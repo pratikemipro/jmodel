@@ -55,22 +55,22 @@ var _ = function () {
 		synonyms	= {},
 		options		= {},
 	    objects 	= {},
-		public		= {},
-		private		= {},
+		external	= {},
+		internal	= {},
 		$			= jQuery;
 		
 	//
 	// Public methods
 	//
 	
-	public.registerPrototype = function (name,constructor,options) {
+	external.registerPrototype = function (name,constructor,options) {
 	
 		constructor.prototype		= new prototypes.DomainObject();
 	
-		prototypes[name]					= constructor;
-		public[name]						= function (id,data) { return private.getObject(name,id,data); };
-		public[options.plural || name+'s']	= function() { return objects[name]; }; 
-		objects[name]						= new private.DomainObjectCollection({});
+		prototypes[name]						= constructor;
+		external[name]							= function (id,data) { return internal.getObject(name,id,data); };
+		external[options.plural || name+'s']	= function() { return objects[name]; }; 
+		objects[name]							= new internal.DomainObjectCollection({});
 	
 		options = options || {};
 		options[name] = options;
@@ -79,12 +79,12 @@ var _ = function () {
 			synonyms[options.synonyms[i]] = name;
 		}
 	
-		return public;
+		return external;
 	
 	};
 	
 	
-	public.resetModel = function () {
+	external.resetModel = function () {
 		
 		for ( var prototypeName in prototypes ) {
 			if ( objects[prototypeName] ) {
@@ -94,12 +94,12 @@ var _ = function () {
 			}
 		}
 		
-		return public;
+		return external;
 		
 	};
 	
 	
-	public.debugObjects = function () {
+	external.debugObjects = function () {
 		
 		var contents = '';
 		
@@ -116,7 +116,7 @@ var _ = function () {
 	// Private methods
 	//
 	
-	private.getObject = function (prototypeName,id,data) {
+	internal.getObject = function (prototypeName,id,data) {
 		
 		prototypeName = synonyms[prototypeName] || prototypeName;
 
@@ -134,18 +134,18 @@ var _ = function () {
 			}
 		}
 		else {									// Need to create a new object from prototype
-			return private.createObject(prototypeName,id,data);
+			return internal.createObject(prototypeName,id,data);
 		}
 		
 	};
 	
 	
-	private.getObjects = function (prototypeName) {
+	internal.getObjects = function (prototypeName) {
 		return objects[prototypeName];
 	};
 	
 	
-	private.generateID = function (prototypeName) {
+	internal.generateID = function (prototypeName) {
 		return -(objects[prototypeName].count()+1);
 	};
 	
@@ -154,7 +154,7 @@ var _ = function () {
 	// Notification queue
 	//
 	
-	private.NotificationQueue = function () {
+	internal.NotificationQueue = function () {
 		
 		var	notifications 	= [],
 			active			= true;
@@ -189,32 +189,32 @@ var _ = function () {
 		
 	};
 	
-	private.notifications = new private.NotificationQueue();
+	internal.notifications = new internal.NotificationQueue();
 	
 	// Public interface to notification queue
 	
-	public.suspendNotifications = function () {
-		private.notifications.suspend();
-		return public;
+	external.suspendNotifications = function () {
+		internal.notifications.suspend();
+		return external;
 	};
 	
-	public.resumeNotifications = function () {
-		private.notifications.resume();
-		return public;
+	external.resumeNotifications = function () {
+		internal.notifications.resume();
+		return external;
 	};
 	
-	public.flushNotifications = function () {
-		private.notifications.flush();
-		return public;
+	external.flushNotifications = function () {
+		internal.notifications.flush();
+		return external;
 	};
 	
-	public.pushNotifications = function () {
+	external.pushNotifications = function () {
 		for(var prototypeName in objects) {
 			objects[prototypeName].each(function (index,object) {
 				object.pushNotifications();
 			});
 		}
-		return public;
+		return external;
 	}
 	
 	
@@ -222,31 +222,31 @@ var _ = function () {
 	// Notification types
 	//
 	
-	private.ContentNotification = function (subscription) {
+	internal.ContentNotification = function (subscription) {
 		this.receive = function () {
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
-	private.ValueNotification = function (subscription) {
+	internal.ValueNotification = function (subscription) {
 		this.receive = function () {
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
-	private.MethodNotification = function (subscription) {
+	internal.MethodNotification = function (subscription) {
 		this.receive = function () {
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
-	private.EventNotification = function (subscription) {
+	internal.EventNotification = function (subscription) {
 		this.receive = function () {
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		};
 	};
 	
-	private.CollectionMethodNotification = function (subscription,event) {
+	internal.CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
 			if (subscription[event.method]) {
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
@@ -254,13 +254,13 @@ var _ = function () {
 		};
 	};
 	
-	private.CollectionEventNotification = function (subscription,event) {
+	internal.CollectionEventNotification = function (subscription,event) {
 		this.receive = function () {
 			// NOTE: Implement this
 		};
 	};
 	
-	private.CollectionMemberNotification = function (subscription,event) {
+	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
 			subscription.key = ( subscription.key instanceof Array ) ? subscription.key : [subscription.key];
 			for (var i in subscription.key) {
@@ -283,7 +283,7 @@ var _ = function () {
 	// queue.
 	//
 	
-	private.SubscriptionList = function (notifications) {
+	internal.SubscriptionList = function (notifications) {
 		
 		var subscribers = [];
 		
@@ -317,7 +317,7 @@ var _ = function () {
 	};
 	
 	
-	private.CollectionSubscriber = function (subscription) {
+	internal.CollectionSubscriber = function (subscription) {
 	
 		// NOTE: Implement filters here
 		this.matches = function (event) {
@@ -336,7 +336,7 @@ var _ = function () {
 	};
 	
 	
-	private.ObjectSubscriber = function (subscription) {
+	internal.ObjectSubscriber = function (subscription) {
 
 		this.matches = function (event) {
 			return event.key == subscription.key;
@@ -353,10 +353,10 @@ var _ = function () {
 	// Domain object collection
 	//
 	
-	private.DomainObjectCollection = function (specification) {
+	internal.DomainObjectCollection = function (specification) {
 		
 		this.objects		= specification.objects ? specification.objects : [];
-		this.subscribers	= new private.SubscriptionList(private.notifications);
+		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
 		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
 			
@@ -467,7 +467,7 @@ var _ = function () {
 			}
 			
 			if ( example ) {
-				var objs = new private.DomainObjectCollection({});
+				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
 					if ( object.matches(example) ) {
 						objs.set(index,object);
@@ -495,7 +495,7 @@ var _ = function () {
 		this.subscribe = function (subscription) {
 
 			if ( subscription.selector ) {
-				subscription.type	= 	private.CollectionMemberNotification;
+				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
 												return collection.filter(subscription.selector) === event.object;
@@ -503,13 +503,13 @@ var _ = function () {
 										}(this);							
 			}
 			else if ( ( typeof onAdd == 'string' ) && ( typeof onRemove == 'string' ) ) {
-				subscription.type	= private.CollectionEventNotification;
+				subscription.type	= internal.CollectionEventNotification;
 			}
 			else {
-				subscription.type	= private.CollectionMethodNotification; 
+				subscription.type	= internal.CollectionMethodNotification; 
 			}
 			
-			this.subscribers.add( new private.CollectionSubscriber(subscription) );
+			this.subscribers.add( new internal.CollectionSubscriber(subscription) );
 			
 			return this;	
 			
@@ -547,7 +547,7 @@ var _ = function () {
 	// Object creation
 	//
 	
-	private.createObject = function (prototypeName,id,data) {
+	internal.createObject = function (prototypeName,id,data) {
 		
 		var newObject	= new prototypes[prototypeName]();
 		var primaryKey	= newObject.primaryKey;
@@ -562,12 +562,12 @@ var _ = function () {
 		}
 		
 		if ( !data[primaryKey] ) {
-			data[primaryKey] = private.generateID(prototypeName);
+			data[primaryKey] = internal.generateID(prototypeName);
 		}
 
 		objects[prototypeName][data[primaryKey]] = newObject; // Must do this before parsing JSON data or else generated keys are all identical
 		newObject.baseCollection = objects[prototypeName];
-		newObject.subscribers = new private.SubscriptionList(private.notifications);
+		newObject.subscribers = new internal.SubscriptionList(internal.notifications);
 		
 		newObject
 			.reifyFields()
@@ -683,7 +683,7 @@ var _ = function () {
 				this.relationships[key].add(value);
 			}
 			else { // Unrelated new object
-				private.getObject(key,value);
+				internal.getObject(key,value);
 			}
 			
 		};
@@ -727,12 +727,12 @@ var _ = function () {
 			
 			for ( var i in this.hasOne ) {
 				var descriptor = this.hasOne[i];
-				this.relationships[descriptor.accessor] = new private.OneToOneRelationship(this,descriptor);
+				this.relationships[descriptor.accessor] = new internal.OneToOneRelationship(this,descriptor);
 			}
 			
 			for ( var i in this.hasMany ) {
 				var descriptor = this.hasMany[i]
-				this.relationships[descriptor.accessor] = new private.OneToManyRelationship(this,descriptor);
+				this.relationships[descriptor.accessor] = new internal.OneToManyRelationship(this,descriptor);
 			}
 			
 			return this;
@@ -743,21 +743,21 @@ var _ = function () {
 		this.subscribe = function (subscription) {
 
 			if ( subscription.change && typeof subscription.change == 'string' ) {
-				subscription.type		= private.EventNotification;
+				subscription.type		= internal.EventNotification;
 				subscription.event		= subscription.change;
 			}
 			else if ( subscription.change && typeof subscription.change == 'function' ) {
-				subscription.type		= private.MethodNotification;
+				subscription.type		= internal.MethodNotification;
 				subscription.method		= subscription.change;
 			}
 			else if ( subscription.target.is('input:input,input:checkbox,input:hidden') ) {
-				subscription.type = private.ValueNotification;
+				subscription.type = internal.ValueNotification;
 			}
 			else {
-				subscription.type = private.ContentNotification;
+				subscription.type = internal.ContentNotification;
 			}
 			
-			this.subscribers.add( new private.ObjectSubscriber(subscription) );
+			this.subscribers.add( new internal.ObjectSubscriber(subscription) );
 			
 			return this;
 			
@@ -792,7 +792,7 @@ var _ = function () {
 				for( var index in exampleForeignKeys ) {
 					var exampleForeignKey = exampleForeignKeys[index];
 					var children = this[exampleForeignKey]();
-					var collection = children.length ? children : new private.DomainObjectCollection({objects:[children]});
+					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children]});
 					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
 						return false;
 					}
@@ -825,16 +825,16 @@ var _ = function () {
 	// Relationships
 	//
 	
-	private.OneToOneRelationship = function (object,relationship) {
+	internal.OneToOneRelationship = function (object,relationship) {
 		
 		this.get = function () {
-			return private.getObject(relationship.prototype,object.get(relationship.field));
+			return internal.getObject(relationship.prototype,object.get(relationship.field));
 		};
 		
 		this.add = function (data) {
 			
 			data = data || {};
-			var newObject = private.getObject(relationship.prototype,data);
+			var newObject = internal.getObject(relationship.prototype,data);
 			
 			object.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -847,11 +847,11 @@ var _ = function () {
 	};
 	
 	
-	private.OneToManyRelationship = function (object,relationship) {
+	internal.OneToManyRelationship = function (object,relationship) {
 		
 		relationship.direction	= 'reverse';
 
-		var children			= new private.DomainObjectCollection({
+		var children			= new internal.DomainObjectCollection({
 											base: objects[relationship.prototype],
 											view: function (field,parent) {
 												return function (candidate) {
@@ -880,13 +880,13 @@ var _ = function () {
 			
 			data = data || {};
 			data[relationship.field] = object.primaryKeyValue();
-			return private.getObject(relationship.prototype,data);
+			return internal.getObject(relationship.prototype,data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			private.getObjects(relationship.prototype).remove(id);
+			internal.getObjects(relationship.prototype).remove(id);
 			return this;
 			
 		};
@@ -903,6 +903,6 @@ var _ = function () {
 	};
 	
 	
-	return public;
+	return external;
 	
 }();
