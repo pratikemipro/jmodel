@@ -134,39 +134,7 @@ var _ = function () {
 			}
 		}
 		else {									// Need to create a new object from prototype
-			
-			var newObject	= new prototypes[prototypeName]();
-			var primaryKey	= newObject.primaryKey;
-			
-			newObject.data	= newObject.data || {};
-			
-			if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
-				data = arguments[1];
-			}
-			else {
-				data = data || {};
-			}
-			
-			if ( !data[primaryKey] ) {
-				data[primaryKey] = private.generateID(prototypeName);
-			}
-
-			objects[prototypeName][data[primaryKey]] = newObject; // Must do this before parsing JSON data or else generated keys are all identical
-			newObject.baseCollection = objects[prototypeName];
-			newObject.subscribers = new private.SubscriptionList(private.notifications);
-			
-			// Must parse JSON before reifying relationships
-			
-			newObject
-				.reifyFields()
-				.reifyRelationships()
-				.parseJSON(data)
-				.parseChildrenFromJSON(data);
-
-			objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
-
-			return newObject;
-
+			return private.createObject(prototypeName,id,data);
 		}
 		
 	};
@@ -573,6 +541,45 @@ var _ = function () {
 		
 		
 	};
+	
+	
+	//
+	// Object creation
+	//
+	
+	private.createObject = function (prototypeName,id,data) {
+		
+		var newObject	= new prototypes[prototypeName]();
+		var primaryKey	= newObject.primaryKey;
+		
+		newObject.data	= newObject.data || {};
+		
+		if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
+			data = arguments[1];
+		}
+		else {
+			data = data || {};
+		}
+		
+		if ( !data[primaryKey] ) {
+			data[primaryKey] = private.generateID(prototypeName);
+		}
+
+		objects[prototypeName][data[primaryKey]] = newObject; // Must do this before parsing JSON data or else generated keys are all identical
+		newObject.baseCollection = objects[prototypeName];
+		newObject.subscribers = new private.SubscriptionList(private.notifications);
+		
+		newObject
+			.reifyFields()
+			.reifyRelationships()
+			.parseJSON(data)
+			.parseChildrenFromJSON(data);
+
+		objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
+
+		return newObject;
+		
+	}
 	
 	
 	//	
