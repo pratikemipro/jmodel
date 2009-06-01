@@ -399,24 +399,9 @@ var _ = function () {
 			specification.base.subscribe({
 				source: specification.base,
 				target: this,
-				add: function (collection,object) {
-					if ( specification.view(object) ) {
-						this.set(object.primaryKeyValue(), object, true);
-					}
-				},
-				remove: function (collection,object) {
-					this.remove(object.primaryKeyValue(),true);
-				},
-				change: function (collection,object) {
-					if ( specification.view(object) ) {
-						this.set(object.primaryKeyValue(), object,true);
-					}
-					else {
-						if ( object.primaryKeyValue() in this.objects ) {
-							this.remove(object.primaryKeyValue(),true);
-						}
-					}
-				}
+				add: 	baseAdd,
+				remove: baseRemove,
+				change: baseChange
 			});
 			
 		}
@@ -560,27 +545,26 @@ var _ = function () {
 		
 		// Subcollection methods
 		
-/*		this.baseAdd = function (collection,object) {
-			alert('here');
+		function baseAdd(collection,object) {
 			if ( specification.view(object) ) {
-				this.set(object.primaryKeyValue(), object);
+				this.set(object.primaryKeyValue(), object, true);
 			}
-		};
+		}
 		
-		this.baseRemove = function (collection,object) {
-			this.remove(object.primaryKeyValue());
-		};
+		function baseRemove(collection,object) {
+			this.remove(object.primaryKeyValue(),true);
+		}
 		
-		this.baseChange = function (collection,object) {
+		function baseChange(collection,object) {
 			if ( specification.view(object) ) {
-				this.set(object.primaryKeyValue(), object);
+				this.set(object.primaryKeyValue(), object,true);
 			}
 			else {
 				if ( object.primaryKeyValue() in this.objects ) {
-					this.remove(object.primaryKeyValue());
+					this.remove(object.primaryKeyValue(),true);
 				}
 			}
-		} */
+		}
 		
 		
 	};
