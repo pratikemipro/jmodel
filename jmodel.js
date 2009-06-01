@@ -157,8 +157,8 @@ var _ = function () {
 			
 			newObject
 				.reifyFields()
-				.parseJSON(data)
 				.reifyRelationships()
+				.parseJSON(data)
 				.parseChildrenFromJSON(data);
 
 			objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
@@ -667,29 +667,12 @@ var _ = function () {
 		
 		this.makeChildFromJSON = function (key,value) {
 			
-			var childID;
-		
-			this.foreignKeys = this.foreignKeys || {};
-			this.reverseForeignKeys = this.reverseForeignKeys || {};
-		
-			if ( this.foreignKeys[key] ) {  // Propagate foreign-key value to child
-				
-				var foreignKey = this.foreignKeys[key];
-				if ( !(this.get(foreignKey.field)) ) {
-					this.set(foreignKey.field,private.generateID(foreignKey.prototype));
-				}
-				childID = this.get(foreignKey.field);
-				
+			if ( this.relationships[key] ) { // New object is related to existing object
+				this.relationships[key].add(value);
 			}
-			
-			var child = childID ? private.getObject(key,childID,value) : private.getObject(key,value);
-			
-			var reverseForeignKey = this.reverseForeignKeyForPrototype(key);
-			if ( reverseForeignKey && !child.get(reverseForeignKey.field) ) {	// Propagate reverse foreign-key value to child
-				
-				child.set(reverseForeignKey.field,this.get(this.primaryKey));
-				
-			} 
+			else { // Unrelated new object
+				private.getObject(key,value);
+			}
 			
 		};
 
@@ -857,6 +840,17 @@ var _ = function () {
 		this.get = function () {
 			return private.getObject(relationship.prototype,object.get(relationship.field));
 		};
+		
+		this.add = function (data) {
+			
+			data = data || {};
+			var newObject = private.getObject(relationship.prototype,data);
+			
+			object.set(relationship.field, newObject.primaryKeyValue());
+			
+			return newObject;
+			
+		}
 		
 		object[relationship.accessor] = this.get;
 		
