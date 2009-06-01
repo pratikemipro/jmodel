@@ -728,21 +728,25 @@ var _ = function () {
 
 		this.reifyFields = function () {
 			
-			for ( var field in this.data ) {
+			for ( var i in this.fields ) {
 				
-				if ( !this[field] ) {
+				var field = this.fields[i];
+				
+				if ( !this[field.accessor] ) {
 					
-					this[field]			= 	function (field) {
+					this.data[field.accessor] = field.defaultValue;
+					
+					this[field.accessor] = 	function (field) {
 						 						return function () {
 													return this.get(field);
 												};
-											}(field);
+											}(field.accessor);
 											
-					this['set'+field]	=	function (field) {
-												return function (value) {
-													return this.set(field,value);
-												};
-											}(field); 
+					this['set'+field.accessor]	=	function (field) {
+														return function (value) {
+															return this.set(field,value);
+														};
+													}(field.accessor); 
 				}
 				
 			}
