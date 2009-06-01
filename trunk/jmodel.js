@@ -291,9 +291,7 @@ var _ = function () {
 	private.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
 			subscription.key = ( subscription.key instanceof Array ) ? subscription.key : [subscription.key];
-			alert(subscription.key);
 			for (var i in subscription.key) {
-				alert('here');
 				event.object.subscribe({
 					source: event.object,
 					target: subscription.target,
@@ -540,7 +538,7 @@ var _ = function () {
 				subscription.type	= 	private.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
-												return collection.filter(subscription.example,subscription.selector) === event.object;
+												return collection.filter(subscription.selector) === event.object;
 											};
 										}(this);							
 			}
