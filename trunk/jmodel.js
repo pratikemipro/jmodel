@@ -275,8 +275,8 @@ var _ = function () {
 					change: subscription.change
 				});
 			}
-		}
-	}
+		};
+	};
 	
 	
 	//
@@ -362,27 +362,6 @@ var _ = function () {
 		this.objects		= specification.objects ? specification.objects : [];
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
-		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
-			
-			specification.base.each(function (key,candidate) {
-				if ( specification.view(candidate) ) {
-					this.set(candidate.primaryKeyValue(), candidate, true);
-				}
-			});
-			
-			specification.base.subscribe({
-				source: specification.base,
-				target: this,
-				add: 	baseAdd,
-				remove: baseRemove,
-				change: baseChange
-			});
-			
-		}
-		else if ( specification.base ) {
-			throw 'Error: Invalid base collection type';
-		}
-
 		
 		this.length = function () {
 			return this.objects.length;
@@ -447,7 +426,7 @@ var _ = function () {
 				mapped.push(mapping(this.objects[index]));
 			}
 			return mapped;
-		}
+		};
 		
 		
 		this.select = function (selector) {
@@ -520,6 +499,28 @@ var _ = function () {
 		};
 		
 		
+		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
+			
+			specification.base.each(function (key,candidate) {
+				if ( specification.view(candidate) ) {
+					this.set(candidate.primaryKeyValue(), candidate, true);
+				}
+			});
+			
+			specification.base.subscribe({
+				source: specification.base,
+				target: this,
+				add: 	baseAdd,
+				remove: baseRemove,
+				change: baseChange
+			});
+			
+		}
+		else if ( specification.base ) {
+			throw 'Error: Invalid base collection type';
+		}
+		
+		
 		// Subcollection methods
 		
 		function baseAdd(collection,object) {
@@ -576,14 +577,13 @@ var _ = function () {
 		newObject
 			.reifyFields()
 			.reifyRelationships()
-			.parseJSON(data)
-			.parseChildrenFromJSON(data);
+			.set(data);
 
 		objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
 
 		return newObject;
 		
-	}
+	};
 	
 	
 	//	
@@ -644,55 +644,6 @@ var _ = function () {
 		};
 		
 
-		this.parseJSON = function (data) {
-			
-			var values = {};
-			for ( var key in data ) {
-				var value = data[key];
-				if ( !(typeof value == 'object') ) { // Just a scalar value
-					values[key] = value;
-				}
-			}
-			this.set(values);
-			
-			return this;
-		
-		};
-		
-		
-		this.parseChildrenFromJSON = function (data) {
-			
-			for ( var key in data ) {
-				var value = data[key];
-				if ( typeof value == 'object' ) { // Just a scalar value
-					if ( value instanceof Array ) { // Need to deal with multiple children
-						for ( var i=0; i<value.length; i++) {
-							this.makeChildFromJSON(key,value[i]);
-						}
-					}
-					else { // Just a foreign key reference
-						this.makeChildFromJSON(key,value);
-					}
-				}
-			}
-			
-			return this;
-			
-		}
-		
-		
-		this.makeChildFromJSON = function (key,value) {
-			
-			if ( this.relationships[key] ) { // New object is related to existing object
-				this.relationships[key].add(value);
-			}
-			else { // Unrelated new object
-				internal.getObject(key,value);
-			}
-			
-		};
-
-
 		this.reifyFields = function () {
 			
 			for ( var i in this.fields ) {
@@ -735,7 +686,7 @@ var _ = function () {
 			}
 			
 			for ( var i in this.hasMany ) {
-				var descriptor = this.hasMany[i]
+				var descriptor = this.hasMany[i];
 				this.relationships[descriptor.accessor] = new internal.OneToManyRelationship(this,descriptor);
 			}
 			
@@ -774,7 +725,7 @@ var _ = function () {
 				this.subscribers.notify({key:i});
 			}
 			
-		}
+		};
 		
 		
 		this.matches = function (example) {
@@ -844,7 +795,7 @@ var _ = function () {
 			
 			return newObject;
 			
-		}
+		};
 		
 		object[relationship.accessor] = this.get;
 		
@@ -856,12 +807,12 @@ var _ = function () {
 		relationship.direction	= 'reverse';
 
 		var children			= new internal.DomainObjectCollection({
-											base: objects[relationship.prototype],
-											view: function (field,parent) {
-												return function (candidate) {
-													return candidate.get(field) == parent.primaryKeyValue();
-												}
-											}(relationship.field,object)
+											base: 	objects[relationship.prototype],
+											view: 	function (field,parent) {
+														return function (candidate) {
+															return candidate.get(field) == parent.primaryKeyValue();
+														};
+													}(relationship.field,object)
 										});
 										
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
@@ -897,7 +848,7 @@ var _ = function () {
 		
 		this.debug = function () {
 			return children.debug();
-		}
+		};
 		
 		object[(relationship.plural || relationship.accessor+'s')] 	= this.get;
 		object['add'+relationship.accessor]							= this.add;
@@ -905,6 +856,69 @@ var _ = function () {
 		object['debug'+relationship.accessor]						= this.debug;
 		
 	};
+	
+	
+	//
+	// JSON parsing
+	//
+	
+	external.json = function () {
+		
+		return {
+			
+			thaw: 	function (data) {
+						data = ( data instanceof Array ) ? data : [data];
+						for ( var i in data ) {
+							for ( var key in data[i] ) {
+								makeObject(key,data[i][key]);
+							}
+						}
+					}
+			
+		};
+		
+		
+		function makeObject (key,data,parent) {
+			
+			var partitionedData = partitionData(data);
+			
+			if ( parent && parent.relationships[key] ) {
+				var object = parent.relationships[key].add(partitionedData.fields);
+			}
+			else {
+				var object = internal.getObject(key,partitionedData.fields);
+			}
+			
+			for ( var childKey in partitionedData.children ) {
+				var childData = partitionedData.children[childKey];
+				childData = ( childData instanceof Array ) ? childData : [childData];
+				for ( var i=0; i<childData.length; i++) {
+					makeObject(childKey,childData[i],object);
+				}
+			}
+
+		}
+		
+		
+		function partitionData (data) {
+			
+			var partitioned = { fields:{}, children:{} };
+			
+			for ( var key in data ) {
+				if ( !(typeof data[key] == 'object') ) {
+					partitioned.fields[key] = data[key];
+				}
+				else {
+					partitioned.children[key] = data[key];
+				}
+			}
+			
+			return partitioned;
+			
+		}
+		
+		
+	}();
 	
 	
 	return external;
