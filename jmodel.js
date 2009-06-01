@@ -193,29 +193,33 @@ var _ = function () {
 	
 	// Public interface to notification queue
 	
-	external.suspendNotifications = function () {
-		internal.notifications.suspend();
-		return external;
-	};
+	external.notifications = {
+		
+		suspend: 	function () {
+						internal.notifications.suspend();
+						return external.notifications;
+					},
+					
+		resume: 	function () {
+						internal.notifications.resume();
+						return external.notifications;
+					},
+					
+		flush: 		function () {
+						internal.notifications.flush();
+						return external.notifications;
+					},
+					
+		push: 		function () {
+						for(var prototypeName in objects) {
+							objects[prototypeName].each(function (index,object) {
+								object.pushNotifications();
+							});
+						}
+						return external.notifications;
+					}
 	
-	external.resumeNotifications = function () {
-		internal.notifications.resume();
-		return external;
 	};
-	
-	external.flushNotifications = function () {
-		internal.notifications.flush();
-		return external;
-	};
-	
-	external.pushNotifications = function () {
-		for(var prototypeName in objects) {
-			objects[prototypeName].each(function (index,object) {
-				object.pushNotifications();
-			});
-		}
-		return external;
-	}
 	
 	
 	//
