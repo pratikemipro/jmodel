@@ -138,6 +138,8 @@ var _ = function () {
 			var newObject	= new prototypes[prototypeName]();
 			var primaryKey	= newObject.primaryKey;
 			
+			newObject.data	= newObject.data || {};
+			
 			if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
 				data = arguments[1];
 			}
@@ -644,8 +646,6 @@ var _ = function () {
 
 		this.parseJSON = function (data) {
 			
-			this.data = this.data || {};
-			
 			var values = {};
 			for ( var key in data ) {
 				var value = data[key];
@@ -691,10 +691,10 @@ var _ = function () {
 			if ( this.foreignKeys[key] ) {  // Propagate foreign-key value to child
 				
 				var foreignKey = this.foreignKeys[key];
-				if ( !(this.data[foreignKey.field]) ) {
-					this.data[foreignKey.field] = private.generateID(foreignKey.prototype);
+				if ( !(this.get(foreignKey.field)) ) {
+					this.set(foreignKey.field,private.generateID(foreignKey.prototype));
 				}
-				childID = this.data[foreignKey.field];
+				childID = this.get(foreignKey.field);
 				
 			}
 			
@@ -703,7 +703,7 @@ var _ = function () {
 			var reverseForeignKey = this.reverseForeignKeyForPrototype(key);
 			if ( reverseForeignKey && !child.get(reverseForeignKey.field) ) {	// Propagate reverse foreign-key value to child
 				
-				child.set(reverseForeignKey.field,this.data[this.primaryKey]);
+				child.set(reverseForeignKey.field,this.get(this.primaryKey));
 				
 			} 
 			
@@ -821,10 +821,10 @@ var _ = function () {
 				if ( typeof example[key] == 'object' && typeof this[key] == 'function' ) { // Some kind of foreign key
 					exampleForeignKeys.push(key);
 				}
-				else if ( example[key] instanceof RegExp && !example[key].test(this.data[key]) ) {
+				else if ( example[key] instanceof RegExp && !example[key].test(this.get(key)) ) {
 					return false;
 				}
-				else if ( this.data[key] != example[key] ) { // Scalar field
+				else if ( this.get(key) != example[key] ) { // Scalar field
 					return false;
 				}
 
