@@ -677,22 +677,6 @@ var _ = function () {
 		};
 
 
-
-		this.reverseForeignKeyForPrototype = function (prototypeName) {
-			
-			for ( var i in this.reverseForeignKeys ) {
-				
-				if ( this.reverseForeignKeys[i].prototype == prototypeName ) {
-					return(this.reverseForeignKeys[i]);
-				}
-				
-			}
-			
-			return null;
-			
-		};
-
-
 		this.reifyFields = function () {
 			
 			for ( var i in this.fields ) {
@@ -725,18 +709,20 @@ var _ = function () {
 
 		this.reifyRelationships = function () {
 			
-			this.foreignKeys		= this.foreignKeys || {};
-			this.reverseForeignKeys	= this.reverseForeignKeys || {};
-			this.relationships		= this.relationships || {};
+			this.hasOne			= this.hasOne || {};
+			this.hasMany		= this.hasMany || {};
+			this.relationships	= this.relationships || {};
 			
 			var i;
 			
-			for ( i in this.foreignKeys ) {
-				this.relationships[i] = new private.OneToOneRelationship(this,this.foreignKeys[i]);
+			for ( i in this.hasOne ) {
+				var descriptor = this.hasOne[i];
+				this.relationships[descriptor.accessor] = new private.OneToOneRelationship(this,descriptor);
 			}
 			
-			for ( i in this.reverseForeignKeys ) {
-				this.relationships[i] = new private.OneToManyRelationship(this,this.reverseForeignKeys[i])
+			for ( i in this.hasMany ) {
+				var descriptor = this.hasMany[i]
+				this.relationships[descriptor.accessor] = new private.OneToManyRelationship(this,descriptor);
 			}
 			
 			return this;
