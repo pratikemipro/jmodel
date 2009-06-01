@@ -155,10 +155,12 @@ var _ = function () {
 			newObject.baseCollection = objects[prototypeName];
 			newObject.subscribers = new private.SubscriptionList(private.notifications);
 			
+			// Must parse JSON before reifying relationships
+			
 			newObject
 				.reifyFields()
-				.reifyRelationships()
 				.parseJSON(data)
+				.reifyRelationships()
 				.parseChildrenFromJSON(data);
 
 			objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
@@ -388,11 +390,11 @@ var _ = function () {
 		this.objects		= specification.objects ? specification.objects : [];
 		this.subscribers	= new private.SubscriptionList(private.notifications);
 
-		if ( specification.base ) { // This collection is a materialised view over a base collection
+		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
 			
-			specification.base.each(function (object) {
-				if ( specification.view(object) ) {
-					this.set(object.primaryKeyValue(), object, true);
+			specification.base.each(function (key,candidate) {
+				if ( specification.view(candidate) ) {
+					this.set(candidate.primaryKeyValue(), candidate, true);
 				}
 			});
 			
@@ -404,6 +406,9 @@ var _ = function () {
 				change: baseChange
 			});
 			
+		}
+		else if ( specification.base ) {
+			throw 'Error: Invalid base collection type';
 		}
 
 		
@@ -513,7 +518,7 @@ var _ = function () {
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
 				if ( obj.data ) {
-					contents += ' '+obj.data[obj.primaryKey]+' ';
+					contents += ' '+obj.primaryKeyValue()+' ';
 				}
 			}
 			return contents;
@@ -683,7 +688,7 @@ var _ = function () {
 				
 				var field = this.fields[i];
 				
-				if ( !this[field.accessor] ) {
+//				if ( !this[field.accessor] ) {
 					
 					this.data[field.accessor] = field.defaultValue;
 					
@@ -698,7 +703,7 @@ var _ = function () {
 															return this.set(field,value);
 														};
 													}(field.accessor); 
-				}
+//				}
 				
 			}
 			
@@ -709,18 +714,16 @@ var _ = function () {
 
 		this.reifyRelationships = function () {
 			
-			this.hasOne			= this.hasOne || {};
-			this.hasMany		= this.hasMany || {};
+			this.hasOne			= this.hasOne || [];
+			this.hasMany		= this.hasMany || [];
 			this.relationships	= this.relationships || {};
 			
-			var i;
-			
-			for ( i in this.hasOne ) {
+			for ( var i in this.hasOne ) {
 				var descriptor = this.hasOne[i];
 				this.relationships[descriptor.accessor] = new private.OneToOneRelationship(this,descriptor);
 			}
 			
-			for ( i in this.hasMany ) {
+			for ( var i in this.hasMany ) {
 				var descriptor = this.hasMany[i]
 				this.relationships[descriptor.accessor] = new private.OneToManyRelationship(this,descriptor);
 			}
@@ -731,12 +734,6 @@ var _ = function () {
 
 
 		this.subscribe = function (subscription) {
-
-//			var subscription = {
-//				source: this,
-//				target: subscriber,
-//				key: key
-//			};
 
 			if ( subscription.change && typeof subscription.change == 'string' ) {
 				subscription.type		= private.EventNotification;
@@ -851,10 +848,7 @@ var _ = function () {
 											base: objects[relationship.prototype],
 											view: function (field,keyValue) {
 												return function (candidate) {
-													if ( candidate[field] ) {
-														return candidate[field]() == keyValue;
-													}
-													return false;
+													return candidate.get(field) == keyValue;
 												}
 											}(relationship.field,object.primaryKeyValue())
 										});
