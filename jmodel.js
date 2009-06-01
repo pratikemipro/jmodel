@@ -159,8 +159,8 @@ var _ = function () {
 			
 			newObject
 				.reifyFields()
-				.parseJSON(data)
 				.reifyRelationships()
+				.parseJSON(data)
 				.parseChildrenFromJSON(data);
 
 			objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
@@ -846,11 +846,11 @@ var _ = function () {
 
 		var children			= new private.DomainObjectCollection({
 											base: objects[relationship.prototype],
-											view: function (field,keyValue) {
+											view: function (field,parent) {
 												return function (candidate) {
-													return candidate.get(field) == keyValue;
+													return candidate.get(field) == parent.primaryKeyValue();
 												}
-											}(relationship.field,object.primaryKeyValue())
+											}(relationship.field,object)
 										});
 										
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
