@@ -414,7 +414,7 @@ var _ = function () {
 		
 		this.each = function (callback) {
 			for(var index in this.objects) {
-				callback.call(this,index,this.objects[index]);
+				callback.call(this.objects[index],index,this.objects[index]);
 			}
 			return this;
 		};
@@ -501,10 +501,10 @@ var _ = function () {
 		
 		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
 			
+			var that = this;
 			specification.base.each(function (key,candidate) {
 				if ( specification.view(candidate) ) {
-					if ( !this.set ) { alert(this) };
-					this.set(candidate.primaryKeyValue(), candidate, true);
+					that.set(candidate.primaryKeyValue(), candidate, true);
 				}
 			});
 			
