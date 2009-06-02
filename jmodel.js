@@ -414,7 +414,7 @@ var _ = function () {
 		
 		this.each = function (callback) {
 			for(var index in this.objects) {
-				callback(index,this.objects[index]);
+				callback.call(this,index,this.objects[index]);
 			}
 			return this;
 		};
@@ -503,6 +503,7 @@ var _ = function () {
 			
 			specification.base.each(function (key,candidate) {
 				if ( specification.view(candidate) ) {
+					if ( !this.set ) { alert(this) };
 					this.set(candidate.primaryKeyValue(), candidate, true);
 				}
 			});
