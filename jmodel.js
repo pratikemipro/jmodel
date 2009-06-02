@@ -38,9 +38,7 @@ jQuery.fn.subscribe = function (subscription) {
 };
 
 jQuery.fn.pubsub = function (domainObject,key) {
-	return this
-			.subscribe({source:domainObject,key:key})
-			.publish({target:domainObject,key:key});
+	return this.subscribe({source:domainObject,key:key}).publish({target:domainObject,key:key});
 };
 
 
@@ -421,7 +419,7 @@ var _ = function () {
 		
 		
 		this.map = function (mapping,mapped) {
-			var mapped = mapped || [];
+			mapped = mapped || [];
 			for(var index in this.objects) {
 				mapped.push(mapping(this.objects[index]));
 			}
@@ -441,12 +439,14 @@ var _ = function () {
 		
 		this.filter = function () {
 			
+			var selector;
+			
 			if ( typeof arguments[0] == 'object' ) {
 				var example		= arguments[0];
-				var selector	= arguments[1];
+				selector		= arguments[1];
 			}
 			else {
-				var selector = arguments[0];
+				selector 		= arguments[0];
 			}
 			
 			if ( example ) {
@@ -619,9 +619,12 @@ var _ = function () {
 
 		this.set = function () {
 			
+			var key;
+			
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				
-				var key = arguments[0], value = arguments[1];
+				key = arguments[0];
+				var value = arguments[1];
 				this.data[key] = value;
 				this.subscribers.notify({key:key});
 				if ( arguments.length == 2 || arguments[2] ) { 
@@ -632,7 +635,7 @@ var _ = function () {
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
 				
 				var mappings = arguments[0];
-				for ( var key in mappings ) {
+				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
 				this.baseCollection.subscribers.notify({method:'change',object:this});
@@ -681,13 +684,15 @@ var _ = function () {
 			this.hasMany		= this.hasMany || [];
 			this.relationships	= this.relationships || {};
 			
-			for ( var i in this.hasOne ) {
-				var descriptor = this.hasOne[i];
+			var i, descriptor;
+			
+			for ( i in this.hasOne ) {
+				descriptor = this.hasOne[i];
 				this.relationships[descriptor.accessor] = new internal.OneToOneRelationship(this,descriptor);
 			}
 			
-			for ( var i in this.hasMany ) {
-				var descriptor = this.hasMany[i];
+			for ( i in this.hasMany ) {
+				descriptor = this.hasMany[i];
 				this.relationships[descriptor.accessor] = new internal.OneToManyRelationship(this,descriptor);
 			}
 			
@@ -865,29 +870,16 @@ var _ = function () {
 	
 	external.json = function () {
 		
-		return {
-			
-			thaw: 	function (data) {
-						data = ( data instanceof Array ) ? data : [data];
-						for ( var i in data ) {
-							for ( var key in data[i] ) {
-								makeObject(key,data[i][key]);
-							}
-						}
-					}
-			
-		};
-		
 		
 		function makeObject (key,data,parent) {
 			
-			var partitionedData = partitionData(data);
+			var partitionedData = partitionData(data), object;
 			
 			if ( parent && parent.relationships[key] ) {
-				var object = parent.relationships[key].add(partitionedData.fields);
+				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				var object = internal.getObject(key,partitionedData.fields);
+				object = internal.getObject(key,partitionedData.fields);
 			}
 			
 			for ( var childKey in partitionedData.children ) {
@@ -917,6 +909,20 @@ var _ = function () {
 			return partitioned;
 			
 		}
+		
+		
+		return {
+			
+			thaw: 	function (data) {
+						data = ( data instanceof Array ) ? data : [data];
+						for ( var i in data ) {
+							for ( var key in data[i] ) {
+								makeObject(key,data[i][key]);
+							}
+						}
+					}
+			
+		};
 		
 		
 	}();
