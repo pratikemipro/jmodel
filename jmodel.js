@@ -826,9 +826,9 @@ var _ = function () {
 				source: children,
 				target: object
 			};
-			if ( relationship.onAdd)    subscription.add    = relationship.onAdd;
-			if ( relationship.onRemove) subscription.remove = relationship.onRemove;
-			if ( relationship.onChange) subscription.change = relationship.onChange;
+			if ( relationship.onAdd)    { subscription.add    = relationship.onAdd;	   }
+			if ( relationship.onRemove) { subscription.remove = relationship.onRemove; }
+			if ( relationship.onChange) { subscription.change = relationship.onChange; }
 			children.subscribe(subscription);
 		}
 		
