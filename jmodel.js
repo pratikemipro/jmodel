@@ -75,7 +75,10 @@ var _ = function () {
 
 			return external.prototype;
 
-		}
+		},
+		
+		context: 		external.context,
+		notifications: 	external.notifications
 		
 	};
 	
@@ -97,7 +100,10 @@ var _ = function () {
 						contents += entityName+': ['+entities[entityName].objects.debug()+'] ';
 					}
 					return contents;
-				}
+				},
+				
+		prototype: 		external.prototype,
+		notifications: 	external.notifications
 		
 	};
 	
@@ -247,7 +253,10 @@ var _ = function () {
 							});
 						}
 						return external.notifications;
-					}
+					},
+					
+		prototype: 	external.prototype,
+		context: 	external.context
 	
 	};
 	
