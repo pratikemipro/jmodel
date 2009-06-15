@@ -49,10 +49,7 @@ jQuery.fn.pubsub = function (domainObject,key) {
 var _ = function () {
 
 
-	var prototypes	= {},
-		synonyms	= {},
-		options		= {},
-	    objects 	= {},
+	var entities	= {},
 		external	= {},
 		internal	= {},
 		$			= jQuery;
@@ -61,90 +58,125 @@ var _ = function () {
 	// Public methods
 	//
 	
-	external.registerPrototype = function (name,constructor,options) {
-	
-		constructor.prototype		= new prototypes.DomainObject();
-	
-		prototypes[name]						= constructor;
-		external[name]							= function (id,data) { return internal.getObject(name,id,data); };
-		external[options.plural || name+'s']	= function() { return objects[name]; }; 
-		objects[name]							= new internal.DomainObjectCollection({});
-	
-		options = options || {};
-		options[name] = options;
-		options.synonyms = options.synonyms || [];
-		for ( var i in options.synonyms ) {
-			synonyms[options.synonyms[i]] = name;
-		}
-	
-		return external;
-	
-	};
-	
-	
-	external.resetModel = function () {
+	external.prototype = {
 		
-		for ( var prototypeName in prototypes ) {
-			if ( objects[prototypeName] ) {
-				objects[prototypeName].each(function (index,object) {
-					objects[prototypeName].remove(object.primaryKeyValue());
-				});
-			}
-		}
-		
-		return external;
-		
-	};
-	
-	
-	external.debugObjects = function () {
-		
-		var contents = '';
-		
-		for ( var prototypeName in objects ) {
-			contents += prototypeName+': ['+objects[prototypeName].debug()+'] ';
-		}
-		
-		return contents;
-		
-	};
-	
-	
-	//
-	// Private methods
-	//
-	
-	internal.getObject = function (prototypeName,id,data) {
-		
-		prototypeName = synonyms[prototypeName] || prototypeName;
+		register: function (name,constructor,options) {
 
-		if ( !objects[prototypeName] ) {
-			alert('Unknown prototype: '+prototypeName );
-			return false;
+			entities[name] = new internal.EntityType(name,constructor,options);
+
+			var names = [name].concat( options.synonyms || [] );
+
+			// NOTE: Make this handle synonyms more gracefully
+			for ( var i in names ) {
+				var synonym 							= names[i];
+				external[synonym] 						= entities[name].object;
+				external[options.plural || synonym+'s']	= function() { return entities[name].objects; };
+			}
+
+			return external.prototype;
+
 		}
 		
-		if ( typeof arguments[1] != 'object' && ( id == ':first' || objects[prototypeName].get(id) ) ) {		// Object already exists
-			if ( id == ':first' ) {
-				return objects[prototypeName].first();
+	};
+	
+	
+	external.context = {
+	
+		reset: 	function () {
+					for ( var entityName in entities ) {
+						entities[entityName].objects.each(function (index,object) {
+							entities[entityName].objects.remove(object.primaryKeyValue());
+						});
+					}
+					return external.context;
+				},
+				
+		debug: 	function () {
+					var contents = '';
+					for ( var entityName in entities ) {
+						contents += entityName+': ['+entities[entityName].objects.debug()+'] ';
+					}
+					return contents;
+				}
+		
+	};
+	
+	
+	//
+	// Entity Type
+	//
+	
+	internal.EntityType = function (name,constructor,options) {
+		
+		options  = options || {};
+		var base = options.base || name; 
+		
+		var objects 			= new internal.DomainObjectCollection({});
+		this.objects 			= objects;
+		constructor.prototype 	= new internal.DomainObject();
+		
+		
+		this.object = function (id,data) {
+			
+			if ( typeof arguments[1] != 'object' && ( id == ':first' || objects.get(id) ) ) {		// Object already exists
+				if ( id == ':first' ) {
+					return objects.first();
+				}
+				else {
+					return objects.get(id);
+				}
+			}
+			else {									// Need to create a new object from prototype
+				return createObject(id,data);
+			}
+			
+		};
+		
+		
+		function createObject (id,data) {
+			
+			var newObject	= new constructor();
+			var primaryKey	= newObject.primaryKey;
+
+			newObject.data	= newObject.data || {};
+
+			if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
+				data = arguments[1];
 			}
 			else {
-				return objects[prototypeName].get(id);
+				data = data || {};
 			}
+
+			if ( !data[primaryKey] ) {
+				data[primaryKey] = generateID();
+			}
+
+			objects.set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
+			newObject.baseCollection = objects;
+			newObject.subscribers = new internal.SubscriptionList(internal.notifications);
+
+			newObject
+				.reifyFields()
+				.reifyRelationships()
+				.set(data);
+
+			objects.set(data[primaryKey],newObject); // To trigger subscribers
+
+			return newObject;
+			
 		}
-		else {									// Need to create a new object from prototype
-			return internal.createObject(prototypeName,id,data);
+		
+		
+		function generateID() {			
+			return -(objects.count()+1);
 		}
+		
 		
 	};
 	
 	
 	internal.getObjects = function (prototypeName) {
-		return objects[prototypeName];
-	};
-	
-	
-	internal.generateID = function (prototypeName) {
-		return -(objects[prototypeName].count()+1);
+		return entities[prototypeName].objects;
 	};
 	
 	
@@ -210,7 +242,7 @@ var _ = function () {
 					
 		push: 		function () {
 						for(var prototypeName in objects) {
-							objects[prototypeName].each(function (index,object) {
+							entities[prototypeName].objects.each(function (index,object) {
 								object.pushNotifications();
 							});
 						}
@@ -549,49 +581,11 @@ var _ = function () {
 	};
 	
 	
-	//
-	// Object creation
-	//
-	
-	internal.createObject = function (prototypeName,id,data) {
-		
-		var newObject	= new prototypes[prototypeName]();
-		var primaryKey	= newObject.primaryKey;
-		
-		newObject.data	= newObject.data || {};
-		
-		if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
-			data = arguments[1];
-		}
-		else {
-			data = data || {};
-		}
-		
-		if ( !data[primaryKey] ) {
-			data[primaryKey] = internal.generateID(prototypeName);
-		}
-
-		objects[prototypeName][data[primaryKey]] = newObject; // Must do this before parsing JSON data or else generated keys are all identical
-		newObject.baseCollection = objects[prototypeName];
-		newObject.subscribers = new internal.SubscriptionList(internal.notifications);
-		
-		newObject
-			.reifyFields()
-			.reifyRelationships()
-			.set(data);
-
-		objects[prototypeName].set(data[primaryKey],newObject); // To trigger subscribers
-
-		return newObject;
-		
-	};
-	
-	
 	//	
 	// Domain Object prototype
 	//
 	
-	prototypes.DomainObject = function () {
+	internal.DomainObject = function () {
 
 
 		this.primaryKeyValue = function () {
@@ -789,13 +783,13 @@ var _ = function () {
 	internal.OneToOneRelationship = function (object,relationship) {
 		
 		this.get = function () {
-			return internal.getObject(relationship.prototype,object.get(relationship.field));
+			return entities[relationship.prototype].object(relationship.field);
 		};
 		
 		this.add = function (data) {
 			
 			data = data || {};
-			var newObject = internal.getObject(relationship.prototype,data);
+			var newObject = entities[relationship.prototype].object(data);
 			
 			object.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -813,7 +807,7 @@ var _ = function () {
 		relationship.direction	= 'reverse';
 
 		var children			= new internal.DomainObjectCollection({
-											base: 	objects[relationship.prototype],
+											base: 	entities[relationship.prototype].objects,
 											view: 	function (field,parent) {
 														return function (candidate) {
 															return candidate.get(field) == parent.primaryKeyValue();
@@ -841,13 +835,13 @@ var _ = function () {
 			
 			data = data || {};
 			data[relationship.field] = object.primaryKeyValue();
-			return internal.getObject(relationship.prototype,data);
+			return entities[relationship.prototype].object(data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			internal.getObjects(relationship.prototype).remove(id);
+			entities[relationship.prototype].objects.remove(id);
 			return this;
 			
 		};
@@ -879,7 +873,10 @@ var _ = function () {
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				object = internal.getObject(key,partitionedData.fields);
+				if ( !entities[key] ) {
+					alert(key);
+				}
+				object = entities[key].object(partitionedData.fields);
 			}
 			
 			for ( var childKey in partitionedData.children ) {
