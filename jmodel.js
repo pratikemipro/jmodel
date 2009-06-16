@@ -165,8 +165,8 @@ var _ = function () {
 
 			newObject.data	= newObject.data || {};
 
-			if ( typeof arguments[1] == 'object' ) { // Need to deduce ID from JSON
-				data = arguments[1];
+			if ( typeof arguments[0] == 'object' ) { // Need to deduce ID from JSON
+				data = arguments[0];
 			}
 			else {
 				data = data || {};
