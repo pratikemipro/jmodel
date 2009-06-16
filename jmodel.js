@@ -69,7 +69,9 @@ var _ = function () {
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
 				var synonym 							= names[i];
+				entities[synonym]						= entities[name];
 				external[synonym] 						= entities[name].object;
+				external['create'+synonym]				= entities[name].create;
 				external[options.plural || synonym+'s']	= function() { return entities[name].objects; };
 			}
 
@@ -132,14 +134,19 @@ var _ = function () {
 					return objects.get(id);
 				}
 			}
-			else {									// Need to create a new object from prototype
-				return createObject(id,data);
+			else {	// May need to create a new object
+				if ( typeof arguments[arguments.length-1] == 'boolean' && arguments[arguments.length-1] ) {
+					return this.create(id,data);
+				}
+				else {
+					return false;
+				}						
 			}
 			
 		};
 		
 		
-		function createObject (id,data) {
+		this.create = function (id,data) {
 			
 			var newObject	= new constructor();
 			var primaryKey	= newObject.primaryKey;
@@ -170,7 +177,7 @@ var _ = function () {
 
 			return newObject;
 			
-		}
+		};
 		
 		
 		function generateID() {			
@@ -247,7 +254,7 @@ var _ = function () {
 					},
 					
 		push: 		function () {
-						for(var prototypeName in objects) {
+						for(var prototypeName in entities) {
 							entities[prototypeName].objects.each(function (index,object) {
 								object.pushNotifications();
 							});
@@ -789,24 +796,25 @@ var _ = function () {
 	// Relationships
 	//
 	
-	internal.OneToOneRelationship = function (object,relationship) {
+	internal.OneToOneRelationship = function (parent,relationship) {
 		
-		this.get = function () {
-			return entities[relationship.prototype].object(relationship.field);
+		this.get = function (create) {
+			return entities[relationship.prototype].object(parent.get(relationship.field),create);
 		};
 		
 		this.add = function (data) {
 			
 			data = data || {};
-			var newObject = entities[relationship.prototype].object(data);
+			var newObject = entities[relationship.prototype].create(data);
 			
-			object.set(relationship.field, newObject.primaryKeyValue());
+			parent.set(relationship.field, newObject.primaryKeyValue());
 			
 			return newObject;
 			
 		};
 		
-		object[relationship.accessor] = this.get;
+		parent[relationship.accessor] 		= this.get;
+		parent['add'+relationship.accessor]	= this.add;
 		
 	};
 	
@@ -844,7 +852,7 @@ var _ = function () {
 			
 			data = data || {};
 			data[relationship.field] = object.primaryKeyValue();
-			return entities[relationship.prototype].object(data);
+			return entities[relationship.prototype].create(data);
 			
 		};
 		
@@ -882,10 +890,7 @@ var _ = function () {
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				if ( !entities[key] ) {
-					alert(key);
-				}
-				object = entities[key].object(partitionedData.fields);
+				object = entities[key].create(partitionedData.fields);
 			}
 			
 			for ( var childKey in partitionedData.children ) {
