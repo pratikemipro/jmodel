@@ -120,7 +120,19 @@ var _ = function () {
 		var base = options.base || name; 
 		
 		var objects 			= new internal.DomainObjectCollection({});
+		
 		this.objects 			= objects;
+		this.name				= name;
+		this.options			= options;
+		this.constructor		= constructor;
+		
+//		var cons = constructor;
+//		while ( cons.prototype != Object.prototype ) {
+//			alert('here');
+//			cons = cons.prototype.constructor;
+//		}
+//		cons.prototype = new internal.DomainObject();
+		
 		constructor.prototype 	= new internal.DomainObject();
 		
 		
@@ -164,8 +176,9 @@ var _ = function () {
 				data[primaryKey] = generateID();
 			}
 
-			objects.set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
-			newObject.baseCollection = objects;
+			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
+
+			newObject.baseCollection = entities[base].objects;
 			newObject.subscribers = new internal.SubscriptionList(internal.notifications);
 
 			newObject
@@ -173,20 +186,42 @@ var _ = function () {
 				.reifyRelationships()
 				.set(data);
 
-			objects.set(data[primaryKey],newObject); // To trigger subscribers
+			// To trigger subscribers
+			set(data[primaryKey],newObject);
 
 			return newObject;
 			
 		};
 		
+		var that=this;
+		function set (id,object) {
+			var entity = that;
+			do {
+				entity.objects.set(id,object);
+//				alert(entity.constructor);
+//				entity = internal.getEntityTypeByConstructor(entity.constructor.prototype.constructor);
+				entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
+			}
+			while ( entity )
+		}
+		
 		
 		function generateID() {			
-			return -(objects.count()+1);
+			return -(entities[base].objects.count()+1);
 		}
 		
 		
 	};
 	
+	
+	internal.getEntityTypeByConstructor = function (constructor) {
+		for( var key in entities ) {
+			if ( entities[key].constructor == constructor ) {
+				return entities[key];
+			}
+		}
+		return false;
+	};
 	
 	internal.getObjects = function (prototypeName) {
 		return entities[prototypeName].objects;
