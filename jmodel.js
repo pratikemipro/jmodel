@@ -681,6 +681,100 @@ var _ = function () {
 	};
 	
 	
+	//
+	// Predicates
+	//
+	
+	internal.ExamplePredicate = function (example) {
+		
+		this.test = function (candidate) {
+			
+			var exampleForeignKeys = [];
+
+			for( var key in example ) {
+
+				if ( typeof example[key] == 'object' && typeof candidate[key] == 'function' ) { // Some kind of foreign key
+					exampleForeignKeys.push(key);
+				}
+				else if ( example[key] instanceof RegExp && !example[key].test(candidate.get(key)) ) {
+					return false;
+				}
+				else if ( candidate.get(key) != example[key] ) { // Scalar field
+					return false;
+				}
+
+				for( var index in exampleForeignKeys ) {
+					var exampleForeignKey = exampleForeignKeys[index];
+					var children = candidate[exampleForeignKey]();
+					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children]});
+					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
+						return false;
+					}
+				}
+
+			}
+			
+			return true;
+			
+		};
+		
+	};
+	
+	external.example = function (example) {
+		return new internal.ExamplePredicate(example);
+	};
+	
+	internal.InstancePredicate = function (constructor) {
+		this.test = function (candidate) {
+			return candidate instanceof constructor;
+		};
+	};
+	
+	external.instance = function (constructor) {
+		return new internal.InstancePredicate(constructor);
+	};
+	
+	// Logical connectives
+	
+	internal.Or = function (predicates) {
+		this.test = function (candidate) {
+			var any = false;
+			for (var i=0; i<predicates.length; i++) {
+				any = any || predicates[i].test(candidate);
+			}
+			return any;
+		};
+	};
+	
+	external.or = function () {
+		return new internal.Or(arguments);
+	};
+	
+	internal.And = function (predicates) {
+		this.test = function (candidate) {
+			var all = true;
+			for (var i=0; i<predicates.length; i++) {
+				all = all && predicates[i].test(candidate);
+			}
+			return all;
+		};
+	};
+	
+	external.and = function () {
+		return new internal.And(arguments);
+	};
+	
+	internal.Not = function (predicate) {
+		this.test = function (candidate) {
+			return !predicate.test(candidate);
+		};
+	};
+	
+	external.not = function (predicate) {
+		return new internal.Not(predicate);
+	};
+	
+	
 	//	
 	// Domain Object prototype
 	//
