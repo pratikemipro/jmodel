@@ -925,7 +925,9 @@ var _ = function () {
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				object = entities[key].create(partitionedData.fields);
+				if ( entities[key] ) {
+					object = entities[key].create(partitionedData.fields);
+				}
 			}
 			
 			for ( var childKey in partitionedData.children ) {
@@ -959,11 +961,12 @@ var _ = function () {
 		
 		return {
 			
-			thaw: 	function (data) {
+			thaw: 	function (data,options) {
+						options = options || {};
 						data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
 							for ( var key in data[i] ) {
-								makeObject(key,data[i][key]);
+								makeObject(key,data[i][key],options.parent);
 							}
 						}
 					}
