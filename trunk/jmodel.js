@@ -934,7 +934,7 @@ var _ = function () {
 				var childData = partitionedData.children[childKey];
 				childData = ( childData instanceof Array ) ? childData : [childData];
 				for ( var i=0; i<childData.length; i++) {
-					makeObject(childKey,childData[i],object);
+					makeObject(childKey,childData[i],object||parent);
 				}
 			}
 
