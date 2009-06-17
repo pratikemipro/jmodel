@@ -4,39 +4,84 @@
 
 // NOTE: Make it possible to publish to a method not just a key?
 jQuery.fn.publish = function (publication) {
-	return this.change ? this.change(function (event) {
-		publication.target.set(publication.key,jQuery(event.target).val());
-	}) :
-	this;
+	
+	if ( publication.bindings ) {
+		
+		for (var selector in publication.bindings) {
+			jQuery(selector,this).each(function (index,object) {
+				jQuery(object).bind('change',function (key) {
+					return function (event) {
+						publication.target.set(key,jQuery(event.target).val());
+					};
+				}(publication.bindings[selector]));
+			});
+		}
+		return this;
+		
+	}
+	else {
+		
+		return this.change ? this.change(function (event) {
+			publication.target.set(publication.key,jQuery(event.target).val());
+		}) :
+		this;
+		
+	}
+	
 };
 
 jQuery.fn.subscribe = function (subscription) {
-	return	(subscription.key && !subscription.selector) ?
-				this.each(function (index,element) {
-					subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
-					jQuery.each(subscription.key,function (index,key) {
-						subscription.source.subscribe({
-							source: subscription.source,
-							target: jQuery(element),
-							key: key,
-							change: subscription.onChange,
-							initialise: subscription.initialise
-						});
-					});
-				}) :
-				this.each(function (index,element) {
+	
+	if ( subscription.key && !subscription.selector ) { // Basic subscription
+		
+		return this.each(function (index,element) {
+			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
+			jQuery.each(subscription.key,function (index,key) {
+				subscription.source.subscribe({
+					source: subscription.source,
+					target: jQuery(element),
+					key: key,
+					change: subscription.onChange,
+					initialise: subscription.initialise
+				});
+			});
+		});
+		
+	}
+	else if ( subscription.bindings ) { // Multiple subscription through selector/key mapping
+		
+		return this.each(function (index,element) {
+			for (var selector in subscription.bindings) {
+				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe({
 						source: subscription.source,
-						target: jQuery(element),
-						add: subscription.onAdd,
-						remove: subscription.onRemove,
-						change: subscription.onChange,
-						initialise: subscription.initialise,
-						filter: subscription.filter,
-						selector: subscription.selector,
-						key: subscription.key
+						target: jQuery(object),
+						key: subscription.bindings[selector],
+						initialise: subscription.initialise
 					});
 				});
+			}
+		});
+		
+	} 
+	else { // Subscription to collection
+		
+		return this.each(function (index,element) {
+			subscription.source.subscribe({
+				source: subscription.source,
+				target: jQuery(element),
+				add: subscription.onAdd,
+				remove: subscription.onRemove,
+				change: subscription.onChange,
+				initialise: subscription.initialise,
+				filter: subscription.filter,
+				selector: subscription.selector,
+				key: subscription.key
+			});
+		});
+		
+	}
+
 };
 
 jQuery.fn.pubsub = function (pubsub) {
