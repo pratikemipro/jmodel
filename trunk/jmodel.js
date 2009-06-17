@@ -210,6 +210,7 @@ var _ = function () {
 		this.create = function (id,data) {
 			
 			var newObject	= new constructor();
+			
 			var primaryKey	= newObject.primaryKey;
 
 			newObject.data	= newObject.data || {};
@@ -233,7 +234,8 @@ var _ = function () {
 			newObject
 				.reifyFields()
 				.reifyRelationships()
-				.set(data);
+				.set(data)
+				.dirty = false;
 
 			// To trigger subscribers
 			set(data[primaryKey],newObject);
@@ -734,6 +736,14 @@ var _ = function () {
 		return new internal.InstancePredicate(constructor);
 	};
 	
+	internal.ModifiedPredicate = function () {
+		this.test = function (candidate) {
+			return candidate.dirty;
+		};
+	};
+	
+	external.dirty = new internal.ModifiedPredicate();
+	
 	// Logical connectives
 	
 	internal.Or = function (predicates) {
@@ -830,7 +840,9 @@ var _ = function () {
 				
 			}
 			// NOTE: Should log problem here
-					
+			
+			this.dirty = true;
+			
 			return this; 
 			
 		};
