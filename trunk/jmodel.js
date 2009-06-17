@@ -19,7 +19,8 @@ jQuery.fn.subscribe = function (subscription) {
 							source: subscription.source,
 							target: jQuery(element),
 							key: key,
-							change: subscription.onChange
+							change: subscription.onChange,
+							initialise: subscription.initialise
 						});
 					});
 				}) :
@@ -30,6 +31,7 @@ jQuery.fn.subscribe = function (subscription) {
 						add: subscription.onAdd,
 						remove: subscription.onRemove,
 						change: subscription.onChange,
+						initialise: subscription.initialise,
 						filter: subscription.filter,
 						selector: subscription.selector,
 						key: subscription.key
@@ -765,7 +767,13 @@ var _ = function () {
 				subscription.type = internal.ContentNotification;
 			}
 			
-			this.subscribers.add( new internal.ObjectSubscriber(subscription) );
+			var subscriber = new internal.ObjectSubscriber(subscription);
+			
+			this.subscribers.add(subscriber);
+			
+			if ( subscription.initialise ) {
+				internal.notifications.send(subscriber.notification({key:subscription.key}));
+			}
 			
 			return this;
 			
