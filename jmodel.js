@@ -756,7 +756,7 @@ var _ = function () {
 				subscription.type		= internal.MethodNotification;
 				subscription.method		= subscription.change;
 			}
-			else if ( subscription.target.is('input:input,input:checkbox,input:hidden') ) {
+			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
 				subscription.type = internal.ValueNotification;
 			}
 			else {
