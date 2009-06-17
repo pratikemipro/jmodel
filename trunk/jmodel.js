@@ -37,8 +37,10 @@ jQuery.fn.subscribe = function (subscription) {
 				});
 };
 
-jQuery.fn.pubsub = function (domainObject,key) {
-	return this.subscribe({source:domainObject,key:key}).publish({target:domainObject,key:key});
+jQuery.fn.pubsub = function (pubsub) {
+	pubsub.source = pubsub.object;
+	pubsub.target = pubsub.object;
+	return this.subscribe(pubsub).publish(pubsub);
 };
 
 
