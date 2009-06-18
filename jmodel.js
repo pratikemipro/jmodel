@@ -129,7 +129,8 @@ var _ = function () {
 		},
 		
 		context: 		external.context,
-		notifications: 	external.notifications
+		notifications: 	external.notifications,
+		json: 			external.json
 		
 	};
 	
@@ -145,6 +146,15 @@ var _ = function () {
 					return external.context;
 				},
 				
+		checkpoint: function () {
+						for ( var entityName in entities ) {
+							entities[entityName].objects.each(function (index,object) {
+								entities[entityName].objects.dirty = false;
+							});
+						}
+						return external.context;
+					}, 
+				
 		debug: 	function () {
 					var contents = '';
 					for ( var entityName in entities ) {
@@ -154,7 +164,8 @@ var _ = function () {
 				},
 				
 		prototype: 		external.prototype,
-		notifications: 	external.notifications
+		notifications: 	external.notifications,
+		json: 			external.json
 		
 	};
 	
@@ -349,7 +360,8 @@ var _ = function () {
 					},
 					
 		prototype: 	external.prototype,
-		context: 	external.context
+		context: 	external.context,
+		json: 		external.json
 	
 	};
 	
@@ -1101,7 +1113,12 @@ var _ = function () {
 								makeObject(key,data[i][key],options.parent);
 							}
 						}
-					}
+						return external.json;
+					},
+					
+			prototype: 		external.prototype,
+			context: 		external.context,
+			notifications: 	external.notifications
 			
 		};
 		
