@@ -126,11 +126,7 @@ var _ = function () {
 
 			return external.prototype;
 
-		},
-		
-		context: 		external.context,
-		notifications: 	external.notifications,
-		json: 			external.json
+		}
 		
 	};
 	
@@ -161,11 +157,7 @@ var _ = function () {
 						contents += entityName+': ['+entities[entityName].objects.debug()+'] ';
 					}
 					return contents;
-				},
-				
-		prototype: 		external.prototype,
-		notifications: 	external.notifications,
-		json: 			external.json
+				}
 		
 	};
 	
@@ -357,11 +349,7 @@ var _ = function () {
 							});
 						}
 						return external.notifications;
-					},
-					
-		prototype: 	external.prototype,
-		context: 	external.context,
-		json: 		external.json
+					}
 	
 	};
 	
@@ -1180,17 +1168,33 @@ var _ = function () {
 							}
 						}
 						return external.json;
-					},
-					
-			prototype: 		external.prototype,
-			context: 		external.context,
-			notifications: 	external.notifications
+					}
 			
 		};
 		
 		
 	}();
 	
+	
+	//
+	// Fluency
+	//
+	
+	external.prototype.context			= external.context;
+	external.prototype.notifications	= external.notifications;
+	external.prototype.json				= external.json;
+	
+	external.context.prototype			= external.prototype;
+	external.context.notifications		= external.notifications;
+	external.context.json				= external.json;
+	
+	external.notifications.prototype	= external.prototype;
+	external.notifications.context		= external.context;
+	external.notifications.json			= external.json;
+	
+	external.json.prototype				= external.prototype;
+	external.json.context				= external.context;
+	external.json.notifications			= external.notifications;
 	
 	return external;
 	
