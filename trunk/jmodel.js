@@ -586,8 +586,14 @@ var _ = function () {
 		
 		this.filter = function () {
 			
+			// No predicate
 			if ( arguments.length === 0 ) {
 				return this;
+			}
+			
+			// Short-circuit ID predicate
+			if ( arguments[0] instanceof internal.IdentityPredicate ) {
+				return this.get(arguments[0].id);
 			}
 			
 			var selector;
@@ -705,6 +711,8 @@ var _ = function () {
 	//
 	
 	internal.IdentityPredicate = function (id) {
+	
+		this.id = id;
 	
 		this.test = function (candidate) {
 			return candidate.primaryKeyValue() == id;
