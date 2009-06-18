@@ -748,11 +748,12 @@ var _ = function () {
 	
 	internal.Or = function (predicates) {
 		this.test = function (candidate) {
-			var any = false;
 			for (var i=0; i<predicates.length; i++) {
-				any = any || predicates[i].test(candidate);
+				if (predicates[i].test(candidate)) {
+					return true;
+				}
 			}
-			return any;
+			return false;
 		};
 	};
 	
@@ -762,11 +763,12 @@ var _ = function () {
 	
 	internal.And = function (predicates) {
 		this.test = function (candidate) {
-			var all = true;
 			for (var i=0; i<predicates.length; i++) {
-				all = all && predicates[i].test(candidate);
+				if (!predicates[i].test(candidate)) {
+					return false;
+				}
 			}
-			return all;
+			return true;
 		};
 	};
 	
