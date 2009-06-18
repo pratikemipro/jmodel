@@ -176,16 +176,16 @@ var _ = function () {
 		this.objects 			= objects;
 		this.name				= name;
 		this.options			= options;
-		this.constructor		= constructor;
+		this.objectConstructor	= constructor;
 		
-//		var cons = constructor;
-//		while ( cons.prototype != Object.prototype ) {
-//			alert('here');
-//			cons = cons.prototype.constructor;
-//		}
-//		cons.prototype = new internal.DomainObject();
-		
-		constructor.prototype 	= new internal.DomainObject();
+		var empty = true;
+		for(var i in constructor.prototype) {
+			empty = false;
+			break;
+		}
+		if ( empty ) {
+			constructor.prototype = new internal.DomainObject();
+		}
 		
 		
 		this.object = function (id,data) {
@@ -213,6 +213,7 @@ var _ = function () {
 		this.create = function (id,data) {
 			
 			var newObject	= new constructor();
+			newObject.constructor = this.objectConstructor;
 			
 			var primaryKey	= newObject.primaryKey;
 
@@ -764,6 +765,25 @@ var _ = function () {
 		return new internal.InstancePredicate(constructor);
 	};
 	
+	// Inheritance
+	
+	internal.InheritancePredicate = function (constructor) {
+		this.test = function (candidate) {
+			var object = candidate;
+			while ( object.constructor != internal.DomainObject ) {
+				if ( object.constructor == constructor ) {
+					return true;
+				}
+				object = object.constructor.prototype;
+			}
+			return false;
+		};
+	};
+	
+	external.isa = function (constructor) {
+		return new internal.InheritancePredicate(constructor);
+	};
+	
 	// Relationship
 	
 	internal.RelationshipPredicate = function (parent,field) {
@@ -876,6 +896,9 @@ var _ = function () {
 	//
 	
 	internal.DomainObject = function () {
+
+
+		this.constructor = internal.DomainObject;
 
 
 		this.primaryKeyValue = function () {
