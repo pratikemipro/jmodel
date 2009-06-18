@@ -530,18 +530,13 @@ var _ = function () {
 		};
 		
 		this.remove = function (predicate,immediate) {
+			predicate = (typeof predicate == 'object') ? predicate : new internal.IdentityPredicate(predicate);
 			var that = this;
-			if ( typeof arguments[0] != 'object' ) {
-				var id = predicate;
-				var removed = this.objects[id];
-				delete this.objects[id];
-				this.subscribers.notify({method:'remove',object:removed});
-			}
-			else { // NOTE: Fix this
-				this.filter(predicate).each(function (key,object) {
-					that.remove(key);
-				});
-			}
+			this.filter(predicate).each(function (key,object) {
+				var removed = object;
+				delete that.objects[key];
+				that.subscribers.notify({method:'remove',object:removed});
+			});
 		};
 	
 		
@@ -577,11 +572,6 @@ var _ = function () {
 			// No predicate
 			if ( arguments.length === 0 ) {
 				return this;
-			}
-			
-			// Short-circuit ID predicate
-			if ( arguments[0] instanceof internal.IdentityPredicate ) {
-				return this.get(arguments[0].id);
 			}
 			
 			var selector;
