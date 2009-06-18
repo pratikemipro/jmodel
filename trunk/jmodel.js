@@ -121,7 +121,7 @@ var _ = function () {
 				entities[synonym]						= entities[name];
 				external[synonym] 						= entities[name].object;
 				external['create'+synonym]				= entities[name].create;
-				external[options.plural || synonym+'s']	= function() { return entities[name].objects; };
+				external[options.plural || synonym+'s']	= function(predicate) { return entities[name].objects.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -586,6 +586,10 @@ var _ = function () {
 		
 		this.filter = function () {
 			
+			if ( arguments.length === 0 ) {
+				return this;
+			}
+			
 			var selector;
 			
 			if ( typeof arguments[0] == 'object' ) {
@@ -699,6 +703,18 @@ var _ = function () {
 	//
 	// Predicates
 	//
+	
+	internal.IdentityPredicate = function (id) {
+	
+		this.test = function (candidate) {
+			return candidate.primaryKeyValue() == id;
+		};
+		
+	};
+	
+	external.id = function (id) {
+		return new internal.IdentityPredicate(id);
+	};
 	
 	internal.ExamplePredicate = function (example) {
 		
