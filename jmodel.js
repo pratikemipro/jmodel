@@ -751,6 +751,16 @@ var _ = function () {
 		return new internal.ExamplePredicate(example);
 	};
 	
+	internal.FunctionPredicate = function (fn) {
+		this.test = function (candidate) {
+			return fn(candidate);
+		};
+	};
+	
+	external.test = function (fn) {
+		return new internal.FunctionPredicate(fn);
+	};
+	
 	internal.InstancePredicate = function (constructor) {
 		this.test = function (candidate) {
 			return candidate instanceof constructor;
