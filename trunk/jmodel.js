@@ -512,14 +512,9 @@ var _ = function () {
 		};
 		
 		this.set = function (id,value,immediate) {
-			if ( !this.objects[id] ) {
-				this.objects[id] = value;
-				this.subscribers.notify({method:'add',object:value});
-			}
-			else {
-				this.objects[id] = value;
-				this.subscribers.notify({method:'change',object:value});
-			}
+			var method = this.objects[id] ? 'change' : 'add';
+			this.objects[id] = value;
+			this.subscribers.notify({method:method,object:value});
 		};
 		
 		this.first = function () {
