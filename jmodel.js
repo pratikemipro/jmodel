@@ -757,6 +757,48 @@ var _ = function () {
 	
 	external.dirty = new internal.ModifiedPredicate();
 	
+	
+	// Comparisons
+	
+	internal.Eq = function (field,value) {
+		this.test = function (candidate) {
+			return candidate.get(field) == value;
+		};
+	};
+	
+	internal.Lt = function (field,value) {
+		this.test = function (candidate) {
+			return candidate.get(field) < value;
+		};
+	};
+	
+	internal.Gt = function (field,value) {
+		this.test = function (candidate) {
+			return candidate.get(field) > value;
+		};
+	};
+	
+	external.eq = function (field,value) {
+		return new internal.Eq(field,value);
+	};
+	
+	external.lt = function (field,value) {
+		return new internal.Lt(field,value);
+	};
+	
+	external.gt = function (field,value) {
+		return new internal.Gt(field,value);
+	};
+	
+	external.lte = function (field,value) {
+		return new internal.Not(new internal.Gt(field,value));
+	};
+	
+	external.gte = function (field,value) {
+		return new internal.Not(new internal.Lt(field,value));
+	};
+	
+	
 	// Logical connectives
 	
 	internal.Or = function (predicates) {
