@@ -529,15 +529,16 @@ var _ = function () {
 			return false;
 		};
 		
-		this.remove = function (criteria,immediate) {
+		this.remove = function (predicate,immediate) {
 			var that = this;
 			if ( typeof arguments[0] != 'object' ) {
-				var removed = this.objects[criteria];
-				delete this.objects[criteria];
+				var id = predicate;
+				var removed = this.objects[id];
+				delete this.objects[id];
 				this.subscribers.notify({method:'remove',object:removed});
 			}
 			else { // NOTE: Fix this
-				this.filter(criteria).each(function (key,object) {
+				this.filter(predicate).each(function (key,object) {
 					that.remove(key);
 				});
 			}
@@ -576,17 +577,17 @@ var _ = function () {
 			var selector;
 			
 			if ( typeof arguments[0] == 'object' ) {
-				var example		= arguments[0];
+				var predicate	= arguments[0];
 				selector		= arguments[1];
 			}
 			else {
 				selector 		= arguments[0];
 			}
 			
-			if ( example ) {
+			if ( predicate ) {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
-					if ( object.matches(example) ) {
+					if ( predicate.test(object) ) {
 						objs.set(index,object);
 					}
 				});
@@ -942,38 +943,6 @@ var _ = function () {
 		};
 		
 		
-		this.matches = function (example) {
-			
-			var exampleForeignKeys = [];
-
-			for( var key in example ) {
-
-				if ( typeof example[key] == 'object' && typeof this[key] == 'function' ) { // Some kind of foreign key
-					exampleForeignKeys.push(key);
-				}
-				else if ( example[key] instanceof RegExp && !example[key].test(this.get(key)) ) {
-					return false;
-				}
-				else if ( this.get(key) != example[key] ) { // Scalar field
-					return false;
-				}
-
-				for( var index in exampleForeignKeys ) {
-					var exampleForeignKey = exampleForeignKeys[index];
-					var children = this[exampleForeignKey]();
-					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children]});
-					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
-						return false;
-					}
-				}
-
-			}
-			
-			return true;
-			
-		};
-		
-		
 		this.debugData = function () {
 
 			var fields = '';
@@ -1041,8 +1010,8 @@ var _ = function () {
 			children.subscribe(subscription);
 		}
 		
-		this.get = function (example,selector) {
-			return children.filter(example,selector);
+		this.get = function (predicate,selector) {
+			return children.filter(predicate,selector);
 		};
 		
 		// NOTE: Should this work with arrays of objects too?
