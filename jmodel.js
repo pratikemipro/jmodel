@@ -1,6 +1,15 @@
-//
-// Domain binding plugin
-//
+/*
+ *	jModel Javascript Library v0.1
+ *	http://code.google.com/p/jmodel/
+ *
+ *	Copyright (c) 2009 Richard Baker
+ *	Dual licensed under the MIT and GPL licenses
+ *
+ */
+
+// =========================================================================
+// 												Domain binding jQuery plugin
+// =========================================================================
 
 // NOTE: Make it possible to publish to a method not just a key?
 jQuery.fn.publish = function (publication) {
@@ -91,9 +100,9 @@ jQuery.fn.pubsub = function (pubsub) {
 };
 
 
-//
-// Domain Object Model
-//
+// ============================================================================
+//														 	Domain Object Model
+// ============================================================================
 
 var _ = function () {
 
@@ -102,10 +111,144 @@ var _ = function () {
 		external	= {},
 		internal	= {},
 		$			= jQuery;
-		
-	//
-	// Public methods
-	//
+	
+	
+	
+	// ------------------------------------------------------------------------
+	// 																 Prototypes
+	// ------------------------------------------------------------------------
+	
+	internal.EntityType = function (name,constructor,options) {
+
+		options  = options || {};
+		this.options			= options;
+
+		// Figure out the current type's base entity
+		entity = this;
+		while ( entity.options && ( entity.options.base !== true ) ) {
+			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
+		}
+		var base = entity.name || name;
+
+		var descriptor = ( base != name) ? 
+							{
+								base: 		entities[base].objects,
+								predicate: 	new internal.InheritsPredicate(constructor)
+							} : {}; 
+
+		var objects 			= new internal.DomainObjectCollection(descriptor);
+
+		this.objects 			= objects;
+		this.name				= name;
+		this.objectConstructor	= constructor;
+
+		var empty = true;
+		for(var i in constructor.prototype) {
+			empty = false;
+			break;
+		}
+		if ( empty ) {
+			constructor.prototype = new internal.DomainObject();
+		}
+
+
+		this.object = function (id,data) {
+
+			// NOTE: THIS IS NOT CORRECT!
+			collection = entities[base].objects;
+
+			if ( typeof arguments[1] != 'object' && ( id == ':first' || collection.get(id) ) ) {		// Object already exists
+				if ( id == ':first' ) {
+					return collection.first();
+				}
+				else {
+					return collection.get(id);
+				}
+			}
+			else  {	// May need to create a new object
+				if ( typeof arguments[arguments.length-1] == 'boolean' && arguments[arguments.length-1] ) {
+					return entities[base].create(id,data);
+				}
+				else {
+					return false;
+				}						
+			}
+
+		};
+
+
+		this.create = function (id,data) {
+
+			var newObject	= new constructor();
+			newObject.constructor = this.objectConstructor;
+
+			var primaryKey	= newObject.primaryKey;
+
+			newObject.data	= newObject.data || {};
+
+			if ( typeof arguments[0] == 'object' ) { // Need to deduce ID from JSON
+				data = arguments[0];
+			}
+			else {
+				data = data || {};
+			}
+
+			if ( !data[primaryKey] ) {
+				data[primaryKey] = generateID();
+			}
+
+			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
+
+			newObject.baseCollection = entities[base].objects;
+			newObject.subscribers = new internal.SubscriptionList(internal.notifications);
+
+			newObject
+				.reifyFields()
+				.reifyRelationships()
+				.set(data)
+				.dirty = false;
+
+			// To trigger subscribers
+			set(data[primaryKey],newObject);
+
+			return newObject;
+
+		};
+
+		var that=this;
+		function set (id,object) {
+			entities[base].objects.set(id,object);
+/*			var entity = that;
+			do {
+				entity.objects.set(id,object);
+//				alert(entity.constructor);
+//				entity = internal.getEntityTypeByConstructor(entity.constructor.prototype.constructor);
+				entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
+			}
+			while ( entity ) */
+		}
+
+
+		function generateID() {			
+			return -(entities[base].objects.count()+1);
+		}
+
+
+	};
+
+
+	internal.getEntityTypeByConstructor = function (constructor) {
+		for( var key in entities ) {
+			if ( entities[key].constructor == constructor ) {
+				return entities[key];
+			}
+		}
+		return false;
+	};
+
+	internal.getObjects = function (prototypeName) {
+		return entities[prototypeName].objects;
+	};
 	
 	external.prototype = {
 		
@@ -129,7 +272,12 @@ var _ = function () {
 		}
 		
 	};
+
+
 	
+	// ------------------------------------------------------------------------
+	//																	Context
+	// ------------------------------------------------------------------------
 	
 	external.context = {
 	
@@ -162,130 +310,10 @@ var _ = function () {
 	};
 	
 	
-	//
-	// Entity Type
-	//
 	
-	internal.EntityType = function (name,constructor,options) {
-		
-		options  = options || {};
-		var base = options.base || name; 
-		
-		var objects 			= new internal.DomainObjectCollection({});
-		
-		this.objects 			= objects;
-		this.name				= name;
-		this.options			= options;
-		this.objectConstructor	= constructor;
-		
-		var empty = true;
-		for(var i in constructor.prototype) {
-			empty = false;
-			break;
-		}
-		if ( empty ) {
-			constructor.prototype = new internal.DomainObject();
-		}
-		
-		
-		this.object = function (id,data) {
-			
-			if ( typeof arguments[1] != 'object' && ( id == ':first' || objects.get(id) ) ) {		// Object already exists
-				if ( id == ':first' ) {
-					return objects.first();
-				}
-				else {
-					return objects.get(id);
-				}
-			}
-			else {	// May need to create a new object
-				if ( typeof arguments[arguments.length-1] == 'boolean' && arguments[arguments.length-1] ) {
-					return this.create(id,data);
-				}
-				else {
-					return false;
-				}						
-			}
-			
-		};
-		
-		
-		this.create = function (id,data) {
-			
-			var newObject	= new constructor();
-			newObject.constructor = this.objectConstructor;
-			
-			var primaryKey	= newObject.primaryKey;
-
-			newObject.data	= newObject.data || {};
-
-			if ( typeof arguments[0] == 'object' ) { // Need to deduce ID from JSON
-				data = arguments[0];
-			}
-			else {
-				data = data || {};
-			}
-
-			if ( !data[primaryKey] ) {
-				data[primaryKey] = generateID();
-			}
-
-			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
-
-			newObject.baseCollection = entities[base].objects;
-			newObject.subscribers = new internal.SubscriptionList(internal.notifications);
-
-			newObject
-				.reifyFields()
-				.reifyRelationships()
-				.set(data)
-				.dirty = false;
-
-			// To trigger subscribers
-			set(data[primaryKey],newObject);
-
-			return newObject;
-			
-		};
-		
-		var that=this;
-		function set (id,object) {
-			var entity = that;
-			do {
-				entity.objects.set(id,object);
-//				alert(entity.constructor);
-//				entity = internal.getEntityTypeByConstructor(entity.constructor.prototype.constructor);
-				entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
-			}
-			while ( entity )
-		}
-		
-		
-		function generateID() {			
-			return -(entities[base].objects.count()+1);
-		}
-		
-		
-	};
-	
-	
-	internal.getEntityTypeByConstructor = function (constructor) {
-		for( var key in entities ) {
-			if ( entities[key].constructor == constructor ) {
-				return entities[key];
-			}
-		}
-		return false;
-	};
-	
-	internal.getObjects = function (prototypeName) {
-		return entities[prototypeName].objects;
-	};
-	
-	
-	//
-	// Notification queue
-	//
+	// ------------------------------------------------------------------------
+	//															  Notifications
+	// ------------------------------------------------------------------------
 	
 	internal.NotificationQueue = function () {
 		
@@ -323,8 +351,6 @@ var _ = function () {
 	};
 	
 	internal.notifications = new internal.NotificationQueue();
-	
-	// Public interface to notification queue
 	
 	external.notifications = {
 		
@@ -486,9 +512,10 @@ var _ = function () {
 	};
 	
 	
-	//
-	// Domain object collection
-	//
+	
+	// ------------------------------------------------------------------------
+	// 												   Domain Object Collection
+	// ------------------------------------------------------------------------
 	
 	internal.DomainObjectCollection = function (specification) {
 		
@@ -680,9 +707,10 @@ var _ = function () {
 	};
 	
 	
-	//
-	// Predicates
-	//
+	
+	// ------------------------------------------------------------------------
+	// 																 Predicates
+	// ------------------------------------------------------------------------
 	
 	// Identity
 	
@@ -891,9 +919,10 @@ var _ = function () {
 	};
 	
 	
-	//	
-	// Domain Object prototype
-	//
+	
+	// ------------------------------------------------------------------------
+	// 															  Domain Object
+	// ------------------------------------------------------------------------
 	
 	internal.DomainObject = function () {
 
@@ -1065,9 +1094,10 @@ var _ = function () {
 	};
 	
 	
-	//
-	// Relationships
-	//
+	
+	// ------------------------------------------------------------------------
+	// 															  Relationships
+	// ------------------------------------------------------------------------
 	
 	internal.OneToOneRelationship = function (parent,relationship) {
 		
@@ -1144,9 +1174,10 @@ var _ = function () {
 	};
 	
 	
-	//
-	// JSON parsing
-	//
+	
+	// ------------------------------------------------------------------------
+	// 																	   JSON
+	// ------------------------------------------------------------------------
 	
 	external.json = function () {
 		
@@ -1212,9 +1243,10 @@ var _ = function () {
 	}();
 	
 	
-	//
-	// Fluency
-	//
+	
+	// ------------------------------------------------------------------------
+	// 																	Fluency 
+	// ------------------------------------------------------------------------
 	
 	external.prototype.context			= external.context;
 	external.prototype.notifications	= external.notifications;
