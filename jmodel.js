@@ -648,7 +648,7 @@ var _ = function () {
 			
 			var that = this;
 			specification.base.each(function (key,candidate) {
-				if ( specification.view(candidate) ) {
+				if ( specification.predicate.test(candidate) ) {
 					that.set(candidate.primaryKeyValue(), candidate, true);
 				}
 			});
@@ -670,7 +670,7 @@ var _ = function () {
 		// Subcollection methods
 		
 		function baseAdd(collection,object) {
-			if ( specification.view(object) ) {
+			if ( specification.predicate.test(object) ) {
 				this.set(object.primaryKeyValue(), object, true);
 			}
 		}
@@ -680,7 +680,7 @@ var _ = function () {
 		}
 		
 		function baseChange(collection,object) {
-			if ( specification.view(object) ) {
+			if ( specification.predicate.test(object) ) {
 				this.set(object.primaryKeyValue(), object,true);
 			}
 			else {
@@ -698,6 +698,8 @@ var _ = function () {
 	// Predicates
 	//
 	
+	// Identity
+	
 	internal.IdentityPredicate = function (id) {
 	
 		this.id = id;
@@ -711,6 +713,20 @@ var _ = function () {
 	external.id = function (id) {
 		return new internal.IdentityPredicate(id);
 	};
+	
+	// Generic function
+	
+	internal.FunctionPredicate = function (fn) {
+		this.test = function (candidate) {
+			return fn(candidate);
+		};
+	};
+	
+	external.test = function (fn) {
+		return new internal.FunctionPredicate(fn);
+	};
+	
+	// Example
 	
 	internal.ExamplePredicate = function (example) {
 		
@@ -751,15 +767,7 @@ var _ = function () {
 		return new internal.ExamplePredicate(example);
 	};
 	
-	internal.FunctionPredicate = function (fn) {
-		this.test = function (candidate) {
-			return fn(candidate);
-		};
-	};
-	
-	external.test = function (fn) {
-		return new internal.FunctionPredicate(fn);
-	};
+	// Instance
 	
 	internal.InstancePredicate = function (constructor) {
 		this.test = function (candidate) {
@@ -770,6 +778,20 @@ var _ = function () {
 	external.instance = function (constructor) {
 		return new internal.InstancePredicate(constructor);
 	};
+	
+	// Relationship
+	
+	internal.RelationshipPredicate = function (parent,field) {
+		this.test = function (candidate) {
+			return candidate.get(field) == parent.primaryKeyValue();
+		};
+	};
+	
+	external.related = function (parent,field) {
+		return new internal.RelationshipPredicate(parent.field);
+	};
+	
+	// Modification state
 	
 	internal.ModifiedPredicate = function () {
 		this.test = function (candidate) {
@@ -1067,12 +1089,8 @@ var _ = function () {
 		relationship.direction	= 'reverse';
 
 		var children			= new internal.DomainObjectCollection({
-											base: 	entities[relationship.prototype].objects,
-											view: 	function (field,parent) {
-														return function (candidate) {
-															return candidate.get(field) == parent.primaryKeyValue();
-														};
-													}(relationship.field,object)
+											base: 		entities[relationship.prototype].objects,
+											predicate: 	new internal.RelationshipPredicate(object,relationship.field)
 										});
 										
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
