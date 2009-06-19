@@ -130,15 +130,15 @@ var _ = function () {
 		}
 		var base = entity.name || name;
 
-		var descriptor = 	( base != name) ? 	{
-								base: 		entities[base].objects,
-								predicate: 	new internal.InstancePredicate(constructor)
-							} : {}; 
+		var objects = new	internal.DomainObjectCollection(
+								( base != name) ?
+									{	base: 		entities[base].objects,
+										predicate: 	new internal.InstancePredicate(constructor) } :
+									{}
+							);
 
-		var objects 			= new internal.DomainObjectCollection(descriptor);
-
-		this.objects 			= objects;
-		this.name				= name;
+		this.objects = objects;
+		this.name	= name;
 
 
 		this.object = function (criterion) {
