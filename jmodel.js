@@ -130,14 +130,13 @@ var _ = function () {
 		}
 		var base = entity.name || name;
 
-		var objects = new	internal.DomainObjectCollection(
+		this.objects = new	internal.DomainObjectCollection(
 								( base != name) ?
 									{	base: 		entities[base].objects,
 										predicate: 	new internal.InstancePredicate(constructor) } :
 									{}
 							);
 
-		this.objects = objects;
 		this.name	= name;
 
 
