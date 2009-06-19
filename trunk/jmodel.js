@@ -120,8 +120,8 @@ var _ = function () {
 	
 	internal.EntityType = function (name,constructor,options) {
 
-		options  = options || {};
-		this.options			= options;
+		options  		= options || {};
+		this.options	= options;
 
 		// Figure out the current type's base entity
 		entity = this;
@@ -130,8 +130,7 @@ var _ = function () {
 		}
 		var base = entity.name || name;
 
-		var descriptor = ( base != name) ? 
-							{
+		var descriptor = 	( base != name) ? 	{
 								base: 		entities[base].objects,
 								predicate: 	new internal.InstancePredicate(constructor)
 							} : {}; 
