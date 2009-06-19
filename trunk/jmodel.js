@@ -139,30 +139,14 @@ var _ = function () {
 
 		this.objects 			= objects;
 		this.name				= name;
-		this.objectConstructor	= constructor;
 
 
-		this.object = function (id,data) {
-
-			// NOTE: THIS IS NOT CORRECT!
-			collection = entities[base].objects;
-
-			if ( typeof arguments[1] != 'object' && ( id == ':first' || collection.get(id) ) ) {		// Object already exists
-				if ( id == ':first' ) {
-					return collection.first();
-				}
-				else {
-					return collection.get(id);
-				}
-			}
-			else  {	// May need to create a new object
-				if ( typeof arguments[arguments.length-1] == 'boolean' && arguments[arguments.length-1] ) {
-					return entities[base].create(data);
-				}
-				else {
-					return false;
-				}						
-			}
+		this.object = function (criterion) {
+			
+			var selector  = ( typeof criterion == 'string' ) ? criterion : ':first';
+			var predicate = ( typeof criterion != 'string' ) ? new internal.IdentityPredicate(criterion) : null;
+			
+			return entities[base].objects.filter(new internal.InstancePredicate(constructor)).filter(predicate).select(selector);
 
 		};
 
@@ -207,7 +191,6 @@ var _ = function () {
 		function mixin(donor,recipient) {
 			for (var prop in donor) {
 				if ( donor[prop] instanceof Array && recipient[prop] instanceof Array ) { // Need to merge arrays
-					alert('merging arrays');
 					recipient[prop] = recipient[prop].concat(donor[prop]);
 				}
 				else {
@@ -238,9 +221,9 @@ var _ = function () {
 			for ( var i in names ) {
 				var synonym 							= names[i];
 				entities[synonym]						= entities[name];
-				external[synonym] 						= entities[name].object;
+				external[synonym] 						= function (predicate) { return entities[name].object(predicate); };
 				external['create'+synonym]				= entities[name].create;
-				external[options.plural || synonym+'s']	= function(predicate) { return entities[name].objects.filter(predicate); };
+				external[options.plural || synonym+'s']	= function (predicate) { return entities[name].objects.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -583,7 +566,7 @@ var _ = function () {
 				selector 		= arguments[0];
 			}
 			
-			if ( predicate ) {
+			if ( predicate && predicate !== null ) {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
 					if ( predicate.test(object) ) {
@@ -993,16 +976,24 @@ var _ = function () {
 			this.hasMany		= this.hasMany || [];
 			this.relationships	= this.relationships || {};
 			
-			var i, descriptor;
+			var i, descriptor, relationship;
 			
 			for ( i in this.hasOne ) {
 				descriptor = this.hasOne[i];
-				this.relationships[descriptor.accessor] = new internal.OneToOneRelationship(this,descriptor);
+				relationship 							= new internal.OneToOneRelationship(this,descriptor);
+				this.relationships[descriptor.accessor] = relationship
+				this[descriptor.accessor] 				= relationship.get;
+				this['add'+descriptor.accessor]			= relationship.add;
 			}
 			
 			for ( i in this.hasMany ) {
 				descriptor = this.hasMany[i];
-				this.relationships[descriptor.accessor] = new internal.OneToManyRelationship(this,descriptor);
+				relationship											= new internal.OneToManyRelationship(this,descriptor);
+				this.relationships[descriptor.accessor] 				= relationship
+				this[(descriptor.plural || descriptor.accessor+'s')] 	= relationship.get;
+				this['add'+descriptor.accessor]							= relationship.add;
+				this['remove'+descriptor.accessor]						= relationship.remove;
+				this['debug'+descriptor.accessor]						= relationship.debug;
 			}
 			
 			return this;
@@ -1073,7 +1064,13 @@ var _ = function () {
 	internal.OneToOneRelationship = function (parent,relationship) {
 		
 		this.get = function (create) {
-			return entities[relationship.prototype].object(parent.get(relationship.field),create);
+			var child = entities[relationship.prototype].object(parent.get(relationship.field));
+			if ( child ) {
+				return child;
+			}
+			else if ( create ) {
+				return this.add();
+			}
 		};
 		
 		this.add = function (data) {
@@ -1086,9 +1083,6 @@ var _ = function () {
 			return newObject;
 			
 		};
-		
-		parent[relationship.accessor] 		= this.get;
-		parent['add'+relationship.accessor]	= this.add;
 		
 	};
 	
@@ -1136,11 +1130,6 @@ var _ = function () {
 		this.debug = function () {
 			return children.debug();
 		};
-		
-		object[(relationship.plural || relationship.accessor+'s')] 	= this.get;
-		object['add'+relationship.accessor]							= this.add;
-		object['remove'+relationship.accessor]						= this.remove;
-		object['debug'+relationship.accessor]						= this.debug;
 		
 	};
 	
@@ -1311,7 +1300,7 @@ var _ = function () {
 		Base.prototype = prototype;
     
 		// Enforce the constructor to be what we expect
-		Base.constructor = Base;
+		prototype.constructor = Base;
 
 		// And make this class extendable
 		Base.extend = arguments.callee;
