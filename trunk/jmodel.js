@@ -142,12 +142,11 @@ var _ = function () {
 
 
 		this.object = function (criterion) {
-			
-			var selector  = ( typeof criterion == 'string' ) ? criterion : ':first';
-			var predicate = ( typeof criterion != 'string' ) ? new internal.IdentityPredicate(criterion) : null;
-			
-			return entities[base].objects.filter(new internal.InstancePredicate(constructor)).filter(predicate).select(selector);
-
+			return entities[base]
+					.objects
+						.filter(new internal.InstancePredicate(constructor))
+						.filter(( typeof criterion != 'string' ) ? new internal.IdentityPredicate(criterion) : null)
+						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
 
 
