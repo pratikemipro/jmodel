@@ -153,20 +153,16 @@ var _ = function () {
 
 			data = (typeof data == 'object') ? data : {};
 
-			var newObject = mixin(
-								new internal.DomainObject(this),
-								new constructor()
-							);
+			var newObject = new constructor();
+			internal.DomainObject.call(newObject,entities[name]);
 
 			var primaryKey	= newObject.primaryKey;
 
-			if ( !data[primaryKey] ) {
-				data[primaryKey] = generateID();
-			}
+			data[primaryKey] = data[primaryKey] || generateID();
 
 			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
 
-			newObject.initDomain(data);
+			newObject.domain.init(data);
 
 			// To trigger subscribers
 			set(data[primaryKey],newObject);
@@ -185,19 +181,6 @@ var _ = function () {
 			return -(entities[base].objects.count()+1);
 		}
 		
-		
-		function mixin(donor,recipient) {
-			for (var prop in donor) {
-				if ( donor[prop] instanceof Array && recipient[prop] instanceof Array ) { // Need to merge arrays
-					recipient[prop] = recipient[prop].concat(donor[prop]);
-				}
-				else {
-					recipient[prop] = donor[prop];	
-				}	
-			}
-			return recipient;
-		}
-
 
 	};
 
@@ -250,7 +233,7 @@ var _ = function () {
 		checkpoint: function () {
 						for ( var entityName in entities ) {
 							entities[entityName].objects.each(function (index,object) {
-								entities[entityName].objects.dirty = false;
+								entities[entityName].objects.domain.dirty = false;
 							});
 						}
 						return external.context;
@@ -329,7 +312,7 @@ var _ = function () {
 		push: 		function () {
 						for(var prototypeName in entities) {
 							entities[prototypeName].objects.each(function (index,object) {
-								object.pushNotifications();
+								object.domain.push();
 							});
 						}
 						return external.notifications;
@@ -476,12 +459,12 @@ var _ = function () {
 	
 	internal.DomainObjectCollection = function (specification) {
 		
-		this.objects		= specification.objects ? specification.objects : [];
+		this.objects		= specification.objects ? specification.objects : {};
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
 		
 		this.length = function () {
-			return this.objects.length;
+			return this.count();
 		};
 		
 		this.count = function () {
@@ -497,9 +480,12 @@ var _ = function () {
 		};
 		
 		this.set = function (id,value,immediate) {
-			var method = this.objects[id] ? 'change' : 'add';
-			this.objects[id] = value;
-			this.subscribers.notify({method:method,object:value});
+			// NOTE: Work out why this is sometimes called with invalid id
+			if ( id ) {
+				var method = this.objects[id] ? 'change' : 'add';
+				this.objects[id] = value;
+				this.subscribers.notify({method:method,object:value});
+			}
 		};
 		
 		this.first = function () {
@@ -583,9 +569,7 @@ var _ = function () {
 			var contents = '';
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
-				if ( obj.data ) {
-					contents += ' '+obj.primaryKeyValue()+' ';
-				}
+				contents += ' '+obj.primaryKeyValue()+' ';
 			}
 			return contents;
 		};
@@ -766,7 +750,7 @@ var _ = function () {
 	
 	internal.ModifiedPredicate = function () {
 		this.test = function (candidate) {
-			return candidate.dirty;
+			return candidate.domain.dirty;
 		};
 	};
 	
@@ -859,38 +843,20 @@ var _ = function () {
 	
 	
 	// ------------------------------------------------------------------------
-	// 															  Domain Object
+	// 														Domain Object mixin
 	// ------------------------------------------------------------------------
 	
 	internal.DomainObject = function (entitytype) {
-
-
-		this.data 			= {};
-		this.subscribers 	= new internal.SubscriptionList(internal.notifications);
-
-
-		this.initDomain = function (data) {
-			
-			this
-				.reifyFields()
-				.reifyRelationships()
-				.set(data)
-				.dirty = false;
-			
-			return this;
-			
-		}
-
-
-		this.primaryKeyValue = function () {
-			return this.get(this.primaryKey);
-		};
 		
+		
+		var data 		= {},
+			subscribers = new internal.SubscriptionList(internal.notifications)
+			
 		
 		this.get = function () {
-			
+		
 			if ( !(arguments[0] instanceof Array) ) { // Just a key
-				return this.data[arguments[0]];
+				return data[arguments[0]];
 			}
 			else { // Array of keys
 				var keys = arguments[0];
@@ -900,105 +866,48 @@ var _ = function () {
 				}
 				return values;
 			}
-			// NOTE: Should log problems here
-			
+	
 		};
-
-
+		
+		
 		this.set = function () {
 			
 			var key;
-			
+
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
-				
+
 				key = arguments[0];
 				var value = arguments[1];
-				this.data[key] = value;
-				this.subscribers.notify({key:key});
+				data[key] = value;
+				subscribers.notify({key:key});
 				if ( arguments.length == 2 || arguments[2] ) { 
-					entitytype.objects.subscribers.notify({method:'change',object:this});
+					entitytype.objects.subscribers.notify({
+						method:'change',
+						object:this
+					});
 				}
-				
+
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
-				
+
 				var mappings = arguments[0];
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				entitytype.objects.subscribers.notify({method:'change',object:this});
-				
+				entitytype.objects.subscribers.notify({
+					method:'change',
+					object:this
+				});
+
 			}
-			// NOTE: Should log problem here
-			
-			this.dirty = true;
-			
-			return this; 
-			
+
+			this.domain.dirty = true;
+
+			return this;
+	
 		};
 		
-
-		this.reifyFields = function () {
-			
-			for ( var i in this.fields ) {
-				
-				var field = this.fields[i];
-				
-//				if ( !this[field.accessor] ) {
-					
-					this.data[field.accessor] = field.defaultValue;
-					
-					this[field.accessor] = 	function (field) {
-						 						return function () {
-													return this.get(field);
-												};
-											}(field.accessor);
-											
-					this['set'+field.accessor]	=	function (field) {
-														return function (value) {
-															return this.set(field,value);
-														};
-													}(field.accessor); 
-//				}
-				
-			}
-			
-			return this;
-			
-		};
-
-
-		this.reifyRelationships = function () {
-			
-			this.hasOne			= this.hasOne || [];
-			this.hasMany		= this.hasMany || [];
-			this.relationships	= this.relationships || {};
-			
-			var i, descriptor, relationship;
-			
-			for ( i in this.hasOne ) {
-				descriptor = this.hasOne[i];
-				relationship 							= new internal.OneToOneRelationship(this,descriptor);
-				this.relationships[descriptor.accessor] = relationship
-				this[descriptor.accessor] 				= relationship.get;
-				this['add'+descriptor.accessor]			= relationship.add;
-			}
-			
-			for ( i in this.hasMany ) {
-				descriptor = this.hasMany[i];
-				relationship											= new internal.OneToManyRelationship(this,descriptor);
-				this.relationships[descriptor.accessor] 				= relationship
-				this[(descriptor.plural || descriptor.accessor+'s')] 	= relationship.get;
-				this['add'+descriptor.accessor]							= relationship.add;
-				this['remove'+descriptor.accessor]						= relationship.remove;
-				this['debug'+descriptor.accessor]						= relationship.debug;
-			}
-			
-			return this;
-			
-		};
-
-
+		
 		this.subscribe = function (subscription) {
 
 			if ( subscription.change && typeof subscription.change == 'string' ) {
@@ -1015,40 +924,113 @@ var _ = function () {
 			else {
 				subscription.type = internal.ContentNotification;
 			}
-			
+
 			var subscriber = new internal.ObjectSubscriber(subscription);
-			
-			this.subscribers.add(subscriber);
-			
+
+			subscribers.add(subscriber);
+
 			if ( subscription.initialise ) {
 				internal.notifications.send(subscriber.notification({key:subscription.key}));
 			}
-			
+
 			return this;
-			
+
 		};
 		
 		
-		this.pushNotifications = function () {
+		this.primaryKeyValue = function () {
+			return this.get(this.primaryKey);
+		};
 		
-			for (var i in this.data) {
-				this.subscribers.notify({key:i});
+		
+		this.domain = function () {
+			
+			that = this;
+			
+			function reifyFields () {
+
+				for ( var i in that.fields ) {
+
+					var field = that.fields[i];
+
+					that.set(field.accessor,field.defaultValue);
+
+					that[field.accessor] = 	function (field) {
+						 						return function () {
+													return this.get(field);
+												};
+											}(field.accessor);
+
+					that['set'+field.accessor]	=	function (field) {
+														return function (value) {
+															return this.set(field,value);
+														};
+													}(field.accessor); 
+
+				}
+
+			};
+			
+			function reifyRelationships() {
+
+				that.hasOne			= that.hasOne || [];
+				that.hasMany		= that.hasMany || [];
+				that.relationships	= that.relationships || {};
+
+				var i, descriptor, relationship;
+
+				for ( i in that.hasOne ) {
+					descriptor = that.hasOne[i];
+					relationship 							= new internal.OneToOneRelationship(that,descriptor);
+					that.relationships[descriptor.accessor] = relationship
+					that[descriptor.accessor] 				= relationship.get;
+					that['add'+descriptor.accessor]			= relationship.add;
+				}
+
+				for ( i in that.hasMany ) {
+					descriptor = that.hasMany[i];
+					relationship											= new internal.OneToManyRelationship(that,descriptor);
+					that.relationships[descriptor.accessor] 				= relationship
+					that[(descriptor.plural || descriptor.accessor+'s')] 	= relationship.get;
+					that['add'+descriptor.accessor]							= relationship.add;
+					that['remove'+descriptor.accessor]						= relationship.remove;
+					that['debug'+descriptor.accessor]						= relationship.debug;
+				}
+
+			};
+			
+			return {
+				
+				dirty: false,
+				
+				init: function (initialData) {
+					reifyFields();
+					reifyRelationships();
+					return that.set(initialData).domain.clean();
+				},
+				
+				clean: function () {
+					that.domain.dirty = false;
+					return that;
+				},
+						
+				push: function () {
+					for (var i in data) {
+						subscribers.notify({key:i});
+					}
+				},
+						
+				debug: function () {
+					var fields = '';
+					for ( var i in data ) {
+						fields += i + ':'+data[i]+' ';
+					}
+					return fields;
+				}
+				
 			}
 			
-		};
-		
-		
-		this.debugData = function () {
-
-			var fields = '';
-
-			for ( var i in this.data ) {
-				fields += i + ':'+this.data[i]+' ';
-			}
-
-			return fields;
-
-		};
+		}.call(this);
 		
 
 	};
