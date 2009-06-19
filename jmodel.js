@@ -133,7 +133,7 @@ var _ = function () {
 		var descriptor = ( base != name) ? 
 							{
 								base: 		entities[base].objects,
-								predicate: 	new internal.InheritsPredicate(constructor)
+								predicate: 	new internal.InstancePredicate(constructor)
 							} : {}; 
 
 		var objects 			= new internal.DomainObjectCollection(descriptor);
@@ -141,15 +141,6 @@ var _ = function () {
 		this.objects 			= objects;
 		this.name				= name;
 		this.objectConstructor	= constructor;
-
-		var empty = true;
-		for(var i in constructor.prototype) {
-			empty = false;
-			break;
-		}
-		if ( empty ) {
-			constructor.prototype = new internal.DomainObject();
-		}
 
 
 		this.object = function (id,data) {
@@ -167,7 +158,7 @@ var _ = function () {
 			}
 			else  {	// May need to create a new object
 				if ( typeof arguments[arguments.length-1] == 'boolean' && arguments[arguments.length-1] ) {
-					return entities[base].create(id,data);
+					return entities[base].create(data);
 				}
 				else {
 					return false;
@@ -177,21 +168,16 @@ var _ = function () {
 		};
 
 
-		this.create = function (id,data) {
+		this.create = function (data) {
 
-			var newObject	= new constructor();
-			newObject.constructor = this.objectConstructor;
+			data = (typeof data == 'object') ? data : {};
+
+			var newObject = mixin(
+								new internal.DomainObject(this),
+								new constructor()
+							);
 
 			var primaryKey	= newObject.primaryKey;
-
-			newObject.data	= newObject.data || {};
-
-			if ( typeof arguments[0] == 'object' ) { // Need to deduce ID from JSON
-				data = arguments[0];
-			}
-			else {
-				data = data || {};
-			}
 
 			if ( !data[primaryKey] ) {
 				data[primaryKey] = generateID();
@@ -199,14 +185,7 @@ var _ = function () {
 
 			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
 
-			newObject.baseCollection = entities[base].objects;
-			newObject.subscribers = new internal.SubscriptionList(internal.notifications);
-
-			newObject
-				.reifyFields()
-				.reifyRelationships()
-				.set(data)
-				.dirty = false;
+			newObject.initDomain(data);
 
 			// To trigger subscribers
 			set(data[primaryKey],newObject);
@@ -215,40 +194,38 @@ var _ = function () {
 
 		};
 
-		var that=this;
+
 		function set (id,object) {
 			entities[base].objects.set(id,object);
-/*			var entity = that;
-			do {
-				entity.objects.set(id,object);
-//				alert(entity.constructor);
-//				entity = internal.getEntityTypeByConstructor(entity.constructor.prototype.constructor);
-				entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
-			}
-			while ( entity ) */
 		}
 
 
 		function generateID() {			
 			return -(entities[base].objects.count()+1);
 		}
-
-
-	};
-
-
-	internal.getEntityTypeByConstructor = function (constructor) {
-		for( var key in entities ) {
-			if ( entities[key].constructor == constructor ) {
-				return entities[key];
+		
+		
+		function mixin(donor,recipient) {
+			for (var prop in donor) {
+				if ( donor[prop] instanceof Array && recipient[prop] instanceof Array ) { // Need to merge arrays
+					alert('merging arrays');
+					recipient[prop] = recipient[prop].concat(donor[prop]);
+				}
+				else {
+					recipient[prop] = donor[prop];	
+				}	
 			}
+			return recipient;
 		}
-		return false;
+
+
 	};
+
 
 	internal.getObjects = function (prototypeName) {
 		return entities[prototypeName].objects;
 	};
+
 	
 	external.prototype = {
 		
@@ -789,27 +766,8 @@ var _ = function () {
 		};
 	};
 	
-	external.instance = function (constructor) {
-		return new internal.InstancePredicate(constructor);
-	};
-	
-	// Inheritance
-	
-	internal.InheritancePredicate = function (constructor) {
-		this.test = function (candidate) {
-			var object = candidate;
-			while ( object.constructor != internal.DomainObject ) {
-				if ( object.constructor == constructor ) {
-					return true;
-				}
-				object = object.constructor.prototype;
-			}
-			return false;
-		};
-	};
-	
 	external.isa = function (constructor) {
-		return new internal.InheritancePredicate(constructor);
+		return new internal.InstancePredicate(constructor);
 	};
 	
 	// Relationship
@@ -924,10 +882,24 @@ var _ = function () {
 	// 															  Domain Object
 	// ------------------------------------------------------------------------
 	
-	internal.DomainObject = function () {
+	internal.DomainObject = function (entitytype) {
 
 
-		this.constructor = internal.DomainObject;
+		this.data 			= {};
+		this.subscribers 	= new internal.SubscriptionList(internal.notifications);
+
+
+		this.initDomain = function (data) {
+			
+			this
+				.reifyFields()
+				.reifyRelationships()
+				.set(data)
+				.dirty = false;
+			
+			return this;
+			
+		}
 
 
 		this.primaryKeyValue = function () {
@@ -964,7 +936,7 @@ var _ = function () {
 				this.data[key] = value;
 				this.subscribers.notify({key:key});
 				if ( arguments.length == 2 || arguments[2] ) { 
-					this.baseCollection.subscribers.notify({method:'change',object:this});
+					entitytype.objects.subscribers.notify({method:'change',object:this});
 				}
 				
 			}
@@ -974,7 +946,7 @@ var _ = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				this.baseCollection.subscribers.notify({method:'change',object:this});
+				entitytype.objects.subscribers.notify({method:'change',object:this});
 				
 			}
 			// NOTE: Should log problem here
@@ -1267,3 +1239,86 @@ var _ = function () {
 	return external;
 	
 }();
+
+
+
+// =========================================================================
+//													   Inheritance utilities
+// =========================================================================
+
+//
+// This is provided as a very lightweight system for implementing inheritance
+// in Javascript. It's possible to use jModel with more elaborate schemes too
+//
+
+
+// Slight modification of John Resig's code inspired by base2 and Prototype
+(function(){
+	
+	var	initializing	= false,
+		fnTest 			= /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+	
+	// The base Base implementation (does nothing)
+	this.Base = function(){};
+  
+	// Create a new Base that inherits from this class
+	Base.extend = function(prop) {
+		
+		var _super = this.prototype;
+    
+		// Instantiate a base class (but only create the instance,
+		// don't run the init constructor)
+		initializing = true;
+		var prototype = new this();
+		initializing = false;
+    
+		// Copy the properties over onto the new prototype or merge as required
+		for (var name in prop) {
+			if ( typeof prop[name] == 'function' && typeof _super[name] == 'function' && fnTest.test(prop[name])) { // Check if we're overwriting an existing function
+				prototype[name] = (function(name, fn){
+					return function() {
+						var tmp = this._super;
+
+						// Add a new ._super() method that is the same method
+						// but on the super-class
+						this._super = _super[name];
+
+						// The method only need to be bound temporarily, so we
+						// remove it when we're done executing
+						var ret = fn.apply(this, arguments);
+						this._super = tmp;
+
+						return ret;
+					};
+				})(name, prop[name]);
+			}
+			else if ( prop[name] instanceof Array && _super[name] instanceof Array ) { // Need to merge arrays
+				prototype[name] = _super[name].concat(prop[name]);
+			}
+			else { // Just a scalar
+				prototype[name] = prop[name];
+			}
+		}
+    
+		// The dummy class constructor
+		function Base() {
+			// All construction is actually done in the init method
+			if ( !initializing && this.init ) {
+				this.init.apply(this, arguments);
+			}
+		}
+    
+		// Populate our constructed prototype object
+		Base.prototype = prototype;
+    
+		// Enforce the constructor to be what we expect
+		Base.constructor = Base;
+
+		// And make this class extendable
+		Base.extend = arguments.callee;
+    
+		return Base;
+		
+	};
+	
+})();
