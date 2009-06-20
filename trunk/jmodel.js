@@ -605,7 +605,7 @@ var _ = function () {
 		
 		this.subscribe = function (subscription) {
 
-			if ( subscription.selector ) {
+			if ( subscription.predicate || subscription.selector ) {
 				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
