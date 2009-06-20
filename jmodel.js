@@ -72,6 +72,24 @@ jQuery.fn.subscribe = function (subscription) {
 			}
 		});
 		
+	}
+	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
+		
+		return this.each(function (index,element) {
+			subscription.source.subscribe({
+				source: subscription.source,
+				predicate: subscription.predicate,
+				selector: subscription.selector,
+				subscription: {
+					target: jQuery(element),
+					key: subscription.subscription.key,
+					change: subscription.subscription.onChange,
+					bindings: subscription.subscription.bindings,
+					initialise: subscription.subscription.initialise
+				}
+			});
+		});
+		
 	} 
 	else { // Subscription to collection
 		
@@ -82,10 +100,7 @@ jQuery.fn.subscribe = function (subscription) {
 				add: subscription.onAdd,
 				remove: subscription.onRemove,
 				change: subscription.onChange,
-				initialise: subscription.initialise,
-				filter: subscription.filter,
-				selector: subscription.selector,
-				key: subscription.key
+				initialise: subscription.initialise
 			});
 		});
 		
@@ -365,14 +380,28 @@ var _ = function () {
 	
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
-			subscription.key = ( subscription.key instanceof Array ) ? subscription.key : [subscription.key];
-			for (var i in subscription.key) {
-				event.object.subscribe({
-					source: event.object,
-					target: subscription.target,
-					key: subscription.key[i],
-					change: subscription.change
-				});
+			if ( subscription.subscription.bindings ) {
+				for (var selector in subscription.subscription.bindings) {
+					jQuery(selector,event.target).each(function (index,object) {
+						event.object.subscribe({
+							source: event.object,
+							target: jQuery(object),
+							key: subscription.subscription.bindings[selector],
+							initialise: subscription.initialise
+						});
+					});
+				}
+			}
+			else {
+				subscription.key = ( subscription.key instanceof Array ) ? subscription.key : [subscription.key];
+				for (var i in subscription.key) {
+					event.object.subscribe({
+						source: event.object,
+						target: subscription.target,
+						key: subscription.key[i],
+						change: subscription.change
+					});
+				}
 			}
 		};
 	};
@@ -580,7 +609,8 @@ var _ = function () {
 				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
-												return collection.filter(subscription.selector) === event.object;
+												return collection.filter(subscription.predicate, subscription.selector) === event.object
+														&& event.method == 'add'; // NOTE: Fix this
 											};
 										}(this);							
 			}
@@ -850,7 +880,7 @@ var _ = function () {
 		
 		
 		var data 		= {},
-			subscribers = new internal.SubscriptionList(internal.notifications)
+			subscribers = new internal.SubscriptionList(internal.notifications);
 			
 		
 		this.get = function () {
@@ -982,7 +1012,7 @@ var _ = function () {
 				for ( i in that.hasOne ) {
 					descriptor = that.hasOne[i];
 					relationship 							= new internal.OneToOneRelationship(that,descriptor);
-					that.relationships[descriptor.accessor] = relationship
+					that.relationships[descriptor.accessor] = relationship;
 					that[descriptor.accessor] 				= relationship.get;
 					that['add'+descriptor.accessor]			= relationship.add;
 				}
@@ -990,7 +1020,7 @@ var _ = function () {
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
 					relationship											= new internal.OneToManyRelationship(that,descriptor);
-					that.relationships[descriptor.accessor] 				= relationship
+					that.relationships[descriptor.accessor] 				= relationship;
 					that[(descriptor.plural || descriptor.accessor+'s')] 	= relationship.get;
 					that['add'+descriptor.accessor]							= relationship.add;
 					that['remove'+descriptor.accessor]						= relationship.remove;
@@ -1028,7 +1058,7 @@ var _ = function () {
 					return fields;
 				}
 				
-			}
+			};
 			
 		}.call(this);
 		
