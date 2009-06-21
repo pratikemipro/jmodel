@@ -125,10 +125,9 @@ jQuery.fn.pubsub = function (pubsub) {
 var _ = function () {
 
 
-	var entities	= {},
+	var 
 		external	= {},
-		internal	= {},
-		$			= jQuery;
+		internal	= {entities:{}};
 	
 	
 	
@@ -147,13 +146,13 @@ var _ = function () {
 		// Figure out the current type's base entity
 		entity = this;
 		while ( entity.options && ( entity.options.base !== true ) ) {
-			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
+			entity = ( entity.options && entity.options.parent ) ? internal.entities[entity.options.parent] : null;
 		}
 		var base = entity.name || name;
 
 		this.objects = new	internal.DomainObjectCollection(
 								( base != name) ?
-									{	base: 		entities[base].objects,
+									{	base: 		internal.entities[base].objects,
 										predicate: 	new internal.InstancePredicate(constructor) } :
 									{}
 							);
@@ -162,7 +161,7 @@ var _ = function () {
 
 
 		this.object = function (criterion) {
-			return entities[base]
+			return internal.entities[base]
 					.objects
 						.filter(new internal.InstancePredicate(constructor))
 						.filter(( typeof criterion != 'string' ) ? new internal.IdentityPredicate(criterion) : null)
@@ -175,7 +174,7 @@ var _ = function () {
 			data = (typeof data == 'object') ? data : {};
 
 			var newObject = new constructor();
-			internal.DomainObject.call(newObject,entities[name]);
+			internal.DomainObject.call(newObject,internal.entities[name]);
 
 			var primaryKey	= newObject.primaryKey;
 
@@ -194,12 +193,12 @@ var _ = function () {
 
 
 		function set (id,object) {
-			entities[base].objects.set(id,object);
+			internal.entities[base].objects.set(id,object);
 		}
 
 
 		function generateID() {			
-			return -(entities[base].objects.count()+1);
+			return -(internal.entities[base].objects.count()+1);
 		}
 		
 
@@ -207,7 +206,7 @@ var _ = function () {
 
 
 	internal.getObjects = function (prototypeName) {
-		return entities[prototypeName].objects;
+		return internal.entities[prototypeName].objects;
 	};
 
 	
@@ -215,18 +214,18 @@ var _ = function () {
 		
 		register: function (name,constructor,options) {
 
-			entities[name] = new internal.EntityType(name,constructor,options);
+			internal.entities[name] = new internal.EntityType(name,constructor,options);
 
 			var names = [name].concat( options.synonyms || [] );
 
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
 				var synonym 							= names[i];
-				entities[synonym]						= entities[name];
-				external[synonym] 						= function (predicate) { return entities[name].object(predicate); };
-				external[synonym].entitytype			= entities[name];
-				external['create'+synonym]				= entities[name].create;
-				external[options.plural || synonym+'s']	= function (predicate) { return entities[name].objects.filter(predicate); };
+				internal.entities[synonym]				= internal.entities[name];
+				external[synonym] 						= function (predicate) { return internal.entities[name].object(predicate); };
+				external[synonym].entitytype			= internal.entities[name];
+				external['create'+synonym]				= internal.entities[name].create;
+				external[options.plural || synonym+'s']	= function (predicate) { return internal.entities[name].objects.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -244,18 +243,18 @@ var _ = function () {
 	external.context = {
 	
 		reset: 	function () {
-					for ( var entityName in entities ) {
-						entities[entityName].objects.each(function (index,object) {
-							entities[entityName].objects.remove(object.primaryKeyValue());
+					for ( var entityName in internal.entities ) {
+						internal.entities[entityName].objects.each(function (index,object) {
+							internal.entities[entityName].objects.remove(object.primaryKeyValue());
 						});
 					}
 					return external.context;
 				},
 				
 		checkpoint: function () {
-						for ( var entityName in entities ) {
-							entities[entityName].objects.each(function (index,object) {
-								entities[entityName].objects.domain.dirty = false;
+						for ( var entityName in internal.entities ) {
+							internal.entities[entityName].objects.each(function (index,object) {
+								internal.entities[entityName].objects.domain.dirty = false;
 							});
 						}
 						return external.context;
@@ -263,8 +262,8 @@ var _ = function () {
 				
 		debug: 	function () {
 					var contents = '';
-					for ( var entityName in entities ) {
-						contents += entityName+': ['+entities[entityName].objects.debug()+'] ';
+					for ( var entityName in internal.entities ) {
+						contents += entityName+': ['+internal.entities[entityName].objects.debug()+'] ';
 					}
 					return contents;
 				}
@@ -332,8 +331,8 @@ var _ = function () {
 					},
 					
 		push: 		function () {
-						for(var prototypeName in entities) {
-							entities[prototypeName].objects.each(function (index,object) {
+						for(var prototypeName in internal.entities) {
+							internal.entities[prototypeName].objects.each(function (index,object) {
 								object.domain.push();
 							});
 						}
@@ -1076,7 +1075,7 @@ var _ = function () {
 	internal.OneToOneRelationship = function (parent,relationship) {
 		
 		this.get = function (create) {
-			var child = entities[relationship.prototype].object(parent.get(relationship.field));
+			var child = internal.entities[relationship.prototype].object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -1088,7 +1087,7 @@ var _ = function () {
 		this.add = function (data) {
 			
 			data = data || {};
-			var newObject = entities[relationship.prototype].create(data);
+			var newObject = internal.entities[relationship.prototype].create(data);
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -1104,7 +1103,7 @@ var _ = function () {
 		relationship.direction	= 'reverse';
 
 		var children			= new internal.DomainObjectCollection({
-											base: 		entities[relationship.prototype].objects,
+											base: 		internal.entities[relationship.prototype].objects,
 											predicate: 	new internal.RelationshipPredicate(object,relationship.field)
 										});
 										
@@ -1128,13 +1127,13 @@ var _ = function () {
 			
 			data = data || {};
 			data[relationship.field] = object.primaryKeyValue();
-			return entities[relationship.prototype].create(data);
+			return internal.entities[relationship.prototype].create(data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			entities[relationship.prototype].objects.remove(id);
+			internal.entities[relationship.prototype].objects.remove(id);
 			return this;
 			
 		};
@@ -1162,8 +1161,8 @@ var _ = function () {
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				if ( entities[key] ) {
-					object = entities[key].create(partitionedData.fields);
+				if ( internal.entities[key] ) {
+					object = internal.entities[key].create(partitionedData.fields);
 				}
 			}
 			
