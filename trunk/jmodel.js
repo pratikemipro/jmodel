@@ -973,6 +973,11 @@ var _ = function () {
 		};
 		
 		
+		this.matches = function (predicate) {
+			return predicate.test(this);
+		}
+		
+		
 		this.domain = function () {
 			
 			that = this;
