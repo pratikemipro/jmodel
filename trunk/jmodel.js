@@ -12,6 +12,7 @@
 // =========================================================================
 
 // NOTE: Make it possible to publish to a method not just a key?
+// NOTE: Make publishing work for domain member subcriptions
 jQuery.fn.publish = function (publication) {
 	
 	if ( publication.bindings ) {
