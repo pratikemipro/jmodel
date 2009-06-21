@@ -136,7 +136,10 @@ var _ = function () {
 	internal.EntityType = function (name,constructor,options) {
 
 		options  		= options || {};
+		
 		this.options	= options;
+		
+		this.constructor = constructor;
 
 		// Figure out the current type's base entity
 		entity = this;
@@ -218,6 +221,7 @@ var _ = function () {
 				var synonym 							= names[i];
 				entities[synonym]						= entities[name];
 				external[synonym] 						= function (predicate) { return entities[name].object(predicate); };
+				external[synonym].entitytype			= entities[name];
 				external['create'+synonym]				= entities[name].create;
 				external[options.plural || synonym+'s']	= function (predicate) { return entities[name].objects.filter(predicate); };
 			}
@@ -387,19 +391,22 @@ var _ = function () {
 							source: event.object,
 							target: jQuery(object),
 							key: subscription.subscription.bindings[selector],
-							initialise: subscription.initialise
+							initialise: subscription.subscription.initialise
 						});
 					});
 				}
 			}
 			else {
-				subscription.key = ( subscription.key instanceof Array ) ? subscription.key : [subscription.key];
-				for (var i in subscription.key) {
+				subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
+													subscription.subscription.key
+													: [subscription.subscription.key];
+				for (var i in subscription.subscription.key) {
 					event.object.subscribe({
 						source: event.object,
-						target: subscription.target,
-						key: subscription.key[i],
-						change: subscription.change
+						target: subscription.subscription.target,
+						key: subscription.subscription.key[i],
+						change: subscription.subscription.change,
+						initialise: subscription.subscription.initialise
 					});
 				}
 			}
@@ -571,7 +578,7 @@ var _ = function () {
 			
 			var selector;
 			
-			if ( typeof arguments[0] == 'object' ) {
+			if ( typeof arguments[0] == 'object' || typeof arguments[0] == 'undefined' ) {
 				var predicate	= arguments[0];
 				selector		= arguments[1];
 			}
@@ -579,7 +586,7 @@ var _ = function () {
 				selector 		= arguments[0];
 			}
 			
-			if ( predicate && predicate !== null ) {
+			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
 					if ( predicate.test(object) ) {
@@ -755,6 +762,7 @@ var _ = function () {
 	// Instance
 	
 	internal.InstancePredicate = function (constructor) {
+		constructor = (constructor.entitytype) ? constructor.entitytype.constructor : constructor;
 		this.test = function (candidate) {
 			return candidate instanceof constructor;
 		};
