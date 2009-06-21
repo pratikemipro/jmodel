@@ -224,6 +224,7 @@ var _ = function () {
 				internal.entities[synonym]				= internal.entities[name];
 				external[synonym] 						= function (predicate) { return internal.entities[name].object(predicate); };
 				external[synonym].entitytype			= internal.entities[name];
+				external[synonym].extend				= function (prop) { return internal.entities[name].constructor.extend(prop); };
 				external['create'+synonym]				= internal.entities[name].create;
 				external[options.plural || synonym+'s']	= function (predicate) { return internal.entities[name].objects.filter(predicate); };
 			}
