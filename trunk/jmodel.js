@@ -76,18 +76,21 @@ jQuery.fn.subscribe = function (subscription) {
 	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
 		
 		return this.each(function (index,element) {
-			subscription.source.subscribe({
-				source: subscription.source,
-				predicate: subscription.predicate,
-				selector: subscription.selector,
-				subscription: {
-					target: jQuery(element),
-					key: subscription.subscription.key,
-					change: subscription.subscription.onChange,
-					bindings: subscription.subscription.bindings,
-					initialise: subscription.subscription.initialise
-				}
-			});
+			for (var selector in subscription.subscription.bindings) {
+				jQuery(selector,element).each(function (index,object) {
+					subscription.source.subscribe({
+						source: subscription.source,
+						predicate: subscription.predicate,
+						selector: subscription.selector,
+						subscription: {
+							target: jQuery(object),
+							key: subscription.subscription.bindings[selector],
+							change: subscription.subscription.onChange,
+							initialise: subscription.subscription.initialise
+						}
+					});
+				});
+			}
 		});
 		
 	} 
@@ -384,31 +387,17 @@ var _ = function () {
 	
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
-			if ( subscription.subscription.bindings ) {
-				for (var selector in subscription.subscription.bindings) {
-					jQuery(selector,event.target).each(function (index,object) {
-						event.object.subscribe({
-							source: event.object,
-							target: jQuery(object),
-							key: subscription.subscription.bindings[selector],
-							initialise: subscription.subscription.initialise
-						});
-					});
-				}
-			}
-			else {
-				subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
-													subscription.subscription.key
-													: [subscription.subscription.key];
-				for (var i in subscription.subscription.key) {
-					event.object.subscribe({
-						source: event.object,
-						target: subscription.subscription.target,
-						key: subscription.subscription.key[i],
-						change: subscription.subscription.change,
-						initialise: subscription.subscription.initialise
-					});
-				}
+			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
+												subscription.subscription.key
+												: [subscription.subscription.key];
+			for (var i in subscription.subscription.key) {
+				event.object.subscribe({
+					source: event.object,
+					target: subscription.subscription.target,
+					key: subscription.subscription.key[i],
+					change: subscription.subscription.change,
+					initialise: subscription.subscription.initialise
+				});
 			}
 		};
 	};
