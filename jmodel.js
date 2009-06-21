@@ -125,8 +125,7 @@ jQuery.fn.pubsub = function (pubsub) {
 var _ = function () {
 
 
-	var 
-		external	= {},
+	var external	= {},
 		internal	= {entities:{}};
 	
 	
