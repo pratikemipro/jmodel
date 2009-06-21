@@ -972,7 +972,7 @@ var _ = function () {
 		
 		this.matches = function (predicate) {
 			return predicate.test(this);
-		}
+		};
 		
 		
 		this.domain = function () {
@@ -1230,7 +1230,7 @@ var _ = function () {
 	external.Base = (function(){
 
 		var	initializing	= false,
-			fnTest 			= /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+			fnTest 			= /xyz/.test(function(){xyz;}) ? (/\b_super\b/) : (/.*/);
 
 		// The base Base implementation (does nothing)
 		var Base = function(){};
