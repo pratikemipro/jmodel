@@ -674,6 +674,51 @@ var _ = function () {
 	};
 	
 	
+	external.set = function() {
+		objects = {};
+		for (var i=0; i<arguments.length; i++) {
+			objects[arguments[i].primaryKeyValue()] = arguments[i];
+		}
+		return new internal.DomainObjectCollection({objects:objects});
+	};
+	
+	
+	// ------------------------------------------------------------------------
+	//															 Set operations
+	// ------------------------------------------------------------------------
+	
+	internal.set = function(set) {
+		return (set instanceof internal.DomainObjectCollection) ? set : set();
+	};
+	
+	external.union = function() {
+		var union = new internal.DomainObjectCollection({});
+		for (var i=0; i<arguments.length; i++ ) {
+			collection = internal.set(arguments[i]);
+			collection.each(function (index,object) {
+				union.set(object.primaryKeyValue(),object);
+			});
+		}
+		return union;
+	};
+	
+	external.intersection = function() {
+		var intersection = internal.set(arguments[0]);
+		for (var i=1; i<arguments.length; i++ ) {
+			intersection = intersection.filter(new internal.MembershipPredicate(internal.set(arguments[i])));
+		}
+		return intersection;
+	};
+	
+	external.difference = function(first,second) {
+		return internal.set(first).filter(
+			new internal.Not(
+				new internal.MembershipPredicate(internal.set(second))
+			)
+		);
+	}
+	
+	
 	
 	// ------------------------------------------------------------------------
 	// 																 Predicates
@@ -776,7 +821,7 @@ var _ = function () {
 	// Membership
 	
 	internal.MembershipPredicate = function (collection) {
-		collection = (collection instanceof internal.DomainObjectCollection) ? collection : collection();
+		collection = internal.set(collection);
 		this.test = function (candidate) {
 			found = false;
 			collection.each(function (index,object) {
