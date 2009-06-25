@@ -631,7 +631,7 @@ var _ = function () {
 		};
 		
 		this.intersection = function () {
-			return external.intersection.apply(null,argumentsArray.apply(this,arguments))
+			return external.intersection.apply(null,argumentsArray.apply(this,arguments));
 		};
 		
 		this.difference = function (set) {
@@ -741,7 +741,7 @@ var _ = function () {
 				new internal.MembershipPredicate(internal.set(second))
 			)
 		);
-	}
+	};
 	
 	
 	
