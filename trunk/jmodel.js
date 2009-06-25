@@ -768,7 +768,7 @@ var _ = function () {
 				else if ( example[key] instanceof RegExp && !example[key].test(candidate.get(key)) ) {
 					return false;
 				}
-				else if ( candidate.get(key) != example[key] ) { // Scalar field
+				else if ( !(example[key] instanceof RegExp) && candidate.get(key) != example[key] ) { // Scalar field
 					return false;
 				}
 
