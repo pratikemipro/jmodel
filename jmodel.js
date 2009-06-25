@@ -220,13 +220,13 @@ var _ = function () {
 
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
-				var synonym 							= names[i];
-				internal.entities[synonym]				= internal.entities[name];
-				external[synonym] 						= function (predicate) { return internal.entities[name].object(predicate); };
-				external[synonym].entitytype			= internal.entities[name];
-				external[synonym].extend				= function (prop) { return internal.entities[name].constructor.extend(prop); };
-				external['create'+synonym]				= internal.entities[name].create;
-				external[options.plural || synonym+'s']	= function (predicate) { return internal.entities[name].objects.filter(predicate); };
+				var synonym 									= names[i];
+				internal.entities[synonym]						= internal.entities[name];
+				external[synonym] 								= function (predicate) { return internal.entities[name].object(predicate); };
+				external[synonym].entitytype					= internal.entities[name];
+				external[synonym].extend						= function (prop) { return internal.entities[name].constructor.extend(prop); };
+				external['create'+synonym]						= internal.entities[name].create;
+				external[options.plural || synonym+'s']			= function (predicate) { return internal.entities[name].objects.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -771,6 +771,25 @@ var _ = function () {
 	
 	external.related = function (parent,field) {
 		return new internal.RelationshipPredicate(parent.field);
+	};
+	
+	// Membership
+	
+	internal.MembershipPredicate = function (collection) {
+		collection = (collection instanceof internal.DomainObjectCollection) ? collection : collection();
+		this.test = function (candidate) {
+			found = false;
+			collection.each(function (index,object) {
+				if ( object === candidate ) {
+					found = true;
+				}
+			});
+			return found;
+		};
+	};
+	
+	external.member = function (collection) {
+		return new internal.MembershipPredicate(collection);
 	};
 	
 	// Modification state
