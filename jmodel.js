@@ -624,6 +624,31 @@ var _ = function () {
 		};
 		
 		
+		// Set methods
+		
+		this.union = function () {
+			return external.union.apply(null,argumentsArray.apply(this,arguments));
+		};
+		
+		this.intersection = function () {
+			return external.intersection.apply(null,argumentsArray.apply(this,arguments))
+		};
+		
+		this.difference = function (set) {
+			return external.difference(this,set);
+		};
+		
+		
+		// Note carefully that argumentsArray includes the current collection in the array
+		function argumentsArray() {
+			var args = [this];
+			for (var i=0; i<arguments.length; i++) {
+				args.push(arguments[i]);
+			}
+			return args;
+		}
+		
+		
 		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
 			
 			var that = this;
@@ -675,7 +700,7 @@ var _ = function () {
 	
 	
 	external.set = function() {
-		objects = {};
+		var objects = {};
 		for (var i=0; i<arguments.length; i++) {
 			objects[arguments[i].primaryKeyValue()] = arguments[i];
 		}
@@ -694,7 +719,7 @@ var _ = function () {
 	external.union = function() {
 		var union = new internal.DomainObjectCollection({});
 		for (var i=0; i<arguments.length; i++ ) {
-			collection = internal.set(arguments[i]);
+			var collection = internal.set(arguments[i]);
 			collection.each(function (index,object) {
 				union.set(object.primaryKeyValue(),object);
 			});
