@@ -487,6 +487,13 @@ var _ = function () {
 		this.objects		= specification.objects ? specification.objects : {};
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
+		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
+			var view = new internal.View(specification.base,this,specification.predicate);
+		}
+		else if ( specification.base ) {
+			throw 'Error: Invalid base collection type';
+		}
+	
 		
 		this.length = function () {
 			return this.count();
@@ -649,53 +656,6 @@ var _ = function () {
 		}
 		
 		
-		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
-			
-			var that = this;
-			specification.base.each(function (key,candidate) {
-				if ( specification.predicate.test(candidate) ) {
-					that.set(candidate.primaryKeyValue(), candidate, true);
-				}
-			});
-			
-			specification.base.subscribe({
-				source: specification.base,
-				target: this,
-				add: 	baseAdd,
-				remove: baseRemove,
-				change: baseChange
-			});
-			
-		}
-		else if ( specification.base ) {
-			throw 'Error: Invalid base collection type';
-		}
-		
-		
-		// Subcollection methods
-		
-		function baseAdd(collection,object) {
-			if ( specification.predicate.test(object) ) {
-				this.set(object.primaryKeyValue(), object, true);
-			}
-		}
-		
-		function baseRemove(collection,object) {
-			this.remove(object.primaryKeyValue(),true);
-		}
-		
-		function baseChange(collection,object) {
-			if ( specification.predicate.test(object) ) {
-				this.set(object.primaryKeyValue(), object,true);
-			}
-			else {
-				if ( object.primaryKeyValue() in this.objects ) {
-					this.remove(object.primaryKeyValue(),true);
-				}
-			}
-		}
-		
-		
 	};
 	
 	
@@ -705,6 +665,46 @@ var _ = function () {
 			objects[arguments[i].primaryKeyValue()] = arguments[i];
 		}
 		return new internal.DomainObjectCollection({objects:objects});
+	};
+	
+	
+	internal.View = function (parent,child,predicate) {
+		
+		parent.each(function (index,object) {
+			if ( predicate.test(object) ) {
+				child.set(object.primaryKeyValue(), object, true);
+			}
+		});
+		
+		parent.subscribe({
+			source: parent,
+			target: child,
+			add: 	parentAdd,
+			remove: parentRemove,
+			change: parentChange
+		});
+		
+		function parentAdd(collection,object) {
+			if ( predicate.test(object) ) {
+				child.set(object.primaryKeyValue(), object, true);
+			}
+		};
+		
+		function parentRemove(collection,object) {
+			child.remove(object.primaryKeyValue(),true);
+		};
+		
+		function parentChange(collection,object) {
+			if ( predicate.test(object) ) {
+				child.set(object.primaryKeyValue(), object,true);
+			}
+			else {
+				if ( object.primaryKeyValue() in child.objects ) {
+					child.remove(object.primaryKeyValue(),true);
+				}
+			}
+		};
+		
 	};
 	
 	
