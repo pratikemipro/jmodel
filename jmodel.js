@@ -971,7 +971,10 @@ var _ = function () {
 		
 		this.get = function () {
 		
-			if ( !(arguments[0] instanceof Array) ) { // Just a key
+			if ( arguments[0] == ':all' ) {
+				return data
+			}
+			else if ( !(arguments[0] instanceof Array) ) { // Just a key
 				return data[arguments[0]];
 			}
 			else { // Array of keys
