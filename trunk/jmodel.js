@@ -52,6 +52,7 @@ jQuery.fn.subscribe = function (subscription) {
 					target: jQuery(element),
 					key: key,
 					change: subscription.onChange,
+					removed: subscription.onRemove,
 					initialise: subscription.initialise
 				});
 			});
@@ -378,6 +379,13 @@ var _ = function () {
 		};
 	};
 	
+	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
+	internal.RemovalNotification = function (subscription) {
+		this.receive = function () {
+			subscription.removed.call(subscription.target,subscription.source);
+		};
+	};
+	
 	internal.CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
 			if (subscription[event.method]) {
@@ -474,7 +482,7 @@ var _ = function () {
 	internal.ObjectSubscriber = function (subscription) {
 
 		this.matches = function (event) {
-			return event.key == subscription.key;
+			return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
 		};
 		
 		this.notification = function (event) {
@@ -542,6 +550,7 @@ var _ = function () {
 			this.filter(predicate).each(function (key,object) {
 				var removed = object;
 				delete that.objects[key];
+				removed.removed();
 				that.subscribers.notify({method:'remove',object:removed});
 			});
 			return this;
@@ -787,7 +796,19 @@ var _ = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
-	// Identity
+	// Object Identity
+	
+	internal.ObjectIdentityPredicate = function (object) {
+		this.test = function (candidate) {
+			return candidate === object;
+		};
+	};
+	
+	external.is = function (object) {
+		return new internal.ObjectIdentityPredicate(object);
+	};
+	
+	// Primary Key Identity
 	
 	internal.IdentityPredicate = function (id) {
 	
@@ -1065,9 +1086,17 @@ var _ = function () {
 		};
 		
 		
+		this.removed = function () {
+			subscribers.notify({removed:true});
+		};
+		
+		
 		this.subscribe = function (subscription) {
 
-			if ( subscription.change && typeof subscription.change == 'string' ) {
+			if ( subscription.removed ) {
+				subscription.type		= internal.RemovalNotification;
+			}
+			else if ( subscription.change && typeof subscription.change == 'string' ) {
 				subscription.type		= internal.EventNotification;
 				subscription.event		= subscription.change;
 			}
@@ -1237,7 +1266,20 @@ var _ = function () {
 											base: 		internal.entities[relationship.prototype].objects,
 											predicate: 	new internal.RelationshipPredicate(object,relationship.field)
 										});
-										
+		
+		// Deletions might cascade								
+		if ( relationship.cascade ) {
+			object.subscribe({
+				removed: 	function () {
+								var objects = internal.entities[relationship.prototype].objects;
+								children.each(function (index,child) {
+									objects.remove(child.primaryKeyValue());
+								});
+							}
+			});
+		}
+		
+		// Relationship might specify subscription to children								
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
 			var subscription = {
 				source: children,
