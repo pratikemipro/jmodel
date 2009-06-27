@@ -1271,9 +1271,8 @@ var _ = function () {
 		if ( relationship.cascade ) {
 			object.subscribe({
 				removed: 	function () {
-								var objects = internal.entities[relationship.prototype].objects;
 								children.each(function (index,child) {
-									objects.remove(child.primaryKeyValue());
+									internal.entities[relationship.prototype].objects.remove(child.primaryKeyValue());
 								});
 							}
 			});
