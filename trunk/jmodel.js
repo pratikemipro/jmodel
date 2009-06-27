@@ -214,19 +214,21 @@ var _ = function () {
 		
 		register: function (name,constructor,options) {
 
-			internal.entities[name] = new internal.EntityType(name,constructor,options);
+			internal.entities[name]			= new internal.EntityType(name,constructor,options);
+			internal.entities[name].deleted = new internal.DeletedObjectsCollection(internal.entities[name].objects);
 
 			var names = [name].concat( options.synonyms || [] );
 
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
-				var synonym 									= names[i];
-				internal.entities[synonym]						= internal.entities[name];
-				external[synonym] 								= function (predicate) { return internal.entities[name].object(predicate); };
-				external[synonym].entitytype					= internal.entities[name];
-				external[synonym].extend						= function (prop) { return internal.entities[name].constructor.extend(prop); };
-				external['create'+synonym]						= internal.entities[name].create;
-				external[options.plural || synonym+'s']			= function (predicate) { return internal.entities[name].objects.filter(predicate); };
+				var synonym 										= names[i];
+				internal.entities[synonym]							= internal.entities[name];
+				external[synonym] 									= function (predicate) { return internal.entities[name].object(predicate); };
+				external[synonym].entitytype						= internal.entities[name];
+				external[synonym].extend							= function (prop) { return internal.entities[name].constructor.extend(prop); };
+				external['create'+synonym]							= internal.entities[name].create;
+				external[options.plural || synonym+'s']				= function (predicate) { return internal.entities[name].objects.filter(predicate); };
+				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return internal.entities[name].deleted.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -255,7 +257,10 @@ var _ = function () {
 		checkpoint: function () {
 						for ( var entityName in internal.entities ) {
 							internal.entities[entityName].objects.each(function (index,object) {
-								internal.entities[entityName].objects.domain.dirty = false;
+								object.domain.dirty = false;
+							});
+							internal.entities[entityName].deleted.each(function (index,object) {
+								internal.entities[entityName].deleted.remove(object.primaryKeyValue());
 							});
 						}
 						return external.context;
@@ -264,7 +269,8 @@ var _ = function () {
 		debug: 	function () {
 					var contents = '';
 					for ( var entityName in internal.entities ) {
-						contents += entityName+': ['+internal.entities[entityName].objects.debug()+'] ';
+						contents += entityName+': ['+internal.entities[entityName].objects.debug()
+									+internal.entities[entityName].deleted.debug()+'] ';
 					}
 					return contents;
 				}
@@ -484,6 +490,8 @@ var _ = function () {
 	
 	internal.DomainObjectCollection = function (specification) {
 		
+		specification = specification || {};
+		
 		this.objects		= specification.objects ? specification.objects : {};
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
@@ -535,6 +543,7 @@ var _ = function () {
 				delete that.objects[key];
 				that.subscribers.notify({method:'remove',object:removed});
 			});
+			return this;
 		};
 	
 		
@@ -665,6 +674,34 @@ var _ = function () {
 			objects[arguments[i].primaryKeyValue()] = arguments[i];
 		}
 		return new internal.DomainObjectCollection({objects:objects});
+	};
+	
+	
+	internal.DeletedObjectsCollection = function (collection) {
+		
+		var deleted = new internal.DomainObjectCollection();
+		
+		deleted.debug = function () {
+			var contents = '';
+			for ( var i in this.objects ) {
+				var obj = this.objects[i];
+				contents += ' ('+obj.primaryKeyValue()+') ';
+			}
+			return contents;
+		};
+		
+		collection.subscribe({
+			source: collection,
+			target: deleted,
+			remove: collectionRemove
+		});
+		
+		function collectionRemove(collection,object) {
+			deleted.set(object.primaryKeyValue(), object);
+		}
+		
+		return deleted;
+		
 	};
 	
 	
@@ -972,7 +1009,7 @@ var _ = function () {
 		this.get = function () {
 		
 			if ( arguments[0] == ':all' ) {
-				return data
+				return data;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
 				return data[arguments[0]];
