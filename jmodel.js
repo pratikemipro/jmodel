@@ -250,7 +250,7 @@ var _ = function () {
 		reset: 	function () {
 					for ( var entityName in internal.entities ) {
 						internal.entities[entityName].objects.each(function (index,object) {
-							internal.entities[entityName].objects.remove(object.primaryKeyValue());
+							internal.entities[entityName].objects.remove(object);
 						});
 					}
 					return external.context;
@@ -262,7 +262,7 @@ var _ = function () {
 								object.domain.dirty = false;
 							});
 							internal.entities[entityName].deleted.each(function (index,object) {
-								internal.entities[entityName].deleted.remove(object.primaryKeyValue());
+								internal.entities[entityName].deleted.remove(object);
 							});
 						}
 						return external.context;
@@ -544,8 +544,15 @@ var _ = function () {
 			return false;
 		};
 		
+		// NOTE: Make this work on base collections
 		this.remove = function (predicate,immediate) {
-			predicate = (typeof predicate == 'object') ? predicate : new internal.IdentityPredicate(predicate);
+			// NOTE: Move this into filtering
+			if ( predicate.domain ) {
+				predicate = new internal.ObjectIdentityPredicate(predicate);
+			}
+			else if ( typeof predicate != 'object' ) {
+				predicate = new internal.IdentityPredicate(predicate);
+			}
 			var that = this;
 			this.filter(predicate).each(function (key,object) {
 				var removed = object;
@@ -738,7 +745,7 @@ var _ = function () {
 		};
 		
 		function parentRemove(collection,object) {
-			child.remove(object.primaryKeyValue(),true);
+			child.remove(object,true);
 		};
 		
 		function parentChange(collection,object) {
@@ -747,7 +754,7 @@ var _ = function () {
 			}
 			else {
 				if ( object.primaryKeyValue() in child.objects ) {
-					child.remove(object.primaryKeyValue(),true);
+					child.remove(object,true);
 				}
 			}
 		};
@@ -1272,7 +1279,7 @@ var _ = function () {
 			object.subscribe({
 				removed: 	function () {
 								children.each(function (index,child) {
-									internal.entities[relationship.prototype].objects.remove(child.primaryKeyValue());
+									internal.entities[relationship.prototype].objects.remove(child);
 								});
 							}
 			});
