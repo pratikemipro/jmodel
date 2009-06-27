@@ -249,9 +249,7 @@ var _ = function () {
 	
 		reset: 	function () {
 					for ( var entityName in internal.entities ) {
-						internal.entities[entityName].objects.each(function (index,object) {
-							internal.entities[entityName].objects.remove(object);
-						});
+						internal.entities[entityName].objects.remove(external.all);
 					}
 					return external.context;
 				},
@@ -261,9 +259,7 @@ var _ = function () {
 							internal.entities[entityName].objects.each(function (index,object) {
 								object.domain.dirty = false;
 							});
-							internal.entities[entityName].deleted.each(function (index,object) {
-								internal.entities[entityName].deleted.remove(object);
-							});
+							internal.entities[entityName].deleted.remove(external.all);
 						}
 						return external.context;
 					}, 
@@ -594,7 +590,7 @@ var _ = function () {
 		this.filter = function () {
 			
 			// No predicate
-			if ( arguments.length === 0 ) {
+			if ( ( arguments.length === 0 ) || ( arguments[0] instanceof internal.AllPredicate ) ) {
 				return this;
 			}
 			
@@ -802,6 +798,17 @@ var _ = function () {
 	// ------------------------------------------------------------------------
 	// 																 Predicates
 	// ------------------------------------------------------------------------
+	
+	// All
+	
+	internal.AllPredicate = function () {
+		this.test = function (candidate) {
+			return true;
+		};
+	};
+	
+	external.all = new internal.AllPredicate();
+	
 	
 	// Object Identity
 	
