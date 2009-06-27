@@ -156,6 +156,8 @@ var _ = function () {
 										predicate: 	new internal.InstancePredicate(constructor) } :
 									{}
 							);
+							
+		this.deleted = new internal.DeletedObjectsCollection(this.objects);
 
 		this.name	= name;
 
@@ -215,7 +217,6 @@ var _ = function () {
 		register: function (name,constructor,options) {
 
 			internal.entities[name]			= new internal.EntityType(name,constructor,options);
-			internal.entities[name].deleted = new internal.DeletedObjectsCollection(internal.entities[name].objects);
 
 			var names = [name].concat( options.synonyms || [] );
 
