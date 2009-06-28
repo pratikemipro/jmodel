@@ -888,13 +888,7 @@ var _ = function () {
 	external.member = internal.MembershipPredicate = function (collection) {		
 		collection = internal.set(collection);
 		return function (candidate) {
-			found = false;
-			collection.each(function (index,object) {
-				if ( object === candidate ) {
-					found = true;
-				}
-			});
-			return found;
+			return collection.filter(internal.ObjectIdentityPredicate(candidate)).count() > 0;
 		};
 	};
 	
