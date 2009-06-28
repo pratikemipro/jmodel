@@ -567,6 +567,16 @@ var jmodel = function () {
 			});
 			return this;
 		};
+		
+		
+		this.by = function (sort) {
+			var ordered = [];
+			this.each(function (index,object) {
+				ordered.push(object);
+			})
+			ordered.sort(sort);
+			return new internal.DomainObjectCollection({objects:ordered});
+		};
 	
 		
 		this.each = function (callback) {
@@ -803,6 +813,29 @@ var jmodel = function () {
 				internal.MembershipPredicate(internal.set(second))
 			)
 		);
+	};
+	
+	
+	// ------------------------------------------------------------------------
+	//														   Sort comparisons
+	// ------------------------------------------------------------------------
+	
+	external.field = function (fieldName) {
+		return function (a,b) {
+			if ( a.get(fieldName) < b.get(fieldName) ) {
+				return -1;
+			}
+			else if ( a.get(fieldName) > b.get(fieldName) ) {
+				return 1;
+			}
+			return 0;
+		};
+	};
+	
+	external.desc = function (order) {
+		return function (a,b) {
+			return -order(a,b);
+		};
 	};
 	
 	
