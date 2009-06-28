@@ -154,7 +154,7 @@ var _ = function () {
 		this.objects = new	internal.DomainObjectCollection(
 								( base != name) ?
 									{	base: 		internal.entities[base].objects,
-										predicate: 	new internal.InstancePredicate(constructor) } :
+										predicate: 	internal.InstancePredicate(constructor) } :
 									{}
 							);
 							
@@ -166,8 +166,8 @@ var _ = function () {
 		this.object = function (criterion) {
 			return internal.entities[base]
 					.objects
-						.filter(new internal.InstancePredicate(constructor))
-						.filter(( typeof criterion != 'string' ) ? new internal.IdentityPredicate(criterion) : null)
+						.filter(internal.InstancePredicate(constructor))
+						.filter(( typeof criterion != 'string' ) ? internal.IdentityPredicate(criterion) : null)
 						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
 
@@ -544,10 +544,10 @@ var _ = function () {
 		this.remove = function (predicate,immediate) {
 			// NOTE: Move this into filtering
 			if ( predicate.domain ) {
-				predicate = new internal.ObjectIdentityPredicate(predicate);
+				predicate = internal.ObjectIdentityPredicate(predicate);
 			}
 			else if ( typeof predicate != 'function' ) {
-				predicate = new internal.IdentityPredicate(predicate);
+				predicate = internal.IdentityPredicate(predicate);
 			}
 			var that = this;
 			this.filter(predicate).each(function (key,object) {
@@ -780,15 +780,15 @@ var _ = function () {
 	external.intersection = function() {
 		var intersection = internal.set(arguments[0]);
 		for (var i=1; i<arguments.length; i++ ) {
-			intersection = intersection.filter(new internal.MembershipPredicate(internal.set(arguments[i])));
+			intersection = intersection.filter(internal.MembershipPredicate(internal.set(arguments[i])));
 		}
 		return intersection;
 	};
 	
 	external.difference = function(first,second) {
 		return internal.set(first).filter(
-			new internal.Not(
-				new internal.MembershipPredicate(internal.set(second))
+			internal.Not(
+				internal.MembershipPredicate(internal.set(second))
 			)
 		);
 	};
@@ -869,6 +869,7 @@ var _ = function () {
 	// Instance
 	
 	external.isa = internal.InstancePredicate = function (constructor) {
+		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
 		return function (candidate) {
 			return candidate instanceof constructor;
 		};
@@ -938,7 +939,7 @@ var _ = function () {
 					internal.Gt(field,lower),
 					internal.Lt(field,higher) 
 				);
-	}
+	};
 	
 	// Logical connectives
 	
@@ -1235,7 +1236,7 @@ var _ = function () {
 
 		var children			= new internal.DomainObjectCollection({
 											base: 		internal.entities[relationship.prototype].objects,
-											predicate: 	new internal.RelationshipPredicate(object,relationship.field)
+											predicate: 	internal.RelationshipPredicate(object,relationship.field)
 										});
 		
 		// Deletions might cascade								
