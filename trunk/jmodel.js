@@ -124,7 +124,7 @@ jQuery.fn.pubsub = function (pubsub) {
 //														 	Domain Object Model
 // ============================================================================
 
-var _ = function () {
+var jmodel = function () {
 
 
 	var external	= {},
@@ -1479,3 +1479,7 @@ var _ = function () {
 	return external;
 	
 }();
+
+if (!_) {
+	var _=jmodel;
+}
