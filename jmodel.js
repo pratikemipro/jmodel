@@ -818,7 +818,7 @@ var jmodel = function () {
 	
 	
 	// ------------------------------------------------------------------------
-	//														   Sort comparisons
+	//														   		  Orderings
 	// ------------------------------------------------------------------------
 	
 	external.ordering = internal.ordering = function (parameter) {
