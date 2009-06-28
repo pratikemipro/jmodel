@@ -569,12 +569,13 @@ var jmodel = function () {
 		};
 		
 		
-		this.by = function (sort) {
+		this.by = function (ordering) {
+			ordering = internal.ordering(ordering);
 			var ordered = [];
 			this.each(function (index,object) {
 				ordered.push(object);
 			})
-			ordered.sort(sort);
+			ordered.sort(ordering);
 			return new internal.DomainObjectCollection({objects:ordered});
 		};
 	
@@ -820,7 +821,16 @@ var jmodel = function () {
 	//														   Sort comparisons
 	// ------------------------------------------------------------------------
 	
-	external.field = function (fieldName) {
+	external.ordering = internal.ordering = function (parameter) {
+		if ( typeof parameter == 'function' ) {
+			return parameter;
+		}
+		else {
+			return internal.FieldOrdering(parameter);
+		}
+	}
+	
+	external.field = internal.FieldOrdering = function (fieldName) {
 		return function (a,b) {
 			if ( a.get(fieldName) < b.get(fieldName) ) {
 				return -1;
@@ -832,7 +842,7 @@ var jmodel = function () {
 		};
 	};
 	
-	external.desc = function (order) {
+	external.desc = internal.DescendingOrdering = function (order) {
 		return function (a,b) {
 			return -order(a,b);
 		};
