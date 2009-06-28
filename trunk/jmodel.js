@@ -546,7 +546,7 @@ var _ = function () {
 			if ( predicate.domain ) {
 				predicate = new internal.ObjectIdentityPredicate(predicate);
 			}
-			else if ( typeof predicate != 'object' ) {
+			else if ( typeof predicate != 'function' ) {
 				predicate = new internal.IdentityPredicate(predicate);
 			}
 			var that = this;
@@ -590,13 +590,13 @@ var _ = function () {
 		this.filter = function () {
 			
 			// No predicate
-			if ( ( arguments.length === 0 ) || ( arguments[0] instanceof internal.AllPredicate ) ) {
+			if ( ( arguments.length === 0 ) || ( arguments[0] === internal.AllPredicate ) ) {
 				return this;
 			}
 			
 			var selector;
 			
-			if ( typeof arguments[0] == 'object' || typeof arguments[0] == 'undefined' ) {
+			if ( typeof arguments[0] == 'function' || typeof arguments[0] == 'undefined' ) {
 				var predicate	= arguments[0];
 				selector		= arguments[1];
 			}
@@ -607,7 +607,7 @@ var _ = function () {
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
-					if ( predicate.test(object) ) {
+					if ( predicate(object) ) {
 						objs.set(index,object);
 					}
 				});
@@ -721,7 +721,7 @@ var _ = function () {
 	internal.View = function (parent,child,predicate) {
 		
 		parent.each(function (index,object) {
-			if ( predicate.test(object) ) {
+			if ( predicate(object) ) {
 				child.set(object.primaryKeyValue(), object, true);
 			}
 		});
@@ -735,7 +735,7 @@ var _ = function () {
 		});
 		
 		function parentAdd(collection,object) {
-			if ( predicate.test(object) ) {
+			if ( predicate(object) ) {
 				child.set(object.primaryKeyValue(), object, true);
 			}
 		};
@@ -745,7 +745,7 @@ var _ = function () {
 		};
 		
 		function parentChange(collection,object) {
-			if ( predicate.test(object) ) {
+			if ( predicate(object) ) {
 				child.set(object.primaryKeyValue(), object,true);
 			}
 			else {
@@ -801,60 +801,40 @@ var _ = function () {
 	
 	// All
 	
-	internal.AllPredicate = function () {
-		this.test = function (candidate) {
+	external.all = internal.AllPredicate = function () {
+		return function (candidate) {
 			return true;
 		};
 	};
 	
-	external.all = new internal.AllPredicate();
-	
-	
 	// Object Identity
 	
-	internal.ObjectIdentityPredicate = function (object) {
-		this.test = function (candidate) {
+	external.is = internal.ObjectIdentityPredicate = function (object) {
+		return function (candidate) {
 			return candidate === object;
 		};
 	};
 	
-	external.is = function (object) {
-		return new internal.ObjectIdentityPredicate(object);
-	};
-	
 	// Primary Key Identity
 	
-	internal.IdentityPredicate = function (id) {
-	
-		this.id = id;
-	
-		this.test = function (candidate) {
+	external.id = internal.IdentityPredicate = function (id) {
+		return function (candidate) {
 			return candidate.primaryKeyValue() == id;
-		};
-		
-	};
-	
-	external.id = function (id) {
-		return new internal.IdentityPredicate(id);
+		};		
 	};
 	
 	// Generic function
 	
-	internal.FunctionPredicate = function (fn) {
-		this.test = function (candidate) {
+	external.test = internal.FunctionPredicate = function (fn) {
+		return function (candidate) {
 			return fn(candidate);
 		};
 	};
 	
-	external.test = function (fn) {
-		return new internal.FunctionPredicate(fn);
-	};
-	
 	// Example
 	
-	internal.ExamplePredicate = function (example) {
-		
-		this.test = function (candidate) {
+	external.example = internal.ExamplePredicate = function (example) {
+		return function (candidate) {
 			
 			var exampleForeignKeys = [];
 
@@ -883,44 +863,30 @@ var _ = function () {
 			
 			return true;
 			
-		};
-		
-	};
-	
-	external.example = function (example) {
-		return new internal.ExamplePredicate(example);
+		};		
 	};
 	
 	// Instance
 	
-	internal.InstancePredicate = function (constructor) {
-		constructor = (constructor.entitytype) ? constructor.entitytype.constructor : constructor;
-		this.test = function (candidate) {
+	external.isa = internal.InstancePredicate = function (constructor) {
+		return function (candidate) {
 			return candidate instanceof constructor;
 		};
 	};
 	
-	external.isa = function (constructor) {
-		return new internal.InstancePredicate(constructor);
-	};
-	
 	// Relationship
 	
-	internal.RelationshipPredicate = function (parent,field) {
-		this.test = function (candidate) {
+	external.related = internal.RelationshipPredicate = function (parent,field) {
+		return function (candidate) {
 			return candidate.get(field) == parent.primaryKeyValue();
 		};
 	};
 	
-	external.related = function (parent,field) {
-		return new internal.RelationshipPredicate(parent.field);
-	};
-	
 	// Membership
 	
-	internal.MembershipPredicate = function (collection) {
+	external.member = internal.MembershipPredicate = function (collection) {		
 		collection = internal.set(collection);
-		this.test = function (candidate) {
+		return function (candidate) {
 			found = false;
 			collection.each(function (index,object) {
 				if ( object === candidate ) {
@@ -931,68 +897,56 @@ var _ = function () {
 		};
 	};
 	
-	external.member = function (collection) {
-		return new internal.MembershipPredicate(collection);
-	};
-	
 	// Modification state
 	
-	internal.ModifiedPredicate = function () {
-		this.test = function (candidate) {
+	external.dirty = internal.ModifiedPredicate = function () {
+		return function (candidate) {
 			return candidate.domain.dirty;
 		};
-	};
-	
-	external.dirty = new internal.ModifiedPredicate();
-	
+	};	
 	
 	// Comparisons
 	
-	internal.Eq = function (field,value) {
-		this.test = function (candidate) {
+	external.eq = internal.Eq = function (field,value) {
+		return function (candidate) {
 			return candidate.get(field) == value;
 		};
 	};
 	
-	internal.Lt = function (field,value) {
-		this.test = function (candidate) {
+	external.lt = internal.Lt = function (field,value) {
+		return function (candidate) {
 			return candidate.get(field) < value;
 		};
 	};
 	
-	internal.Gt = function (field,value) {
-		this.test = function (candidate) {
+	external.gt = internal.Gt = function (field,value) {
+		return function (candidate) {
 			return candidate.get(field) > value;
 		};
 	};
 	
-	external.eq = function (field,value) {
-		return new internal.Eq(field,value);
+	external.lte = internal.LtE = function (field,value) {
+		return internal.Not(internal.Gt(field,value));
 	};
 	
-	external.lt = function (field,value) {
-		return new internal.Lt(field,value);
+	external.gte = internal.GtE = function (field,value) {
+		return internal.Not(internal.Lt(field,value));
 	};
 	
-	external.gt = function (field,value) {
-		return new internal.Gt(field,value);
-	};
-	
-	external.lte = function (field,value) {
-		return new internal.Not(new internal.Gt(field,value));
-	};
-	
-	external.gte = function (field,value) {
-		return new internal.Not(new internal.Lt(field,value));
-	};
-	
+	external.between = function (field,lower,higher) {
+		return internal.And(
+					internal.Gt(field,lower),
+					internal.Lt(field,higher) 
+				);
+	}
 	
 	// Logical connectives
 	
-	internal.Or = function (predicates) {
-		this.test = function (candidate) {
+	external.or = internal.Or = function () {
+		var predicates = internal.arrayFromArguments(arguments);
+		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
-				if (predicates[i].test(candidate)) {
+				if (predicates[i](candidate)) {
 					return true;
 				}
 			}
@@ -1000,14 +954,11 @@ var _ = function () {
 		};
 	};
 	
-	external.or = function () {
-		return new internal.Or(arguments);
-	};
-	
-	internal.And = function (predicates) {
-		this.test = function (candidate) {
+	external.and = internal.And = function () {
+		var predicates = internal.arrayFromArguments(arguments);
+		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
-				if (!predicates[i].test(candidate)) {
+				if (!(predicates[i](candidate))) {
 					return false;
 				}
 			}
@@ -1015,20 +966,26 @@ var _ = function () {
 		};
 	};
 	
-	external.and = function () {
-		return new internal.And(arguments);
-	};
-	
-	internal.Not = function (predicate) {
-		this.test = function (candidate) {
-			return !predicate.test(candidate);
+	external.not = internal.Not = function (predicate) {
+		return function (candidate) {
+			return !predicate(candidate);
 		};
 	};
 	
-	external.not = function (predicate) {
-		return new internal.Not(predicate);
+	// Utility function used by And and Or.
+	internal.arrayFromArguments = function (args) {
+		if ( args[0] instanceof Array ) {
+			return args[0];
+		}
+		else {
+			var args2 = [];
+			for (var i=0; i<args.length;i++) {
+				args2.push(args[i]);
+			}
+			return args2;
+		}
 	};
-	
+		
 	
 	
 	// ------------------------------------------------------------------------
@@ -1144,7 +1101,7 @@ var _ = function () {
 		
 		
 		this.matches = function (predicate) {
-			return predicate.test(this);
+			return predicate(this);
 		};
 		
 		
