@@ -848,6 +848,19 @@ var jmodel = function () {
 		};
 	};
 	
+	external.composite = internal.CompositeOrdering = function () {
+		var orderings = internal.arrayFromArguments(arguments);
+		return function (a,b) {
+			for (var i=0; i<orderings.length; i++) {
+				var value = orderings[i](a,b);
+				if ( value !== 0 ) {
+					return value;
+				}
+			}
+			return 0;
+		};
+	};
+	
 	
 	
 	// ------------------------------------------------------------------------
