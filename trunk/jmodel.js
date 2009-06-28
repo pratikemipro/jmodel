@@ -842,6 +842,18 @@ var jmodel = function () {
 		};
 	};
 	
+	external.predicate = internal.PredicateOrdering = function(predicate) {
+		return function(a,b) {
+			if ( predicate(a) && !predicate(b) ) {
+				return -1;
+			}
+			else if ( predicate(b) && !predicate(a) ) {
+				return 1;
+			}
+			return 0;
+		}
+	};
+	
 	external.desc = internal.DescendingOrdering = function (order) {
 		return function (a,b) {
 			return -order(a,b);
@@ -867,7 +879,7 @@ var jmodel = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
-	external.predicate = internal.predicate = function (parameter) {
+	internal.predicate = function (parameter) {
 		if ( typeof parameter == 'function' ) {
 			return parameter;
 		}
