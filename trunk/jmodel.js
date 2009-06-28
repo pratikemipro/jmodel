@@ -167,7 +167,7 @@ var _ = function () {
 			return internal.entities[base]
 					.objects
 						.filter(internal.InstancePredicate(constructor))
-						.filter(( typeof criterion != 'string' ) ? internal.IdentityPredicate(criterion) : null)
+						.filter(( typeof criterion != 'string' ) ? internal.predicate(criterion) : null)
 						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
 
@@ -542,13 +542,6 @@ var _ = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate,immediate) {
-			// NOTE: Move this into filtering
-			if ( predicate.domain ) {
-				predicate = internal.ObjectIdentityPredicate(predicate);
-			}
-			else if ( typeof predicate != 'function' ) {
-				predicate = internal.IdentityPredicate(predicate);
-			}
 			var that = this;
 			this.filter(predicate).each(function (key,object) {
 				var removed = object;
@@ -589,20 +582,27 @@ var _ = function () {
 		
 		this.filter = function () {
 			
-			// No predicate
-			if ( ( arguments.length === 0 ) || ( arguments[0] === internal.AllPredicate ) ) {
+			var selector,predicate;
+
+			if ( arguments.length === 0 ) {
 				return this;
 			}
-			
-			var selector;
-			
-			if ( typeof arguments[0] == 'function' || typeof arguments[0] == 'undefined' ) {
-				var predicate	= arguments[0];
-				selector		= arguments[1];
+			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) ) {
+				predicate 	= null;
+				selector	= arguments[0];
 			}
 			else {
-				selector 		= arguments[0];
+				predicate	= internal.predicate(arguments[0]);
+				selector	= arguments[1];
 			}
+			
+//			if ( typeof arguments[0] == 'function' || typeof arguments[0] == 'undefined' ) {
+//				var predicate	= /*internal.predicate(*/arguments[0]/*)*/;
+//				selector		= arguments[1];
+//			}
+//			else {
+//				selector 		= arguments[0];
+//			} 
 			
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				var objs = new internal.DomainObjectCollection({});
@@ -799,13 +799,31 @@ var _ = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
+	external.predicate = internal.predicate = function (parameter) {
+		if ( typeof parameter == 'function' ) {
+			return parameter;
+		}
+		else if ( parameter && parameter.domain ) {
+			return internal.ObjectIdentityPredicate(parameter);
+		}
+		else if ( typeof parameter == 'object' ) {
+			return internal.ExamplePredicate(parameter);
+		} 
+		else if ( typeof parameter == 'number' ) {
+			return internal.IdentityPredicate(parameter);
+		}
+		return null;
+	};
+	
 	// All
 	
-	external.all = internal.AllPredicate = function () {
+	internal.AllPredicate = function () {
 		return function (candidate) {
 			return true;
 		};
 	};
+	
+	external.all = internal.AllPredicate();
 	
 	// Object Identity
 	
