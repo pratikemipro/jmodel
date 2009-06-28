@@ -183,21 +183,28 @@ var jmodel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 
-			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
+			add(newObject);
+//			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
 
 			newObject.domain.init(data);
 
 			// To trigger subscribers
-			set(data[primaryKey],newObject);
+//			add(newObject);
+//			set(data[primaryKey],newObject);
 
 			return newObject;
 
 		};
 
 
-		function set (id,object) {
-			internal.entities[base].objects.set(id,object);
+		function add (object) {
+			internal.entities[base].objects.add(object);
 		}
+
+/*		function set (id,object) {
+			alert('deprecated');
+			internal.entities[base].objects.set(id,object);
+		} */
 
 
 		function generateID() {			
@@ -497,7 +504,7 @@ var jmodel = function () {
 		
 		specification = specification || {};
 		
-		this.objects		= specification.objects ? specification.objects : {};
+		this.objects		= specification.objects ? specification.objects : [];
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 
 		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
@@ -524,20 +531,29 @@ var jmodel = function () {
 			return this.objects[id];
 		};
 		
-		this.set = function (id,value,immediate) {
+		this.add = function (object) {
+			if ( this.filter(object).count() === 0 ) {
+				this.objects.push(object);
+				this.subscribers.notify({method:'add',object:object});
+			}
+		};
+		
+/*		this.set = function (id,value,immediate) {
+			alert('deprecated');
 			// NOTE: Work out why this is sometimes called with invalid id
 			if ( id ) {
 				var method = this.objects[id] ? 'change' : 'add';
 				this.objects[id] = value;
 				this.subscribers.notify({method:method,object:value});
 			}
-		};
+		}; */
 		
 		this.first = function () {
-			for ( var i in this.objects ) {
+			return this.objects.length > 0 ? this.objects[0] : false;
+/*			for ( var i in this.objects ) {
 				return this.objects[i];
 			}
-			return false;
+			return false; */
 		};
 		
 		// NOTE: Make this work on base collections
@@ -600,7 +616,7 @@ var jmodel = function () {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
 					if ( predicate(object) ) {
-						objs.set(index,object);
+						objs.add(object);
 					}
 				});
 				return objs.select(selector);
@@ -674,9 +690,9 @@ var jmodel = function () {
 	
 	
 	external.set = function() {
-		var objects = {};
+		var objects = [];
 		for (var i=0; i<arguments.length; i++) {
-			objects[arguments[i].primaryKeyValue()] = arguments[i];
+			objects.push(arguments[i]);
 		}
 		return new internal.DomainObjectCollection({objects:objects});
 	};
@@ -702,7 +718,7 @@ var jmodel = function () {
 		});
 		
 		function collectionRemove(collection,object) {
-			deleted.set(object.primaryKeyValue(), object);
+			deleted.add(object);
 		}
 		
 		return deleted;
@@ -714,7 +730,7 @@ var jmodel = function () {
 		
 		parent.each(function (index,object) {
 			if ( predicate(object) ) {
-				child.set(object.primaryKeyValue(), object, true);
+				child.add(object);
 			}
 		});
 		
@@ -728,22 +744,24 @@ var jmodel = function () {
 		
 		function parentAdd(collection,object) {
 			if ( predicate(object) ) {
-				child.set(object.primaryKeyValue(), object, true);
+				child.add(object);
 			}
 		};
 		
 		function parentRemove(collection,object) {
-			child.remove(object,true);
+			child.remove(object);
 		};
 		
 		function parentChange(collection,object) {
 			if ( predicate(object) ) {
-				child.set(object.primaryKeyValue(), object,true);
+				child.add(object);
+//				child.set(object.primaryKeyValue(), object,true);
 			}
 			else {
-				if ( object.primaryKeyValue() in child.objects ) {
-					child.remove(object,true);
-				}
+				child.remove(object);
+//				if ( object.primaryKeyValue() in child.objects ) {
+//					child.remove(object,true);
+//				}
 			}
 		};
 		
@@ -763,7 +781,9 @@ var jmodel = function () {
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = internal.set(arguments[i]);
 			collection.each(function (index,object) {
-				union.set(object.primaryKeyValue(),object);
+				if ( union.filter(object).count() == 0 ) {
+					union.add(object);
+				}
 			});
 		}
 		return union;
