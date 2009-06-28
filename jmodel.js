@@ -851,7 +851,7 @@ var jmodel = function () {
 				return 1;
 			}
 			return 0;
-		}
+		};
 	};
 	
 	external.desc = internal.DescendingOrdering = function (order) {
