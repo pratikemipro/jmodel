@@ -574,7 +574,7 @@ var jmodel = function () {
 			var ordered = [];
 			this.each(function (index,object) {
 				ordered.push(object);
-			})
+			});
 			ordered.sort(ordering);
 			return new internal.DomainObjectCollection({objects:ordered});
 		};
@@ -828,7 +828,7 @@ var jmodel = function () {
 		else {
 			return internal.FieldOrdering(parameter);
 		}
-	}
+	};
 	
 	external.field = internal.FieldOrdering = function (fieldName) {
 		return function (a,b) {
