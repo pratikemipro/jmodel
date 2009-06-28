@@ -596,14 +596,6 @@ var jmodel = function () {
 				selector	= arguments[1];
 			}
 			
-//			if ( typeof arguments[0] == 'function' || typeof arguments[0] == 'undefined' ) {
-//				var predicate	= /*internal.predicate(*/arguments[0]/*)*/;
-//				selector		= arguments[1];
-//			}
-//			else {
-//				selector 		= arguments[0];
-//			} 
-			
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				var objs = new internal.DomainObjectCollection({});
 				this.each(function (index,object) {
