@@ -549,14 +549,13 @@ var jmodel = function () {
 		};
 		
 		// NOTE: Make this work on base collections
-		this.remove = function (predicate,immediate) {
-			var that = this;
-			this.filter(predicate).each(function (key,object) {
-				var removed = object;
-				delete that.objects[key];
+		this.remove = function (predicate) {
+			var indices = this.indices(predicate);
+			for (var i=0; i<indices.length; i++) {
+				var removed = this.objects.splice(indices[i],1)[0];
 				removed.removed();
-				that.subscribers.notify({method:'remove',object:removed});
-			});
+				this.subscribers.notify({method:'remove',object:removed});
+			}
 			return this;
 		};
 		
@@ -629,6 +628,19 @@ var jmodel = function () {
 			}
 			
 		};
+		
+		
+		this.indices = function (predicate) {
+			predicate = internal.predicate(predicate);
+			var indices = [];
+			this.each(function (index,object) {
+				if ( predicate(object) ) {
+					indices.push(index);
+				}
+			});
+			return indices;
+		}
+		
 		
 		this.debug = function () {
 			var contents = '';
