@@ -154,8 +154,9 @@ var jmodel = function () {
 		this.objects = new	internal.DomainObjectCollection(
 								( base != name) ?
 									{	base: 		internal.entities[base].objects,
-										predicate: 	internal.InstancePredicate(constructor) } :
-									{}
+										predicate: 	internal.InstancePredicate(constructor),
+										ordering: 	options.ordering } :
+									{	ordering: 	options.ordering }
 							);
 							
 		this.deleted = new internal.DeletedObjectsCollection(this.objects);
@@ -182,10 +183,10 @@ var jmodel = function () {
 			var primaryKey	= newObject.primaryKey;
 
 			data[primaryKey] = data[primaryKey] || generateID();
-
+			newObject.domain.init(data);
 			internal.entities[base].objects.add(newObject)
 
-			newObject.domain.init(data);
+			
 
 			return newObject;
 
@@ -488,9 +489,17 @@ var jmodel = function () {
 	internal.DomainObjectCollection = function (specification) {
 		
 		specification = specification || {};
+		if ( specification.ordering ) {
+			specification.ordering = internal.ordering(specification.ordering);
+		}
 		
 		this.objects		= specification.objects ? specification.objects : [];
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
+		
+		var sorted = false;
+		if ( specification.ordering ) {
+			sort.apply(this);
+		}
 		
 		this.length = function () {
 			return this.count();
@@ -526,6 +535,7 @@ var jmodel = function () {
 		};
 		
 		this.first = function () {
+			if ( !sorted ) { sort.apply(this); }
 			return this.objects.length > 0 ? this.objects[0] : false;
 		};
 		
@@ -556,7 +566,14 @@ var jmodel = function () {
 			return new internal.DomainObjectCollection({objects:ordered});
 		};
 		
+		
+		function sort() {
+			this.objects.sort(specification.ordering);
+			sorted = true;
+		}
+		
 		this.each = function (callback) {
+			if ( !sorted ) { sort.apply(this); }
 			for(var index in this.objects) {
 				callback.call(this.objects[index],index,this.objects[index]);
 			}
@@ -564,6 +581,7 @@ var jmodel = function () {
 		};
 		
 		this.map = function (mapping,mapped) {
+			if ( !sorted ) { sort.apply(this); }
 			mapped = mapped || [];
 			for(var index in this.objects) {
 				mapped.push(mapping(this.objects[index]));
@@ -614,6 +632,7 @@ var jmodel = function () {
 		
 		
 		this.debug = function () {
+			if ( !sorted ) { sort.apply(this); }
 			var contents = '';
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
@@ -671,14 +690,25 @@ var jmodel = function () {
 			return args;
 		}
 		
-		
-		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
+		// This collection is a materialised view over a base collection
+		if ( specification.base instanceof this.constructor ) {
 			var view = new internal.View(specification.base,this,specification.predicate);
 		}
 		else if ( specification.base ) {
 			throw 'Error: Invalid base collection type';
 		}
 		
+		// The collection needs to be sorted
+		this.subscribe({
+			source: this,
+			target: this,
+			add: 	unsorted,
+			change: unsorted
+		});
+		
+		function unsorted() {
+			sorted = false;
+		}
 		
 	};
 	
@@ -806,6 +836,9 @@ var jmodel = function () {
 	external.ordering = internal.ordering = function () {
 		if ( arguments.length > 1 ) {
 			return internal.CompositeOrdering.apply(null,arguments);
+		}
+		else if ( arguments[0] instanceof Array ) {
+			return internal.CompositeOrdering(arguments[0]);
 		}
 		else if ( typeof arguments[0] == 'function' ) {
 			return arguments[0];
