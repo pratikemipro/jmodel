@@ -183,7 +183,7 @@ var jmodel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 
-			internal.entities[base].objects.add(object)
+			internal.entities[base].objects.add(newObject)
 
 			newObject.domain.init(data);
 
