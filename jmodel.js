@@ -646,7 +646,7 @@ var jmodel = function () {
 				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
-												return collection.filter(subscription.predicate, subscription.selector) === event.object
+												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
 														&& event.method == 'add'; // NOTE: Fix this
 											};
 										}(this);							
@@ -912,7 +912,7 @@ var jmodel = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
-	internal.predicate = function (parameter) {
+	external.predicate = internal.predicate = function (parameter) {
 		if ( typeof parameter == 'function' ) {
 			return parameter;
 		}
@@ -1273,18 +1273,18 @@ var jmodel = function () {
 					descriptor = that.hasOne[i];
 					relationship 							= new internal.OneToOneRelationship(that,descriptor);
 					that.relationships[descriptor.accessor] = relationship;
-					that[descriptor.accessor] 				= relationship.get;
-					that['add'+descriptor.accessor]			= relationship.add;
+					that[descriptor.accessor] 				= function (relationship) {return relationship.get;}(relationship);
+					that['add'+descriptor.accessor]			= function (relationship) {return relationship.add;}(relationship);
 				}
 
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
 					relationship											= new internal.OneToManyRelationship(that,descriptor);
 					that.relationships[descriptor.accessor] 				= relationship;
-					that[(descriptor.plural || descriptor.accessor+'s')] 	= relationship.get;
-					that['add'+descriptor.accessor]							= relationship.add;
-					that['remove'+descriptor.accessor]						= relationship.remove;
-					that['debug'+descriptor.accessor]						= relationship.debug;
+					that[(descriptor.plural || descriptor.accessor+'s')] 	= function (relationship) {return relationship.get;}(relationship);
+					that['add'+descriptor.accessor]							= function (relationship) {return relationship.add;}(relationship);
+					that['remove'+descriptor.accessor]						= function (relationship) {return relationship.remove;}(relationship);
+					that['debug'+descriptor.accessor]						= function (relationship) {return relationship.debug;}(relationship);
 				}
 
 			};
@@ -1390,7 +1390,7 @@ var jmodel = function () {
 		}
 		
 		this.get = function (predicate,selector) {
-			return children.filter(predicate,selector);
+			return children.filter(predicate).select(selector);
 		};
 		
 		// NOTE: Should this work with arrays of objects too?
