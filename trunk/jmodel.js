@@ -510,13 +510,18 @@ var jmodel = function () {
 		
 		this.add = function (object) {
 			if ( this.filter(object).count() === 0 ) {
-/*				object.subscribe({
-					key: ':any',
-					change: function () {
-					}
-				}); */
 				this.objects.push(object);
 				this.subscribers.notify({method:'add',object:object});
+				object.subscribe({
+					target: this,
+					key: ':any',
+					change: function (object) {
+						this.subscribers.notify({
+							method:'change',
+							object:object
+						}); 
+					}		
+				});
 			}
 		};
 		
@@ -526,7 +531,7 @@ var jmodel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			predicate = internal.predicate(predicate);
+			predicate = internal.predicate(predicate) || internal.NonePredicate();
 			var newObjects = [], that=this;
 			this.each(function (index,object) {
 				if ( predicate(object) ) {
@@ -717,6 +722,8 @@ var jmodel = function () {
 	
 	internal.View = function (parent,child,predicate) {
 		
+		predicate = internal.predicate(predicate);
+		
 		parent.each(function (index,object) {
 			if ( predicate(object) ) {
 				child.add(object);
@@ -742,6 +749,7 @@ var jmodel = function () {
 		};
 		
 		function parentChange(collection,object) {
+			// Object sometimes null here
 			if ( predicate(object) ) {
 				child.add(object);
 			}
@@ -897,6 +905,16 @@ var jmodel = function () {
 	};
 	
 	external.all = internal.AllPredicate();
+	
+	// None
+	
+	internal.NonePredicate = function () {
+		return function (candidate) {
+			return false;
+		};
+	};
+	
+	external.none = internal.NonePredicate();
 	
 	// Object Identity
 	
@@ -1153,6 +1171,8 @@ var jmodel = function () {
 		
 		
 		this.subscribe = function (subscription) {
+
+			subscription.source = this;
 
 			if ( subscription.removed ) {
 				subscription.type		= internal.RemovalNotification;
