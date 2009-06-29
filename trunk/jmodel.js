@@ -1128,7 +1128,6 @@ var jmodel = function () {
 			var key;
 
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
-
 				key = arguments[0];
 				var value = arguments[1];
 				data[key] = value;
@@ -1136,26 +1135,13 @@ var jmodel = function () {
 				if ( arguments.length == 2 || arguments[2] ) {
 					subscribers.notify({key:':any'});
 				}
-/*				if ( arguments.length == 2 || arguments[2] ) { 
-					entitytype.objects.subscribers.notify({
-						method:'change',
-						object:this
-					});
-				} */
-
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
-
 				var mappings = arguments[0];
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
 				subscribers.notify({key:':any'});
-/*				entitytype.objects.subscribers.notify({
-					method:'change',
-					object:this
-				}); */
-
 			}
 
 			this.domain.dirty = true;
