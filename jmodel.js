@@ -241,7 +241,7 @@ var jmodel = function () {
 	
 		reset: 	function () {
 					for ( var entityName in internal.entities ) {
-						internal.entities[entityName].objects.remove(external.all);
+						internal.entities[entityName].objects.remove(internal.AllPredicate());
 					}
 					return external.context;
 				},
@@ -251,7 +251,7 @@ var jmodel = function () {
 							internal.entities[entityName].objects.each(function (index,object) {
 								object.domain.dirty = false;
 							});
-							internal.entities[entityName].deleted.remove(external.all);
+							internal.entities[entityName].deleted.remove(internal.AllPredicate());
 						}
 						return external.context;
 					}, 
@@ -510,6 +510,11 @@ var jmodel = function () {
 		
 		this.add = function (object) {
 			if ( this.filter(object).count() === 0 ) {
+/*				object.subscribe({
+					key: ':any',
+					change: function () {
+					}
+				}); */
 				this.objects.push(object);
 				this.subscribers.notify({method:'add',object:object});
 			}
@@ -521,12 +526,18 @@ var jmodel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			var indices = this.indices(predicate);
-			for (var i=0; i<indices.length; i++) {
-				var removed = this.objects.splice(indices[i],1)[0];
-				removed.removed();
-				this.subscribers.notify({method:'remove',object:removed});
-			}
+			predicate = internal.predicate(predicate);
+			var newObjects = [], that=this;
+			this.each(function (index,object) {
+				if ( predicate(object) ) {
+					object.removed();
+					that.subscribers.notify({method:'remove',object:object});
+				}
+				else {
+					newObjects.push(object);
+				}
+			});
+			this.objects = newObjects;
 			return this;
 		};
 		
@@ -596,17 +607,6 @@ var jmodel = function () {
 			
 		};
 		
-		
-		this.indices = function (predicate) {
-			predicate = internal.predicate(predicate);
-			var indices = [];
-			this.each(function (index,object) {
-				if ( predicate(object) ) {
-					indices.push(index);
-				}
-			});
-			return indices;
-		}
 		
 		this.debug = function () {
 			var contents = '';
@@ -1115,12 +1115,15 @@ var jmodel = function () {
 				var value = arguments[1];
 				data[key] = value;
 				subscribers.notify({key:key});
-				if ( arguments.length == 2 || arguments[2] ) { 
+				if ( arguments.length == 2 || arguments[2] ) {
+					subscribers.notify({key:':any'});
+				}
+/*				if ( arguments.length == 2 || arguments[2] ) { 
 					entitytype.objects.subscribers.notify({
 						method:'change',
 						object:this
 					});
-				}
+				} */
 
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1129,10 +1132,11 @@ var jmodel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				entitytype.objects.subscribers.notify({
+				subscribers.notify({key:':any'});
+/*				entitytype.objects.subscribers.notify({
 					method:'change',
 					object:this
-				});
+				}); */
 
 			}
 
@@ -1143,7 +1147,7 @@ var jmodel = function () {
 		};
 		
 		
-		this.removed = function () {
+		this.removed = function (collection) {
 			subscribers.notify({removed:true});
 		};
 		
