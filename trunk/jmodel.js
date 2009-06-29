@@ -825,16 +825,22 @@ var jmodel = function () {
 		};
 	};
 	
-	external.predicate = internal.PredicateOrdering = function(predicate) {
+	external.predicate = internal.PredicateOrdering = function() {
+		
+		var predicates = internal.arrayFromArguments(arguments);
+		
+		function numberMatches(object) {
+			var matches = 0;
+			for (var i=0; i<predicates.length; i++) {
+				matches += predicates[i](object) ? 1 : 0;
+			}
+			return matches;
+		}
+		
 		return function(a,b) {
-			if ( predicate(a) && !predicate(b) ) {
-				return -1;
-			}
-			else if ( predicate(b) && !predicate(a) ) {
-				return 1;
-			}
-			return 0;
+			return numberMatches(b)-numberMatches(a);
 		};
+		
 	};
 	
 	external.desc = internal.DescendingOrdering = function (ordering) {
