@@ -183,28 +183,13 @@ var jmodel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 
-			add(newObject);
-//			set(data[primaryKey],newObject); // Must do this before parsing JSON data or else generated keys are all identical
+			internal.entities[base].objects.add(object)
 
 			newObject.domain.init(data);
-
-			// To trigger subscribers
-//			add(newObject);
-//			set(data[primaryKey],newObject);
 
 			return newObject;
 
 		};
-
-
-		function add (object) {
-			internal.entities[base].objects.add(object);
-		}
-
-/*		function set (id,object) {
-			alert('deprecated');
-			internal.entities[base].objects.set(id,object);
-		} */
 
 
 		function generateID() {			
@@ -530,22 +515,8 @@ var jmodel = function () {
 			}
 		};
 		
-/*		this.set = function (id,value,immediate) {
-			alert('deprecated');
-			// NOTE: Work out why this is sometimes called with invalid id
-			if ( id ) {
-				var method = this.objects[id] ? 'change' : 'add';
-				this.objects[id] = value;
-				this.subscribers.notify({method:method,object:value});
-			}
-		}; */
-		
 		this.first = function () {
 			return this.objects.length > 0 ? this.objects[0] : false;
-/*			for ( var i in this.objects ) {
-				return this.objects[i];
-			}
-			return false; */
 		};
 		
 		// NOTE: Make this work on base collections
@@ -559,7 +530,6 @@ var jmodel = function () {
 			return this;
 		};
 		
-		
 		this.by = function (ordering) {
 			ordering = internal.ordering(ordering);
 			var ordered = [];
@@ -569,7 +539,6 @@ var jmodel = function () {
 			ordered.sort(ordering);
 			return new internal.DomainObjectCollection({objects:ordered});
 		};
-	
 		
 		this.each = function (callback) {
 			for(var index in this.objects) {
@@ -578,7 +547,6 @@ var jmodel = function () {
 			return this;
 		};
 		
-		
 		this.map = function (mapping,mapped) {
 			mapped = mapped || [];
 			for(var index in this.objects) {
@@ -586,7 +554,6 @@ var jmodel = function () {
 			}
 			return mapped;
 		};
-		
 		
 		this.select = function (selector) {
 			if ( selector == ':first' ) {
@@ -640,7 +607,6 @@ var jmodel = function () {
 			});
 			return indices;
 		}
-		
 		
 		this.debug = function () {
 			var contents = '';
@@ -778,13 +744,9 @@ var jmodel = function () {
 		function parentChange(collection,object) {
 			if ( predicate(object) ) {
 				child.add(object);
-//				child.set(object.primaryKeyValue(), object,true);
 			}
 			else {
 				child.remove(object);
-//				if ( object.primaryKeyValue() in child.objects ) {
-//					child.remove(object,true);
-//				}
 			}
 		};
 		
