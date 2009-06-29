@@ -530,8 +530,8 @@ var jmodel = function () {
 			return this;
 		};
 		
-		this.by = function (ordering) {
-			ordering = internal.ordering(ordering);
+		this.by = function () {
+			var ordering = internal.ordering.apply(null,arguments);
 			var ordered = [];
 			this.each(function (index,object) {
 				ordered.push(object);
@@ -795,12 +795,15 @@ var jmodel = function () {
 	//														   		  Orderings
 	// ------------------------------------------------------------------------
 	
-	external.ordering = internal.ordering = function (parameter) {
-		if ( typeof parameter == 'function' ) {
+	external.ordering = internal.ordering = function () {
+		if ( arguments.length > 1 ) {
+			return internal.CompositeOrdering.apply(null,arguments);
+		}
+		else if ( typeof arguments[0] == 'function' ) {
 			return parameter;
 		}
 		else {
-			return internal.FieldOrdering(parameter);
+			return internal.FieldOrdering(arguments[0]);
 		}
 	};
 	
@@ -828,14 +831,18 @@ var jmodel = function () {
 		};
 	};
 	
-	external.desc = internal.DescendingOrdering = function (order) {
+	external.desc = internal.DescendingOrdering = function (ordering) {
+		ordering = internal.ordering(ordering);
 		return function (a,b) {
-			return -order(a,b);
+			return -ordering(a,b);
 		};
 	};
 	
 	external.composite = internal.CompositeOrdering = function () {
 		var orderings = internal.arrayFromArguments(arguments);
+		for (var i=0; i<orderings.length; i++) {
+			orderings[i] = internal.ordering(orderings[i]);
+		}
 		return function (a,b) {
 			for (var i=0; i<orderings.length; i++) {
 				var value = orderings[i](a,b);
