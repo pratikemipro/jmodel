@@ -506,14 +506,6 @@ var jmodel = function () {
 		
 		this.objects		= specification.objects ? specification.objects : [];
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
-
-		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
-			var view = new internal.View(specification.base,this,specification.predicate);
-		}
-		else if ( specification.base ) {
-			throw 'Error: Invalid base collection type';
-		}
-	
 		
 		this.length = function () {
 			return this.count();
@@ -694,6 +686,14 @@ var jmodel = function () {
 				args.push(arguments[i]);
 			}
 			return args;
+		}
+		
+		
+		if ( specification.base instanceof this.constructor ) { // This collection is a materialised view over a base collection
+			var view = new internal.View(specification.base,this,specification.predicate);
+		}
+		else if ( specification.base ) {
+			throw 'Error: Invalid base collection type';
 		}
 		
 		
