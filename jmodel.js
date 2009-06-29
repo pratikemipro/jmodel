@@ -119,6 +119,19 @@ jQuery.fn.pubsub = function (pubsub) {
 	return this.subscribe(pubsub).publish(pubsub);
 };
 
+jQuery.fn.permute = function (permutation) {
+	
+	var copies = [];
+	for(var i=0; i<permutation.length; i++) {
+		copies.push(jQuery(this.get(i)).clone(true));
+	};
+	
+	for(var i=0; i<copies.length; i++) {
+		jQuery(this.get(i)).replaceWith(copies[permutation[i]]);
+	}
+	
+}
+
 
 // ============================================================================
 //														 	Domain Object Model
