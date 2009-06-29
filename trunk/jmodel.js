@@ -919,7 +919,7 @@ var jmodel = function () {
 		else if ( parameter && parameter.domain ) {
 			return internal.ObjectIdentityPredicate(parameter);
 		}
-		else if ( typeof parameter == 'object' ) {
+		else if ( typeof parameter == 'object' && parameter !== null ) {
 			return internal.ExamplePredicate(parameter);
 		} 
 		else if ( typeof parameter == 'number' ) {
