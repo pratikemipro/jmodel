@@ -800,10 +800,16 @@ var jmodel = function () {
 			return internal.CompositeOrdering.apply(null,arguments);
 		}
 		else if ( typeof arguments[0] == 'function' ) {
-			return parameter;
+			return arguments[0];
 		}
 		else {
-			return internal.FieldOrdering(arguments[0]);
+			var pieces = arguments[0].split(' ');
+			if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
+				return internal.FieldOrdering(pieces[0]);
+			}
+			else {
+				return internal.DescendingOrdering(internal.FieldOrdering(pieces[0]));
+			}
 		}
 	};
 	
