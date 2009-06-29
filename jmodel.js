@@ -186,8 +186,6 @@ var jmodel = function () {
 			newObject.domain.init(data);
 			internal.entities[base].objects.add(newObject)
 
-			
-
 			return newObject;
 
 		};
@@ -389,6 +387,7 @@ var jmodel = function () {
 		};
 	};
 	
+	// NOTE: Make this work with bindings
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
 			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
