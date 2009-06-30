@@ -105,6 +105,7 @@ jQuery.fn.subscribe = function (subscription) {
 				add: subscription.onAdd,
 				remove: subscription.onRemove,
 				change: subscription.onChange,
+				sort: subscription.onSort,
 				initialise: subscription.initialise
 			});
 		});
@@ -120,13 +121,17 @@ jQuery.fn.pubsub = function (pubsub) {
 };
 
 jQuery.fn.permute = function (permutation) {
+
+	if ( this.length != permutation.length ) {
+		return false;
+	}
 	
 	var copies = [];
-	for(var i=0; i<permutation.length; i++) {
+	for(var i=0; i<this.length; i++) {
 		copies.push(jQuery(this.get(i)).clone(true));
 	};
 	
-	for(var i=0; i<copies.length; i++) {
+	for(var i=0; i<permutation.length; i++) {
 		jQuery(this.get(i)).replaceWith(copies[permutation[i]]);
 	}
 	
@@ -388,8 +393,11 @@ var jmodel = function () {
 	
 	internal.CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
-			if (subscription[event.method]) {
+			if (subscription[event.method] && event.object) {
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
+			}
+			else if (subscription[event.method]) {
+				subscription[event.method].call(subscription.target,event.permutation);
 			}
 		};
 	};
@@ -510,7 +518,7 @@ var jmodel = function () {
 		
 		var sorted = false;
 		if ( specification.ordering ) {
-			sort.apply(this);
+			this.sort();
 		}
 		
 		this.length = function () {
@@ -537,17 +545,19 @@ var jmodel = function () {
 					target: this,
 					key: ':any',
 					change: function (object) {
+						sorted = false;
 						this.subscribers.notify({
 							method:'change',
 							object:object
 						}); 
 					}		
 				});
+				sorted = false;
 			}
 		};
 		
 		this.first = function () {
-			if ( !sorted ) { sort.apply(this); }
+			if ( !sorted ) { this.sort(); }
 			return this.objects.length > 0 ? this.objects[0] : false;
 		};
 		
@@ -579,13 +589,48 @@ var jmodel = function () {
 		};
 		
 		
-		function sort() {
+		this.sort = function () {
+			
+			if (arguments.length > 0) {
+				specification.ordering = internal.ordering.apply(null,arguments);
+			}
+			
+			// Remember old order
+			for(var i=0; i<this.objects.length; i++) {
+				this.objects[i].domain.position = i;
+			}
+			
+			// Sort
 			this.objects.sort(specification.ordering);
+			
+			// Find permutation
+			var permutation = [];
+			for(var i=0; i<this.objects.length; i++) {
+				permutation[i] = this.objects[i].domain.position;
+			}
+			
+			// Find whether permutation is not identity permutation
+			var permuted = false;
+			for(var i=0; i<permutation.length; i++) {
+				if ( permutation[i] != i ) {
+					permuted = true;
+					break;
+				}
+			}
+			
+			// Notify subscribers
+			if ( permuted ) {
+				this.subscribers.notify({method:'sort',permutation:permutation});
+			}
+			
 			sorted = true;
+			
+			return this;
+			
 		}
 		
 		this.each = function (callback) {
-			if ( !sorted ) { sort.apply(this); }
+			if ( !sorted ) { this.sort(); }
 			for(var index in this.objects) {
 				callback.call(this.objects[index],index,this.objects[index]);
 			}
@@ -593,7 +638,7 @@ var jmodel = function () {
 		};
 		
 		this.map = function (mapping,mapped) {
-			if ( !sorted ) { sort.apply(this); }
+			if ( !sorted ) { this.sort(); }
 			mapped = mapped || [];
 			for(var index in this.objects) {
 				mapped.push(mapping(this.objects[index]));
@@ -644,7 +689,7 @@ var jmodel = function () {
 		
 		
 		this.debug = function () {
-			if ( !sorted ) { sort.apply(this); }
+			if ( !sorted ) { this.sort(); }
 			var contents = '';
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
@@ -710,17 +755,6 @@ var jmodel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
-		// The collection needs to be sorted
-		this.subscribe({
-			source: this,
-			target: this,
-			add: 	unsorted,
-			change: unsorted
-		});
-		
-		function unsorted() {
-			sorted = false;
-		}
 		
 	};
 	
@@ -878,7 +912,7 @@ var jmodel = function () {
 		};
 	};
 	
-	external.predicate = internal.PredicateOrdering = function() {
+	external.score = internal.PredicateOrdering = function() {
 		
 		var predicates = internal.arrayFromArguments(arguments);
 		
@@ -890,7 +924,7 @@ var jmodel = function () {
 			return matches;
 		}
 		
-		return function(a,b) {
+		return function (a,b) {
 			return numberMatches(b)-numberMatches(a);
 		};
 		
