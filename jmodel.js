@@ -689,7 +689,6 @@ var jmodel = function () {
 		
 		
 		this.debug = function () {
-			if ( !sorted ) { this.sort(); }
 			var contents = '';
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
