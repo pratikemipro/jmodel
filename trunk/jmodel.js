@@ -721,7 +721,7 @@ var jModel = function () {
 		};
 		
 		this.add = function (object) {
-			if ( this.filter(object).count() === 0 ) {
+			if ( !internal.MembershipPredicate(this)(object) ) {
 				this.objects.push(object);
 				this.subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
@@ -1048,9 +1048,7 @@ var jModel = function () {
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = internal.set(arguments[i]);
 			collection.each(function (index,object) {
-				if ( union.filter(object).count() == 0 ) {
-					union.add(object);
-				}
+				union.add(object);
 			});
 		}
 		return union;
