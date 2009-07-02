@@ -168,7 +168,7 @@ jQuery.fn.permute = function (permutation) {
 //														 	Domain Object Model
 // ============================================================================
 
-var jmodel = function () {
+var jModel = function () {
 
 
 	var external	= {},
@@ -270,7 +270,7 @@ var jmodel = function () {
 
 		disable: 	function (flag) {
 						setFlag(flag,false);
-						return external.log
+						return external.log;
 					}
 		
 	};
@@ -344,7 +344,7 @@ var jmodel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
-			internal.entities[base].objects.add(newObject)
+			internal.entities[base].objects.add(newObject);
 
 			log.endGroup(log.flags.domainobject.create);
 
@@ -636,7 +636,7 @@ var jmodel = function () {
 		
 		this.debug = function () {
 			return subscribers.length > 0 ? '{'+subscribers.length+' subscribers}' : '';
-		}
+		};
 		
 	};
 	
@@ -805,7 +805,7 @@ var jmodel = function () {
 			
 			return this;
 			
-		}
+		};
 		
 		this.each = function (callback) {
 			if ( !sorted ) { this.sort(); }
@@ -1124,7 +1124,7 @@ var jmodel = function () {
 				property = path[i];
 				value = object[property]();
 				if ( !(typeof value == 'object') ) {
-					return value
+					return value;
 				}
 				else {
 					object = value instanceof internal.DomainObjectCollection ? value.first() : value;
@@ -1143,7 +1143,7 @@ var jmodel = function () {
 			return 0;
 		};
 		
-	}
+	};
 	
 	external.desc = internal.DescendingOrdering = function (ordering) {
 		ordering = internal.ordering(ordering);
@@ -1440,7 +1440,7 @@ var jmodel = function () {
 					this.set(key,mappings[key],false);
 				}
 				subscribers.notify({key:':any',description:'field value change: any'});
-				log.endGroup()
+				log.endGroup();
 			}
 
 			this.domain.dirty = true;
@@ -1879,5 +1879,5 @@ var jmodel = function () {
 }();
 
 if (!_) {
-	var _=jmodel;
+	var _=jModel;
 }
