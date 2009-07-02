@@ -126,13 +126,15 @@ jQuery.fn.permute = function (permutation) {
 		return false;
 	}
 	
-	var copies = [];
+	var copies = [], placeholders = [];
 	for(var i=0; i<this.length; i++) {
-		copies.push(jQuery(this.get(i)).clone(true));
+		copies[i] 		= this.get(i);
+		placeholders[i] = document.createComment('');
+		copies[i].parentNode.replaceChild(placeholders[i],copies[i])
 	};
 	
-	for(var i=0; i<permutation.length; i++) {
-		jQuery(this.get(i)).replaceWith(copies[permutation[i]]);
+	for(var i=0; i<copies.length; i++) {
+		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
 	}
 	
 }
