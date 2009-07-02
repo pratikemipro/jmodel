@@ -126,18 +126,18 @@ jQuery.fn.permute = function (permutation) {
 		return false;
 	}
 	
-	var copies = [], placeholders = [];
-	for(var i=0; i<this.length; i++) {
+	var copies = [], placeholders = [], i;
+	for(i=0; i<this.length; i++) {
 		copies[i] 		= this.get(i);
 		placeholders[i] = document.createComment('');
-		copies[i].parentNode.replaceChild(placeholders[i],copies[i])
-	};
+		copies[i].parentNode.replaceChild(placeholders[i],copies[i]);
+	}
 	
-	for(var i=0; i<copies.length; i++) {
+	for(i=0; i<copies.length; i++) {
 		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
 	}
 	
-}
+};
 
 
 // ============================================================================
@@ -149,7 +149,111 @@ var jmodel = function () {
 
 	var external	= {},
 		internal	= {entities:{}};
+		
+		
+	// ------------------------------------------------------------------------
+	//																	Logging
+	// ------------------------------------------------------------------------
 	
+	var log = {
+		
+		active: 	false,
+		
+		flags: 		{
+						all: false,
+						domainobject: {
+							all: false,
+							set: false
+						}
+					},
+				
+		startGroup: function (condition,title) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.group ) {
+								console.group(title);
+							}
+						}
+					},
+				
+		endGroup: 	function (condition) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.groupEnd ) {
+								console.groupEnd();
+							}
+						}
+					},
+					
+		error: 		function (condition,message) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.error ) {
+								console.error(message);
+							}
+							else if ( console.log ) { 
+								console.log(message);
+							} 
+						}
+					},
+					
+		warning: 	function (condition,message) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.warn ) {
+								console.warn(message);
+							}
+							else if ( console.log ) { 
+								console.log(message);
+							} 
+						}
+					},
+					
+		debug: 		function (condition, message) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.debug ) {
+								console.debug(message);
+							}
+							else if ( console.log ) { 
+								console.log(message);
+							} 
+						}
+					},
+					
+		info: 		function (condition, message) {
+						if ( log.active && ( log.flags.all || condition ) ) {
+							if ( console.info ) {
+								console.info(message);
+							}
+							else if ( console.log ) { 
+								console.log(message);
+							} 
+						}
+					}
+		
+	};
+	
+	function setFlag(path,value) {
+		pieces = path.split('.');
+		var property=log.flags;
+		for (var i=0; i<pieces.length-1; i++) {
+			if ( typeof property[pieces[i]] == 'object' ) {
+				property=property[pieces[i]];
+			}
+		}
+		property[pieces[pieces.length-1]] = value;
+	}
+	
+	external.log = {
+	
+		enable: 	function (flag) {
+						setFlag(flag,true);
+						log.active = true;
+						return log.flags;
+					},
+					
+		disable: 	function (flag) {
+						setFlag(flag,false);
+						return external.log
+					}
+		
+	};
 	
 	
 	// ------------------------------------------------------------------------
@@ -282,6 +386,11 @@ var jmodel = function () {
 									+internal.entities[entityName].deleted.debug(false)+'] ';
 					}
 					return contents;
+				},
+				
+		log: 	function (type,state) {
+					logging[type] = state;
+					return external.context;
 				}
 		
 	};
@@ -1247,6 +1356,7 @@ var jmodel = function () {
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				key = arguments[0];
 				var value = arguments[1];
+				log.debug(log.flags.domainobject.set,'Setting '+key+' to "'+value+'"');
 				data[key] = value;
 				subscribers.notify({key:key});
 				if ( arguments.length == 2 || arguments[2] ) {
@@ -1254,11 +1364,13 @@ var jmodel = function () {
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
+				log.startGroup(log.flags.domainobject.set,'Setting fields');
 				var mappings = arguments[0];
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
 				subscribers.notify({key:':any'});
+				log.endGroup()
 			}
 
 			this.domain.dirty = true;
@@ -1656,28 +1768,37 @@ var jmodel = function () {
 		return Base;
 
 	})();
-	
+
 	
 	
 	// ------------------------------------------------------------------------
 	// 																	Fluency 
 	// ------------------------------------------------------------------------
 	
+	external.log.prototoype		= external.prototype;
+	external.log.context		= external.context;
+	external.log.notifications	= external.notifications;
+	external.log.json			= external.json;
+	
 	external.prototype.context			= external.context;
 	external.prototype.notifications	= external.notifications;
 	external.prototype.json				= external.json;
+	external.prototype.log				= external.log;
 	
 	external.context.prototype			= external.prototype;
 	external.context.notifications		= external.notifications;
 	external.context.json				= external.json;
+	external.context.log				= external.log;
 	
 	external.notifications.prototype	= external.prototype;
 	external.notifications.context		= external.context;
 	external.notifications.json			= external.json;
+	external.notifications.log			= external.log;
 	
 	external.json.prototype				= external.prototype;
 	external.json.context				= external.context;
 	external.json.notifications			= external.notifications;
+	external.json.log					= external.log;
 	
 	return external;
 	
