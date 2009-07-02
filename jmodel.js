@@ -1652,6 +1652,7 @@ var jmodel = function () {
 			var subscription = {
 				source: children,
 				target: object,
+				filter: relationship.filter,
 				description: 'subscription to relationship children'
 			};
 			if ( relationship.onAdd)    { subscription.add    = relationship.onAdd;	   }
@@ -1660,8 +1661,8 @@ var jmodel = function () {
 			children.subscribe(subscription);
 		}
 		
-		this.get = function (predicate,selector) {
-			return children.filter(predicate).select(selector);
+		this.get = function () {
+			return children.filter.apply(children,arguments);
 		};
 		
 		// NOTE: Should this work with arrays of objects too?
