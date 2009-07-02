@@ -275,11 +275,11 @@ var jmodel = function () {
 						return external.context;
 					}, 
 				
-		debug: 	function () {
+		debug: 	function (showSubscribers) {
 					var contents = '';
 					for ( var entityName in internal.entities ) {
-						contents += entityName+': ['+internal.entities[entityName].objects.debug()
-									+internal.entities[entityName].deleted.debug()+'] ';
+						contents += entityName+': ['+internal.entities[entityName].objects.debug(showSubscribers)
+									+internal.entities[entityName].deleted.debug(false)+'] ';
 					}
 					return contents;
 				}
@@ -467,6 +467,10 @@ var jmodel = function () {
 				}
 			});
 		};
+		
+		this.debug = function () {
+			return subscribers.length > 0 ? '{'+subscribers.length+' subscribers}' : '';
+		}
 		
 	};
 	
@@ -690,11 +694,14 @@ var jmodel = function () {
 		};
 		
 		
-		this.debug = function () {
+		this.debug = function (showSubscribers) {
 			var contents = '';
 			for ( var i in this.objects ) {
 				var obj = this.objects[i];
 				contents += ' '+obj.primaryKeyValue()+' ';
+			}
+			if ( showSubscribers ) {
+				contents += ' '+this.subscribers.debug()+' ';
 			}
 			return contents;
 		};
@@ -901,7 +908,8 @@ var jmodel = function () {
 		}
 	};
 	
-	external.field = internal.FieldOrdering = function (fieldName) {
+	external.field = internal.FieldOrdering = function (fieldName,getter) {
+		
 		return function (a,b) {
 			if ( a.get(fieldName) < b.get(fieldName) ) {
 				return -1;
@@ -913,7 +921,7 @@ var jmodel = function () {
 		};
 	};
 	
-	external.score = internal.PredicateOrdering = function() {
+	external.score = internal.PredicateOrdering = function () {
 		
 		var predicates = internal.arrayFromArguments(arguments);
 		
@@ -930,6 +938,35 @@ var jmodel = function () {
 		};
 		
 	};
+	
+	external.path = internal.FieldPathOrdering = function (fieldpath) {
+		
+		function getFieldValue(object,path) {
+			var property, value;
+			for (var i=0; i<path.length; i++) {
+				property = path[i];
+				value = object[property]();
+				if ( !(typeof value == 'object') ) {
+					return value
+				}
+				else {
+					object = value instanceof internal.DomainObjectCollection ? value.first() : value;
+				}
+			}
+			return 0;
+		}
+		
+		return function (a,b) {
+			if ( getFieldValue(a,fieldpath) < getFieldValue(b,fieldpath) ) {
+				return -1;
+			}
+			else if ( getFieldValue(a,fieldpath) > getFieldValue(b,fieldpath) ) {
+				return 1;
+			}
+			return 0;
+		};
+		
+	}
 	
 	external.desc = internal.DescendingOrdering = function (ordering) {
 		ordering = internal.ordering(ordering);
@@ -1358,11 +1395,14 @@ var jmodel = function () {
 					}
 				},
 						
-				debug: function () {
+				debug: function (showSubscribers) {
 					var fields = '';
 					for ( var i in data ) {
 						fields += i + ':'+data[i]+' ';
 					}
+					if ( showSubscribers ) {
+						fields += ' '+subscribers.debug()+' ';
+					} 
 					return fields;
 				}
 				
