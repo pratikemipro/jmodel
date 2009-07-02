@@ -708,9 +708,6 @@ var jModel = function () {
 		this.subscribers	= new internal.SubscriptionList(internal.notifications);
 		
 		var sorted = false;
-		if ( specification.ordering ) {
-			this.sort();
-		}
 		
 		this.length = this.count = function () {
 			return this.objects.length;
@@ -766,14 +763,12 @@ var jModel = function () {
 			return this;
 		};
 		
-		this.by = function () {
-			var ordering = internal.ordering.apply(null,arguments);
-			var ordered = [];
-			this.each(function (index,object) {
-				ordered.push(object);
-			});
-			ordered.sort(ordering);
-			return new internal.DomainObjectCollection({objects:ordered,description:'ordered '+specification.description});
+		this.by = function () {			
+			return new internal.DomainObjectCollection({
+				objects: copyArray(this.objects),
+				ordering: internal.ordering.apply(null,arguments),
+				description:'ordered '+specification.description
+			});	
 		};
 		
 		
@@ -931,6 +926,20 @@ var jModel = function () {
 			return external.difference(this,set);
 		};
 		
+		
+		// Initial sort
+		if ( specification.ordering ) {
+			this.sort();
+			sorted = true;
+		}
+		
+		function copyArray (original) {
+			copy = [];
+			for(var i in original) {
+				copy[i] = original[i];
+			}
+			return copy;
+		}
 		
 		// Note carefully that argumentsArray includes the current collection in the array
 		function argumentsArray() {
