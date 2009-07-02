@@ -848,13 +848,12 @@ var jModel = function () {
 			}
 			
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
-				var objs = new internal.DomainObjectCollection({description:'filtered '+specification.description});
-				this.each(function (index,object) {
-					if ( predicate(object) ) {
-						objs.add(object);
-					}
-				});
-				return objs.select(selector);
+				return (
+					new	internal.DomainObjectCollection({
+							objects: partitionArray(this.objects,predicate).pass,
+							description:'filtered '+specification.description
+						})
+					).select(selector);
 			}
 			else {
 				return this.select(selector);
@@ -942,7 +941,7 @@ var jModel = function () {
 					partition.pass.push(object);
 				}
 				else {
-					partition.fail.push(object)
+					partition.fail.push(object);
 				}
 			}
 			return partition;
@@ -1788,7 +1787,7 @@ var jModel = function () {
 								makeObject(key,data[i][key],options.parent);
 							}
 						}
-						log.endGroup(log.flags.json.thaw)
+						log.endGroup(log.flags.json.thaw);
 						return external.json;
 					}
 			
