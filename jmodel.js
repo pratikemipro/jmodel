@@ -568,7 +568,6 @@ var jmodel = function () {
 	// NOTE: Make this work with bindings
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
-			alert('here');
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
 												subscription.subscription.key
