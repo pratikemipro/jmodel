@@ -774,7 +774,7 @@ var jmodel = function () {
 			
 			// Remember old order
 			for(var i=0; i<this.objects.length; i++) {
-				this.objects[i].domain.position = i;
+				this.objects[i].domain.tags.position = i;
 			}
 			
 			// Sort
@@ -783,7 +783,8 @@ var jmodel = function () {
 			// Find permutation
 			var permutation = [];
 			for(var i=0; i<this.objects.length; i++) {
-				permutation[i] = this.objects[i].domain.position;
+				permutation[i] = this.objects[i].domain.tags.position;
+				delete this.objects[i].domain.tags.position;
 			}
 			
 			// Find whether permutation is not identity permutation
@@ -1556,6 +1557,8 @@ var jmodel = function () {
 			return {
 				
 				dirty: false,
+				
+				tags: {},
 				
 				init: function (initialData) {
 					reifyFields();
