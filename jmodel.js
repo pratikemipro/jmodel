@@ -77,8 +77,8 @@ jQuery.fn.subscribe = function (subscription) {
 		});
 		
 	}
-	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
-		
+	else if ( ( subscription.predicate || subscription.selector ) && subscription.subscription.bindings ) { // Subscription to members of collection with bindings
+
 		return this.each(function (index,element) {
 			for (var selector in subscription.subscription.bindings) {
 				jQuery(selector,element).each(function (index,object) {
@@ -98,8 +98,27 @@ jQuery.fn.subscribe = function (subscription) {
 				});
 			}
 		});
-		
+
 	} 
+	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
+
+		return this.each(function (index,element) {
+			subscription.source.subscribe({
+				source: subscription.source,
+				predicate: subscription.predicate,
+				selector: subscription.selector,
+				description: 'application subscription',
+				subscription: {
+					target: jQuery(element),
+					key: subscription.subscription.key,
+					change: subscription.subscription.onChange,
+					initialise: subscription.subscription.initialise,
+					description: 'application subscription'
+				}
+			});
+		});
+		
+	}
 	else { // Subscription to collection
 		
 		return this.each(function (index,element) {
@@ -549,6 +568,7 @@ var jmodel = function () {
 	// NOTE: Make this work with bindings
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
+			alert('here');
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
 												subscription.subscription.key
