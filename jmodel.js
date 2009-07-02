@@ -712,16 +712,8 @@ var jModel = function () {
 			this.sort();
 		}
 		
-		this.length = function () {
-			return this.count();
-		};
-		
-		this.count = function () {
-			var count = 0;
-			for ( var i in this.objects ) {
-				count++;
-			}
-			return count;
+		this.length = this.count = function () {
+			return this.objects.length;
 		};
 		
 		this.get = function (id) {
