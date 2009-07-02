@@ -719,17 +719,20 @@ var jmodel = function () {
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
 			predicate = internal.predicate(predicate) || internal.NonePredicate();
-			var newObjects = [], that=this;
+			var retainedObjects=[], removedObjects=[], that=this;
 			this.each(function (index,object) {
 				if ( predicate(object) ) {
-					object.removed();
-					that.subscribers.notify({method:'remove',object:object,description:'object removal'});
+					removedObjects.push(object);
 				}
 				else {
-					newObjects.push(object);
+					retainedObjects.push(object);
 				}
 			});
-			this.objects = newObjects;
+			this.objects = retainedObjects;
+			for (var i=0; i<removedObjects.length; i++) {
+				removedObjects[i].removed();
+				that.subscribers.notify({method:'remove',object:removedObjects[i],description:'object removal'});
+			}
 			return this;
 		};
 		
@@ -1622,7 +1625,7 @@ var jmodel = function () {
 			});
 		}
 		
-		// Relationship might specify subscription to children								
+		// Relationship might specify subscription to children							
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
 			var subscription = {
 				source: children,
