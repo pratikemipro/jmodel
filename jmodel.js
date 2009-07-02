@@ -625,6 +625,7 @@ var jModel = function () {
 				}
 			}
 			if ( !found ) {
+				log.debug(log.flags.subscriptions.subscribe,'adding subscriber: '+subscriber.description);
 				subscribers.push(subscriber);
 			}
 		};
@@ -654,6 +655,8 @@ var jModel = function () {
 	
 	internal.CollectionSubscriber = function (subscription) {
 	
+		this.description = subscription.description;
+	
 		// NOTE: Implement filters here
 		this.matches = function (event) {
 			if ( !subscription.filter ) {
@@ -672,6 +675,8 @@ var jModel = function () {
 	
 	
 	internal.ObjectSubscriber = function (subscription) {
+
+		this.description = subscription.description;
 
 		this.matches = function (event) {
 			return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
@@ -738,7 +743,7 @@ var jModel = function () {
 							description:'object change'
 						}); 
 					},
-					description: 'object change for collection change'
+					description: 'object change for '+specification.description+' collection change'
 				});
 				sorted = false;
 			}
