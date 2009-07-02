@@ -745,20 +745,11 @@ var jModel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			predicate = internal.predicate(predicate) || internal.NonePredicate();
-			var retainedObjects=[], removedObjects=[], that=this;
-			this.each(function (index,object) {
-				if ( predicate(object) ) {
-					removedObjects.push(object);
-				}
-				else {
-					retainedObjects.push(object);
-				}
-			});
-			this.objects = retainedObjects;
-			for (var i=0; i<removedObjects.length; i++) {
-				removedObjects[i].removed();
-				that.subscribers.notify({method:'remove',object:removedObjects[i],description:'object removal'});
+			var partition = partitionArray( this.objects, internal.predicate(predicate) || internal.NonePredicate() );
+			this.objects = partition.fail;
+			for (var i in partition.pass) {
+				partition.pass[i].removed();
+				this.subscribers.notify({method:'remove',object:partition.pass[i],description:'object removal'});
 			}
 			return this;
 		};
@@ -933,6 +924,8 @@ var jModel = function () {
 			sorted = true;
 		}
 		
+		// Utility methods
+		
 		function copyArray (original) {
 			copy = [];
 			for(var i in original) {
@@ -940,6 +933,21 @@ var jModel = function () {
 			}
 			return copy;
 		}
+		
+		function partitionArray (array,predicate) {
+			partition = {pass:[],fail:[]};
+			for (var i in array) {
+				var object = array[i];
+				if ( predicate(object) ) {
+					partition.pass.push(object);
+				}
+				else {
+					partition.fail.push(object)
+				}
+			}
+			return partition;
+		}
+		
 		
 		// Note carefully that argumentsArray includes the current collection in the array
 		function argumentsArray() {
