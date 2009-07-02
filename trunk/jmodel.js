@@ -395,11 +395,11 @@ var jmodel = function () {
 	
 	internal.CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
-			if (subscription[event.method] && event.object) {
-				subscription[event.method].call(subscription.target,subscription.source,event.object);
+			if (subscription[event.method] && event.permutation) {
+				subscription[event.method].call(subscription.target,event.permutation);
 			}
 			else if (subscription[event.method]) {
-				subscription[event.method].call(subscription.target,event.permutation);
+				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		};
 	};
