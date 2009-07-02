@@ -161,9 +161,20 @@ var jmodel = function () {
 		
 		flags: 		{
 						all: false,
+						application: false,
 						domainobject: {
 							all: false,
+							create: false,
 							set: false
+						},
+						subscriptions: {
+							all: false,
+							subscribe: false,
+							notify: false
+						},
+						notifications: {
+							all: false,
+							send: false
 						}
 					},
 				
@@ -225,9 +236,22 @@ var jmodel = function () {
 								console.log(message);
 							} 
 						}
+					},
+					
+		enable: 	function (flag) {
+						setFlag(flag,true);
+						log.active = true;
+						return log.flags;
+					},
+
+		disable: 	function (flag) {
+						setFlag(flag,false);
+						return external.log
 					}
 		
 	};
+	
+	external.log = log;
 	
 	function setFlag(path,value) {
 		pieces = path.split('.');
@@ -239,21 +263,7 @@ var jmodel = function () {
 		}
 		property[pieces[pieces.length-1]] = value;
 	}
-	
-	external.log = {
-	
-		enable: 	function (flag) {
-						setFlag(flag,true);
-						log.active = true;
-						return log.flags;
-					},
-					
-		disable: 	function (flag) {
-						setFlag(flag,false);
-						return external.log
-					}
-		
-	};
+
 	
 	
 	// ------------------------------------------------------------------------
@@ -298,6 +308,8 @@ var jmodel = function () {
 
 
 		this.create = function (data) {
+			
+			log.startGroup(log.flags.domainobject.create,'Creating a new '+name);
 
 			data = (typeof data == 'object') ? data : {};
 
@@ -309,6 +321,8 @@ var jmodel = function () {
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
 			internal.entities[base].objects.add(newObject)
+
+			log.endGroup(log.flags.domainobject.create);
 
 			return newObject;
 
@@ -411,6 +425,7 @@ var jmodel = function () {
 				notification.receive();
 			}
 			else {
+				log.debug(log.flags.notifications.send,'Adding a notification to the queue');
 				notifications.push(notification);
 			}
 			return this;
@@ -473,24 +488,28 @@ var jmodel = function () {
 	
 	internal.ContentNotification = function (subscription) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
 	internal.ValueNotification = function (subscription) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
 	internal.MethodNotification = function (subscription) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving an object method notification');
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
 	internal.EventNotification = function (subscription) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving an event notification');
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		};
 	};
@@ -498,6 +517,7 @@ var jmodel = function () {
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	internal.RemovalNotification = function (subscription) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving a removal notification');
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
@@ -505,9 +525,11 @@ var jmodel = function () {
 	internal.CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
+				log.debug(log.flags.notifications.send,'Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
 			}
 			else if (subscription[event.method]) {
+				log.debug(log.flags.notifications.send,'Receiving a collection method notification');
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		};
@@ -522,10 +544,12 @@ var jmodel = function () {
 	// NOTE: Make this work with bindings
 	internal.CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
+			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
 												subscription.subscription.key
 												: [subscription.subscription.key];
 			for (var i in subscription.subscription.key) {
+				
 				event.object.subscribe({
 					source: event.object,
 					target: subscription.subscription.target,
@@ -570,11 +594,19 @@ var jmodel = function () {
 		};
 		
 		this.notify = function (event) {
+			var notificationNeeded = false;
 			this.each(function (subscriber) {
 				if ( subscriber.matches(event) ) {
+					if ( !notificationNeeded ) {
+						log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
+						notificationNeeded = true;
+					}
 					notifications.send(subscriber.notification(event));
 				}
 			});
+			if (notificationNeeded) {
+				log.endGroup();
+			}
 		};
 		
 		this.debug = function () {
@@ -655,7 +687,7 @@ var jmodel = function () {
 		this.add = function (object) {
 			if ( this.filter(object).count() === 0 ) {
 				this.objects.push(object);
-				this.subscribers.notify({method:'add',object:object});
+				this.subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: this,
 					key: ':any',
@@ -663,7 +695,8 @@ var jmodel = function () {
 						sorted = false;
 						this.subscribers.notify({
 							method:'change',
-							object:object
+							object:object,
+							description:'object change'
 						}); 
 					}		
 				});
@@ -683,7 +716,7 @@ var jmodel = function () {
 			this.each(function (index,object) {
 				if ( predicate(object) ) {
 					object.removed();
-					that.subscribers.notify({method:'remove',object:object});
+					that.subscribers.notify({method:'remove',object:object,description:'object removal'});
 				}
 				else {
 					newObjects.push(object);
@@ -735,7 +768,7 @@ var jmodel = function () {
 			
 			// Notify subscribers
 			if ( permuted ) {
-				this.subscribers.notify({method:'sort',permutation:permutation});
+				this.subscribers.notify({method:'sort',permutation:permutation,description:'collection sort'});
 			}
 			
 			sorted = true;
@@ -818,6 +851,7 @@ var jmodel = function () {
 		this.subscribe = function (subscription) {
 
 			if ( subscription.predicate || subscription.selector ) {
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription');
 				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
@@ -827,9 +861,11 @@ var jmodel = function () {
 										}(this);							
 			}
 			else if ( ( typeof onAdd == 'string' ) && ( typeof onRemove == 'string' ) ) {
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription');
 				subscription.type	= internal.CollectionEventNotification;
 			}
 			else {
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection method subscription');
 				subscription.type	= internal.CollectionMethodNotification; 
 			}
 			
@@ -1358,9 +1394,9 @@ var jmodel = function () {
 				var value = arguments[1];
 				log.debug(log.flags.domainobject.set,'Setting '+key+' to "'+value+'"');
 				data[key] = value;
-				subscribers.notify({key:key});
+				subscribers.notify({key:key,description:'field value change: '+key});
 				if ( arguments.length == 2 || arguments[2] ) {
-					subscribers.notify({key:':any'});
+					subscribers.notify({key:':any',description:'field value change: any'});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1369,7 +1405,7 @@ var jmodel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				subscribers.notify({key:':any'});
+				subscribers.notify({key:':any',description:'field value change: any'});
 				log.endGroup()
 			}
 
@@ -1381,7 +1417,7 @@ var jmodel = function () {
 		
 		
 		this.removed = function (collection) {
-			subscribers.notify({removed:true});
+			subscribers.notify({removed:true,description:'object removal'});
 		};
 		
 		
@@ -1503,7 +1539,7 @@ var jmodel = function () {
 						
 				push: function () {
 					for (var i in data) {
-						subscribers.notify({key:i});
+						subscribers.notify({key:i,description:'field value'});
 					}
 				},
 						
