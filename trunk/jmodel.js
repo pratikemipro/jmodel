@@ -53,7 +53,8 @@ jQuery.fn.subscribe = function (subscription) {
 					key: key,
 					change: subscription.onChange,
 					removed: subscription.onRemove,
-					initialise: subscription.initialise
+					initialise: subscription.initialise,
+					description: 'application subscription'
 				});
 			});
 		});
@@ -68,7 +69,8 @@ jQuery.fn.subscribe = function (subscription) {
 						source: subscription.source,
 						target: jQuery(object),
 						key: subscription.bindings[selector],
-						initialise: subscription.initialise
+						initialise: subscription.initialise,
+						description: 'application subscription'
 					});
 				});
 			}
@@ -84,11 +86,13 @@ jQuery.fn.subscribe = function (subscription) {
 						source: subscription.source,
 						predicate: subscription.predicate,
 						selector: subscription.selector,
+						description: 'application subscription',
 						subscription: {
 							target: jQuery(object),
 							key: subscription.subscription.bindings[selector],
 							change: subscription.subscription.onChange,
-							initialise: subscription.subscription.initialise
+							initialise: subscription.subscription.initialise,
+							description: 'application subscription'
 						}
 					});
 				});
@@ -106,7 +110,8 @@ jQuery.fn.subscribe = function (subscription) {
 				remove: subscription.onRemove,
 				change: subscription.onChange,
 				sort: subscription.onSort,
-				initialise: subscription.initialise
+				initialise: subscription.initialise,
+				description: 'application subscription'
 			});
 		});
 		
@@ -488,28 +493,28 @@ var jmodel = function () {
 	
 	internal.ContentNotification = function (subscription) {
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key);
+			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
 	internal.ValueNotification = function (subscription) {
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key);
+			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
 	internal.MethodNotification = function (subscription) {
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving an object method notification');
+			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
 	internal.EventNotification = function (subscription) {
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving an event notification');
+			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		};
 	};
@@ -517,7 +522,7 @@ var jmodel = function () {
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	internal.RemovalNotification = function (subscription) {
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a removal notification');
+			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
@@ -529,7 +534,7 @@ var jmodel = function () {
 				subscription[event.method].call(subscription.target,event.permutation);
 			}
 			else if (subscription[event.method]) {
-				log.debug(log.flags.notifications.send,'Receiving a collection method notification');
+				log.debug(log.flags.notifications.send,'Receiving a collection method notification'+': '+subscription.description);
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		};
@@ -555,7 +560,8 @@ var jmodel = function () {
 					target: subscription.subscription.target,
 					key: subscription.subscription.key[i],
 					change: subscription.subscription.change,
-					initialise: subscription.subscription.initialise
+					initialise: subscription.subscription.initialise,
+					description: 'collection member subscription for key '+subscription.subscription.key[i]
 				});
 			}
 		};
@@ -698,7 +704,8 @@ var jmodel = function () {
 							object:object,
 							description:'object change'
 						}); 
-					}		
+					},
+					description: 'object change for collection change'
 				});
 				sorted = false;
 			}
@@ -851,7 +858,7 @@ var jmodel = function () {
 		this.subscribe = function (subscription) {
 
 			if ( subscription.predicate || subscription.selector ) {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription');
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription: '+subscription.description);
 				subscription.type	= 	internal.CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
@@ -861,11 +868,11 @@ var jmodel = function () {
 										}(this);							
 			}
 			else if ( ( typeof onAdd == 'string' ) && ( typeof onRemove == 'string' ) ) {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription');
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription: '+subscription.description);
 				subscription.type	= internal.CollectionEventNotification;
 			}
 			else {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection method subscription');
+				log.debug(log.flags.subscriptions.subscribe,'Creating a collection method subscription: '+subscription.description);
 				subscription.type	= internal.CollectionMethodNotification; 
 			}
 			
@@ -935,9 +942,10 @@ var jmodel = function () {
 		};
 		
 		collection.subscribe({
-			source: collection,
-			target: deleted,
-			remove: collectionRemove
+			source: 		collection,
+			target: 		deleted,
+			remove: 		collectionRemove,
+			description: 	'deleted object collection'
 		});
 		
 		function collectionRemove(collection,object) {
@@ -960,11 +968,12 @@ var jmodel = function () {
 		});
 		
 		parent.subscribe({
-			source: parent,
-			target: child,
-			add: 	parentAdd,
-			remove: parentRemove,
-			change: parentChange
+			source: 		parent,
+			target: 		child,
+			add: 			parentAdd,
+			remove: 		parentRemove,
+			change: 		parentChange,
+			description: 	'view'
 		});
 		
 		function parentAdd(collection,object) {
@@ -1617,7 +1626,8 @@ var jmodel = function () {
 		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
 			var subscription = {
 				source: children,
-				target: object
+				target: object,
+				description: 'subscription to relationship children'
 			};
 			if ( relationship.onAdd)    { subscription.add    = relationship.onAdd;	   }
 			if ( relationship.onRemove) { subscription.remove = relationship.onRemove; }
