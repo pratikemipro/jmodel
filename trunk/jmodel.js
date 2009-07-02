@@ -204,6 +204,10 @@ var jModel = function () {
 						notifications: {
 							all: false,
 							send: false
+						},
+						json: {
+							all: false,
+							thaw: false
 						}
 					},
 				
@@ -1713,13 +1717,17 @@ var jModel = function () {
 		
 		function makeObject (key,data,parent) {
 			
+			log.startGroup(log.flags.json.thaw,'thawing a '+key);
+			
 			var partitionedData = partitionData(data), object;
 			
 			if ( parent && parent.relationships[key] ) {
+				log.debug(log.flags.json.thaw,'adding object to relationship');
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
 				if ( internal.entities[key] ) {
+					log.debug(log.flags.json.thaw,'creating free object');
 					object = internal.entities[key].create(partitionedData.fields);
 				}
 			}
@@ -1731,11 +1739,15 @@ var jModel = function () {
 					makeObject(childKey,childData[i],object||parent);
 				}
 			}
+			
+			log.endGroup(log.flags.json.thaw);
 
 		}
 		
 		
 		function partitionData (data) {
+			
+			log.debug(log.flags.json.thaw,'partitioning data');
 			
 			var partitioned = { fields:{}, children:{} };
 			
@@ -1756,6 +1768,7 @@ var jModel = function () {
 		return {
 			
 			thaw: 	function (data,options) {
+						log.startGroup(log.flags.json.thaw,'thawing JSON');
 						options = options || {};
 						data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
@@ -1763,6 +1776,7 @@ var jModel = function () {
 								makeObject(key,data[i][key],options.parent);
 							}
 						}
+						log.endGroup(log.flags.json.thaw)
 						return external.json;
 					}
 			
