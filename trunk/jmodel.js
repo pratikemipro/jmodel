@@ -191,6 +191,11 @@ var jModel = function () {
 							create: false,
 							set: false
 						},
+						domainobjectcollection: {
+							all: false,
+							create: false,
+							add: false
+						},
 						subscriptions: {
 							all: false,
 							subscribe: false,
@@ -311,10 +316,12 @@ var jModel = function () {
 
 		this.objects = new	internal.DomainObjectCollection(
 								( base != name) ?
-									{	base: 		internal.entities[base].objects,
-										predicate: 	internal.InstancePredicate(constructor),
-										ordering: 	options.ordering } :
-									{	ordering: 	options.ordering }
+									{	base: 			internal.entities[base].objects,
+										predicate: 		internal.InstancePredicate(constructor),
+										ordering: 		options.ordering,
+										description: 	name } :
+									{	ordering: 		options.ordering,
+										description: 	name }
 							);
 							
 		this.deleted = new internal.DeletedObjectsCollection(this.objects);
@@ -681,6 +688,9 @@ var jModel = function () {
 	internal.DomainObjectCollection = function (specification) {
 		
 		specification = specification || {};
+		
+		log.startGroup(log.flags.domainobjectcollection.create,'Creating a DomainObjectCollection: '+specification.description);
+		
 		if ( specification.ordering ) {
 			specification.ordering = internal.ordering(specification.ordering);
 		}
@@ -762,7 +772,7 @@ var jModel = function () {
 				ordered.push(object);
 			});
 			ordered.sort(ordering);
-			return new internal.DomainObjectCollection({objects:ordered});
+			return new internal.DomainObjectCollection({objects:ordered,description:'ordered '+specification.description});
 		};
 		
 		
@@ -851,7 +861,7 @@ var jModel = function () {
 			}
 			
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
-				var objs = new internal.DomainObjectCollection({});
+				var objs = new internal.DomainObjectCollection({description:'filtered '+specification.description});
 				this.each(function (index,object) {
 					if ( predicate(object) ) {
 						objs.add(object);
@@ -938,6 +948,8 @@ var jModel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
+		log.endGroup(log.flags.domainobjectcollection.create);
+		
 		
 	};
 	
@@ -947,13 +959,13 @@ var jModel = function () {
 		for (var i=0; i<arguments.length; i++) {
 			objects.push(arguments[i]);
 		}
-		return new internal.DomainObjectCollection({objects:objects});
+		return new internal.DomainObjectCollection({objects:objects,description:'set'});
 	};
 	
 	
 	internal.DeletedObjectsCollection = function (collection) {
 		
-		var deleted = new internal.DomainObjectCollection();
+		var deleted = new internal.DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
 			var contents = '';
@@ -1031,7 +1043,7 @@ var jModel = function () {
 	};
 	
 	external.union = function() {
-		var union = new internal.DomainObjectCollection({});
+		var union = new internal.DomainObjectCollection({description:'union'});
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = internal.set(arguments[i]);
 			collection.each(function (index,object) {
@@ -1256,7 +1268,7 @@ var jModel = function () {
 				for( var index in exampleForeignKeys ) {
 					var exampleForeignKey = exampleForeignKeys[index];
 					var children = candidate[exampleForeignKey]();
-					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children]});
+					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children],description:'children'});
 					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
 						return false;
 					}
@@ -1634,8 +1646,9 @@ var jModel = function () {
 		relationship.direction	= 'reverse';
 
 		var children			= new internal.DomainObjectCollection({
-											base: 		internal.entities[relationship.prototype].objects,
-											predicate: 	internal.RelationshipPredicate(object,relationship.field)
+											base: 	     internal.entities[relationship.prototype].objects,
+											predicate: 	 internal.RelationshipPredicate(object,relationship.field),
+											description: 'children by relationship '+relationship.accessor
 										});
 		
 		// Deletions might cascade								
