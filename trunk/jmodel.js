@@ -1297,11 +1297,13 @@ var jmodel = function () {
 	
 	// Modification state
 	
-	external.dirty = internal.ModifiedPredicate = function () {
+	internal.ModifiedPredicate = function () {
 		return function (candidate) {
 			return candidate.domain.dirty;
 		};
 	};	
+	
+	external.dirty = internal.ModifiedPredicate();
 	
 	// Comparisons
 	
