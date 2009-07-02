@@ -1335,8 +1335,8 @@ var jmodel = function () {
 	
 	external.between = function (field,lower,higher) {
 		return internal.And(
-					internal.Gt(field,lower),
-					internal.Lt(field,higher) 
+					internal.GtE(field,lower),
+					internal.LtE(field,higher) 
 				);
 	};
 	
