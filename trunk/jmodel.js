@@ -1022,13 +1022,13 @@ var jModel = function () {
 	external.intersection = function() {
 		var intersection = makeCollection(arguments[0]);
 		for (var i=1; i<arguments.length; i++ ) {
-			intersection = intersection.filter(MembershipPredicate(makeCollection(arguments[i])));
+			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
 		return intersection;
 	};
 	
 	external.difference = function(first,second) {
-		return makeCollection(first).filter( Not(MembershipPredicate(makeCollection(second))) );
+		return makeCollection(first).filter( Not(MembershipPredicate(second)) );
 	};
 	
 	
