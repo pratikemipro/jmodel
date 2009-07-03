@@ -15,7 +15,33 @@
 // NOTE: Make publishing work for domain member subscriptions
 jQuery.fn.publish = function (publication) {
 	
-	if ( publication.bindings ) {
+	if ( publication.selector && publication.bindings ) {
+	}
+	else if ( publication.selector ) {
+	
+		var that=this;
+		
+		publication.target.subscribe({
+			source: publication.target,
+			predicate: publication.predicate,
+			selector: publication.selector,
+			initialise: publication.initialise,
+			description: publication.description || 'domain collection publication',			
+			subscription: {
+				target: that,
+				key: publication.key,
+				change: function (target) {
+					that.bind('change',function (event) {
+						target.set(publication.publication.key,jQuery(event.target).val());
+					});
+				},
+				initialise: publication.initialise,
+				description: publication.description || 'domain collection member subscription'
+			}
+		});
+		
+	}
+	else if ( publication.bindings ) {
 		
 		for (var selector in publication.bindings) {
 			jQuery(selector,this).each(function (index,object) {
