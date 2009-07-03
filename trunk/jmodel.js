@@ -413,11 +413,6 @@ var jModel = function () {
 									+entities[entityName].deleted.debug(false)+'] ';
 					}
 					return contents;
-				},
-				
-		log: 	function (type,state) {
-					logging[type] = state;
-					return external.context;
 				}
 		
 	};
