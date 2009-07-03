@@ -1702,8 +1702,9 @@ var jModel = function () {
 			
 			log.startGroup(log.flags.json.thaw,'thawing a '+key);
 			
-			var partitionedData = partitionData(data), object;
+			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
+			var object;
 			if ( parent && parent.relationships[key] ) {
 				log.debug(log.flags.json.thaw,'adding object to relationship');
 				object = parent.relationships[key].add(partitionedData.fields);
@@ -1725,26 +1726,6 @@ var jModel = function () {
 			
 			log.endGroup(log.flags.json.thaw);
 
-		}
-		
-		
-		function partitionData (data) {
-			
-			log.debug(log.flags.json.thaw,'partitioning data');
-			
-			var partitioned = { fields:{}, children:{} };
-			
-			for ( var key in data ) {
-				if ( !(typeof data[key] == 'object') ) {
-					partitioned.fields[key] = data[key];
-				}
-				else {
-					partitioned.children[key] = data[key];
-				}
-			}
-			
-			return partitioned;
-			
 		}
 		
 		
@@ -1867,15 +1848,29 @@ var jModel = function () {
 		return copy;
 	}
 	
-	function partitionArray (array,predicate) {
-		partition = {pass:[],fail:[]};
-		for (var i in array) {
-			var object = array[i];
-			if ( predicate(object) ) {
-				partition.pass.push(object);
+	function partitionArray (array,predicate,passName,failName) {
+		return partition( array, predicate, passName, failName, Array, function (destination,index,object) {
+			destination.push(object);
+		});
+	}
+	
+	function partitionObject (object,predicate,passName,failName) {
+		return partition( object, predicate, passName, failName, Object, function (destination,index,object) {
+			destination[index] = object;
+		});
+	}
+	
+	function partition (source,predicate,passName,failName,constructor,add) {
+		var partition = {};
+		var pass = partition[passName||'pass'] = new constructor();
+		var fail = partition[failName||'fail'] = new constructor();
+		for (var i in source) {
+			var candidate = source[i];
+			if ( predicate(candidate) ) {
+				add(pass,i,candidate);
 			}
 			else {
-				partition.fail.push(object);
+				add(fail,i,candidate);
 			}
 		}
 		return partition;
