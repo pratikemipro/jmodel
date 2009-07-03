@@ -1287,6 +1287,14 @@ var jModel = function () {
 		};		
 	};
 	
+	// Type
+	
+	var TypePredicate = external.type = function (type) {
+		return function (candidate) {
+			return typeof candidate === type;
+		};
+	};
+	
 	// Instance
 	
 	var InstancePredicate = external.isa = function (constructor) {
