@@ -54,7 +54,7 @@ jQuery.fn.subscribe = function (subscription) {
 					change: subscription.onChange,
 					removed: subscription.onRemove,
 					initialise: subscription.initialise,
-					description: 'application subscription'
+					description: subscription.description || 'application subscription'
 				});
 			});
 		});
@@ -70,7 +70,7 @@ jQuery.fn.subscribe = function (subscription) {
 						target: jQuery(object),
 						key: subscription.bindings[selector],
 						initialise: subscription.initialise,
-						description: 'application subscription'
+						description: subscription.description || 'application subscription'
 					});
 				});
 			}
@@ -86,13 +86,13 @@ jQuery.fn.subscribe = function (subscription) {
 						source: subscription.source,
 						predicate: subscription.predicate,
 						selector: subscription.selector,
-						description: 'application subscription',
+						description: subscription.description || 'application subscription',
 						subscription: {
 							target: jQuery(object),
 							key: subscription.subscription.bindings[selector],
 							change: subscription.subscription.onChange,
 							initialise: subscription.subscription.initialise,
-							description: 'application subscription'
+							description: subscription.subscription.description || 'application subscription'
 						}
 					});
 				});
@@ -107,13 +107,13 @@ jQuery.fn.subscribe = function (subscription) {
 				source: subscription.source,
 				predicate: subscription.predicate,
 				selector: subscription.selector,
-				description: 'application subscription',
+				description: subscription.description || 'application subscription',
 				subscription: {
 					target: jQuery(element),
 					key: subscription.subscription.key,
 					change: subscription.subscription.onChange,
 					initialise: subscription.subscription.initialise,
-					description: 'application subscription'
+					description: subscription.subscription.description || 'application subscription'
 				}
 			});
 		});
@@ -130,7 +130,7 @@ jQuery.fn.subscribe = function (subscription) {
 				change: subscription.onChange,
 				sort: subscription.onSort,
 				initialise: subscription.initialise,
-				description: 'application subscription'
+				description: subscription.description || 'application subscription'
 			});
 		});
 		
