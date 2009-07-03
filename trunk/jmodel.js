@@ -917,31 +917,7 @@ var jModel = function () {
 			this.sort();
 			sorted = true;
 		}
-		
-		// Utility methods
-		
-		function copyArray (original) {
-			copy = [];
-			for(var i in original) {
-				copy[i] = original[i];
-			}
-			return copy;
-		}
-		
-		function partitionArray (array,predicate) {
-			partition = {pass:[],fail:[]};
-			for (var i in array) {
-				var object = array[i];
-				if ( predicate(object) ) {
-					partition.pass.push(object);
-				}
-				else {
-					partition.fail.push(object);
-				}
-			}
-			return partition;
-		}
-		
+
 		
 		// Note carefully that argumentsArray includes the current collection in the array
 		function argumentsArray() {
@@ -1877,6 +1853,33 @@ var jModel = function () {
 
 	})();
 
+	
+	
+	// ------------------------------------------------------------------------
+	//															      Utilities
+	// ------------------------------------------------------------------------
+	
+	function copyArray (original) {
+		copy = [];
+		for(var i in original) {
+			copy[i] = original[i];
+		}
+		return copy;
+	}
+	
+	function partitionArray (array,predicate) {
+		partition = {pass:[],fail:[]};
+		for (var i in array) {
+			var object = array[i];
+			if ( predicate(object) ) {
+				partition.pass.push(object);
+			}
+			else {
+				partition.fail.push(object);
+			}
+		}
+		return partition;
+	}
 	
 	
 	// ------------------------------------------------------------------------
