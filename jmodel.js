@@ -171,8 +171,8 @@ jQuery.fn.permute = function (permutation) {
 var jModel = function () {
 
 
-	var external	= {},
-		internal	= {entities:{}};
+	var external={},
+		entities={};
 		
 		
 	// ------------------------------------------------------------------------
@@ -303,7 +303,7 @@ var jModel = function () {
 	// 																 Prototypes
 	// ------------------------------------------------------------------------
 	
-	internal.EntityType = function (name,constructor,options) {
+	var EntityType = function (name,constructor,options) {
 
 		options  		= options || {};
 		
@@ -314,30 +314,30 @@ var jModel = function () {
 		// Figure out the current type's base entity
 		entity = this;
 		while ( entity.options && ( entity.options.base !== true ) ) {
-			entity = ( entity.options && entity.options.parent ) ? internal.entities[entity.options.parent] : null;
+			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
 		}
 		var base = entity.name || name;
 
-		this.objects = new	internal.DomainObjectCollection(
+		this.objects = new	DomainObjectCollection(
 								( base != name) ?
-									{	base: 			internal.entities[base].objects,
-										predicate: 		internal.InstancePredicate(constructor),
+									{	base: 			entities[base].objects,
+										predicate: 		InstancePredicate(constructor),
 										ordering: 		options.ordering,
 										description: 	name } :
 									{	ordering: 		options.ordering,
 										description: 	name }
 							);
 							
-		this.deleted = new internal.DeletedObjectsCollection(this.objects);
+		this.deleted = new DeletedObjectsCollection(this.objects);
 
 		this.name	= name;
 
 
 		this.object = function (criterion) {
-			return internal.entities[base]
+			return entities[base]
 					.objects
-						.filter(internal.InstancePredicate(constructor))
-						.filter(( typeof criterion != 'string' ) ? internal.predicate(criterion) : null)
+						.filter(InstancePredicate(constructor))
+						.filter(( typeof criterion != 'string' ) ? makePredicate(criterion) : null)
 						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
 
@@ -349,13 +349,13 @@ var jModel = function () {
 			data = (typeof data == 'object') ? data : {};
 
 			var newObject = new constructor();
-			internal.DomainObject.call(newObject,internal.entities[name]);
+			DomainObject.call(newObject,entities[name]);
 
 			var primaryKey	= newObject.primaryKey;
 
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
-			internal.entities[base].objects.add(newObject);
+			entities[base].objects.add(newObject);
 
 			log.endGroup(log.flags.domainobject.create);
 
@@ -365,15 +365,10 @@ var jModel = function () {
 
 
 		function generateID() {			
-			return -(internal.entities[base].objects.count()+1);
+			return -(entities[base].objects.count()+1);
 		}
 		
 
-	};
-
-
-	internal.getObjects = function (prototypeName) {
-		return internal.entities[prototypeName].objects;
 	};
 
 	
@@ -381,20 +376,20 @@ var jModel = function () {
 		
 		register: function (name,constructor,options) {
 
-			internal.entities[name]			= new internal.EntityType(name,constructor,options);
+			entities[name] = new EntityType(name,constructor,options);
 
 			var names = [name].concat( options.synonyms || [] );
 
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
 				var synonym 										= names[i];
-				internal.entities[synonym]							= internal.entities[name];
-				external[synonym] 									= function (predicate) { return internal.entities[name].object(predicate); };
-				external[synonym].entitytype						= internal.entities[name];
-				external[synonym].extend							= function (prop) { return internal.entities[name].constructor.extend(prop); };
-				external['create'+synonym]							= internal.entities[name].create;
-				external[options.plural || synonym+'s']				= function (predicate) { return internal.entities[name].objects.filter(predicate); };
-				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return internal.entities[name].deleted.filter(predicate); };
+				entities[synonym]									= entities[name];
+				external[synonym] 									= function (predicate) { return entities[name].object(predicate); };
+				external[synonym].entitytype						= entities[name];
+				external[synonym].extend							= function (prop) { return entities[name].constructor.extend(prop); };
+				external['create'+synonym]							= entities[name].create;
+				external[options.plural || synonym+'s']				= function (predicate) { return entities[name].objects.filter(predicate); };
+				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return entities[name].deleted.filter(predicate); };
 			}
 
 			return external.prototype;
@@ -412,27 +407,27 @@ var jModel = function () {
 	external.context = {
 	
 		reset: 	function () {
-					for ( var entityName in internal.entities ) {
-						internal.entities[entityName].objects.remove(internal.AllPredicate());
+					for ( var entityName in entities ) {
+						entities[entityName].objects.remove(AllPredicate());
 					}
 					return external.context;
 				},
 				
 		checkpoint: function () {
-						for ( var entityName in internal.entities ) {
-							internal.entities[entityName].objects.each(function (index,object) {
+						for ( var entityName in entities ) {
+							entities[entityName].objects.each(function (index,object) {
 								object.domain.dirty = false;
 							});
-							internal.entities[entityName].deleted.remove(internal.AllPredicate());
+							entities[entityName].deleted.remove(AllPredicate());
 						}
 						return external.context;
 					}, 
 				
 		debug: 	function (showSubscribers) {
 					var contents = '';
-					for ( var entityName in internal.entities ) {
-						contents += entityName+': ['+internal.entities[entityName].objects.debug(showSubscribers)
-									+internal.entities[entityName].deleted.debug(false)+'] ';
+					for ( var entityName in entities ) {
+						contents += entityName+': ['+entities[entityName].objects.debug(showSubscribers)
+									+entities[entityName].deleted.debug(false)+'] ';
 					}
 					return contents;
 				},
@@ -450,7 +445,7 @@ var jModel = function () {
 	//															  Notifications
 	// ------------------------------------------------------------------------
 	
-	internal.NotificationQueue = function () {
+	var NotificationQueue = function () {
 		
 		var	notifications 	= [],
 			active			= true;
@@ -486,28 +481,28 @@ var jModel = function () {
 		
 	};
 	
-	internal.notifications = new internal.NotificationQueue();
+	var notifications = new NotificationQueue();
 	
 	external.notifications = {
 		
 		suspend: 	function () {
-						internal.notifications.suspend();
+						notifications.suspend();
 						return external.notifications;
 					},
 					
 		resume: 	function () {
-						internal.notifications.resume();
+						notifications.resume();
 						return external.notifications;
 					},
 					
 		flush: 		function () {
-						internal.notifications.flush();
+						notifications.flush();
 						return external.notifications;
 					},
 					
 		push: 		function () {
-						for(var prototypeName in internal.entities) {
-							internal.entities[prototypeName].objects.each(function (index,object) {
+						for(var prototypeName in entities) {
+							entities[prototypeName].objects.each(function (index,object) {
 								object.domain.push();
 							});
 						}
@@ -521,28 +516,28 @@ var jModel = function () {
 	// Notification types
 	//
 	
-	internal.ContentNotification = function (subscription) {
+	var ContentNotification = function (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
-	internal.ValueNotification = function (subscription) {
+	var ValueNotification = function (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
-	internal.MethodNotification = function (subscription) {
+	var MethodNotification = function (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
-	internal.EventNotification = function (subscription) {
+	var EventNotification = function (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
@@ -550,14 +545,14 @@ var jModel = function () {
 	};
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
-	internal.RemovalNotification = function (subscription) {
+	var RemovalNotification = function (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
 	
-	internal.CollectionMethodNotification = function (subscription,event) {
+	var CollectionMethodNotification = function (subscription,event) {
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
 				log.debug(log.flags.notifications.send,'Receiving a sort notification');
@@ -570,14 +565,14 @@ var jModel = function () {
 		};
 	};
 	
-	internal.CollectionEventNotification = function (subscription,event) {
+	var CollectionEventNotification = function (subscription,event) {
 		this.receive = function () {
 			// NOTE: Implement this
 		};
 	};
 	
 	// NOTE: Make this work with bindings
-	internal.CollectionMemberNotification = function (subscription,event) {
+	var CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
@@ -606,7 +601,7 @@ var jModel = function () {
 	// queue.
 	//
 	
-	internal.SubscriptionList = function (notifications) {
+	var SubscriptionList = function (notifications) {
 		
 		var subscribers = [];
 		
@@ -653,7 +648,7 @@ var jModel = function () {
 	};
 	
 	
-	internal.CollectionSubscriber = function (subscription) {
+	var CollectionSubscriber = function (subscription) {
 	
 		this.description = subscription.description;
 	
@@ -674,7 +669,7 @@ var jModel = function () {
 	};
 	
 	
-	internal.ObjectSubscriber = function (subscription) {
+	var ObjectSubscriber = function (subscription) {
 
 		this.description = subscription.description;
 
@@ -694,18 +689,18 @@ var jModel = function () {
 	// 												   Domain Object Collection
 	// ------------------------------------------------------------------------
 	
-	internal.DomainObjectCollection = function (specification) {
+	var DomainObjectCollection = function (specification) {
 		
 		specification = specification || {};
 		
 		log.startGroup(log.flags.domainobjectcollection.create,'Creating a DomainObjectCollection: '+specification.description);
 		
 		if ( specification.ordering ) {
-			specification.ordering = internal.ordering(specification.ordering);
+			specification.ordering = makeOrdering(specification.ordering);
 		}
 		
 		this.objects		= specification.objects ? specification.objects : [];
-		this.subscribers	= new internal.SubscriptionList(internal.notifications);
+		this.subscribers	= new SubscriptionList(notifications);
 		
 		var sorted = false;
 		
@@ -718,7 +713,7 @@ var jModel = function () {
 		};
 		
 		this.add = function (object) {
-			if ( !internal.MembershipPredicate(this)(object) ) {
+			if ( !MembershipPredicate(this)(object) ) {
 				this.objects.push(object);
 				this.subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
@@ -745,7 +740,7 @@ var jModel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			var partition = partitionArray( this.objects, internal.predicate(predicate) || internal.NonePredicate() );
+			var partition = partitionArray( this.objects, makePredicate(predicate) || NonePredicate() );
 			this.objects = partition.fail;
 			for (var i in partition.pass) {
 				partition.pass[i].removed();
@@ -755,9 +750,9 @@ var jModel = function () {
 		};
 		
 		this.by = function () {			
-			return new internal.DomainObjectCollection({
+			return new DomainObjectCollection({
 				objects: copyArray(this.objects),
-				ordering: internal.ordering.apply(null,arguments),
+				ordering: makeOrdering.apply(null,arguments),
 				description:'ordered '+specification.description
 			});	
 		};
@@ -766,7 +761,7 @@ var jModel = function () {
 		this.sort = function () {
 			
 			if (arguments.length > 0) {
-				specification.ordering = internal.ordering.apply(null,arguments);
+				specification.ordering = makeOrdering.apply(null,arguments);
 			}
 			
 			// Remember old order
@@ -843,13 +838,13 @@ var jModel = function () {
 				selector	= arguments[0];
 			}
 			else {
-				predicate	= internal.predicate(arguments[0]);
+				predicate	= makePredicate(arguments[0]);
 				selector	= arguments[1];
 			}
 			
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				return (
-					new	internal.DomainObjectCollection({
+					new	DomainObjectCollection({
 							objects: partitionArray(this.objects,predicate).pass,
 							description:'filtered '+specification.description
 						})
@@ -878,7 +873,7 @@ var jModel = function () {
 
 			if ( subscription.predicate || subscription.selector ) {
 				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription: '+subscription.description);
-				subscription.type	= 	internal.CollectionMemberNotification;
+				subscription.type	= 	CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
 												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
@@ -888,14 +883,14 @@ var jModel = function () {
 			}
 			else if ( ( typeof onAdd == 'string' ) && ( typeof onRemove == 'string' ) ) {
 				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription: '+subscription.description);
-				subscription.type	= internal.CollectionEventNotification;
+				subscription.type	= CollectionEventNotification;
 			}
 			else {
 				log.debug(log.flags.subscriptions.subscribe,'Creating a collection method subscription: '+subscription.description);
-				subscription.type	= internal.CollectionMethodNotification; 
+				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			this.subscribers.add( new internal.CollectionSubscriber(subscription) );
+			this.subscribers.add( new CollectionSubscriber(subscription) );
 			
 			return this;	
 			
@@ -959,7 +954,7 @@ var jModel = function () {
 		
 		// This collection is a materialised view over a base collection
 		if ( specification.base instanceof this.constructor ) {
-			var view = new internal.View(specification.base,this,specification.predicate);
+			var view = new View(specification.base,this,specification.predicate);
 		}
 		else if ( specification.base ) {
 			throw 'Error: Invalid base collection type';
@@ -976,13 +971,13 @@ var jModel = function () {
 		for (var i=0; i<arguments.length; i++) {
 			objects.push(arguments[i]);
 		}
-		return new internal.DomainObjectCollection({objects:objects,description:'set'});
+		return new DomainObjectCollection({objects:objects,description:'set'});
 	};
 	
 	
-	internal.DeletedObjectsCollection = function (collection) {
+	var DeletedObjectsCollection = function (collection) {
 		
-		var deleted = new internal.DomainObjectCollection({description:'deleted'});
+		var deleted = new DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
 			var contents = '';
@@ -1009,9 +1004,9 @@ var jModel = function () {
 	};
 	
 	
-	internal.View = function (parent,child,predicate) {
+	var View = function (parent,child,predicate) {
 		
-		predicate = internal.predicate(predicate);
+		predicate = makePredicate(predicate);
 		
 		parent.each(function (index,object) {
 			if ( predicate(object) ) {
@@ -1055,14 +1050,14 @@ var jModel = function () {
 	//															 Set operations
 	// ------------------------------------------------------------------------
 	
-	internal.set = function(set) {
-		return (set instanceof internal.DomainObjectCollection) ? set : set();
+	var makeCollection = function(set) {
+		return (set instanceof DomainObjectCollection) ? set : set();
 	};
 	
 	external.union = function() {
-		var union = new internal.DomainObjectCollection({description:'union'});
+		var union = new DomainObjectCollection({description:'union'});
 		for (var i=0; i<arguments.length; i++ ) {
-			var collection = internal.set(arguments[i]);
+			var collection = makeCollection(arguments[i]);
 			collection.each(function (index,object) {
 				union.add(object);
 			});
@@ -1071,19 +1066,15 @@ var jModel = function () {
 	};
 	
 	external.intersection = function() {
-		var intersection = internal.set(arguments[0]);
+		var intersection = makeCollection(arguments[0]);
 		for (var i=1; i<arguments.length; i++ ) {
-			intersection = intersection.filter(internal.MembershipPredicate(internal.set(arguments[i])));
+			intersection = intersection.filter(MembershipPredicate(makeCollection(arguments[i])));
 		}
 		return intersection;
 	};
 	
 	external.difference = function(first,second) {
-		return internal.set(first).filter(
-			internal.Not(
-				internal.MembershipPredicate(internal.set(second))
-			)
-		);
+		return makeCollection(first).filter( Not(MembershipPredicate(makeCollection(second))) );
 	};
 	
 	
@@ -1091,12 +1082,12 @@ var jModel = function () {
 	//														   		  Orderings
 	// ------------------------------------------------------------------------
 	
-	external.ordering = internal.ordering = function () {
+	var makeOrdering = external.ordering = function () {
 		if ( arguments.length > 1 ) {
-			return internal.CompositeOrdering.apply(null,arguments);
+			return CompositeOrdering.apply(null,arguments);
 		}
 		else if ( arguments[0] instanceof Array ) {
-			return internal.CompositeOrdering(arguments[0]);
+			return CompositeOrdering(arguments[0]);
 		}
 		else if ( typeof arguments[0] == 'function' ) {
 			return arguments[0];
@@ -1104,15 +1095,15 @@ var jModel = function () {
 		else {
 			var pieces = arguments[0].split(' ');
 			if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
-				return internal.FieldOrdering(pieces[0]);
+				return FieldOrdering(pieces[0]);
 			}
 			else {
-				return internal.DescendingOrdering(internal.FieldOrdering(pieces[0]));
+				return DescendingOrdering(FieldOrdering(pieces[0]));
 			}
 		}
 	};
 	
-	external.field = internal.FieldOrdering = function (fieldName,getter) {
+	var FieldOrdering = external.field = function (fieldName,getter) {
 		
 		return function (a,b) {
 			if ( a.get(fieldName) < b.get(fieldName) ) {
@@ -1125,9 +1116,9 @@ var jModel = function () {
 		};
 	};
 	
-	external.score = internal.PredicateOrdering = function () {
+	var PredicateOrdering = external.score = function () {
 		
-		var predicates = internal.arrayFromArguments(arguments);
+		var predicates = arrayFromArguments(arguments);
 		
 		function numberMatches(object) {
 			var matches = 0;
@@ -1143,7 +1134,7 @@ var jModel = function () {
 		
 	};
 	
-	external.path = internal.FieldPathOrdering = function (fieldpath) {
+	var FieldPathOrdering = external.path = function (fieldpath) {
 		
 		function getFieldValue(object,path) {
 			var property, value;
@@ -1154,7 +1145,7 @@ var jModel = function () {
 					return value;
 				}
 				else {
-					object = value instanceof internal.DomainObjectCollection ? value.first() : value;
+					object = value instanceof DomainObjectCollection ? value.first() : value;
 				}
 			}
 			return 0;
@@ -1172,17 +1163,17 @@ var jModel = function () {
 		
 	};
 	
-	external.desc = internal.DescendingOrdering = function (ordering) {
-		ordering = internal.ordering(ordering);
+	var DescendingOrdering = external.desc = function (ordering) {
+		ordering = makeOrdering(ordering);
 		return function (a,b) {
 			return -ordering(a,b);
 		};
 	};
 	
-	external.composite = internal.CompositeOrdering = function () {
-		var orderings = internal.arrayFromArguments(arguments);
+	var CompositeOrdering = external.composite = function () {
+		var orderings = arrayFromArguments(arguments);
 		for (var i=0; i<orderings.length; i++) {
-			orderings[i] = internal.ordering(orderings[i]);
+			orderings[i] = makeOrdering(orderings[i]);
 		}
 		return function (a,b) {
 			for (var i=0; i<orderings.length; i++) {
@@ -1201,45 +1192,45 @@ var jModel = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
-	external.predicate = internal.predicate = function (parameter) {
+	var makePredicate = external.predicate = function (parameter) {
 		if ( typeof parameter == 'function' ) {
 			return parameter;
 		}
 		else if ( parameter && parameter.domain ) {
-			return internal.ObjectIdentityPredicate(parameter);
+			return ObjectIdentityPredicate(parameter);
 		}
 		else if ( typeof parameter == 'object' && parameter !== null ) {
-			return internal.ExamplePredicate(parameter);
+			return ExamplePredicate(parameter);
 		} 
 		else if ( typeof parameter == 'number' ) {
-			return internal.IdentityPredicate(parameter);
+			return IdentityPredicate(parameter);
 		}
 		return null;
 	};
 	
 	// All
 	
-	internal.AllPredicate = function () {
+	var AllPredicate = function () {
 		return function (candidate) {
 			return true;
 		};
 	};
 	
-	external.all = internal.AllPredicate();
+	external.all = AllPredicate();
 	
 	// None
 	
-	internal.NonePredicate = function () {
+	var NonePredicate = function () {
 		return function (candidate) {
 			return false;
 		};
 	};
 	
-	external.none = internal.NonePredicate();
+	external.none = NonePredicate();
 	
 	// Object Identity
 	
-	external.is = internal.ObjectIdentityPredicate = function (object) {
+	var ObjectIdentityPredicate = external.is = function (object) {
 		return function (candidate) {
 			return candidate === object;
 		};
@@ -1247,7 +1238,7 @@ var jModel = function () {
 	
 	// Primary Key Identity
 	
-	external.id = internal.IdentityPredicate = function (id) {
+	var IdentityPredicate = external.id = function (id) {
 		return function (candidate) {
 			return candidate.primaryKeyValue() == id;
 		};		
@@ -1255,7 +1246,7 @@ var jModel = function () {
 	
 	// Generic function
 	
-	external.test = internal.FunctionPredicate = function (fn) {
+	var FunctionPredicate = external.test = function (fn) {
 		return function (candidate) {
 			return fn(candidate);
 		};
@@ -1263,7 +1254,7 @@ var jModel = function () {
 	
 	// Example
 	
-	external.example = internal.ExamplePredicate = function (example) {
+	var ExamplePredicate = external.example = function (example) {
 		return function (candidate) {
 			
 			var exampleForeignKeys = [];
@@ -1283,7 +1274,7 @@ var jModel = function () {
 				for( var index in exampleForeignKeys ) {
 					var exampleForeignKey = exampleForeignKeys[index];
 					var children = candidate[exampleForeignKey]();
-					var collection = children.length ? children : new internal.DomainObjectCollection({objects:[children],description:'children'});
+					var collection = children.length ? children : new DomainObjectCollection({objects:[children],description:'children'});
 					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
 						return false;
 					}
@@ -1298,7 +1289,7 @@ var jModel = function () {
 	
 	// Instance
 	
-	external.isa = internal.InstancePredicate = function (constructor) {
+	var InstancePredicate = external.isa = function (constructor) {
 		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
 		return function (candidate) {
 			return candidate instanceof constructor;
@@ -1307,7 +1298,7 @@ var jModel = function () {
 	
 	// Relationship
 	
-	external.related = internal.RelationshipPredicate = function (parent,field) {
+	var RelationshipPredicate = external.related = function (parent,field) {
 		return function (candidate) {
 			return candidate.get(field) == parent.primaryKeyValue();
 		};
@@ -1315,62 +1306,59 @@ var jModel = function () {
 	
 	// Membership
 	
-	external.member = internal.MembershipPredicate = function (collection) {		
-		collection = internal.set(collection);
+	var MembershipPredicate = external.member = function (collection) {		
+		collection = makeCollection(collection);
 		return function (candidate) {
-			return collection.filter(internal.ObjectIdentityPredicate(candidate)).count() > 0;
+			return collection.filter(ObjectIdentityPredicate(candidate)).count() > 0;
 		};
 	};
 	
 	// Modification state
 	
-	internal.ModifiedPredicate = function () {
+	var ModifiedPredicate = function () {
 		return function (candidate) {
 			return candidate.domain.dirty;
 		};
 	};	
 	
-	external.dirty = internal.ModifiedPredicate();
+	external.dirty = ModifiedPredicate();
 	
 	// Comparisons
 	
-	external.eq = internal.Eq = function (field,value) {
+	var Eq = external.eq = function (field,value) {
 		return function (candidate) {
 			return candidate.get(field) == value;
 		};
 	};
 	
-	external.lt = internal.Lt = function (field,value) {
+	var Lt = external.lt = function (field,value) {
 		return function (candidate) {
 			return candidate.get(field) < value;
 		};
 	};
 	
-	external.gt = internal.Gt = function (field,value) {
+	var Gt = external.gt = function (field,value) {
 		return function (candidate) {
 			return candidate.get(field) > value;
 		};
 	};
 	
-	external.lte = internal.LtE = function (field,value) {
-		return internal.Not(internal.Gt(field,value));
+	var LtE = external.lte = function (field,value) {
+		return Not(Gt(field,value));
 	};
 	
-	external.gte = internal.GtE = function (field,value) {
-		return internal.Not(internal.Lt(field,value));
+	var GtE = external.gte = function (field,value) {
+		return Not(Lt(field,value));
 	};
 	
 	external.between = function (field,lower,higher) {
-		return internal.And(
-					internal.GtE(field,lower),
-					internal.LtE(field,higher) 
-				);
+		return And(	GtE(field,lower), LtE(field,higher) );
 	};
 	
 	// Logical connectives
 	
-	external.or = internal.Or = function () {
-		var predicates = internal.arrayFromArguments(arguments);
+	var Or = external.or = function () {
+		var predicates = arrayFromArguments(arguments);
 		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
 				if (predicates[i](candidate)) {
@@ -1381,8 +1369,8 @@ var jModel = function () {
 		};
 	};
 	
-	external.and = internal.And = function () {
-		var predicates = internal.arrayFromArguments(arguments);
+	var And = external.and = function () {
+		var predicates = arrayFromArguments(arguments);
 		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
 				if (!(predicates[i](candidate))) {
@@ -1393,14 +1381,14 @@ var jModel = function () {
 		};
 	};
 	
-	external.not = internal.Not = function (predicate) {
+	var Not = external.not = function (predicate) {
 		return function (candidate) {
 			return !predicate(candidate);
 		};
 	};
 	
 	// Utility function used by And and Or.
-	internal.arrayFromArguments = function (args) {
+	var arrayFromArguments = function (args) {
 		if ( args[0] instanceof Array ) {
 			return args[0];
 		}
@@ -1419,11 +1407,11 @@ var jModel = function () {
 	// 														Domain Object mixin
 	// ------------------------------------------------------------------------
 	
-	internal.DomainObject = function (entitytype) {
+	var DomainObject = function (entitytype) {
 		
 		
 		var data 		= {},
-			subscribers = new internal.SubscriptionList(internal.notifications);
+			subscribers = new SubscriptionList(notifications);
 			
 		
 		this.get = function () {
@@ -1487,29 +1475,29 @@ var jModel = function () {
 			subscription.source = this;
 
 			if ( subscription.removed ) {
-				subscription.type		= internal.RemovalNotification;
+				subscription.type		= RemovalNotification;
 			}
 			else if ( subscription.change && typeof subscription.change == 'string' ) {
-				subscription.type		= internal.EventNotification;
+				subscription.type		= EventNotification;
 				subscription.event		= subscription.change;
 			}
 			else if ( subscription.change && typeof subscription.change == 'function' ) {
-				subscription.type		= internal.MethodNotification;
+				subscription.type		= MethodNotification;
 				subscription.method		= subscription.change;
 			}
 			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-				subscription.type = internal.ValueNotification;
+				subscription.type = ValueNotification;
 			}
 			else {
-				subscription.type = internal.ContentNotification;
+				subscription.type = ContentNotification;
 			}
 
-			var subscriber = new internal.ObjectSubscriber(subscription);
+			var subscriber = new ObjectSubscriber(subscription);
 
 			subscribers.add(subscriber);
 
 			if ( subscription.initialise ) {
-				internal.notifications.send(subscriber.notification({key:subscription.key}));
+				notifications.send(subscriber.notification({key:subscription.key}));
 			}
 
 			return this;
@@ -1565,7 +1553,7 @@ var jModel = function () {
 
 				for ( i in that.hasOne ) {
 					descriptor = that.hasOne[i];
-					relationship 							= new internal.OneToOneRelationship(that,descriptor);
+					relationship 							= new OneToOneRelationship(that,descriptor);
 					that.relationships[descriptor.accessor] = relationship;
 					that[descriptor.accessor] 				= function (relationship) {return relationship.get;}(relationship);
 					that['add'+descriptor.accessor]			= function (relationship) {return relationship.add;}(relationship);
@@ -1573,7 +1561,7 @@ var jModel = function () {
 
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
-					relationship											= new internal.OneToManyRelationship(that,descriptor);
+					relationship											= new OneToManyRelationship(that,descriptor);
 					that.relationships[descriptor.accessor] 				= relationship;
 					that[(descriptor.plural || descriptor.accessor+'s')] 	= function (relationship) {return relationship.get;}(relationship);
 					that['add'+descriptor.accessor]							= function (relationship) {return relationship.add;}(relationship);
@@ -1630,10 +1618,10 @@ var jModel = function () {
 	// 															  Relationships
 	// ------------------------------------------------------------------------
 	
-	internal.OneToOneRelationship = function (parent,relationship) {
+	var OneToOneRelationship = function (parent,relationship) {
 		
 		this.get = function (create) {
-			var child = internal.entities[relationship.prototype].object(parent.get(relationship.field));
+			var child = entities[relationship.prototype].object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -1645,7 +1633,7 @@ var jModel = function () {
 		this.add = function (data) {
 			
 			data = data || {};
-			var newObject = internal.entities[relationship.prototype].create(data);
+			var newObject = entities[relationship.prototype].create(data);
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -1656,13 +1644,13 @@ var jModel = function () {
 	};
 	
 	
-	internal.OneToManyRelationship = function (object,relationship) {
+	var OneToManyRelationship = function (object,relationship) {
 		
 		relationship.direction	= 'reverse';
 
-		var children			= new internal.DomainObjectCollection({
-											base: 	     internal.entities[relationship.prototype].objects,
-											predicate: 	 internal.RelationshipPredicate(object,relationship.field),
+		var children			= new DomainObjectCollection({
+											base: 	     entities[relationship.prototype].objects,
+											predicate: 	 RelationshipPredicate(object,relationship.field),
 											description: 'children by relationship '+relationship.accessor
 										});
 		
@@ -1671,7 +1659,7 @@ var jModel = function () {
 			object.subscribe({
 				removed: 	function () {
 								children.each(function (index,child) {
-									internal.entities[relationship.prototype].objects.remove(child);
+									entities[relationship.prototype].objects.remove(child);
 								});
 							}
 			});
@@ -1700,13 +1688,13 @@ var jModel = function () {
 			
 			data = data || {};
 			data[relationship.field] = object.primaryKeyValue();
-			return internal.entities[relationship.prototype].create(data);
+			return entities[relationship.prototype].create(data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			internal.entities[relationship.prototype].objects.remove(id);
+			entities[relationship.prototype].objects.remove(id);
 			return this;
 			
 		};
@@ -1737,9 +1725,9 @@ var jModel = function () {
 				object = parent.relationships[key].add(partitionedData.fields);
 			}
 			else {
-				if ( internal.entities[key] ) {
+				if ( entities[key] ) {
 					log.debug(log.flags.json.thaw,'creating free object');
-					object = internal.entities[key].create(partitionedData.fields);
+					object = entities[key].create(partitionedData.fields);
 				}
 			}
 			
