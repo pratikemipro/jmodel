@@ -211,64 +211,47 @@ var jModel = function () {
 						}
 					},
 				
-		startGroup: function (condition,title) {
-						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.group ) {
-								console.group(title);
-							}
-						}
-					},
+		startGroup: function (condition,title) { log.log(condition,title,'startgroup');	},
 				
-		endGroup: 	function (condition) {
-						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.groupEnd ) {
-								console.groupEnd();
-							}
-						}
-					},
+		endGroup: 	function (condition) { log.log(condition,'','endgroup'); },
 					
-		error: 		function (condition,message) {
-						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.error ) {
-								console.error(message);
-							}
-							else if ( console.log ) { 
-								console.log(message);
-							} 
-						}
-					},
+		error: 		function (condition,message) { log.log(condition,message,'error'); },
 					
-		warning: 	function (condition,message) {
-						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.warn ) {
-								console.warn(message);
-							}
-							else if ( console.log ) { 
-								console.log(message);
-							} 
-						}
-					},
+		warning: 	function (condition,message) { log.log(condition,message,'warning'); },
 					
-		debug: 		function (condition, message) {
-						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.debug ) {
-								console.debug(message);
-							}
-							else if ( console.log ) { 
-								console.log(message);
-							} 
-						}
-					},
+		debug: 		function (condition, message) { log.log(condition,message,'debug'); },
 					
-		info: 		function (condition, message) {
+		info: 		function (condition, message) {	log.log(condition,message,'info'); },
+					
+		log: 		function (condition, message, type) {
+			
 						if ( log.active && ( log.flags.all || condition ) ) {
-							if ( console.info ) {
-								console.info(message);
+							
+							if ( type == 'startgroup' ) {
+								if ( console.group ) {
+									console.group(message);
+								}
+								else if ( console.log ) {
+									console.log(message);
+								}
 							}
-							else if ( console.log ) { 
-								console.log(message);
-							} 
+							else if ( type == 'endgroup' ) {
+								if ( console.groupEnd ) {
+									console.groupEnd();
+								}
+							}
+							else {
+								switch (type) {	
+									case 'error': 	if (console.error) {console.error(message); break;}
+									case 'warning': if (console.warn)  {console.warn(message);  break;}
+									case 'debug': 	if (console.debug) {console.debug(message); break;}
+									case 'info': 	if (console.info)  {console.debug(message); break;}
+									default: 		if (console.log)   {console.log(message);         }	
+								}
+							}
+							
 						}
+						
 					},
 					
 		enable: 	function (flag) {
