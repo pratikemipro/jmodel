@@ -40,6 +40,8 @@ jQuery.fn.publish = function (publication) {
 			}
 		});
 		
+		return this;
+		
 	}
 	else if ( publication.bindings ) {
 		
