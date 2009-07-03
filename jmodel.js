@@ -86,6 +86,7 @@ jQuery.fn.subscribe = function (subscription) {
 						source: subscription.source,
 						predicate: subscription.predicate,
 						selector: subscription.selector,
+						initialise: subscription.initialise,
 						description: subscription.description || 'application subscription',
 						subscription: {
 							target: jQuery(object),
@@ -107,6 +108,7 @@ jQuery.fn.subscribe = function (subscription) {
 				source: subscription.source,
 				predicate: subscription.predicate,
 				selector: subscription.selector,
+				initialise: subscription.initialise,
 				description: subscription.description || 'application subscription',
 				subscription: {
 					target: jQuery(element),
@@ -848,6 +850,8 @@ var jModel = function () {
 		};
 		
 		this.subscribe = function (subscription) {
+			
+			log.startGroup(log.flags.subscriptions.subscribe,'Subscribing: '+subscription.description);
 
 			if ( subscription.predicate || subscription.selector ) {
 				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription: '+subscription.description);
@@ -855,7 +859,7 @@ var jModel = function () {
 				subscription.filter = 	function (collection) {
 											return function (event) {
 												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
-														&& event.method == 'add'; // NOTE: Fix this
+														&& ( event.method == 'add' || event.method == 'initialise' ); // NOTE: Fix this
 											};
 										}(this);							
 			}
@@ -868,7 +872,21 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			this.subscribers.add( new CollectionSubscriber(subscription) );
+			var subscriber = new CollectionSubscriber(subscription)
+			this.subscribers.add(subscriber);
+			
+			if ( subscription.initialise ) {
+				log.startGroup(log.flags.subscriptions.subscribe,'initialising subscription');
+				this.each(function (index,object) {
+					var event = {method:'initialise',object:object,description:'initialisation'}
+					if ( subscriber.matches(event) ) {
+						notifications.send(subscriber.notification(event));
+					}
+				});
+				log.endGroup(log.flags.subscriptions.subscribe);
+			}
+			
+			log.endGroup(log.flags.subscriptions.subscribe);
 			
 			return this;	
 			
