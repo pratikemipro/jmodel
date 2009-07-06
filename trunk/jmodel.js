@@ -15,7 +15,37 @@
 // NOTE: Make publishing work for domain member subscriptions
 jQuery.fn.publish = function (publication) {
 	
-	if ( publication.selector && publication.bindings ) {
+	if ( publication.selector && publication.member.bindings ) {
+		
+		this.each(function (index,element) {
+			for (var selector in publication.member.bindings) {
+				jQuery(selector,element).each(function (index,object) {
+					publication.target.subscribe({
+						source: publication.target,
+						predicate: publication.predicate,
+						selector: publication.selector,
+						initialise: publication.initialise,
+						description: publication.description || 'domain collection publication',			
+						member: {
+							target: jQuery(object),
+							key: publication.member.bindings[selector],
+							change: function (key,object) {
+								return function (target) {
+									jQuery(object).bind('change',function (event) {
+										target.set(key,jQuery(event.target).val());
+									});
+								}
+							}(publication.member.bindings[selector],object),
+							initialise: publication.initialise,
+							description: publication.description || 'domain collection member subscription'
+						}
+					});
+				})
+			}
+		});
+		
+		return this;
+		
 	}
 	else if ( publication.selector ) {
 	
@@ -27,12 +57,12 @@ jQuery.fn.publish = function (publication) {
 			selector: publication.selector,
 			initialise: publication.initialise,
 			description: publication.description || 'domain collection publication',			
-			subscription: {
+			member: {
 				target: that,
 				key: publication.key,
 				change: function (target) {
 					that.bind('change',function (event) {
-						target.set(publication.publication.key,jQuery(event.target).val());
+						target.set(publication.member.key,jQuery(event.target).val());
 					});
 				},
 				initialise: publication.initialise,
@@ -105,10 +135,10 @@ jQuery.fn.subscribe = function (subscription) {
 		});
 		
 	}
-	else if ( ( subscription.predicate || subscription.selector ) && subscription.subscription.bindings ) { // Subscription to members of collection with bindings
+	else if ( ( subscription.predicate || subscription.selector ) && subscription.member.bindings ) { // Subscription to members of collection with bindings
 
 		return this.each(function (index,element) {
-			for (var selector in subscription.subscription.bindings) {
+			for (var selector in subscription.member.bindings) {
 				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe({
 						source: subscription.source,
@@ -116,12 +146,12 @@ jQuery.fn.subscribe = function (subscription) {
 						selector: subscription.selector,
 						initialise: subscription.initialise,
 						description: subscription.description || 'application subscription',
-						subscription: {
+						member: {
 							target: jQuery(object),
-							key: subscription.subscription.bindings[selector],
-							change: subscription.subscription.change,
-							initialise: subscription.subscription.initialise,
-							description: subscription.subscription.description || 'application subscription'
+							key: subscription.member.bindings[selector],
+							change: subscription.member.change,
+							initialise: subscription.member.initialise,
+							description: subscription.member.description || 'application subscription'
 						}
 					});
 				});
@@ -138,12 +168,12 @@ jQuery.fn.subscribe = function (subscription) {
 				selector: subscription.selector,
 				initialise: subscription.initialise,
 				description: subscription.description || 'application subscription',
-				subscription: {
+				member: {
 					target: jQuery(element),
-					key: subscription.subscription.key,
-					change: subscription.subscription.change,
-					initialise: subscription.subscription.initialise,
-					description: subscription.subscription.description || 'application subscription'
+					key: subscription.member.key,
+					change: subscription.member.change,
+					initialise: subscription.member.initialise,
+					description: subscription.member.description || 'application subscription'
 				}
 			});
 		});
@@ -584,18 +614,18 @@ var jModel = function () {
 	var CollectionMemberNotification = function (subscription,event) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
-			subscription.subscription.key = ( subscription.subscription.key instanceof Array ) ?
-												subscription.subscription.key
-												: [subscription.subscription.key];
-			for (var i in subscription.subscription.key) {
+			subscription.member.key = ( subscription.member.key instanceof Array ) ?
+												subscription.member.key
+												: [subscription.member.key];
+			for (var i in subscription.member.key) {
 				
 				event.object.subscribe({
 					source: event.object,
-					target: subscription.subscription.target,
-					key: subscription.subscription.key[i],
-					change: subscription.subscription.change,
-					initialise: subscription.subscription.initialise,
-					description: 'collection member subscription for key '+subscription.subscription.key[i]
+					target: subscription.member.target,
+					key: subscription.member.key[i],
+					change: subscription.member.change,
+					initialise: subscription.member.initialise,
+					description: 'collection member subscription for key '+subscription.member.key[i]
 				});
 			}
 		};
