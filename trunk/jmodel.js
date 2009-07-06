@@ -79,8 +79,8 @@ jQuery.fn.subscribe = function (subscription) {
 					source: subscription.source,
 					target: jQuery(element),
 					key: key,
-					change: subscription.onChange,
-					removed: subscription.onRemove,
+					change: subscription.change,
+					removed: subscription.remove,
 					initialise: subscription.initialise,
 					description: subscription.description || 'application subscription'
 				});
@@ -119,7 +119,7 @@ jQuery.fn.subscribe = function (subscription) {
 						subscription: {
 							target: jQuery(object),
 							key: subscription.subscription.bindings[selector],
-							change: subscription.subscription.onChange,
+							change: subscription.subscription.change,
 							initialise: subscription.subscription.initialise,
 							description: subscription.subscription.description || 'application subscription'
 						}
@@ -141,7 +141,7 @@ jQuery.fn.subscribe = function (subscription) {
 				subscription: {
 					target: jQuery(element),
 					key: subscription.subscription.key,
-					change: subscription.subscription.onChange,
+					change: subscription.subscription.change,
 					initialise: subscription.subscription.initialise,
 					description: subscription.subscription.description || 'application subscription'
 				}
@@ -155,10 +155,10 @@ jQuery.fn.subscribe = function (subscription) {
 			subscription.source.subscribe({
 				source: subscription.source,
 				target: jQuery(element),
-				add: subscription.onAdd,
-				remove: subscription.onRemove,
-				change: subscription.onChange,
-				sort: subscription.onSort,
+				add: subscription.add,
+				remove: subscription.remove,
+				change: subscription.change,
+				sort: subscription.sort,
 				initialise: subscription.initialise,
 				description: subscription.description || 'application subscription'
 			});
@@ -892,7 +892,7 @@ var jModel = function () {
 											};
 										}(this);							
 			}
-			else if ( ( typeof onAdd == 'string' ) && ( typeof onRemove == 'string' ) ) {
+			else if ( ( typeof subscription.add == 'string' ) && ( typeof subscription.remove == 'string' ) ) {
 				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription: '+subscription.description);
 				subscription.type	= CollectionEventNotification;
 			}
@@ -1675,16 +1675,16 @@ var jModel = function () {
 		}
 		
 		// Relationship might specify subscription to children							
-		if ( relationship.onAdd || relationship.onRemove || relationship.onChange ) {
+		if ( relationship.add || relationship.remove || relationship.change ) {
 			var subscription = {
 				source: children,
 				target: object,
 				filter: relationship.filter,
 				description: 'subscription to relationship children'
 			};
-			if ( relationship.onAdd)    { subscription.add    = relationship.onAdd;	   }
-			if ( relationship.onRemove) { subscription.remove = relationship.onRemove; }
-			if ( relationship.onChange) { subscription.change = relationship.onChange; }
+			if ( relationship.add)    { subscription.add    = relationship.add;	   }
+			if ( relationship.oremove) { subscription.remove = relationship.remove; }
+			if ( relationship.change) { subscription.change = relationship.change; }
 			children.subscribe(subscription);
 		}
 		
