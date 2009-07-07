@@ -227,10 +227,15 @@ jQuery.fn.permute = function (permutation) {
 };
 
 jQuery.fn.view = function (options) {
-	if ( options.constructor && ( typeof options.constructor == 'function' ) ) {
-		this.each(function (index,element) {
-			var view = new options.constructor(element,options);
-		});
+	this.each(function (index,element) {
+		var view = new options.constructor(element,options);
+	});
+	return this;
+}
+
+jQuery.fn.views = function (views) {
+	for (var selector in views) {
+		jQuery(selector,this).view(views[selector]);
 	}
 	return this;
 }
