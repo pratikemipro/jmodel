@@ -1697,6 +1697,7 @@ var jModel = function () {
 	var OneToManyRelationship = function (object,relationship) {
 		
 		relationship.direction	= 'reverse';
+		this.enabled 			= relationship.enabled;
 
 		var children			= new DomainObjectCollection({
 											base: 	     entities[relationship.prototype].objects,
@@ -1724,7 +1725,7 @@ var jModel = function () {
 				description: 'subscription to relationship children'
 			};
 			if ( relationship.add)    { subscription.add    = relationship.add;	   }
-			if ( relationship.oremove) { subscription.remove = relationship.remove; }
+			if ( relationship.remove) { subscription.remove = relationship.remove; }
 			if ( relationship.change) { subscription.change = relationship.change; }
 			children.subscribe(subscription);
 		}
