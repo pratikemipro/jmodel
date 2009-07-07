@@ -222,7 +222,18 @@ jQuery.fn.permute = function (permutation) {
 		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
 	}
 	
+	return this;
+	
 };
+
+jQuery.fn.view = function (options) {
+	if ( options.constructor && ( typeof options.constructor == 'function' ) ) {
+		this.each(function (index,element) {
+			var view = new options.constructor(element,options);
+		});
+	}
+	return this;
+}
 
 
 // ============================================================================
