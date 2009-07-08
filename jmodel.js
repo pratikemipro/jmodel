@@ -1722,16 +1722,11 @@ var jModel = function () {
 		}
 		
 		// Relationship might specify subscription to children							
-		if ( relationship.add || relationship.remove || relationship.change ) {
-			var subscription = {
-				source: children,
-				target: object,
-				filter: relationship.filter,
-				description: 'subscription to relationship children'
-			};
-			if ( relationship.add)    { subscription.add    = relationship.add;	   }
-			if ( relationship.remove) { subscription.remove = relationship.remove; }
-			if ( relationship.change) { subscription.change = relationship.change; }
+		if ( relationship.subscription ) {
+			var subscription = relationship.subscription;
+			subscription.source = children;
+			subscription.target = object;
+			subscription.description = subscription.description || 'subscription to relationship children';
 			children.subscribe(subscription);
 		}
 		
