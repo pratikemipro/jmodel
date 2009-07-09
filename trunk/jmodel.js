@@ -446,6 +446,18 @@ var jModel = function () {
 			return members.join(separator);
 		};
 		
+		this.union = function () {
+			return external.union.apply(null,argumentsArray.apply(this,arguments));
+		};
+		
+		this.intersection = function () {
+			return external.intersection.apply(null,argumentsArray.apply(this,arguments));
+		};
+		
+		this.difference = function (set) {
+			return external.difference(this,set);
+		};
+		
 		this.delegateFor = function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
@@ -457,6 +469,58 @@ var jModel = function () {
 	}
 	
 	external.Set2 = Set;
+	
+	
+	
+	// ------------------------------------------------------------------------
+	//															 Set operations
+	// ------------------------------------------------------------------------
+	
+	var makeCollection = function(set) {
+		return ( set instanceof Set || set instanceof DomainObjectCollection ) ? set : set();
+	};
+	
+	external.union = function() {
+		var union = new Set();
+		for (var i=0; i<arguments.length; i++ ) {
+			var collection = makeCollection(arguments[i]);
+			collection.each(function (index,object) {
+				union.add(object);
+			});
+		}
+		if ( arguments[0] instanceof Set ) {
+			return union;
+		}
+		else {
+			return new DomainObjectCollection({
+				objects: union,
+				description:'union'
+			});
+		}
+	};
+	
+	external.intersection = function() {
+		var intersection = new Set();
+		makeCollection(arguments[0]).each(function (index,object) {
+			intersection.add(object);
+		})
+		for (var i=1; i<arguments.length; i++ ) {
+			intersection = intersection.filter(MembershipPredicate(arguments[i]));
+		}
+		if ( arguments[0] instanceof Set ) {
+			return intersection;
+		}
+		else {
+			return new DomainObjectCollection({
+				objects: intersection,
+				description:'intersection'
+			});
+		}
+	};
+	
+	external.difference = function(first,second) {
+		return makeCollection(first).filter( Not(MembershipPredicate(second)) );
+	};
 
 	
 	
@@ -1037,36 +1101,12 @@ var jModel = function () {
 		};
 		
 		
-		// Set methods
-		
-		this.union = function () {
-			return external.union.apply(null,argumentsArray.apply(this,arguments));
-		};
-		
-		this.intersection = function () {
-			return external.intersection.apply(null,argumentsArray.apply(this,arguments));
-		};
-		
-		this.difference = function (set) {
-			return external.difference(this,set);
-		};
-		
-		
 		// Initial sort
 		if ( specification.ordering ) {
 			this.sort();
 			sorted = true;
 		}
-
 		
-		// Note carefully that argumentsArray includes the current collection in the array
-		function argumentsArray() {
-			var args = [this];
-			for (var i=0; i<arguments.length; i++) {
-				args.push(arguments[i]);
-			}
-			return args;
-		}
 		
 		// This collection is a materialised view over a base collection
 		if ( specification.base instanceof this.constructor ) {
@@ -1156,56 +1196,6 @@ var jModel = function () {
 		
 	};
 	
-	
-	// ------------------------------------------------------------------------
-	//															 Set operations
-	// ------------------------------------------------------------------------
-	
-	var makeCollection = function(set) {
-		return ( set instanceof Set || set instanceof DomainObjectCollection ) ? set : set();
-	};
-	
-	external.union = function() {
-		var union = new Set();
-		for (var i=0; i<arguments.length; i++ ) {
-			var collection = makeCollection(arguments[i]);
-			collection.each(function (index,object) {
-				union.add(object);
-			});
-		}
-		if ( arguments[0] instanceof Set ) {
-			return union;
-		}
-		else {
-			return new DomainObjectCollection({
-				objects: union,
-				description:'union'
-			});
-		}
-	};
-	
-	external.intersection = function() {
-		var intersection = new Set();
-		makeCollection(arguments[0]).each(function (index,object) {
-			intersection.add(object);
-		})
-		for (var i=1; i<arguments.length; i++ ) {
-			intersection = intersection.filter(MembershipPredicate(arguments[i]));
-		}
-		if ( arguments[0] instanceof Set ) {
-			return intersection;
-		}
-		else {
-			return new DomainObjectCollection({
-				objects: intersection,
-				description:'intersection'
-			});
-		}
-	};
-	
-	external.difference = function(first,second) {
-		return makeCollection(first).filter( Not(MembershipPredicate(second)) );
-	};
 	
 	
 	// ------------------------------------------------------------------------
@@ -2024,6 +2014,15 @@ var jModel = function () {
 			}
 		}
 		return partition;
+	}
+	
+	// Note carefully that argumentsArray includes the current collection in the array
+	function argumentsArray() {
+		var args = [this];
+		for (var i=0; i<arguments.length; i++) {
+			args.push(arguments[i]);
+		}
+		return args;
 	}
 	
 	
