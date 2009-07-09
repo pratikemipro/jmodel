@@ -413,6 +413,9 @@ var jModel = function () {
 		};
 		
 		this.filter = function (predicate) {
+			if ( !predicate ) {
+				return this;
+			}
 			predicate = makePredicate(predicate);
 			return this.partition(predicate).pass;
 		};
@@ -850,7 +853,26 @@ var jModel = function () {
 	};
 	
 	
+	var Subscriber = function () {
+		
+		var enabled = true;
+		
+		this.enable = function () {
+			enabled = true;
+			return this;
+		}
+		
+		this.disable = function () {
+			enabled = false;
+			return this;
+		}
+		
+	}
+	
+	
 	var CollectionSubscriber = function (subscription) {
+		
+		Subscriber.apply(this);
 	
 		this.description = subscription.description;
 	
@@ -872,6 +894,8 @@ var jModel = function () {
 	
 	
 	var ObjectSubscriber = function (subscription) {
+
+		Subscriber.apply(this);
 
 		this.description = subscription.description;
 
@@ -904,7 +928,9 @@ var jModel = function () {
 
 		this.objects 		= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
 		this.objects.delegateFor(this);
-		this.subscribers	= new SubscriptionList(notifications);
+		
+		var subscribers	= new SubscriptionList(notifications);
+		this.subscribers = function (predicate) { return subscribers.filter(predicate); };
 		
 		var sorted = false;
 		
@@ -913,13 +939,13 @@ var jModel = function () {
 		
 		this.add = function (object) {
 			if ( this.objects.add(object) ) {
-				this.subscribers.notify({method:'add',object:object,description:'object addition'});
+				subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: this,
 					key: ':any',
 					change: function (object) {
 						sorted = false;
-						this.subscribers.notify({
+						subscribers.notify({
 							method:'change',
 							object:object,
 							description:'object change'
@@ -990,7 +1016,7 @@ var jModel = function () {
 
 			// Notify subscribers
 			if ( permuted ) {
-				this.subscribers.notify({method:'sort',permutation:permutation,description:'collection sort'});
+				subscribers.notify({method:'sort',permutation:permutation,description:'collection sort'});
 			}
 
 			sorted = true;
@@ -1051,7 +1077,7 @@ var jModel = function () {
 		this.debug = function (showSubscribers) {
 			var contents = this.objects.map(function (object) {return object.primaryKeyValue();}).join(' ');
 			if ( showSubscribers ) {
-				contents += ' '+this.subscribers.debug()+' ';
+				contents += ' '+subscribers.debug()+' ';
 			}
 			return contents;
 		};
@@ -1081,7 +1107,7 @@ var jModel = function () {
 			}
 			
 			var subscriber = new CollectionSubscriber(subscription)
-			this.subscribers.add(subscriber);
+			subscribers.add(subscriber);
 			
 			if ( subscription.initialise ) {
 				log.startGroup(log.flags.subscriptions.subscribe,'initialising subscription');
@@ -1540,6 +1566,9 @@ var jModel = function () {
 		
 		var data 		= {},
 			subscribers = new SubscriptionList(notifications);
+			
+			
+		this.subscribers = function (predicate) { return subscribers.filter(predicate); };
 			
 		
 		this.get = function () {
