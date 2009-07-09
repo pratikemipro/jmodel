@@ -430,7 +430,7 @@ var jModel = function () {
 		};
 		
 		this.map = function (mapping,mapped) {
-			mapped = new Set() || [];
+			mapped = mapped || new Set();
 			this.each(function (index,object) {
 				mapped.add(mapping.call(object,object));
 			});
