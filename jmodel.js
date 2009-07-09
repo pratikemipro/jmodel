@@ -394,16 +394,17 @@ var jModel = function () {
 		
 		this.partition = function (predicate,passName,failName) {
 			
+			predicate = makePredicate(predicate);
 			var partition = {};
 			var pass = partition[passName||'pass'] = new Set();
 			var fail = partition[failName||'fail'] = new Set();
 			
-			this.each(function () {
-				if ( predicate(this) ) {
-					pass.add(this);
+			this.each(function (index,object) {
+				if ( predicate(object) ) {
+					pass.add(object);
 				}
 				else {
-					fail.add(this);
+					fail.add(object);
 				}
 			})
 
@@ -412,22 +413,23 @@ var jModel = function () {
 		};
 		
 		this.filter = function (predicate) {
+			predicate = makePredicate(predicate);
 			return this.partition(predicate).pass;
 		};
 		
 		this.remove = function (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			members = [];
-			partition.keep.each(function () {
-				members.push(this);
+			partition.keep.each(function (index,object) {
+				members.push(object);
 			})
 			return partition.remove; 
 		};
 		
 		this.map = function (mapping,mapped) {
 			mapped = new Set() || [];
-			this.each(function () {
-				mapped.add(mapping(this));
+			this.each(function (index,object) {
+				mapped.add(mapping.call(object,object));
 			});
 			return mapped;
 		};
@@ -439,6 +441,10 @@ var jModel = function () {
 		this.sort = function (ordering) {
 			members.sort(ordering);
 		}
+		
+		this.join = function (separator) {
+			return members.join(separator);
+		};
 		
 		this.delegateFor = function (host) {
 			for (var i in this) {
@@ -582,7 +588,7 @@ var jModel = function () {
 					var contents = '';
 					for ( var entityName in entities ) {
 						contents += entityName+': ['+entities[entityName].objects.debug(showSubscribers)
-									+entities[entityName].deleted.debug(false)+'] ';
+									+' '+entities[entityName].deleted.debug(false)+'] ';
 					}
 					return contents;
 				}
@@ -766,8 +772,8 @@ var jModel = function () {
 			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
 			if ( needNotification.count() > 0 ) {
 				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
-				needNotification.each(function () {
-					notifications.send(this.notification(event));
+				needNotification.each(function (index,object) {
+					notifications.send(object.notification(event));
 				});
 				log.endGroup(log.flags.subscriptions.notify);
 			}
@@ -830,19 +836,19 @@ var jModel = function () {
 		if ( specification.ordering ) {
 			specification.ordering = makeOrdering(specification.ordering);
 		}
-		
-		this.objects		= specification.objects ? specification.objects : [];
+
+
+		this.objects 		= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		this.objects.delegateFor(this);
 		this.subscribers	= new SubscriptionList(notifications);
 		
 		var sorted = false;
 		
-		this.length = this.count = function () {
-			return this.objects.length;
-		};
+		this.length = this.objects.count;
+		
 		
 		this.add = function (object) {
-			if ( !MembershipPredicate(this)(object) ) {
-				this.objects.push(object);
+			if ( this.objects.add(object) ) {
 				this.subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: this,
@@ -859,27 +865,29 @@ var jModel = function () {
 				});
 				sorted = false;
 			}
+			return this;
 		};
+
 
 		this.first = function () {
 			if ( !sorted ) { this.sort(); }
-			return this.objects.length > 0 ? this.objects[0] : false;
+			return this.objects.first()
 		};
+		
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			var partition = partitionArray( this.objects, makePredicate(predicate) || NonePredicate() );
-			this.objects = partition.fail;
-			for (var i in partition.pass) {
-				partition.pass[i].removed();
-				this.subscribers.notify({method:'remove',object:partition.pass[i],description:'object removal'});
-			}
-			return this;
-		};
+			var collection = this;
+			this.objects.remove(predicate).each(function (index,object) {
+				object.removed();
+				collection.subscribers.notify({method:'remove',object:object,description:'object removal'});
+			})
+		}
+		
 		
 		this.by = function () {			
 			return new DomainObjectCollection({
-				objects: copyArray(this.objects),
+				objects: this.objects.copy(),
 				ordering: makeOrdering.apply(null,arguments),
 				description:'ordered '+specification.description
 			});	
@@ -887,26 +895,26 @@ var jModel = function () {
 		
 		
 		this.sort = function () {
-			
+
 			if (arguments.length > 0) {
 				specification.ordering = makeOrdering.apply(null,arguments);
 			}
-			
+
 			// Remember old order
-			for(var i=0; i<this.objects.length; i++) {
-				this.objects[i].domain.tags.position = i;
-			}
-			
+			this.objects.each(function (index) {
+				this.domain.tags.position = index;
+			});
+
 			// Sort
 			this.objects.sort(specification.ordering);
-			
+
 			// Find permutation
 			var permutation = [];
-			for(var i=0; i<this.objects.length; i++) {
-				permutation[i] = this.objects[i].domain.tags.position;
-				delete this.objects[i].domain.tags.position;
-			}
-			
+			this.objects.each(function (index) {
+				permutation[index] = this.domain.tags.position;
+				delete this.domain.tags.position;
+			});
+
 			// Find whether permutation is not identity permutation
 			var permuted = false;
 			for(var i=0; i<permutation.length; i++) {
@@ -915,34 +923,25 @@ var jModel = function () {
 					break;
 				}
 			}
-			
+
 			// Notify subscribers
 			if ( permuted ) {
 				this.subscribers.notify({method:'sort',permutation:permutation,description:'collection sort'});
 			}
-			
+
 			sorted = true;
-			
+
 			return this;
-			
+
 		};
+		
 		
 		this.each = function (callback) {
 			if ( !sorted ) { this.sort(); }
-			for(var index in this.objects) {
-				callback.call(this.objects[index],index,this.objects[index]);
-			}
+			this.objects.each(callback);
 			return this;
 		};
 		
-		this.map = function (mapping,mapped) {
-			if ( !sorted ) { this.sort(); }
-			mapped = mapped || [];
-			for(var index in this.objects) {
-				mapped.push(mapping(this.objects[index]));
-			}
-			return mapped;
-		};
 		
 		this.select = function (selector) {
 			if ( selector == ':first' ) {
@@ -973,7 +972,7 @@ var jModel = function () {
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				return (
 					new	DomainObjectCollection({
-							objects: partitionArray(this.objects,predicate).pass,
+							objects: this.objects.filter(predicate),
 							description:'filtered '+specification.description
 						})
 					).select(selector);
@@ -986,16 +985,13 @@ var jModel = function () {
 		
 		
 		this.debug = function (showSubscribers) {
-			var contents = '';
-			for ( var i in this.objects ) {
-				var obj = this.objects[i];
-				contents += ' '+obj.primaryKeyValue()+' ';
-			}
+			var contents = this.objects.map(function (object) {return object.primaryKeyValue();}).join(' ');
 			if ( showSubscribers ) {
 				contents += ' '+this.subscribers.debug()+' ';
 			}
 			return contents;
 		};
+		
 		
 		this.subscribe = function (subscription) {
 			
@@ -1100,12 +1096,7 @@ var jModel = function () {
 		var deleted = new DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
-			var contents = '';
-			for ( var i in this.objects ) {
-				var obj = this.objects[i];
-				contents += ' ('+obj.primaryKeyValue()+') ';
-			}
-			return contents;
+			return this.objects.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
 		};
 		
 		collection.subscribe({
@@ -1171,26 +1162,45 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	var makeCollection = function(set) {
-		return (set instanceof DomainObjectCollection) ? set : set();
+		return ( set instanceof Set || set instanceof DomainObjectCollection ) ? set : set();
 	};
 	
 	external.union = function() {
-		var union = new DomainObjectCollection({description:'union'});
+		var union = new Set();
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = makeCollection(arguments[i]);
 			collection.each(function (index,object) {
 				union.add(object);
 			});
 		}
-		return union;
+		if ( arguments[0] instanceof Set ) {
+			return union;
+		}
+		else {
+			return new DomainObjectCollection({
+				objects: union,
+				description:'union'
+			});
+		}
 	};
 	
 	external.intersection = function() {
-		var intersection = makeCollection(arguments[0]);
+		var intersection = new Set();
+		makeCollection(arguments[0]).each(function (index,object) {
+			intersection.add(object);
+		})
 		for (var i=1; i<arguments.length; i++ ) {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
-		return intersection;
+		if ( arguments[0] instanceof Set ) {
+			return intersection;
+		}
+		else {
+			return new DomainObjectCollection({
+				objects: intersection,
+				description:'intersection'
+			});
+		}
 	};
 	
 	external.difference = function(first,second) {
