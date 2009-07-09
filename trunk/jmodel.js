@@ -436,6 +436,10 @@ var jModel = function () {
 			return new Set(members.slice());
 		};
 		
+		this.sort = function (ordering) {
+			members.sort(ordering);
+		}
+		
 		this.delegateFor = function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
