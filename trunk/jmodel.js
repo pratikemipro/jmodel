@@ -836,10 +836,6 @@ var jModel = function () {
 			return this.objects.length;
 		};
 		
-		this.get = function (id) {
-			return this.objects[id];
-		};
-		
 		this.add = function (object) {
 			if ( !MembershipPredicate(this)(object) ) {
 				this.objects.push(object);
