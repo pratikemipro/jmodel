@@ -357,6 +357,91 @@ var jModel = function () {
 		property[pieces[pieces.length-1]] = value;
 	}
 
+
+
+	// ------------------------------------------------------------------------
+	//																		Set
+	// ------------------------------------------------------------------------
+
+	var Set = function (objects) {
+		
+		var members = objects || [];
+		
+		this.add = function (object) {
+			if ( members.indexOf(object) == -1 ) {
+				members.push(object);
+				return true;
+			}
+			else {
+				return false;
+			}
+		};
+		
+		this.count = function () {
+			return members.length;
+		};
+		
+		this.first = function () {
+			return members.length > 0 ? members[0] : false;
+		};
+		
+		this.each = function (callback) {
+			for(var index in members) {
+				callback.call(members[index],index,members[index]);
+			}
+			return this;
+		};
+		
+		this.partition = function (predicate,passName,failName) {
+			
+			var partition = {};
+			var pass = partition[passName||'pass'] = new Set();
+			var fail = partition[failName||'fail'] = new Set();
+			
+			this.each(function () {
+				if ( predicate(this) ) {
+					pass.add(this);
+				}
+				else {
+					fail.add(this);
+				}
+			})
+
+			return partition;
+
+		};
+		
+		this.filter = function (predicate) {
+			return this.partition(predicate).pass;
+		};
+		
+		this.remove = function (predicate) {
+			var partition = this.partition(predicate,'remove','keep');
+			members = [];
+			partition.keep.each(function () {
+				members.push(this);
+			})
+			return partition.remove; 
+		};
+		
+		this.map = function (mapping,mapped) {
+			mapped = new Set() || [];
+			this.each(function () {
+				mapped.add(mapping(this));
+			});
+			return mapped;
+		};
+		
+		this.delegateFor = function (host) {
+			for (var i in this) {
+				if ( !host[i] ) {
+					host[i] = this[i];
+				}
+			}
+		}
+		
+	}
+
 	
 	
 	// ------------------------------------------------------------------------
@@ -658,46 +743,28 @@ var jModel = function () {
 	
 	var SubscriptionList = function (notifications) {
 		
-		var subscribers = [];
-		
-		this.each = function (callback) {
-			for(var index in subscribers) {
-				callback(subscribers[index]);
-			}
-		};
+		var subscribers = new Set();
+		subscribers.delegateFor(this);
 		
 		this.add = function (subscriber) {
-			var found = false;
-			for (var i in subscribers) {
-				if ( subscribers[i] == subscriber ) {
-					found = true;
-					break;
-				}
-			}
-			if ( !found ) {
-				log.debug(log.flags.subscriptions.subscribe,'adding subscriber: '+subscriber.description);
-				subscribers.push(subscriber);
+			if ( subscribers.add(subscriber) ) {
+				log.debug(log.flags.subscriptions.subscribe,'added subscriber: '+subscriber.description);
 			}
 		};
 		
 		this.notify = function (event) {
-			var notificationNeeded = false;
-			this.each(function (subscriber) {
-				if ( subscriber.matches(event) ) {
-					if ( !notificationNeeded ) {
-						log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
-						notificationNeeded = true;
-					}
-					notifications.send(subscriber.notification(event));
-				}
-			});
-			if (notificationNeeded) {
-				log.endGroup();
+			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
+			if ( needNotification.count() > 0 ) {
+				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
+				needNotification.each(function () {
+					notifications.send(this.notification(event));
+				});
+				log.endGroup(log.flags.subscriptions.notify);
 			}
 		};
 		
 		this.debug = function () {
-			return subscribers.length > 0 ? '{'+subscribers.length+' subscribers}' : '';
+			return subscribers.count() > 0 ? '{'+subscribers.count()+' subscribers}' : '';
 		};
 		
 	};
@@ -787,7 +854,7 @@ var jModel = function () {
 				sorted = false;
 			}
 		};
-		
+
 		this.first = function () {
 			if ( !sorted ) { this.sort(); }
 			return this.objects.length > 0 ? this.objects[0] : false;
