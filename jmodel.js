@@ -432,6 +432,10 @@ var jModel = function () {
 			return mapped;
 		};
 		
+		this.copy = function () {
+			return new Set(members.slice());
+		};
+		
 		this.delegateFor = function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
@@ -441,6 +445,8 @@ var jModel = function () {
 		}
 		
 	}
+	
+	external.Set2 = Set;
 
 	
 	
