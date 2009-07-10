@@ -471,7 +471,19 @@ var jModel = function () {
 		
 	}
 	
-	external.Set2 = Set;
+	
+	external.set = function() {
+		if ( typeof arguments[0] == 'array' ) {
+			return new Set(arguments[0]);
+		}
+		else {
+			var objects = [];
+			for (var i=0; i<arguments.length; i++) {
+				objects.push(arguments[i]);
+			}
+			return new Set(objects);
+		}
+	};
 	
 	
 	
@@ -967,10 +979,9 @@ var jModel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			var collection = this;
 			this.objects.remove(predicate).each(function (index,object) {
 				object.removed();
-				collection.subscribers.notify({method:'remove',object:object,description:'object removal'});
+				subscribers.notify({method:'remove',object:object,description:'object removal'});
 			})
 		}
 		
@@ -1147,15 +1158,18 @@ var jModel = function () {
 		
 	};
 	
-	
-	external.set = function() {
-		var objects = [];
-		for (var i=0; i<arguments.length; i++) {
-			objects.push(arguments[i]);
+	external.collection = function() {
+		if ( typeof arguments[0] == 'array' ) {
+			return new DomainObjectCollection({objects:arguments[0],description:'set'});
 		}
-		return new DomainObjectCollection({objects:objects,description:'set'});
+		else {
+			var objects = [];
+			for (var i=0; i<arguments.length; i++) {
+				objects.push(arguments[i]);
+			}
+			return new DomainObjectCollection({objects:objects,description:'set'});
+		}
 	};
-	
 	
 	var DeletedObjectsCollection = function (collection) {
 		
