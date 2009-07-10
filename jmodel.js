@@ -394,7 +394,7 @@ var jModel = function () {
 		
 		this.partition = function (predicate,passName,failName) {
 			
-			predicate = makePredicate(predicate);
+			predicate = this.predicate(predicate);
 			var partition = {};
 			var pass = partition[passName||'pass'] = new Set();
 			var fail = partition[failName||'fail'] = new Set();
@@ -416,7 +416,6 @@ var jModel = function () {
 			if ( !predicate ) {
 				return this;
 			}
-			predicate = makePredicate(predicate);
 			return this.partition(predicate).pass;
 		};
 		
@@ -461,6 +460,22 @@ var jModel = function () {
 			return external.difference(this,set);
 		};
 		
+		this.predicate = function (parameter) {
+			if ( typeof parameter == 'function' ) {
+				return parameter;
+			}
+			else if ( parameter && parameter.domain ) {
+				return ObjectIdentityPredicate(parameter);
+			}
+			else if ( typeof parameter == 'object' && parameter !== null ) {
+				return ExamplePredicate(parameter);
+			} 
+			else if ( typeof parameter == 'number' ) {
+				return IdentityPredicate(parameter);
+			}
+			return null;
+		}
+		
 		this.delegateFor = function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
@@ -484,6 +499,9 @@ var jModel = function () {
 			return new Set(objects);
 		}
 	};
+	
+	
+	external.predicate = (new Set()).predicate;
 	
 	
 	
@@ -577,7 +595,7 @@ var jModel = function () {
 			return entities[base]
 					.objects
 						.filter(InstancePredicate(constructor))
-						.filter(( typeof criterion != 'string' ) ? makePredicate(criterion) : null)
+						.filter(( typeof criterion != 'string' ) ? criterion : null)
 						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
 
@@ -1077,7 +1095,7 @@ var jModel = function () {
 				selector	= arguments[0];
 			}
 			else {
-				predicate	= makePredicate(arguments[0]);
+				predicate	= this.predicate(arguments[0]);
 				selector	= arguments[1];
 			}
 			
@@ -1208,12 +1226,8 @@ var jModel = function () {
 	
 	var View = function (parent,child,predicate) {
 		
-		predicate = makePredicate(predicate);
-		
-		parent.each(function (index,object) {
-			if ( predicate(object) ) {
-				child.add(object);
-			}
+		parent.filter(predicate).each(function () {
+			child.add(object);
 		});
 		
 		parent.subscribe({
@@ -1363,22 +1377,7 @@ var jModel = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
-	var makePredicate = external.predicate = function (parameter) {
-		if ( typeof parameter == 'function' ) {
-			return parameter;
-		}
-		else if ( parameter && parameter.domain ) {
-			return ObjectIdentityPredicate(parameter);
-		}
-		else if ( typeof parameter == 'object' && parameter !== null ) {
-			return ExamplePredicate(parameter);
-		} 
-		else if ( typeof parameter == 'number' ) {
-			return IdentityPredicate(parameter);
-		}
-		return null;
-	};
-	
+
 	// All
 	
 	var AllPredicate = function () {
