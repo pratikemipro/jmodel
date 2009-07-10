@@ -247,11 +247,11 @@ jQuery.fn.views = function (views) {
 
 var jModel = function () {
 
-
-	var external={},
-		entities={};
+	var external		= function (predicate) { return all.filter(predicate); };
+		entities		= {},
+		notifications	= new NotificationQueue();;
 		
-		
+				
 	// ------------------------------------------------------------------------
 	//																	Logging
 	// ------------------------------------------------------------------------
@@ -363,7 +363,7 @@ var jModel = function () {
 	//																		Set
 	// ------------------------------------------------------------------------
 
-	var Set = function (objects) {
+	function Set (objects) {
 		
 		var members = objects || [];
 		
@@ -509,7 +509,7 @@ var jModel = function () {
 	//															 Set operations
 	// ------------------------------------------------------------------------
 	
-	var makeCollection = function(set) {
+	function makeCollection (set) {
 		return ( set instanceof Set || set instanceof DomainObjectCollection ) ? set : set();
 	};
 	
@@ -561,7 +561,9 @@ var jModel = function () {
 	// 																 Prototypes
 	// ------------------------------------------------------------------------
 	
-	var EntityType = function (name,constructor,options) {
+	var all = new DomainObjectCollection();
+	
+	function EntityType (name,constructor,options) {
 
 		options  		= options || {};
 		
@@ -569,22 +571,12 @@ var jModel = function () {
 		
 		this.constructor = constructor;
 
-		// Figure out the current type's base entity
-		entity = this;
-		while ( entity.options && ( entity.options.base !== true ) ) {
-			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
-		}
-		var base = entity.name || name;
-
-		this.objects = new	DomainObjectCollection(
-								( base != name) ?
-									{	base: 			entities[base].objects,
-										predicate: 		InstancePredicate(constructor),
-										ordering: 		options.ordering,
-										description: 	name } :
-									{	ordering: 		options.ordering,
-										description: 	name }
-							);
+		this.objects = new	DomainObjectCollection({
+								base: 			all,
+								predicate: 		InstancePredicate(constructor),
+								ordering: 		options.ordering,
+								description: 	name
+							});
 							
 		this.deleted = new DeletedObjectsCollection(this.objects);
 
@@ -592,9 +584,7 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			return entities[base]
-					.objects
-						.filter(InstancePredicate(constructor))
+			return this.objects
 						.filter(( typeof criterion != 'string' ) ? criterion : null)
 						.select(( typeof criterion == 'string' ) ? criterion : ':first');
 		};
@@ -613,7 +603,7 @@ var jModel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
-			entities[base].objects.add(newObject);
+			all.add(newObject);
 
 			log.endGroup(log.flags.domainobject.create);
 
@@ -623,7 +613,7 @@ var jModel = function () {
 
 
 		function generateID() {			
-			return -(entities[base].objects.count()+1);
+			return -(all.count()+1);
 		}
 		
 
@@ -698,7 +688,7 @@ var jModel = function () {
 	//															  Notifications
 	// ------------------------------------------------------------------------
 	
-	var NotificationQueue = function () {
+	function NotificationQueue () {
 		
 		var	notifications 	= [],
 			active			= true;
@@ -734,8 +724,6 @@ var jModel = function () {
 		
 	};
 	
-	var notifications = new NotificationQueue();
-	
 	external.notifications = {
 		
 		suspend: 	function () {
@@ -769,28 +757,28 @@ var jModel = function () {
 	// Notification types
 	//
 	
-	var ContentNotification = function (subscription) {
+	function ContentNotification (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
-	var ValueNotification = function (subscription) {
+	function ValueNotification (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
-	var MethodNotification = function (subscription) {
+	function MethodNotification (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
-	var EventNotification = function (subscription) {
+	function EventNotification (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
@@ -798,14 +786,14 @@ var jModel = function () {
 	};
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
-	var RemovalNotification = function (subscription) {
+	function RemovalNotification (subscription) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
 	
-	var CollectionMethodNotification = function (subscription,event) {
+	function CollectionMethodNotification  (subscription,event) {
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
 				log.debug(log.flags.notifications.send,'Receiving a sort notification');
@@ -818,14 +806,14 @@ var jModel = function () {
 		};
 	};
 	
-	var CollectionEventNotification = function (subscription,event) {
+	function CollectionEventNotification (subscription,event) {
 		this.receive = function () {
 			// NOTE: Implement this
 		};
 	};
 	
 	// NOTE: Make this work with bindings
-	var CollectionMemberNotification = function (subscription,event) {
+	function CollectionMemberNotification (subscription,event) {
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
@@ -854,7 +842,7 @@ var jModel = function () {
 	// queue.
 	//
 	
-	var SubscriptionList = function (notifications) {
+	function SubscriptionList (notifications) {
 		
 		var subscribers = new Set();
 		subscribers.delegateFor(this);
@@ -883,7 +871,7 @@ var jModel = function () {
 	};
 	
 	
-	var Subscriber = function (subscription) {
+	function Subscriber (subscription) {
 		
 		this.target 		= subscription.target;
 		this.description 	= subscription.description;
@@ -903,7 +891,7 @@ var jModel = function () {
 	}
 	
 	
-	var CollectionSubscriber = function (subscription) {
+	function CollectionSubscriber (subscription) {
 		
 		Subscriber.call(this,subscription);
 	
@@ -930,7 +918,7 @@ var jModel = function () {
 	};
 	
 	
-	var ObjectSubscriber = function (subscription) {
+	function ObjectSubscriber (subscription) {
 
 		Subscriber.call(this,subscription);
 
@@ -956,7 +944,7 @@ var jModel = function () {
 	// 												   Domain Object Collection
 	// ------------------------------------------------------------------------
 	
-	var DomainObjectCollection = function (specification) {
+	function DomainObjectCollection (specification) {
 		
 		specification = specification || {};
 		
@@ -1200,7 +1188,7 @@ var jModel = function () {
 		}
 	};
 	
-	var DeletedObjectsCollection = function (collection) {
+	function DeletedObjectsCollection (collection) {
 		
 		var deleted = new DomainObjectCollection({description:'deleted'});
 		
@@ -1224,7 +1212,7 @@ var jModel = function () {
 	};
 	
 	
-	var View = function (parent,child,predicate) {
+	function View (parent,child,predicate) {
 		
 		parent.filter(predicate).each(function () {
 			child.add(object);
@@ -1585,7 +1573,7 @@ var jModel = function () {
 	// 														Domain Object mixin
 	// ------------------------------------------------------------------------
 	
-	var DomainObject = function (entitytype) {
+	function DomainObject (entitytype) {
 		
 		
 		var data 		= {},
@@ -1799,7 +1787,7 @@ var jModel = function () {
 	// 															  Relationships
 	// ------------------------------------------------------------------------
 	
-	var OneToOneRelationship = function (parent,relationship) {
+	function OneToOneRelationship (parent,relationship) {
 		
 		this.get = function (create) {
 			var child = entities[relationship.prototype].object(parent.get(relationship.field));
@@ -1825,7 +1813,7 @@ var jModel = function () {
 	};
 	
 	
-	var OneToManyRelationship = function (object,relationship) {
+	function OneToManyRelationship (object,relationship) {
 		
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
