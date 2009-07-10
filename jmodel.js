@@ -1806,6 +1806,15 @@ var jModel = function () {
 		var relationships = new Set();
 		relationships.delegateFor(this);
 		
+		this.predicate = function (parameter) {
+			if ( typeof parameter == 'string' && parameter.charAt(0) != ':' ) {
+				return PropertyPredicate('accessor',parameter);
+			}
+			else {
+				return relationships.predicate(parameter);
+			}
+		}
+		
 	}
 	
 	function OneToOneRelationship (parent,relationship) {
