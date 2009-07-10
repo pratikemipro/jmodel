@@ -1205,7 +1205,7 @@ var jModel = function () {
 		var deleted = new DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
-			return objects.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
+			return this.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
 		};
 		
 		collection.subscribe({
