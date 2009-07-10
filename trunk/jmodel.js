@@ -865,7 +865,10 @@ var jModel = function () {
 	};
 	
 	
-	var Subscriber = function () {
+	var Subscriber = function (subscription) {
+		
+		this.target 		= subscription.target;
+		this.description 	= subscription.description;
 		
 		var enabled = true;
 		
@@ -884,9 +887,7 @@ var jModel = function () {
 	
 	var CollectionSubscriber = function (subscription) {
 		
-		Subscriber.apply(this);
-	
-		this.description = subscription.description;
+		Subscriber.call(this,subscription);
 	
 		// NOTE: Implement filters here
 		this.matches = function (event) {
@@ -902,14 +903,18 @@ var jModel = function () {
 			return new subscription.type(subscription,event);
 		};
 		
+		this.debug = function () {
+			log.startGroup(true,'Subscriber');
+			log.debug(true,subscription.description);
+			log.endGroup(true);
+		}
+		
 	};
 	
 	
 	var ObjectSubscriber = function (subscription) {
 
-		Subscriber.apply(this);
-
-		this.description = subscription.description;
+		Subscriber.call(this,subscription);
 
 		this.matches = function (event) {
 			return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
@@ -918,6 +923,12 @@ var jModel = function () {
 		this.notification = function (event) {
 			return new subscription.type(subscription,event);
 		};
+		
+		this.debug = function () {
+			log.startGroup(true,'Subscriber');
+			log.debug(true,subscription.description);
+			log.endGroup(true);
+		}
 		
 	};
 	
@@ -938,19 +949,19 @@ var jModel = function () {
 		}
 
 
-		this.objects 		= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
-		this.objects.delegateFor(this);
+		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		objects.delegateFor(this);
 		
 		var subscribers	= new SubscriptionList(notifications);
 		this.subscribers = function (predicate) { return subscribers.filter(predicate); };
 		
 		var sorted = false;
 		
-		this.length = this.objects.count;
+		this.length = objects.count;
 		
 		
 		this.add = function (object) {
-			if ( this.objects.add(object) ) {
+			if ( objects.add(object) ) {
 				subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: this,
@@ -973,13 +984,13 @@ var jModel = function () {
 
 		this.first = function () {
 			if ( !sorted ) { this.sort(); }
-			return this.objects.first()
+			return objects.first()
 		};
 		
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
-			this.objects.remove(predicate).each(function (index,object) {
+			objects.remove(predicate).each(function (index,object) {
 				object.removed();
 				subscribers.notify({method:'remove',object:object,description:'object removal'});
 			})
@@ -988,7 +999,7 @@ var jModel = function () {
 		
 		this.by = function () {			
 			return new DomainObjectCollection({
-				objects: this.objects.copy(),
+				objects: objects.copy(),
 				ordering: makeOrdering.apply(null,arguments),
 				description:'ordered '+specification.description
 			});	
@@ -1002,16 +1013,16 @@ var jModel = function () {
 			}
 
 			// Remember old order
-			this.objects.each(function (index) {
+			objects.each(function (index) {
 				this.domain.tags.position = index;
 			});
 
 			// Sort
-			this.objects.sort(specification.ordering);
+			objects.sort(specification.ordering);
 
 			// Find permutation
 			var permutation = [];
-			this.objects.each(function (index) {
+			objects.each(function (index) {
 				permutation[index] = this.domain.tags.position;
 				delete this.domain.tags.position;
 			});
@@ -1039,7 +1050,7 @@ var jModel = function () {
 		
 		this.each = function (callback) {
 			if ( !sorted ) { this.sort(); }
-			this.objects.each(callback);
+			objects.each(callback);
 			return this;
 		};
 		
@@ -1073,7 +1084,7 @@ var jModel = function () {
 			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
 				return (
 					new	DomainObjectCollection({
-							objects: this.objects.filter(predicate),
+							objects: objects.filter(predicate),
 							description:'filtered '+specification.description
 						})
 					).select(selector);
@@ -1086,7 +1097,7 @@ var jModel = function () {
 		
 		
 		this.debug = function (showSubscribers) {
-			var contents = this.objects.map(function (object) {return object.primaryKeyValue();}).join(' ');
+			var contents = objects.map(function (object) {return object.primaryKeyValue();}).join(' ');
 			if ( showSubscribers ) {
 				contents += ' '+subscribers.debug()+' ';
 			}
@@ -1176,7 +1187,7 @@ var jModel = function () {
 		var deleted = new DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
-			return this.objects.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
+			return objects.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
 		};
 		
 		collection.subscribe({
@@ -1842,7 +1853,7 @@ var jModel = function () {
 			var subscription = relationship.subscription;
 			subscription.source = children;
 			subscription.target = object;
-			subscription.description = subscription.description || 'subscription to relationship children';
+			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
 			children.subscribe(subscription);
 		}
 		
