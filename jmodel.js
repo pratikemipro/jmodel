@@ -423,7 +423,7 @@ var jModel = function () {
 			if ( arguments.length === 0 ) {
 				return this;
 			}
-			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) && arguments[0].charAt(0) == ':' ) {
+			else if ( arguments.length == 1 && typeof arguments[0] == 'string' && arguments[0].charAt(0) == ':' ) {
 				predicate 	= AllPredicate();
 				selector	= arguments[0];
 			}
