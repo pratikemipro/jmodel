@@ -1591,7 +1591,7 @@ var jModel = function () {
 		
 		var data 			= {},
 			subscribers 	= new SubscriptionList(notifications),
-			relationships	= new Set();
+			relationships	= new RelationshipList();
 			
 			
 		this.subscribers	= function (predicate) { return subscribers.filter.apply(subscribers,arguments); };
@@ -1800,6 +1800,13 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	// 															  Relationships
 	// ------------------------------------------------------------------------
+	
+	function RelationshipList (notifications) {
+		
+		var relationships = new Set();
+		relationships.delegateFor(this);
+		
+	}
 	
 	function OneToOneRelationship (parent,relationship) {
 		
