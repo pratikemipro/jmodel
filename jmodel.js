@@ -34,13 +34,13 @@ jQuery.fn.publish = function (publication) {
 									jQuery(object).bind('change',function (event) {
 										target.set(key,jQuery(event.target).val());
 									});
-								}
+								};
 							}(publication.member.bindings[selector],object),
 							initialise: publication.initialise,
 							description: publication.description || 'domain collection member subscription'
 						}
 					});
-				})
+				});
 			}
 		});
 		
@@ -231,14 +231,14 @@ jQuery.fn.view = function (options) {
 		var view = new options.constructor(element,options);
 	});
 	return this;
-}
+};
 
 jQuery.fn.views = function (views) {
 	for (var selector in views) {
 		jQuery(selector,this).view(views[selector]);
 	}
 	return this;
-}
+};
 
 
 // ============================================================================
@@ -247,7 +247,7 @@ jQuery.fn.views = function (views) {
 
 var jModel = function () {
 
-	var external		= function (predicate) { return all.filter(predicate); };
+	var external		= function (predicate) { return all.filter.apply(all,arguments); },
 		entities		= {},
 		notifications	= new NotificationQueue();;
 		
@@ -385,6 +385,10 @@ var jModel = function () {
 			return members.length > 0 ? members[0] : false;
 		};
 		
+		this.select = function (selector) {
+			return selector == ':first' ? this.first() : this;
+		};
+		
 		this.each = function (callback) {
 			for(var index in members) {
 				callback.call(members[index],index,members[index]);
@@ -406,17 +410,30 @@ var jModel = function () {
 				else {
 					fail.add(object);
 				}
-			})
+			});
 
 			return partition;
 
 		};
 		
-		this.filter = function (predicate) {
-			if ( !predicate ) {
+		this.filter = function () {
+			
+			var predicate, selector;
+			
+			if ( arguments.length === 0 ) {
 				return this;
 			}
-			return this.partition(predicate).pass;
+			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) ) {
+				predicate 	= null;
+				selector	= arguments[0];
+			}
+			else {
+				predicate	= arguments[0];
+				selector	= arguments[1];
+			}
+
+			return this.partition(predicate).pass.select(selector);			
+		
 		};
 		
 		this.remove = function (predicate) {
@@ -424,7 +441,7 @@ var jModel = function () {
 			members = [];
 			partition.keep.each(function (index,object) {
 				members.push(object);
-			})
+			});
 			return partition.remove; 
 		};
 		
@@ -442,7 +459,7 @@ var jModel = function () {
 		
 		this.sort = function (ordering) {
 			members.sort(ordering);
-		}
+		};
 		
 		this.join = function (separator) {
 			return members.join(separator);
@@ -473,8 +490,8 @@ var jModel = function () {
 			else if ( typeof parameter == 'number' ) {
 				return IdentityPredicate(parameter);
 			}
-			return null;
-		}
+			return AllPredicate();
+		};
 		
 		this.delegateFor = function (host) {
 			for (var i in this) {
@@ -482,7 +499,7 @@ var jModel = function () {
 					host[i] = this[i];
 				}
 			}
-		}
+		};
 		
 	}
 	
@@ -536,7 +553,7 @@ var jModel = function () {
 		var intersection = new Set();
 		makeCollection(arguments[0]).each(function (index,object) {
 			intersection.add(object);
-		})
+		});
 		for (var i=1; i<arguments.length; i++ ) {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
@@ -584,9 +601,7 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			return this.objects
-						.filter(( typeof criterion != 'string' ) ? criterion : null)
-						.select(( typeof criterion == 'string' ) ? criterion : ':first');
+			return this.objects.filter.apply(this.objects,arguments);
 		};
 
 
@@ -632,12 +647,12 @@ var jModel = function () {
 			for ( var i in names ) {
 				var synonym 										= names[i];
 				entities[synonym]									= entities[name];
-				external[synonym] 									= function (predicate) { return entities[name].object(predicate); };
+				external[synonym] 									= function (predicate) { return entities[name].object.apply(entities[name],arguments); };
 				external[synonym].entitytype						= entities[name];
 				external[synonym].extend							= function (prop) { return entities[name].constructor.extend(prop); };
 				external['create'+synonym]							= entities[name].create;
-				external[options.plural || synonym+'s']				= function (predicate) { return entities[name].objects.filter(predicate); };
-				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return entities[name].deleted.filter(predicate); };
+				external[options.plural || synonym+'s']				= function (predicate) { return entities[name].objects.filter.apply(entities[name].objects,arguments); };
+				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return entities[name].deleted.filter.apply(entities[name].deleted,arguments); };
 			}
 
 			return external.prototype;
@@ -881,12 +896,12 @@ var jModel = function () {
 		this.enable = function () {
 			enabled = true;
 			return this;
-		}
+		};
 		
 		this.disable = function () {
 			enabled = false;
 			return this;
-		}
+		};
 		
 	}
 	
@@ -913,7 +928,7 @@ var jModel = function () {
 			log.startGroup(true,'Subscriber');
 			log.debug(true,subscription.description);
 			log.endGroup(true);
-		}
+		};
 		
 	};
 	
@@ -934,7 +949,7 @@ var jModel = function () {
 			log.startGroup(true,'Subscriber');
 			log.debug(true,subscription.description);
 			log.endGroup(true);
-		}
+		};
 		
 	};
 	
@@ -959,7 +974,7 @@ var jModel = function () {
 		objects.delegateFor(this);
 		
 		var subscribers	= new SubscriptionList(notifications);
-		this.subscribers = function (predicate) { return subscribers.filter(predicate); };
+		this.subscribers = function (predicate) { return subscribers.filter.apply(subscribers,arguments); };
 		
 		var sorted = false;
 		
@@ -990,7 +1005,7 @@ var jModel = function () {
 
 		this.first = function () {
 			if ( !sorted ) { this.sort(); }
-			return objects.first()
+			return objects.first();
 		};
 		
 		
@@ -999,8 +1014,8 @@ var jModel = function () {
 			objects.remove(predicate).each(function (index,object) {
 				object.removed();
 				subscribers.notify({method:'remove',object:object,description:'object removal'});
-			})
-		}
+			});
+		};
 		
 		
 		this.by = function () {			
@@ -1072,32 +1087,22 @@ var jModel = function () {
 		
 		
 		this.filter = function () {
-			
-			var selector,predicate;
 
 			if ( arguments.length === 0 ) {
 				return this;
 			}
-			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) ) {
-				predicate 	= null;
-				selector	= arguments[0];
-			}
-			else {
-				predicate	= this.predicate(arguments[0]);
-				selector	= arguments[1];
-			}
 			
-			if ( predicate && predicate !== null && (typeof predicate != 'undefined') ) {
-				return (
-					new	DomainObjectCollection({
-							objects: objects.filter(predicate),
-							description:'filtered '+specification.description
-						})
-					).select(selector);
+			var filtered = objects.filter.apply(objects,arguments);
+			
+			if ( filtered instanceof Set ) {
+				return new DomainObjectCollection({
+					objects: filtered,
+					description:'filtered '+specification.description
+				});
 			}
 			else {
-				return this.select(selector);
-			}
+				return filtered;
+			} 
 			
 		};
 		
@@ -1134,13 +1139,13 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			var subscriber = new CollectionSubscriber(subscription)
+			var subscriber = new CollectionSubscriber(subscription);
 			subscribers.add(subscriber);
 			
 			if ( subscription.initialise ) {
 				log.startGroup(log.flags.subscriptions.subscribe,'initialising subscription');
 				this.each(function (index,object) {
-					var event = {method:'initialise',object:object,description:'initialisation'}
+					var event = {method:'initialise',object:object,description:'initialisation'};
 					if ( subscriber.matches(event) ) {
 						notifications.send(subscriber.notification(event));
 					}
@@ -1399,8 +1404,8 @@ var jModel = function () {
 	var PropertyPredicate = external.property = function (property,value) {
 		return function (candidate) {
 			return candidate[property] == value;
-		}
-	}
+		};
+	};
 	
 	// Primary Key Identity
 	
@@ -1589,8 +1594,8 @@ var jModel = function () {
 			relationships	= new Set();
 			
 			
-		this.subscribers	= function (predicate) { return subscribers.filter(predicate); };
-		this.relationships	= function (predicate) { return relationships.filter(predicate); };
+		this.subscribers	= function (predicate) { return subscribers.filter.apply(subscribers,arguments); };
+		this.relationships	= function (predicate) { return relationships.filter.apply(relationships,arguments); };
 			
 		
 		this.get = function () {
