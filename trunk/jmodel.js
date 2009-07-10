@@ -1838,9 +1838,8 @@ var jModel = function () {
 		};
 		
 		this.add = function (data) {
-			
-			data = data || {};
-			var newObject = entities[relationship.prototype].create(data);
+
+			var newObject = entities[relationship.prototype].create( data || {} );
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
