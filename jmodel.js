@@ -591,9 +591,16 @@ var jModel = function () {
 		this.options	= options;
 		
 		this.constructor = constructor;
+		
+		// Figure out the current type's base entity
+		entity = this;
+		while ( entity.options && ( entity.options.base !== true ) ) {
+			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
+		}
+		var base = entity.name || name;
 
 		this.objects = new	DomainObjectCollection({
-								base: 			all,
+								base: 			( base != name ) ? entities[base].objects : all,
 								predicate: 		InstancePredicate(constructor),
 								ordering: 		options.ordering,
 								description: 	name
@@ -1016,6 +1023,7 @@ var jModel = function () {
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
 			objects.remove(predicate).each(function (index,object) {
+				console.log(object.primaryKeyValue());
 				object.removed();
 				subscribers.notify({method:'remove',object:object,description:'object removal'});
 			});
@@ -1243,7 +1251,7 @@ var jModel = function () {
 		};
 		
 		function parentRemove(collection,object) {
-			child.remove(object);
+			child.remove(object,true);
 		};
 		
 		function parentChange(collection,object) {
@@ -1252,7 +1260,7 @@ var jModel = function () {
 				child.add(object);
 			}
 			else {
-				child.remove(object);
+				child.remove(object,true);
 			}
 		};
 		
@@ -1863,7 +1871,7 @@ var jModel = function () {
 										});
 		
 		// Deletions might cascade								
-		if ( relationship.cascade ) {
+/*		if ( relationship.cascade ) {
 			object.subscribe({
 				removed: 	function () {
 								children.each(function (index,child) {
@@ -1871,7 +1879,7 @@ var jModel = function () {
 								});
 							}
 			});
-		}
+		} */
 		
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
