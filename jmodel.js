@@ -424,7 +424,7 @@ var jModel = function () {
 				return this;
 			}
 			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) ) {
-				predicate 	= null;
+				predicate 	= AllPredicate();
 				selector	= arguments[0];
 			}
 			else {
