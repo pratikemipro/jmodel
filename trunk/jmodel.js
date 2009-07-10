@@ -1394,6 +1394,14 @@ var jModel = function () {
 		};
 	};
 	
+	// Property
+	
+	var PropertyPredicate = external.property = function (property,value) {
+		return function (candidate) {
+			return candidate[property] == value;
+		}
+	}
+	
 	// Primary Key Identity
 	
 	var IdentityPredicate = external.id = function (id) {
@@ -1576,11 +1584,13 @@ var jModel = function () {
 	function DomainObject (entitytype) {
 		
 		
-		var data 		= {},
-			subscribers = new SubscriptionList(notifications);
+		var data 			= {},
+			subscribers 	= new SubscriptionList(notifications),
+			relationships	= new Set();
 			
 			
-		this.subscribers = function (predicate) { return subscribers.filter(predicate); };
+		this.subscribers	= function (predicate) { return subscribers.filter(predicate); };
+		this.relationships	= function (predicate) { return relationships.filter(predicate); };
 			
 		
 		this.get = function () {
@@ -1716,14 +1726,13 @@ var jModel = function () {
 
 				that.hasOne			= that.hasOne || [];
 				that.hasMany		= that.hasMany || [];
-				that.relationships	= that.relationships || {};
 
 				var i, descriptor, relationship;
 
 				for ( i in that.hasOne ) {
 					descriptor = that.hasOne[i];
 					relationship 							= new OneToOneRelationship(that,descriptor);
-					that.relationships[descriptor.accessor] = relationship;
+					relationships.add(relationship);
 					that[descriptor.accessor] 				= function (relationship) {return relationship.get;}(relationship);
 					that['add'+descriptor.accessor]			= function (relationship) {return relationship.add;}(relationship);
 				}
@@ -1731,7 +1740,7 @@ var jModel = function () {
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
 					relationship											= new OneToManyRelationship(that,descriptor);
-					that.relationships[descriptor.accessor] 				= relationship;
+					relationships.add(relationship);
 					that[(descriptor.plural || descriptor.accessor+'s')] 	= function (relationship) {return relationship.get;}(relationship);
 					that['add'+descriptor.accessor]							= function (relationship) {return relationship.add;}(relationship);
 					that['remove'+descriptor.accessor]						= function (relationship) {return relationship.remove;}(relationship);
@@ -1789,6 +1798,8 @@ var jModel = function () {
 	
 	function OneToOneRelationship (parent,relationship) {
 		
+		this.accessor = relationship.accessor;
+		
 		this.get = function (create) {
 			var child = entities[relationship.prototype].object(parent.get(relationship.field));
 			if ( child ) {
@@ -1817,6 +1828,7 @@ var jModel = function () {
 		
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
+		this.accessor			= relationship.accessor;
 
 		var children			= new DomainObjectCollection({
 											base: 	     entities[relationship.prototype].objects,
@@ -1891,9 +1903,9 @@ var jModel = function () {
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
-			if ( parent && parent.relationships[key] ) {
+			if ( parent && parent.relationships && parent.relationships(PropertyPredicate('accessor',key)).count() > 0 ) {
 				log.debug(log.flags.json.thaw,'adding object to relationship');
-				object = parent.relationships[key].add(partitionedData.fields);
+				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
 			else {
 				if ( entities[key] ) {
