@@ -423,13 +423,17 @@ var jModel = function () {
 			if ( arguments.length === 0 ) {
 				return this;
 			}
-			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) ) {
+			else if ( arguments.length == 1 && ( typeof arguments[0] == 'string' ) && arguments[0].charAt(0) == ':' ) {
 				predicate 	= AllPredicate();
 				selector	= arguments[0];
 			}
 			else {
-				predicate	= arguments[0];
+				predicate	= this.predicate(arguments[0]);
 				selector	= arguments[1];
+			}
+			
+			if ( predicate && predicate.unique ) {
+				selector = ':first';
 			}
 
 			return this.partition(predicate).pass.select(selector);			
@@ -1801,14 +1805,16 @@ var jModel = function () {
 	// 															  Relationships
 	// ------------------------------------------------------------------------
 	
-	function RelationshipList (notifications) {
+	function RelationshipList () {
 		
 		var relationships = new Set();
 		relationships.delegateFor(this);
 		
 		this.predicate = function (parameter) {
-			if ( typeof parameter == 'string' && parameter.charAt(0) != ':' ) {
-				return PropertyPredicate('accessor',parameter);
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				var predicate = PropertyPredicate('accessor',parameter);
+				predicate.unique = true;
+				return predicate;
 			}
 			else {
 				return relationships.predicate(parameter);
