@@ -1699,7 +1699,7 @@ var jModel = function () {
 		
 		this.domain = function () {
 			
-			that = this;
+			var that = this;
 			
 			function reifyFields () {
 
@@ -1850,7 +1850,7 @@ var jModel = function () {
 		
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
-			var subscription = relationship.subscription;
+			var subscription = copyObject(relationship.subscription);
 			subscription.source = children;
 			subscription.target = object;
 			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
@@ -1878,7 +1878,12 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			return children.debug();
+			log.startGroup(true,'Relationship: '+relationship.accessor);
+			log.debug(true,'Object: '+object.domain.debug());
+			if ( relationship.subscription ) {
+				log.debug(true, 'Subscription target: '+subscription.target.domain.debug());
+			}
+			log.endGroup(true);
 		};
 		
 	};
@@ -2036,8 +2041,21 @@ var jModel = function () {
 	
 	function copyArray (original) {
 		copy = [];
-		for(var i in original) {
+		for (var i in original) {
 			copy[i] = original[i];
+		}
+		return copy;
+	}
+	
+	function copyObject (original) {
+		copy = {};
+		for (var i in original) {
+			if ( typeof original[i] == 'object' ) {
+				copy[i] = copyObject(original[i]);
+			}
+			else {
+				copy[i] = original[i];
+			}
 		}
 		return copy;
 	}
