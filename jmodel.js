@@ -612,7 +612,8 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			return this.objects.filter.apply(this.objects,arguments);
+			var objects = this.objects.filter.apply(this.objects,arguments)
+			return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
 		};
 
 
