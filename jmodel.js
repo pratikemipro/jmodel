@@ -395,8 +395,15 @@ var jModel = function () {
 		};
 		
 		this.each = function (callback) {
-			for(var index in members) {
-				callback.call(members[index],index,members[index]);
+			if ( typeof callback == 'string' ) {
+				for(var index in members) {
+					members[index][callback].call(members[index],index,members[index]);
+				}
+			}
+			else {
+				for(var index in members) {
+					callback.call(members[index],index,members[index]);
+				}
 			}
 			return this;
 		};
