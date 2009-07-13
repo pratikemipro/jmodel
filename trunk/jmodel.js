@@ -659,12 +659,12 @@ var jModel = function () {
 			for ( var i in names ) {
 				var synonym 										= names[i];
 				entities[synonym]									= entities[name];
-				external[synonym] 									= function (predicate) { return entities[name].object.apply(entities[name],arguments); };
+				external[synonym] 									= delegateTo(entities[name],'object');
 				external[synonym].entitytype						= entities[name];
-				external[synonym].extend							= function (prop) { return entities[name].constructor.extend(prop); };
-				external['create'+synonym]							= entities[name].create;
-				external[options.plural || synonym+'s']				= function (predicate) { return entities[name].objects.filter.apply(entities[name].objects,arguments); };
-				external['deleted'+(options.plural || synonym+'s')]	= function (predicate) { return entities[name].deleted.filter.apply(entities[name].deleted,arguments); };
+				external[synonym].extend							= delegateTo(entities[name].constructor,'extend');
+				external['create'+synonym]							= delegateTo(entities[name],'create');
+				external[options.plural || synonym+'s']				= delegateTo(entities[name].objects,'filter');
+				external['deleted'+(options.plural || synonym+'s')]	= delegateTo(entities[name].deleted,'filter');
 			}
 
 			return external.prototype;
@@ -1751,18 +1751,18 @@ var jModel = function () {
 					descriptor = that.hasOne[i];
 					relationship 							= new OneToOneRelationship(that,descriptor);
 					relationships.add(relationship);
-					that[descriptor.accessor] 				= function (relationship) {return relationship.get;}(relationship);
-					that['add'+descriptor.accessor]			= function (relationship) {return relationship.add;}(relationship);
+					that[descriptor.accessor]				= delegateTo(relationship,'get');
+					that['add'+descriptor.accessor]			= delegateTo(relationship,'add');
 				}
 
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
 					relationship											= new OneToManyRelationship(that,descriptor);
 					relationships.add(relationship);
-					that[(descriptor.plural || descriptor.accessor+'s')] 	= function (relationship) {return relationship.get;}(relationship);
-					that['add'+descriptor.accessor]							= function (relationship) {return relationship.add;}(relationship);
-					that['remove'+descriptor.accessor]						= function (relationship) {return relationship.remove;}(relationship);
-					that['debug'+descriptor.accessor]						= function (relationship) {return relationship.debug;}(relationship);
+					that[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
+					that['add'+descriptor.accessor]							= delegateTo(relationship,'add');
+					that['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
+					that['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
 				}
 
 			};
@@ -2130,6 +2130,14 @@ var jModel = function () {
 		}
 		return args;
 	}
+	
+	
+	function delegateTo(context,methodName) {
+		return function () {
+			return context[methodName].apply(context,arguments);
+		}
+	}
+	
 	
 	
 	// ------------------------------------------------------------------------
