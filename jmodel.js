@@ -722,16 +722,22 @@ var jModel = function () {
 	
 	function NotificationQueue () {
 		
-		var	notifications 	= [],
-			active			= true;
+		var	notifications 	= new Set(),
+			active			= true,
+			filter			= AllPredicate();
+			
+		notifications.delegateFor(this);
 		
 		this.send = function (notification) {
-			if ( active ) {
+			if ( !filter(notification) ) {
+				return this;
+			}
+			else if ( active ) {
 				notification.receive();
 			}
 			else {
 				log.debug(log.flags.notifications.send,'Adding a notification to the queue');
-				notifications.push(notification);
+				notifications.add(notification);
 			}
 			return this;
 		};
@@ -743,16 +749,22 @@ var jModel = function () {
 		
 		this.resume = function () {
 			active = true;
-			while ( notifications.length ) {
-				notifications.shift().receive();
-			}
+			notifications.each(function (index,notification) {
+				notification.receive();
+			});
+			this.flush()
 			return this;
 		};
 		
-		this.flush = function () {
-			notifications = [];
+		this.flush = function (predicate) {
+			notifications.remove(predicate);
 			return this;
 		};
+		
+		this.setFilter = function (predicate) {
+			filter = predicate;
+			return this;
+		}
 		
 	};
 	
@@ -768,8 +780,8 @@ var jModel = function () {
 						return external.notifications;
 					},
 					
-		flush: 		function () {
-						notifications.flush();
+		flush: 		function (predicate) {
+						notifications.flush(predicate);
 						return external.notifications;
 					},
 					
@@ -779,6 +791,11 @@ var jModel = function () {
 								object.domain.push();
 							});
 						}
+						return external.notifications;
+					},
+					
+		setFilter: 	function (predicate) {
+						notifications.setFilter(predicate);
 						return external.notifications;
 					}
 	
@@ -917,12 +934,12 @@ var jModel = function () {
 		this.description 	= subscription.description;
 		
 		this.enable = function () {
-			enabled = true;
+			this.enabled = true;
 			return this;
 		};
 		
 		this.disable = function () {
-			enabled = false;
+			this.enabled = false;
 			return this;
 		};
 		
@@ -931,13 +948,13 @@ var jModel = function () {
 	
 	function CollectionSubscriber (subscription) {
 		
-		var enabled = true;
+		this.enabled = true;
 		
 		Subscriber.call(this,subscription);
 	
 		// NOTE: Implement filters here
 		this.matches = function (event) {
-			if ( !enabled ) {
+			if ( !this.enabled ) {
 				return false;
 			}
 			else if ( !subscription.filter ) {
@@ -963,12 +980,12 @@ var jModel = function () {
 	
 	function ObjectSubscriber (subscription) {
 		
-		var enabled = true;
+		this.enabled = true;
 
 		Subscriber.call(this,subscription);
 
 		this.matches = function (event) {
-			if ( !enabled ) {
+			if ( !this.enabled ) {
 				return false;
 			}
 			else {
