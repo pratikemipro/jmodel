@@ -990,8 +990,8 @@ var jModel = function () {
 		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
 		objects.delegateFor(this);
 		
-		var subscribers	= new SubscriptionList(notifications);
-		this.subscribers = function (predicate) { return subscribers.filter.apply(subscribers,arguments); };
+		var subscribers		= new SubscriptionList(notifications);
+		this.subscribers	= delegateTo(subscribers,'filter');
 		
 		var sorted = false;
 		
@@ -1610,9 +1610,9 @@ var jModel = function () {
 			subscribers 	= new SubscriptionList(notifications),
 			relationships	= new RelationshipList();
 			
-			
-		this.subscribers	= function (predicate) { return subscribers.filter.apply(subscribers,arguments); };
-		this.relationships	= function (predicate) { return relationships.filter.apply(relationships,arguments); };
+		
+		this.subscribers	= delegateTo(subscribers, 'filter');
+		this.relationships	= delegateTo(relationships,'filter');
 			
 		
 		this.get = function () {
