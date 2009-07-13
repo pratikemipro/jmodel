@@ -367,8 +367,13 @@ var jModel = function () {
 		
 		var members = objects || [];
 		
+		this.constraint = AllPredicate();
+		
 		this.add = function (object) {
-			if ( members.indexOf(object) == -1 ) {
+			if ( !this.constraint(object) ) {
+				throw 'Membership constraint violation';
+			}
+			else if ( members.indexOf(object) == -1 ) {
 				members.push(object);
 				return true;
 			}
@@ -1385,7 +1390,7 @@ var jModel = function () {
 
 	// All
 	
-	var AllPredicate = function () {
+	function AllPredicate () {
 		return function (candidate) {
 			return true;
 		};
@@ -1395,7 +1400,7 @@ var jModel = function () {
 	
 	// None
 	
-	var NonePredicate = function () {
+	function NonePredicate () {
 		return function (candidate) {
 			return false;
 		};
@@ -1818,6 +1823,8 @@ var jModel = function () {
 		var relationships = new Set();
 		relationships.delegateFor(this);
 		
+		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
+		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				var predicate = PropertyPredicate('accessor',parameter);
@@ -1856,6 +1863,8 @@ var jModel = function () {
 		};
 		
 	};
+	
+	external.OneToOneRelationship = OneToOneRelationship;
 	
 	
 	function OneToManyRelationship (object,relationship) {
@@ -1921,6 +1930,7 @@ var jModel = function () {
 		
 	};
 	
+	external.OneToManyRelationship = OneToManyRelationship;
 	
 	
 	// ------------------------------------------------------------------------
