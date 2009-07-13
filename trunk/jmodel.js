@@ -1024,7 +1024,6 @@ var jModel = function () {
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate) {
 			objects.remove(predicate).each(function (index,object) {
-				console.log(object.primaryKeyValue());
 				object.removed();
 				subscribers.notify({method:'remove',object:object,description:'object removal'});
 			});
