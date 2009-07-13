@@ -1278,7 +1278,7 @@ var jModel = function () {
 	
 	function View (parent,child,predicate) {
 		
-		parent.filter(predicate).each(function () {
+		parent.filter(predicate).each(function (index,object) {
 			child.add(object);
 		});
 		
