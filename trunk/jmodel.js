@@ -789,28 +789,32 @@ var jModel = function () {
 	// Notification types
 	//
 	
-	function ContentNotification (subscription) {
+	function ContentNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
 	
-	function ValueNotification (subscription) {
+	function ValueNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
 	
-	function MethodNotification (subscription) {
+	function MethodNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
 	
-	function EventNotification (subscription) {
+	function EventNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
@@ -818,14 +822,16 @@ var jModel = function () {
 	};
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
-	function RemovalNotification (subscription) {
+	function RemovalNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
 	
-	function CollectionMethodNotification  (subscription,event) {
+	function CollectionMethodNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
 				log.debug(log.flags.notifications.send,'Receiving a sort notification');
@@ -838,14 +844,16 @@ var jModel = function () {
 		};
 	};
 	
-	function CollectionEventNotification (subscription,event) {
+	function CollectionEventNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			// NOTE: Implement this
 		};
 	};
 	
 	// NOTE: Make this work with bindings
-	function CollectionMemberNotification (subscription,event) {
+	function CollectionMemberNotification (subscription,event,subscriber) {
+		this.subscriber = subscriber;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
@@ -889,8 +897,8 @@ var jModel = function () {
 			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
 			if ( needNotification.count() > 0 ) {
 				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
-				needNotification.each(function (index,object) {
-					notifications.send(object.notification(event));
+				needNotification.each(function (index,subscriber) {
+					notifications.send(subscriber.notification(event));
 				});
 				log.endGroup(log.flags.subscriptions.notify);
 			}
@@ -908,8 +916,6 @@ var jModel = function () {
 		this.target 		= subscription.target;
 		this.description 	= subscription.description;
 		
-		var enabled = true;
-		
 		this.enable = function () {
 			enabled = true;
 			return this;
@@ -925,11 +931,16 @@ var jModel = function () {
 	
 	function CollectionSubscriber (subscription) {
 		
+		var enabled = true;
+		
 		Subscriber.call(this,subscription);
 	
 		// NOTE: Implement filters here
 		this.matches = function (event) {
-			if ( !subscription.filter ) {
+			if ( !enabled ) {
+				return false;
+			}
+			else if ( !subscription.filter ) {
 				return true;
 			}
 			else {
@@ -938,7 +949,7 @@ var jModel = function () {
 		};
 	
 		this.notification = function (event) {
-			return new subscription.type(subscription,event);
+			return new subscription.type(subscription,event,this);
 		};
 		
 		this.debug = function () {
@@ -951,15 +962,22 @@ var jModel = function () {
 	
 	
 	function ObjectSubscriber (subscription) {
+		
+		var enabled = true;
 
 		Subscriber.call(this,subscription);
 
 		this.matches = function (event) {
-			return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
+			if ( !enabled ) {
+				return false;
+			}
+			else {
+				return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
+			}
 		};
 		
 		this.notification = function (event) {
-			return new subscription.type(subscription,event);
+			return new subscription.type(subscription,event,this);
 		};
 		
 		this.debug = function () {
@@ -1172,7 +1190,7 @@ var jModel = function () {
 			
 			log.endGroup(log.flags.subscriptions.subscribe);
 			
-			return this;	
+			return subscriber;	
 			
 		};
 		
@@ -1701,7 +1719,7 @@ var jModel = function () {
 				notifications.send(subscriber.notification({key:subscription.key}));
 			}
 
-			return this;
+			return subscriber;
 
 		};
 		
@@ -1896,7 +1914,7 @@ var jModel = function () {
 			subscription.source = children;
 			subscription.target = object;
 			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
-			children.subscribe(subscription);
+			this.subscription = children.subscribe(subscription);
 		}
 		
 		this.get = function () {
