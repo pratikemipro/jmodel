@@ -505,7 +505,9 @@ var jModel = function () {
 		};
 		
 		this.sort = function (ordering) {
-			members.sort(ordering);
+			if ( ordering ) {
+				members.sort(ordering);
+			}	
 		};
 		
 		this.join = function (separator) {
