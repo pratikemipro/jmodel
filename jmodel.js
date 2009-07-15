@@ -374,6 +374,10 @@ var jModel = function () {
 
 	function Set (objects) {
 		
+		if ( objects && ! objects instanceof Array ) {
+			throw 'Invalid arguments for Set constructor';
+		}
+		
 		var members = objects || [];
 		
 		this.constraint = AllPredicate();
@@ -382,13 +386,24 @@ var jModel = function () {
 			if ( !this.constraint(object) ) {
 				throw 'Membership constraint violation';
 			}
-			else if ( members.indexOf(object) == -1 ) {
+			else if ( members.indexOf && members.indexOf(object) == -1 ) {
 				members.push(object);
 				return true;
 			}
-			else {
-				return false;
+			else if ( !members.indexOf ) { // Oh, how we hate IE
+				var found = false;
+				for( var i=0; i<members.length; i++ ) {
+					if ( members[i] === object ) {
+						found = true;
+						break;
+					}
+				}
+				if ( !found ) {
+					members.push(object);
+					return true;
+				}
 			}
+			return false;
 		};
 		
 		this.count = function () {
