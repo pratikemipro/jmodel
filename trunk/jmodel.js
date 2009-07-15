@@ -106,6 +106,7 @@ jQuery.fn.subscribe = function (subscription) {
 			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
 			jQuery.each(subscription.key,function (index,key) {
 				subscription.source.subscribe({
+					application: true,
 					source: subscription.source,
 					target: jQuery(element),
 					key: key,
@@ -124,6 +125,7 @@ jQuery.fn.subscribe = function (subscription) {
 			for (var selector in subscription.bindings) {
 				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe({
+						application: true,
 						source: subscription.source,
 						target: jQuery(object),
 						key: subscription.bindings[selector],
@@ -141,12 +143,14 @@ jQuery.fn.subscribe = function (subscription) {
 			for (var selector in subscription.member.bindings) {
 				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe({
+						application: true,
 						source: subscription.source,
 						predicate: subscription.predicate,
 						selector: subscription.selector,
 						initialise: subscription.initialise,
 						description: subscription.description || 'application subscription',
 						member: {
+							application: true,
 							target: jQuery(object),
 							key: subscription.member.bindings[selector],
 							change: subscription.member.change,
@@ -163,12 +167,14 @@ jQuery.fn.subscribe = function (subscription) {
 
 		return this.each(function (index,element) {
 			subscription.source.subscribe({
+				application: true,
 				source: subscription.source,
 				predicate: subscription.predicate,
 				selector: subscription.selector,
 				initialise: subscription.initialise,
 				description: subscription.description || 'application subscription',
 				member: {
+					application: true,
 					target: jQuery(element),
 					key: subscription.member.key,
 					change: subscription.member.change,
@@ -183,6 +189,7 @@ jQuery.fn.subscribe = function (subscription) {
 		
 		return this.each(function (index,element) {
 			subscription.source.subscribe({
+				application: true,
 				source: subscription.source,
 				target: jQuery(element),
 				add: subscription.add,
@@ -746,7 +753,7 @@ var jModel = function () {
 			if ( !filter(notification) ) {
 				return this;
 			}
-			else if ( active ) {
+			else if ( active || !notification.subscription.application ) {
 				notification.receive();
 			}
 			else {
@@ -821,7 +828,7 @@ var jModel = function () {
 	//
 	
 	function ContentNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
@@ -829,7 +836,7 @@ var jModel = function () {
 	};
 	
 	function ValueNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
@@ -837,7 +844,7 @@ var jModel = function () {
 	};
 	
 	function MethodNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
@@ -845,7 +852,7 @@ var jModel = function () {
 	};
 	
 	function EventNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
@@ -854,7 +861,7 @@ var jModel = function () {
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	function RemovalNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
@@ -862,13 +869,13 @@ var jModel = function () {
 	};
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
 				log.debug(log.flags.notifications.send,'Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
 			}
-			else if (subscription[event.method]) {
+			else if (subscription[event.method] && typeof subscription[event.method] == 'function' ) {
 				log.debug(log.flags.notifications.send,'Receiving a collection method notification'+': '+subscription.description);
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
@@ -876,7 +883,7 @@ var jModel = function () {
 	};
 	
 	function CollectionEventNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			// NOTE: Implement this
 		};
@@ -884,7 +891,7 @@ var jModel = function () {
 	
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
-		this.subscriber = subscriber;
+		this.subscription = subscription;
 		this.receive = function () {
 			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
@@ -893,6 +900,7 @@ var jModel = function () {
 			for (var i in subscription.member.key) {
 				
 				event.object.subscribe({
+					application: subscription.application,
 					source: event.object,
 					target: subscription.member.target,
 					key: subscription.member.key[i],
@@ -1290,6 +1298,7 @@ var jModel = function () {
 		});
 		
 		parent.subscribe({
+			initialise: 	true,
 			source: 		parent,
 			target: 		child,
 			add: 			parentAdd,
@@ -1828,8 +1837,9 @@ var jModel = function () {
 				
 				init: function (initialData) {
 					reifyFields();
+					that.set(initialData); // Must do this before reifying relationships or else initial population of children fails
 					reifyRelationships();
-					return that.set(initialData).domain.clean();
+					return that.domain.clean();
 				},
 				
 				clean: function () {
@@ -1942,6 +1952,7 @@ var jModel = function () {
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
 			var subscription = copyObject(relationship.subscription);
+			subscription.application = true;
 			subscription.source = children;
 			subscription.target = object;
 			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
