@@ -708,9 +708,7 @@ var jModel = function () {
 	external.context = {
 	
 		reset: 	function () {
-					for ( var entityName in entities ) {
-						entities[entityName].objects.remove(AllPredicate());
-					}
+					all.remove(AllPredicate(),true);
 					return external.context;
 				},
 				
@@ -719,7 +717,7 @@ var jModel = function () {
 							entities[entityName].objects.each(function (index,object) {
 								object.domain.dirty = false;
 							});
-							entities[entityName].deleted.remove(AllPredicate());
+							entities[entityName].deleted.remove(AllPredicate(),true);
 						}
 						return external.context;
 					}, 
@@ -1084,11 +1082,17 @@ var jModel = function () {
 		
 		
 		// NOTE: Make this work on base collections
-		this.remove = function (predicate) {
-			objects.remove(predicate).each(function (index,object) {
-				object.removed();
-				subscribers.notify({method:'remove',object:object,description:'object removal'});
-			});
+		this.remove = function (predicate,fromHere) {
+			if ( fromHere ) {
+				objects.remove(predicate).each(function (index,object) {
+					object.removed();
+					subscribers.notify({method:'remove',object:object,description:'object removal'});
+				});
+			}
+			else {
+				all.remove(predicate,true);
+			}
+		
 		};
 		
 		
