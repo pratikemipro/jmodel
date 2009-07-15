@@ -311,26 +311,28 @@ var jModel = function () {
 			
 						if ( log.active && ( log.flags.all || condition ) ) {
 							
+							var console = window.console;
+							
 							if ( type == 'startgroup' ) {
-								if ( console.group ) {
+								if ( console && console.group ) {
 									console.group(message);
 								}
-								else if ( console.log ) {
+								else if ( console && console.log ) {
 									console.log(message);
 								}
 							}
 							else if ( type == 'endgroup' ) {
-								if ( console.groupEnd ) {
+								if ( console && console.groupEnd ) {
 									console.groupEnd();
 								}
 							}
 							else {
 								switch (type) {	
-									case 'error': 	if (console.error) {console.error(message); break;}
-									case 'warning': if (console.warn)  {console.warn(message);  break;}
-									case 'debug': 	if (console.debug) {console.debug(message); break;}
-									case 'info': 	if (console.info)  {console.debug(message); break;}
-									default: 		if (console.log)   {console.log(message);   break;}	
+									case 'error': 	if (console && console.error) {console.error(message); break;}
+									case 'warning': if (console && console.warn)  {console.warn(message);  break;}
+									case 'debug': 	if (console && console.debug) {console.debug(message); break;}
+									case 'info': 	if (console && console.info)  {console.debug(message); break;}
+									default: 		if (console && console.log)   {console.log(message);   break;}	
 								}
 							}
 							
@@ -380,7 +382,7 @@ var jModel = function () {
 			if ( !this.constraint(object) ) {
 				throw 'Membership constraint violation';
 			}
-			else if ( members.indexOf(object) == -1 ) {
+			else if ( members.indexOf && members.indexOf(object) == -1 ) {
 				members.push(object);
 				return true;
 			}
@@ -535,7 +537,7 @@ var jModel = function () {
 	
 	
 	external.set = function() {
-		if ( typeof arguments[0] == 'array' ) {
+		if ( arguments[0] instanceof Array ) {
 			return new Set(arguments[0]);
 		}
 		else {
