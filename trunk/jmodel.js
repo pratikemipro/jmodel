@@ -249,7 +249,7 @@ var jModel = function () {
 
 	var external		= function (predicate) { return all.filter.apply(all,arguments); },
 		entities		= {},
-		notifications	= new NotificationQueue();;
+		notifications	= new NotificationQueue();
 		
 				
 	// ------------------------------------------------------------------------
@@ -323,7 +323,7 @@ var jModel = function () {
 									case 'warning': if (console.warn)  {console.warn(message);  break;}
 									case 'debug': 	if (console.debug) {console.debug(message); break;}
 									case 'info': 	if (console.info)  {console.debug(message); break;}
-									default: 		if (console.log)   {console.log(message);         }	
+									default: 		if (console.log)   {console.log(message);   break;}	
 								}
 							}
 							
@@ -395,17 +395,24 @@ var jModel = function () {
 		};
 		
 		this.each = function (callback) {
+			var index;
 			if ( typeof callback == 'string' ) {
-				for(var index in members) {
+				for(index in members) {
 					members[index][callback].call(members[index],index,members[index]);
 				}
 			}
 			else {
-				for(var index in members) {
+				for(index in members) {
 					callback.call(members[index],index,members[index]);
 				}
 			}
 			return this;
+		};
+		
+		this.when = function (predicate,callback) {
+				if ( predicate == ':empty' && members.length === 0 ) {
+					callback.call(this,this);
+				}
 		};
 		
 		this.partition = function (predicate,passName,failName) {
