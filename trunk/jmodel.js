@@ -382,7 +382,7 @@ var jModel = function () {
 			if ( !this.constraint(object) ) {
 				throw 'Membership constraint violation';
 			}
-			else if ( members.indexOf && members.indexOf(object) == -1 ) {
+			else if ( members.indexOf(object) == -1 ) {
 				members.push(object);
 				return true;
 			}
