@@ -617,16 +617,9 @@ var jModel = function () {
 		this.options	= options;
 		
 		this.constructor = constructor;
-		
-		// Figure out the current type's base entity
-//		entity = this;
-//		while ( entity.options && ( entity.options.base !== true ) ) {
-//			entity = ( entity.options && entity.options.parent ) ? entities[entity.options.parent] : null;
-//		}
-//		var base = entity.name || name;
 
 		this.objects = new	DomainObjectCollection({
-								base: 		/*	( base != name ) ? entities[base].objects :*/ all,
+								base: 			all,
 								predicate: 		InstancePredicate(constructor),
 								ordering: 		options.ordering,
 								description: 	name
