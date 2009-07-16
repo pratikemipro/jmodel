@@ -1608,15 +1608,15 @@ var jModel = function () {
 		var predicates = [];
 		
 		for( var key in example ) {
-			if ( typeof example[key] == 'function' ) {
+			if ( example[key] instanceof RegExp ) {
+				predicates.push(FieldPredicate(key,RegularExpressionPredicate(example[key])));
+			}
+			else if ( typeof example[key] == 'function' ) {
 				predicates.push(FieldPredicate(key,example[key]));
 			}
 			else if ( typeof example[key] == 'object' ) {
 				predicates.push(FieldPredicate(key,SomeSetPredicate(ExamplePredicate(example[key]))));
-			}
-			else if ( example[key] instanceof RegExp ) {
-				predicates.push(FieldPredicate(key,RegularExpressionPredicate(example[key])));
-			}
+			} 
 			else {
 				predicates.push(FieldPredicate(key,EqualityPredicate(example[key])));
 			}
