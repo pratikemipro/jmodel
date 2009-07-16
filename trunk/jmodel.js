@@ -783,9 +783,7 @@ var jModel = function () {
 		
 		this.resume = function () {
 			active = true;
-			notifications.each(function (index,notification) {
-				notification.receive();
-			});
+			notifications.each('receive');
 			this.flush();
 			return this;
 		};
