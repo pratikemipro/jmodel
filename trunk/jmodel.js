@@ -650,7 +650,7 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			var objects = this.objects.filter.apply(this.objects,arguments)
+			var objects = this.objects.filter.apply(this.objects,arguments);
 			return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
 		};
 
@@ -783,7 +783,7 @@ var jModel = function () {
 			notifications.each(function (index,notification) {
 				notification.receive();
 			});
-			this.flush()
+			this.flush();
 			return this;
 		};
 		
@@ -795,7 +795,7 @@ var jModel = function () {
 		this.setFilter = function (predicate) {
 			filter = predicate;
 			return this;
-		}
+		};
 		
 	};
 	
@@ -1457,6 +1457,9 @@ var jModel = function () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 	
+	//
+	// First-order predicates
+	//
 
 	// All
 	
@@ -1477,6 +1480,94 @@ var jModel = function () {
 	};
 	
 	external.none = NonePredicate();
+	
+	// Value comparisons
+	
+	function EqualityPredicate (value) {
+		return function (candidate) {
+			return candidate == value;
+		};
+	}
+	
+	function LessThanPredicate (value) {
+		return function (candidate) {
+			return candidate < value;
+		};
+	}
+	
+	function GreaterThanPredicate (value) {
+		return function (candidate) {
+			return candidate > value;
+		};
+	}
+	
+	function LessThanEqualPredicate (value) {
+		return function (candidate) {
+			return candidate <= value;
+		};
+	}
+	
+	function GreaterThanEqualPredicate (value) {
+		return function (candidate) {
+			return candidate >= value;
+		};
+	}
+	
+	function BetweenPredicate (lower,higher) {
+		return function (candidate) {
+			return lower <= candidate && candidate <= higher;
+		};
+	}
+	
+	var Eq = external.eq = function (value,field) {
+		return field ?
+			FieldPredicate(field,EqualityPredicate(value))
+			: EqualityPredicate(value);
+	};
+	
+	var Lt = external.lt = function (value,field) {
+		return field ?
+			FieldPredicate(field,LessThanPredicate(value))
+			: LessThanPredicate(value);
+	};
+	
+	var Gt = external.gt = function (value,field) {
+		return field ?
+			FieldPredicate(field,GreaterThanPredicate(value))
+			: GreaterThanPredicate(value);
+	};
+	
+	var LtE = external.lte = function (value,field) {
+		return field ?
+			FieldPredicate(field,LessThanEqualPredicate(value))
+			: LessThanEqualPredicate(value);
+	};
+	
+	var GtE = external.gte = function (value,field) {
+		return field ?
+			FieldPredicate(field,GreaterThanEqualPredicate(value))
+			: GreaterThanEqualPredicate(value);
+	};
+	
+	external.between = function (lower,higher,field) {
+		return field ?
+			FieldPredicate(field,BetweenPredicate(lower,higher))
+			: BetweenPredicate(lower,higher);
+	};
+	
+	// Regex
+	
+	function RegularExpressionPredicate (regex) {
+		return function (candidate) {
+			return regex.test(candidate);
+		};
+	}
+	
+	external.regex = function (regex,field) {
+		return field ?
+			FieldPredicate(field,RegularExpressionPredicate(regex))
+			: RegularExpressionPredicate(regex);
+	}
 	
 	// Object Identity
 	
@@ -1589,37 +1680,18 @@ var jModel = function () {
 	
 	external.dirty = ModifiedPredicate();
 	
-	// Comparisons
 	
-	var Eq = external.eq = function (field,value) {
+	//
+	// Higher-order predicates
+	//
+	
+	// Field predicate
+	
+	function FieldPredicate (field,predicate) {
 		return function (candidate) {
-			return candidate.get(field) == value;
+			return predicate(candidate.get(field));
 		};
-	};
-	
-	var Lt = external.lt = function (field,value) {
-		return function (candidate) {
-			return candidate.get(field) < value;
-		};
-	};
-	
-	var Gt = external.gt = function (field,value) {
-		return function (candidate) {
-			return candidate.get(field) > value;
-		};
-	};
-	
-	var LtE = external.lte = function (field,value) {
-		return Not(Gt(field,value));
-	};
-	
-	var GtE = external.gte = function (field,value) {
-		return Not(Lt(field,value));
-	};
-	
-	external.between = function (field,lower,higher) {
-		return And(	GtE(field,lower), LtE(field,higher) );
-	};
+	}
 	
 	// Logical connectives
 	
@@ -1905,7 +1977,7 @@ var jModel = function () {
 			else {
 				return relationships.predicate(parameter);
 			}
-		}
+		};
 		
 	}
 	
