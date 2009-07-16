@@ -956,7 +956,7 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			return subscribers.count() > 0 ? '{'+subscribers.count()+' subscribers}' : '';
+			return _.not(_.empty)(subscribers) ? '{'+subscribers.count()+' subscribers}' : '';
 		};
 		
 	};
