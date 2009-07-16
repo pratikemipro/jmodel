@@ -1567,7 +1567,7 @@ var jModel = function () {
 		return field ?
 			FieldPredicate(field,RegularExpressionPredicate(regex))
 			: RegularExpressionPredicate(regex);
-	}
+	};
 	
 	// Object Identity
 	
@@ -1684,6 +1684,35 @@ var jModel = function () {
 	//
 	// Higher-order predicates
 	//
+	
+	// Set predicates
+	
+	function AllSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter(predicate).count() === set.count();
+		};
+	}
+	
+	external.allset = AllSetPredicate;
+	
+	function SomeSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter(predicate).count() > 0;
+		};
+	}
+	
+	external.some = SomeSetPredicate;
+	
+	function NoneSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter(predicate).count() === 0;
+		};
+	}
+	
+	external.none = NoneSetPredicate;
 	
 	// Field predicate
 	
