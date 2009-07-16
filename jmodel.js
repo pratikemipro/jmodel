@@ -2001,7 +2001,7 @@ var jModel = function () {
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				var predicate = PropertyPredicate('accessor',parameter);
+				var predicate = PropertyPredicate('name',parameter);
 				predicate.unique = true;
 				return predicate;
 			}
@@ -2014,7 +2014,8 @@ var jModel = function () {
 	
 	function OneToOneRelationship (parent,relationship) {
 		
-		this.accessor = relationship.accessor;
+		this.accessor	= relationship.accessor;
+		this.name		= relationship.accessor;
 		
 		this.get = function (create) {
 			var child = entities[relationship.prototype].object(parent.get(relationship.field));
@@ -2046,6 +2047,7 @@ var jModel = function () {
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
 		this.accessor			= relationship.accessor;
+		this.name				= relationship.plural || relationship.accessor+'s'
 
 		var children			= new DomainObjectCollection({
 											base: 	     entities[relationship.prototype].objects,
