@@ -1792,7 +1792,9 @@ var jModel = function () {
 				return data;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				return data[arguments[0]];
+				return data[arguments[0]] ?
+					data[arguments[0]]
+					: relationships.filter(arguments[0]).get();
 			}
 			else { // Array of keys
 				var keys = arguments[0];
