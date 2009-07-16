@@ -1604,36 +1604,26 @@ var jModel = function () {
 	// Example
 	
 	var ExamplePredicate = external.example = function (example) {
-		return function (candidate) {
-			
-			var exampleForeignKeys = [];
-
-			for( var key in example ) {
-
-				if ( typeof example[key] == 'object' && typeof candidate[key] == 'function' ) { // Some kind of foreign key
-					exampleForeignKeys.push(key);
-				}
-				else if ( example[key] instanceof RegExp && !example[key].test(candidate.get(key)) ) {
-					return false;
-				}
-				else if ( !(example[key] instanceof RegExp) && candidate.get(key) != example[key] ) { // Scalar field
-					return false;
-				}
-
-				for( var index in exampleForeignKeys ) {
-					var exampleForeignKey = exampleForeignKeys[index];
-					var children = candidate[exampleForeignKey]();
-					var collection = children.length ? children : new DomainObjectCollection({objects:[children],description:'children'});
-					if ( collection.filter(example[exampleForeignKey]).length() === 0 ) {
-						return false;
-					}
-				}
-
+		
+		var predicates = [];
+		
+		for( var key in example ) {
+			if ( typeof example[key] == 'function' ) {
+				predicates.push(FieldPredicate(key,example[key]));
 			}
-			
-			return true;
-			
-		};		
+			else if ( typeof example[key] == 'object' ) {
+				predicates.push(FieldPredicate(key,SomeSetPredicate(ExamplePredicate(example[key]))));
+			}
+			else if ( example[key] instanceof RegExp ) {
+				predicates.push(FieldPredicate(key,RegularExpressionPredicate(example[key])));
+			}
+			else {
+				predicates.push(FieldPredicate(key,EqualityPredicate(example[key])));
+			}
+		}
+		
+		return And(predicates);
+
 	};
 	
 	// Type
@@ -1690,7 +1680,9 @@ var jModel = function () {
 	function AllSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter(predicate).count() === set.count();
+			return set.filter ?
+				set.filter(predicate).count() === set.count()
+				: predicate(set);
 		};
 	}
 	
@@ -1699,7 +1691,9 @@ var jModel = function () {
 	function SomeSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter(predicate).count() > 0;
+			return set.filter ?
+				set.filter(predicate).count() > 0
+				: predicate(set);
 		};
 	}
 	
@@ -1708,7 +1702,9 @@ var jModel = function () {
 	function NoneSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter(predicate).count() === 0;
+			return set.filter ?
+				set.filter(predicate).count() === 0
+				: !predicate(set);
 		};
 	}
 	
