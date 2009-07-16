@@ -434,9 +434,9 @@ var jModel = function () {
 		};
 		
 		this.when = function (predicate,callback) {
-				if ( predicate == ':empty' && members.length === 0 ) {
-					callback.call(this,this);
-				}
+			if ( this.predicate(predicate)(this) ) {
+				callback.call(this,this);
+			}
 		};
 		
 		this.partition = function (predicate,passName,failName) {
@@ -527,6 +527,9 @@ var jModel = function () {
 		};
 		
 		this.predicate = function (parameter) {
+			if ( parameter == ':empty' ) {
+				return EmptySetPredicate();
+			}
 			if ( typeof parameter == 'function' ) {
 				return parameter;
 			}
@@ -2051,7 +2054,7 @@ var jModel = function () {
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
 		this.accessor			= relationship.accessor;
-		this.name				= relationship.plural || relationship.accessor+'s'
+		this.name				= relationship.plural || relationship.accessor+'s';
 
 		var children			= new DomainObjectCollection({
 											base: 	     entities[relationship.prototype].objects,
