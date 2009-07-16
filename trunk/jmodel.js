@@ -946,7 +946,7 @@ var jModel = function () {
 		
 		this.notify = function (event) {
 			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
-			if ( _.not(_.empty)(needNotification) ) {
+			if ( _.nonempty(needNotification) ) {
 				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
 				needNotification.each(function (index,subscriber) {
 					notifications.send(subscriber.notification(event));
@@ -956,7 +956,7 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			return _.not(_.empty)(subscribers) ? '{'+subscribers.count()+' subscribers}' : '';
+			return _.nonempty(subscribers) ? '{'+subscribers.count()+' subscribers}' : '';
 		};
 		
 	};
@@ -1658,7 +1658,7 @@ var jModel = function () {
 	var MembershipPredicate = external.member = function (collection) {		
 		collection = makeCollection(collection);
 		return function (candidate) {
-			return _.not(_.empty)(collection.filter(ObjectIdentityPredicate(candidate)));
+			return _.nonempty(collection.filter(ObjectIdentityPredicate(candidate)));
 		};
 	};
 	
@@ -1687,6 +1687,8 @@ var jModel = function () {
 	
 	external.empty = EmptySetPredicate();
 	
+	external.nonempty = Not(EmptySetPredicate());
+	
 	function AllSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
@@ -1702,7 +1704,7 @@ var jModel = function () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set.filter ?
-				_.not(_.empty)(set.filter(predicate))
+				_.nonempty(set.filter(predicate))
 				: predicate(set);
 		};
 	}
@@ -1730,7 +1732,7 @@ var jModel = function () {
 	
 	// Logical connectives
 	
-	var Or = external.or = function () {
+	function Or () {
 		var predicates = arrayFromArguments(arguments);
 		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
@@ -1742,7 +1744,9 @@ var jModel = function () {
 		};
 	};
 	
-	var And = external.and = function () {
+	external.or = Or;
+	
+	function And () {
 		var predicates = arrayFromArguments(arguments);
 		return function (candidate) {
 			for (var i=0; i<predicates.length; i++) {
@@ -1754,11 +1758,15 @@ var jModel = function () {
 		};
 	};
 	
-	var Not = external.not = function (predicate) {
+	external.and = And;
+	
+	function Not (predicate) {
 		return function (candidate) {
 			return !predicate(candidate);
 		};
 	};
+	
+	external.not = Not;
 	
 	// Utility function used by And and Or.
 	var arrayFromArguments = function (args) {
@@ -2130,7 +2138,7 @@ var jModel = function () {
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
-			if ( parent && parent.relationships && _.not(_.empty)(parent.relationships(PropertyPredicate('accessor',key))) ) {
+			if ( parent && parent.relationships && _.nonempty(parent.relationships(PropertyPredicate('accessor',key))) ) {
 				log.debug(log.flags.json.thaw,'adding object to relationship');
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
