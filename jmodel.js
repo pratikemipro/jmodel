@@ -255,6 +255,7 @@ jQuery.fn.views = function (views) {
 var jModel = function () {
 
 	var external		= function (predicate) { return all.filter.apply(all,arguments); },
+		_				= external,
 		entities		= {},
 		notifications	= new NotificationQueue();
 		
@@ -945,7 +946,7 @@ var jModel = function () {
 		
 		this.notify = function (event) {
 			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
-			if ( needNotification.count() > 0 ) {
+			if ( _.not(_.empty)(needNotification) ) {
 				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
 				needNotification.each(function (index,subscriber) {
 					notifications.send(subscriber.notification(event));
