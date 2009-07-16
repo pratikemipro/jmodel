@@ -1677,6 +1677,14 @@ var jModel = function () {
 	
 	// Set predicates
 	
+	function EmptySetPredicate () {
+		return function (set) {
+			return set.count() === 0;
+		};
+	}
+	
+	external.empty = EmptySetPredicate();
+	
 	function AllSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
