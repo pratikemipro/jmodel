@@ -1658,7 +1658,7 @@ var jModel = function () {
 	var MembershipPredicate = external.member = function (collection) {		
 		collection = makeCollection(collection);
 		return function (candidate) {
-			return collection.filter(ObjectIdentityPredicate(candidate)).count() > 0;
+			return _.not(_.empty)(collection.filter(ObjectIdentityPredicate(candidate)));
 		};
 	};
 	
@@ -1691,7 +1691,7 @@ var jModel = function () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set.filter ?
-				set.filter(predicate).count() === set.count()
+				_.empty(set.filter(_.not(predicate)))
 				: predicate(set);
 		};
 	}
@@ -1702,7 +1702,7 @@ var jModel = function () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set.filter ?
-				set.filter(predicate).count() > 0
+				_.not(_.empty)(set.filter(predicate))
 				: predicate(set);
 		};
 	}
@@ -1713,7 +1713,7 @@ var jModel = function () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set.filter ?
-				set.filter(predicate).count() === 0
+				_.empty(set.filter(predicate))
 				: !predicate(set);
 		};
 	}
@@ -2130,7 +2130,7 @@ var jModel = function () {
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
-			if ( parent && parent.relationships && parent.relationships(PropertyPredicate('accessor',key)).count() > 0 ) {
+			if ( parent && parent.relationships && _.not(_.empty)(parent.relationships(PropertyPredicate('accessor',key))) ) {
 				log.debug(log.flags.json.thaw,'adding object to relationship');
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
