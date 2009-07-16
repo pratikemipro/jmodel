@@ -530,7 +530,7 @@ var jModel = function () {
 			if ( parameter == ':empty' ) {
 				return EmptySetPredicate();
 			}
-			if ( typeof parameter == 'function' ) {
+			else if ( typeof parameter == 'function' ) {
 				return parameter;
 			}
 			else if ( parameter && parameter.domain ) {
