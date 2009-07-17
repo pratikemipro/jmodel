@@ -1371,17 +1371,6 @@ var jModel = function () {
 	};
 	
 	
-	var ValueOrdering = external.value = function(a,b) {
-		if ( a < b ) {
-			return -1;
-		}
-		else if ( a > b ) {
-			return 1;
-		}
-		return 0;
-	};
-	
-	
 	var FunctionOrdering = external.func = function(fn) {
 		return function (a,b) {
 			if ( fn(a) < fn(b) ) {
@@ -1395,18 +1384,12 @@ var jModel = function () {
 	};
 	
 	
-	var FieldOrdering = external.field = function (fieldName,getter) {
-		
-		return function (a,b) {
-			if ( a.get(fieldName) < b.get(fieldName) ) {
-				return -1;
-			}
-			else if ( a.get(fieldName) > b.get(fieldName) ) {
-				return 1;
-			}
-			return 0;
-		};
-	};
+	var ValueOrdering = external.value =  FunctionOrdering( function (obj) {return obj;} );
+	
+	var FieldOrdering = external.field = function (fieldName) {
+		return FunctionOrdering( function (obj) {return obj.get(fieldName);} );
+	}
+
 	
 	var PredicateOrdering = external.score = function () {
 		
