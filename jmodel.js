@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.2.0
+ *	jModel Javascript Library v0.3.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009 Richard Baker
