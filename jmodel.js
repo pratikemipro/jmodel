@@ -1677,7 +1677,7 @@ var jModel = function () {
 	
 	function EmptySetPredicate () {
 		return function (set) {
-			return set.count() === 0;
+			return set ? set.count() === 0 : true;
 		};
 	}
 	
@@ -1809,9 +1809,14 @@ var jModel = function () {
 				return data;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				return data[arguments[0]] ?
-					data[arguments[0]]
-					: relationships.filter(arguments[0]).get();
+				if ( data[arguments[0]] ) {
+					return data[arguments[0]];
+				}
+				else {
+					if ( _.nonempty(relationships.filter(arguments[0])) ) {
+						return relationships.filter(arguments[0]).get()
+					}
+				}
 			}
 			else { // Array of keys
 				var keys = arguments[0];
