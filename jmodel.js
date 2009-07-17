@@ -1386,57 +1386,43 @@ var jModel = function () {
 	
 	var ValueOrdering = external.value =  FunctionOrdering( function (obj) {return obj;} );
 	
+	
 	var FieldOrdering = external.field = function (fieldName) {
 		return FunctionOrdering( function (obj) {return obj.get(fieldName);} );
 	}
 
-	
+
 	var PredicateOrdering = external.score = function () {
 		
 		var predicates = arrayFromArguments(arguments);
 		
-		function numberMatches(object) {
+		return FunctionOrdering( function (obj) {
 			var matches = 0;
-			for (var i=0; i<predicates.length; i++) {
-				matches += predicates[i](object) ? 1 : 0;
+			for (var i=0; i<predicates.length; i++ ) {
+				matches += predicates[i](obj) ? 1 : 0;
 			}
 			return matches;
-		}
+		});
 		
-		return function (a,b) {
-			return numberMatches(b)-numberMatches(a);
-		};
-		
-	};
+	}
 	
-	var FieldPathOrdering = external.path = function (fieldpath) {
-		
-		function getFieldValue(object,path) {
+	
+	var FieldPathOrdering = external.path = function (fieldpath) {	
+		return FunctionOrdering( function (obj) {
 			var property, value;
 			for (var i=0; i<path.length; i++) {
-				property = path[i];
-				value = object[property]();
+				value = obj.get(path[i]);
 				if ( !(typeof value == 'object') ) {
 					return value;
 				}
 				else {
-					object = value instanceof DomainObjectCollection ? value.first() : value;
+					obj = value instanceof DomainObjectCollection ? value.first() : value;
 				}
 			}
 			return 0;
-		}
-		
-		return function (a,b) {
-			if ( getFieldValue(a,fieldpath) < getFieldValue(b,fieldpath) ) {
-				return -1;
-			}
-			else if ( getFieldValue(a,fieldpath) > getFieldValue(b,fieldpath) ) {
-				return 1;
-			}
-			return 0;
-		};
-		
+		});	
 	};
+	
 	
 	var DescendingOrdering = external.desc = function (ordering) {
 		ordering = makeOrdering(ordering);
