@@ -1694,7 +1694,14 @@ var jModel = function () {
 		};
 	}
 	
-	external.all = AllSetPredicate;
+	external.all = function () {
+		if ( arguments.length === 0 ) {
+			return AllPredicate();
+		}
+		else {
+			return AllSetPredicate.apply(null,arguments);
+		}
+	};
 	
 	function SomeSetPredicate () {
 		var predicate = And.apply(null,arguments);
