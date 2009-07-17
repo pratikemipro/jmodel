@@ -407,8 +407,10 @@ var jModel = function () {
 			return false;
 		};
 		
-		this.count = function () {
-			return members.length;
+		this.count = function (predicate) {
+			return predicate ?
+			 			this.filter(predicate).count()
+						: members.length;
 		};
 		
 		this.first = function () {
