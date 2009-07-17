@@ -1389,22 +1389,21 @@ var jModel = function () {
 	
 	var FieldOrdering = external.field = function (fieldName) {
 		return FunctionOrdering( function (obj) {return obj.get(fieldName);} );
-	}
+	};
 
 
 	var PredicateOrdering = external.score = function () {
 		
-		var predicates = arrayFromArguments(arguments);
+		var predicates = _.set(arrayFromArguments(arguments));
 		
 		return FunctionOrdering( function (obj) {
-			var matches = 0;
-			for (var i=0; i<predicates.length; i++ ) {
-				matches += predicates[i](obj) ? 1 : 0;
-			}
-			return matches;
+			return -predicates
+					.map(function (pred) {return pred(obj);} )
+						.filter(TruePredicate)
+							.count();
 		});
 		
-	}
+	};
 	
 	
 	var FieldPathOrdering = external.path = function (fieldpath) {	
@@ -1472,6 +1471,14 @@ var jModel = function () {
 			return false;
 		};
 	};
+	
+	// True
+	
+	function TruePredicate (candidate) {
+		return candidate == true;
+	};
+	
+	external.istrue = TruePredicate;
 	
 	// Value comparisons
 	
