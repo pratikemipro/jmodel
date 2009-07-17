@@ -1471,8 +1471,6 @@ var jModel = function () {
 		};
 	};
 	
-	external.all = AllPredicate();
-	
 	// None
 	
 	function NonePredicate () {
@@ -1480,8 +1478,6 @@ var jModel = function () {
 			return false;
 		};
 	};
-	
-	external.none = NonePredicate();
 	
 	// Value comparisons
 	
@@ -1698,7 +1694,7 @@ var jModel = function () {
 		};
 	}
 	
-	external.allset = AllSetPredicate;
+	external.all = AllSetPredicate;
 	
 	function SomeSetPredicate () {
 		var predicate = And.apply(null,arguments);
