@@ -1393,16 +1393,13 @@ var jModel = function () {
 
 
 	var PredicateOrdering = external.score = function () {
-		
 		var predicates = _.set(arrayFromArguments(arguments));
-		
 		return FunctionOrdering( function (obj) {
 			return -predicates
 					.map(function (pred) {return pred(obj);} )
 						.filter(TruePredicate)
 							.count();
 		});
-		
 	};
 	
 	
