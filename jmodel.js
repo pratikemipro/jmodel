@@ -1370,6 +1370,18 @@ var jModel = function () {
 		}
 	};
 	
+	
+	var ValueOrdering = external.value = function(a,b) {
+		if ( a < b ) {
+			return -1;
+		}
+		else if ( a > b ) {
+			return 1;
+		}
+		return 0;
+	};
+	
+	
 	var FieldOrdering = external.field = function (fieldName,getter) {
 		
 		return function (a,b) {
