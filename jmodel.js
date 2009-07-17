@@ -1733,28 +1733,18 @@ var jModel = function () {
 	// Logical connectives
 	
 	function Or () {
-		var predicates = arrayFromArguments(arguments);
+		var predicates = _.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			for (var i=0; i<predicates.length; i++) {
-				if (predicates[i](candidate)) {
-					return true;
-				}
-			}
-			return false;
+			return _.nonempty(predicates.filter(function (predicate) { return predicate(candidate); }));
 		};
 	};
 	
 	external.or = Or;
 	
 	function And () {
-		var predicates = arrayFromArguments(arguments);
+		var predicates = _.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			for (var i=0; i<predicates.length; i++) {
-				if (!(predicates[i](candidate))) {
-					return false;
-				}
-			}
-			return true;
+			return _.empty(predicates.filter(function (predicate) { return !predicate(candidate); } ));
 		};
 	};
 	
