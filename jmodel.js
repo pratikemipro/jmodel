@@ -1641,9 +1641,8 @@ var jModel = function () {
 	// Relationship
 	
 	var RelationshipPredicate = external.related = function (parent,field) {
-		return function (candidate) {
-			return candidate.get(field) == parent.primaryKeyValue();
-		};
+		var parentKey = parent.primaryKeyValue();
+		return FieldPredicate(field,Eq(parentKey));
 	};
 	
 	// Membership
