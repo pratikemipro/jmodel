@@ -249,126 +249,22 @@ jQuery.fn.views = function (views) {
 
 
 // ============================================================================
-//														 	Domain Object Model
+//									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
-var jModel = function () {
 
-	var external		= function (predicate) { return all.filter.apply(all,arguments); },
-		_				= external,
-		entities		= {},
-		notifications	= new NotificationQueue();
-		
-				
-	// ------------------------------------------------------------------------
-	//																	Logging
-	// ------------------------------------------------------------------------
+function OPAL () {
 	
-	var log = {
-		
-		active: 	false,
-		
-		flags: 		{
-						all: false,
-						application: false,
-						domainobject: {
-							all: false,
-							create: false,
-							set: false
-						},
-						domainobjectcollection: {
-							all: false,
-							create: false,
-							add: false
-						},
-						subscriptions: {
-							all: false,
-							subscribe: false,
-							notify: false
-						},
-						notifications: {
-							all: false,
-							send: false
-						},
-						json: {
-							all: false,
-							thaw: false
-						}
-					},
-				
-		startGroup: function (condition,title) { log.log(condition,title,'startgroup');	},
-				
-		endGroup: 	function (condition) { log.log(condition,'','endgroup'); },
-					
-		error: 		function (condition,message) { log.log(condition,message,'error'); },
-					
-		warning: 	function (condition,message) { log.log(condition,message,'warning'); },
-					
-		debug: 		function (condition, message) { log.log(condition,message,'debug'); },
-					
-		info: 		function (condition, message) {	log.log(condition,message,'info'); },
-					
-		log: 		function (condition, message, type) {
-			
-						if ( log.active && ( log.flags.all || condition ) ) {
-							
-							var console = window.console;
-							
-							if ( type == 'startgroup' ) {
-								if ( console && console.group ) {
-									console.group(message);
-								}
-								else if ( console && console.log ) {
-									console.log(message);
-								}
-							}
-							else if ( type == 'endgroup' ) {
-								if ( console && console.groupEnd ) {
-									console.groupEnd();
-								}
-							}
-							else {
-								switch (type) {	
-									case 'error': 	if (console && console.error) {console.error(message); break;}
-									case 'warning': if (console && console.warn)  {console.warn(message);  break;}
-									case 'debug': 	if (console && console.debug) {console.debug(message); break;}
-									case 'info': 	if (console && console.info)  {console.debug(message); break;}
-									default: 		if (console && console.log)   {console.log(message);   break;}	
-								}
-							}
-							
-						}
-						
-					},
-					
-		enable: 	function (flag) {
-						setFlag(flag,true);
-						log.active = true;
-						return log.flags;
-					},
-
-		disable: 	function (flag) {
-						setFlag(flag,false);
-						return external.log;
-					}
-		
-	};
+	var opal = {};
 	
-	external.log = log;
-	
-	function setFlag(path,value) {
-		pieces = path.split('.');
-		var property=log.flags;
-		for (var i=0; i<pieces.length-1; i++) {
-			if ( typeof property[pieces[i]] == 'object' ) {
-				property=property[pieces[i]];
+	opal.extend = function (object) {
+		for ( var i in object ) {
+			if ( !this[i] ) {
+				this[i] = object[i];
 			}
 		}
-		property[pieces[pieces.length-1]] = value;
-	}
-
-
-
+	};
+	
 	// ------------------------------------------------------------------------
 	//																		Set
 	// ------------------------------------------------------------------------
@@ -518,32 +414,29 @@ var jModel = function () {
 		};
 		
 		this.union = function () {
-			return external.union.apply(null,argumentsArray.apply(this,arguments));
+			return union.apply(null,argumentsArray.apply(this,arguments));
 		};
 		
 		this.intersection = function () {
-			return external.intersection.apply(null,argumentsArray.apply(this,arguments));
+			return intersection.apply(null,argumentsArray.apply(this,arguments));
 		};
 		
 		this.difference = function (set) {
-			return external.difference(this,set);
+			return difference(this,set);
 		};
 		
 		this.predicate = function (parameter) {
+			if ( parameter === null ) {
+				return AllPredicate();
+			}
 			if ( parameter == ':empty' ) {
 				return EmptySetPredicate();
 			}
 			else if ( typeof parameter == 'function' ) {
 				return parameter;
 			}
-			else if ( parameter && parameter.domain ) {
+			else if ( typeof parameter == 'object' ) {
 				return ObjectIdentityPredicate(parameter);
-			}
-			else if ( typeof parameter == 'object' && parameter !== null ) {
-				return ExamplePredicate(parameter);
-			} 
-			else if ( typeof parameter == 'number' ) {
-				return IdentityPredicate(parameter);
 			}
 			return AllPredicate();
 		};
@@ -558,8 +451,12 @@ var jModel = function () {
 		
 	}
 	
+	opal.Set = Set;
 	
-	external.set = function() {
+	opal.set = function() {
+		if ( arguments[0] instanceof Set ) {
+			return arguments[0];
+		}
 		if ( arguments[0] instanceof Array ) {
 			return new Set(arguments[0]);
 		}
@@ -572,8 +469,598 @@ var jModel = function () {
 		}
 	};
 	
+	//
+	// Set operations
+	//
 	
-	external.predicate = (new Set()).predicate;
+	function union () {
+		var union = new Set();
+		for (var i=0; i<arguments.length; i++ ) {
+			var set = arguments[i];
+			set.each(function (index,object) {
+				union.add(object);
+			});
+		}
+		return union;
+	};
+	
+	function intersection () {
+		var intersection = new Set();
+		arguments[0].each(function (index,object) {
+			intersection.add(object);
+		});
+		for (var i=1; i<arguments.length; i++ ) {
+			intersection = intersection.filter(MembershipPredicate(arguments[i]));
+		}
+		return intersection
+	};
+	
+	function difference (first,second) {
+		return first.filter( Not(MembershipPredicate(second)) );
+	};
+	
+	opal.extend({
+		union: 			union,
+		intersection: 	intersection,
+		difference: 	difference
+	});
+	
+	
+	
+	// ------------------------------------------------------------------------
+	// 																 Predicates
+	// ------------------------------------------------------------------------
+	
+	opal.predicate = (new Set()).predicate;
+	
+	//
+	// First-order predicates
+	//
+
+	// Generic
+	
+	function AllPredicate () {
+		return function (candidate) {
+			return true;
+		};
+	}
+	
+	function NonePredicate () {
+		return function (candidate) {
+			return false;
+		};
+	}
+	
+	function TruePredicate (candidate) {
+		return candidate == true;
+	}
+	
+	function FunctionPredicate (fn) {
+		return function (candidate) {
+			return fn(candidate);
+		};
+	}
+	
+	opal.extend({
+		AllPredicate: 		AllPredicate,
+		NonePredicate: 		NonePredicate,
+		TruePredicate: 		TruePredicate,
+		FunctionPredicate: 	FunctionPredicate
+	});
+	
+	// Object Predicates
+	
+	function ObjectIdentityPredicate (object) {
+		return function (candidate) {
+			return candidate == object;
+		};
+	}
+	
+	function TypePredicate (type) {
+		return function (candidate) {
+			return typeof candidate === type;
+		};
+	}
+
+	function InstancePredicate (constructor) {
+		// NOTE: Put this next line into jModel
+		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
+		return function (candidate) {
+			return candidate instanceof constructor;
+		};
+	}
+	
+	function PropertyPredicate (property,value) {
+		return function (candidate) {
+			return candidate[property] == value;
+		};
+	}
+	
+	opal.extend({
+		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
+		TypePredicate: 				TypePredicate,
+		InstancePredicate: 			InstancePredicate,
+		PropertyPredicate: 			PropertyPredicate
+	});
+	
+	// Value comparisons
+	
+	function EqualityPredicate (value) {
+		return function (candidate) {
+			return candidate == value;
+		};
+	}
+	
+	function LessThanPredicate (value) {
+		return function (candidate) {
+			return candidate < value;
+		};
+	}
+	
+	function GreaterThanPredicate (value) {
+		return function (candidate) {
+			return candidate > value;
+		};
+	}
+	
+	function LessThanEqualPredicate (value) {
+		return function (candidate) {
+			return candidate <= value;
+		};
+	}
+	
+	function GreaterThanEqualPredicate (value) {
+		return function (candidate) {
+			return candidate >= value;
+		};
+	}
+	
+	function BetweenPredicate (lower,higher) {
+		return function (candidate) {
+			return lower <= candidate && candidate <= higher;
+		};
+	}
+	
+	function RegularExpressionPredicate (regex) {
+		return function (candidate) {
+			return regex.test(candidate);
+		};
+	}
+	
+	opal.extend({
+		EqualityPredicate: 				EqualityPredicate,
+		LessThanPredicate: 				LessThanPredicate,
+		GreaterThanPredicate: 			GreaterThanPredicate,
+		LessThanEqualPredicate: 		LessThanEqualPredicate,
+		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
+		BetweenPredicate: 				BetweenPredicate,
+		RegularExpressionPredicate: 	RegularExpressionPredicate
+	});
+	
+	
+	// Membership
+	
+	function MembershipPredicate (set) {		
+		set = opal.set(set);
+		return function (candidate) {
+			return Not(EmptySetPredicate())(set.filter(ObjectIdentityPredicate(candidate)));
+		};
+	};
+	
+	opal.MembershipPredicate = MembershipPredicate;
+	
+	
+	//
+	// Logical connectives
+	//
+	
+	function Or () {
+		var predicates = opal.set(arrayFromArguments(arguments));
+		return function (candidate) {
+			return Not(EmptySetPredicate())(predicates.filter(function (predicate) { return predicate(candidate); }));
+		};
+	};
+	
+	function And () {
+		var predicates = opal.set(arrayFromArguments(arguments));
+		return function (candidate) {
+			return EmptySetPredicate()(predicates.filter(function (predicate) { return !predicate(candidate); } ));
+		};
+	};
+	
+	function Not (predicate) {
+		return function (candidate) {
+			return !predicate(candidate);
+		};
+	};
+	
+	opal.extend({
+		Or:  Or,
+		And: And,
+		Not: Not
+	});
+
+	
+	//
+	// Higher-order predicates
+	//
+	
+	// Set predicates
+	
+	function EmptySetPredicate () {
+		return function (set) {
+			return set ? set.count() === 0 : true;
+		};
+	}
+	
+	function AllSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter ?
+				EmptySetPredicate(set.filter(Not(predicate)))
+				: predicate(set);
+		};
+	}
+	
+	function SomeSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter ?
+				Not(EmptySetPredicate)(set.filter(predicate))
+				: predicate(set);
+		};
+	}
+	
+	function NoneSetPredicate () {
+		var predicate = And.apply(null,arguments);
+		return function (set) {
+			return set.filter ?
+				_.empty(set.filter(predicate))
+				: !predicate(set);
+		};
+	}
+	
+	opal.extend({
+		EmptySetPredicate: 	EmptySetPredicate,
+		AllSetPredicate: 	AllSetPredicate,
+		SomeSetPredicate: 	SomeSetPredicate,
+		NoneSetPredicate: 	NoneSetPredicate
+	});
+	
+	
+	
+	// ------------------------------------------------------------------------
+	//														   		  Orderings
+	// ------------------------------------------------------------------------
+	
+	function makeOrdering () {
+		if ( arguments.length > 1 ) {
+			return CompositeOrdering.apply(null,arguments);
+		}
+		else if ( arguments[0] instanceof Array ) {
+			return CompositeOrdering(arguments[0]);
+		}
+		return arguments[0];
+	};
+	
+	function FunctionOrdering (fn) {
+		return function (a,b) {
+			if ( fn(a) < fn(b) ) {
+				return -1;
+			}
+			else if ( fn(a) > fn(b) ) {
+				return 1;
+			}
+			return 0;
+		};
+	};
+	
+	var ValueOrdering = FunctionOrdering( function (obj) {return obj;} );
+	
+	function PredicateOrdering () {
+		var predicates = opal.set(arrayFromArguments(arguments));
+		return FunctionOrdering( function (obj) {
+			return -predicates.count(function (pred) {return pred(obj);} );
+		});
+	};
+	
+	function DescendingOrdering (ordering) {
+		ordering = makeOrdering(ordering);
+		return function (a,b) {
+			return -ordering(a,b);
+		};
+	};
+	
+	function CompositeOrdering () {
+		var orderings = arrayFromArguments(arguments);
+		for (var i=0; i<orderings.length; i++) {
+			orderings[i] = makeOrdering(orderings[i]);
+		}
+		return function (a,b) {
+			for (var i=0; i<orderings.length; i++) {
+				var value = orderings[i](a,b);
+				if ( value !== 0 ) {
+					return value;
+				}
+			}
+			return 0;
+		};
+	};
+	
+	opal.extend({
+		makeOrdering: 		makeOrdering,
+		FunctionOrdering: 	FunctionOrdering,
+		ValueOrdering: 		ValueOrdering,
+		PredicateOrdering: 	PredicateOrdering,
+		DescendingOrdering: DescendingOrdering,
+		CompositeOrdering: 	CompositeOrdering
+	});
+	
+	
+	// ------------------------------------------------------------------------
+	// 														  Utility functions
+	// ------------------------------------------------------------------------
+	
+	// NOTE: fix this ugliness
+	
+	function arrayFromArguments (args) {
+		if ( args[0] instanceof Array ) {
+			return args[0];
+		}
+		else {
+			var args2 = [];
+			for (var i=0; i<args.length;i++) {
+				args2.push(args[i]);
+			}
+			return args2;
+		}
+	};
+	
+	function argumentsArray() {
+		var args = [this];
+		for (var i=0; i<arguments.length; i++) {
+			args.push(arguments[i]);
+		}
+		return args;
+	}
+
+	opal.extend({
+		arrayFromArguments: arrayFromArguments,
+		argumentsArray: 	argumentsArray
+	});
+
+	
+	return opal;
+	
+}
+
+
+
+// ============================================================================
+//														 	Domain Object Model
+// ============================================================================
+
+var jModel = function () {
+
+	//
+	// Import OPAL
+	//
+
+	var opal = OPAL();
+	
+	var Set							= opal.Set,
+		set							= opal.set,
+		union						= opal.union,
+		intersection				= opal.intersection,
+		difference					= opal.difference,
+		
+		predicate					= opal.predicate,
+	
+		AllPredicate				= opal.AllPredicate,
+		NonePredicate				= opal.NonePredicate,
+		TruePredicate				= opal.TruePredicate,
+		FunctionPredicate			= opal.FunctionPredicate,
+		
+		ObjectIdentityPredicate		= opal.ObjectIdentityPredicate,
+		TypePredicate 				= opal.TypePredicate,
+		InstancePredicate			= opal.InstancePredicate,
+		PropertyPredicate			= opal.PropertyPredicate,
+		
+		EqualityPredicate 			= opal.EqualityPredicate,
+		LessThanPredicate 			= opal.LessThanPredicate,
+		GreaterThanPredicate 		= opal.GreaterThanPredicate,
+		LessThanEqualPredicate 		= opal.LessThanEqualPredicate,
+		GreaterThanEqualPredicate	= opal.GreaterThanEqualPredicate,
+		BetweenPredicate 			= opal.BetweenPredicate,
+		RegularExpressionPredicate 	= opal.RegularExpressionPredicate,
+		
+		Or							= opal.Or,
+		And							= opal.And,
+		Not							= opal.Not
+		
+		EmptySetPredicate			= opal.EmptySetPredicate,
+		AllSetPredicate				= opal.AllSetPredicate
+		SomeSetPredicate			= opal.SomeSetPredicate
+		NoneSetPredicate			= opal.NoneSetPredicate,
+		
+		FunctionOrdering			= opal.FunctionOrdering,
+		ValueOrdering				= opal.ValueOrdering,
+		PredicateOrdering			= opal.PredicateOrdering,
+		DescendingOrdering			= opal.DescendingOrdering,
+		CompositeOrdering			= opal.CompositeOrdering,
+		
+		arrayFromArguments			= opal.arrayFromArguments,
+		argumentsArray				= opal.argumentsArray;
+
+	//
+	// Define local variables
+	//
+
+	var external		= function (predicate) { return all.filter.apply(all,arguments); },
+		_				= external,
+		entities		= {},
+		notifications	= new NotificationQueue();
+	
+	external.extend = opal.extend;
+		
+	//
+	// External interface to OPAL
+	//
+	
+	external.extend({
+		
+		/* Set */
+		set: 	opal.set,
+		
+		/* Predicates */
+		predicate: 	predicate,
+		
+		is: 		ObjectIdentityPredicate,
+		istrue: 	TruePredicate,
+		
+		test: 		FunctionPredicate,
+		type: 		TypePredicate,
+		isa: 		InstancePredicate,
+		property: 	PropertyPredicate,
+		
+		member: 	MembershipPredicate,
+		
+		or: 		Or,
+		and: 		And,
+		not: 		Not,
+		
+		empty: 		EmptySetPredicate,
+		nonempty: 	Not(EmptySetPredicate()),
+		
+		all: 		function () {
+						if ( arguments.length === 0 ) {
+							return AllPredicate();
+						}
+						else {
+							return AllSetPredicate.apply(null,arguments);
+						}
+					},
+		
+		some: 		SomeSetPredicate,
+		none: 		NoneSetPredicate,
+		
+		/* Orderings */
+		
+		func: 		FunctionOrdering,
+		value: 		ValueOrdering,
+		score: 		PredicateOrdering,
+		desc: 		DescendingOrdering,
+		composite: 	CompositeOrdering
+		
+	});
+	
+				
+	// ------------------------------------------------------------------------
+	//																	Logging
+	// ------------------------------------------------------------------------
+	
+	var log = {
+		
+		active: 	false,
+		
+		flags: 		{
+						all: false,
+						application: false,
+						domainobject: {
+							all: false,
+							create: false,
+							set: false
+						},
+						domainobjectcollection: {
+							all: false,
+							create: false,
+							add: false
+						},
+						subscriptions: {
+							all: false,
+							subscribe: false,
+							notify: false
+						},
+						notifications: {
+							all: false,
+							send: false
+						},
+						json: {
+							all: false,
+							thaw: false
+						}
+					},
+				
+		startGroup: function (condition,title) { log.log(condition,title,'startgroup');	},
+				
+		endGroup: 	function (condition) { log.log(condition,'','endgroup'); },
+					
+		error: 		function (condition,message) { log.log(condition,message,'error'); },
+					
+		warning: 	function (condition,message) { log.log(condition,message,'warning'); },
+					
+		debug: 		function (condition, message) { log.log(condition,message,'debug'); },
+					
+		info: 		function (condition, message) {	log.log(condition,message,'info'); },
+					
+		log: 		function (condition, message, type) {
+			
+						if ( log.active && ( log.flags.all || condition ) ) {
+							
+							var console = window.console;
+							
+							if ( type == 'startgroup' ) {
+								if ( console && console.group ) {
+									console.group(message);
+								}
+								else if ( console && console.log ) {
+									console.log(message);
+								}
+							}
+							else if ( type == 'endgroup' ) {
+								if ( console && console.groupEnd ) {
+									console.groupEnd();
+								}
+							}
+							else {
+								switch (type) {	
+									case 'error': 	if (console && console.error) {console.error(message); break;}
+									case 'warning': if (console && console.warn)  {console.warn(message);  break;}
+									case 'debug': 	if (console && console.debug) {console.debug(message); break;}
+									case 'info': 	if (console && console.info)  {console.debug(message); break;}
+									default: 		if (console && console.log)   {console.log(message);   break;}	
+								}
+							}
+							
+						}
+						
+					},
+					
+		enable: 	function (flag) {
+						setFlag(flag,true);
+						log.active = true;
+						return log.flags;
+					},
+
+		disable: 	function (flag) {
+						setFlag(flag,false);
+						return external.log;
+					}
+		
+	};
+	
+	external.log = log;
+	
+	function setFlag(path,value) {
+		pieces = path.split('.');
+		var property=log.flags;
+		for (var i=0; i<pieces.length-1; i++) {
+			if ( typeof property[pieces[i]] == 'object' ) {
+				property=property[pieces[i]];
+			}
+		}
+		property[pieces[pieces.length-1]] = value;
+	}
 	
 	
 	
@@ -1254,6 +1741,26 @@ var jModel = function () {
 		};
 		
 		
+		this.predicate = function (parameter) {
+			if ( parameter == ':empty' ) {
+				return EmptySetPredicate();
+			}
+			else if ( typeof parameter == 'function' ) {
+				return parameter;
+			}
+			else if ( parameter && parameter.domain ) {
+				return ObjectIdentityPredicate(parameter);
+			}
+			else if ( typeof parameter == 'object' && parameter !== null ) {
+				return ExamplePredicate(parameter);
+			} 
+			else if ( typeof parameter == 'number' ) {
+				return IdentityPredicate(parameter);
+			}
+			return AllPredicate();
+		};
+		
+		
 		// Initial sort
 		if ( specification.ordering ) {
 			this.sort();
@@ -1348,10 +1855,10 @@ var jModel = function () {
 	
 	
 	// ------------------------------------------------------------------------
-	//														   		  Orderings
+	//														   Domain Orderings
 	// ------------------------------------------------------------------------
 	
-	var makeOrdering = external.ordering = function () {
+	function makeOrdering () {
 		if ( arguments.length > 1 ) {
 			return CompositeOrdering.apply(null,arguments);
 		}
@@ -1372,37 +1879,13 @@ var jModel = function () {
 		}
 	};
 	
-	
-	var FunctionOrdering = external.func = function(fn) {
-		return function (a,b) {
-			if ( fn(a) < fn(b) ) {
-				return -1;
-			}
-			else if ( fn(a) > fn(b) ) {
-				return 1;
-			}
-			return 0;
-		};
-	};
-	
-	
-	var ValueOrdering = external.value =  FunctionOrdering( function (obj) {return obj;} );
-	
-	
-	var FieldOrdering = external.field = function (fieldName) {
+
+	function FieldOrdering (fieldName) {
 		return FunctionOrdering( function (obj) {return obj.get(fieldName);} );
 	};
-
-
-	var PredicateOrdering = external.score = function () {
-		var predicates = _.set(arrayFromArguments(arguments));
-		return FunctionOrdering( function (obj) {
-			return -predicates.count(function (pred) {return pred(obj);} );
-		});
-	};
 	
 	
-	var FieldPathOrdering = external.path = function (fieldpath) {	
+	function FieldPathOrdering (fieldpath) {	
 		return FunctionOrdering( function (obj) {
 			var property, value;
 			for (var i=0; i<path.length; i++) {
@@ -1419,167 +1902,83 @@ var jModel = function () {
 	};
 	
 	
-	var DescendingOrdering = external.desc = function (ordering) {
-		ordering = makeOrdering(ordering);
-		return function (a,b) {
-			return -ordering(a,b);
-		};
-	};
-	
-	var CompositeOrdering = external.composite = function () {
-		var orderings = arrayFromArguments(arguments);
-		for (var i=0; i<orderings.length; i++) {
-			orderings[i] = makeOrdering(orderings[i]);
-		}
-		return function (a,b) {
-			for (var i=0; i<orderings.length; i++) {
-				var value = orderings[i](a,b);
-				if ( value !== 0 ) {
-					return value;
-				}
-			}
-			return 0;
-		};
-	};
-	
+	external.extend({
+		ordering: 	makeOrdering,
+		field: 		FieldOrdering,
+		path: 		FieldPathOrdering
+	});
 	
 	
 	// ------------------------------------------------------------------------
-	// 																 Predicates
+	// 														  Domain Predicates
 	// ------------------------------------------------------------------------
 	
+	external.predicate = (new DomainObjectCollection()).predicate;
+	
 	//
-	// First-order predicates
+	// Field predicates
 	//
-
-	// All
 	
-	function AllPredicate () {
+	function FieldPredicate (field,predicate) {
 		return function (candidate) {
-			return true;
-		};
-	};
-	
-	// None
-	
-	function NonePredicate () {
-		return function (candidate) {
-			return false;
-		};
-	};
-	
-	// True
-	
-	function TruePredicate (candidate) {
-		return candidate == true;
-	};
-	
-	external.istrue = TruePredicate;
-	
-	// Value comparisons
-	
-	function EqualityPredicate (value) {
-		return function (candidate) {
-			return candidate == value;
+			return predicate(candidate.get(field));
 		};
 	}
 	
-	function LessThanPredicate (value) {
-		return function (candidate) {
-			return candidate < value;
-		};
-	}
-	
-	function GreaterThanPredicate (value) {
-		return function (candidate) {
-			return candidate > value;
-		};
-	}
-	
-	function LessThanEqualPredicate (value) {
-		return function (candidate) {
-			return candidate <= value;
-		};
-	}
-	
-	function GreaterThanEqualPredicate (value) {
-		return function (candidate) {
-			return candidate >= value;
-		};
-	}
-	
-	function BetweenPredicate (lower,higher) {
-		return function (candidate) {
-			return lower <= candidate && candidate <= higher;
-		};
-	}
-	
-	var Eq = external.eq = function (value,field) {
+	function Eq (value,field) {
 		return field ?
 			FieldPredicate(field,EqualityPredicate(value))
 			: EqualityPredicate(value);
 	};
 	
-	var Lt = external.lt = function (value,field) {
+	function Lt (value,field) {
 		return field ?
 			FieldPredicate(field,LessThanPredicate(value))
 			: LessThanPredicate(value);
 	};
 	
-	var Gt = external.gt = function (value,field) {
+	function Gt (value,field) {
 		return field ?
 			FieldPredicate(field,GreaterThanPredicate(value))
 			: GreaterThanPredicate(value);
 	};
 	
-	var LtE = external.lte = function (value,field) {
+	function LtE (value,field) {
 		return field ?
 			FieldPredicate(field,LessThanEqualPredicate(value))
 			: LessThanEqualPredicate(value);
 	};
 	
-	var GtE = external.gte = function (value,field) {
+	function GtE (value,field) {
 		return field ?
 			FieldPredicate(field,GreaterThanEqualPredicate(value))
 			: GreaterThanEqualPredicate(value);
 	};
 	
-	external.between = function (lower,higher,field) {
+	function Between (lower,higher,field) {
 		return field ?
 			FieldPredicate(field,BetweenPredicate(lower,higher))
 			: BetweenPredicate(lower,higher);
-	};
-	
-	// Regex
-	
-	function RegularExpressionPredicate (regex) {
-		return function (candidate) {
-			return regex.test(candidate);
-		};
 	}
 	
-	external.regex = function (regex,field) {
+	function RegEx (regex,field) {
 		return field ?
 			FieldPredicate(field,RegularExpressionPredicate(regex))
 			: RegularExpressionPredicate(regex);
 	};
 	
-	// Object Identity
-	
-	var ObjectIdentityPredicate = external.is = function (object) {
-		return function (candidate) {
-			return candidate === object;
-		};
-	};
-	
-	// Property
-	
-	var PropertyPredicate = external.property = function (property,value) {
-		return function (candidate) {
-			return candidate[property] == value;
-		};
-	};
-	
+	external.extend({
+		
+		eq: 		Eq,
+		lt: 		Lt,
+		gt: 		Gt,
+		lte: 		LtE,
+		gte: 		GtE,
+		between: 	Between,
+		regex: 		RegEx
+					
+	});
+
 	// Primary Key Identity
 	
 	var IdentityPredicate = external.id = function (id) {
@@ -1587,15 +1986,7 @@ var jModel = function () {
 			return candidate.primaryKeyValue() == id;
 		};		
 	};
-	
-	// Generic function
-	
-	var FunctionPredicate = external.test = function (fn) {
-		return function (candidate) {
-			return fn(candidate);
-		};
-	};
-	
+
 	// Example
 	
 	var ExamplePredicate = external.example = function (example) {
@@ -1621,23 +2012,6 @@ var jModel = function () {
 
 	};
 	
-	// Type
-	
-	var TypePredicate = external.type = function (type) {
-		return function (candidate) {
-			return typeof candidate === type;
-		};
-	};
-	
-	// Instance
-	
-	var InstancePredicate = external.isa = function (constructor) {
-		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
-		return function (candidate) {
-			return candidate instanceof constructor;
-		};
-	};
-	
 	// Relationship
 	
 	var RelationshipPredicate = external.related = function (parent,field) {
@@ -1647,12 +2021,14 @@ var jModel = function () {
 	
 	// Membership
 	
-	var MembershipPredicate = external.member = function (collection) {		
+	function MembershipPredicate (collection) {		
 		collection = makeCollection(collection);
 		return function (candidate) {
-			return _.nonempty(collection.filter(ObjectIdentityPredicate(candidate)));
+			return Not(EmptySetPredicate())(collection.filter(ObjectIdentityPredicate(candidate)));
 		};
 	};
+	
+	external.member = MembershipPredicate;
 	
 	// Modification state
 	
@@ -1663,113 +2039,6 @@ var jModel = function () {
 	};	
 	
 	external.dirty = ModifiedPredicate();
-	
-	
-	//
-	// Higher-order predicates
-	//
-	
-	// Set predicates
-	
-	function EmptySetPredicate () {
-		return function (set) {
-			return set ? set.count() === 0 : true;
-		};
-	}
-	
-	external.empty = EmptySetPredicate();
-	
-	external.nonempty = Not(EmptySetPredicate());
-	
-	function AllSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set.filter ?
-				_.empty(set.filter(_.not(predicate)))
-				: predicate(set);
-		};
-	}
-	
-	external.all = function () {
-		if ( arguments.length === 0 ) {
-			return AllPredicate();
-		}
-		else {
-			return AllSetPredicate.apply(null,arguments);
-		}
-	};
-	
-	function SomeSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set.filter ?
-				_.nonempty(set.filter(predicate))
-				: predicate(set);
-		};
-	}
-	
-	external.some = SomeSetPredicate;
-	
-	function NoneSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set.filter ?
-				_.empty(set.filter(predicate))
-				: !predicate(set);
-		};
-	}
-	
-	external.none = NoneSetPredicate;
-	
-	// Field predicate
-	
-	function FieldPredicate (field,predicate) {
-		return function (candidate) {
-			return predicate(candidate.get(field));
-		};
-	}
-	
-	// Logical connectives
-	
-	function Or () {
-		var predicates = _.set(arrayFromArguments(arguments));
-		return function (candidate) {
-			return _.nonempty(predicates.filter(function (predicate) { return predicate(candidate); }));
-		};
-	};
-	
-	external.or = Or;
-	
-	function And () {
-		var predicates = _.set(arrayFromArguments(arguments));
-		return function (candidate) {
-			return _.empty(predicates.filter(function (predicate) { return !predicate(candidate); } ));
-		};
-	};
-	
-	external.and = And;
-	
-	function Not (predicate) {
-		return function (candidate) {
-			return !predicate(candidate);
-		};
-	};
-	
-	external.not = Not;
-	
-	// Utility function used by And and Or.
-	var arrayFromArguments = function (args) {
-		if ( args[0] instanceof Array ) {
-			return args[0];
-		}
-		else {
-			var args2 = [];
-			for (var i=0; i<args.length;i++) {
-				args2.push(args[i]);
-			}
-			return args2;
-		}
-	};
 		
 	
 	
@@ -2315,16 +2584,6 @@ var jModel = function () {
 		}
 		return partition;
 	}
-	
-	// Note carefully that argumentsArray includes the current collection in the array
-	function argumentsArray() {
-		var args = [this];
-		for (var i=0; i<arguments.length; i++) {
-			args.push(arguments[i]);
-		}
-		return args;
-	}
-	
 	
 	function delegateTo(context,methodName) {
 		return function () {
