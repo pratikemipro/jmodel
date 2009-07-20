@@ -492,7 +492,7 @@ function OPAL () {
 		for (var i=1; i<arguments.length; i++ ) {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
-		return intersection
+		return intersection;
 	};
 	
 	function difference (first,second) {
@@ -916,108 +916,135 @@ var jModel = function () {
 	//																	Logging
 	// ------------------------------------------------------------------------
 	
-	var log = {
+	function Logger (flags) {
 		
-		active: 	false,
+		var active = false;
 		
-		flags: 		{
-						all: false,
-						application: false,
-						domainobject: {
-							all: false,
-							create: false,
-							set: false
-						},
-						domainobjectcollection: {
-							all: false,
-							create: false,
-							add: false
-						},
-						subscriptions: {
-							all: false,
-							subscribe: false,
-							notify: false
-						},
-						notifications: {
-							all: false,
-							send: false
-						},
-						json: {
-							all: false,
-							thaw: false
-						}
-					},
-				
-		startGroup: function (condition,title) { log.log(condition,title,'startgroup');	},
-				
-		endGroup: 	function (condition) { log.log(condition,'','endgroup'); },
-					
-		error: 		function (condition,message) { log.log(condition,message,'error'); },
-					
-		warning: 	function (condition,message) { log.log(condition,message,'warning'); },
-					
-		debug: 		function (condition, message) { log.log(condition,message,'debug'); },
-					
-		info: 		function (condition, message) {	log.log(condition,message,'info'); },
-					
-		log: 		function (condition, message, type) {
+		function log (condition, message, type) {
 			
-						if ( log.active && ( log.flags.all || condition ) ) {
-							
-							var console = window.console;
-							
-							if ( type == 'startgroup' ) {
-								if ( console && console.group ) {
-									console.group(message);
-								}
-								else if ( console && console.log ) {
-									console.log(message);
-								}
-							}
-							else if ( type == 'endgroup' ) {
-								if ( console && console.groupEnd ) {
-									console.groupEnd();
-								}
-							}
-							else {
-								switch (type) {	
-									case 'error': 	if (console && console.error) {console.error(message); break;}
-									case 'warning': if (console && console.warn)  {console.warn(message);  break;}
-									case 'debug': 	if (console && console.debug) {console.debug(message); break;}
-									case 'info': 	if (console && console.info)  {console.debug(message); break;}
-									default: 		if (console && console.log)   {console.log(message);   break;}	
-								}
-							}
-							
-						}
-						
-					},
-					
-		enable: 	function (flag) {
-						setFlag(flag,true);
-						log.active = true;
-						return log.flags;
-					},
-
-		disable: 	function (flag) {
-						setFlag(flag,false);
-						return external.log;
+			if ( active && enabled(condition) ) {
+				
+				var console = window.console;
+				
+				if ( type == 'startgroup' ) {
+					if ( console && console.group ) {
+						console.group(message);
 					}
-		
-	};
-	
-	external.log = log;
-	
-	function setFlag(path,value) {
-		pieces = path.split('.');
-		var property=log.flags;
-		for (var i=0; i<pieces.length-1; i++) {
-			if ( typeof property[pieces[i]] == 'object' ) {
-				property=property[pieces[i]];
+					else if ( console && console.log ) {
+						console.log(message);
+					}
+				}
+				else if ( type == 'endgroup' ) {
+					if ( console && console.groupEnd ) {
+						console.groupEnd();
+					}
+				}
+				else {
+					switch (type) {	
+						case 'error': 	if (console && console.error) {console.error(message); break;}
+						case 'warning': if (console && console.warn)  {console.warn(message);  break;}
+						case 'debug': 	if (console && console.debug) {console.debug(message); break;}
+						case 'info': 	if (console && console.info)  {console.debug(message); break;}
+						default: 		if (console && console.log)   {console.log(message);   break;}	
+					}
+				}
+				
 			}
+			
 		}
-		property[pieces[pieces.length-1]] = value;
+		
+		this.startGroup = function (condition,title) { log(condition,title,'startgroup'); };
+				
+		this.endGroup = function (condition) { log(condition,'','endgroup'); };
+					
+		this.error = function (condition,message) { log(condition,message,'error'); };
+					
+		this.warning = function (condition,message) { log(condition,message,'warning'); };
+					
+		this.debug = function (condition, message) { log(condition,message,'debug'); };
+					
+		this.info = function (condition, message) { log(condition,message,'info'); };
+		
+		this.enable = function (flag) {
+			setFlag(flag,true);
+			active = true;
+			return this;
+		};
+
+		this.disable = function (flag) {
+			setFlag(flag,false);
+			return this;
+		};
+		
+		function enabled (path) {
+			if ( !path ) {
+				return false;
+			}
+			var pieces = path.split('/'),
+				property = flags;
+			for ( var i=0; i<pieces.length; i++ ) {
+				if ( typeof property.all == 'boolean' && property.all ) {
+					return true;
+				}
+				property = property[pieces[i]];
+				if ( !property ) {
+					return false;
+				}
+				else if ( property && typeof property == 'boolean' ) {
+					return property;
+				}
+			}
+			return false;
+		}
+		
+		function setFlag (path,value) {
+			var pieces = path.split('/'),
+				property = flags;
+			for (var i=0; i<pieces.length-1; i++) {
+				if ( typeof property[pieces[i]] == 'object' ) {
+					property = property[pieces[i]];
+				}
+				else if ( typeof property[pieces[i]] == 'undefined' ) {
+					property[pieces[i]] = {all:false};
+					property = property[pieces[i]];
+				}
+			}
+			property[pieces[pieces.length-1]] = value;
+		}
+		
 	}
+	
+	var log = external.log = new Logger({
+		
+		all: false,
+		application: {
+			all: false
+		},
+		domainobject: {
+			all: false,
+			create: false,
+			set: false
+		},
+		domainobjectcollection: {
+			all: false,
+			create: false,
+			add: false
+		},
+		subscriptions: {
+			all: false,
+			subscribe: false,
+			notify: false
+		},
+		notifications: {
+			all: false,
+			send: false
+		},
+		json: {
+			all: false,
+			thaw: false
+		}
+		
+	});
 	
 	
 	
@@ -1107,7 +1134,7 @@ var jModel = function () {
 
 		this.create = function (data) {
 			
-			log.startGroup(log.flags.domainobject.create,'Creating a new '+name);
+			log.startGroup('domainobject/create','Creating a new '+name);
 
 			data = (typeof data == 'object') ? data : {};
 
@@ -1120,7 +1147,7 @@ var jModel = function () {
 			newObject.domain.init(data);
 			all.add(newObject);
 
-			log.endGroup(log.flags.domainobject.create);
+			log.endGroup('domainobject/create');
 
 			return newObject;
 
@@ -1217,7 +1244,7 @@ var jModel = function () {
 				notification.receive();
 			}
 			else {
-				log.debug(log.flags.notifications.send,'Adding a notification to the queue');
+				log.debug('notifications/send','Adding a notification to the queue');
 				notifications.add(notification);
 			}
 			return this;
@@ -1288,7 +1315,7 @@ var jModel = function () {
 	function ContentNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a content notification for '+subscription.key+': '+subscription.description);
+			log.debug('notifications/send','Receiving a content notification for '+subscription.key+': '+subscription.description);
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
@@ -1296,7 +1323,7 @@ var jModel = function () {
 	function ValueNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a value notification for '+subscription.key+': '+subscription.description);
+			log.debug('notifications/send','Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
 	};
@@ -1304,7 +1331,7 @@ var jModel = function () {
 	function MethodNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving an object method notification'+': '+subscription.description);
+			log.debug('notifications/send','Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		};	
 	};
@@ -1312,7 +1339,7 @@ var jModel = function () {
 	function EventNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving an event notification'+': '+subscription.description);
+			log.debug('notifications/send','Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		};
 	};
@@ -1321,7 +1348,7 @@ var jModel = function () {
 	function RemovalNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a removal notification'+': '+subscription.description);
+			log.debug('notifications/send','Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		};
 	};
@@ -1330,11 +1357,11 @@ var jModel = function () {
 		this.subscription = subscription;
 		this.receive = function () {
 			if (subscription[event.method] && event.permutation) {
-				log.debug(log.flags.notifications.send,'Receiving a sort notification');
+				log.debug('notifications/send','Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
 			}
 			else if (subscription[event.method] && typeof subscription[event.method] == 'function' ) {
-				log.debug(log.flags.notifications.send,'Receiving a collection method notification'+': '+subscription.description);
+				log.debug('notifications/send','Receiving a collection method notification'+': '+subscription.description);
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		};
@@ -1351,7 +1378,7 @@ var jModel = function () {
 	function CollectionMemberNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log.debug(log.flags.notifications.send,'Receiving a collection member notification');
+			log.debug('notifications/send','Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
 												subscription.member.key
 												: [subscription.member.key];
@@ -1386,18 +1413,18 @@ var jModel = function () {
 		
 		this.add = function (subscriber) {
 			if ( subscribers.add(subscriber) ) {
-				log.debug(log.flags.subscriptions.subscribe,'added subscriber: '+subscriber.description);
+				log.debug('subscriptions/subscribe','added subscriber: '+subscriber.description);
 			}
 		};
 		
 		this.notify = function (event) {
 			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
 			if ( _.nonempty(needNotification) ) {
-				log.startGroup(log.flags.subscriptions.notify,'Notifying subscribers of '+event.description);
+				log.startGroup('subscriptions/notify','Notifying subscribers of '+event.description);
 				needNotification.each(function (index,subscriber) {
 					notifications.send(subscriber.notification(event));
 				});
-				log.endGroup(log.flags.subscriptions.notify);
+				log.endGroup('subscriptions/notify');
 			}
 		};
 		
@@ -1495,7 +1522,7 @@ var jModel = function () {
 		
 		specification = specification || {};
 		
-		log.startGroup(log.flags.domainobjectcollection.create,'Creating a DomainObjectCollection: '+specification.description);
+		log.startGroup('domainobjectcollection/create','Creating a DomainObjectCollection: '+specification.description);
 		
 		if ( specification.ordering ) {
 			specification.ordering = makeOrdering(specification.ordering);
@@ -1656,10 +1683,10 @@ var jModel = function () {
 		
 		this.subscribe = function (subscription) {
 			
-			log.startGroup(log.flags.subscriptions.subscribe,'Subscribing: '+subscription.description);
+			log.startGroup('subscriptions/subscribe','Subscribing: '+subscription.description);
 
 			if ( subscription.predicate || subscription.selector ) {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection member subscription: '+subscription.description);
+				log.debug('subscriptions/subscribe','Creating a collection member subscription: '+subscription.description);
 				subscription.type	= 	CollectionMemberNotification;
 				subscription.filter = 	function (collection) {
 											return function (event) {
@@ -1669,11 +1696,11 @@ var jModel = function () {
 										}(this);							
 			}
 			else if ( ( typeof subscription.add == 'string' ) && ( typeof subscription.remove == 'string' ) ) {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection event subscription: '+subscription.description);
+				log.debug('subscriptions/subscribe','Creating a collection event subscription: '+subscription.description);
 				subscription.type	= CollectionEventNotification;
 			}
 			else {
-				log.debug(log.flags.subscriptions.subscribe,'Creating a collection method subscription: '+subscription.description);
+				log.debug('subscriptions/subscribe','Creating a collection method subscription: '+subscription.description);
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
@@ -1681,17 +1708,17 @@ var jModel = function () {
 			subscribers.add(subscriber);
 			
 			if ( subscription.initialise ) {
-				log.startGroup(log.flags.subscriptions.subscribe,'initialising subscription');
+				log.startGroup('subscriptions/subscribe','initialising subscription');
 				this.each(function (index,object) {
 					var event = {method:'initialise',object:object,description:'initialisation'};
 					if ( subscriber.matches(event) ) {
 						notifications.send(subscriber.notification(event));
 					}
 				});
-				log.endGroup(log.flags.subscriptions.subscribe);
+				log.endGroup('subscriptions/subscribe');
 			}
 			
-			log.endGroup(log.flags.subscriptions.subscribe);
+			log.endGroup('subscriptions/subscribe');
 			
 			return subscriber;	
 			
@@ -1733,7 +1760,7 @@ var jModel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
-		log.endGroup(log.flags.domainobjectcollection.create);
+		log.endGroup('domainobjectcollection/create');
 		
 		
 	};
@@ -2049,7 +2076,7 @@ var jModel = function () {
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				key = arguments[0];
 				var value = arguments[1];
-				log.debug(log.flags.domainobject.set,'Setting '+key+' to "'+value+'"');
+				log.debug('domainobject/set','Setting '+key+' to "'+value+'"');
 				data[key] = value;
 				subscribers.notify({key:key,description:'field value change: '+key});
 				if ( arguments.length == 2 || arguments[2] ) {
@@ -2057,7 +2084,7 @@ var jModel = function () {
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
-				log.startGroup(log.flags.domainobject.set,'Setting fields');
+				log.startGroup('domainobject/set','Setting fields');
 				var mappings = arguments[0];
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
@@ -2353,18 +2380,18 @@ var jModel = function () {
 		
 		function makeObject (key,data,parent) {
 			
-			log.startGroup(log.flags.json.thaw,'thawing a '+key);
+			log.startGroup('json/thaw','thawing a '+key);
 			
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
 			if ( parent && parent.relationships && _.nonempty(parent.relationships(PropertyPredicate('accessor',key))) ) {
-				log.debug(log.flags.json.thaw,'adding object to relationship');
+				log.debug('json/thaw','adding object to relationship');
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
 			else {
 				if ( entities[key] ) {
-					log.debug(log.flags.json.thaw,'creating free object');
+					log.debug('json/thaw','creating free object');
 					object = entities[key].create(partitionedData.fields);
 				}
 			}
@@ -2377,7 +2404,7 @@ var jModel = function () {
 				}
 			}
 			
-			log.endGroup(log.flags.json.thaw);
+			log.endGroup('json/thaw');
 
 		}
 		
@@ -2385,7 +2412,7 @@ var jModel = function () {
 		return {
 			
 			thaw: 	function (data,options) {
-						log.startGroup(log.flags.json.thaw,'thawing JSON');
+						log.startGroup('json/thaw','thawing JSON');
 						options = options || {};
 						data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
@@ -2393,7 +2420,7 @@ var jModel = function () {
 								makeObject(key,data[i][key],options.parent);
 							}
 						}
-						log.endGroup(log.flags.json.thaw);
+						log.endGroup('json/thaw');
 						return external.json;
 					}
 			
