@@ -1004,7 +1004,7 @@ var jModel = function () {
 		};
 		
 		var external = function (condition) {	
-			if ( active && enabled(condition) ) {
+			if ( arguments.length === 0 || ( active && enabled(condition) ) ) {
 				return externalActive;
 			}
 			else {
@@ -1490,9 +1490,9 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			log(true).startGroup('Subscriber');
-			log(true).debug(subscription.description);
-			log(true).endGroup();
+			log().startGroup('Subscriber');
+			log().debug(subscription.description);
+			log().endGroup();
 		};
 		
 	};
@@ -1518,9 +1518,9 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			log(true).startGroup('Subscriber');
-			log(true).debug(subscription.description);
-			log(true).endGroup();
+			log().startGroup('Subscriber');
+			log().debug(subscription.description);
+			log().endGroup();
 		};
 		
 	};
@@ -2371,12 +2371,12 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			log(true).startGroup('Relationship: '+relationship.accessor);
-			log(true).debug('Object: '+object.domain.debug());
+			log().startGroup('Relationship: '+relationship.accessor);
+			log().debug('Object: '+object.domain.debug());
 			if ( relationship.subscription ) {
-				log(true).debug('Subscription target: '+subscription.target.domain.debug());
+				log().debug('Subscription target: '+subscription.target.domain.debug());
 			}
-			log(true).endGroup();
+			log().endGroup();
 		};
 		
 	};
