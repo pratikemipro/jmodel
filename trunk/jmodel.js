@@ -430,7 +430,7 @@ function OPAL () {
 				return AllPredicate();
 			}
 			if ( parameter == ':empty' ) {
-				return EmptySetPredicate();
+				return EmptySetPredicate;
 			}
 			else if ( typeof parameter == 'function' ) {
 				return parameter;
@@ -643,7 +643,7 @@ function OPAL () {
 	function MembershipPredicate (set) {		
 		set = opal.set(set);
 		return function (candidate) {
-			return Not(EmptySetPredicate())(set.filter(ObjectIdentityPredicate(candidate)));
+			return Not(EmptySetPredicate)(set.filter(ObjectIdentityPredicate(candidate)));
 		};
 	};
 	
@@ -657,14 +657,14 @@ function OPAL () {
 	function Or () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return Not(EmptySetPredicate())(predicates.filter(function (predicate) { return predicate(candidate); }));
+			return Not(EmptySetPredicate)(predicates.filter(function (predicate) { return predicate(candidate); }));
 		};
 	};
 	
 	function And () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return EmptySetPredicate()(predicates.filter(function (predicate) { return !predicate(candidate); } ));
+			return EmptySetPredicate(predicates.filter(function (predicate) { return !predicate(candidate); } ));
 		};
 	};
 	
@@ -687,10 +687,8 @@ function OPAL () {
 	
 	// Set predicates
 	
-	function EmptySetPredicate () {
-		return function (set) {
-			return set ? set.count() === 0 : true;
-		};
+	function EmptySetPredicate (set) {
+		return set ? set.count() === 0 : true;
 	}
 	
 	function AllSetPredicate () {
@@ -930,7 +928,7 @@ var jModel = function () {
 		not: 		Not,
 		
 		empty: 		EmptySetPredicate,
-		nonempty: 	Not(EmptySetPredicate()),
+		nonempty: 	Not(EmptySetPredicate),
 		
 		all: 		function () {
 						if ( arguments.length === 0 ) {
@@ -1743,7 +1741,7 @@ var jModel = function () {
 		
 		this.predicate = function (parameter) {
 			if ( parameter == ':empty' ) {
-				return EmptySetPredicate();
+				return EmptySetPredicate;
 			}
 			else if ( typeof parameter == 'function' ) {
 				return parameter;
@@ -2024,7 +2022,7 @@ var jModel = function () {
 	function MembershipPredicate (collection) {		
 		collection = makeCollection(collection);
 		return function (candidate) {
-			return Not(EmptySetPredicate())(collection.filter(ObjectIdentityPredicate(candidate)));
+			return Not(EmptySetPredicate)(collection.filter(ObjectIdentityPredicate(candidate)));
 		};
 	};
 	
