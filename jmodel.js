@@ -986,21 +986,21 @@ var jModel = function () {
 		}		
 		
 		var externalActive = {
-			startGroup: function (title) { log('startgroup',title); },
-			endGroup: 	function () { log('endgroup'); },
-			error: 		function (message) { log('error',message); },
-			warning: 	function (message) { log('warning',message); },
-			debug: 		function (message) { log('debug',message); },
-			info: 		function (message) { log('info',message); }
+			startGroup: function (title) { log('startgroup',title); 	return externalActive; },
+			endGroup: 	function () { log('endgroup'); 					return externalActive; },
+			error: 		function (message) { log('error',message); 		return externalActive; },
+			warning: 	function (message) { log('warning',message);	return externalActive; },
+			debug: 		function (message) { log('debug',message); 		return externalActive; },
+			info: 		function (message) { log('info',message); 		return externalActive; }
 		};
 		
 		var externalInactive = {
-			startGroup: function () {},
-			endGroup: 	function () {},
-			error: 		function () {},
-			warning: 	function () {},
-			debug: 		function () {},
-			info: 		function () {}
+			startGroup: function () { return externalInactive; },
+			endGroup: 	function () { return externalInactive; },
+			error: 		function () { return externalInactive; },
+			warning: 	function () { return externalInactive; },
+			debug: 		function () { return externalInactive; },
+			info: 		function () { return externalInactive; }
 		};
 		
 		var external = function (condition) {	
@@ -2066,7 +2066,7 @@ var jModel = function () {
 				}
 				else {
 					if ( _.nonempty(relationships.filter(arguments[0])) ) {
-						return relationships.filter(arguments[0]).get()
+						return relationships.filter(arguments[0]).get();
 					}
 				}
 			}
