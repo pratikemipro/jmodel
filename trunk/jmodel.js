@@ -1247,12 +1247,6 @@ var jModel = function () {
 				log.endGroup(log.flags.subscriptions.subscribe);
 			}
 			
-			if ( subscription.initialise ) {
-				this.each(function (index,object) {
-					subscribers.notify({method:'add',object:object,description:'object addition'});
-				});
-			}
-			
 			log.endGroup(log.flags.subscriptions.subscribe);
 			
 			return subscriber;	
@@ -2057,7 +2051,7 @@ var jModel = function () {
 	
 	
 	function OneToManyRelationship (object,relationship) {
-		
+
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
 		this.accessor			= relationship.accessor;
