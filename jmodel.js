@@ -845,50 +845,9 @@ var jModel = function () {
 	//
 
 	var opal = OPAL();
-	
-	var Set							= opal.Set,
-		set							= opal.set,
-		union						= opal.union,
-		intersection				= opal.intersection,
-		difference					= opal.difference,
-		
-		predicate					= opal.predicate,
-	
-		AllPredicate				= opal.AllPredicate,
-		NonePredicate				= opal.NonePredicate,
-		TruePredicate				= opal.TruePredicate,
-		FunctionPredicate			= opal.FunctionPredicate,
-		
-		ObjectIdentityPredicate		= opal.ObjectIdentityPredicate,
-		TypePredicate 				= opal.TypePredicate,
-		InstancePredicate			= opal.InstancePredicate,
-		PropertyPredicate			= opal.PropertyPredicate,
-		
-		EqualityPredicate 			= opal.EqualityPredicate,
-		LessThanPredicate 			= opal.LessThanPredicate,
-		GreaterThanPredicate 		= opal.GreaterThanPredicate,
-		LessThanEqualPredicate 		= opal.LessThanEqualPredicate,
-		GreaterThanEqualPredicate	= opal.GreaterThanEqualPredicate,
-		BetweenPredicate 			= opal.BetweenPredicate,
-		RegularExpressionPredicate 	= opal.RegularExpressionPredicate,
-		
-		Or							= opal.Or,
-		And							= opal.And,
-		Not							= opal.Not
-		
-		EmptySetPredicate			= opal.EmptySetPredicate,
-		AllSetPredicate				= opal.AllSetPredicate
-		SomeSetPredicate			= opal.SomeSetPredicate
-		NoneSetPredicate			= opal.NoneSetPredicate,
-		
-		FunctionOrdering			= opal.FunctionOrdering,
-		ValueOrdering				= opal.ValueOrdering,
-		PredicateOrdering			= opal.PredicateOrdering,
-		DescendingOrdering			= opal.DescendingOrdering,
-		CompositeOrdering			= opal.CompositeOrdering,
-		
-		arrayFromArguments			= opal.arrayFromArguments,
-		argumentsArray				= opal.argumentsArray;
+	for ( var i in opal ) {
+		eval('var '+i+' = opal.'+i);
+	}
 
 	//
 	// Define local variables
@@ -908,7 +867,7 @@ var jModel = function () {
 	external.extend({
 		
 		/* Set */
-		set: 	opal.set,
+		set: 		opal.set,
 		
 		/* Predicates */
 		predicate: 	predicate,
