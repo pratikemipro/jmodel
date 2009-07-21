@@ -427,21 +427,16 @@ function OPAL () {
 		
 	
 		this.predicate = function (parameter) {
-//			console.log('Making predicate in Set');
 			if ( parameter === null ) {
-//				console.log('Returning AllPredicate');
 				return AllPredicate();
 			}
 			if ( parameter == ':empty' ) {
-//				console.log('Returning EmptySetPredicate');
 				return EmptySetPredicate;
 			}
 			else if ( typeof parameter == 'function' ) {
-//				console.log('Returning predicate');
 				return parameter;
 			}
 			else if ( typeof parameter == 'object' ) {
-//				console.log('Returning ObjectIdentityPredicate');
 				return ObjectIdentityPredicate(parameter);
 			}
 			return AllPredicate();
