@@ -333,14 +333,14 @@ function OPAL () {
 		};
 		
 		this.when = function (predicate,callback) {
-			if ( this.predicate(predicate)(this) ) {
+			if ( this.make.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
 		};
 		
 		this.partition = function (predicate,passName,failName) {
 			
-			predicate = this.predicate(predicate);
+			predicate = this.make.predicate(predicate);
 			var partition = {};
 			var pass = partition[passName||'pass'] = new Set();
 			var fail = partition[failName||'fail'] = new Set();
@@ -370,7 +370,7 @@ function OPAL () {
 				selector	= arguments[0];
 			}
 			else {
-				predicate	= this.predicate(arguments[0]);
+				predicate	= this.make.predicate(arguments[0]);
 				selector	= arguments[1];
 			}
 			
@@ -425,20 +425,34 @@ function OPAL () {
 			return difference(this,set);
 		};
 		
-		this.predicate = function (parameter) {
-			if ( parameter === null ) {
+		this.make = {
+			
+			predicate: function (parameter) {
+				if ( parameter === null ) {
+					return AllPredicate();
+				}
+				if ( parameter == ':empty' ) {
+					return EmptySetPredicate;
+				}
+				else if ( typeof parameter == 'function' ) {
+					return parameter;
+				}
+				else if ( typeof parameter == 'object' ) {
+					return ObjectIdentityPredicate(parameter);
+				}
 				return AllPredicate();
+			},
+			
+			ordering: function () {
+				if ( arguments.length > 1 ) {
+					return CompositeOrdering.apply(null,arguments);
+				}
+				else if ( arguments[0] instanceof Array ) {
+					return CompositeOrdering(arguments[0]);
+				}
+				return arguments[0];
 			}
-			if ( parameter == ':empty' ) {
-				return EmptySetPredicate;
-			}
-			else if ( typeof parameter == 'function' ) {
-				return parameter;
-			}
-			else if ( typeof parameter == 'object' ) {
-				return ObjectIdentityPredicate(parameter);
-			}
-			return AllPredicate();
+			
 		};
 		
 		this.delegateFor = function (host) {
@@ -731,15 +745,7 @@ function OPAL () {
 	//														   		  Orderings
 	// ------------------------------------------------------------------------
 	
-	function makeOrdering () {
-		if ( arguments.length > 1 ) {
-			return CompositeOrdering.apply(null,arguments);
-		}
-		else if ( arguments[0] instanceof Array ) {
-			return CompositeOrdering(arguments[0]);
-		}
-		return arguments[0];
-	};
+	var makeOrdering = (new Set()).make.ordering;
 	
 	function FunctionOrdering (fn) {
 		return function (a,b) {
@@ -763,7 +769,6 @@ function OPAL () {
 	};
 	
 	function DescendingOrdering (ordering) {
-		ordering = makeOrdering(ordering);
 		return function (a,b) {
 			return -ordering(a,b);
 		};
@@ -771,9 +776,6 @@ function OPAL () {
 	
 	function CompositeOrdering () {
 		var orderings = arrayFromArguments(arguments);
-		for (var i=0; i<orderings.length; i++) {
-			orderings[i] = makeOrdering(orderings[i]);
-		}
 		return function (a,b) {
 			for (var i=0; i<orderings.length; i++) {
 				var value = orderings[i](a,b);
@@ -786,7 +788,6 @@ function OPAL () {
 	};
 	
 	opal.extend({
-		makeOrdering: 		makeOrdering,
 		FunctionOrdering: 	FunctionOrdering,
 		ValueOrdering: 		ValueOrdering,
 		PredicateOrdering: 	PredicateOrdering,
@@ -1533,25 +1534,6 @@ var jModel = function () {
 	
 	function DomainObjectCollection (specification) {
 		
-		specification = specification || {};
-		
-		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
-		
-		if ( specification.ordering ) {
-			specification.ordering = makeOrdering(specification.ordering);
-		}
-
-
-		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
-		objects.delegateFor(this);
-		
-		var subscribers		= new SubscriptionList(notifications);
-		this.subscribers	= delegateTo(subscribers,'filter');
-		
-		var sorted = false;
-		
-		this.length = objects.count;
-		
 		
 		this.add = function (object) {
 			if ( objects.add(object) ) {
@@ -1599,7 +1581,7 @@ var jModel = function () {
 		this.by = function () {			
 			return new DomainObjectCollection({
 				objects: objects.copy(),
-				ordering: makeOrdering.apply(null,arguments),
+				ordering: this.make.ordering.apply(null,arguments),
 				description:'ordered '+specification.description
 			});	
 		};
@@ -1608,7 +1590,7 @@ var jModel = function () {
 		this.sort = function () {
 
 			if (arguments.length > 0) {
-				specification.ordering = makeOrdering.apply(null,arguments);
+				specification.ordering = this.make.ordering.apply(null,arguments);
 			}
 
 			// Remember old order
@@ -1737,25 +1719,76 @@ var jModel = function () {
 			
 		};
 		
-		
-		this.predicate = function (parameter) {
-			if ( parameter == ':empty' ) {
-				return EmptySetPredicate;
+		var that = this;
+		this.make = {
+			
+			predicate: function (parameter) {
+				if ( parameter == ':empty' ) {
+					return EmptySetPredicate;
+				}
+				else if ( typeof parameter == 'function' ) {
+					return parameter;
+				}
+				else if ( parameter && parameter.domain ) {
+					return ObjectIdentityPredicate(parameter);
+				}
+				else if ( typeof parameter == 'object' && parameter !== null ) {
+					return ExamplePredicate(parameter);
+				} 
+				else if ( typeof parameter == 'number' ) {
+					return IdentityPredicate(parameter);
+				}
+				return AllPredicate();
+			},
+			
+			ordering: function () {
+				if ( arguments.length > 1 ) {
+					for ( var i=0; i<arguments.length; i++ ) {
+						arguments[i] = that.make.ordering(arguments[i]);
+					}
+					return CompositeOrdering.apply(null,arguments);
+				}
+				else if ( arguments[0] instanceof Array ) {
+					for ( var i=0; i<arguments[0].length; i++ ) {
+						arguments[0][i] = that.make.ordering(arguments[0][i]);
+					}
+					return CompositeOrdering(arguments[0]);
+				}
+				else if ( typeof arguments[0] == 'function' ) {
+					return arguments[0];
+				}
+				else {
+					var pieces = arguments[0].split(' ');
+					if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
+						return FieldOrdering(pieces[0]);
+					}
+					else {
+						return DescendingOrdering(FieldOrdering(pieces[0]));
+					}
+				}
 			}
-			else if ( typeof parameter == 'function' ) {
-				return parameter;
-			}
-			else if ( parameter && parameter.domain ) {
-				return ObjectIdentityPredicate(parameter);
-			}
-			else if ( typeof parameter == 'object' && parameter !== null ) {
-				return ExamplePredicate(parameter);
-			} 
-			else if ( typeof parameter == 'number' ) {
-				return IdentityPredicate(parameter);
-			}
-			return AllPredicate();
+			
 		};
+		
+		
+		specification = specification || {};
+		
+		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
+		
+		if ( specification.ordering ) {
+			specification.ordering = this.make.ordering(specification.ordering);
+		}
+
+
+		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		objects.delegateFor(this);
+		
+		var subscribers		= new SubscriptionList(notifications);
+		this.subscribers	= delegateTo(subscribers,'filter');
+		
+		var sorted = false;
+		
+		this.length = objects.count;
 		
 		
 		// Initial sort
@@ -1855,26 +1888,7 @@ var jModel = function () {
 	//														   Domain Orderings
 	// ------------------------------------------------------------------------
 	
-	function makeOrdering () {
-		if ( arguments.length > 1 ) {
-			return CompositeOrdering.apply(null,arguments);
-		}
-		else if ( arguments[0] instanceof Array ) {
-			return CompositeOrdering(arguments[0]);
-		}
-		else if ( typeof arguments[0] == 'function' ) {
-			return arguments[0];
-		}
-		else {
-			var pieces = arguments[0].split(' ');
-			if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
-				return FieldOrdering(pieces[0]);
-			}
-			else {
-				return DescendingOrdering(FieldOrdering(pieces[0]));
-			}
-		}
-	};
+	var makeOrdering = (new DomainObjectCollection()).make.ordering;
 	
 
 	function FieldOrdering (fieldName) {
@@ -2273,15 +2287,19 @@ var jModel = function () {
 		
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		
-		this.predicate = function (parameter) {
-			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				var predicate = PropertyPredicate('name',parameter);
-				predicate.unique = true;
-				return predicate;
+		this.make = {
+		
+			predicate: function (parameter) {
+				if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+					var predicate = PropertyPredicate('name',parameter);
+					predicate.unique = true;
+					return predicate;
+				}
+				else {
+					return relationships.make.predicate(parameter);
+				}
 			}
-			else {
-				return relationships.predicate(parameter);
-			}
+			
 		};
 		
 	}
