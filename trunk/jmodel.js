@@ -1793,7 +1793,7 @@ var jModel = function () {
 		
 		
 		// This collection is a materialised view over a base collection
-		if ( specification.base instanceof this.constructor ) {
+		if ( specification.base ) {
 			var view = new View(specification.base,this,specification.predicate);
 		}
 		else if ( specification.base ) {
@@ -1845,7 +1845,6 @@ var jModel = function () {
 	function View (parent,child,predicate) {
 		
 		parent.subscribe({
-			initialise: 	true,
 			source: 		parent,
 			target: 		child,
 			add: 			parentAdd,
@@ -1853,6 +1852,12 @@ var jModel = function () {
 			change: 		parentChange,
 			description: 	'view'
 		});
+		
+		parent
+			.filter(predicate)
+				.each(function (index,object) {
+					child.add(object);
+				});
 		
 		function parentAdd(collection,object) {
 			if ( predicate(object) ) {
@@ -2020,8 +2025,7 @@ var jModel = function () {
 	// Relationship
 	
 	var RelationshipPredicate = external.related = function (parent,field) {
-		var parentKey = parent.primaryKeyValue();
-		return FieldPredicate(field,Eq(parentKey));
+		return FieldPredicate(field,Eq(parent.primaryKeyValue()));
 	};
 	
 	// Membership
@@ -2324,22 +2328,25 @@ var jModel = function () {
 	external.OneToOneRelationship = OneToOneRelationship;
 	
 	
-	function OneToManyRelationship (object,relationship) {
+	function OneToManyRelationship (parent,relationship) {
 
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
 		this.accessor			= relationship.accessor;
 		this.name				= relationship.plural || relationship.accessor+'s';
 
+		var example = {};
+		example[relationship.field] = parent.primaryKeyValue();
+
 		var children			= new DomainObjectCollection({
 											base: 	     entities[relationship.prototype].objects,
-											predicate: 	 RelationshipPredicate(object,relationship.field),
+											predicate: 	 RelationshipPredicate(parent,relationship.field),
 											description: 'children by relationship '+relationship.accessor
 										});
 		
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {
-			object.subscribe({
+			parent.subscribe({
 				removed: 	function () {
 								children.each(function (index,child) {
 									entities[relationship.prototype].objects.remove(child);
@@ -2353,7 +2360,7 @@ var jModel = function () {
 			var subscription = copyObject(relationship.subscription);
 			subscription.application = true;
 			subscription.source = children;
-			subscription.target = object;
+			subscription.target = parent;
 			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
 			this.subscription = children.subscribe(subscription);
 		}
@@ -2366,7 +2373,7 @@ var jModel = function () {
 		this.add = function (data) {
 			
 			data = data || {};
-			data[relationship.field] = object.primaryKeyValue();
+			data[relationship.field] = parent.primaryKeyValue();
 			return entities[relationship.prototype].create(data);
 			
 		};
@@ -2380,7 +2387,7 @@ var jModel = function () {
 		
 		this.debug = function () {
 			log().startGroup('Relationship: '+relationship.accessor);
-			log().debug('Object: '+object.domain.debug());
+			log().debug('Object: '+parent.domain.debug());
 			if ( relationship.subscription ) {
 				log().debug('Subscription target: '+subscription.target.domain.debug());
 			}
