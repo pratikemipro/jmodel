@@ -1853,6 +1853,7 @@ var jModel = function () {
 			description: 	'view'
 		});
 		
+		// NOTE: this is ugly, and really should be done by subscription initialisation
 		parent
 			.filter(predicate)
 				.each(function (index,object) {
