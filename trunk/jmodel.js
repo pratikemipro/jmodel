@@ -333,14 +333,14 @@ function OPAL () {
 		};
 		
 		this.when = function (predicate,callback) {
-			if ( this.make.predicate(predicate)(this) ) {
+			if ( this.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
 		};
 		
 		this.partition = function (predicate,passName,failName) {
 			
-			predicate = this.make.predicate(predicate);
+			predicate = this.predicate(predicate);
 			var partition = {};
 			var pass = partition[passName||'pass'] = new Set();
 			var fail = partition[failName||'fail'] = new Set();
@@ -370,7 +370,7 @@ function OPAL () {
 				selector	= arguments[0];
 			}
 			else {
-				predicate	= this.make.predicate(arguments[0]);
+				predicate	= this.predicate(arguments[0]);
 				selector	= arguments[1];
 			}
 			
@@ -425,34 +425,36 @@ function OPAL () {
 			return difference(this,set);
 		};
 		
-		this.make = {
-			
-			predicate: function (parameter) {
-				if ( parameter === null ) {
-					return AllPredicate();
-				}
-				if ( parameter == ':empty' ) {
-					return EmptySetPredicate;
-				}
-				else if ( typeof parameter == 'function' ) {
-					return parameter;
-				}
-				else if ( typeof parameter == 'object' ) {
-					return ObjectIdentityPredicate(parameter);
-				}
+	
+		this.predicate = function (parameter) {
+//			console.log('Making predicate in Set');
+			if ( parameter === null ) {
+//				console.log('Returning AllPredicate');
 				return AllPredicate();
-			},
-			
-			ordering: function () {
-				if ( arguments.length > 1 ) {
-					return CompositeOrdering.apply(null,arguments);
-				}
-				else if ( arguments[0] instanceof Array ) {
-					return CompositeOrdering(arguments[0]);
-				}
-				return arguments[0];
 			}
+			if ( parameter == ':empty' ) {
+//				console.log('Returning EmptySetPredicate');
+				return EmptySetPredicate;
+			}
+			else if ( typeof parameter == 'function' ) {
+//				console.log('Returning predicate');
+				return parameter;
+			}
+			else if ( typeof parameter == 'object' ) {
+//				console.log('Returning ObjectIdentityPredicate');
+				return ObjectIdentityPredicate(parameter);
+			}
+			return AllPredicate();
+		};
 			
+		this.ordering = function () {
+			if ( arguments.length > 1 ) {
+				return CompositeOrdering.apply(null,arguments);
+			}
+			else if ( arguments[0] instanceof Array ) {
+				return CompositeOrdering(arguments[0]);
+			}
+			return arguments[0];
 		};
 		
 		this.delegateFor = function (host) {
@@ -745,7 +747,7 @@ function OPAL () {
 	//														   		  Orderings
 	// ------------------------------------------------------------------------
 	
-	var makeOrdering = (new Set()).make.ordering;
+	var makeOrdering = (new Set()).ordering;
 	
 	function FunctionOrdering (fn) {
 		return function (a,b) {
@@ -1535,6 +1537,17 @@ var jModel = function () {
 	function DomainObjectCollection (specification) {
 		
 		
+		specification = specification || {};
+		
+		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
+		
+		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		objects.delegateFor(this);
+		
+		var subscribers		= new SubscriptionList(notifications);
+		this.subscribers	= delegateTo(subscribers,'filter');
+		
+		
 		this.add = function (object) {
 			if ( objects.add(object) ) {
 				subscribers.notify({method:'add',object:object,description:'object addition'});
@@ -1581,7 +1594,7 @@ var jModel = function () {
 		this.by = function () {			
 			return new DomainObjectCollection({
 				objects: objects.copy(),
-				ordering: this.make.ordering.apply(null,arguments),
+				ordering: this.ordering.apply(null,arguments),
 				description:'ordered '+specification.description
 			});	
 		};
@@ -1590,7 +1603,7 @@ var jModel = function () {
 		this.sort = function () {
 
 			if (arguments.length > 0) {
-				specification.ordering = this.make.ordering.apply(null,arguments);
+				specification.ordering = this.ordering.apply(null,arguments);
 			}
 
 			// Remember old order
@@ -1652,7 +1665,7 @@ var jModel = function () {
 				return this;
 			}
 			
-			var filtered = objects.filter.apply(objects,arguments);
+			var filtered = objects.filter.apply(this,arguments);
 			
 			if ( filtered instanceof Set ) {
 				return new DomainObjectCollection({
@@ -1719,73 +1732,59 @@ var jModel = function () {
 			
 		};
 		
-		var that = this;
-		this.make = {
-			
-			predicate: function (parameter) {
-				if ( parameter == ':empty' ) {
-					return EmptySetPredicate;
-				}
-				else if ( typeof parameter == 'function' ) {
-					return parameter;
-				}
-				else if ( parameter && parameter.domain ) {
-					return ObjectIdentityPredicate(parameter);
-				}
-				else if ( typeof parameter == 'object' && parameter !== null ) {
-					return ExamplePredicate(parameter);
-				} 
-				else if ( typeof parameter == 'number' ) {
-					return IdentityPredicate(parameter);
-				}
-				return AllPredicate();
-			},
-			
-			ordering: function () {
-				if ( arguments.length > 1 ) {
-					for ( var i=0; i<arguments.length; i++ ) {
-						arguments[i] = that.make.ordering(arguments[i]);
-					}
-					return CompositeOrdering.apply(null,arguments);
-				}
-				else if ( arguments[0] instanceof Array ) {
-					for ( var i=0; i<arguments[0].length; i++ ) {
-						arguments[0][i] = that.make.ordering(arguments[0][i]);
-					}
-					return CompositeOrdering(arguments[0]);
-				}
-				else if ( typeof arguments[0] == 'function' ) {
-					return arguments[0];
-				}
-				else {
-					var pieces = arguments[0].split(' ');
-					if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
-						return FieldOrdering(pieces[0]);
-					}
-					else {
-						return DescendingOrdering(FieldOrdering(pieces[0]));
-					}
-				}
+		this.predicate = function (parameter) {
+			if ( parameter == ':empty' ) {
+				return EmptySetPredicate;
 			}
-			
+			else if ( typeof parameter == 'function' ) {
+				return parameter;
+			}
+			else if ( parameter && parameter.domain ) {
+				return ObjectIdentityPredicate(parameter);
+			}
+			else if ( typeof parameter == 'object' && parameter !== null ) {
+				return ExamplePredicate(parameter);
+			} 
+			else if ( typeof parameter == 'number' ) {
+				return IdentityPredicate(parameter);
+			}
+			return AllPredicate();
 		};
 		
+		function ordering () {
+			if ( arguments.length > 1 ) {
+				for ( var i=0; i<arguments.length; i++ ) {
+					arguments[i] = ordering(arguments[i]);
+				}
+				return CompositeOrdering.apply(null,arguments);
+			}
+			else if ( arguments[0] instanceof Array ) {
+				for ( var i=0; i<arguments[0].length; i++ ) {
+					arguments[0][i] = ordering(arguments[0][i]);
+				}
+				return CompositeOrdering(arguments[0]);
+			}
+			else if ( typeof arguments[0] == 'function' ) {
+				return arguments[0];
+			}
+			else {
+				var pieces = arguments[0].split(' ');
+				if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
+					return FieldOrdering(pieces[0]);
+				}
+				else {
+					return DescendingOrdering(FieldOrdering(pieces[0]));
+				}
+			}
+		}
 		
-		specification = specification || {};
+		this.ordering = ordering;
 		
-		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
 		if ( specification.ordering ) {
-			specification.ordering = this.make.ordering(specification.ordering);
+			specification.ordering = this.ordering(specification.ordering);
 		}
 
-
-		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
-		objects.delegateFor(this);
-		
-		var subscribers		= new SubscriptionList(notifications);
-		this.subscribers	= delegateTo(subscribers,'filter');
-		
 		var sorted = false;
 		
 		this.length = objects.count;
@@ -1888,7 +1887,7 @@ var jModel = function () {
 	//														   Domain Orderings
 	// ------------------------------------------------------------------------
 	
-	var makeOrdering = (new DomainObjectCollection()).make.ordering;
+	var makeOrdering = (new DomainObjectCollection()).ordering;
 	
 
 	function FieldOrdering (fieldName) {
@@ -2287,19 +2286,15 @@ var jModel = function () {
 		
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		
-		this.make = {
-		
-			predicate: function (parameter) {
-				if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-					var predicate = PropertyPredicate('name',parameter);
-					predicate.unique = true;
-					return predicate;
-				}
-				else {
-					return relationships.make.predicate(parameter);
-				}
+		this.predicate = function (parameter) {
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				var predicate = PropertyPredicate('name',parameter);
+				predicate.unique = true;
+				return predicate;
 			}
-			
+			else {
+				return relationships.predicate(parameter);
+			}
 		};
 		
 	}
