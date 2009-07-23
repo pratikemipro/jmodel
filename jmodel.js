@@ -394,7 +394,12 @@ function OPAL () {
 		this.map = function (mapping,mapped) {
 			mapped = mapped || new Set();
 			this.each(function (index,object) {
-				mapped.add(mapping.call(object,object));
+				if ( typeof mapping == 'string' ) {
+					mapped.add(object[mapping].call(object,object));
+				}
+				else {
+					mapped.add(mapping.call(object,object));
+				}
 			});
 			return mapped;
 		};
