@@ -1132,6 +1132,13 @@ var jModel = function () {
 								description: 	name
 							});
 							
+		// EntityType methods
+		if ( options.methods ) {
+			for (var i in options.methods) {
+				this.objects[i] = options.methods[i];		
+			}
+		}
+							
 		this.deleted = new DeletedObjectsCollection(this.objects);
 
 		this.name	= name;
@@ -1177,20 +1184,22 @@ var jModel = function () {
 		
 		register: function (name,constructor,options) {
 
-			entities[name] = new EntityType(name,constructor,options);
+			entities[name] 		= new EntityType(name,constructor,options);
 
 			var names = [name].concat( options.synonyms || [] );
 
 			// NOTE: Make this handle synonyms more gracefully
 			for ( var i in names ) {
-				var synonym 										= names[i];
-				entities[synonym]									= entities[name];
-				external[synonym] 									= delegateTo(entities[name],'object');
-				external[synonym].entitytype						= entities[name];
-				external[synonym].extend							= delegateTo(entities[name].constructor,'extend');
-				external['create'+synonym]							= delegateTo(entities[name],'create');
-				external[options.plural || synonym+'s']				= delegateTo(entities[name].objects,'filter');
-				external['deleted'+(options.plural || synonym+'s')]	= delegateTo(entities[name].deleted,'filter');
+				var synonym 					= names[i];
+				var plural						= options.plural || synonym+'s';
+				entities[synonym]				= entities[name];
+				external[synonym] 				= delegateTo(entities[name],'object');
+				external[synonym].entitytype	= entities[name];
+				external[synonym].extend		= delegateTo(entities[name].constructor,'extend');
+				external['create'+synonym]		= delegateTo(entities[name],'create');
+				external[plural]				= delegateTo(entities[name].objects,'filter');
+				external['deleted'+plural]		= delegateTo(entities[name].deleted,'filter');
+				
 			}
 
 			return external.prototype;
