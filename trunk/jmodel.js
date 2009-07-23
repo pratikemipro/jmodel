@@ -265,6 +265,16 @@ function OPAL () {
 		}
 	};
 	
+	
+	function Method (name) {
+		return function () {
+			return object[name] ? object[name].apply(object,index,object) : false;
+		};
+	}
+	
+	opal.Method = Method;
+	
+	
 	// ------------------------------------------------------------------------
 	//																		Set
 	// ------------------------------------------------------------------------
@@ -392,14 +402,10 @@ function OPAL () {
 		};
 		
 		this.map = function (mapping,mapped) {
-			mapped = mapped || new Set();
+			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
+			mapped	= mapped || new Set();
 			this.each(function (index,object) {
-				if ( typeof mapping == 'string' ) {
-					mapped.add(object[mapping].call(object,object));
-				}
-				else {
-					mapped.add(mapping.call(object,object));
-				}
+				mapped.add(mapping(object));
 			});
 			return mapped;
 		};
@@ -880,6 +886,8 @@ var jModel = function () {
 	//
 	
 	external.extend({
+		
+		method: 	Method,
 		
 		/* Set */
 		set: 		opal.set,
