@@ -1228,24 +1228,19 @@ var jModel = function () {
 		
 		register: function (name,constructor,options) {
 
-			entities[name] 		= new EntityType(name,constructor,options);
+			var plural					= options.plural || name+'s';
 
-			var names = [name].concat( options.synonyms || [] );
+			entities[name] 				= new EntityType(name,constructor,options);
 
-			// NOTE: Make this handle synonyms more gracefully
-			for ( var i in names ) {
-				var synonym 					= names[i];
-				var plural						= options.plural || synonym+'s';
-				entities[synonym]				= entities[name];
-				external[synonym] 				= delegateTo(entities[name],'object');
-				external[synonym].entitytype	= entities[name];
-				external[synonym].extend		= delegateTo(entities[name].constructor,'extend');
-				external['create'+synonym]		= delegateTo(entities[name],'create');
-				external[plural]				= delegateTo(entities[name].objects,'filter');
-				external['deleted'+plural]		= delegateTo(entities[name].deleted,'filter');
+			external[name]	 			= delegateTo(entities[name],'object');
+			external[plural]			= delegateTo(entities[name].objects,'filter');
 				
-			}
-
+			external['create'+name]		= delegateTo(entities[name],'create');
+			external['deleted'+plural]	= delegateTo(entities[name].deleted,'filter');
+				
+			external[name].entitytype	= entities[name];
+			external[name].extend		= delegateTo(entities[name].constructor,'extend');
+				
 			return external.prototype;
 
 		}
