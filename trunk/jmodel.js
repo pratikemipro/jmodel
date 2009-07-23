@@ -267,9 +267,11 @@ function OPAL () {
 	
 	
 	function Method (name) {
-		return function (object) {
-			return object[name] ? object[name].apply(object) : false;
+		var method = function (object,args) {
+			return object[name] ? object[name].apply(object,args) : false;
 		};
+		method.apply = method;
+		return method;
 	}
 	
 	opal.Method = Method;
@@ -336,16 +338,9 @@ function OPAL () {
 		};
 		
 		this.each = function (callback) {
-			var index;
-			if ( typeof callback == 'string' ) {
-				for(index in members) {
-					members[index][callback].call(members[index],index,members[index]);
-				}
-			}
-			else {
-				for(index in members) {
-					callback.call(members[index],index,members[index]);
-				}
+			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
+			for(index in members) {
+				callback.apply(members[index],[index,members[index]]);
 			}
 			return this;
 		};
