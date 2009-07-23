@@ -267,12 +267,20 @@ function OPAL () {
 	
 	
 	function Method (name) {
-		return function () {
-			return object[name] ? object[name].apply(object,index,object) : false;
+		return function (object) {
+			return object[name] ? object[name].apply(object) : false;
 		};
 	}
 	
 	opal.Method = Method;
+	
+	function plus(a,b) {
+		return a+b;
+	}
+	
+	plus.unit = 0;
+	
+	opal.plus = plus;
 	
 	
 	// ------------------------------------------------------------------------
@@ -409,6 +417,14 @@ function OPAL () {
 			});
 			return mapped;
 		};
+		
+		this.reduce = function (fn,acc) {
+			acc = acc || fn.unit;
+			this.each(function (index,object) {
+				acc = fn(acc,object);
+			});
+			return acc;
+		}
 		
 		this.copy = function () {
 			return new Set(members.slice());
@@ -888,6 +904,7 @@ var jModel = function () {
 	external.extend({
 		
 		method: 	Method,
+		plus: 		plus,
 		
 		/* Set */
 		set: 		opal.set,
