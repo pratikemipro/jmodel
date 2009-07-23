@@ -587,11 +587,23 @@ function OPAL () {
 		};
 	}
 	
+	function PropertyPathPredicate (path,value) {
+		var pieces = path.split('.');
+		return function (candidate) {
+			var test = candidate;
+			for ( var i=0; i<pieces.length; i++ ) {
+				test = test[pieces[i]];
+			}
+			return test == value;
+		};
+	}
+	
 	opal.extend({
 		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
 		TypePredicate: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,
-		PropertyPredicate: 			PropertyPredicate
+		PropertyPredicate: 			PropertyPredicate,
+		PropertyPathPredicate: 		PropertyPathPredicate
 	});
 	
 	// Value comparisons
@@ -876,7 +888,14 @@ var jModel = function () {
 		test: 		FunctionPredicate,
 		type: 		TypePredicate,
 		isa: 		InstancePredicate,
-		property: 	PropertyPredicate,
+		property: 	function (path,value) {
+						if ( path.indexOf('.') != -1 ) {
+							return PropertyPathPredicate(path,value);
+						}
+						else {
+							return PropertyPredicate(path,value);
+						}
+					},
 		
 		member: 	MembershipPredicate,
 		
