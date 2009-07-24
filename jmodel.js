@@ -23,12 +23,21 @@ jQuery.fn.publish = function (publication) {
 		
 		publish.failure = failure || function (message) {
 			source
-				.addClass('failure')
-				.attr('title',message);
+				.attr('title',message)
+				.animate({
+					backgroundColor: 'red'
+				},250)
+				.animate({
+					backgroundColor: '#ff7777'
+				},500);
 		};
 		
 		publish.success = success || function () {
-			source.removeClass('failure');
+			source
+				.attr('title','')
+				.animate({
+					backgroundColor: 'white'
+				},500);
 		}
 
 		return publish;
