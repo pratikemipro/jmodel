@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.4.0
+ *	jModel Javascript Library v0.4.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009 Richard Baker
@@ -1271,12 +1271,14 @@ var jModel = function () {
 					}, 
 				
 		debug: 	function (showSubscribers) {
-					var contents = '';
+					log().startGroup('Context');
 					for ( var entityName in entities ) {
-						contents += entityName+': ['+entities[entityName].objects.debug(showSubscribers)
-									+' '+entities[entityName].deleted.debug(false)+'] ';
+						log().startGroup(entityName);
+						entities[entityName].objects.debug(showSubscribers);
+						entities[entityName].deleted.debug(false);
+						log().endGroup();
 					}
-					return contents;
+					log().endGroup();
 				}
 		
 	};
@@ -1488,7 +1490,9 @@ var jModel = function () {
 		};
 		
 		this.debug = function () {
-			return _.nonempty(subscribers) ? '{'+subscribers.count()+' subscribers}' : '';
+			if ( _.nonempty(subscribers) ) {
+				log().debug('Subscribers:  '+subscribers.count());
+			}
 		};
 		
 	};
@@ -1724,11 +1728,12 @@ var jModel = function () {
 		
 		
 		this.debug = function (showSubscribers) {
-			var contents = objects.map(function (object) {return object.primaryKeyValue();}).join(' ');
-			if ( showSubscribers ) {
-				contents += ' '+subscribers.debug()+' ';
+			if ( Not(EmptySetPredicate)(objects) ) {
+				log().debug('Objects:  '+objects.map('primaryKeyValue').join(', '));
 			}
-			return contents;
+			if ( showSubscribers ) {
+				subscribers.debug();
+			}
 		};
 		
 		
@@ -1871,7 +1876,9 @@ var jModel = function () {
 		var deleted = new DomainObjectCollection({description:'deleted'});
 		
 		deleted.debug = function () {
-			return this.map(function (object) {return '('+object.primaryKeyValue()+')';}).join(' ');
+			if ( Not(EmptySetPredicate)(deleted) ) {
+				log().debug('Deleted:  '+deleted.map('primaryKeyValue').join(', '));
+			}
 		};
 		
 		collection.subscribe({
@@ -2304,14 +2311,14 @@ var jModel = function () {
 				},
 						
 				debug: function (showSubscribers) {
-					var fields = '';
+					log().startGroup('Domain Object');
 					for ( var i in data ) {
-						fields += i + ':'+data[i]+' ';
+						log().debug(i+': '+data[i]);
 					}
 					if ( showSubscribers ) {
-						fields += ' '+subscribers.debug()+' ';
-					} 
-					return fields;
+						subscribers.debug();
+					}
+					log().endGroup();
 				}
 				
 			};
