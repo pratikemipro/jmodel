@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.4.1
+ *	jModel Javascript Library v0.4.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009 Richard Baker
@@ -887,7 +887,7 @@ var jModel = function () {
 
 	var external		= function (predicate) { return all.filter.apply(all,arguments); },
 		_				= external,
-		entities		= {},
+		entities		= new EntityTypeSet(),
 		notifications	= new NotificationQueue();
 	
 	external.extend = opal.extend;
@@ -1161,13 +1161,33 @@ var jModel = function () {
 	
 	var all = new DomainObjectCollection();
 	
+	
+	function EntityTypeSet () {
+		
+		var	types = new Set();
+		types.delegateFor(this);
+		
+		this.predicate = function (parameter) {
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				var predicate = PropertyPredicate('name',parameter);
+				predicate.unique = true;
+				return predicate;
+			}
+			else {
+				return types.predicate(parameter);
+			}
+		};
+		
+	}
+	
+	
 	function EntityType (name,constructor,options) {
 
 		options  		= options || {};
 		
-		this.options	= options;
-		
-		this.constructor = constructor;
+		this.options		= options;
+		this.name			= name;
+		this.constructor	= constructor;
 
 		this.objects = new	DomainObjectCollection({
 								base: 			all,
@@ -1201,7 +1221,7 @@ var jModel = function () {
 			data = (typeof data == 'object') ? data : {};
 
 			var newObject = new constructor();
-			DomainObject.call(newObject,entities[name]);
+			DomainObject.call(newObject,entities.filter(PropertyPredicate('name',name)));
 
 			var primaryKey	= newObject.primaryKey;
 
@@ -1228,18 +1248,19 @@ var jModel = function () {
 		
 		register: function (name,constructor,options) {
 
-			var plural					= options.plural || name+'s';
+			var plural					= options.plural || name+'s',
+				entity	= new EntityType(name,constructor,options);
 
-			entities[name] 				= new EntityType(name,constructor,options);
-
-			external[name]	 			= delegateTo(entities[name],'object');
-			external[plural]			= delegateTo(entities[name].objects,'filter');
+			external[name]	 			= delegateTo(entity,'object');
+			external[plural]			= delegateTo(entity.objects,'filter');
 				
-			external['create'+name]		= delegateTo(entities[name],'create');
-			external['deleted'+plural]	= delegateTo(entities[name].deleted,'filter');
+			external['create'+name]		= delegateTo(entity,'create');
+			external['deleted'+plural]	= delegateTo(entity.deleted,'filter');
 				
-			external[name].entitytype	= entities[name];
-			external[name].extend		= delegateTo(entities[name].constructor,'extend');
+			external[name].entitytype	= entity;
+			external[name].extend		= delegateTo(entity.constructor,'extend');
+			
+			entities.add(entity);
 				
 			return external.prototype;
 
@@ -1261,23 +1282,21 @@ var jModel = function () {
 				},
 				
 		checkpoint: function () {
-						for ( var entityName in entities ) {
-							entities[entityName].objects.each(function (index,object) {
-								object.domain.dirty = false;
-							});
-							entities[entityName].deleted.remove(AllPredicate(),true);
-						}
+						entities.each(function (index,entity) {
+							entity.objects.each('clean');
+							entity.deleted.remove(AllPredicate(),true);
+						});
 						return external.context;
 					}, 
 				
 		debug: 	function (showSubscribers) {
 					log().startGroup('Context');
-					for ( var entityName in entities ) {
-						log().startGroup(entityName);
-						entities[entityName].objects.debug(showSubscribers);
-						entities[entityName].deleted.debug(false);
+					entities.each(function (index,entity) {
+						log().startGroup(entity.name);
+						entity.objects.debug(showSubscribers);
+						entity.deleted.debug(false);
 						log().endGroup();
-					}
+					});
 					log().endGroup();
 				}
 		
@@ -1353,11 +1372,11 @@ var jModel = function () {
 					},
 					
 		push: 		function () {
-						for(var prototypeName in entities) {
-							entities[prototypeName].objects.each(function (index,object) {
+						entities.each(function (index,entity) {
+							entity.objects.each(function (index,object) {
 								object.domain.push();
 							});
-						}
+						});
 						return external.notifications;
 					},
 					
@@ -2116,7 +2135,7 @@ var jModel = function () {
 		
 		var data 			= {},
 			subscribers 	= new SubscriptionList(notifications),
-			relationships	= new RelationshipList();
+			relationships	= new RelationshipSet();
 			
 		
 		this.subscribers	= delegateTo(subscribers, 'filter');
@@ -2334,7 +2353,7 @@ var jModel = function () {
 	// 															  Relationships
 	// ------------------------------------------------------------------------
 	
-	function RelationshipList () {
+	function RelationshipSet () {
 		
 		var relationships = new Set();
 		relationships.delegateFor(this);
@@ -2360,7 +2379,7 @@ var jModel = function () {
 		this.name		= relationship.accessor;
 		
 		this.get = function (create) {
-			var child = entities[relationship.prototype].object(parent.get(relationship.field));
+			var child = entities.filter(relationship.prototype).object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -2371,7 +2390,7 @@ var jModel = function () {
 		
 		this.add = function (data) {
 
-			var newObject = entities[relationship.prototype].create( data || {} );
+			var newObject = entities.filter(relationship.prototype).create( data || {} );
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -2395,7 +2414,7 @@ var jModel = function () {
 		example[relationship.field] = parent.primaryKeyValue();
 
 		var children			= new DomainObjectCollection({
-											base: 	     entities[relationship.prototype].objects,
+											base: 	     entities.filter(relationship.prototype).objects,
 											predicate: 	 RelationshipPredicate(parent,relationship.field),
 											description: 'children by relationship '+relationship.accessor
 										});
@@ -2430,13 +2449,13 @@ var jModel = function () {
 			
 			data = data || {};
 			data[relationship.field] = parent.primaryKeyValue();
-			return entities[relationship.prototype].create(data);
+			return entities.filter(relationship.prototype).create(data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			entities[relationship.prototype].objects.remove(id);
+			entities.filter(relationship.prototype).objects.remove(id);
 			return this;
 			
 		};
@@ -2474,9 +2493,9 @@ var jModel = function () {
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
 			else {
-				if ( entities[key] ) {
+				if ( entities.filter(key) ) {
 					log('json/thaw').debug('creating free object');
-					object = entities[key].create(partitionedData.fields);
+					object = entities.filter(key).create(partitionedData.fields);
 				}
 			}
 			
