@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.4.2
+ *	jModel Javascript Library v0.4.3
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009 Richard Baker
@@ -298,13 +298,20 @@ function OPAL () {
 	
 	opal.Method = Method;
 	
-	function plus(a,b) {
+	function plus (a,b) {
 		return a+b;
 	}
-	
 	plus.unit = 0;
 	
 	opal.plus = plus;
+	
+	
+	function times (a,b) {
+		return a*b;
+	}
+	times.unit = 1;
+	
+	opal.times = times;
 	
 	
 	// ------------------------------------------------------------------------
@@ -922,6 +929,7 @@ var jModel = function () {
 		
 		method: 	Method,
 		plus: 		plus,
+		times: 		times,
 		
 		/* Set */
 		set: 		opal.set,
