@@ -1248,7 +1248,7 @@ var jModel = function () {
 		
 		register: function (name,constructor,options) {
 
-			var plural					= options.plural || name+'s',
+			var plural	= options.plural || name+'s',
 				entity	= new EntityType(name,constructor,options);
 
 			external[name]	 			= delegateTo(entity,'object');
