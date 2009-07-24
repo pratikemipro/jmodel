@@ -2207,7 +2207,8 @@ var jModel = function () {
 					}
 				}
 				else if ( arguments.callee.caller.failure ) {
-					var message = fields.filter(PropertyPredicate('accessor',key)).first().validation || '';
+					var validation = fields.filter(PropertyPredicate('accessor',key)).first().validation;
+					var message =  validation.message ? validation.message : '';
 					arguments.callee.caller.failure(message);
 				}
 			}
@@ -2411,7 +2412,7 @@ var jModel = function () {
 	function Field (field) {
 		
 		var data 		= field.defaultValue || null,
-			predicate	= field.predicate || AllPredicate;
+			predicate	= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
 		
 		this.accessor	= field.accessor;
 		this.validation	= field.validation;
