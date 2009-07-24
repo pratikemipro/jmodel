@@ -15,11 +15,32 @@
 // NOTE: Make publishing work for domain member subscriptions
 jQuery.fn.publish = function (publication) {
 	
+	function Publisher (source,target,key,failure,success) {
+		
+		var publish = function (event) {
+			target.set(key,jQuery(event.target).val());
+		};
+		
+		publish.failure = failure || function (message) {
+			source
+				.addClass('failure')
+				.attr('title',message);
+		};
+		
+		publish.success = success || function () {
+			source.removeClass('failure');
+		}
+
+		return publish;
+		
+	}
+	
 	if ( publication.selector && publication.member.bindings ) {
 		
 		this.each(function (index,element) {
 			for (var selector in publication.member.bindings) {
 				jQuery(selector,element).each(function (index,object) {
+					var publisher = new Publisher();
 					publication.target.subscribe({
 						source: publication.target,
 						predicate: publication.predicate,
@@ -31,9 +52,7 @@ jQuery.fn.publish = function (publication) {
 							key: publication.member.bindings[selector],
 							change: function (key,object) {
 								return function (target) {
-									jQuery(object).bind('change',function (event) {
-										target.set(key,jQuery(event.target).val());
-									});
+									jQuery(object).bind('change',Publisher(jQuery(object),target,key));
 								};
 							}(publication.member.bindings[selector],object),
 							initialise: publication.initialise,
@@ -50,7 +69,7 @@ jQuery.fn.publish = function (publication) {
 	else if ( publication.selector ) {
 	
 		var that=this;
-		
+			
 		publication.target.subscribe({
 			source: publication.target,
 			predicate: publication.predicate,
@@ -61,9 +80,7 @@ jQuery.fn.publish = function (publication) {
 				target: that,
 				key: publication.key,
 				change: function (target) {
-					that.bind('change',function (event) {
-						target.set(publication.member.key,jQuery(event.target).val());
-					});
+					that.bind('change',Publisher(that,target,publication.member.key));
 				},
 				initialise: publication.initialise,
 				description: publication.description || 'domain collection member subscription'
@@ -77,11 +94,7 @@ jQuery.fn.publish = function (publication) {
 		
 		for (var selector in publication.bindings) {
 			jQuery(selector,this).each(function (index,object) {
-				jQuery(object).bind('change',function (key) {
-					return function (event) {
-						publication.target.set(key,jQuery(event.target).val());
-					};
-				}(publication.bindings[selector]));
+				jQuery(object).bind('change',Publisher(jQuery(object),publication.target,publication.bindings[selector]));
 			});
 		}
 		return this;
@@ -90,7 +103,7 @@ jQuery.fn.publish = function (publication) {
 	else {
 		
 		return this.change ? this.change(function (event) {
-			publication.target.set(publication.key,jQuery(event.target).val());
+			Publisher(jQuery(this),publication.target,publication.key)(event);
 		}) :
 		this;
 		
@@ -1480,14 +1493,14 @@ var jModel = function () {
 	
 	
 	//
-	// Subscription list
+	// Subscriber Set
 	//
 	// This contains a list of subscription objects, each of which produces
 	// notification objects when required and adds them to the notification
 	// queue.
 	//
 	
-	function SubscriptionList (notifications) {
+	function SubscriberSet (notifications) {
 		
 		var subscribers = new Set();
 		subscribers.delegateFor(this);
@@ -1611,7 +1624,7 @@ var jModel = function () {
 		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
 		objects.delegateFor(this);
 		
-		var subscribers		= new SubscriptionList(notifications);
+		var subscribers		= new SubscriberSet(notifications);
 		this.subscribers	= delegateTo(subscribers,'filter');
 		
 		
@@ -2135,7 +2148,7 @@ var jModel = function () {
 		
 		
 		var fields			= new FieldSet(),
-			subscribers 	= new SubscriptionList(notifications),
+			subscribers 	= new SubscriberSet(notifications),
 			relationships	= new RelationshipSet();
 			
 		this.subscribers	= delegateTo(subscribers, 'filter');
@@ -2184,10 +2197,18 @@ var jModel = function () {
 				key = arguments[0];
 				var value = arguments[1];
 				log('domainobject/set').debug('Setting '+key+' to "'+value+'"');
-				fields.set(key,value);
-				subscribers.notify({key:key,description:'field value change: '+key});
-				if ( arguments.length == 2 || arguments[2] ) {
-					subscribers.notify({key:':any',description:'field value change: any'});
+				if ( fields.set(key,value) ) {
+					subscribers.notify({key:key,description:'field value change: '+key});
+					if ( arguments.length == 2 || arguments[2] ) {
+						subscribers.notify({key:':any',description:'field value change: any'});
+					}
+					if ( arguments.callee.caller.success ) {
+						arguments.callee.caller.success();
+					}
+				}
+				else if ( arguments.callee.caller.failure ) {
+					var message = fields.filter(PropertyPredicate('accessor',key)).first().validation || '';
+					arguments.callee.caller.failure(message);
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -2374,7 +2395,7 @@ var jModel = function () {
 		}
 		
 		this.set = function (name,value) {
-			fields.filter(PropertyPredicate('accessor',name)).first().set(value);
+			return fields.filter(PropertyPredicate('accessor',name)).first().set(value);
 		}
 		
 		this.keys = function () {
@@ -2389,16 +2410,24 @@ var jModel = function () {
 	
 	function Field (field) {
 		
-		var data = field.defaultValue || null;
+		var data 		= field.defaultValue || null,
+			predicate	= field.predicate || AllPredicate;
 		
-		this.accessor = field.accessor;
+		this.accessor	= field.accessor;
+		this.validation	= field.validation;
 		
 		this.get = function () {
 			return data;
 		}
 		
 		this.set = function (value) {
-			data = value;
+			if ( predicate(value) ) {
+				data = value;
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 		
 		this.debug = function () {
