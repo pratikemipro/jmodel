@@ -1227,10 +1227,11 @@ var jModel = function () {
 
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
+
 			all.add(newObject);
 
 			log('domainobject/create').endGroup();
-
+			
 			return newObject;
 
 		};
@@ -2133,27 +2134,33 @@ var jModel = function () {
 	function DomainObject (entitytype) {
 		
 		
-		var data 			= {},
+		var fields			= new FieldSet(),
 			subscribers 	= new SubscriptionList(notifications),
 			relationships	= new RelationshipSet();
 			
-		
 		this.subscribers	= delegateTo(subscribers, 'filter');
 		this.relationships	= delegateTo(relationships,'filter');
-			
 		
 		this.get = function () {
 		
 			if ( arguments[0] == ':all' ) {
-				return data;
+				return this.get(fields.keys());
+			}
+			else if ( arguments[0].each ) {
+				var values = {};
+				arguments[0].each(function (index,key) {
+					values[key] = fields.get(key);
+				});
+				return values;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				if ( data[arguments[0]] ) {
-					return data[arguments[0]];
+				var key = arguments[0];
+				if ( fields.filter(key) ) {
+					return fields.get(key);
 				}
 				else {
-					if ( _.nonempty(relationships.filter(arguments[0])) ) {
-						return relationships.filter(arguments[0]).get();
+					if ( _.nonempty(relationships.filter(key)) ) {
+						return relationships.filter(key).get();
 					}
 				}
 			}
@@ -2161,7 +2168,7 @@ var jModel = function () {
 				var keys = arguments[0];
 				var values = {};
 				for ( var key in keys ) {
-					values[keys[key]] = this.get(keys[key]);
+					values[keys[key]] = fields.get(keys[key]);
 				}
 				return values;
 			}
@@ -2177,7 +2184,7 @@ var jModel = function () {
 				key = arguments[0];
 				var value = arguments[1];
 				log('domainobject/set').debug('Setting '+key+' to "'+value+'"');
-				data[key] = value;
+				fields.set(key,value);
 				subscribers.notify({key:key,description:'field value change: '+key});
 				if ( arguments.length == 2 || arguments[2] ) {
 					subscribers.notify({key:':any',description:'field value change: any'});
@@ -2256,25 +2263,17 @@ var jModel = function () {
 			
 			function reifyFields () {
 
-				for ( var i in that.fields ) {
+				log('domainobject/create').startGroup('Reifying fields');
 
-					var field = that.fields[i];
-
-					that.set(field.accessor,field.defaultValue);
-
-					that[field.accessor] = 	function (field) {
-						 						return function () {
-													return this.get(field);
-												};
-											}(field.accessor);
-
-					that['set'+field.accessor]	=	function (field) {
-														return function (value) {
-															return this.set(field,value);
-														};
-													}(field.accessor); 
-
+				for ( var i in that.has ) {
+					var descriptor  			= that.has[i],
+						field					= new Field(descriptor);
+					fields.add(field);
+					that[descriptor.accessor]	= delegateTo(field,'get');
+					that['set'+field.accessor]	= delegateTo(field,'set');
 				}
+				
+				log('domainobject/create').endGroup();
 
 			};
 			
@@ -2285,6 +2284,7 @@ var jModel = function () {
 
 				var i, descriptor, relationship;
 
+				log('domainobject/create').startGroup('Reifying OneToOne relationships');
 				for ( i in that.hasOne ) {
 					descriptor = that.hasOne[i];
 					relationship 							= new OneToOneRelationship(that,descriptor);
@@ -2292,7 +2292,9 @@ var jModel = function () {
 					that[descriptor.accessor]				= delegateTo(relationship,'get');
 					that['add'+descriptor.accessor]			= delegateTo(relationship,'add');
 				}
+				log('domainobject/create').endGroup();
 
+				log('domainobject/create').startGroup('Reifying OneToMany relationships');
 				for ( i in that.hasMany ) {
 					descriptor = that.hasMany[i];
 					relationship											= new OneToManyRelationship(that,descriptor);
@@ -2302,6 +2304,7 @@ var jModel = function () {
 					that['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
 					that['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
 				}
+				log('domainobject/create').endGroup();
 
 			};
 			
@@ -2324,16 +2327,14 @@ var jModel = function () {
 				},
 						
 				push: function () {
-					for (var i in data) {
-						subscribers.notify({key:i,description:'field value'});
-					}
+					fields.each(function (index,field) {
+						subscribers.notify({key:field.name,description:'field value'});
+					})
 				},
 						
 				debug: function (showSubscribers) {
 					log().startGroup('Domain Object');
-					for ( var i in data ) {
-						log().debug(i+': '+data[i]);
-					}
+					fields.debug();
 					if ( showSubscribers ) {
 						subscribers.debug();
 					}
@@ -2347,6 +2348,64 @@ var jModel = function () {
 
 	};
 	
+	
+	// ------------------------------------------------------------------------
+	// 															  		 Fields
+	// ------------------------------------------------------------------------
+	
+	function FieldSet () {
+		
+		var fields = new Set();
+		fields.delegateFor(this);
+		
+		this.predicate = function (parameter) {
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				var predicate = PropertyPredicate('accessor',parameter);
+				predicate.unique = true;
+				return predicate;
+			}
+			else {
+				return fields.predicate(parameter);
+			}
+		};
+		
+		this.get = function (name) {
+			return fields.filter(PropertyPredicate('accessor',name)).first().get();
+		}
+		
+		this.set = function (name,value) {
+			fields.filter(PropertyPredicate('accessor',name)).first().set(value);
+		}
+		
+		this.keys = function () {
+			return fields.map( function (field) { return field.accessor; } );
+		}
+		
+		this.debug = function () {
+			this.each('debug');
+		}
+		
+	}
+	
+	function Field (field) {
+		
+		var data = field.defaultValue || null;
+		
+		this.accessor = field.accessor;
+		
+		this.get = function () {
+			return data;
+		}
+		
+		this.set = function (value) {
+			data = value;
+		}
+		
+		this.debug = function () {
+			log().debug(field.accessor+': '+data);
+		}
+		
+	}
 	
 	
 	// ------------------------------------------------------------------------
@@ -2405,20 +2464,27 @@ var jModel = function () {
 	
 	function OneToManyRelationship (parent,relationship) {
 
+		log('domainobject/create').startGroup('Reifying '+relationship.accessor);
+
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
 		this.accessor			= relationship.accessor;
 		this.name				= relationship.plural || relationship.accessor+'s';
 
 		var example = {};
+		log('domainobject/create').startGroup('Getting primary key value');
 		example[relationship.field] = parent.primaryKeyValue();
+		log('domainobject/create').endGroup();
 
+
+		log('domainobject/create').startGroup('Creating children collection');
 		var children			= new DomainObjectCollection({
 											base: 	     entities.filter(relationship.prototype).objects,
 											predicate: 	 RelationshipPredicate(parent,relationship.field),
 											description: 'children by relationship '+relationship.accessor
 										});
-		
+		log('domainobject/create').endGroup();
+	
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {
 			parent.subscribe({
@@ -2468,6 +2534,8 @@ var jModel = function () {
 			}
 			log().endGroup();
 		};
+		
+		log('domainobject/create').endGroup();
 		
 	};
 	
