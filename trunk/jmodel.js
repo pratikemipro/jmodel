@@ -241,13 +241,13 @@ jQuery.fn.permute = function (permutation) {
 	}
 	
 	var copies = [], placeholders = [], i;
-	for(i=0; i<this.length; i++) {
+	for (i=0; i<this.length; i++) {
 		copies[i] 		= this.get(i);
 		placeholders[i] = document.createComment('');
 		copies[i].parentNode.replaceChild(placeholders[i],copies[i]);
 	}
 	
-	for(i=0; i<copies.length; i++) {
+	for (i=0; i<copies.length; i++) {
 		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
 	}
 	
@@ -368,7 +368,7 @@ function OPAL () {
 		
 		this.each = function (callback) {
 			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
-			for(index in members) {
+			for (index in members) {
 				callback.apply(members[index],[index,members[index]]);
 			}
 			return this;
@@ -537,7 +537,7 @@ function OPAL () {
 	
 	function union () {
 		var union = new Set();
-		for (var i=0; i<arguments.length; i++ ) {
+		for (var i=0; i<arguments.length; i++) {
 			var set = arguments[i];
 			set.each(function (index,object) {
 				union.add(object);
@@ -551,7 +551,7 @@ function OPAL () {
 		arguments[0].each(function (index,object) {
 			intersection.add(object);
 		});
-		for (var i=1; i<arguments.length; i++ ) {
+		for (var i=1; i<arguments.length; i++) {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
 		return intersection;
@@ -809,10 +809,12 @@ function OPAL () {
 	
 	function FunctionOrdering (fn) {
 		return function (a,b) {
-			if ( fn(a) < fn(b) ) {
+			var fna = fn(a),
+				fnb = fn(b);
+			if ( fna < fnb ) {
 				return -1;
 			}
-			else if ( fn(a) > fn(b) ) {
+			else if ( fna > fnb ) {
 				return 1;
 			}
 			return 0;
