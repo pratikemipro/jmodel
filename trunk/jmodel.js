@@ -2167,7 +2167,7 @@ var jModel = function () {
 		
 		
 		var subscribers 	= new SubscriberSet(notifications),
-			fields			= new FieldSet(subscribers),
+			fields			= new FieldSet(this,subscribers),
 			relationships	= new RelationshipSet();
 			
 		this.subscribers	= delegateTo(subscribers, 'filter');
@@ -2383,7 +2383,7 @@ var jModel = function () {
 	// 															  		 Fields
 	// ------------------------------------------------------------------------
 	
-	function FieldSet (subscribers) {
+	function FieldSet (object,subscribers) {
 		
 		var fields = new Set();
 		fields.delegateFor(this);
