@@ -307,6 +307,7 @@ function OPAL () {
 		Method: Method
 	});
 	
+	
 	function plus (a,b) {
 		return a+b;
 	}
