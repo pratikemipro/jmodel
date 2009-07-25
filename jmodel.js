@@ -324,7 +324,8 @@ function OPAL () {
 			throw 'Invalid arguments for Set constructor';
 		}
 		
-		var members = objects || [];
+		var members = objects || [],
+			index = false;
 		
 		this.constraint = AllPredicate();
 		
@@ -334,6 +335,9 @@ function OPAL () {
 			}
 			else if ( members.indexOf && members.indexOf(object) == -1 ) {
 				members.push(object);
+				if ( index ) {
+					index.add(object);
+				}
 				return true;
 			}
 			else if ( !members.indexOf ) { // Oh, how we hate IE
@@ -346,8 +350,16 @@ function OPAL () {
 				}
 				if ( !found ) {
 					members.push(object);
+					index.add(object);
 					return true;
 				}
+			}
+			return false;
+		};
+		
+		this.get = function (key) {
+			if (index) {
+				return index.get(key);
 			}
 			return false;
 		};
@@ -368,7 +380,7 @@ function OPAL () {
 		
 		this.each = function (callback) {
 			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
-			for (index in members) {
+			for (var index in members) {
 				callback.apply(members[index],[index,members[index]]);
 			}
 			return this;
@@ -430,6 +442,11 @@ function OPAL () {
 			partition.keep.each(function (index,object) {
 				members.push(object);
 			});
+			if ( index ) {
+				partition.remove.each(function (index,object) {
+					index.remove(object);
+				});
+			}
 			return partition.remove; 
 		};
 		
@@ -503,6 +520,10 @@ function OPAL () {
 			return arguments[0];
 		};
 		
+		this.index = function (key) {
+			index = new UniqueIndex(this,key);
+		};
+		
 		this.delegateFor = function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
@@ -567,6 +588,55 @@ function OPAL () {
 		difference: 	difference
 	});
 	
+	
+	// ------------------------------------------------------------------------
+	//															   Unique Index
+	// ------------------------------------------------------------------------
+	
+	function UniqueIndex (set,key) {
+		
+		var index = {};
+		
+		this.build = function () {
+			var that = this;
+			set.each(function (i,object) {
+				that.add(object);
+			});
+		};
+		
+		this.add = function (object) {
+			index[key(object)] = object;
+		};
+		
+		this.remove = function (object) {
+			delete index[key(object)];
+		};
+		
+		this.get = function (keyval) {
+			return index[keyval];
+		};
+		
+		this.build();
+		
+	}
+	
+	function PropertyKey (property) {
+		return function (object) {
+			return object[property];
+		};
+	}
+	
+	function MethodKey (method) {
+		return function (object) {
+			return object[method]();
+		};
+	}
+	
+	opal.extend({
+		UniqueIndex: UniqueIndex,
+		PropertyKey: PropertyKey,
+		MethodKey: MethodKey
+	});
 	
 	
 	// ------------------------------------------------------------------------
@@ -1197,6 +1267,8 @@ var jModel = function () {
 	function EntityTypeSet () {
 		
 		var	types = new Set();
+		
+		types.index(PropertyKey('name'));
 		types.delegateFor(this);
 		
 		this.predicate = function (parameter) {
@@ -1228,6 +1300,11 @@ var jModel = function () {
 								description: 	name
 							});
 							
+		// Index if there's a primary key
+		if ( options.primaryKey ) {
+			this.objects.index(MethodKey(options.primaryKey));
+		}
+							
 		// EntityType methods
 		if ( options.methods ) {
 			for (var i in options.methods) {
@@ -1241,8 +1318,13 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			var objects = this.objects.filter.apply(this.objects,arguments);
-			return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
+			if ( options.primaryKey ) {
+				return this.objects.get(criterion);
+			}
+			else {
+				var objects = this.objects.filter.apply(this.objects,arguments);
+				return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
+			}
 		};
 
 
@@ -1253,9 +1335,11 @@ var jModel = function () {
 			data = (typeof data == 'object') ? data : {};
 
 			var newObject = new constructor();
-			DomainObject.call(newObject,entities.filter(PropertyPredicate('name',name)));
+			DomainObject.call(newObject,entities.get(name));
+			
 
-			var primaryKey	= newObject.primaryKey;
+			var primaryKey	= options.primaryKey;
+			newObject.primaryKey = primaryKey;
 
 			data[primaryKey] = data[primaryKey] || generateID();
 			newObject.domain.init(data);
@@ -2173,6 +2257,7 @@ var jModel = function () {
 		this.subscribers	= delegateTo(subscribers, 'filter');
 		this.fields			= delegateTo(fields,'filter');
 		this.relationships	= delegateTo(relationships,'filter');
+		this.relationship   = delegateTo(relationships,'get');
 		
 		this.get = function () {
 		
@@ -2188,12 +2273,12 @@ var jModel = function () {
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
 				var key = arguments[0];
-				if ( fields.filter(key) ) {
+				if ( fields.get(key) ) {
 					return fields.get(key);
 				}
 				else {
-					if ( _.nonempty(relationships.filter(key)) ) {
-						return relationships.filter(key).get();
+					if ( relationships.get(key) ) {
+						return relationships.get(key).get();
 					}
 				}
 			}
@@ -2386,6 +2471,8 @@ var jModel = function () {
 	function FieldSet (object,subscribers) {
 		
 		var fields = new Set();
+		
+		fields.index(PropertyKey('accessor'));
 		fields.delegateFor(this);
 		
 		this.predicate = function (parameter) {
@@ -2400,11 +2487,11 @@ var jModel = function () {
 		};
 		
 		this.get = function (name) {
-			return fields.filter(PropertyPredicate('accessor',name)).first().get();
+			return fields.get(name).get();
 		};
 		
 		this.set = function (name,value,publisher) {
-			return fields.filter(PropertyPredicate('accessor',name)).first().set(value,publisher);
+			return fields.get(name).set(value,publisher);
 		};
 		
 		this.keys = function () {
@@ -2462,6 +2549,8 @@ var jModel = function () {
 	function RelationshipSet () {
 		
 		var relationships = new Set();
+		
+		relationships.index(PropertyKey('name'));
 		relationships.delegateFor(this);
 		
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
@@ -2485,7 +2574,7 @@ var jModel = function () {
 		this.name		= relationship.accessor;
 		
 		this.get = function (create) {
-			var child = entities.filter(relationship.prototype).object(parent.get(relationship.field));
+			var child = entities.get(relationship.prototype).object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -2496,7 +2585,7 @@ var jModel = function () {
 		
 		this.add = function (data) {
 
-			var newObject = entities.filter(relationship.prototype).create( data || {} );
+			var newObject = entities.get(relationship.prototype).create( data || {} );
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -2526,7 +2615,7 @@ var jModel = function () {
 
 		log('domainobject/create').startGroup('Creating children collection');
 		var children			= new DomainObjectCollection({
-											base: 	     entities.filter(relationship.prototype).objects,
+											base: 	     entities.get(relationship.prototype).objects,
 											predicate: 	 RelationshipPredicate(parent,relationship.field),
 											description: 'children by relationship '+relationship.accessor
 										});
@@ -2562,13 +2651,13 @@ var jModel = function () {
 			
 			data = data || {};
 			data[relationship.field] = parent.primaryKeyValue();
-			return entities.filter(relationship.prototype).create(data);
+			return entities.get(relationship.prototype).create(data);
 			
 		};
 		
 		this.remove = function (id) {
 			
-			entities.filter(relationship.prototype).objects.remove(id);
+			entities.get(relationship.prototype).objects.remove(id);
 			return this;
 			
 		};
@@ -2608,9 +2697,9 @@ var jModel = function () {
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
 			else {
-				if ( entities.filter(key) ) {
+				if ( entities.get(key) ) {
 					log('json/thaw').debug('creating free object');
-					object = entities.filter(key).create(partitionedData.fields);
+					object = entities.get(key).create(partitionedData.fields);
 				}
 			}
 			
