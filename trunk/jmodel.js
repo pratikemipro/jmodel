@@ -368,10 +368,16 @@ function OPAL () {
 		};
 		
 		this.get = function (key) {
-			if (index) {
+			if ( key == ':first' ) {
+				return this.first();
+			}
+			else if (index) {
 				return index.get(key);
 			}
-			return false;
+			else {
+				var obj = this.filter(key)
+				return obj.each ? obj.first() : obj;
+			}
 		};
 		
 		this.count = function (predicate) {
