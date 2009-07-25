@@ -288,6 +288,11 @@ function OPAL () {
 	};
 	
 	
+	function Type (object) {
+		return typeof object;
+	}
+	
+	
 	function Property (property) {
 		return function (object) {
 			return object[property];
@@ -675,11 +680,18 @@ function OPAL () {
 		};
 	}
 	
+	function FunctionValuePredicate(fn,value) {
+		return function (candidate) {
+			return fn(candidate) == value;
+		}
+	}
+	
 	opal.extend({
-		AllPredicate: 		AllPredicate,
-		NonePredicate: 		NonePredicate,
-		TruePredicate: 		TruePredicate,
-		FunctionPredicate: 	FunctionPredicate
+		AllPredicate: 			AllPredicate,
+		NonePredicate: 			NonePredicate,
+		TruePredicate: 			TruePredicate,
+		FunctionPredicate: 		FunctionPredicate,
+		FunctionValuePredicate: FunctionValuePredicate
 	});
 	
 	// Object Predicates
@@ -691,9 +703,7 @@ function OPAL () {
 	}
 	
 	function TypePredicate (type) {
-		return function (candidate) {
-			return typeof candidate === type;
-		};
+		return FunctionValuePredicate(Type,type);
 	}
 
 	function InstancePredicate (constructor) {
@@ -705,9 +715,7 @@ function OPAL () {
 	}
 	
 	function PropertyPredicate (property,value) {
-		return function (candidate) {
-			return candidate[property] == value;
-		};
+		return FunctionValuePredicate(Property(property),value);
 	}
 	
 	function PropertyPathPredicate (path,value) {
@@ -2186,9 +2194,7 @@ var jModel = function () {
 	// Primary Key Identity
 	
 	var IdentityPredicate = external.id = function (id) {
-		return function (candidate) {
-			return candidate.primaryKeyValue() == id;
-		};		
+		return FunctionValuePredicate(Method('primaryKeyValue'),id);
 	};
 
 	// Example
