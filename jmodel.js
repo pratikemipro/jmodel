@@ -2166,11 +2166,12 @@ var jModel = function () {
 	function DomainObject (entitytype) {
 		
 		
-		var fields			= new FieldSet(),
-			subscribers 	= new SubscriberSet(notifications),
+		var subscribers 	= new SubscriberSet(notifications),
+			fields			= new FieldSet(subscribers),
 			relationships	= new RelationshipSet();
 			
 		this.subscribers	= delegateTo(subscribers, 'filter');
+		this.fields			= delegateTo(fields,'filter');
 		this.relationships	= delegateTo(relationships,'filter');
 		
 		this.get = function () {
@@ -2215,20 +2216,8 @@ var jModel = function () {
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				key = arguments[0];
 				var value = arguments[1];
-				log('domainobject/set').debug('Setting '+key+' to "'+value+'"');
-				if ( fields.set(key,value) ) {
-					subscribers.notify({key:key,description:'field value change: '+key});
-					if ( arguments.length == 2 || arguments[2] ) {
-						subscribers.notify({key:':any',description:'field value change: any'});
-					}
-					if ( arguments.callee.caller.success ) {
-						arguments.callee.caller.success();
-					}
-				}
-				else if ( arguments.callee.caller.failure ) {
-					var validation = fields.filter(PropertyPredicate('accessor',key)).first().validation;
-					var message =  validation.message ? validation.message : '';
-					arguments.callee.caller.failure(message);
+				if ( fields.set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
+					subscribers.notify({key:':any',description:'field value change: any'});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -2308,7 +2297,7 @@ var jModel = function () {
 
 				for ( var i in that.has ) {
 					var descriptor  			= that.has[i],
-						field					= new Field(descriptor);
+						field					= new Field(descriptor,subscribers);
 					fields.add(field);
 					that[descriptor.accessor]	= delegateTo(field,'get');
 					that['set'+field.accessor]	= delegateTo(field,'set');
@@ -2394,7 +2383,7 @@ var jModel = function () {
 	// 															  		 Fields
 	// ------------------------------------------------------------------------
 	
-	function FieldSet () {
+	function FieldSet (subscribers) {
 		
 		var fields = new Set();
 		fields.delegateFor(this);
@@ -2414,8 +2403,8 @@ var jModel = function () {
 			return fields.filter(PropertyPredicate('accessor',name)).first().get();
 		};
 		
-		this.set = function (name,value) {
-			return fields.filter(PropertyPredicate('accessor',name)).first().set(value);
+		this.set = function (name,value,publisher) {
+			return fields.filter(PropertyPredicate('accessor',name)).first().set(value,publisher);
 		};
 		
 		this.keys = function () {
@@ -2428,24 +2417,33 @@ var jModel = function () {
 		
 	}
 	
-	function Field (field) {
+	function Field (field,subscribers) {
 		
 		var data 		= field.defaultValue || null,
-			predicate	= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
+			predicate	= field.validation ? field.validation.predicate || AllPredicate : AllPredicate,
+			message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
 		
 		this.accessor	= field.accessor;
-		this.validation	= field.validation;
 		
 		this.get = function () {
 			return data;
 		};
 		
-		this.set = function (value) {
+		this.set = function (value,publisher) {
 			if ( predicate(value) ) {
+				log('domainobject/set').debug('Setting '+field.accessor+' to "'+value+'"');
 				data = value;
+				subscribers.notify({key:field.accessor,description:'field value change: '+field.accessor});
+				if ( publisher && publisher.success ) {
+					publisher.success();
+				}
 				return true;
 			}
 			else {
+				log('domainobject/set').debug('Setting '+key+' to "'+value+'" failed validation');
+				if ( publisher && publisher.failure ) {
+					publisher.failure(message);
+				}
 				return false;
 			}
 		};
