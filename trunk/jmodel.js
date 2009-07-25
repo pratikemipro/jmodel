@@ -38,7 +38,7 @@ jQuery.fn.publish = function (publication) {
 				.animate({
 					backgroundColor: 'white'
 				},500);
-		}
+		};
 
 		return publish;
 		
@@ -448,7 +448,7 @@ function OPAL () {
 				acc = fn(acc,object);
 			});
 			return acc;
-		}
+		};
 		
 		this.copy = function () {
 			return new Set(members.slice());
@@ -2370,7 +2370,7 @@ var jModel = function () {
 				push: function () {
 					fields.each(function (index,field) {
 						subscribers.notify({key:field.name,description:'field value'});
-					})
+					});
 				},
 						
 				debug: function (showSubscribers) {
@@ -2412,19 +2412,19 @@ var jModel = function () {
 		
 		this.get = function (name) {
 			return fields.filter(PropertyPredicate('accessor',name)).first().get();
-		}
+		};
 		
 		this.set = function (name,value) {
 			return fields.filter(PropertyPredicate('accessor',name)).first().set(value);
-		}
+		};
 		
 		this.keys = function () {
 			return fields.map( function (field) { return field.accessor; } );
-		}
+		};
 		
 		this.debug = function () {
 			this.each('debug');
-		}
+		};
 		
 	}
 	
@@ -2438,7 +2438,7 @@ var jModel = function () {
 		
 		this.get = function () {
 			return data;
-		}
+		};
 		
 		this.set = function (value) {
 			if ( predicate(value) ) {
@@ -2448,11 +2448,11 @@ var jModel = function () {
 			else {
 				return false;
 			}
-		}
+		};
 		
 		this.debug = function () {
 			log().debug(field.accessor+': '+data);
-		}
+		};
 		
 	}
 	
