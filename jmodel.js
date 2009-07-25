@@ -288,6 +288,12 @@ function OPAL () {
 	};
 	
 	
+	function Property (property) {
+		return function (object) {
+			return object[property];
+		};
+	}
+	
 	function Method (name) {
 		var method = function (object,args) {
 			return object[name] ? object[name].apply(object,args) : false;
@@ -296,22 +302,25 @@ function OPAL () {
 		return method;
 	}
 	
-	opal.Method = Method;
+	opal.extend({
+		Property: Property,
+		Method: Method
+	});
 	
 	function plus (a,b) {
 		return a+b;
 	}
-	plus.unit = 0;
-	
-	opal.plus = plus;
-	
+	plus.unit = 0;	
 	
 	function times (a,b) {
 		return a*b;
 	}
 	times.unit = 1;
 	
-	opal.times = times;
+	opal.extend({
+		plus: plus,
+		times: times
+	});
 	
 	
 	// ------------------------------------------------------------------------
@@ -620,22 +629,8 @@ function OPAL () {
 		
 	}
 	
-	function PropertyKey (property) {
-		return function (object) {
-			return object[property];
-		};
-	}
-	
-	function MethodKey (method) {
-		return function (object) {
-			return object[method]();
-		};
-	}
-	
 	opal.extend({
-		UniqueIndex: UniqueIndex,
-		PropertyKey: PropertyKey,
-		MethodKey: MethodKey
+		UniqueIndex: UniqueIndex
 	});
 	
 	
@@ -1268,7 +1263,7 @@ var jModel = function () {
 		
 		var	types = new Set();
 		
-		types.index(PropertyKey('name'));
+		types.index(Property('name'));
 		types.delegateFor(this);
 		
 		this.predicate = function (parameter) {
@@ -1302,7 +1297,7 @@ var jModel = function () {
 							
 		// Index if there's a primary key
 		if ( options.primaryKey ) {
-			this.objects.index(MethodKey(options.primaryKey));
+			this.objects.index(Method(options.primaryKey));
 		}
 							
 		// EntityType methods
@@ -2472,7 +2467,7 @@ var jModel = function () {
 		
 		var fields = new Set();
 		
-		fields.index(PropertyKey('accessor'));
+		fields.index(Property('accessor'));
 		fields.delegateFor(this);
 		
 		this.predicate = function (parameter) {
@@ -2550,7 +2545,7 @@ var jModel = function () {
 		
 		var relationships = new Set();
 		
-		relationships.index(PropertyKey('name'));
+		relationships.index(Property('name'));
 		relationships.delegateFor(this);
 		
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
