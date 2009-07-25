@@ -287,11 +287,13 @@ function OPAL () {
 		}
 	};
 	
+	function Identity (object) {
+		return object;
+	}
 	
 	function Type (object) {
 		return typeof object;
 	}
-	
 	
 	function Property (property) {
 		return function (object) {
@@ -697,9 +699,7 @@ function OPAL () {
 	// Object Predicates
 	
 	function ObjectIdentityPredicate (object) {
-		return function (candidate) {
-			return candidate == object;
-		};
+		return FunctionValuePredicate(Identity,object);
 	}
 	
 	function TypePredicate (type) {
