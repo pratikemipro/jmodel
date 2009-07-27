@@ -1019,6 +1019,10 @@ var jModel = function () {
 	// External interface to OPAL
 	//
 	
+	for (var i in opal) {
+		external[i] = opal[i];
+	}
+	
 	external.extend({
 		
 		proppath: 	PropertyPath,
