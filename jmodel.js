@@ -301,6 +301,22 @@ function OPAL () {
 		};
 	}
 	
+	function PropertyPath (path,separator) {
+		var pieces = path.split(separator||'.');
+		function resolve (object,pieces) {
+			var piece = pieces.shift();
+			return ( pieces.length === 0 ) ? object[piece] : resolve(object[piece],pieces);
+		}
+		return function (object) {
+			try {
+				return resolve (object,pieces);
+			}
+			catch (error) {
+				return false;
+			}
+		};
+	}
+	
 	function Method (name) {
 		var method = function (object,args) {
 			return object[name] ? object[name].apply(object,args) : false;
@@ -310,7 +326,10 @@ function OPAL () {
 	}
 	
 	opal.extend({
+		Identity: Identity,
+		Type: Type,
 		Property: Property,
+		PropertyPath: PropertyPath,
 		Method: Method
 	});
 	
@@ -719,14 +738,7 @@ function OPAL () {
 	}
 	
 	function PropertyPathPredicate (path,value) {
-		var pieces = path.split('.');
-		return function (candidate) {
-			var test = candidate;
-			for ( var i=0; i<pieces.length; i++ ) {
-				test = test[pieces[i]];
-			}
-			return test == value;
-		};
+		return FunctionValuePredicate(PropertyPath(path),value);
 	}
 	
 	opal.extend({
@@ -1009,6 +1021,7 @@ var jModel = function () {
 	
 	external.extend({
 		
+		proppath: 	PropertyPath,
 		method: 	Method,
 		plus: 		plus,
 		times: 		times,
