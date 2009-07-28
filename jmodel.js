@@ -485,7 +485,7 @@ function OPAL () {
 				members.push(object);
 			});
 			if ( index ) {
-				partition.remove.each(function (index,object) {
+				partition.remove.each(function (i,object) {
 					index.remove(object);
 				});
 			}
@@ -1788,6 +1788,7 @@ var jModel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate,fromHere) {
+			predicate = this.predicate(predicate);
 			if ( fromHere ) {
 				objects.remove(predicate).each(function (index,object) {
 					object.removed();
@@ -2512,11 +2513,21 @@ var jModel = function () {
 		};
 		
 		this.get = function (name) {
-			return fields.get(name).get();
+			try {
+				return fields.get(name).get();
+			}
+			catch (e) {
+				return null;
+			}
 		};
 		
 		this.set = function (name,value,publisher) {
-			return fields.get(name).set(value,publisher);
+			try {
+				return fields.get(name).set(value,publisher);
+			}
+			catch (e) {
+				return null;
+			}
 		};
 		
 		this.keys = function () {
