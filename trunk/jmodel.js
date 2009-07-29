@@ -301,11 +301,20 @@ function OPAL () {
 		};
 	}
 	
+	function Method (name) {
+		var method = function (object,args) {
+			return object[name] ? object[name].apply(object,args) : false;
+		};
+		method.apply = method;
+		return method;
+	}
+	
 	function PropertyPath (path,separator) {
 		var pieces = path.split(separator||'.');
 		function resolve (object,pieces) {
-			var piece = pieces.shift();
-			return ( pieces.length === 0 ) ? object[piece] : resolve(object[piece],pieces);
+			var piece		= pieces.shift(),
+				deref	= ( typeof object[piece] == 'function' ) ? Method(piece) : Property(piece);
+			return ( pieces.length === 0 ) ? deref(object) : resolve(deref(object),pieces);
 		}
 		return function (object) {
 			try {
@@ -317,20 +326,12 @@ function OPAL () {
 		};
 	}
 	
-	function Method (name) {
-		var method = function (object,args) {
-			return object[name] ? object[name].apply(object,args) : false;
-		};
-		method.apply = method;
-		return method;
-	}
-	
 	opal.extend({
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
-		PropertyPath: PropertyPath,
-		Method: Method
+		Method: Method,
+		PropertyPath: PropertyPath
 	});
 	
 	
@@ -733,14 +734,7 @@ function OPAL () {
 		};
 	}
 	
-	function PropertyPredicate (property,predicate) {
-		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return function (candidate) {
-			return predicate(Property(property)(candidate));
-		};
-	}
-	
-	function PropertyPathPredicate (path,predicate) {
+	function PropertyPredicate (path,predicate) {
 		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
 		return function (candidate) {
 			return predicate(PropertyPath(path)(candidate));
@@ -751,8 +745,8 @@ function OPAL () {
 		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
 		TypePredicate: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,
-		PropertyPredicate: 			PropertyPredicate,
-		PropertyPathPredicate: 		PropertyPathPredicate
+		PropertyPredicate: 			PropertyPredicate/*,
+		PropertyPathPredicate: 		PropertyPathPredicate*/
 	});
 	
 	// Value comparisons
@@ -1048,14 +1042,7 @@ var jModel = function () {
 		test: 		FunctionPredicate,
 		type: 		TypePredicate,
 		isa: 		InstancePredicate,
-		property: 	function (path,predicate) {
-						if ( path.indexOf('.') != -1 ) {
-							return PropertyPathPredicate(path,predicate);
-						}
-						else {
-							return PropertyPredicate(path,predicate);
-						}
-					},
+		property: 	PropertyPredicate,
 		
 		member: 	MembershipPredicate,
 		
