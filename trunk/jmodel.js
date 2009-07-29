@@ -750,12 +750,19 @@ function OPAL () {
 		};
 	}
 	
+	function PropertySetPredicate (paths,predicate) {
+		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
+		return function (candidate) {
+			return predicate(PropertySet(paths)(candidate));
+		};
+	}
+	
 	opal.extend({
 		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
 		TypePredicate: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,
-		PropertyPredicate: 			PropertyPredicate/*,
-		PropertyPathPredicate: 		PropertyPathPredicate*/
+		PropertyPredicate: 			PropertyPredicate,
+		PropertySetPredicate: 		PropertySetPredicate
 	});
 	
 	// Value comparisons
@@ -1034,8 +1041,6 @@ var jModel = function () {
 	
 	external.extend({
 		
-		proppath: 	PropertyPath,
-		propset: 	PropertySet,
 		method: 	Method,
 		plus: 		plus,
 		times: 		times,
@@ -1053,6 +1058,7 @@ var jModel = function () {
 		type: 		TypePredicate,
 		isa: 		InstancePredicate,
 		property: 	PropertyPredicate,
+		propset: 	PropertySetPredicate,
 		
 		member: 	MembershipPredicate,
 		
