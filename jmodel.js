@@ -1424,7 +1424,7 @@ var jModel = function () {
 							entity.deleted.remove(AllPredicate(),true);
 						});
 						return external.context;
-					}, 
+					},
 				
 		debug: 	function (showSubscribers) {
 					log().startGroup('Context');
@@ -2259,7 +2259,6 @@ var jModel = function () {
 	};	
 	
 	external.dirty = ModifiedPredicate();
-		
 	
 	
 	// ------------------------------------------------------------------------
@@ -2271,13 +2270,15 @@ var jModel = function () {
 		
 		var subscribers 	= new SubscriberSet(notifications),
 			fields			= new FieldSet(this,subscribers),
-			relationships	= new RelationshipSet();
+			relationships	= new RelationshipSet(),
+			constraints		= new ConstraintSet;
 			
 		this.subscribers	= delegateTo(subscribers, 'filter');
 		this.fields			= delegateTo(fields,'filter');
 		this.field			= delegateTo(fields,'getField');
 		this.relationships	= delegateTo(relationships,'filter');
 		this.relationship   = delegateTo(relationships,'get');
+		this.constraints	= delegateTo(constraints,'filter');
 		
 		this.get = function () {
 		
@@ -2392,6 +2393,16 @@ var jModel = function () {
 		};
 		
 		
+		this.validate = function () {
+			
+			var obj = this;
+			return constraints
+						.filter(function (constraint) {return Not(constraint)(obj);})
+							.map(function (constraint) {return constraint.message})
+								.join('; ');
+		}
+		
+		
 		this.domain = function () {
 			
 			var that = this;
@@ -2410,9 +2421,9 @@ var jModel = function () {
 				
 				log('domainobject/create').endGroup();
 
-			};
+			}
 			
-			function reifyRelationships() {
+			function reifyRelationships () {
 
 				that.hasOne			= that.hasOne || [];
 				that.hasMany		= that.hasMany || [];
@@ -2441,7 +2452,21 @@ var jModel = function () {
 				}
 				log('domainobject/create').endGroup();
 
-			};
+			}
+			
+			function reifyConstraints () {
+				
+				that.must = that.must || [];
+				
+				log('domainobject/create').startGroup('Reifying constraints');
+				for (var i in that.must ) {
+					descriptor = that.must[i];
+					descriptor.predicate.message = descriptor.message;
+					constraints.add(descriptor.predicate);
+				}
+				log('domainobject/create').endGroup();
+				
+			}
 			
 			return {
 				
@@ -2453,6 +2478,7 @@ var jModel = function () {
 					reifyFields();
 					that.set(initialData); // Must do this before reifying relationships or else initial population of children fails
 					reifyRelationships();
+					reifyConstraints();
 					return that.domain.clean();
 				},
 				
@@ -2708,6 +2734,20 @@ var jModel = function () {
 	};
 	
 	external.OneToManyRelationship = OneToManyRelationship;
+	
+	
+	// ------------------------------------------------------------------------
+	// 																Constraints
+	// ------------------------------------------------------------------------
+	
+	function ConstraintSet () {
+		
+		var constraints = new Set();
+		constraints.constraint = TypePredicate('function');
+
+		constraints.delegateFor(this);
+		
+	}
 	
 	
 	// ------------------------------------------------------------------------
