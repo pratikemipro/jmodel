@@ -287,6 +287,16 @@ function OPAL () {
 		}
 	};
 	
+	function compose () {
+		var fns = arguments;
+		return function (x) {
+			for (var i=arguments.length;i>=0;i--) {
+				x = fns[i](x);
+			}
+			return x;
+		}
+	}
+	
 	function Identity (object) {
 		return object;
 	}
@@ -335,6 +345,7 @@ function OPAL () {
 	}
 	
 	opal.extend({
+		compose: compose,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
@@ -712,9 +723,7 @@ function OPAL () {
 	}
 	
 	function FunctionValuePredicate(fn,value) {
-		return function (candidate) {
-			return fn(candidate) == value;
-		};
+		return compose(EqualityPredicate(value),fn);
 	}
 	
 	opal.extend({
@@ -745,9 +754,7 @@ function OPAL () {
 	
 	function PropertyPredicate (path,predicate) {
 		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return function (candidate) {
-			return predicate(PropertyPath(path)(candidate));
-		};
+		return compose(predicate,PropertyPath(path));
 	}
 	
 	function PropertySetPredicate (paths,predicate) {
@@ -901,7 +908,8 @@ function OPAL () {
 	}
 	
 	function CardinalityPredicate (predicate) {
-		return PropertyPredicate('count',(typeof predicate == 'function') ? predicate : EqualityPredicate(predicate));
+		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
+		return compose(predicate,Method('count'));
 	}
 	
 	opal.extend({
