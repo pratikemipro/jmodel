@@ -330,7 +330,7 @@ function OPAL () {
 		paths = ( paths instanceof Set ) ? paths : new Set(paths);
 		paths = paths.map(function (path) { return PropertyPath(path,separator); });
 		return function (object) {
-			return paths.map(function (path) { return path(object) });
+			return paths.map(function (path) { return path(object); });
 		};
 	}
 	
@@ -411,7 +411,7 @@ function OPAL () {
 				return index.get(key);
 			}
 			else {
-				var obj = this.filter(key)
+				var obj = this.filter(key);
 				return obj.each ? obj.first() : obj;
 			}
 		};
@@ -714,7 +714,7 @@ function OPAL () {
 	function FunctionValuePredicate(fn,value) {
 		return function (candidate) {
 			return fn(candidate) == value;
-		}
+		};
 	}
 	
 	opal.extend({
@@ -2425,9 +2425,9 @@ var jModel = function () {
 			var obj = this;
 			return constraints
 						.filter(function (constraint) {return Not(constraint)(obj);})
-							.map(function (constraint) {return constraint.message})
+							.map(function (constraint) {return constraint.message;})
 								.join('; ');
-		}
+		};
 		
 		
 		this.domain = function () {
