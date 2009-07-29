@@ -328,7 +328,7 @@ function OPAL () {
 	
 	function PropertySet (paths,separator) {
 		paths = ( paths instanceof Set ) ? paths : new Set(paths);
-		paths = paths.map(function (path) { return PropertyPath(path,separator) });
+		paths = paths.map(function (path) { return PropertyPath(path,separator); });
 		return function (object) {
 			return paths.map(function (path) { return path(object) });
 		};
@@ -900,11 +900,16 @@ function OPAL () {
 		};
 	}
 	
+	function CardinalityPredicate (predicate) {
+		return PropertyPredicate('count',(typeof predicate == 'function') ? predicate : EqualityPredicate(predicate));
+	}
+	
 	opal.extend({
-		EmptySetPredicate: 	EmptySetPredicate,
-		AllSetPredicate: 	AllSetPredicate,
-		SomeSetPredicate: 	SomeSetPredicate,
-		NoneSetPredicate: 	NoneSetPredicate
+		EmptySetPredicate: 		EmptySetPredicate,
+		AllSetPredicate: 		AllSetPredicate,
+		SomeSetPredicate: 		SomeSetPredicate,
+		NoneSetPredicate: 		NoneSetPredicate,
+		CardinalityPredicate: 	CardinalityPredicate
 	});
 	
 	
