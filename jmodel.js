@@ -1441,6 +1441,12 @@ var jModel = function () {
 						});
 						return external.context;
 					},
+		
+		validate: 	function () {
+						return all
+								.map(function (object) {return {object:object, messages:object.validate()};})
+									.filter(function (result) { return result.messages !== ''; });
+					},
 				
 		debug: 	function (showSubscribers) {
 					log().startGroup('Context');
