@@ -733,12 +733,18 @@ function OPAL () {
 		};
 	}
 	
-	function PropertyPredicate (property,value) {
-		return FunctionValuePredicate(Property(property),value);
+	function PropertyPredicate (property,predicate) {
+		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
+		return function (candidate) {
+			return predicate(Property(property)(candidate));
+		};
 	}
 	
-	function PropertyPathPredicate (path,value) {
-		return FunctionValuePredicate(PropertyPath(path),value);
+	function PropertyPathPredicate (path,predicate) {
+		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
+		return function (candidate) {
+			return predicate(PropertyPath(path)(candidate));
+		};
 	}
 	
 	opal.extend({
@@ -1042,12 +1048,12 @@ var jModel = function () {
 		test: 		FunctionPredicate,
 		type: 		TypePredicate,
 		isa: 		InstancePredicate,
-		property: 	function (path,value) {
+		property: 	function (path,predicate) {
 						if ( path.indexOf('.') != -1 ) {
-							return PropertyPathPredicate(path,value);
+							return PropertyPathPredicate(path,predicate);
 						}
 						else {
-							return PropertyPredicate(path,value);
+							return PropertyPredicate(path,predicate);
 						}
 					},
 		
