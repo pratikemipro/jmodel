@@ -1539,7 +1539,7 @@ var jModel = function () {
 	function ContentNotification (subscription,event,subscriber) {
 		this.subscription = subscription;
 		this.receive = function () {
-			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description);
+			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
 			subscription.target.html(subscription.source.get(subscription.key));
 		};	
 	};
@@ -1615,7 +1615,7 @@ var jModel = function () {
 					key: subscription.member.key[i],
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
-					description: 'collection member subscription for key '+subscription.member.key[i]
+					description: subscription.member.description || 'collection member subscription for key '+subscription.member.key[i]
 				});
 			}
 		};
@@ -2282,6 +2282,7 @@ var jModel = function () {
 			
 		this.subscribers	= delegateTo(subscribers, 'filter');
 		this.fields			= delegateTo(fields,'filter');
+		this.field			= delegateTo(fields,'getField');
 		this.relationships	= delegateTo(relationships,'filter');
 		this.relationship   = delegateTo(relationships,'get');
 		
@@ -2298,9 +2299,9 @@ var jModel = function () {
 				return values;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				var key = arguments[0];
-				if ( fields.get(key) ) {
-					return fields.get(key);
+				var key = arguments[0], field;
+				if ( field = fields.getField(key) ) {
+					return field.get(key);
 				}
 				else {
 					if ( relationships.get(key) ) {
@@ -2520,6 +2521,8 @@ var jModel = function () {
 				return null;
 			}
 		};
+		
+		this.getField = delegateTo(fields,'get');
 		
 		this.set = function (name,value,publisher) {
 			try {
