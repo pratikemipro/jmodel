@@ -326,12 +326,21 @@ function OPAL () {
 		};
 	}
 	
+	function PropertySet (paths,separator) {
+		paths = ( paths instanceof Set ) ? paths : new Set(paths);
+		paths = paths.map(function (path) { return PropertyPath(path,separator) });
+		return function (object) {
+			return paths.map(function (path) { return path(object) });
+		};
+	}
+	
 	opal.extend({
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
 		Method: Method,
-		PropertyPath: PropertyPath
+		PropertyPath: PropertyPath,
+		PropertySet: PropertySet
 	});
 	
 	
@@ -1026,6 +1035,7 @@ var jModel = function () {
 	external.extend({
 		
 		proppath: 	PropertyPath,
+		propset: 	PropertySet,
 		method: 	Method,
 		plus: 		plus,
 		times: 		times,
