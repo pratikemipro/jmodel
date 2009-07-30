@@ -1399,6 +1399,10 @@ var jModel = function () {
 			newObject.domain.init(data);
 
 			all.add(newObject);
+			
+			if ( newObject.initialise ) {
+				newObject.initialise();
+			}
 
 			log('domainobject/create').endGroup();
 			
@@ -2389,6 +2393,22 @@ var jModel = function () {
 		
 		
 		this.subscribe = function (subscription) {
+
+			if ( subscription.key instanceof Array ) {
+				for(var i=0;i<subscription.key.length;i++) {
+					this.subscribe({
+						source: subscription.source,
+						target: subscription.target,
+						key: subscription.key[i],
+						change: subscription.change,
+						removed: subscription.remove,
+						initialise: subscription.initialise,
+						description: subscription.description
+					});
+				}
+			}
+
+			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
 
 			subscription.source = this;
 
