@@ -313,7 +313,10 @@ function OPAL () {
 	
 	function Method (name) {
 		var method = function (object,args) {
-			return object[name] ? object[name].apply(object,args) : false;
+			if ( ! ( object[name] && typeof object[name] ) ) {
+				return false;
+			}
+			return args ? object[name].apply(object,args) : object[name].apply(object);
 		};
 		method.apply = method;
 		return method;
