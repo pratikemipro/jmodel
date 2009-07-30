@@ -290,7 +290,7 @@ function OPAL () {
 	function compose () {
 		var fns = arguments;
 		return function (x) {
-			for (var i=arguments.length;i>=0;i--) {
+			for (var i=fns.length-1;i>=0;i--) {
 				x = fns[i](x);
 			}
 			return x;
