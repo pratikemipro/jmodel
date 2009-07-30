@@ -407,7 +407,9 @@ function OPAL () {
 				}
 				if ( !found ) {
 					members.push(object);
-					index.add(object);
+					if ( index ) {
+						index.add(object);
+					}
 					return true;
 				}
 			}
