@@ -2324,6 +2324,10 @@ var jModel = function () {
 		};
 	}
 	
+	function Join (separator) {
+		return Method('join',separator);
+	}
+	
 	function Decimal (places) {
 		return Method('toFixed',places);
 	}
@@ -2347,6 +2351,9 @@ var jModel = function () {
 	
 	external.extend({
 		noformat: 	NoFormat(),
+		prepend: 	Prepend,
+		append: 	Append,
+		join: 		Join,
 		decimal: 	Decimal,
 		locale: 	Locale(),
 		percent: 	Percentage(),
