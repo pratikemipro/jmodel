@@ -136,6 +136,7 @@ jQuery.fn.subscribe = function (subscription) {
 					removed: subscription.remove,
 					initialise: subscription.initialise,
 					format: subscription.format,
+					value: subscription.value,
 					description: subscription.description || 'application subscription'
 				});
 			});
@@ -154,6 +155,7 @@ jQuery.fn.subscribe = function (subscription) {
 						key: subscription.bindings[selector],
 						initialise: subscription.initialise,
 						format: subscription.format,
+						value: subscription.value,
 						description: subscription.description || 'application subscription'
 					});
 				});
@@ -180,6 +182,7 @@ jQuery.fn.subscribe = function (subscription) {
 							change: subscription.member.change,
 							initialise: subscription.member.initialise,
 							format: subscription.member.format,
+							value: subscription.member.value,
 							description: subscription.member.description || 'application subscription'
 						}
 					});
@@ -205,6 +208,7 @@ jQuery.fn.subscribe = function (subscription) {
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
 					format: subscription.member.format,
+					value: subscription.member.value,
 					description: subscription.member.description || 'application subscription'
 				}
 			});
@@ -224,6 +228,7 @@ jQuery.fn.subscribe = function (subscription) {
 				sort: subscription.sort,
 				initialise: subscription.initialise,
 				format: subscription.format,
+				value: subscription.value,
 				description: subscription.description || 'application subscription'
 			});
 		});
@@ -335,7 +340,6 @@ function OPAL () {
 	}
 	
 	function PropertyPath (path,separator) {
-		var pieces = path.split(separator||'.');
 		function resolve (object,pieces) {
 			var piece		= pieces.shift(),
 				deref	= ( typeof object[piece] == 'function' ) ? Method(piece) : Property(piece);
@@ -343,7 +347,8 @@ function OPAL () {
 		}
 		return function (object) {
 			try {
-				return resolve (object,pieces);
+				pieces = path.split(separator||'.');
+				return resolve(object,pieces);
 			}
 			catch (error) {
 				return false;
@@ -1570,7 +1575,8 @@ var jModel = function () {
 		this.subscription = subscription;
 		this.receive = function () {
 			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
-			subscription.target.html(subscription.format(subscription.source.get(subscription.key)));
+			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
+			subscription.target.html(subscription.format(value));
 		};	
 	};
 	
@@ -1646,6 +1652,7 @@ var jModel = function () {
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
 					format: subscription.member.format,
+					value: subscription.member.value,
 					description: subscription.member.description || 'collection member subscription for key '+subscription.member.key[i]
 				});
 			}
@@ -2442,6 +2449,8 @@ var jModel = function () {
 						source: subscription.source,
 						target: subscription.target,
 						key: subscription.key[i],
+						format: subscription.format,
+						value: subscription.value,
 						change: subscription.change,
 						removed: subscription.remove,
 						initialise: subscription.initialise,
