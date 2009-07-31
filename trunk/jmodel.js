@@ -297,6 +297,10 @@ function OPAL () {
 		}
 	}
 	
+	function pipe () {
+		return compose.apply(null,arrayFromArguments(arguments).reverse());
+	}
+	
 	function Identity (object) {
 		return object;
 	}
@@ -349,6 +353,7 @@ function OPAL () {
 	
 	opal.extend({
 		compose: compose,
+		pipe: pipe,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
