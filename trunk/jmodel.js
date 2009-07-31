@@ -2328,6 +2328,21 @@ var jModel = function () {
 		return Method('join',separator);
 	}
 	
+	function Concatenate () {
+		var formatters = arrayFromArguments(arguments),
+			separator = ' ';
+		if ( typeof formatters[formatters.length-1] == 'string' ) {
+			separator = formatters.pop();
+		}
+		return function (object) {
+			var mapped = [];
+			for (var i=0; i<formatters.length; i++) {
+				mapped.push(formatters[i](object));
+			}
+			return mapped.join(separator);
+		}
+	}
+	
 	function Decimal (places) {
 		return Method('toFixed',places);
 	}
@@ -2354,6 +2369,7 @@ var jModel = function () {
 		prepend: 	Prepend,
 		append: 	Append,
 		join: 		Join,
+		concat: 	Concatenate,
 		decimal: 	Decimal,
 		locale: 	Locale(),
 		percent: 	Percentage(),
