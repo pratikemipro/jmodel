@@ -550,11 +550,11 @@ function OPAL () {
 		};
 		
 		this.union = function () {
-			return union.apply(null,argumentsArray.apply(this,arguments));
+			return union.apply(null,[this].concat(arrayFromArguments(arguments)));
 		};
 		
 		this.intersection = function () {
-			return intersection.apply(null,argumentsArray.apply(this,arguments));
+			return intersection.apply(null,[this].concat(arrayFromArguments(arguments)));
 		};
 		
 		this.difference = function (set) {
@@ -988,32 +988,12 @@ function OPAL () {
 	// 														  Utility functions
 	// ------------------------------------------------------------------------
 	
-	// NOTE: fix this ugliness
-	
 	function arrayFromArguments (args) {
-		if ( args[0] instanceof Array ) {
-			return args[0];
-		}
-		else {
-			var args2 = [];
-			for (var i=0; i<args.length;i++) {
-				args2.push(args[i]);
-			}
-			return args2;
-		}
+		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
 	};
-	
-	function argumentsArray() {
-		var args = [this];
-		for (var i=0; i<arguments.length; i++) {
-			args.push(arguments[i]);
-		}
-		return args;
-	}
 
 	opal.extend({
-		arrayFromArguments: arrayFromArguments,
-		argumentsArray: 	argumentsArray
+		arrayFromArguments: 			arrayFromArguments
 	});
 
 	
