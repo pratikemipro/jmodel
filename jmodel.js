@@ -2325,6 +2325,10 @@ var jModel = function () {
 		return Method('toLocaleString');
 	}
 	
+	function Percentage () {
+		return Append('%');
+	}
+	
 	function Currency (symbol,decimals) {
 		return function (number) {
 			return compose(	Prepend(number < 0 ? '-' : ''),
@@ -2335,10 +2339,11 @@ var jModel = function () {
 	}
 	
 	external.extend({
-		noformat: NoFormat,
-		decimal: Decimal,
-		locale: Locale,
-		currency: Currency
+		noformat: 	NoFormat(),
+		decimal: 	Decimal,
+		locale: 	Locale(),
+		percent: 	Percentage(),
+		currency: 	Currency
 	});
 	
 	
