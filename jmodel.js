@@ -995,7 +995,7 @@ function OPAL () {
 	
 	function arrayFromArguments (args) {
 		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
-	};
+	}; 
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments
@@ -2391,9 +2391,7 @@ var jModel = function () {
 						description: subscription.description
 					});
 				}
-			}
-
-			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
+			} 
 
 			subscription.source = this;
 
