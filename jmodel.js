@@ -135,6 +135,7 @@ jQuery.fn.subscribe = function (subscription) {
 					change: subscription.change,
 					removed: subscription.remove,
 					initialise: subscription.initialise,
+					format: subscription.format,
 					description: subscription.description || 'application subscription'
 				});
 			});
@@ -152,6 +153,7 @@ jQuery.fn.subscribe = function (subscription) {
 						target: jQuery(object),
 						key: subscription.bindings[selector],
 						initialise: subscription.initialise,
+						format: subscription.format,
 						description: subscription.description || 'application subscription'
 					});
 				});
@@ -177,6 +179,7 @@ jQuery.fn.subscribe = function (subscription) {
 							key: subscription.member.bindings[selector],
 							change: subscription.member.change,
 							initialise: subscription.member.initialise,
+							format: subscription.member.format,
 							description: subscription.member.description || 'application subscription'
 						}
 					});
@@ -201,6 +204,7 @@ jQuery.fn.subscribe = function (subscription) {
 					key: subscription.member.key,
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
+					format: subscription.member.format,
 					description: subscription.member.description || 'application subscription'
 				}
 			});
@@ -219,6 +223,7 @@ jQuery.fn.subscribe = function (subscription) {
 				change: subscription.change,
 				sort: subscription.sort,
 				initialise: subscription.initialise,
+				format: subscription.format,
 				description: subscription.description || 'application subscription'
 			});
 		});
@@ -315,13 +320,16 @@ function OPAL () {
 		};
 	}
 	
-	function Method (name) {
-		var method = function (object,args) {
-			if ( ! ( object[name] && typeof object[name] ) ) {
-				return false;
-			}
-			return args ? object[name].apply(object,args) : object[name].apply(object);
-		};
+	function Method () {
+		var name = arguments[0],
+			args1 = arrayFromArguments(arguments).slice(1),
+			method = function (object) {
+				if ( ! ( object[name] && typeof object[name] ) ) {
+					return false;
+				}
+				var args = args1.concat(arrayFromArguments(arguments).slice(1));
+				return args ? object[name].apply(object,args) : object[name].apply(object);
+			};
 		method.apply = method;
 		return method;
 	}
@@ -1562,7 +1570,7 @@ var jModel = function () {
 		this.subscription = subscription;
 		this.receive = function () {
 			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
-			subscription.target.html(subscription.source.get(subscription.key));
+			subscription.target.html(subscription.format(subscription.source.get(subscription.key)));
 		};	
 	};
 	
@@ -1637,6 +1645,7 @@ var jModel = function () {
 					key: subscription.member.key[i],
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
+					format: subscription.member.format,
 					description: subscription.member.description || 'collection member subscription for key '+subscription.member.key[i]
 				});
 			}
@@ -2291,6 +2300,49 @@ var jModel = function () {
 	
 	
 	// ------------------------------------------------------------------------
+	// 														 		 Formatters
+	// ------------------------------------------------------------------------
+	
+	function NoFormat (object) { return object; }
+	
+	function Prepend (prefix) {
+		return function (string) {
+			return prefix+string;
+		};
+	}
+	
+	function Append (suffix) {
+		return function (string) {
+			return string+suffix;
+		};
+	}
+	
+	function Decimal (places) {
+		return Method('toFixed',places);
+	}
+	
+	function Locale () {
+		return Method('toLocaleString');
+	}
+	
+	function Currency (symbol,decimals) {
+		return function (number) {
+			return compose(	Prepend(number < 0 ? '-' : ''),
+							Prepend(symbol),
+							Locale(),
+							Decimal(decimals===false ? 0 : 2) 		)(Math.abs(number));
+		};
+	}
+	
+	external.extend({
+		noformat: NoFormat,
+		decimal: Decimal,
+		locale: Locale,
+		currency: Currency
+	});
+	
+	
+	// ------------------------------------------------------------------------
 	// 														Domain Object mixin
 	// ------------------------------------------------------------------------
 	
@@ -2394,6 +2446,7 @@ var jModel = function () {
 			} 
 
 			subscription.source = this;
+			subscription.format = subscription.format || NoFormat;
 
 			if ( subscription.removed ) {
 				subscription.type		= RemovalNotification;
