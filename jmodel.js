@@ -1370,7 +1370,7 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
-			if ( options.primaryKey ) {
+			if ( typeof criterion == 'number' && options.primaryKey ) {
 				return this.objects.get(criterion);
 			}
 			else {
