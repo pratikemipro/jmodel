@@ -481,18 +481,22 @@ function OPAL () {
 		this.partition = function (predicate,passName,failName) {
 			
 			predicate = this.predicate(predicate);
-			var partition = {};
-			var pass = partition[passName||'pass'] = new Set();
-			var fail = partition[failName||'fail'] = new Set();
+			
+			var partition	= {},
+				pass		= [],
+				fail		= [];
 			
 			this.each(function (index,object) {
 				if ( predicate(object) ) {
-					pass.add(object);
+					pass.push(object);
 				}
 				else {
-					fail.add(object);
+					fail.push(object);
 				}
 			});
+			
+			partition[passName||'pass'] = new Set(pass);
+			partition[failName||'fail'] = new Set(fail);
 
 			return partition;
 
@@ -906,7 +910,7 @@ function OPAL () {
 	function AllSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter ?
+			return set && set.filter ?
 				EmptySetPredicate(set.filter(Not(predicate)))
 				: predicate(set);
 		};
@@ -915,7 +919,7 @@ function OPAL () {
 	function SomeSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter ?
+			return set && set.filter ?
 				Not(EmptySetPredicate)(set.filter(predicate))
 				: predicate(set);
 		};
@@ -924,7 +928,7 @@ function OPAL () {
 	function NoneSetPredicate () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
-			return set.filter ?
+			return set && set.filter ?
 				_.empty(set.filter(predicate))
 				: !predicate(set);
 		};
@@ -2189,7 +2193,7 @@ var jModel = function () {
 	
 	function FieldPredicate (field,predicate) {
 		return function (candidate) {
-			return predicate(candidate.get(field));
+			return candidate && candidate.get ? predicate(candidate.get(field)) : false;
 		};
 	}
 	
@@ -2846,9 +2850,9 @@ var jModel = function () {
 			
 		};
 		
-		this.remove = function (id) {
+		this.remove = function (criteria) {
 			
-			entities.get(relationship.prototype).objects.remove(id);
+			entities.get(relationship.prototype).objects.remove(criteria);
 			return this;
 			
 		};
