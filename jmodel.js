@@ -805,6 +805,7 @@ var jModel = function () {
 		test: 		FunctionPredicate,
 		type: 		TypePredicate,
 		isa: 		InstancePredicate,
+		isan: 		InstancePredicate,
 		property: 	PropertyPredicate,
 		propset: 	PropertySetPredicate,
 		
@@ -1460,12 +1461,10 @@ var jModel = function () {
 			if ( !this.enabled ) {
 				return false;
 			}
-			else if ( !subscription.filter ) {
-				return true;
-			}
-			else {
+			if ( subscription.filter ) {
 				return subscription.filter(event);
 			}
+			return true;
 		};
 	
 		this.notification = function (event) {
@@ -3025,7 +3024,7 @@ jQuery.fn.subscribe = function (subscription) {
 		});
 		
 	}
-	else if ( ( subscription.predicate || subscription.selector ) && subscription.member.bindings ) { // Subscription to members of collection with bindings
+	else if ( ( subscription.predicate || subscription.selector ) && subscription.member && subscription.member.bindings ) { // Subscription to members of collection with bindings
 
 		return this.each(function (index,element) {
 			for (var selector in subscription.member.bindings) {
@@ -3053,7 +3052,7 @@ jQuery.fn.subscribe = function (subscription) {
 		});
 
 	} 
-	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
+	else if ( ( subscription.predicate || subscription.selector ) && subscription.member ) { // Subscription to members of collection
 
 		return this.each(function (index,element) {
 			subscription.source.subscribe({
@@ -3084,6 +3083,7 @@ jQuery.fn.subscribe = function (subscription) {
 				application: true,
 				source: subscription.source,
 				target: jQuery(element),
+				predicate: subscription.predicate,
 				add: subscription.add,
 				remove: subscription.remove,
 				change: subscription.change,
