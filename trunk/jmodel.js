@@ -2913,7 +2913,7 @@ jQuery.fn.publish = function (publication) {
 							key: publication.member.bindings[selector],
 							change: function (key,object) {
 								return function (target) {
-									jQuery(object).bind('change',Publisher(jQuery(object),target,key));
+									jQuery(object).bind('blur',Publisher(jQuery(object),target,key));
 								};
 							}(publication.member.bindings[selector],object),
 							initialise: publication.initialise,
@@ -2940,7 +2940,7 @@ jQuery.fn.publish = function (publication) {
 			member: {
 				target: that,
 				key: publication.key,
-				change: function (target) {
+				blur: function (target) {
 					that.bind('change',Publisher(that,target,publication.member.key));
 				},
 				initialise: publication.initialise,
@@ -2955,7 +2955,7 @@ jQuery.fn.publish = function (publication) {
 		
 		for (var selector in publication.bindings) {
 			jQuery(selector,this).each(function (index,object) {
-				jQuery(object).bind('change',Publisher(jQuery(object),publication.target,publication.bindings[selector]));
+				jQuery(object).bind('blur',Publisher(jQuery(object),publication.target,publication.bindings[selector]));
 			});
 		}
 		return this;
@@ -2963,7 +2963,7 @@ jQuery.fn.publish = function (publication) {
 	}
 	else {
 		
-		return this.change ? this.change(function (event) {
+		return this.blur ? this.blur(function (event) {
 			Publisher(jQuery(this),publication.target,publication.key)(event);
 		}) :
 		this;
