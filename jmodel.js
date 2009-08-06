@@ -32,7 +32,7 @@ function OPAL () {
 				x = fns[i](x);
 			}
 			return x;
-		}
+		};
 	}
 	
 	function pipe () {
@@ -67,6 +67,13 @@ function OPAL () {
 		return method;
 	}
 	
+	function ApplyTo () {
+		var args = arguments;
+		return function (fn) {
+			return fn.apply(null,args);
+		};
+	}
+	
 	function PropertyPath (path,separator) {
 		function resolve (object,pieces) {
 			var piece		= pieces.shift(),
@@ -99,6 +106,7 @@ function OPAL () {
 		Type: Type,
 		Property: Property,
 		Method: Method,
+		ApplyTo: ApplyTo,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet
 	});
@@ -2071,7 +2079,7 @@ var jModel = function () {
 				mapped.push(formatters[i](object));
 			}
 			return mapped.join(separator);
-		}
+		};
 	}
 	
 	function Decimal (places) {
