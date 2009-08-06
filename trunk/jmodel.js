@@ -3097,6 +3097,10 @@ jQuery.fn.domainSelect = function (binding) {
 		function addOption (collection,option) {
 			jQuery(element).append('<option value="'+binding.value(option)+'">'+binding.label(option)+'</option>');
 		}
+		
+		function removeOption (collection, option) {
+			$('option[value="'+binding.value(option)+'"]').remove();
+		}
 	
 		jQuery(element).subscribe({
 			source: 		binding.source,
@@ -3104,9 +3108,7 @@ jQuery.fn.domainSelect = function (binding) {
 			description: 	'Domain select',
 			initialise: 	addOption,
 			add: 			addOption,
-			remove: 		function (collection,option) {
-								$('option[value="'+binding.value(option)+'"]').remove();
-							}
+			remove: 		removeOption
 		});
 		
 	});
