@@ -7,278 +7,6 @@
  *
  */
 
-// =========================================================================
-// 												Domain binding jQuery plugin
-// =========================================================================
-
-// NOTE: Make it possible to publish to a method not just a key?
-// NOTE: Make publishing work for domain member subscriptions
-jQuery.fn.publish = function (publication) {
-	
-	function Publisher (source,target,key,failure,success) {
-		
-		var publish = function (event) {
-			target.set(key,jQuery(event.target).val());
-		};
-		
-		publish.failure = failure || function (message) {
-			source
-				.attr('title',message)
-				.animate({
-					backgroundColor: 'red'
-				},250)
-				.animate({
-					backgroundColor: '#ff7777'
-				},500);
-		};
-		
-		publish.success = success || function () {
-			source
-				.attr('title','')
-				.animate({
-					backgroundColor: 'white'
-				},500);
-		};
-
-		return publish;
-		
-	}
-	
-	if ( publication.selector && publication.member.bindings ) {
-		
-		this.each(function (index,element) {
-			for (var selector in publication.member.bindings) {
-				jQuery(selector,element).each(function (index,object) {
-					var publisher = new Publisher();
-					publication.target.subscribe({
-						source: publication.target,
-						predicate: publication.predicate,
-						selector: publication.selector,
-						initialise: publication.initialise,
-						description: publication.description || 'domain collection publication',			
-						member: {
-							target: jQuery(object),
-							key: publication.member.bindings[selector],
-							change: function (key,object) {
-								return function (target) {
-									jQuery(object).bind('change',Publisher(jQuery(object),target,key));
-								};
-							}(publication.member.bindings[selector],object),
-							initialise: publication.initialise,
-							description: publication.description || 'domain collection member subscription'
-						}
-					});
-				});
-			}
-		});
-		
-		return this;
-		
-	}
-	else if ( publication.selector ) {
-	
-		var that=this;
-			
-		publication.target.subscribe({
-			source: publication.target,
-			predicate: publication.predicate,
-			selector: publication.selector,
-			initialise: publication.initialise,
-			description: publication.description || 'domain collection publication',			
-			member: {
-				target: that,
-				key: publication.key,
-				change: function (target) {
-					that.bind('change',Publisher(that,target,publication.member.key));
-				},
-				initialise: publication.initialise,
-				description: publication.description || 'domain collection member subscription'
-			}
-		});
-		
-		return this;
-		
-	}
-	else if ( publication.bindings ) {
-		
-		for (var selector in publication.bindings) {
-			jQuery(selector,this).each(function (index,object) {
-				jQuery(object).bind('change',Publisher(jQuery(object),publication.target,publication.bindings[selector]));
-			});
-		}
-		return this;
-		
-	}
-	else {
-		
-		return this.change ? this.change(function (event) {
-			Publisher(jQuery(this),publication.target,publication.key)(event);
-		}) :
-		this;
-		
-	}
-	
-};
-
-jQuery.fn.subscribe = function (subscription) {
-	
-	if ( subscription.key && !subscription.selector ) { // Basic subscription
-		
-		return this.each(function (index,element) {
-			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
-			jQuery.each(subscription.key,function (index,key) {
-				subscription.source.subscribe({
-					application: true,
-					source: subscription.source,
-					target: jQuery(element),
-					key: key,
-					change: subscription.change,
-					removed: subscription.remove,
-					initialise: subscription.initialise,
-					format: subscription.format,
-					value: subscription.value,
-					description: subscription.description || 'application subscription'
-				});
-			});
-		});
-		
-	}
-	else if ( subscription.bindings ) { // Multiple subscription through selector/key mapping
-		
-		return this.each(function (index,element) {
-			for (var selector in subscription.bindings) {
-				jQuery(selector,element).each(function (index,object) {
-					subscription.source.subscribe({
-						application: true,
-						source: subscription.source,
-						target: jQuery(object),
-						key: subscription.bindings[selector],
-						initialise: subscription.initialise,
-						format: subscription.format,
-						value: subscription.value,
-						description: subscription.description || 'application subscription'
-					});
-				});
-			}
-		});
-		
-	}
-	else if ( ( subscription.predicate || subscription.selector ) && subscription.member.bindings ) { // Subscription to members of collection with bindings
-
-		return this.each(function (index,element) {
-			for (var selector in subscription.member.bindings) {
-				jQuery(selector,element).each(function (index,object) {
-					subscription.source.subscribe({
-						application: true,
-						source: subscription.source,
-						predicate: subscription.predicate,
-						selector: subscription.selector,
-						initialise: subscription.initialise,
-						description: subscription.description || 'application subscription',
-						member: {
-							application: true,
-							target: jQuery(object),
-							key: subscription.member.bindings[selector],
-							change: subscription.member.change,
-							initialise: subscription.member.initialise,
-							format: subscription.member.format,
-							value: subscription.member.value,
-							description: subscription.member.description || 'application subscription'
-						}
-					});
-				});
-			}
-		});
-
-	} 
-	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
-
-		return this.each(function (index,element) {
-			subscription.source.subscribe({
-				application: true,
-				source: subscription.source,
-				predicate: subscription.predicate,
-				selector: subscription.selector,
-				initialise: subscription.initialise,
-				description: subscription.description || 'application subscription',
-				member: {
-					application: true,
-					target: jQuery(element),
-					key: subscription.member.key,
-					change: subscription.member.change,
-					initialise: subscription.member.initialise,
-					format: subscription.member.format,
-					value: subscription.member.value,
-					description: subscription.member.description || 'application subscription'
-				}
-			});
-		});
-		
-	}
-	else { // Subscription to collection
-		
-		return this.each(function (index,element) {
-			subscription.source.subscribe({
-				application: true,
-				source: subscription.source,
-				target: jQuery(element),
-				add: subscription.add,
-				remove: subscription.remove,
-				change: subscription.change,
-				sort: subscription.sort,
-				initialise: subscription.initialise,
-				format: subscription.format,
-				value: subscription.value,
-				description: subscription.description || 'application subscription'
-			});
-		});
-		
-	}
-
-};
-
-jQuery.fn.pubsub = function (pubsub) {
-	// NOTE: Should rewrite publication here rather than using this shortcut
-	pubsub.source = pubsub.object;
-	pubsub.target = pubsub.object;
-	return this.subscribe(pubsub).publish(pubsub);
-};
-
-jQuery.fn.permute = function (permutation) {
-
-	if ( this.length != permutation.length ) {
-		return false;
-	}
-	
-	var copies = [], placeholders = [], i;
-	for (i=0; i<this.length; i++) {
-		copies[i] 		= this.get(i);
-		placeholders[i] = document.createComment('');
-		copies[i].parentNode.replaceChild(placeholders[i],copies[i]);
-	}
-	
-	for (i=0; i<copies.length; i++) {
-		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
-	}
-	
-	return this;
-	
-};
-
-jQuery.fn.view = function (options) {
-	this.each(function (index,element) {
-		var view = new options.constructor(element,options);
-	});
-	return this;
-};
-
-jQuery.fn.views = function (views) {
-	for (var selector in views) {
-		jQuery(selector,this).view(views[selector]);
-	}
-	return this;
-};
-
 
 // ============================================================================
 //									 Object Predicate and Action Library (OPAL)
@@ -329,7 +57,7 @@ function OPAL () {
 		var name = arguments[0],
 			args1 = arrayFromArguments(arguments).slice(1),
 			method = function (object) {
-				if ( ! ( object[name] && typeof object[name] ) ) {
+				if ( ! ( object[name] && typeof object[name] == 'function' ) ) {
 					return false;
 				}
 				var args = args1.concat(arrayFromArguments(arguments).slice(1));
@@ -1970,7 +1698,7 @@ var jModel = function () {
 			subscribers.add(subscriber);
 			
 			if ( subscription.initialise ) {
-				log('subscriptions/subscribe').startGroup('initialising subscription');
+				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				this.each(function (index,object) {
 					var event = {method:'initialise',object:object,description:'initialisation'};
 					if ( subscriber.matches(event) ) {
@@ -3129,3 +2857,302 @@ var jModel = function () {
 if (!_) {
 	var _=jModel;
 }
+
+
+// =========================================================================
+// 												Domain binding jQuery plugin
+// =========================================================================
+
+// NOTE: Make it possible to publish to a method not just a key?
+// NOTE: Make publishing work for domain member subscriptions
+jQuery.fn.publish = function (publication) {
+	
+	function Publisher (source,target,key,failure,success) {
+		
+		var publish = function (event) {
+			target.set(key,jQuery(event.target).val());
+		};
+		
+		publish.failure = failure || function (message) {
+			source
+				.attr('title',message)
+				.animate({
+					backgroundColor: 'red'
+				},250)
+				.animate({
+					backgroundColor: '#ff7777'
+				},500);
+		};
+		
+		publish.success = success || function () {
+			source
+				.attr('title','')
+				.animate({
+					backgroundColor: 'white'
+				},500);
+		};
+
+		return publish;
+		
+	}
+	
+	if ( publication.selector && publication.member.bindings ) {
+		
+		this.each(function (index,element) {
+			for (var selector in publication.member.bindings) {
+				jQuery(selector,element).each(function (index,object) {
+					var publisher = new Publisher();
+					publication.target.subscribe({
+						source: publication.target,
+						predicate: publication.predicate,
+						selector: publication.selector,
+						initialise: publication.initialise,
+						description: publication.description || 'domain collection publication',			
+						member: {
+							target: jQuery(object),
+							key: publication.member.bindings[selector],
+							change: function (key,object) {
+								return function (target) {
+									jQuery(object).bind('change',Publisher(jQuery(object),target,key));
+								};
+							}(publication.member.bindings[selector],object),
+							initialise: publication.initialise,
+							description: publication.description || 'domain collection member subscription'
+						}
+					});
+				});
+			}
+		});
+		
+		return this;
+		
+	}
+	else if ( publication.selector ) {
+	
+		var that=this;
+			
+		publication.target.subscribe({
+			source: publication.target,
+			predicate: publication.predicate,
+			selector: publication.selector,
+			initialise: publication.initialise,
+			description: publication.description || 'domain collection publication',			
+			member: {
+				target: that,
+				key: publication.key,
+				change: function (target) {
+					that.bind('change',Publisher(that,target,publication.member.key));
+				},
+				initialise: publication.initialise,
+				description: publication.description || 'domain collection member subscription'
+			}
+		});
+		
+		return this;
+		
+	}
+	else if ( publication.bindings ) {
+		
+		for (var selector in publication.bindings) {
+			jQuery(selector,this).each(function (index,object) {
+				jQuery(object).bind('change',Publisher(jQuery(object),publication.target,publication.bindings[selector]));
+			});
+		}
+		return this;
+		
+	}
+	else {
+		
+		return this.change ? this.change(function (event) {
+			Publisher(jQuery(this),publication.target,publication.key)(event);
+		}) :
+		this;
+		
+	}
+	
+};
+
+jQuery.fn.subscribe = function (subscription) {
+	
+	if ( subscription.key && !subscription.selector ) { // Basic subscription
+		
+		return this.each(function (index,element) {
+			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
+			jQuery.each(subscription.key,function (index,key) {
+				subscription.source.subscribe({
+					application: true,
+					source: subscription.source,
+					target: jQuery(element),
+					key: key,
+					change: subscription.change,
+					removed: subscription.remove,
+					initialise: subscription.initialise,
+					format: subscription.format,
+					value: subscription.value,
+					description: subscription.description || 'application subscription'
+				});
+			});
+		});
+		
+	}
+	else if ( subscription.bindings ) { // Multiple subscription through selector/key mapping
+		
+		return this.each(function (index,element) {
+			for (var selector in subscription.bindings) {
+				jQuery(selector,element).each(function (index,object) {
+					subscription.source.subscribe({
+						application: true,
+						source: subscription.source,
+						target: jQuery(object),
+						key: subscription.bindings[selector],
+						initialise: subscription.initialise,
+						format: subscription.format,
+						value: subscription.value,
+						description: subscription.description || 'application subscription'
+					});
+				});
+			}
+		});
+		
+	}
+	else if ( ( subscription.predicate || subscription.selector ) && subscription.member.bindings ) { // Subscription to members of collection with bindings
+
+		return this.each(function (index,element) {
+			for (var selector in subscription.member.bindings) {
+				jQuery(selector,element).each(function (index,object) {
+					subscription.source.subscribe({
+						application: true,
+						source: subscription.source,
+						predicate: subscription.predicate,
+						selector: subscription.selector,
+						initialise: subscription.initialise,
+						description: subscription.description || 'application subscription',
+						member: {
+							application: true,
+							target: jQuery(object),
+							key: subscription.member.bindings[selector],
+							change: subscription.member.change,
+							initialise: subscription.member.initialise,
+							format: subscription.member.format,
+							value: subscription.member.value,
+							description: subscription.member.description || 'application subscription'
+						}
+					});
+				});
+			}
+		});
+
+	} 
+	else if ( subscription.predicate || subscription.selector ) { // Subscription to members of collection
+
+		return this.each(function (index,element) {
+			subscription.source.subscribe({
+				application: true,
+				source: subscription.source,
+				predicate: subscription.predicate,
+				selector: subscription.selector,
+				initialise: subscription.initialise,
+				description: subscription.description || 'application subscription',
+				member: {
+					application: true,
+					target: jQuery(element),
+					key: subscription.member.key,
+					change: subscription.member.change,
+					initialise: subscription.member.initialise,
+					format: subscription.member.format,
+					value: subscription.member.value,
+					description: subscription.member.description || 'application subscription'
+				}
+			});
+		});
+		
+	}
+	else { // Subscription to collection
+		
+		return this.each(function (index,element) {
+			subscription.source.subscribe({
+				application: true,
+				source: subscription.source,
+				target: jQuery(element),
+				add: subscription.add,
+				remove: subscription.remove,
+				change: subscription.change,
+				sort: subscription.sort,
+				initialise: subscription.initialise,
+				format: subscription.format,
+				value: subscription.value,
+				description: subscription.description || 'application subscription'
+			});
+		});
+		
+	}
+
+};
+
+jQuery.fn.pubsub = function (pubsub) {
+	// NOTE: Should rewrite publication here rather than using this shortcut
+	pubsub.source = pubsub.object;
+	pubsub.target = pubsub.object;
+	return this.subscribe(pubsub).publish(pubsub);
+};
+
+jQuery.fn.permute = function (permutation) {
+
+	if ( this.length != permutation.length ) {
+		return false;
+	}
+	
+	var copies = [], placeholders = [], i;
+	for (i=0; i<this.length; i++) {
+		copies[i] 		= this.get(i);
+		placeholders[i] = document.createComment('');
+		copies[i].parentNode.replaceChild(placeholders[i],copies[i]);
+	}
+	
+	for (i=0; i<copies.length; i++) {
+		placeholders[i].parentNode.replaceChild(copies[permutation[i]],placeholders[i]);
+	}
+	
+	return this;
+	
+};
+
+jQuery.fn.view = function (options) {
+	this.each(function (index,element) {
+		var view = new options.constructor(element,options);
+	});
+	return this;
+};
+
+jQuery.fn.views = function (views) {
+	for (var selector in views) {
+		jQuery(selector,this).view(views[selector]);
+	}
+	return this;
+};
+
+jQuery.fn.domainSelect = function (binding) {
+	
+	binding.value = (typeof binding.value == 'string') ? jModel.Method(binding.value) : binding.value;
+	binding.label = (typeof binding.label == 'string') ? jModel.Method(binding.label) : binding.label;
+	
+	return this.each(function (index,element) {
+	
+		function addOption (collection,option) {
+			jQuery(element).append('<option value="'+binding.value(option)+'">'+binding.label(option)+'</option>');
+		}
+	
+		jQuery(element).subscribe({
+			source: 		binding.source,
+			initialise: 	true,
+			description: 	'Domain select',
+			initialise: 	addOption,
+			add: 			addOption,
+			remove: 		function (collection,option) {
+								$('option[value="'+binding.value(option)+'"]').remove();
+							}
+		});
+		
+	});
+	
+};
