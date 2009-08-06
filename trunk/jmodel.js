@@ -146,7 +146,7 @@ function OPAL () {
 		
 		this.add = function (object) {
 			if ( !this.constraint(object) ) {
-				throw 'Membership constraint violation';
+				return false;
 			}
 			else if ( members.indexOf && members.indexOf(object) == -1 ) {
 				members.push(object);
@@ -1239,19 +1239,19 @@ var jModel = function () {
 		
 		this.send = function (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
-			messages.each(function (index,message) {
-				if ( typeof message != 'boolean' ) {
-					if ( !filter(message) ) {
-					}
-					else if ( active || !message.subscription.application ) {
-						message.receive();
-					}
-					else {
-						log('notifications/send').debug('Adding a notification to the queue');
-						notifications.add(message);
-					}
-				}
-			});
+			messages
+				.filter(TypePredicate('object'))
+					.each(function (index,message) {
+						if ( !filter(message) ) {
+						}
+						else if ( active || !message.subscription.application ) {
+							message.receive();
+						}
+						else {
+							log('notifications/send').debug('Adding a notification to the queue');
+							notifications.add(message);
+						}
+					});
 			return this;
 		};
 		
