@@ -1425,7 +1425,7 @@ var jModel = function () {
 		};
 		
 		this.notify = function (event) {
-			var messages = subscribers.map(ApplyTo(event)).filter(function (notification) {return notification != false});
+			var messages = subscribers.map(ApplyTo(event)).filter(function (notification) {return notification != false;});
 			if ( _.nonempty(messages) ) {
 				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				notifications.send(messages);
@@ -1648,7 +1648,7 @@ var jModel = function () {
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				this.each(function (index,object) {
-					notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}))	
+					notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}));	
 				});
 				log('subscriptions/subscribe').endGroup();
 			}
