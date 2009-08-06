@@ -67,6 +67,10 @@ function OPAL () {
 		return method;
 	}
 	
+	function apply (fn) {
+		return fn.apply(null);
+	}
+	
 	function ApplyTo () {
 		var args = arguments;
 		return function (fn) {
@@ -106,6 +110,7 @@ function OPAL () {
 		Type: Type,
 		Property: Property,
 		Method: Method,
+		apply: apply,
 		ApplyTo: ApplyTo,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet
@@ -133,10 +138,6 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 
 	function Set (objects) {
-		
-		if ( objects && ! objects instanceof Array ) {
-			throw 'Invalid arguments for Set constructor';
-		}
 		
 		var members = objects || [],
 			index = false;
@@ -1236,17 +1237,21 @@ var jModel = function () {
 			
 		notifications.delegateFor(this);
 		
-		this.send = function (notification) {
-			if ( !filter(notification) ) {
-				return this;
-			}
-			else if ( active || !notification.subscription.application ) {
-				notification.receive();
-			}
-			else {
-				log('notifications/send').debug('Adding a notification to the queue');
-				notifications.add(notification);
-			}
+		this.send = function (messages) {
+			messages = (messages instanceof Set) ? messages : new Set([messages]);
+			messages.each(function (index,message) {
+				if ( typeof message != 'boolean' ) {
+					if ( !filter(message) ) {
+					}
+					else if ( active || !message.subscription.application ) {
+						message.receive();
+					}
+					else {
+						log('notifications/send').debug('Adding a notification to the queue');
+						notifications.add(message);
+					}
+				}
+			});
 			return this;
 		};
 		
@@ -1384,7 +1389,6 @@ var jModel = function () {
 												subscription.member.key
 												: [subscription.member.key];
 			for (var i in subscription.member.key) {
-				
 				event.object.subscribe({
 					application: subscription.application,
 					source: event.object,
@@ -1421,12 +1425,10 @@ var jModel = function () {
 		};
 		
 		this.notify = function (event) {
-			var needNotification = subscribers.filter(function (subscriber) {return subscriber.matches(event);});
-			if ( _.nonempty(needNotification) ) {
+			var messages = subscribers.map(ApplyTo(event)).filter(function (notification) {return notification != false});
+			if ( _.nonempty(messages) ) {
 				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
-				needNotification.each(function (index,subscriber) {
-					notifications.send(subscriber.notification(event));
-				});
+				notifications.send(messages);
 				log('subscriptions/notify').endGroup();
 			}
 		};
@@ -1438,83 +1440,22 @@ var jModel = function () {
 		};
 		
 	};
-	
-	
-	function Subscriber (subscription) {
 		
-		this.target 		= subscription.target;
-		this.description 	= subscription.description;
-		
-		this.enable = function () {
-			this.enabled = true;
-			return this;
+	function CollectionSubscriber (subscription) {
+		return function (event) {
+			return ( subscription.filter && !subscription.filter(event) ) ? false
+				:  new subscription.type(subscription,event);
 		};
-		
-		this.disable = function () {
-			this.enabled = false;
-			return this;
-		};
-		
 	}
 	
-	
-	function CollectionSubscriber (subscription) {
-		
-		this.enabled = true;
-		
-		Subscriber.call(this,subscription);
-	
-		// NOTE: Implement filters here
-		this.matches = function (event) {
-			if ( !this.enabled ) {
-				return false;
-			}
-			if ( subscription.filter ) {
-				return subscription.filter(event);
-			}
-			return true;
-		};
-	
-		this.notification = function (event) {
-			return new subscription.type(subscription,event,this);
-		};
-		
-		this.debug = function () {
-			log().startGroup('Subscriber');
-			log().debug(subscription.description);
-			log().endGroup();
-		};
-		
-	};
-	
-	
 	function ObjectSubscriber (subscription) {
-		
-		this.enabled = true;
+		return function (event) {
+			return ( event.removed && subscription.removed ) || ( event.key == subscription.key ) ?
+				new subscription.type(subscription,event)
+				: false;
+		};
+	}
 
-		Subscriber.call(this,subscription);
-
-		this.matches = function (event) {
-			if ( !this.enabled ) {
-				return false;
-			}
-			else {
-				return ( event.removed && subscription.removed ) || ( event.key == subscription.key );
-			}
-		};
-		
-		this.notification = function (event) {
-			return new subscription.type(subscription,event,this);
-		};
-		
-		this.debug = function () {
-			log().startGroup('Subscriber');
-			log().debug(subscription.description);
-			log().endGroup();
-		};
-		
-	};
-	
 	
 	
 	// ------------------------------------------------------------------------
@@ -1701,16 +1642,13 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			var subscriber = new CollectionSubscriber(subscription);
+			var subscriber = CollectionSubscriber(subscription);
 			subscribers.add(subscriber);
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				this.each(function (index,object) {
-					var event = {method:'initialise',object:object,description:'initialisation'};
-					if ( subscriber.matches(event) ) {
-						notifications.send(subscriber.notification(event));
-					}
+					notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}))	
 				});
 				log('subscriptions/subscribe').endGroup();
 			}
@@ -2242,12 +2180,12 @@ var jModel = function () {
 				subscription.type = ContentNotification;
 			}
 
-			var subscriber = new ObjectSubscriber(subscription);
+			var subscriber = ObjectSubscriber(subscription);
 
 			subscribers.add(subscriber);
 
 			if ( subscription.initialise ) {
-				notifications.send(subscriber.notification({key:subscription.key}));
+				notifications.send(subscriber({key:subscription.key}));
 			}
 
 			return subscriber;
