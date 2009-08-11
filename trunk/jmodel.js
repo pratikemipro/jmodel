@@ -2525,7 +2525,7 @@ var jModel = function () {
 		
 		this.remove = function (criteria) {
 			
-			entities.get(relationship.prototype).objects.remove(criteria);
+			all.remove(And(RelationshipPredicate(parent,relationship.field),criteria));
 			return this;
 			
 		};
