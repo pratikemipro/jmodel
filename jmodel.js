@@ -1465,7 +1465,8 @@ var jModel = function () {
 	function DomainObjectCollection (specification) {
 		
 		
-		specification = specification || {};
+		specification			= specification || {};
+		specification.predicate = specification.predicate || AllPredicate();
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
@@ -1506,7 +1507,7 @@ var jModel = function () {
 		
 		// NOTE: Make this work on base collections
 		this.remove = function (predicate,fromHere) {
-			predicate = this.predicate(predicate);
+			predicate = And(specification.predicate,this.predicate(predicate));
 			if ( fromHere ) {
 				objects.remove(predicate).each(function (index,object) {
 					object.removed();
@@ -2510,9 +2511,8 @@ var jModel = function () {
 			this.subscription = children.subscribe(subscription);
 		}
 		
-		this.get = function () {
-			return children.filter.apply(children,arguments);
-		};
+		children.delegateFor(this);
+		this.get = delegateTo(children,'filter');
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function (data) {
@@ -2520,13 +2520,6 @@ var jModel = function () {
 			data = data || {};
 			data[relationship.field] = parent.primaryKeyValue();
 			return entities.get(relationship.prototype).create(data);
-			
-		};
-		
-		this.remove = function (criteria) {
-			
-			all.remove(And(RelationshipPredicate(parent,relationship.field),criteria));
-			return this;
 			
 		};
 		
