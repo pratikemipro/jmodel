@@ -1055,7 +1055,7 @@ var jModel = function () {
 	// 																 Prototypes
 	// ------------------------------------------------------------------------
 	
-	var all = new DomainObjectCollection();
+	var all = new DomainObjectCollection({description:'All Objects'});
 	
 	
 	function EntityTypeSet () {
@@ -1515,7 +1515,7 @@ var jModel = function () {
 				});
 			}
 			else {
-				all.remove(predicate,true);
+				all.remove(And(MembershipPredicate(objects),predicate),true);
 			}
 		
 		};
