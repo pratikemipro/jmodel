@@ -1,0 +1,49 @@
+body {
+	font-family: Arial;
+	width: 800px;
+}
+
+dt {
+	font-weight: bold;
+	margin-top: 24px;
+	margin-bottom: 2px;
+	background: #ddddff;
+	border: 1px solid #ccccee;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 6px;
+}
+
+span.arguments {
+	font-weight: normal;
+}
+
+dd {
+	margin-left: 0px;
+	margin-bottom: 4px;
+}
+
+dd.example {
+	display: inline-block;
+	background: #eeeeee;
+	border: 1px solid #dddddd;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 12px;
+	padding-bottom: 0px;
+	margin-bottom: 20px;
+}
+
+dd.example p {
+	margin-top: 0px;
+	margin-bottom: 12px;
+}
+
+code {
+	font-family: Courier New;
+}
+
+span.output {
+	color: #3030d0;
+	margin-left: 14px;
+}

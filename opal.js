@@ -36,6 +36,17 @@ function OPAL () {
 	function pipe () {
 		return compose.apply(null,arrayFromArguments(arguments).reverse());
 	}
+	
+	function apply (fn) {
+		return fn.apply(null);
+	}
+
+	function ApplyTo () {
+		var args = arguments;
+		return function (fn) {
+			return fn.apply(null,args);
+		};
+	}
 
 	function Identity (object) {
 		return object;
@@ -65,17 +76,6 @@ function OPAL () {
 		return method;
 	}
 
-	function apply (fn) {
-		return fn.apply(null);
-	}
-
-	function ApplyTo () {
-		var args = arguments;
-		return function (fn) {
-			return fn.apply(null,args);
-		};
-	}
-
 	function PropertyPath (path,separator) {
 		function resolve (object,pieces) {
 			var piece		= pieces.shift(),
@@ -102,14 +102,15 @@ function OPAL () {
 	}
 
 	opal.extend({
+		apply: apply,
+		ApplyTo: ApplyTo,
+		applyto: ApplyTo,
 		compose: compose,
 		pipe: pipe,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
 		Method: Method,
-		apply: apply,
-		ApplyTo: ApplyTo,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet
 	});
