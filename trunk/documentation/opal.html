@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>OPAL</title>
+		<link rel="stylesheet" href="jmodel.css"/>
+	</head>
+	<body>
+
+		<h1>OPAL</h1>
+
+		<h2>Function Composition and Application</h2>
+		
+		<dl>
+			
+			<dt><code>compose <span class="arguments">(f1,f2,f3...)</span></code></dt>
+			<dd><code>compose</code> performs funtion composition in the traditional way, applying the rightmost function first so that <code>compose(f1,f2,f3)(x)</code> is the same as <em>f1( f2( f3(x) ) ).</em></dd>
+			
+			<dt><code>pipe <span class="arguments">(f1,f2,f3...)</span></code></dt>
+			<dd><code>pipe</code> composes functions as a pipeline, applying the leftmost function first so that <code>pipe(f1,f2,f3)(x)</code> is the same as <em>f3( f2( f1(x) ) )</em>.
+			
+			<dt><code>apply <span class="arguments">(fn)</span></code></dt>
+			<dd><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</dd>
+			
+			<dt><code>applyto <span class="arguments">(a,b,c...)</span></code></dt>
+			<dd>Given arguments <code>a,b,c&hellip;</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</dd>
+			
+		</dl>
+		
+		<h2>Object Functions</h2>
+		
+		<dl>
+			
+			<dt><code>Identity <span class="arguments">(object)</span></code></dt>
+			<dd><p>The <code>Identity</code> function returns its argument.</p></dd>
+			<dd class="example">
+				<p>
+					<code>Identity('test');</code>
+					<br/><span class="output">&rArr; <code>'test''</code></span>
+				</p>
+			</dd>
+			
+			<dt><code>Type <span class="arguments">(object)</span></code></dt>
+			<dd><p>The <code>Type</code> function is equivalent to <code>typeof obj</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>Type('test');</code>
+					<br/><span class="output">&rArr; <code>'string'</code></span>
+				</p>
+				<p>
+					<code>Type({name:'john'});</code>
+					<br/><span class="output">&rArr; <code>'object'</code></span>
+				</p>
+			</dd>
+			
+			<dt><code>Property <span class="arguments">(property)</span></code></dt>
+			<dd><p><code>Property(property)</code> returns a function that when called on an object returns the object's value for the property "property". In other words <code>Property(property)(object)</code> is equivalent to <code>object[property]</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>Property('forename')({forename:'john',surname:'smith'});</code>
+					<br/><span class="output">&rArr; <code>'john'</code></span>
+				</p>
+			</dd>
+			
+			<dt><code>Method <span class="arguments">(name,[a,b,c...])</span></code></dt>
+			<dd><p>The <code>Method</code> function creates a "suspended method" function that when called on an object is equivalent to calling the named method on the object. Arguments can be provided either at the time of suspension or the time of invocation or both.</p> <p><code>Method('method',a,b,c)(object,d,e,f)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>Method('split','-')('john-smith');</code>
+					<br/><span class="output">&rArr; <code>['john','smith']</code></span>
+				</p>
+				<p>
+					<code>Method('split')('john-smith','-');</code>
+					<br/><span class="output">&rArr; <code>['john','smith']</code></span>
+				</p>
+			</dd>
+			
+			<dt><code>PropertyPath <span class="arguments">(path,[separator])</span></code></dt>
+			<dd><p><code>PropertyPath</code> returns a function that dereferences a path on an object, so that <code>PropertyPath('a/b/c','/')(obj)</code> is equivalent to <code>obj.a.b.c</code>. The default value for the separator is the '.' character. If an elements of the path is a methods then the method will be invoked during dereferencing.</p></dd>
+			<dd class="example">
+				<p>
+					<code>PropertyPath('name.last')({name:{first:'john',last:'smith'},age:27})</code>
+					<br/><span class="output">&rArr; <code>'smith'</code></span>
+				</p>
+			</dd>
+			
+			<dt><code>PropertySet <span class="arguments">(paths,[separator])</span></code></dt>
+			<dd><span style="color:red">document this</span></dd>
+			
+		</dl>
+		
+		<h2>Set</h2>
+		<span style="color:red">document this</span>
+		
+		<h2>Set Operations</h2>
+		
+		<dl>
+			
+			<dt><code>union <span class="arguments">(a,b,c...)</span></code></dt>
+			<dd><p>The <code>union</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of any of <code>a,b,c...</code>.</p></dd>
+			
+			<dt><code>intersection <span class="arguments">(a,b,c...)</span></code></dt>
+			<dd><p>The <code>intersection</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of all of <code>a,b,c...</code>.</p></dd>
+			
+			<dt><code>difference <span class="arguments">(first,second)</span></code></dt>
+			<dd><p>The <code>difference</code> of two sets <code>first</code> and <code>second</code> is a set containing all elements of <code>first</code> that are not members of <code>second</code>.</p></dd>
+			
+		</dl>
+		
+		<h2>Unique Index</h2>
+		<span style="color:red">document this</span>
+		
+		<h2>Predicates</h2>
+		
+		<h2>Mathematical Functions</h2>
+		
+		<dl>
+			
+			<dt><code>plus <span class="arguments">(a,b)</span></code></dt>
+			<dd><code>plus(a,b)</code> is equivalent to <code>a+b</code>.</dd>
+			
+			<dt><code>times <span class="arguments">(a,b)</span></code></dt>
+			<dd><code>times(a,b)</code> is equivalent to <code>a*b</code>.</dd>
+		
+		</dl>
+
+	</body>
+</html>
