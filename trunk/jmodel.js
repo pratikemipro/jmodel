@@ -272,6 +272,7 @@ var jModel = function () {
 			});
 		}
 	};
+	external.union.unit = set();
 	
 	external.intersection = function() {
 		var intersection = new Set();
