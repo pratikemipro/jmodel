@@ -360,6 +360,7 @@ var jModel = function () {
 
 
 		this.object = function (criterion) {
+			criterion = ( typeof criterion == 'string' && options.primaryKey && parseInt(criterion) ) ? parseInt(criterion) : criterion;
 			if ( typeof criterion == 'number' && options.primaryKey ) {
 				return this.objects.get(criterion);
 			}
@@ -430,6 +431,10 @@ var jModel = function () {
 		}
 		
 	};
+	
+	external.entity = function (name) {
+		return external[name];
+	}
 
 
 	
