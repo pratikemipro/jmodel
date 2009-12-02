@@ -1301,6 +1301,27 @@ var jModel = function () {
 		};
 	}
 	
+	function Listing () {
+		var formatter, terminal;
+		if ( typeof arguments[0] == 'function' ) {
+			formatter	= arguments[0];
+			terminal	= arguments[1];
+		}
+		else {
+			formatter 	= NoFormat;
+			terminal	= arguments[0];
+		}
+		terminal = terminal || ' and ';
+		return function (list) {
+			var length = list.count(),
+				terminalPosition = length > 1 ? length-1 : -1;
+			return list.reduce(function (acc,object,index) {
+				var separator = index == terminalPosition ? terminal : ', ';				
+				return acc + (acc ? separator : '') + formatter(object);
+			},'');
+		}
+	}
+	
 	external.extend({
 		noformat: 	NoFormat(),
 		prepend: 	Prepend,
@@ -1311,7 +1332,8 @@ var jModel = function () {
 		decimal: 	Decimal,
 		locale: 	Locale(),
 		percent: 	Percentage(),
-		currency: 	Currency
+		currency: 	Currency,
+		listing: 	Listing
 	});
 	
 	
