@@ -350,7 +350,7 @@ function OPAL () {
 
 		this.format = function (formatter) {
 			return formatter(this);
-		}
+		};
 
 		this.delegateFor = function (host) {
 			for (var i in this) {
@@ -393,7 +393,7 @@ function OPAL () {
 			});
 		}
 		return union;
-	};
+	}
 
 	function intersection () {
 		var intersection = new Set();
@@ -404,11 +404,11 @@ function OPAL () {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
 		return intersection;
-	};
+	}
 
 	function difference (first,second) {
 		return first.filter( Not(MembershipPredicate(second)) );
-	};
+	}
 
 	opal.extend({
 		union: 			union,
@@ -613,7 +613,7 @@ function OPAL () {
 		return function (candidate) {
 			return Not(EmptySetPredicate)(set.filter(ObjectIdentityPredicate(candidate)));
 		};
-	};
+	}
 
 	opal.MembershipPredicate	= MembershipPredicate;
 	opal.member 				= MembershipPredicate;
@@ -628,20 +628,20 @@ function OPAL () {
 		return function (candidate) {
 			return Not(EmptySetPredicate)(predicates.filter(function (predicate) { return predicate(candidate); }));
 		};
-	};
+	}
 
 	function And () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
 			return EmptySetPredicate(predicates.filter(function (predicate) { return !predicate(candidate); } ));
 		};
-	};
+	}
 
 	function Not (predicate) {
 		return function (candidate) {
 			return !predicate(candidate);
 		};
-	};
+	}
 
 	opal.extend({
 		Or:  Or,
@@ -727,7 +727,7 @@ function OPAL () {
 			}
 			return 0;
 		};
-	};
+	}
 
 	var ValueOrdering = FunctionOrdering( function (obj) {return obj;} );
 
@@ -736,13 +736,13 @@ function OPAL () {
 		return FunctionOrdering( function (obj) {
 			return -predicates.count(function (pred) {return pred(obj);} );
 		});
-	};
+	}
 
 	function DescendingOrdering (ordering) {
 		return function (a,b) {
 			return -ordering(a,b);
 		};
-	};
+	}
 
 	function CompositeOrdering () {
 		var orderings = arrayFromArguments(arguments);
@@ -755,7 +755,7 @@ function OPAL () {
 			}
 			return 0;
 		};
-	};
+	}
 
 	opal.extend({
 		FunctionOrdering: 	FunctionOrdering,
@@ -777,7 +777,7 @@ function OPAL () {
 
 	function arrayFromArguments (args) {
 		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
-	}; 
+	} 
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments
