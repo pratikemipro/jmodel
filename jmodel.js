@@ -251,7 +251,15 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function makeCollection (set) {
-		return ( set instanceof Set || set instanceof DomainObjectCollection ) ? set : set();
+		if ( set instanceof Set || set instanceof DomainObjectCollection ) {
+			return set;
+		}
+		else if ( typeof set == 'function' ) {
+			return set();
+		}
+		else {
+			return new Set();
+		}
 	};
 	
 	external.union = function() {
