@@ -284,9 +284,9 @@ function OPAL () {
 		};
 
 		this.reduce = function (fn,acc) {
-			acc = acc || fn.unit;
+			acc = arguments.length > 1 ? acc : fn.unit;
 			this.each(function (index,object) {
-				acc = fn(acc,object);
+				acc = fn(acc,object,index);
 			});
 			return acc;
 		};
@@ -347,6 +347,10 @@ function OPAL () {
 		this.index = function (key) {
 			index = new UniqueIndex(this,key);
 		};
+
+		this.format = function (formatter) {
+			return formatter(this);
+		}
 
 		this.delegateFor = function (host) {
 			for (var i in this) {
