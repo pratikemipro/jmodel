@@ -1276,6 +1276,10 @@ var jModel = function () {
 		};
 	}
 	
+	function Surround (affix) {
+		return compose(Prepend(affix),Append(affix));
+	}
+	
 	function Decimal (places) {
 		return Method('toFixed',places);
 	}
@@ -1303,6 +1307,7 @@ var jModel = function () {
 		append: 	Append,
 		join: 		Join,
 		concat: 	Concatenate,
+		surround: 	Surround,
 		decimal: 	Decimal,
 		locale: 	Locale(),
 		percent: 	Percentage(),
