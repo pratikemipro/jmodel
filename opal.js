@@ -357,6 +357,12 @@ function OPAL () {
 	opal.Set = Set;
 
 	function set () {
+		return arguments[0] instanceof Set ?
+					arguments[0]
+					: new Set(arrayFromArguments(arguments));
+	}
+
+/*	function set () {
 		if ( arguments[0] instanceof Set ) {
 			return arguments[0];
 		}
@@ -370,7 +376,7 @@ function OPAL () {
 			}
 			return new Set(objects);
 		}
-	};
+	}; */
 	opal.set = set;
 
 	//
