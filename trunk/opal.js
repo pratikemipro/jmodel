@@ -222,12 +222,7 @@ function OPAL () {
 				fail		= [];
 
 			this.each(function (index,object) {
-				if ( predicate(object) ) {
-					pass.push(object);
-				}
-				else {
-					fail.push(object);
-				}
+				(predicate(object) ? pass : fail).push(object);
 			});
 
 			partition[passName||'pass'] = new Set(pass);
