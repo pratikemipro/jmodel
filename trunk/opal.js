@@ -15,9 +15,10 @@ function OPAL () {
 
 	var opal = {};
 
-	opal.extend = function (object) {
+	opal.extend = function (object,target) {
+		target = target || this;
 		for ( var i in object ) {
-			this[i] = object[i];
+			target[i] = object[i];
 		}
 	};
 
