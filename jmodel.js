@@ -15,88 +15,10 @@
 
 var jModel = function () {
 
-	//
-	// Import OPAL
-	//
+	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
+		_				= external;
 
-	var opal = OPAL();
-	for ( var i in opal ) {
-		eval('var '+i+' = opal.'+i);
-	}
 
-	//
-	// Define local variables
-	//
-
-	var external		= function (predicate) { return all.filter.apply(all,arguments); },
-		_				= external,
-		entities		= new EntityTypeSet(),
-		notifications	= new NotificationQueue();
-	
-	external.extend = opal.extend;
-		
-	//
-	// External interface to OPAL
-	//
-	
-	for (var i in opal) {
-		external[i] = opal[i];
-	}
-	
-	external.extend({
-		
-		method: 	Method,
-		plus: 		plus,
-		times: 		times,
-		
-		/* Set */
-		set: 		opal.set,
-		
-		/* Predicates */
-		predicate: 	predicate,
-		
-		is: 		ObjectIdentityPredicate,
-		istrue: 	TruePredicate,
-		
-		test: 		FunctionPredicate,
-		type: 		TypePredicate,
-		isa: 		InstancePredicate,
-		isan: 		InstancePredicate,
-		property: 	PropertyPredicate,
-		propset: 	PropertySetPredicate,
-		
-		member: 	MembershipPredicate,
-		
-		or: 		Or,
-		and: 		And,
-		not: 		Not,
-		
-		empty: 		EmptySetPredicate,
-		nonempty: 	Not(EmptySetPredicate),
-		
-		all: 		function () {
-						if ( arguments.length === 0 ) {
-							return AllPredicate();
-						}
-						else {
-							return AllSetPredicate.apply(null,arguments);
-						}
-					},
-		
-		some: 		SomeSetPredicate,
-		none: 		NoneSetPredicate,
-		
-		/* Orderings */
-		
-		func: 		FunctionOrdering,
-		value: 		ValueOrdering,
-		score: 		PredicateOrdering,
-		desc: 		DescendingOrdering,
-		composite: 	CompositeOrdering
-		
-	});
-	
-				
 	// ------------------------------------------------------------------------
 	//																	Logging
 	// ------------------------------------------------------------------------
@@ -245,6 +167,99 @@ var jModel = function () {
 	});
 	
 	
+	// ------------------------------------------------------------------------
+	//															 Initialisation
+	// ------------------------------------------------------------------------
+
+
+	//
+	// Import OPAL
+	//
+
+	var opal = OPAL();
+	for ( var i in opal ) {
+		eval('var '+i+' = opal.'+i);
+	}
+
+	//
+	// Define local variables
+	//
+
+	var	contexts		= function (predicate) { return contexts.get(predicate); };
+	ContextSet.apply(contexts);
+	
+	var	defaultContext	= contexts.create('default'),
+		notifications	= new NotificationQueue();
+		
+	external.context = defaultContext;
+	
+	external.extend = opal.extend;
+	
+	external.extend({
+		contexts: contexts
+	});
+		
+	//
+	// External interface to OPAL
+	//
+	
+	for (var i in opal) {
+		external[i] = opal[i];
+	}
+	
+	external.extend({
+		
+		method: 	Method,
+		plus: 		plus,
+		times: 		times,
+		
+		/* Set */
+		set: 		opal.set,
+		
+		/* Predicates */
+		predicate: 	predicate,
+		
+		is: 		ObjectIdentityPredicate,
+		istrue: 	TruePredicate,
+		
+		test: 		FunctionPredicate,
+		type: 		TypePredicate,
+		isa: 		InstancePredicate,
+		isan: 		InstancePredicate,
+		property: 	PropertyPredicate,
+		propset: 	PropertySetPredicate,
+		
+		member: 	MembershipPredicate,
+		
+		or: 		Or,
+		and: 		And,
+		not: 		Not,
+		
+		empty: 		EmptySetPredicate,
+		nonempty: 	Not(EmptySetPredicate),
+		
+		all: 		function () {
+						if ( arguments.length === 0 ) {
+							return AllPredicate();
+						}
+						else {
+							return AllSetPredicate.apply(null,arguments);
+						}
+					},
+		
+		some: 		SomeSetPredicate,
+		none: 		NoneSetPredicate,
+		
+		/* Orderings */
+		
+		func: 		FunctionOrdering,
+		value: 		ValueOrdering,
+		score: 		PredicateOrdering,
+		desc: 		DescendingOrdering,
+		composite: 	CompositeOrdering
+		
+	});
+	
 	
 	// ------------------------------------------------------------------------
 	//															 Set operations
@@ -274,6 +289,7 @@ var jModel = function () {
 			return union;
 		}
 		else {
+			// NOTE: Need a context here
 			return new DomainObjectCollection({
 				objects: union,
 				description:'union'
@@ -294,6 +310,7 @@ var jModel = function () {
 			return intersection;
 		}
 		else {
+			// NOTE: Need a context here
 			return new DomainObjectCollection({
 				objects: intersection,
 				description:'intersection'
@@ -306,13 +323,98 @@ var jModel = function () {
 	};
 
 	
+	// ------------------------------------------------------------------------
+	// 																   Contexts
+	// ------------------------------------------------------------------------
+	
+	function ContextSet () {
+		
+		var contexts = new Set();
+		
+		contexts.index(Property('name'));
+		contexts.delegateFor(this);
+	
+		this.create = function (name) {
+			var context = new Context(name);
+			this.add(context);
+			return context;
+		};
+	
+	}
+	
+	
+	function Context (name) {
+		
+		this.name 		= name;
+		this.all		= new DomainObjectCollection({context: this, description:'All Objects in context '+this.name});
+		this.entities	= new EntityTypeSet();
+		
+		var	notifications	= new NotificationQueue(this),
+			isDefault		= false,
+			context			= this;
+		
+		this.register = function (name,constructor,options) {
+
+			var entity	= new EntityType(context,name,constructor,options);
+				
+			entity.exposeAt(context);
+			if ( isDefault ) {
+				entity.exposeAt(external);
+			}
+
+			context.entities.add(entity);
+
+			return this;
+			
+		};
+		
+		this.reset = function () {
+			this.all.remove(AllPredicate(),true);
+			return this;
+		};
+				
+		this.checkpoint = function () {
+			this.entities.each(function (index,entity) {
+				entity.objects.each('clean');
+				entity.deleted.remove(AllPredicate(),true);
+			});
+			return this;
+		};
+		
+		this.validate = function () {
+			return this.all
+					.map(function (object) {return {object:object, messages:object.validate()};})
+						.filter(function (result) { return result.messages !== ''; });
+		};
+				
+		this.debug = function (showSubscribers) {
+			log().startGroup('Context: '+name);
+			this.entities.each(function (index,entity) {
+				log().startGroup(entity.name);
+				entity.objects.debug(showSubscribers);
+				entity.deleted.debug(false);
+				log().endGroup();
+			});
+			log().endGroup();
+		};
+		
+		this.entity = function (name) {
+			return this[name];
+		};
+		
+		this.setDefault = function () {
+			isDefault			= true;
+			defaultContext		= this;
+			external.context	= this;
+		};
+		
+	}
+	
+	
 	
 	// ------------------------------------------------------------------------
 	// 																 Prototypes
 	// ------------------------------------------------------------------------
-	
-	var all = new DomainObjectCollection({description:'All Objects'});
-	
 	
 	function EntityTypeSet () {
 		
@@ -335,16 +437,17 @@ var jModel = function () {
 	}
 	
 	
-	function EntityType (name,constructor,options) {
+	function EntityType (context,name,constructor,options) {
 
 		options  		= options || {};
 		
 		this.options		= options;
 		this.name			= name;
 		this.constructor	= constructor;
+		this.context		= context;
 
 		this.objects = new	DomainObjectCollection({
-								base: 			all,
+								base: 			this.context.all,
 								predicate: 		InstancePredicate(constructor),
 								ordering: 		options.ordering,
 								description: 	name
@@ -386,16 +489,15 @@ var jModel = function () {
 			data = (typeof data == 'object') ? data : {};
 
 			var newObject = new constructor();
-			DomainObject.call(newObject,entities.get(name));
+			DomainObject.call(newObject,this.context);
 			
-
 			var primaryKey	= options.primaryKey;
 			newObject.primaryKey = primaryKey;
 
-			data[primaryKey] = data[primaryKey] || generateID();
+			data[primaryKey] = data[primaryKey] || this.generateID();
 			newObject.domain.init(data);
 
-			all.add(newObject);
+			this.context.all.add(newObject);
 			
 			if ( newObject.initialise ) {
 				newObject.initialise();
@@ -406,83 +508,35 @@ var jModel = function () {
 			return newObject;
 
 		};
-
-
-		function generateID() {			
-			return -(all.count()+1);
-		}
 		
-
-	};
-
-	
-	external.prototype = {
 		
-		register: function (name,constructor,options) {
-
-			var plural	= options.plural || name+'s',
-				entity	= new EntityType(name,constructor,options);
-
-			external[name]	 			= delegateTo(entity,'object');
-			external[plural]			= delegateTo(entity.objects,'filter');
-				
-			external['create'+name]		= delegateTo(entity,'create');
-			external['deleted'+plural]	= delegateTo(entity.deleted,'filter');
-				
-			external[name].entitytype	= entity;
-			external[name].extend		= delegateTo(entity.constructor,'extend');
+		this.exposeAt = function (target) {
 			
-			entities.add(entity);
-				
-			return external.prototype;
+			var plural	= options.plural || name+'s';
+			
+			target[name]	 			= delegateTo(this,'object');
+			target[plural]				= delegateTo(this.objects,'filter');
 
+			target['create'+name]		= delegateTo(this,'create');
+			target['deleted'+plural]	= delegateTo(this.deleted,'filter');
+
+			target[name].entitytype		= this;
+			target[name].extend			= delegateTo(this.constructor,'extend');
+			
+		}
+
+
+		this.generateID = function () {	
+			return -(this.context.all.count()+1);
 		}
 		
+
 	};
 	
+	// NOTE: Remove this
 	external.entity = function (name) {
 		return external[name];
 	}
-
-
-	
-	// ------------------------------------------------------------------------
-	//																	Context
-	// ------------------------------------------------------------------------
-	
-	external.context = {
-	
-		reset: 	function () {
-					all.remove(AllPredicate(),true);
-					return external.context;
-				},
-				
-		checkpoint: function () {
-						entities.each(function (index,entity) {
-							entity.objects.each('clean');
-							entity.deleted.remove(AllPredicate(),true);
-						});
-						return external.context;
-					},
-		
-		validate: 	function () {
-						return all
-								.map(function (object) {return {object:object, messages:object.validate()};})
-									.filter(function (result) { return result.messages !== ''; });
-					},
-				
-		debug: 	function (showSubscribers) {
-					log().startGroup('Context');
-					entities.each(function (index,entity) {
-						log().startGroup(entity.name);
-						entity.objects.debug(showSubscribers);
-						entity.deleted.debug(false);
-						log().endGroup();
-					});
-					log().endGroup();
-				}
-		
-	};
 	
 	
 	
@@ -490,7 +544,9 @@ var jModel = function () {
 	//															  Notifications
 	// ------------------------------------------------------------------------
 	
-	function NotificationQueue () {
+	function NotificationQueue (context) {
+		
+		this.context = context;
 		
 		var	notifications 	= new Set(),
 			active			= true,
@@ -540,6 +596,7 @@ var jModel = function () {
 		
 	};
 	
+	// NOTE: Move this into context
 	external.notifications = {
 		
 		suspend: 	function () {
@@ -778,7 +835,8 @@ var jModel = function () {
 				});
 			}
 			else {
-				all.remove(And(MembershipPredicate(objects),predicate),true,true);
+				console.log(specification);
+				specification.context.all.remove(And(MembershipPredicate(objects),predicate),true,true);
 			}
 		
 		};
@@ -786,6 +844,7 @@ var jModel = function () {
 		
 		this.by = function () {			
 			return new DomainObjectCollection({
+				context: specification.context,
 				objects: objects.copy(),
 				ordering: this.ordering.apply(null,arguments),
 				description:'ordered '+specification.description
@@ -862,6 +921,7 @@ var jModel = function () {
 			
 			if ( filtered instanceof Set ) {
 				return new DomainObjectCollection({
+					context: specification.context,
 					objects: filtered,
 					description:'filtered '+specification.description
 				});
@@ -1003,6 +1063,7 @@ var jModel = function () {
 	
 	external.collection = function() {
 		if ( typeof arguments[0] == 'array' ) {
+			// NOTE: Need a context here
 			return new DomainObjectCollection({objects:arguments[0],description:'set'});
 		}
 		else {
@@ -1010,6 +1071,7 @@ var jModel = function () {
 			for (var i=0; i<arguments.length; i++) {
 				objects.push(arguments[i]);
 			}
+			// NOTE: Need a context here
 			return new DomainObjectCollection({objects:objects,description:'set'});
 		}
 	};
@@ -1349,7 +1411,7 @@ var jModel = function () {
 	// 														Domain Object mixin
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (entitytype) {
+	function DomainObject (context) {
 		
 		
 		var subscribers 	= new SubscriberSet(notifications),
@@ -1363,6 +1425,7 @@ var jModel = function () {
 		this.relationships	= delegateTo(relationships,'filter');
 		this.relationship   = delegateTo(relationships,'get');
 		this.constraints	= delegateTo(constraints,'filter');
+		this.context		= context;
 		
 		this.get = function () {
 		
@@ -1733,7 +1796,7 @@ var jModel = function () {
 		this.name		= relationship.accessor;
 		
 		this.get = function (create) {
-			var child = entities.get(relationship.prototype).object(parent.get(relationship.field));
+			var child = parent.context.entities.get(relationship.prototype).object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -1744,7 +1807,7 @@ var jModel = function () {
 		
 		this.add = function (data) {
 
-			var newObject = entities.get(relationship.prototype).create( data || {} );
+			var newObject = parent.context.entities.get(relationship.prototype).create( data || {} );
 			
 			parent.set(relationship.field, newObject.primaryKeyValue());
 			
@@ -1774,9 +1837,10 @@ var jModel = function () {
 
 		log('domainobject/create').startGroup('Creating children collection');
 		var children			= new DomainObjectCollection({
-											base: 	     entities.get(relationship.prototype).objects,
-											predicate: 	 RelationshipPredicate(parent,relationship.field),
-											description: 'children by relationship '+relationship.accessor
+											context: 		parent.context,
+											base: 	     	parent.context.entities.get(relationship.prototype).objects,
+											predicate: 	 	RelationshipPredicate(parent,relationship.field),
+											description: 	'children by relationship '+relationship.accessor
 										});
 		log('domainobject/create').endGroup();
 	
@@ -1809,7 +1873,7 @@ var jModel = function () {
 			
 			data = data || {};
 			data[relationship.field] = parent.primaryKeyValue();
-			return entities.get(relationship.prototype).create(data);
+			return parent.context.entities.get(relationship.prototype).create(data);
 			
 		};
 		
@@ -1850,7 +1914,7 @@ var jModel = function () {
 	external.json = function () {
 		
 		
-		function makeObject (key,data,parent) {
+		function makeObject (key,data,parent,context) {
 			
 			log('json/thaw').startGroup('thawing a '+key);
 			
@@ -1862,9 +1926,12 @@ var jModel = function () {
 				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
 			}
 			else {
-				if ( entities.get(key) ) {
+				if ( context.entities.get(key) ) {
 					log('json/thaw').debug('creating free object');
-					object = entities.get(key).create(partitionedData.fields);
+					object = context.entities.get(key).create(partitionedData.fields);
+				}
+				else {
+					log('json/thaw').debug('unknown entity type: '+key);
 				}
 			}
 			
@@ -1872,7 +1939,7 @@ var jModel = function () {
 				var childData = partitionedData.children[childKey];
 				childData = ( childData instanceof Array ) ? childData : [childData];
 				for ( var i=0; i<childData.length; i++) {
-					makeObject(childKey,childData[i],object||parent);
+					makeObject(childKey,childData[i],object||parent,context);
 				}
 			}
 			
@@ -1883,13 +1950,13 @@ var jModel = function () {
 		
 		return {
 			
-			thaw: 	function (data,options) {
+			thaw: 	function (context,data,options) {
 						log('json/thaw').startGroup('thawing JSON');
 						options = options || {};
 						data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
 							for ( var key in data[i] ) {
-								makeObject(key,data[i][key],options.parent);
+								makeObject(key,data[i][key],options.parent,context);
 							}
 						}
 						log('json/thaw').endGroup();
@@ -2053,27 +2120,18 @@ var jModel = function () {
 	// 																	Fluency 
 	// ------------------------------------------------------------------------
 	
-	external.log.prototoype		= external.prototype;
 	external.log.context		= external.context;
 	external.log.notifications	= external.notifications;
 	external.log.json			= external.json;
 	
-	external.prototype.context			= external.context;
-	external.prototype.notifications	= external.notifications;
-	external.prototype.json				= external.json;
-	external.prototype.log				= external.log;
-	
-	external.context.prototype			= external.prototype;
 	external.context.notifications		= external.notifications;
 	external.context.json				= external.json;
 	external.context.log				= external.log;
 	
-	external.notifications.prototype	= external.prototype;
 	external.notifications.context		= external.context;
 	external.notifications.json			= external.json;
 	external.notifications.log			= external.log;
 	
-	external.json.prototype				= external.prototype;
 	external.json.context				= external.context;
 	external.json.notifications			= external.notifications;
 	external.json.log					= external.log;
