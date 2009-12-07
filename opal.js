@@ -146,28 +146,24 @@ function OPAL () {
 			if ( !this.constraint(object) ) {
 				return false;
 			}
-			else if ( members.indexOf && members.indexOf(object) == -1 ) {
-				members.push(object);
-				if ( index ) {
-					index.add(object);
-				}
-				return true;
-			}
+			var found = false;
+			if ( members.indexOf && members.indexOf(object) == -1 ) {
+				found = true;
+			}	
 			else if ( !members.indexOf ) { // Oh, how we hate IE
-				var found = false;
 				for( var i=0; i<members.length; i++ ) {
 					if ( members[i] === object ) {
 						found = true;
 						break;
 					}
 				}
-				if ( !found ) {
-					members.push(object);
-					if ( index ) {
-						index.add(object);
-					}
-					return true;
+			}
+			if ( found ) {	
+				members.push(object);
+				if ( index ) {
+					index.add(object);
 				}
+				return true;
 			}
 			return false;
 		};
