@@ -426,9 +426,7 @@ var jModel = function () {
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				var predicate = PropertyPredicate('name',parameter);
-				predicate.unique = true;
-				return predicate;
+				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
 				return types.predicate(parameter);
@@ -1701,9 +1699,7 @@ var jModel = function () {
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				var predicate = PropertyPredicate('accessor',parameter);
-				predicate.unique = true;
-				return predicate;
+				return extend({unique:true},PropertyPredicate('accessor',parameter));
 			}
 			else {
 				return fields.predicate(parameter);
@@ -1793,9 +1789,7 @@ var jModel = function () {
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				var predicate = PropertyPredicate('name',parameter);
-				predicate.unique = true;
-				return predicate;
+				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
 				return relationships.predicate(parameter);
