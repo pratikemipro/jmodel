@@ -146,7 +146,7 @@ function OPAL () {
 				return false;
 			}
 			var found = false;
-			if ( members.indexOf && members.indexOf(object) == -1 ) {
+			if ( members.indexOf && members.indexOf(object) > -1 ) {
 				found = true;
 			}	
 			else if ( !members.indexOf ) { // Oh, how we hate IE
@@ -157,7 +157,7 @@ function OPAL () {
 					}
 				}
 			}
-			if ( found ) {	
+			if ( !found ) {	
 				members.push(object);
 				if ( index ) {
 					index.add(object);
