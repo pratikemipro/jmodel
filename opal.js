@@ -117,15 +117,13 @@ function OPAL () {
 	});
 
 
-	function plus (a,b) {
+	var plus = extend({unit:0},function (a,b) {
 		return a+b;
-	}
-	plus.unit = 0;	
+	});
 
-	function times (a,b) {
+	var times = extend({unit:1},function times (a,b) {
 		return a*b;
-	}
-	times.unit = 1;
+	});
 
 	opal.extend({
 		plus: plus,
