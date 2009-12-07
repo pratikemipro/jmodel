@@ -345,20 +345,27 @@ var jModel = function () {
 	
 	function Context (name) {
 		
-		this.name 		= name;
-		this.all		= new DomainObjectCollection({context: this, description:'All Objects in context '+this.name});
-		this.entities	= new EntityTypeSet();
+		this.name 			= name;
+		this.entities		= new EntityTypeSet(this);
+		this.all			= collection({description:'All Objects in context '+this.name});
+		this.notifications	= new NotificationQueue(this);
 		
-		var	notifications	= new NotificationQueue(this),
-			isDefault		= false,
+		var	isDefault		= false,
 			context			= this;
 		
+		// Register a new constructor
 		this.register = function (name,constructor,options) {
-			var entity	= new EntityType(context,name,constructor,options);
-			entity.exposeAt( isDefault ? [context,external] : [context] );
-			this.entities.add(entity);
-			return this;
+			return this.entities
+						.create(name,constructor,options)
+							.exposeAt( isDefault ? [context,external] : [context] )
+							.context;
 		};
+		
+		// Create a new collection
+		function collection (specification) {
+			return new DomainObjectCollection( extend({context:this},specification) );
+		}
+		this.collection = collection;
 		
 		this.reset = function () {
 			this.all.remove(AllPredicate(),true);
@@ -408,7 +415,9 @@ var jModel = function () {
 	// 																 Prototypes
 	// ------------------------------------------------------------------------
 	
-	function EntityTypeSet () {
+	function EntityTypeSet (context) {
+		
+		this.context = context;
 		
 		var	types = new Set();
 		
@@ -425,6 +434,12 @@ var jModel = function () {
 				return types.predicate(parameter);
 			}
 		};
+		
+		this.create = function (name,constructor,options) {
+			var entity = new EntityType(context,name,constructor,options);
+			this.add(entity);
+			return entity;
+		}
 		
 	}
 	
@@ -519,6 +534,8 @@ var jModel = function () {
 				target[name].extend			= delegateTo(entity.constructor,'extend');
 				
 			});
+			
+			return this;
 			
 		}
 
