@@ -79,14 +79,13 @@ function OPAL () {
 
 	function PropertyPath (path,separator) {
 		function resolve (object,pieces) {
-			var piece		= pieces.shift(),
+			var piece	= pieces.shift(),
 				deref	= ( typeof object[piece] == 'function' ) ? Method(piece) : Property(piece);
 			return ( pieces.length === 0 ) ? deref(object) : resolve(deref(object),pieces);
 		}
 		return function (object) {
 			try {
-				pieces = path.split(separator||'.');
-				return resolve(object,pieces);
+				return resolve(object,path.split(separator||'.'));
 			}
 			catch (error) {
 				return false;
@@ -361,22 +360,6 @@ function OPAL () {
 					arguments[0]
 					: new Set(arrayFromArguments(arguments));
 	}
-
-/*	function set () {
-		if ( arguments[0] instanceof Set ) {
-			return arguments[0];
-		}
-		if ( arguments[0] instanceof Array ) {
-			return new Set(arguments[0]);
-		}
-		else {
-			var objects = [];
-			for (var i=0; i<arguments.length; i++) {
-				objects.push(arguments[i]);
-			}
-			return new Set(objects);
-		}
-	}; */
 	opal.set = set;
 
 	//
