@@ -15,12 +15,14 @@ function OPAL () {
 
 	var opal = {};
 
-	opal.extend = function (object,target) {
+	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
 			target[i] = object[i];
 		}
-	};
+		return target;
+	}
+	opal.extend = extend;
 
 	function compose () {
 		var fns = arguments;
@@ -365,7 +367,7 @@ function OPAL () {
 
 	opal.Set = Set;
 
-	opal.set = function() {
+	function set () {
 		if ( arguments[0] instanceof Set ) {
 			return arguments[0];
 		}
@@ -380,6 +382,7 @@ function OPAL () {
 			return new Set(objects);
 		}
 	};
+	opal.set = set;
 
 	//
 	// Set operations
@@ -778,10 +781,26 @@ function OPAL () {
 
 	function arrayFromArguments (args) {
 		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
-	} 
+	}
+	
+	function copy (obj) {
+		return extend(obj,{
+			add: function (attributes) {
+				return extend(attributes,this);
+			},
+			remove: function () {
+				var that = this;
+				set(arrayFromArguments(arguments)).each(function (index,key) {
+					delete that[key];
+				});
+				return this;
+			}
+		});
+	}
 
 	opal.extend({
-		arrayFromArguments: 			arrayFromArguments
+		arrayFromArguments: 			arrayFromArguments,
+		copy: 							copy
 	});
 
 
