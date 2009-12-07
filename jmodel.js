@@ -354,18 +354,10 @@ var jModel = function () {
 			context			= this;
 		
 		this.register = function (name,constructor,options) {
-
 			var entity	= new EntityType(context,name,constructor,options);
-				
-			entity.exposeAt(context);
-			if ( isDefault ) {
-				entity.exposeAt(external);
-			}
-
-			context.entities.add(entity);
-
+			entity.exposeAt( isDefault ? [context,external] : [context] );
+			this.entities.add(entity);
 			return this;
-			
 		};
 		
 		this.reset = function () {
@@ -510,18 +502,23 @@ var jModel = function () {
 		};
 		
 		
-		this.exposeAt = function (target) {
+		this.exposeAt = function (targets) {
 			
-			var plural	= options.plural || name+'s';
+			var plural	= options.plural || name+'s',
+				entity = this;
 			
-			target[name]	 			= delegateTo(this,'object');
-			target[plural]				= delegateTo(this.objects,'filter');
+			set(targets).each(function (index,target) {
+			
+				target[name]	 			= delegateTo(entity,'object');
+				target[plural]				= delegateTo(entity.objects,'filter');
 
-			target['create'+name]		= delegateTo(this,'create');
-			target['deleted'+plural]	= delegateTo(this.deleted,'filter');
+				target['create'+name]		= delegateTo(entity,'create');
+				target['deleted'+plural]	= delegateTo(entity.deleted,'filter');
 
-			target[name].entitytype		= this;
-			target[name].extend			= delegateTo(this.constructor,'extend');
+				target[name].entitytype		= entity;
+				target[name].extend			= delegateTo(entity.constructor,'extend');
+				
+			});
 			
 		}
 
