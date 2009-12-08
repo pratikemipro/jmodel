@@ -188,10 +188,10 @@ var jModel = function () {
 	var	contexts		= function (predicate) { return contexts.get(predicate); };
 	ContextSet.apply(contexts);
 	
-	var	defaultContext	= contexts.create('default'),
-		notifications	= new NotificationQueue();
+	var	defaultContext	= contexts.create('default').setDefault()/*,
+		notifications	= new NotificationQueue()*/;
 		
-	external.context = defaultContext;
+//	external.context = defaultContext;
 	
 	external.extend = opal.extend;
 	
@@ -289,8 +289,8 @@ var jModel = function () {
 			return union;
 		}
 		else {
-			// NOTE: Need a context here
 			return new DomainObjectCollection({
+				context: contexts('default'),
 				objects: union,
 				description:'union'
 			});
@@ -312,6 +312,7 @@ var jModel = function () {
 		else {
 			// NOTE: Need a context here
 			return new DomainObjectCollection({
+				context: contexts('default'),
 				objects: intersection,
 				description:'intersection'
 			});
@@ -345,13 +346,13 @@ var jModel = function () {
 	
 	function Context (name) {
 		
-		this.name 			= name;
-		this.entities		= new EntityTypeSet(this);
-		this.all			= collection({description:'All Objects in context '+this.name});
-		this.notifications	= new NotificationQueue(this);
-		
 		var	isDefault		= false,
 			context			= this;
+		
+		this.name 			= name;
+		this.notifications	= new NotificationQueue(context);
+		this.entities		= new EntityTypeSet(this);
+		this.all			= collection({description:'All Objects in context '+this.name});
 		
 		// Register a new constructor
 		this.register = function (name,constructor,options) {
@@ -363,7 +364,7 @@ var jModel = function () {
 		
 		// Create a new collection
 		function collection (specification) {
-			return new DomainObjectCollection( extend({context:this},specification) );
+			return new DomainObjectCollection( extend({context:context},specification) );
 		}
 		this.collection = collection;
 		
@@ -401,10 +402,45 @@ var jModel = function () {
 			return this[name];
 		};
 		
+		// NOTE: Move this into context
+/*		this.notifications = {
+
+			suspend: 	function () {
+							context.notifications.suspend();
+							return context.notifications;
+						},
+
+			resume: 	function () {
+							context.notifications.resume();
+							return context.notifications;
+						},
+
+			flush: 		function (predicate) {
+							context.notifications.flush(predicate);
+							return context.notifications;
+						},
+
+			push: 		function () {
+							context.entities.each(function (index,entity) {
+								entity.objects.each(function (index,object) {
+									object.domain.push();
+								});
+							});
+							return context.notifications;
+						},
+
+			setFilter: 	function (predicate) {
+							context.notifications.setFilter(predicate);
+							return context.notifications;
+						} 
+
+		}; */
+		
 		this.setDefault = function () {
-			isDefault			= true;
-			defaultContext		= this;
-			external.context	= this;
+			isDefault				= true;
+			defaultContext			= this;
+			external.context		= this;
+			external.notifications	= this.notifications;
 		};
 		
 	}
@@ -608,40 +644,6 @@ var jModel = function () {
 		
 	};
 	
-	// NOTE: Move this into context
-	external.notifications = {
-		
-		suspend: 	function () {
-						notifications.suspend();
-						return external.notifications;
-					},
-					
-		resume: 	function () {
-						notifications.resume();
-						return external.notifications;
-					},
-					
-		flush: 		function (predicate) {
-						notifications.flush(predicate);
-						return external.notifications;
-					},
-					
-		push: 		function () {
-						entities.each(function (index,entity) {
-							entity.objects.each(function (index,object) {
-								object.domain.push();
-							});
-						});
-						return external.notifications;
-					},
-					
-		setFilter: 	function (predicate) {
-						notifications.setFilter(predicate);
-						return external.notifications;
-					}
-	
-	};
-	
 	
 	//
 	// Notification types
@@ -797,6 +799,8 @@ var jModel = function () {
 		
 		specification			= specification || {};
 		specification.predicate = specification.predicate || AllPredicate();
+
+		var notifications = specification.context ? specification.context.notifications : contexts('default').notifications;
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
@@ -847,7 +851,6 @@ var jModel = function () {
 				});
 			}
 			else {
-				console.log(specification);
 				specification.context.all.remove(And(MembershipPredicate(objects),predicate),true,true);
 			}
 		
@@ -1073,10 +1076,11 @@ var jModel = function () {
 		
 	};
 	
+	// NOTE: Make this a method of Context
 	external.collection = function() {
 		if ( typeof arguments[0] == 'array' ) {
 			// NOTE: Need a context here
-			return new DomainObjectCollection({objects:arguments[0],description:'set'});
+			return new DomainObjectCollection({context:contexts('default'),objects:arguments[0],description:'set'});
 		}
 		else {
 			var objects = [];
@@ -1084,13 +1088,13 @@ var jModel = function () {
 				objects.push(arguments[i]);
 			}
 			// NOTE: Need a context here
-			return new DomainObjectCollection({objects:objects,description:'set'});
+			return new DomainObjectCollection({context:contexts('default'),objects:objects,description:'set'});
 		}
 	};
 	
 	function DeletedObjectsCollection (collection) {
 		
-		var deleted = new DomainObjectCollection({description:'deleted'});
+		var deleted = new DomainObjectCollection({context:collection.context,description:'deleted'});
 		
 		deleted.debug = function () {
 			if ( Not(EmptySetPredicate)(deleted) ) {
@@ -1426,7 +1430,8 @@ var jModel = function () {
 	function DomainObject (context) {
 		
 		
-		var subscribers 	= new SubscriberSet(notifications),
+		var notifications	= context.notifications,
+			subscribers 	= new SubscriberSet(notifications),
 			fields			= new FieldSet(this,subscribers),
 			relationships	= new RelationshipSet(),
 			constraints		= new ConstraintSet;
