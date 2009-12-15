@@ -528,35 +528,25 @@ function OPAL () {
 
 	// Value comparisons
 
-	function EqualityPredicate (value) {
-		return function (candidate) {
-			return candidate == value;
-		};
-	}
+	function eq  (a,b) { return a==b; }
+	function lt  (a,b) { return a<b; }
+	function gt  (a,b) { return a>b; }
+	function lte (a,b) { return a<=b; }
+	function gte (a,b) { return a>=b; }
 
-	function LessThanPredicate (value) {
-		return function (candidate) {
-			return candidate < value;
-		};
+	function ComparisonPredicate (operator) {
+		return function (value) {
+			return function (candidate) {
+				return operator(candidate,value);
+			}
+		}
 	}
-
-	function GreaterThanPredicate (value) {
-		return function (candidate) {
-			return candidate > value;
-		};
-	}
-
-	function LessThanEqualPredicate (value) {
-		return function (candidate) {
-			return candidate <= value;
-		};
-	}
-
-	function GreaterThanEqualPredicate (value) {
-		return function (candidate) {
-			return candidate >= value;
-		};
-	}
+	
+	var EqualityPredicate         = ComparisonPredicate(eq),
+		LessThanPredicate         = ComparisonPredicate(lt),
+		GreaterThanPredicate      = ComparisonPredicate(gt),
+		LessThanEqualPredicate    = ComparisonPredicate(lte),
+		GreaterThanEqualPredicate = ComparisonPredicate(gte);
 
 	function BetweenPredicate (lower,higher) {
 		return function (candidate) {
@@ -571,6 +561,8 @@ function OPAL () {
 	}
 
 	opal.extend({
+		ComparisonPredicate: 			ComparisonPredicate,
+		compare: 						ComparisonPredicate,
 		EqualityPredicate: 				EqualityPredicate,
 		eq: 							EqualityPredicate,
 		LessThanPredicate: 				LessThanPredicate,
