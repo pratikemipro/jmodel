@@ -711,7 +711,7 @@ function OPAL () {
 		};
 	}
 
-	var ValueOrdering = FunctionOrdering( function (obj) {return obj;} );
+	var ValueOrdering = FunctionOrdering(Identity);
 
 	function PredicateOrdering () {
 		var predicates = opal.set(arrayFromArguments(arguments));
