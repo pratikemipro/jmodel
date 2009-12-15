@@ -716,7 +716,7 @@ function OPAL () {
 	function PredicateOrdering () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return FunctionOrdering( function (obj) {
-			return -predicates.count(function (pred) {return pred(obj);} );
+			return -predicates.count(ApplyTo(obj));
 		});
 	}
 
