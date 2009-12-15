@@ -1,0 +1,576 @@
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+		<script src="../opal.js"></script>
+		<link media="screen" href="testsuite.css" type="text/css" rel="stylesheet">
+		<script src="testrunner.js"></script>
+
+		<script>
+		
+			var opal = OPAL();
+		
+			// ------------------------------------------------------------------------
+			//														  Object-functional
+			// ------------------------------------------------------------------------
+			
+			module('Set');
+			
+			test('Compose', function () {
+			
+				var double = function (x) { return 2*x; },
+					addten = function (x) { return x+10; };
+					
+				equals( opal.compose(double,addten)(7), 34, 'composition of two functions works' );
+				equals( opal.compose(addten,double)(7), 24, 'composition works in opposite direction' );
+				equals( opal.compose(double)(7), 14, 'composition of a single function is just that function' );	
+				equals( opal.compose()(7), 7, 'composition of no functions is identity' );
+				
+			});
+			
+			test('Pipe', function () {
+			
+				var double = function (x) { return 2*x; },
+					addten = function (x) { return x+10; };
+					
+				equals( opal.pipe(double,addten)(7), 24, 'piping of two functions works' );
+				equals( opal.pipe(addten,double)(7), 34, 'piping works in opposite direction' );
+				equals( opal.pipe(double)(7), 14, 'pipe of a single function is just that function' );	
+				equals( opal.pipe()(7), 7, 'pipe of no functions is identity' );
+				
+			});
+			
+			test('Identity', function () {
+			
+				var fred = 'fred';
+			
+				equals( opal.Identity(fred), fred, 'identity function returns object unchanged' );
+				
+			});
+			
+			test('Type', function () {
+			
+				var fred = 'fred',
+					age = 12,
+					hello = function () { alert('hello'); },
+					obj = {};
+			
+				equals( opal.Type(fred),	'string',	'Type works on strings' );
+				equals( opal.Type(age),		'number',	'Type works on numbers' );
+				equals( opal.Type(hello),	'function', 'Type works on functions' );
+				equals( opal.Type(obj),		'object',	'Type works on objects' );
+				
+			});
+			
+			test('Property', function () {
+			
+				var fred = {forename:'Fred',surname:'Smith'};
+				
+				equals( opal.Property('surname')(fred), 'Smith', 'Property works on properties that exist' );
+				equals( opal.Property('age')(fred), undefined, 'Property returns "undefined" for properties that do not exist');
+				
+			});
+			
+			test('Method', function () {
+			
+				var test = {
+					ten: function () { return 10; },
+					double: function (x) { return 2*x; }
+				}
+				
+				equals( opal.Method('ten')(test), 10, 'Method works without any arguments');
+				// Need to test arguments passed in Method functor as well as in method call
+				
+			});
+			
+			
+		
+			// ------------------------------------------------------------------------
+			//																		Set
+			// ------------------------------------------------------------------------
+			
+			module('Set');
+			
+			test('Set creation', function () {
+				
+				equals( opal.set(['red','green','blue']).count(), 3, "creation from array" );
+				equals( opal.set('red','green','blue').count(), 3, "creation from arguments" );
+				
+			});
+			
+			test('Adding elements', function () {
+				
+				var testSet = opal.set();
+				testSet.add('red');
+				testSet.add('green');
+				
+				equals( testSet.count(), 2, "addition of non-duplicate objects" );
+				equals( testSet.add('blue'), true, "addition of non-duplicate succeeds" );
+				equals( testSet.add('green'), false, "addition of duplicate fails" );
+				
+				// NOTE: Test constraints here
+				
+			});
+			
+			test('Counting elements', function () {
+			
+				var testSet = opal.set();
+				equals( testSet.count(), 0, 'new sets are empty');
+				
+				testSet.add('red');
+				testSet.add('green');
+				equals( testSet.count(), 2, 'adding elements increments count');
+				
+				testSet.remove(opal.ObjectIdentityPredicate('green'));
+				equals( testSet.count(), 1, 'removing element decrements count');
+				
+			});
+		
+			test('First element', function () {
+				
+				var testSet = opal.set();
+				
+				equals( testSet.first(), false, 'empty set has no first element');
+				
+				testSet.add('red');
+				testSet.add('green');
+				
+				equals( testSet.first(), 'red', 'first element of non-empty set is first added');
+				
+			});
+			
+			test('Selector', function () {
+			
+				var testSet = opal.set();
+				testSet.add('red');
+				testSet.add('green');
+				
+				equals( testSet.select(':first'), 'red', ':first selector returns first added');
+				equals( testSet.select('fred'), testSet, 'other selectors return whole set' );
+				
+				
+			});
+			
+			test('Each', function () {
+			
+				var testSet = opal.set();
+				testSet.add('red');
+				testSet.add('green');
+				testSet.add('blue');
+				
+				var concat = '';
+				testSet.each(function () {concat+=this});
+				
+				equals( concat, 'redgreenblue', 'each works with functions');
+				
+				var testSet = opal.set();
+				var concatstr = '';
+				var concat = function () {concatstr+=this.colour};
+				
+				var red = new Object();
+				red.colour = 'red';
+				red.concat = concat;
+				
+				var green = new Object();
+				green.colour = 'green';
+				green.concat = concat;
+				
+				testSet.add(red);
+				testSet.add(green);
+				testSet.each('concat')
+				
+				equals(concatstr, 'redgreen', 'each works with method name');
+				
+			});
+			
+			test('When', function () {
+			
+				var testSet = opal.set(),
+					output;
+				
+				testSet.when(':empty', function () { output = 123 });
+				equals(output, 123, 'when works with :empty on empty set' );
+				
+				testSet.add('red');
+				output = null;
+				testSet.when(':empty', function () { output = 123 });
+				equals(output, null, 'when works with :empty on non-empty set' );
+				
+			});
+		
+			test('Partition', function () {
+			
+				var testSet = opal.set(1,2,3,4,5,6,7,8),
+					partition = testSet.partition(function (object) {
+						return object % 2 == 0;
+					},'even','odd');
+				
+				equals(partition.odd.first(), 1, 'fail contains correct first element');
+				equals(partition.odd.count(), 4, 'fail contains correct number of elements');
+				
+				equals(partition.even.first(), 2, 'pass contains correct first element');
+				equals(partition.even.count(), 4, 'pass contains correct number of elements');
+				
+			});
+			
+			test('Filter', function () {
+				
+				// Test filter with no parameter
+				var testSet = opal.set(1,2,3,4);
+				equals( testSet.filter(), testSet, 'Filtering with no conditions leaves set unchanged');
+				
+				// Test filter with string-specified selector
+				equals( testSet.filter(':first'), 1, 'Filtering with string-specified selector applies selector' );
+				
+				// Test filter with predicate and no selector
+				equals( testSet.filter(function (obj) {return obj <= 2}).count(), 2, 'Filtering removes objects' );
+				equals( testSet.filter(function (obj) {return obj >= 2}).first(), 2, 'Filtering preserves objects' );
+				
+				// Test filter with predicate and selector
+				equals( testSet.filter(function (obj) {return obj >= 2},':first'), 2, 'Filtering with selection works' );
+				
+			});
+			
+			test('Remove', function () {
+				var testSet = opal.set('red','green','blue');
+				var removed = testSet.remove(function (candidate) { return candidate === 'red' });
+				equals(testSet.first(), 'green', 'element removal works');
+				equals(removed.first(), 'red', 'correct removed element returned');
+			});
+			
+			test('Map', function () {
+				
+				var testSet = opal.set(1,2,3);
+				var doubled = testSet.map(function (obj) { return obj*2; });
+				
+				equals(doubled.first(),2,'mapping works');
+				
+			});
+			
+			test('Copy', function () {
+				var testSet = opal.set('red','green','blue'),
+					copied = testSet.copy();
+					
+				equals(copied.first(), 'red', 'copying preserves first element');
+				
+				testSet.remove(function (obj) { return obj === 'red' });
+				equals(copied.first(), 'red', 'changes to original set membership not propagated');
+			
+			});
+			
+			test('Sort', function () {
+				
+				var testSet = opal.set('red','green','blue');
+				testSet.sort(function (a,b) { 
+					if ( a < b) {
+						return -1;
+					}
+					else if ( a > b ) {
+						return 1;
+					}
+					return 0;
+				});
+				
+				equals(testSet.first(),'blue','sorting works');
+				
+			});
+			
+			test('Join', function () {
+				var testSet = opal.set('red','green','blue');
+				equals(testSet.join(','), 'red,green,blue', 'join works');
+			});
+		
+			test('Union', function () {
+				var testSet = opal.set('red','green','blue');
+				equals( testSet.union(opal.set('cyan','magenta')).count(), 5, 'Union with one set works' );
+				equals( testSet.union(opal.set('cyan','magenta'),opal.set('yellow')).count(), 6, 'Union with multiple sets works' );
+			});
+			
+			test('Intersection', function () {
+				var testSet = opal.set('red','green','blue');
+				equals( testSet.intersection(opal.set('red','blue')).count(), 2, 'Intersection with one set works' );
+				equals( testSet.intersection(opal.set('red','blue'),opal.set('blue')).count(), 1, 'Intersection with multiple sets works' );
+			});
+			
+			test('Difference', function () {
+				var testSet = opal.set('red','green','blue');
+				equals( testSet.difference(opal.set('red')).count(), 2, 'Difference has correct first number of element' );
+				equals( testSet.difference(opal.set('red')).first(), 'green', 'Difference has correct first element' );
+			});
+			
+			test('Predicate generator', function () {
+				// Need lots of assertions here
+			});
+			
+			test('Delegation', function () {
+				// Need lots of assertions here
+			});
+		
+		
+			// ------------------------------------------------------------------------
+			// 															 Set operations
+			// ------------------------------------------------------------------------
+			
+			module('Set operations');
+			
+			test('Union', function () {
+				var set1 = opal.set('red','green','blue'),
+					set2 = opal.set('cyan','magenta','yellow'),
+					set3 = opal.set('black','white');
+				equals( opal.union(set1,set2,set3).count(), 8, 'Union of multiple sets has correct cardinality' );
+			});
+			
+			test('Intersection', function () {
+				var set1 = opal.set('red','green','blue'),
+					set2 = opal.set('red','blue'),
+					set3 = opal.set('blue');
+				equals( opal.intersection(set1,set2,set3).count(), 1, 'Intersection of multiple sets has correct cardinality');
+				equals( opal.intersection(set1,set2,set3).first(), 'blue', 'Intersection of multiple sets contains correct elements');
+			});
+			
+			test('Difference', function () {
+				var set1 = opal.set('red','green','blue'),
+					set2 = opal.set('red','blue');
+				equals( opal.difference(set1,set2).count(), 1, 'Difference has correct cardinality');
+				equals( opal.difference(set1,set2).first(), 'green', 'Difference has correct membership');
+			});
+			
+		
+			// ------------------------------------------------------------------------
+			// 																  Orderings
+			// ------------------------------------------------------------------------
+		
+			module('Orderings');
+			
+			
+			test('Orderings generator', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('FunctionOrdering', function () {
+				// Need lots of assertions here
+			});
+			
+			test('ValueOrdering', function () {
+				
+				equals( opal.ValueOrdering(3,7), -1, 'First argument less returns -1 (integers)' );
+				equals( opal.ValueOrdering(7,7), 0, 'Arguments equal return 0 (integers)' );
+				equals( opal.ValueOrdering(7,3), 1, 'First argument greater returns 1 (integers)' );
+				
+				equals( opal.ValueOrdering('alice','fred'), -1, 'First argument less returns -1 (strings)' );
+				equals( opal.ValueOrdering('fred','fred'), 0, 'Arguments equal return 0 (strings)' );
+				equals( opal.ValueOrdering('fred','alice'), 1, 'First argument greater returns 1 (strings)' );
+				
+			});			
+			
+			test('PredicateOrdering', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('DescendingOrdering', function () {
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(3,7), 1, 'First argument less returns 1 for descending value ordering' );
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,7), 0, 'Arguments equal return 0' );
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,3), -1, 'First argument greater returns -1 for descending value ordering' );
+			});
+			
+			
+			test('CompositeOrdering', function () {
+				// Need lots of assertions here
+			});
+
+
+
+			// ------------------------------------------------------------------------
+			// 																 Predicates
+			// ------------------------------------------------------------------------
+			
+			module('Predicates');
+			
+			
+			test('Predicates generator: predicate', function () {
+				
+				var predicate = opal.ObjectIdentityPredicate('Dummy');
+				same( opal.predicate(predicate), predicate, 'opal.predicate should return actual predicates unchanged' );
+				
+			});
+			
+			
+			test('Predicates generator: object identity', function () {
+				
+				var object = {name:'Fred'};
+				equals( opal.predicate(object)(object), opal.ObjectIdentityPredicate(object)(object), "acting on predicate's object" );
+				equals( opal.predicate(object)({}), opal.ObjectIdentityPredicate(object)({}), "acting on predicate's object" );
+			
+			});
+			
+			
+			test('Predicates generator: null', function () {
+				
+				var object = {Forename:'Test1'};
+				equals( opal.predicate(null)(object),  true, "should return AllPredicate when passed null" );
+			
+			});
+			
+			
+			test('AllPredicate', function () {
+				
+				var object = {Forename:'Test1'};
+				equals( opal.AllPredicate()(object), true, "returns true on generic object" );
+			
+			});
+			
+			
+			test('NonePredicate', function () {
+				
+				var object = {Forename:'Test1'};
+				equals( opal.NonePredicate()(object), false, "returns false on generic object" );
+			
+			});
+			
+			
+			test('FunctionPredicate', function () {
+
+				var match   = {First:3,Second:2};
+				var nomatch = {First:3,Second:3};
+				var fn = function (candidate) {
+					return candidate.First+candidate.Second == 5
+				}
+				equals( opal.FunctionPredicate(fn)(match), true, "returns true on matching object" );
+				equals( opal.FunctionPredicate(fn)(nomatch), false, "returns false on umatching object" );
+			
+			});
+			
+			
+			test('ObjectIdentityPredicate', function () {
+				
+				var object = {Forename:'Test1'};
+				var other = {Forename:'Test2'};
+				equals( opal.ObjectIdentityPredicate(object)(object), true, "returns true on predicate's object" );
+				equals( opal.ObjectIdentityPredicate(object)(other),  false, "returns false on other objects" );
+			
+			});
+		
+			
+			test('TypePredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('InstancePredicate', function () {
+				
+				var Mammal 	= function () {},
+					mammal  = new Mammal(),
+					Fish 	= function () {},
+					fish	= new Fish();
+					
+				equals( opal.InstancePredicate(Mammal)(mammal), true,  "returns true on object with matching constructor");
+				equals( opal.InstancePredicate(Mammal)(fish),   false, "returns false on object without matching constructor");
+				
+			});
+			
+			
+			test('PropertyPredicate', function () {
+			
+				var person = {Forename:'John'};
+				
+				equals( opal.PropertyPredicate('Forename','John')(person), true, 'returns true if property matches' );
+				equals( opal.PropertyPredicate('Forename','Jane')(person), false, 'returns false if property matches' );
+				
+				var person = {Name:{Fore:'John'}};
+				
+				equals( opal.PropertyPredicate('Name.Fore','John')(person), true, 'returns true if property path matches' );
+				equals( opal.PropertyPredicate('Name.Fore','Jane')(person), false, 'returns false if property path does not matches' );
+				
+			});
+			
+			
+			test('MembershipPredicate', function () {
+				
+				var red = 'red',
+					green = 'green',
+					blue = 'blue',
+					pink = 'pink',
+					testSet = opal.set(red,green,blue);
+					
+				equals( opal.MembershipPredicate(testSet)(red), true, "returns true if object is first in collection");
+				equals( opal.MembershipPredicate(testSet)(green), true, "returns true if object is elsewhere in collection");
+				equals( opal.MembershipPredicate(testSet)(pink), false, "returns false if object is not in collection");
+				
+			});
+			
+			
+			test('Eq', function () {
+				
+				equals( opal.EqualityPredicate(3)(3), true, 'returns true if values equal');
+				equals( opal.EqualityPredicate(3)(2), false, 'returns false if values not equal')
+				
+			});
+			
+			
+			test('Lt', function () {
+				
+				equals( opal.LessThanPredicate(3)(2), true, 'returns true if value less than target');
+				equals( opal.LessThanPredicate(3)(3), false, 'returns false if value equal to target');
+				equals( opal.LessThanPredicate(3)(4), false, 'returns false if value greater than target');
+				
+			});
+			
+			
+			test('Gt', function () {
+				
+				equals( opal.GreaterThanPredicate(3)(2), false, 'returns false if value less than target');
+				equals( opal.GreaterThanPredicate(3)(3), false, 'returns false if value equal to target');
+				equals( opal.GreaterThanPredicate(3)(4), true, 'returns true if value greater than target');
+				
+			});
+			
+			
+			test('LtE', function () {
+				
+				equals( opal.LessThanEqualPredicate(3)(2), true, 'returns true if value less than target');
+				equals( opal.LessThanEqualPredicate(3)(3), true, 'returns true if value equal to target');
+				equals( opal.LessThanEqualPredicate(3)(4), false, 'returns false if value greater than target');
+				
+			});
+			
+			
+			test('GtE', function () {
+				
+				equals( opal.GreaterThanEqualPredicate(3)(2), false, 'returns false if value less than target');
+				equals( opal.GreaterThanEqualPredicate(3)(3), true, 'returns true if value equal to target');
+				equals( opal.GreaterThanEqualPredicate(3)(4), true, 'returns true if value greater than target');
+				
+			});
+			
+			
+			test('between', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('Or', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('And', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('Not', function () {
+				// Need lots of assertions here
+			});
+
+
+ 		</script>
+	</head>
+	<body>
+		<h1>OPAL JavaScript Tests</h1>
+		<h2 id="banner"></h2>
+		<h2 id="userAgent"></h2>
+		<ol id="tests"></ol>
+		<div id="main"></div>
+	</body>
+</html>
