@@ -15,6 +15,10 @@
 			
 			module('Set');
 			
+			test('Extend', function () {
+				
+			});
+			
 			test('Compose', function () {
 			
 				var double = function (x) { return 2*x; },
@@ -36,6 +40,14 @@
 				equals( opal.pipe(addten,double)(7), 34, 'piping works in opposite direction' );
 				equals( opal.pipe(double)(7), 14, 'pipe of a single function is just that function' );	
 				equals( opal.pipe()(7), 7, 'pipe of no functions is identity' );
+				
+			});
+			
+			test('Apply', function () {
+				
+			});
+			
+			test('ApplyTo', function () {
 				
 			});
 			
@@ -82,6 +94,14 @@
 				
 			});
 			
+			test('PropertyPath', function () {
+				
+			});
+			
+			test('PropertySet', function () {
+				
+			});
+			
 			
 		
 			// ------------------------------------------------------------------------
@@ -108,6 +128,10 @@
 				equals( testSet.add('green'), false, "addition of duplicate fails" );
 				
 				// NOTE: Test constraints here
+				
+			});
+			
+			test('Getting elements', function () {
 				
 			});
 			
@@ -246,6 +270,10 @@
 				
 			});
 			
+			test('Reduce', function () {
+				
+			});
+			
 			test('Copy', function () {
 				var testSet = opal.set('red','green','blue'),
 					copied = testSet.copy();
@@ -301,10 +329,25 @@
 				// Need lots of assertions here
 			});
 			
+			test('Ordering generator', function () {
+				
+			});
+			
+			test('Indexing', function () {
+				
+			});
+			
+			test('Formatting', function () {
+				
+			});
+			
 			test('Delegation', function () {
 				// Need lots of assertions here
 			});
 		
+			test('Set creation', function () {
+				
+			});
 		
 			// ------------------------------------------------------------------------
 			// 															 Set operations
@@ -336,50 +379,32 @@
 			
 		
 			// ------------------------------------------------------------------------
-			// 																  Orderings
+			// 															   Unique index
 			// ------------------------------------------------------------------------
 		
-			module('Orderings');
-			
-			
-			test('Orderings generator', function () {
-				// Need lots of assertions here
-			});
-			
-			
-			test('FunctionOrdering', function () {
-				// Need lots of assertions here
-			});
-			
-			test('ValueOrdering', function () {
+			module('Unique Index');
+		
+			test('Index creation', function () {
 				
-				equals( opal.ValueOrdering(3,7), -1, 'First argument less returns -1 (integers)' );
-				equals( opal.ValueOrdering(7,7), 0, 'Arguments equal return 0 (integers)' );
-				equals( opal.ValueOrdering(7,3), 1, 'First argument greater returns 1 (integers)' );
+			});
+			
+			test('Index rebulding', function () {
 				
-				equals( opal.ValueOrdering('alice','fred'), -1, 'First argument less returns -1 (strings)' );
-				equals( opal.ValueOrdering('fred','fred'), 0, 'Arguments equal return 0 (strings)' );
-				equals( opal.ValueOrdering('fred','alice'), 1, 'First argument greater returns 1 (strings)' );
+			});
+			
+			test('Index add', function () {
 				
-			});			
-			
-			test('PredicateOrdering', function () {
-				// Need lots of assertions here
 			});
 			
-			
-			test('DescendingOrdering', function () {
-				equals( opal.DescendingOrdering(opal.ValueOrdering)(3,7), 1, 'First argument less returns 1 for descending value ordering' );
-				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,7), 0, 'Arguments equal return 0' );
-				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,3), -1, 'First argument greater returns -1 for descending value ordering' );
+			test('Index remove', function () {
+				
 			});
 			
-			
-			test('CompositeOrdering', function () {
-				// Need lots of assertions here
+			test('Index get', function () {
+				
 			});
-
-
+		
+		
 
 			// ------------------------------------------------------------------------
 			// 																 Predicates
@@ -429,6 +454,11 @@
 			});
 			
 			
+			test('TruePredicate', function () {
+			
+			});
+			
+			
 			test('FunctionPredicate', function () {
 
 				var match   = {First:3,Second:2};
@@ -438,6 +468,11 @@
 				}
 				equals( opal.FunctionPredicate(fn)(match), true, "returns true on matching object" );
 				equals( opal.FunctionPredicate(fn)(nomatch), false, "returns false on umatching object" );
+			
+			});
+			
+			
+			test('FunctionValuePredicate', function () {
 			
 			});
 			
@@ -485,18 +520,8 @@
 			});
 			
 			
-			test('MembershipPredicate', function () {
-				
-				var red = 'red',
-					green = 'green',
-					blue = 'blue',
-					pink = 'pink',
-					testSet = opal.set(red,green,blue);
-					
-				equals( opal.MembershipPredicate(testSet)(red), true, "returns true if object is first in collection");
-				equals( opal.MembershipPredicate(testSet)(green), true, "returns true if object is elsewhere in collection");
-				equals( opal.MembershipPredicate(testSet)(pink), false, "returns false if object is not in collection");
-				
+			test('PropertySetPredicate', function () {
+			
 			});
 			
 			
@@ -549,6 +574,26 @@
 			});
 			
 			
+			test('RegularExpressionPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('MembershipPredicate', function () {
+				
+				var red = 'red',
+					green = 'green',
+					blue = 'blue',
+					pink = 'pink',
+					testSet = opal.set(red,green,blue);
+					
+				equals( opal.MembershipPredicate(testSet)(red), true, "returns true if object is first in collection");
+				equals( opal.MembershipPredicate(testSet)(green), true, "returns true if object is elsewhere in collection");
+				equals( opal.MembershipPredicate(testSet)(pink), false, "returns false if object is not in collection");
+				
+			});
+			
+			
 			test('Or', function () {
 				// Need lots of assertions here
 			});
@@ -560,6 +605,76 @@
 			
 			
 			test('Not', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('EmptySetPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('AllSetPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('SomeSetPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('NoneSetPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('CardinalityPredicate', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			// ------------------------------------------------------------------------
+			// 																  Orderings
+			// ------------------------------------------------------------------------
+		
+			module('Orderings');
+			
+			
+			test('Orderings generator', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('FunctionOrdering', function () {
+				// Need lots of assertions here
+			});
+			
+			test('ValueOrdering', function () {
+				
+				equals( opal.ValueOrdering(3,7), -1, 'First argument less returns -1 (integers)' );
+				equals( opal.ValueOrdering(7,7), 0, 'Arguments equal return 0 (integers)' );
+				equals( opal.ValueOrdering(7,3), 1, 'First argument greater returns 1 (integers)' );
+				
+				equals( opal.ValueOrdering('alice','fred'), -1, 'First argument less returns -1 (strings)' );
+				equals( opal.ValueOrdering('fred','fred'), 0, 'Arguments equal return 0 (strings)' );
+				equals( opal.ValueOrdering('fred','alice'), 1, 'First argument greater returns 1 (strings)' );
+				
+			});			
+			
+			test('PredicateOrdering', function () {
+				// Need lots of assertions here
+			});
+			
+			
+			test('DescendingOrdering', function () {
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(3,7), 1, 'First argument less returns 1 for descending value ordering' );
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,7), 0, 'Arguments equal return 0' );
+				equals( opal.DescendingOrdering(opal.ValueOrdering)(7,3), -1, 'First argument greater returns -1 for descending value ordering' );
+			});
+			
+			
+			test('CompositeOrdering', function () {
 				// Need lots of assertions here
 			});
 
