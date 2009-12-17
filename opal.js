@@ -596,18 +596,21 @@ function OPAL () {
 	//
 	// Logical connectives
 	//
+	
+	function or  (a,b) { return a || b; }
+	function and (a,b) { return a && b; }
 
 	function Or () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return Not(EmptySetPredicate)(predicates.filter(function (predicate) { return predicate(candidate); }));
+			return predicates.map(ApplyTo(candidate)).reduce(or,false);
 		};
 	}
 
 	function And () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return EmptySetPredicate(predicates.filter(function (predicate) { return !predicate(candidate); } ));
+			return predicates.map(ApplyTo(candidate)).reduce(and,true);
 		};
 	}
 
