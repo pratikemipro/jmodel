@@ -489,12 +489,12 @@ var jModel = function () {
 		this.constructor	= constructor;
 		this.context		= context;
 
-		this.objects = new	DomainObjectCollection({
-								base: 			this.context.all,
-								predicate: 		InstancePredicate(constructor),
-								ordering: 		options.ordering,
-								description: 	name
-							});
+		this.objects =	this.context.collection({
+							base: 			this.context.all,
+							predicate: 		InstancePredicate(constructor),
+							ordering: 		options.ordering,
+							description: 	name
+						});
 							
 		// Index if there's a primary key
 		if ( options.primaryKey ) {
@@ -805,18 +805,17 @@ var jModel = function () {
 	
 	function DomainObjectCollection (specification) {
 		
-		
 		specification			= specification || {};
 		specification.predicate = specification.predicate || AllPredicate();
 
-		var notifications = specification.context ? specification.context.notifications : contexts('default').notifications;
+		this.context = specification.context || contexts('default');
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
 		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
 		objects.delegateFor(this);
 		
-		var subscribers		= new SubscriberSet(notifications);
+		var subscribers		= new SubscriberSet(this.context.notifications);
 		this.subscribers	= delegateTo(subscribers,'filter');
 		
 		
@@ -867,12 +866,11 @@ var jModel = function () {
 		
 		
 		this.by = function () {			
-			return new DomainObjectCollection({
-				context: specification.context,
+			return this.context.collection({
 				objects: objects.copy(),
 				ordering: this.ordering.apply(null,arguments),
 				description:'ordered '+specification.description
-			});	
+			});
 		};
 		
 		
@@ -944,8 +942,7 @@ var jModel = function () {
 			var filtered = objects.filter.apply(this,arguments);
 			
 			if ( filtered instanceof Set ) {
-				return new DomainObjectCollection({
-					context: specification.context,
+				return this.context.collection({
 					objects: filtered,
 					description:'filtered '+specification.description
 				});
@@ -996,7 +993,7 @@ var jModel = function () {
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				this.each(function (index,object) {
-					notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}));	
+					this.context.notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}));	
 				});
 				log('subscriptions/subscribe').endGroup();
 			}
@@ -1103,7 +1100,7 @@ var jModel = function () {
 	
 	function DeletedObjectsCollection (collection) {
 		
-		var deleted = new DomainObjectCollection({context:collection.context,description:'deleted'});
+		var deleted = collection.context.collection({description:'deleted'});
 		
 		deleted.debug = function () {
 			if ( Not(EmptySetPredicate)(deleted) ) {
@@ -1858,12 +1855,11 @@ var jModel = function () {
 
 
 		log('domainobject/create').startGroup('Creating children collection');
-		var children			= new DomainObjectCollection({
-											context: 		parent.context,
-											base: 	     	parent.context.entities.get(relationship.prototype).objects,
-											predicate: 	 	RelationshipPredicate(parent,relationship.field),
-											description: 	'children by relationship '+relationship.accessor
-										});
+		var children = 	parent.context.collection({
+							base: 	     	parent.context.entities.get(relationship.prototype).objects,
+							predicate: 	 	RelationshipPredicate(parent,relationship.field),
+							description: 	'children by relationship '+relationship.accessor
+						});
 		log('domainobject/create').endGroup();
 	
 		// Deletions might cascade								
