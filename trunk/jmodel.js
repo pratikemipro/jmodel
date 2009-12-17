@@ -189,10 +189,7 @@ var jModel = function () {
 	var	contexts		= function (predicate) { return contexts.get(predicate); };
 	ContextSet.apply(contexts);
 	
-	var	defaultContext	= contexts.create('default').setDefault()/*,
-		notifications	= new NotificationQueue()*/;
-		
-//	external.context = defaultContext;
+	var	defaultContext	= contexts.create('default').setDefault();
 	
 	external.extend = opal.extend;
 	
@@ -403,40 +400,6 @@ var jModel = function () {
 		this.entity = function (name) {
 			return this[name];
 		};
-		
-		// NOTE: Move this into context
-/*		this.notifications = {
-
-			suspend: 	function () {
-							context.notifications.suspend();
-							return context.notifications;
-						},
-
-			resume: 	function () {
-							context.notifications.resume();
-							return context.notifications;
-						},
-
-			flush: 		function (predicate) {
-							context.notifications.flush(predicate);
-							return context.notifications;
-						},
-
-			push: 		function () {
-							context.entities.each(function (index,entity) {
-								entity.objects.each(function (index,object) {
-									object.domain.push();
-								});
-							});
-							return context.notifications;
-						},
-
-			setFilter: 	function (predicate) {
-							context.notifications.setFilter(predicate);
-							return context.notifications;
-						} 
-
-		}; */
 		
 		this.setDefault = function () {
 			isDefault				= true;
