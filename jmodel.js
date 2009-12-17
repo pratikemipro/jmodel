@@ -157,6 +157,7 @@ var jModel = function () {
 		},
 		notifications: {
 			all: false,
+			control: false,
 			send: false
 		},
 		json: {
@@ -622,11 +623,13 @@ var jModel = function () {
 		};
 		
 		this.suspend = function () {
+			log('notifications/control').debug('Suspending notifications for '+this.context.name);
 			active = false;
 			return this;
 		};
 		
 		this.resume = function () {
+			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			active = true;
 			notifications.each('receive');
 			this.flush();
@@ -634,6 +637,7 @@ var jModel = function () {
 		};
 		
 		this.flush = function (predicate) {
+			log('notifications/control').debug('Flushing notifications for '+this.context.name);
 			notifications.remove(predicate);
 			return this;
 		};
