@@ -389,6 +389,7 @@ var jModel = function () {
 				
 		this.debug = function (showSubscribers) {
 			log().startGroup('Context: '+name);
+			this.notifications.debug();
 			this.entities.each(function (index,entity) {
 				log().startGroup(entity.name);
 				entity.objects.debug(showSubscribers);
@@ -640,6 +641,10 @@ var jModel = function () {
 		this.setFilter = function (predicate) {
 			filter = predicate;
 			return this;
+		};
+		
+		this.debug = function () {
+			log().debug('Pending notifications: '+this.count());
 		};
 		
 	};
