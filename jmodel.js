@@ -287,8 +287,7 @@ var jModel = function () {
 			return union;
 		}
 		else {
-			return new DomainObjectCollection({
-				context: contexts('default'),
+			return contexts('default').collection({
 				objects: union,
 				description:'union'
 			});
@@ -308,9 +307,7 @@ var jModel = function () {
 			return intersection;
 		}
 		else {
-			// NOTE: Need a context here
-			return new DomainObjectCollection({
-				context: contexts('default'),
+			return contexts('default').collection({
 				objects: intersection,
 				description:'intersection'
 			});
