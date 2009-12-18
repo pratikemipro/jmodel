@@ -597,20 +597,20 @@ function OPAL () {
 	// Logical connectives
 	//
 	
-	function or  (a,b) { return a || b; }
-	function and (a,b) { return a && b; }
+	var or  = extend({unit:false}, function (a,b) { return a || b; } ),
+		and = extend({unit:true},  function (a,b) { return a && b; } ); 
 
 	function Or () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return predicates.map(ApplyTo(candidate)).reduce(or,false);
+			return predicates.map(ApplyTo(candidate)).reduce(or);
 		};
 	}
 
 	function And () {
 		var predicates = opal.set(arrayFromArguments(arguments));
 		return function (candidate) {
-			return predicates.map(ApplyTo(candidate)).reduce(and,true);
+			return predicates.map(ApplyTo(candidate)).reduce(and);
 		};
 	}
 
@@ -644,7 +644,7 @@ function OPAL () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set && set.filter ?
-				set.map(predicate).reduce(and,true)
+				set.map(predicate).reduce(and)
 				: predicate(set);
 		};
 	}
@@ -653,7 +653,7 @@ function OPAL () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set && set.filter ?
-				set.map(predicate).reduce(or,false)
+				set.map(predicate).reduce(or)
 				: predicate(set);
 		};
 	}
