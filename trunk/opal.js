@@ -644,7 +644,7 @@ function OPAL () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set && set.filter ?
-				EmptySetPredicate(set.filter(Not(predicate)))
+				set.map(predicate).reduce(and,true)
 				: predicate(set);
 		};
 	}
@@ -653,7 +653,7 @@ function OPAL () {
 		var predicate = And.apply(null,arguments);
 		return function (set) {
 			return set && set.filter ?
-				Not(EmptySetPredicate)(set.filter(predicate))
+				set.map(predicate).reduce(or,false)
 				: predicate(set);
 		};
 	}
