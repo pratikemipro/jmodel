@@ -570,12 +570,12 @@ var jModel = function () {
 		this.send = function (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			messages
-				.filter(TypePredicate('object'))
+				.filter(TypePredicate('function'))
 					.each(function (index,message) {
 						if ( !filter(message) ) {
 						}
 						else if ( active || !message.subscription.application ) {
-							message.receive();
+							message();
 						}
 						else {
 							log('notifications/send').debug('Adding a notification to the queue');
@@ -594,7 +594,7 @@ var jModel = function () {
 		this.resume = function () {
 			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			active = true;
-			notifications.each('receive');
+			notifications.map(apply);
 			this.flush();
 			return this;
 		};
@@ -622,50 +622,44 @@ var jModel = function () {
 	//
 	
 	function ContentNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
 			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
 			subscription.target.html(subscription.format(value));
-		};	
+		});	
 	};
 	
 	function ValueNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
-		};
+		});
 	};
 	
 	function MethodNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
-		};	
+		});	
 	};
 	
 	function EventNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
-		};
+		});
 	};
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	function RemovalNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
-		};
+		});
 	};
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			if (subscription[event.method] && event.permutation) {
 				log('notifications/send').debug('Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
@@ -674,20 +668,18 @@ var jModel = function () {
 				log('notifications/send').debug('Receiving a collection method notification'+': '+subscription.description);
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
-		};
+		});
 	};
 	
 	function CollectionEventNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			// NOTE: Implement this
-		};
+		});
 	};
 	
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
-		this.subscription = subscription;
-		this.receive = function () {
+		return extend({subscription:subscription}, function () {
 			log('notifications/send').debug('Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
 												subscription.member.key
@@ -705,7 +697,7 @@ var jModel = function () {
 					description: subscription.member.description || 'collection member subscription for key '+subscription.member.key[i]
 				});
 			}
-		};
+		});
 	};
 	
 	
@@ -748,14 +740,14 @@ var jModel = function () {
 	function CollectionSubscriber (subscription) {
 		return function (event) {
 			return ( subscription.filter && !subscription.filter(event) ) ? false
-				:  new subscription.type(subscription,event);
+				:  subscription.type(subscription,event);
 		};
 	}
 	
 	function ObjectSubscriber (subscription) {
 		return function (event) {
 			return ( event.removed && subscription.removed ) || ( event.key == subscription.key ) ?
-				new subscription.type(subscription,event)
+				subscription.type(subscription,event)
 				: false;
 		};
 	}
