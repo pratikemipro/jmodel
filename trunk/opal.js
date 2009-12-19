@@ -97,7 +97,7 @@ function OPAL () {
 		paths = ( paths instanceof Set ) ? paths : new Set(paths);
 		paths = paths.map(function (path) { return PropertyPath(path,separator); });
 		return function (object) {
-			return paths.map(function (path) { return path(object); });
+			return paths.map(ApplyTo(object));
 		};
 	}
 
