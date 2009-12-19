@@ -598,6 +598,7 @@ function OPAL () {
 	//
 	
 	var or  = extend({unit:false}, function (a,b) { return a || b; } ),
+		nor = extend({unit:false}, function (a,b) { return !( a || b ); } ),
 		and = extend({unit:true},  function (a,b) { return a && b; } ); 
 
 	function Or () {
@@ -636,41 +637,25 @@ function OPAL () {
 
 	// Set predicates
 
-	function EmptySetPredicate (set) {
-		return set ? set.count() === 0 : true;
-	}
-
-	function AllSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set && set.filter ?
-				set.map(predicate).reduce(and)
-				: predicate(set);
-		};
-	}
-
-	function SomeSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set && set.filter ?
-				set.map(predicate).reduce(or)
-				: predicate(set);
-		};
-	}
-
-	function NoneSetPredicate () {
-		var predicate = And.apply(null,arguments);
-		return function (set) {
-			return set && set.filter ?
-				_.empty(set.filter(predicate))
-				: !predicate(set);
-		};
-	}
-
 	function CardinalityPredicate (predicate) {
 		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
 		return compose(predicate,Method('count'));
 	}
+	
+	var EmptySetPredicate = CardinalityPredicate(0);
+
+	function SetPredicate (conjunction) {
+		return function () {
+			var predicate = And.apply(null,arguments);
+			return function (candidate) {
+				return set(candidate).map(predicate).reduce(conjunction);
+			};
+		};
+	}
+
+	var AllSetPredicate  = SetPredicate(and);
+	var SomeSetPredicate = SetPredicate(or);
+	var NoneSetPredicate = SetPredicate(nor);
 
 	opal.extend({
 		EmptySetPredicate: 		EmptySetPredicate,
