@@ -584,7 +584,7 @@ function OPAL () {
 	function MembershipPredicate (set) {		
 		set = opal.set(set);
 		return function (candidate) {
-			return Not(EmptySetPredicate)(set.filter(ObjectIdentityPredicate(candidate)));
+			return set.member(candidate);
 		};
 	}
 
@@ -600,25 +600,18 @@ function OPAL () {
 		nor = extend({unit:false}, function (a,b) { return !( a || b ); } ),
 		and = extend({unit:true},  function (a,b) { return a && b; } ); 
 
-	function Or () {
-		var predicates = opal.set(arrayFromArguments(arguments));
-		return function (candidate) {
-			return predicates.map(ApplyTo(candidate)).reduce(or);
+	function ConjunctionPredicate (conjunction) {
+		return function () {
+			var predicates = opal.set(arrayFromArguments(arguments));
+			return function (candidate) {
+				return predicates.map(ApplyTo(candidate)).reduce(conjunction);
+			};
 		};
 	}
-
-	function And () {
-		var predicates = opal.set(arrayFromArguments(arguments));
-		return function (candidate) {
-			return predicates.map(ApplyTo(candidate)).reduce(and);
-		};
-	}
-
-	function Not (predicate) {
-		return function (candidate) {
-			return !predicate(candidate);
-		};
-	}
+	
+	var Or  = ConjunctionPredicate(or),
+		And = ConjunctionPredicate(and),
+		Not = ConjunctionPredicate(nor);
 
 	opal.extend({
 		Or:  Or,
@@ -652,9 +645,9 @@ function OPAL () {
 		};
 	}
 
-	var AllSetPredicate  = SetPredicate(and);
-	var SomeSetPredicate = SetPredicate(or);
-	var NoneSetPredicate = SetPredicate(nor);
+	var AllSetPredicate  = SetPredicate(and),
+		SomeSetPredicate = SetPredicate(or),
+		NoneSetPredicate = SetPredicate(nor);
 
 	opal.extend({
 		EmptySetPredicate: 		EmptySetPredicate,
