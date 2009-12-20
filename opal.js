@@ -142,22 +142,7 @@ function OPAL () {
 		this.constraint = AllPredicate();
 
 		this.add = function (object) {
-			if ( !this.constraint(object) ) {
-				return false;
-			}
-			var found = false;
-			if ( members.indexOf && members.indexOf(object) > -1 ) {
-				found = true;
-			}	
-			else if ( !members.indexOf ) { // Oh, how we hate IE
-				for( var i=0; i<members.length; i++ ) {
-					if ( members[i] === object ) {
-						found = true;
-						break;
-					}
-				}
-			}
-			if ( !found ) {	
+			if ( this.constraint(object) && !this.member(object) ) {	
 				members.push(object);
 				if ( index ) {
 					index.add(object);
@@ -165,6 +150,20 @@ function OPAL () {
 				return true;
 			}
 			return false;
+		};
+		
+		this.member = function (object) {
+			if ( members.indexOf ) {
+				return members.indexOf(object) > -1;
+			}	
+			else { // Oh, how we hate IE
+				for( var i=0; i<members.length; i++ ) {
+					if ( members[i] === object ) {
+						return true
+					}
+				}
+				return false;
+			}
 		};
 
 		this.get = function (key) {
