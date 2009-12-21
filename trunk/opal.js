@@ -141,15 +141,22 @@ function OPAL () {
 
 		this.constraint = AllPredicate();
 
-		this.add = function (object) {
+		this.add = function (object,success,failure) {
 			if ( this.constraint(object) && !this.member(object) ) {	
 				members.push(object);
 				if ( index ) {
 					index.add(object);
 				}
-				return true;
+				if (success) {
+					apply(success);
+				}
 			}
-			return false;
+			else {
+				if (failure) {
+					apply(failure);
+				}	
+			}
+			return this;
 		};
 		
 		this.member = function (object) {
