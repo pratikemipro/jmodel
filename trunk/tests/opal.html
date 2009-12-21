@@ -13,7 +13,7 @@
 			//														  Object-functional
 			// ------------------------------------------------------------------------
 			
-			module('Set');
+			module('Functions');
 			
 			test('Extend', function () {
 				
@@ -124,8 +124,8 @@
 				testSet.add('green');
 				
 				equals( testSet.count(), 2, "addition of non-duplicate objects" );
-				equals( testSet.add('blue'), true, "addition of non-duplicate succeeds" );
-				equals( testSet.add('green'), false, "addition of duplicate fails" );
+				equals( testSet.add('blue').count(), 3, "addition of non-duplicate succeeds" );
+				equals( testSet.add('green').count(), 3, "addition of duplicate fails" );
 				
 				// NOTE: Test constraints here
 				
