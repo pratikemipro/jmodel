@@ -712,9 +712,9 @@ var jModel = function () {
 		subscribers.delegateFor(this);
 		
 		this.add = function (subscriber) {
-			if ( subscribers.add(subscriber) ) {
+			return subscribers.add(subscriber,function () {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
-			}
+			});
 		};
 		
 		this.notify = function (event) {
@@ -761,6 +761,7 @@ var jModel = function () {
 		specification.predicate = specification.predicate || AllPredicate();
 
 		this.context = specification.context || contexts('default');
+		var collection = this;
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
@@ -772,10 +773,10 @@ var jModel = function () {
 		
 		
 		this.add = function (object) {
-			if ( objects.add(object) ) {
+			return objects.add(object, function () {
 				subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
-					target: this,
+					target: collection,
 					key: ':any',
 					change: function (object) {
 						sorted = false;
@@ -788,8 +789,7 @@ var jModel = function () {
 					description: 'object change for '+specification.description+' collection change'
 				});
 				sorted = false;
-			}
-			return this;
+			});
 		};
 
 
