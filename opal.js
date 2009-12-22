@@ -267,11 +267,6 @@ function OPAL () {
 		this.remove = function (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			members = partition.keep.get();
-			
-/*			members = [];
-			partition.keep.each(function (index,object) {
-				members.push(object);
-			}); */
 			if ( index ) {
 				partition.remove.each(function (i,object) {
 					index.remove(object);
@@ -282,11 +277,9 @@ function OPAL () {
 
 		this.map = function (mapping,mapped) {
 			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
-			mapped	= mapped || new Set();
-			this.each(function (index,object) {
-				mapped.add(mapping(object));
-			});
-			return mapped;
+			return this.reduce(function (output,object) {
+				return output.add(mapping(object));
+			}, mapped || new Set() );
 		};
 
 		this.reduce = function (fn,acc) {
