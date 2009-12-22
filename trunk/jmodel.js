@@ -237,12 +237,7 @@ var jModel = function () {
 		nonempty: 	Not(EmptySetPredicate),
 		
 		all: 		function () {
-						if ( arguments.length === 0 ) {
-							return AllPredicate();
-						}
-						else {
-							return AllSetPredicate.apply(null,arguments);
-						}
+						return arguments.length === 0 ? AllPredicate() : AllSetPredicate.apply(null,arguments);
 					},
 		
 		some: 		SomeSetPredicate,
@@ -712,9 +707,9 @@ var jModel = function () {
 		subscribers.delegateFor(this);
 		
 		this.add = function (subscriber) {
-			return subscribers.add(subscriber,function () {
+			if ( subscribers.add(subscriber) ) {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
-			});
+			}
 		};
 		
 		this.notify = function (event) {
@@ -761,7 +756,6 @@ var jModel = function () {
 		specification.predicate = specification.predicate || AllPredicate();
 
 		this.context = specification.context || contexts('default');
-		var collection = this;
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
@@ -773,10 +767,10 @@ var jModel = function () {
 		
 		
 		this.add = function (object) {
-			return objects.add(object, function () {
+			if ( objects.add(object) ) {
 				subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
-					target: collection,
+					target: this,
 					key: ':any',
 					change: function (object) {
 						sorted = false;
@@ -789,7 +783,8 @@ var jModel = function () {
 					description: 'object change for '+specification.description+' collection change'
 				});
 				sorted = false;
-			});
+			}
+			return this;
 		};
 
 
