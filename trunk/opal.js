@@ -740,7 +740,7 @@ function OPAL () {
 			},
 			remove: function () {
 				var that = this;
-				set(arrayFromArguments(arguments)).each(function (index,key) {
+				set(arguments).each(function (index,key) {
 					delete that[key];
 				});
 				return this;
