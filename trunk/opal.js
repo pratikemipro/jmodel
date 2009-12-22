@@ -366,8 +366,7 @@ function OPAL () {
 	opal.Set = Set;
 
 	function set () {
-		return arguments.length == 1 && arguments[0] instanceof Set ?
-					arguments[0]
+		return ( arguments.length == 1 && arguments[0].callee ) ? new Set(arrayFromArguments(arguments[0]))
 					: new Set(arrayFromArguments(arguments));
 	}
 	opal.set = set;
@@ -377,7 +376,7 @@ function OPAL () {
 	//
 
 	function union () {
-		return set.call(null,arrayFromArguments(arguments)).reduce(Method('concat'),set());
+		return set(arguments).reduce(Method('concat'),set());
 	}
 
 	function intersection () {
