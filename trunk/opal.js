@@ -266,10 +266,12 @@ function OPAL () {
 
 		this.remove = function (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
-			members = [];
+			members = partition.keep.get();
+			
+/*			members = [];
 			partition.keep.each(function (index,object) {
 				members.push(object);
-			});
+			}); */
 			if ( index ) {
 				partition.remove.each(function (i,object) {
 					index.remove(object);
