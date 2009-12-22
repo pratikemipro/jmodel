@@ -732,8 +732,8 @@ function OPAL () {
 		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
 	}
 	
-	function copy (obj) {
-		return extend(obj,{
+	function copy (obj,exact) {
+		return extend(obj, exact ? {} : {
 			add: function (attributes) {
 				return extend(attributes,this);
 			},
@@ -744,7 +744,7 @@ function OPAL () {
 				});
 				return this;
 			}
-		});
+		} );
 	}
 
 	opal.extend({
