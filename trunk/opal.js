@@ -146,8 +146,6 @@ function OPAL () {
 		var members = objects || [],
 			index = false;
 
-		this.constraint = AllPredicate();
-
 		this.add = function (object,success,failure) {
 			if ( this.constraint(object) && !this.member(object) ) {	
 				members.push(object);
@@ -164,11 +162,7 @@ function OPAL () {
 				}	
 			}
 			return this;
-		};
-		
-		this.concat = function (second) {
-			return second && second.reduce ? second.reduce(Method('add'),this) : this;
-		}
+		}; 
 		
 		this.member = function (object) {
 			if ( members.indexOf ) {
@@ -210,10 +204,6 @@ function OPAL () {
 			return members.length > 0 ? members[0] : false;
 		};
 
-		this.select = function (selector) {
-			return selector == ':first' ? this.first() : this;
-		};
-
 		this.each = function (callback) {
 			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
 			for (var index in members) {
@@ -222,13 +212,56 @@ function OPAL () {
 			return this;
 		};
 
-		this.when = function (predicate,callback) {
+		this.remove = function (predicate) {
+			var partition = this.partition(predicate,'remove','keep');
+			members = partition.keep.get();
+			if ( index ) {
+				partition.remove.reduce(Method('remove'),index);
+			}
+			return partition.remove; 
+		};
+
+		this.copy = function () {
+			return new Set(members.slice());
+		};
+
+		this.sort = function (ordering) {
+			if ( ordering ) {
+				members.sort(ordering);
+			}
+			return this;
+		};
+
+		this.join = function (separator) {
+			return members.join(separator);
+		};
+
+		this.index = function (key) {
+			index = new UniqueIndex(this,key);
+			return this;
+		};
+
+	}
+	
+	Set.prototype = {
+		
+		constraint: AllPredicate(),
+		
+		concat : function (second) {
+			return second && second.reduce ? second.reduce(Method('add'),this) : this;
+		},
+		
+		select : function (selector) {
+			return selector == ':first' ? this.first() : this;
+		},
+		
+		when : function (predicate,callback) {
 			if ( this.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
-		};
-
-		this.partition = function (predicate,passName,failName) {
+		},
+		
+		partition: function (predicate,passName,failName) {
 
 			predicate = this.predicate(predicate);
 
@@ -245,9 +278,9 @@ function OPAL () {
 
 			return partition;
 
-		};
-
-		this.filter = function () {
+		},
+		
+		filter: function () {
 
 			var predicate, selector;
 
@@ -269,60 +302,36 @@ function OPAL () {
 
 			return this.partition(predicate).pass.select(selector);			
 
-		};
-
-		this.remove = function (predicate) {
-			var partition = this.partition(predicate,'remove','keep');
-			members = partition.keep.get();
-			if ( index ) {
-				partition.remove.reduce(Method('remove'),index);
-			}
-			return partition.remove; 
-		};
-
-		this.map = function (mapping,mapped) {
+		},
+		
+		map: function (mapping,mapped) {
 			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
 			return this.reduce(function (output,object) {
 				return output.add(mapping(object));
 			}, mapped || new Set() );
-		};
-
-		this.reduce = function (fn,acc) {
+		},
+		
+		reduce: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			this.each(function (index,object) {
 				acc = fn(acc,object);
 			});
 			return acc;
-		};
-
-		this.copy = function () {
-			return new Set(members.slice());
-		};
-
-		this.sort = function (ordering) {
-			if ( ordering ) {
-				members.sort(ordering);
-			}	
-		};
-
-		this.join = function (separator) {
-			return members.join(separator);
-		};
-
-		this.union = function () {
+		},
+		
+		union: function () {
 			return union.apply(null,[this].concat(arrayFromArguments(arguments)));
-		};
-
-		this.intersection = function () {
+		},
+		
+		intersection: function () {
 			return intersection.apply(null,[this].concat(arrayFromArguments(arguments)));
-		};
-
-		this.difference = function (set) {
+		},
+		
+		difference: function (set) {
 			return difference(this,set);
-		};
-
-
-		this.predicate = function (parameter) {
+		},
+		
+		predicate: function (parameter) {
 			if ( parameter === null ) {
 				return AllPredicate();
 			}
@@ -336,9 +345,9 @@ function OPAL () {
 				return ObjectIdentityPredicate(parameter);
 			}
 			return AllPredicate();
-		};
-
-		this.ordering = function () {
+		},
+		
+		ordering: function () {
 			if ( arguments.length > 1 ) {
 				return CompositeOrdering.apply(null,arguments);
 			}
@@ -346,25 +355,21 @@ function OPAL () {
 				return CompositeOrdering(arguments[0]);
 			}
 			return arguments[0];
-		};
-
-		this.index = function (key) {
-			index = new UniqueIndex(this,key);
-		};
-
-		this.format = function (formatter) {
+		},
+		
+		format: function (formatter) {
 			return formatter(this);
-		};
-
-		this.delegateFor = function (host) {
+		},
+		
+		delegateFor: function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
 					host[i] = this[i];
 				}
 			}
-		};
-
-	}
+		}
+		
+	};
 
 	opal.Set = Set;
 
@@ -405,29 +410,35 @@ function OPAL () {
 
 	function UniqueIndex (set,key) {
 
-		var index = {};
-
-		this.build = function () {
-			set.reduce(Method('add'),this);
-		};
-
-		this.add = function (object) {
-			index[key(object)] = object;
-			return this;
-		};
-
-		this.remove = function (object) {
-			delete index[key(object)];
-			return this;
-		};
-
-		this.get = function (keyval) {
-			return index[keyval];
-		};
-
+		this.set	= set;
+		this.key	= key;
+		this.index	= {};
+		
 		this.build();
 
 	}
+	
+	UniqueIndex.prototype = {
+	
+		build: function () {
+			this.set.reduce(Method('add'),this);
+		},
+
+		add: function (object) {
+			this.index[this.key(object)] = object;
+			return this;
+		},
+
+		remove: function (object) {
+			delete this.index[this.key(object)];
+			return this;
+		},
+
+		get: function (keyval) {
+			return this.index[keyval];
+		}
+		
+	};
 
 	opal.extend({
 		UniqueIndex: UniqueIndex
