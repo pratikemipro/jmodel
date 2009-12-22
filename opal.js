@@ -38,15 +38,17 @@ function OPAL () {
 		return compose.apply(null,arrayFromArguments(arguments).reverse());
 	}
 	
-	function apply (fn) {
-		return fn.apply(null);
+	function apply () {
+		var fn   = arguments[0],
+			args = arrayFromArguments(arguments).slice(1);
+		return fn.apply(null,args);
 	}
 
 	function ApplyTo () {
-		var args = arguments;
-		return function (fn) {
+		var args = arrayFromArguments(arguments);
+		return args.length == 1 ? function (fn) {
 			return fn.apply(null,args);
-		};
+		} : args[args.length-1].apply(null,args.slice(0,args.length-1));
 	}
 
 	function Identity (object) {
@@ -76,21 +78,26 @@ function OPAL () {
 		method.apply = method;
 		return method;
 	}
+	
+	function Resolve (name) {
+		var method = Method(name),
+			property = Property(name);
+		return function (object) {
+			return object[name] && typeof object[name] == 'function' ? method(object)
+						: property(object);
+		}
+	}
 
 	function PropertyPath (path,separator) {
-		function resolve (object,pieces) {
-			var piece	= pieces.shift(),
-				deref	= ( typeof object[piece] == 'function' ) ? Method(piece) : Property(piece);
-			return ( pieces.length === 0 ) ? deref(object) : resolve(deref(object),pieces);
-		}
+		var resolvers = set.apply(null,path.split(separator||'.')).map(Resolve);
 		return function (object) {
 			try {
-				return resolve(object,path.split(separator||'.'));
+				return resolvers.reduce(ApplyTo,object);
 			}
 			catch (error) {
 				return false;
 			}
-		};
+		}
 	}
 
 	function PropertySet (paths,separator) {
@@ -285,7 +292,7 @@ function OPAL () {
 		this.reduce = function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			this.each(function (index,object) {
-				acc = fn(acc,object,index);
+				acc = fn(acc,object);
 			});
 			return acc;
 		};
