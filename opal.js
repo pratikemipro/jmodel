@@ -383,14 +383,9 @@ function OPAL () {
 	}
 
 	function intersection () {
-		var intersection = new Set();
-		arguments[0].each(function (index,object) {
-			intersection.add(object);
-		});
-		for (var i=1; i<arguments.length; i++) {
-			intersection = intersection.filter(MembershipPredicate(arguments[i]));
-		}
-		return intersection;
+		return set(arguments).reduce(function (a,b) {
+			return a.filter( MembershipPredicate(b) );
+		}, arguments[0].copy());
 	}
 
 	function difference (first,second) {
