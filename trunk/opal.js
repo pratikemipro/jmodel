@@ -89,7 +89,7 @@ function OPAL () {
 	}
 
 	function PropertyPath (path,separator) {
-		var resolvers = set.apply(null,typeof path == 'string' ? path.split(separator||'.') : path).map(Resolve);
+		var resolvers = set( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
 		return function (object) {
 			try {
 				return resolvers.reduce(ApplyTo,object);
