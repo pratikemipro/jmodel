@@ -147,17 +147,21 @@ function OPAL () {
 				if ( index ) {
 					index.add(object);
 				}
-				if (success) {
+				if (success && typeof success=='function') {
 					apply(success);
 				}
 			}
 			else {
-				if (failure) {
+				if (failure && typeof failure=='function') {
 					apply(failure);
 				}	
 			}
 			return this;
 		};
+		
+		this.concat = function (second) {
+			return second && second.reduce ? second.reduce(Method('add'),this) : this;
+		}
 		
 		this.member = function (object) {
 			if ( members.indexOf ) {
@@ -362,7 +366,7 @@ function OPAL () {
 	opal.Set = Set;
 
 	function set () {
-		return arguments[0] instanceof Set ?
+		return arguments.length == 1 && arguments[0] instanceof Set ?
 					arguments[0]
 					: new Set(arrayFromArguments(arguments));
 	}
@@ -373,14 +377,7 @@ function OPAL () {
 	//
 
 	function union () {
-		var union = new Set();
-		for (var i=0; i<arguments.length; i++) {
-			var set = arguments[i];
-			set.each(function (index,object) {
-				union.add(object);
-			});
-		}
-		return union;
+		return set.call(null,arrayFromArguments(arguments)).reduce(Method('concat'),set());
 	}
 
 	function intersection () {
