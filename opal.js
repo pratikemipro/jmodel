@@ -178,7 +178,10 @@ function OPAL () {
 		};
 
 		this.get = function (key) {
-			if ( key == ':first' ) {
+			if ( arguments.length == 0 ) {
+				return members;
+			}
+			else if ( key == ':first' ) {
 				return this.first();
 			}
 			else if (index) {
