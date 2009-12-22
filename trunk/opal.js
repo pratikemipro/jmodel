@@ -584,8 +584,7 @@ function OPAL () {
 
 	// Membership
 
-	function MembershipPredicate (set) {		
-		set = opal.set(set);
+	function MembershipPredicate (set) {
 		return function (candidate) {
 			return set.member(candidate);
 		};
