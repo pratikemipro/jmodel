@@ -413,10 +413,7 @@ function OPAL () {
 		var index = {};
 
 		this.build = function () {
-			var that = this;
-			set.each(function (i,object) {
-				that.add(object);
-			});
+			set.reduce(Method('add'),this);
 		};
 
 		this.add = function (object) {
