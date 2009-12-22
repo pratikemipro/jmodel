@@ -275,9 +275,7 @@ function OPAL () {
 			var partition = this.partition(predicate,'remove','keep');
 			members = partition.keep.get();
 			if ( index ) {
-				partition.remove.each(function (i,object) {
-					index.remove(object);
-				});
+				partition.remove.reduce(Method('remove'),index);
 			}
 			return partition.remove; 
 		};
@@ -423,10 +421,12 @@ function OPAL () {
 
 		this.add = function (object) {
 			index[key(object)] = object;
+			return this;
 		};
 
 		this.remove = function (object) {
 			delete index[key(object)];
+			return this;
 		};
 
 		this.get = function (keyval) {
