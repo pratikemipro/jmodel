@@ -367,6 +367,7 @@ function OPAL () {
 					host[i] = this[i];
 				}
 			}
+			return this;
 		}
 		
 	};
