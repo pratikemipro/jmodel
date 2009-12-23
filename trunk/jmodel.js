@@ -339,10 +339,10 @@ var jModel = function () {
 		var	isDefault		= false,
 			context			= this;
 		
-		this.name 			= name;
+		this.name			= name;
 		this.notifications	= new NotificationQueue(context);
-		this.entities		= new EntityTypeSet(this);
-		this.all			= collection({description:'All Objects in context '+this.name});
+		this.entities		= new EntityTypeSet(context);
+		this.all			= collection({description:'All Objects in context '+context.name});
 		
 		// Register a new constructor
 		this.register = function (name,constructor,options) {
@@ -1165,47 +1165,23 @@ var jModel = function () {
 		};
 	}
 	
-	function Eq (value,field) {
-		return field ?
-			FieldPredicate(field,EqualityPredicate(value))
-			: EqualityPredicate(value);
-	};
-	
-	function Lt (value,field) {
-		return field ?
-			FieldPredicate(field,LessThanPredicate(value))
-			: LessThanPredicate(value);
-	};
-	
-	function Gt (value,field) {
-		return field ?
-			FieldPredicate(field,GreaterThanPredicate(value))
-			: GreaterThanPredicate(value);
-	};
-	
-	function LtE (value,field) {
-		return field ?
-			FieldPredicate(field,LessThanEqualPredicate(value))
-			: LessThanEqualPredicate(value);
-	};
-	
-	function GtE (value,field) {
-		return field ?
-			FieldPredicate(field,GreaterThanEqualPredicate(value))
-			: GreaterThanEqualPredicate(value);
-	};
-	
-	function Between (lower,higher,field) {
-		return field ?
-			FieldPredicate(field,BetweenPredicate(lower,higher))
-			: BetweenPredicate(lower,higher);
+	function FieldOrValuePredicate (ValuePredicate) {
+		return function () {
+			var field = arguments[arguments.length-1],
+				value = arrayFromArguments(arguments).slice(0,arguments.length-1);
+			return arguments.length > 1 ?
+				FieldPredicate(field,ValuePredicate.apply(null,value))
+				: ValuePredicate.apply(null,value);
+		};
 	}
 	
-	function RegEx (regex,field) {
-		return field ?
-			FieldPredicate(field,RegularExpressionPredicate(regex))
-			: RegularExpressionPredicate(regex);
-	};
+	var Eq		= FieldOrValuePredicate(EqualityPredicate),
+		Lt		= FieldOrValuePredicate(LessThanPredicate),
+		Gt		= FieldOrValuePredicate(GreaterThanPredicate),
+		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
+		GtE		= FieldOrValuePredicate(GreaterThanPredicate),
+		Between	= FieldOrValuePredicate(BetweenPredicate),
+		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate);
 	
 	external.extend({
 		
@@ -1228,7 +1204,7 @@ var jModel = function () {
 	// Example
 	
 	var ExamplePredicate = external.example = function (example) {
-		
+
 		var predicates = [];
 		
 		for( var key in example ) {
