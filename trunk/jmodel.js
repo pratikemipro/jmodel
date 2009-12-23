@@ -323,9 +323,7 @@ var jModel = function () {
 		var contexts = set().index(Property('name')).delegateFor(this);
 	
 		this.create = function (name) {
-			var context = new Context(name);
-			this.add(context);
-			return context;
+			return this.add(new Context(name)).added;
 		};
 	
 	}
@@ -421,9 +419,7 @@ var jModel = function () {
 		};
 		
 		this.create = function (name,constructor,options) {
-			var entity = new EntityType(context,name,constructor,options);
-			this.add(entity);
-			return entity;
+			return this.add(new EntityType(context,name,constructor,options)).added;
 		}
 		
 	}
@@ -547,11 +543,9 @@ var jModel = function () {
 		
 		this.context = context;
 		
-		var	notifications 	= new Set(),
+		var	notifications 	= set().delegateFor(this),
 			active			= true,
 			filter			= AllPredicate();
-			
-		notifications.delegateFor(this);
 		
 		this.send = function (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
@@ -697,8 +691,7 @@ var jModel = function () {
 	
 	function SubscriberSet (notifications) {
 		
-		var subscribers = new Set();
-		subscribers.delegateFor(this);
+		var subscribers = set().delegateFor(this);
 		
 		this.add = function (subscriber) {
 			if ( subscribers.add(subscriber) ) {
@@ -1829,10 +1822,7 @@ var jModel = function () {
 	
 	function ConstraintSet () {
 		
-		var constraints = new Set();
-		constraints.constraint = TypePredicate('function');
-
-		constraints.delegateFor(this);
+		var constraints = extend({constraint:TypePredicate('function')},set()).delegateFor(this);
 		
 	}
 	
