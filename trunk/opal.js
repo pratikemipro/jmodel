@@ -145,6 +145,8 @@ function OPAL () {
 
 		var members = objects || [],
 			index = false;
+			
+		this.added = null;
 
 		this.add = function (object,success,failure) {
 			if ( this.constraint(object) && !this.member(object) ) {	
@@ -152,6 +154,7 @@ function OPAL () {
 				if ( index ) {
 					index.add(object);
 				}
+				this.added = object;
 				if (success && typeof success=='function') {
 					apply(success);
 				}
