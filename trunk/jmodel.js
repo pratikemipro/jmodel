@@ -1165,11 +1165,12 @@ var jModel = function () {
 		};
 	}
 	
-	function FieldOrValuePredicate (ValuePredicate) {
+	function FieldOrValuePredicate (ValuePredicate,numberValueArguments) {
+		numberValueArguments = numberValueArguments || 1;
 		return function () {
 			var field = arguments[arguments.length-1],
-				value = arrayFromArguments(arguments).slice(0,arguments.length-1);
-			return arguments.length > 1 ?
+				value = arrayFromArguments(arguments).slice(0,numberValueArguments);
+			return arguments.length > numberValueArguments ?
 				FieldPredicate(field,ValuePredicate.apply(null,value))
 				: ValuePredicate.apply(null,value);
 		};
@@ -1180,7 +1181,7 @@ var jModel = function () {
 		Gt		= FieldOrValuePredicate(GreaterThanPredicate),
 		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
 		GtE		= FieldOrValuePredicate(GreaterThanPredicate),
-		Between	= FieldOrValuePredicate(BetweenPredicate),
+		Between	= FieldOrValuePredicate(BetweenPredicate,2),
 		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate);
 	
 	external.extend({
