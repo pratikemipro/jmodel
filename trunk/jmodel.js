@@ -696,6 +696,7 @@ var jModel = function () {
 		this.add = function (subscriber) {
 			if ( subscribers.add(subscriber) ) {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
+				this.added = subscriber;
 			}
 			return this;
 		};
@@ -1468,9 +1469,7 @@ var jModel = function () {
 				subscription.type = ContentNotification;
 			}
 
-			var subscriber = ObjectSubscriber(subscription);
-
-			subscribers.add(subscriber);
+			var subscriber = subscribers.add(ObjectSubscriber(subscription)).added;
 
 			if ( subscription.initialise ) {
 				notifications.send(subscriber({key:subscription.key}));
