@@ -697,6 +697,7 @@ var jModel = function () {
 			if ( subscribers.add(subscriber) ) {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
 			}
+			return this;
 		};
 		
 		this.notify = function (event) {
@@ -921,8 +922,7 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			var subscriber = CollectionSubscriber(subscription);
-			subscribers.add(subscriber);
+			var subscriber = subscribers.add(CollectionSubscriber(subscription)).added;
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
