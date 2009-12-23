@@ -320,10 +320,7 @@ var jModel = function () {
 	
 	function ContextSet () {
 		
-		var contexts = new Set();
-		
-		contexts.index(Property('name'));
-		contexts.delegateFor(this);
+		var contexts = set().index(Property('name')).delegateFor(this);
 	
 		this.create = function (name) {
 			var context = new Context(name);
@@ -412,10 +409,7 @@ var jModel = function () {
 		
 		this.context = context;
 		
-		var	types = new Set();
-		
-		types.index(Property('name'));
-		types.delegateFor(this);
+		var	types = set().index(Property('name')).delegateFor(this);
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
@@ -1627,10 +1621,7 @@ var jModel = function () {
 	
 	function FieldSet (object,subscribers) {
 		
-		var fields = new Set();
-		
-		fields.index(Property('accessor'));
-		fields.delegateFor(this);
+		var fields = set().index(Property('accessor')).delegateFor(this);
 		
 		this.predicate = function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
@@ -1715,10 +1706,7 @@ var jModel = function () {
 	
 	function RelationshipSet () {
 		
-		var relationships = new Set();
-		
-		relationships.index(Property('name'));
-		relationships.delegateFor(this);
+		var relationships = set().index(Property('name')).delegateFor(this);
 		
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		
