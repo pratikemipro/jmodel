@@ -154,6 +154,12 @@ function OPAL () {
 		a.push(b);
 		return a;
 	});
+	
+	var AddWhen = function (predicate) {
+		return function (a,b) {
+			return predicate(b) ? a.add(b) : a;
+		}
+	}
 
 	opal.extend({
 		plus: plus,
@@ -332,7 +338,7 @@ function OPAL () {
 				selector = ':first';
 			}
 
-			return this.partition(predicate).pass.select(selector);			
+			return this.reduce(AddWhen(predicate),set()).select(selector);		
 
 		},
 		
