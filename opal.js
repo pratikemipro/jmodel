@@ -267,22 +267,10 @@ function OPAL () {
 		this.join = function (separator) {
 			return members.join(separator);
 		};
-		
-		this.aggregate = function (combiner,acc) {
-			acc = acc || null;
-			return function (extractor) {
-				return this.map(extractor || Identity).reduce(combiner,acc);
-			};
-		};
 
 		this.max = this.aggregate(max);
 		this.min = this.aggregate(min);
 		this.sum = this.aggregate(plus);
-		
-		this.mean = function () {
-			var stat = this.aggregate(parallel(plus,count),{sum:0,count:0}).apply(this,arguments);
-			return stat.sum/stat.count;
-		};
 
 		this.index = function (key) {
 			index = new UniqueIndex(this,key);
@@ -403,6 +391,18 @@ function OPAL () {
 				return CompositeOrdering(arguments[0]);
 			}
 			return arguments[0];
+		},
+		
+		aggregate: function (combiner,acc) {
+			acc = acc || null;
+			return function (extractor) {
+				return this.map(extractor || Identity).reduce(combiner,acc);
+			};
+		},
+		
+		mean: function () {
+			var stat = this.aggregate(parallel(plus,count),{sum:0,count:0}).apply(this,arguments);
+			return stat.sum/stat.count;
 		},
 		
 		format: function (formatter) {
