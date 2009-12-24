@@ -38,6 +38,20 @@ function OPAL () {
 		return compose.apply(null,arrayFromArguments(arguments).reverse());
 	}
 	
+	function parallel () {
+		var fns = arguments;
+		return function () {
+			var args0 = arguments[0],
+				result = {};
+			for (var i=0; i<fns.length;i++) {
+				var label = fns[i] && fns[i].label ? fns[i].label : 'fn_'+i;
+				arguments[0] = args0[label] != undefined ? args0[label] : args0;
+				result[label] = fns[i].apply(null,arguments);
+			}
+			return result;
+		}
+	}
+	
 	function apply () {
 		var fn   = arguments[0],
 			args = arrayFromArguments(arguments).slice(1);
@@ -114,6 +128,7 @@ function OPAL () {
 		applyto: ApplyTo,
 		compose: compose,
 		pipe: pipe,
+		parallel: parallel,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
@@ -123,17 +138,22 @@ function OPAL () {
 	});
 
 
-	var plus = extend({unit:0},function (a,b) {
+	var plus = extend({unit:0,label:'sum'},function (a,b) {
 		return a+b;
 	});
 
-	var times = extend({unit:1},function times (a,b) {
+	var times = extend({unit:1,label:'product'},function (a,b) {
 		return a*b;
 	});
+	
+	var count = extend({unit:0,label:'count'},function (a,b) {
+		return a += 1;
+	})
 
 	opal.extend({
 		plus: plus,
-		times: times
+		times: times,
+		parallel: parallel
 	});
 	
 	function eq  (a,b) { return a==b; }
@@ -248,15 +268,21 @@ function OPAL () {
 			return members.join(separator);
 		};
 		
-		this.aggregate = function (combiner) {
+		this.aggregate = function (combiner,acc) {
+			acc = acc || null;
 			return function (extractor) {
-				return this.map(extractor || Identity).reduce(combiner);
+				return this.map(extractor || Identity).reduce(combiner,acc);
 			};
 		};
 
 		this.max = this.aggregate(max);
 		this.min = this.aggregate(min);
 		this.sum = this.aggregate(plus);
+		
+		this.mean = function () {
+			var stat = this.aggregate(parallel(plus,count),{sum:0,count:0}).apply(this,arguments);
+			return stat.sum/stat.count;
+		};
 
 		this.index = function (key) {
 			index = new UniqueIndex(this,key);
