@@ -233,10 +233,6 @@ function OPAL () {
 			return this;
 		};
 
-		this.max = this.aggregate(max);
-		this.min = this.aggregate(min);
-		this.sum = this.aggregate(plus);
-
 		this.index = function (key) {
 			index = new UniqueIndex(this,key);
 			return this;
@@ -429,6 +425,9 @@ function OPAL () {
 		}
 		
 	};
+	Set.prototype.max = Set.prototype.aggregate(max);
+	Set.prototype.min = Set.prototype.aggregate(min);
+	Set.prototype.sum = Set.prototype.aggregate(plus);
 
 	opal.Set = Set;
 
