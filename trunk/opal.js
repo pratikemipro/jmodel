@@ -135,6 +135,15 @@ function OPAL () {
 		plus: plus,
 		times: times
 	});
+	
+	function eq  (a,b) { return a==b; }
+	function lt  (a,b) { return a<b; }
+	function gt  (a,b) { return a>b; }
+	function lte (a,b) { return a<=b; }
+	function gte (a,b) { return a>=b; }
+	
+	function max (a,b) { return a > b ? a : b}
+	function min (a,b) { return a < b ? a : b}
 
 
 	// ------------------------------------------------------------------------
@@ -238,6 +247,16 @@ function OPAL () {
 		this.join = function (separator) {
 			return members.join(separator);
 		};
+		
+		this.aggregate = function (combiner) {
+			return function (extractor) {
+				return this.map(extractor || Identity).reduce(combiner);
+			};
+		};
+
+		this.max = this.aggregate(max);
+		this.min = this.aggregate(min);
+		this.sum = this.aggregate(plus);
 
 		this.index = function (key) {
 			index = new UniqueIndex(this,key);
@@ -541,12 +560,6 @@ function OPAL () {
 	});
 
 	// Value comparisons
-
-	function eq  (a,b) { return a==b; }
-	function lt  (a,b) { return a<b; }
-	function gt  (a,b) { return a>b; }
-	function lte (a,b) { return a<=b; }
-	function gte (a,b) { return a>=b; }
 
 	function ComparisonPredicate (operator) {
 		return function (value) {
