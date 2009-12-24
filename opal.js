@@ -200,20 +200,6 @@ function OPAL () {
 			}
 			return this;
 		}; 
-		
-		this.member = function (object) {
-			if ( members.indexOf ) {
-				return members.indexOf(object) > -1;
-			}	
-			else { // Oh, how we hate IE
-				for( var i=0; i<members.length; i++ ) {
-					if ( members[i] === object ) {
-						return true
-					}
-				}
-				return false;
-			}
-		};
 
 		this.get = function (key) {
 			if ( arguments.length == 0 ) {
@@ -231,24 +217,6 @@ function OPAL () {
 			}
 		};
 
-		this.count = function (predicate) {
-			return predicate ?
-			 			this.filter(predicate).count()
-						: members.length;
-		};
-
-		this.first = function () {
-			return members.length > 0 ? members[0] : false;
-		};
-
-		this.each = function (callback) {
-			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
-			for (var index in members) {
-				callback.apply(members[index],[index,members[index]]);
-			}
-			return this;
-		};
-
 		this.remove = function (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			members = partition.keep.get();
@@ -258,19 +226,11 @@ function OPAL () {
 			return partition.remove; 
 		};
 
-		this.copy = function () {
-			return new Set(members.slice());
-		};
-
 		this.sort = function (ordering) {
 			if ( ordering ) {
 				members.sort(ordering);
 			}
 			return this;
-		};
-
-		this.join = function (separator) {
-			return members.join(separator);
 		};
 
 		this.max = this.aggregate(max);
@@ -288,6 +248,32 @@ function OPAL () {
 		
 		constraint: AllPredicate(),
 		
+		first: function () {
+			var members = this.get();
+			return members.length > 0 ? members[0] : false;
+		},
+		
+		member: function (object) {
+			var members = this.get();
+			if ( members.indexOf ) {
+				return members.indexOf(object) > -1;
+			}	
+			else { // Oh, how we hate IE
+				for( var i=0; i<members.length; i++ ) {
+					if ( members[i] === object ) {
+						return true
+					}
+				}
+				return false;
+			}
+		},
+		
+		count: function (predicate) {
+			return predicate ?
+			 			this.filter(predicate).count()
+						: this.reduce(count);
+		},
+		
 		concat : function (second) {
 			return second && second.reduce ? second.reduce(Method('add'),this) : this;
 		},
@@ -300,6 +286,15 @@ function OPAL () {
 			if ( this.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
+		},
+		
+		each: function (callback) {
+			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
+			var members = this.get();
+			for (var index in members) {
+				callback.apply(members[index],[index,members[index]]);
+			}
+			return this;
 		},
 		
 		partition: function (predicate,passName,failName) {
@@ -360,6 +355,10 @@ function OPAL () {
 			return acc;
 		},
 		
+		copy: function () {
+			return this.reduce(Method('add'),set())
+		},
+		
 		union: function () {
 			return union.apply(null,[this].concat(arrayFromArguments(arguments)));
 		},
@@ -412,6 +411,12 @@ function OPAL () {
 		
 		format: function (formatter) {
 			return formatter(this);
+		},
+		
+		join: function (separator) {
+			return this.reduce(function (a,b) {
+				return a+(a ? (separator||',') : '')+b;
+			},'');
 		},
 		
 		delegateFor: function (host) {
