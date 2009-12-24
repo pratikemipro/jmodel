@@ -148,12 +148,17 @@ function OPAL () {
 	
 	var count = extend({unit:0,label:'count'},function (a,b) {
 		return a += 1;
-	})
+	});
+	
+	var push = extend({unit:[]},function (a,b) {
+		a.push(b);
+		return a;
+	});
 
 	opal.extend({
 		plus: plus,
 		times: times,
-		parallel: parallel
+		push: push
 	});
 	
 	function eq  (a,b) { return a==b; }
