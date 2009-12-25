@@ -1318,9 +1318,11 @@ var jModel = function () {
 		terminal = terminal || ' and ';
 		return function (list) {
 			var length = list.count(),
-				terminalPosition = length > 1 ? length-1 : -1;
-			return list.reduce(function (acc,object,index) {
-				var separator = index == terminalPosition ? terminal : ', ';				
+				terminalPosition = length > 1 ? length-1 : -1,
+				index=0;
+			return list.reduce(function (acc,object) {
+				var separator = index == terminalPosition ? terminal : ', ';	
+				index++;			
 				return acc + (acc ? separator : '') + formatter(object);
 			},'');
 		}
