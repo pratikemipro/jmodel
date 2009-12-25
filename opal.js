@@ -303,18 +303,16 @@ function OPAL () {
 
 			predicate = this.predicate(predicate);
 
-			var partition	= {},
-				pass		= [],
+			var pass		= [],
 				fail		= [];
 
 			this.each(function (index,object) {
 				(predicate(object) ? pass : fail).push(object);
 			});
-
-			partition[passName||'pass'] = new Set(pass);
-			partition[failName||'fail'] = new Set(fail);
-
-			return partition;
+			
+			return copy({})
+						.set(passName||'pass',set(pass))
+						.set(failName||'fail',set(fail));
 
 		},
 		
