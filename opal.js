@@ -155,16 +155,17 @@ function OPAL () {
 		return a;
 	});
 	
-	var AddWhen = function (predicate) {
-		return function (a,b) {
+	var add = function (predicate) {
+		return extend({unit:set()},function (a,b) {
 			return predicate(b) ? a.add(b) : a;
-		}
+		});
 	}
 
 	opal.extend({
 		plus: plus,
 		times: times,
-		push: push
+		push: push,
+		add: add
 	});
 	
 	function eq  (a,b) { return a==b; }
@@ -336,7 +337,7 @@ function OPAL () {
 				selector = ':first';
 			}
 
-			return this.reduce(AddWhen(predicate),set()).select(selector);		
+			return this.reduce(add(predicate),set()).select(selector);		
 
 		},
 		
