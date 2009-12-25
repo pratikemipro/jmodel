@@ -802,22 +802,30 @@ function OPAL () {
 	}
 	
 	function copy (obj,exact) {
-		return extend(obj, exact ? {} : {
-			add: function (attributes) {
-				return extend(attributes,this);
-			},
-			remove: function () {
-				var that = this;
-				set(arguments).each(function (index,key) {
-					delete that[key];
-				});
-				return this;
-			},
-			set: function (key,value) {
-				this[key] = value;
-				return this;
-			}
-		} );
+		return extend(obj, exact ? {} : new EnhancedObject() );
+	}
+	
+	function EnhancedObject () {}
+	
+	EnhancedObject.prototype = {
+		
+		add: function (attributes) {
+			return extend(attributes,this);
+		},
+		
+		remove: function () {
+			var that = this;
+			set(arguments).each(function (index,key) {
+				delete that[key];
+			});
+			return this;
+		},
+		
+		set: function (key,value) {
+			this[key] = value;
+			return this;
+		}
+		
 	}
 
 	opal.extend({
