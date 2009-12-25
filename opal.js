@@ -158,7 +158,6 @@ function OPAL () {
 	var add = function () {
 		var predicate   = arguments[0] || AllPredicate(),
 			mapping		= arguments[1] || Identity;
-		console.log(predicate,mapping);
 		return extend({unit:set()},function (a,b) {
 			return predicate(b) ? a.add(mapping(b)) : a;
 		});
@@ -346,9 +345,7 @@ function OPAL () {
 		
 		map: function (mapping,mapped) {
 			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
-			return this.reduce(function (output,object) {
-				return output.add(mapping(object));
-			}, mapped || new Set() );
+			return this.reduce(add(null,mapping), mapped || set() );
 		},
 		
 		reduce: function (fn,acc) {
