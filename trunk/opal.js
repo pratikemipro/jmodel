@@ -138,6 +138,10 @@ function OPAL () {
 	});
 
 
+	//
+	// Reduction functions
+	//
+
 	var plus = extend({unit:0,label:'sum'},function (a,b) {
 		return a+b;
 	});
@@ -146,9 +150,12 @@ function OPAL () {
 		return a*b;
 	});
 	
-	var count = extend({unit:0,label:'count'},function (a,b) {
-		return a += 1;
-	});
+	var count = function (predicate) {
+		var predicate = predicate || AllPredicate();
+		return extend({unit:0,label:'count'}, function (a,b) {
+			return a += (predicate(b) ? 1 : 0);
+		});
+	};
 	
 	var push = extend({unit:[]},function (a,b) {
 		a.push(b);
@@ -158,10 +165,13 @@ function OPAL () {
 	var add = function () {
 		var predicate   = arguments[0] || AllPredicate(),
 			mapping		= arguments[1] || Identity;
-		return extend({unit:set()},function (a,b) {
+		return extend({unit:set()}, function (a,b) {
 			return predicate(b) ? a.add(mapping(b)) : a;
 		});
-	}
+	};
+	
+	function max (a,b) { return a > b ? a : b}
+	function min (a,b) { return a < b ? a : b}
 
 	opal.extend({
 		plus: plus,
@@ -170,14 +180,16 @@ function OPAL () {
 		add: add
 	});
 	
+	
+	//
+	// Comparison functions
+	//
+	
 	function eq  (a,b) { return a==b; }
 	function lt  (a,b) { return a<b; }
 	function gt  (a,b) { return a>b; }
 	function lte (a,b) { return a<=b; }
 	function gte (a,b) { return a>=b; }
-	
-	function max (a,b) { return a > b ? a : b}
-	function min (a,b) { return a < b ? a : b}
 
 
 	// ------------------------------------------------------------------------
@@ -274,9 +286,7 @@ function OPAL () {
 		},
 		
 		count: function (predicate) {
-			return predicate ?
-			 			this.filter(predicate).count()
-						: this.reduce(count);
+			return this.reduce(count(predicate));
 		},
 		
 		concat : function (second) {
