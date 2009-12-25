@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.1.0
+ *	OPAL Javascript Library v0.8.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009 Richard Baker
@@ -522,10 +522,6 @@ function OPAL () {
 
 	var predicate =  (new Set()).predicate;
 	opal.predicate = predicate;
-
-	//
-	// First-order predicates
-	//
 
 	// Generic
 
