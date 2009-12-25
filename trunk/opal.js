@@ -442,6 +442,7 @@ function OPAL () {
 	Set.prototype.max = Set.prototype.aggregate(max);
 	Set.prototype.min = Set.prototype.aggregate(min);
 	Set.prototype.sum = Set.prototype.aggregate(plus);
+	Set.prototype.range = Set.prototype.aggregate(parallel(min,max),{min:null,max:null});
 
 	opal.Set = Set;
 
