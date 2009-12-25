@@ -176,8 +176,8 @@ function OPAL () {
 		});
 	};
 	
-	function max (a,b) { return a > b ? a : b}
-	function min (a,b) { return a < b ? a : b}
+	var max = extend({label:'max'}, function (a,b) { return a > b ? a : b});
+	var min = extend({label:'min'}, function (a,b) { return ( a < b && a != null ) ? a : b});
 
 	opal.extend({
 		plus: plus,
