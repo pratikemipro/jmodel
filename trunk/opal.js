@@ -155,10 +155,12 @@ function OPAL () {
 		return a;
 	});
 	
-	var add = function (predicate) {
-		predicate = predicate || AllPredicate()
+	var add = function () {
+		var predicate   = arguments[0] || AllPredicate(),
+			mapping		= arguments[1] || Identity;
+		console.log(predicate,mapping);
 		return extend({unit:set()},function (a,b) {
-			return predicate(b) ? a.add(b) : a;
+			return predicate(b) ? a.add(mapping(b)) : a;
 		});
 	}
 
@@ -374,7 +376,7 @@ function OPAL () {
 		},
 		
 		predicate: function (parameter) {
-			if ( parameter === null ) {
+			if ( parameter === null || parameter === undefined ) {
 				return AllPredicate();
 			}
 			if ( parameter == ':empty' ) {
