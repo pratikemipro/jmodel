@@ -170,9 +170,9 @@ function OPAL () {
 		});
 	};
 	
-	var contains = function (candidate) {
+	var contains = function (predicate) {
 		return extend({unit:false}, function (a,b) {
-			return a || b == candidate;
+			return a || predicate(b);
 		});
 	};
 	
@@ -195,7 +195,7 @@ function OPAL () {
 	// Comparison functions
 	//
 	
-	function eq  (a,b) { return a==b; }
+	function eq  (a,b) { return a===b; }
 	function lt  (a,b) { return a<b; }
 	function gt  (a,b) { return a>b; }
 	function lte (a,b) { return a<=b; }
@@ -281,7 +281,7 @@ function OPAL () {
 		},
 		
 		member: function (object) {
-			return this.reduce(contains(object));
+			return this.reduce(contains(ObjectIdentityPredicate(object)));
 		},
 		
 		count: function (predicate) {
@@ -391,7 +391,7 @@ function OPAL () {
 			else if ( typeof parameter == 'function' ) {
 				return parameter;
 			}
-			else if ( typeof parameter == 'object' ) {
+			else if ( typeof parameter == 'object' || typeof parameter == 'string' || typeof parameter == 'number' ) {
 				return ObjectIdentityPredicate(parameter);
 			}
 			return AllPredicate();
@@ -520,7 +520,8 @@ function OPAL () {
 	// 																 Predicates
 	// ------------------------------------------------------------------------
 
-	opal.predicate = (new Set()).predicate;
+	var predicate =  (new Set()).predicate;
+	opal.predicate = predicate;
 
 	//
 	// First-order predicates
