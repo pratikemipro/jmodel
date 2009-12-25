@@ -812,6 +812,10 @@ function OPAL () {
 					delete that[key];
 				});
 				return this;
+			},
+			set: function (key,value) {
+				this[key] = value;
+				return this;
 			}
 		} );
 	}
