@@ -170,14 +170,24 @@ function OPAL () {
 		});
 	};
 	
+	var contains = function (candidate) {
+		return extend({unit:false}, function (a,b) {
+			return a || b == candidate;
+		});
+	};
+	
 	function max (a,b) { return a > b ? a : b}
 	function min (a,b) { return a < b ? a : b}
 
 	opal.extend({
 		plus: plus,
 		times: times,
+		count: count,
 		push: push,
-		add: add
+		add: add,
+		contains: contains,
+		max: max,
+		min: min
 	});
 	
 	
@@ -271,18 +281,7 @@ function OPAL () {
 		},
 		
 		member: function (object) {
-			var members = this.get();
-			if ( members.indexOf ) {
-				return members.indexOf(object) > -1;
-			}	
-			else { // Oh, how we hate IE
-				for( var i=0; i<members.length; i++ ) {
-					if ( members[i] === object ) {
-						return true
-					}
-				}
-				return false;
-			}
+			return this.reduce(contains(object));
 		},
 		
 		count: function (predicate) {
