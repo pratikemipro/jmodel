@@ -450,9 +450,7 @@ function OPAL () {
 	}
 
 	function intersection () {
-		return set(arguments).reduce(function (a,b) {
-			return a.filter( MembershipPredicate(b) );
-		}, arguments[0].copy());
+		return set(arguments).map(MembershipPredicate).reduce(Method('filter'),arguments[0].copy());
 	}
 
 	function difference (first,second) {
@@ -474,7 +472,7 @@ function OPAL () {
 
 		this.set	= set;
 		this.key	= key;
-		this.index	= {};
+		this.index	= copy({});
 		
 		this.build();
 
@@ -493,7 +491,7 @@ function OPAL () {
 
 		remove: function (object) {
 			delete this.index[this.key(object)];
-			return this;
+			return this; 
 		},
 
 		get: function (keyval) {
