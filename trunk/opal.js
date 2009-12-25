@@ -698,11 +698,6 @@ function OPAL () {
 		not: Not
 	});
 
-
-	//
-	// Higher-order predicates
-	//
-
 	// Set predicates
 
 	function CardinalityPredicate (predicate) {
