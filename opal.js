@@ -156,6 +156,7 @@ function OPAL () {
 	});
 	
 	var add = function (predicate) {
+		predicate = predicate || AllPredicate()
 		return extend({unit:set()},function (a,b) {
 			return predicate(b) ? a.add(b) : a;
 		});
