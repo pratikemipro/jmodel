@@ -689,13 +689,14 @@ var jModel = function () {
 	
 	function SubscriberSet (notifications) {
 		
-		var subscribers = set().delegateFor(this);
+		var subscribers = set().delegateFor(this),
+			that = this;
 		
 		this.add = function (subscriber) {
-			if ( subscribers.add(subscriber) ) {
+			subscribers.add(subscriber, function () {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
-				this.added = subscriber;
-			}
+				that.added = subscriber;
+			});
 			return this;
 		};
 		
