@@ -448,9 +448,7 @@ var jModel = function () {
 							
 		// EntityType methods
 		if ( options.methods ) {
-			for (var i in options.methods) {
-				this.objects[i] = options.methods[i];		
-			}
+			extend(options.methods,this.objects);
 		}
 							
 		this.deleted = new DeletedObjectsCollection(this.objects);
