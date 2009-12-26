@@ -740,6 +740,8 @@ var jModel = function () {
 	
 	function DomainObjectCollection (specification) {
 		
+		var that=this;
+		
 		specification			= specification || {};
 		specification.predicate = specification.predicate || AllPredicate();
 
@@ -755,10 +757,10 @@ var jModel = function () {
 		
 		
 		this.add = function (object) {
-			if ( objects.add(object) ) {
+			objects.add(object, function () {
 				subscribers.notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
-					target: this,
+					target: that,
 					key: ':any',
 					change: function (object) {
 						sorted = false;
@@ -771,7 +773,7 @@ var jModel = function () {
 					description: 'object change for '+specification.description+' collection change'
 				});
 				sorted = false;
-			}
+			});
 			return this;
 		};
 
