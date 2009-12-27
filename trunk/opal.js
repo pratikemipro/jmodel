@@ -157,10 +157,10 @@ function OPAL () {
 		});
 	};
 	
-	var push = extend({unit:[]},function (a,b) {
+	var push = function (a,b) {
 		a.push(b);
 		return a;
-	});
+	};
 	
 	var add = function () {
 		var predicate   = arguments[0] || AllPredicate(),
