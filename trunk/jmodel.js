@@ -1020,18 +1020,10 @@ var jModel = function () {
 	
 	// NOTE: Make this a method of Context
 	external.collection = function() {
-		if ( typeof arguments[0] == 'array' ) {
-			// NOTE: Need a context here
-			return new DomainObjectCollection({context:contexts('default'),objects:arguments[0],description:'set'});
-		}
-		else {
-			var objects = [];
-			for (var i=0; i<arguments.length; i++) {
-				objects.push(arguments[i]);
-			}
-			// NOTE: Need a context here
-			return new DomainObjectCollection({context:contexts('default'),objects:objects,description:'set'});
-		}
+			return new DomainObjectCollection({
+				context: contexts('default'),
+				objects: set(arguments).reduce(push,[]),
+				description: 'set'});
 	};
 	
 	function DeletedObjectsCollection (collection) {
