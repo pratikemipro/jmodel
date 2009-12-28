@@ -211,6 +211,8 @@ function OPAL () {
 		var members = objects || [],
 			index = false;
 			
+		members = members.jquery ? members.get() : members;
+			
 		this.added = null;
 
 		this.add = function (object,success,failure) {
