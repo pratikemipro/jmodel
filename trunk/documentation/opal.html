@@ -116,16 +116,16 @@
 			<dd><p><code>add</code> adds an object to a set. Note that a set can only contain one copy of an object so adding the same object more than once is equivalent to adding it once. The <code>success</code> and <code>failure</code> parameters are for callback functions that are invoked if the object is added or not added respectively. Within the callback function, <code>this</code> is the set. The object is passed through to the callback as a parameter.</p></dd>
 			<dd class="example">
 				<p>
-					<code>set().add('red').count();</code>
-					<br/><span class="output">&rArr; <code>1</code></span>
+					<code>set().add('red').get();</code>
+					<br/><span class="output">&rArr; <code>["red"]</code></span>
 				</p>
 				<p>
-					<code>set().add('red').add('red').count();</code>
-					<br/><span class="output">&rArr; <code>1</code></span>
+					<code>set().add('red').add('red').get();</code>
+					<br/><span class="output">&rArr; <code>["red"]</code></span>
 				</p>
 				<p>
-					<code>set().add('red').add('green').count();</code>
-					<br/><span class="output">&rArr; <code>2</code></span>
+					<code>set().add('red').add('green').get();</code>
+					<br/><span class="output">&rArr; <code>["red", "green"]</code></span>
 				</p>
 				<p>
 					<code>set().add('red', function (obj) { console.log('Added "'+obj+'"'); });</code>
