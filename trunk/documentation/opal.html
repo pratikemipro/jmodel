@@ -292,7 +292,21 @@
 		<dl>
 			
 			<dt><code>count <span class="arguments">(<span class="optional">predicate</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+				<dd><p><code>count</code> returns the number of elements of the set that match the predicate. If no predicate is specified it returns the number of elements in the set.</p></dd>
+				<dd class="example">
+					<p>
+						<code>set('red','green','blue').count();</code>
+						<br/><span class="output">&rArr; <code>3</code></span>
+					</p>
+					<p>
+						<code>set('red',5,'green',2,8,'blue',3).count(type('string'));</code>
+						<br/><span class="output">&rArr; <code>3</code></span>
+					</p>
+					<p>
+						<code>set('red',5,'green',2,8,'blue',3).count(/re/);</code>
+						<br/><span class="output">&rArr; <code>2</code></span>
+					</p>
+				</dd>
 		
 			<dt><code>aggregate <span class="arguments">(combiner<span class="optional">,accumulator</span>)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
