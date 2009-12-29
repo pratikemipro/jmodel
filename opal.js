@@ -853,4 +853,5 @@ function OPAL () {
 
 }
 
-if ( typeof _ == 'undefined' ) { _ = OPAL(); }
+var opal = OPAL();
+if ( typeof _ == 'undefined' ) { var _ = OPAL(); }
