@@ -223,12 +223,12 @@ function OPAL () {
 				}
 				this.added = object;
 				if (success && typeof success=='function') {
-					apply(success);
+					success.call(this,object);
 				}
 			}
 			else {
 				if (failure && typeof failure=='function') {
-					apply(failure);
+					success.call(this,object);
 				}	
 			}
 			return this;
