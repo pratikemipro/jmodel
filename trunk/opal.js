@@ -260,9 +260,7 @@ function OPAL () {
 		};
 
 		this.sort = function () {
-			if ( arguments.length > 0 ) {
-				members.sort(this.ordering.apply(null,arguments));
-			}
+			members.sort(this.ordering.apply(null,arguments));
 			return this;
 		};
 
@@ -405,6 +403,9 @@ function OPAL () {
 			}
 			else if ( arguments[0] instanceof Array ) {
 				return CompositeOrdering(arguments[0]);
+			}
+			else if ( arguments.length == 0 ) {
+				return ValueOrdering;
 			}
 			return arguments[0];
 		},
