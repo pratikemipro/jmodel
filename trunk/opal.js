@@ -259,9 +259,9 @@ function OPAL () {
 			return partition.remove; 
 		};
 
-		this.sort = function (ordering) {
-			if ( ordering ) {
-				members.sort(ordering);
+		this.sort = function () {
+			if ( arguments.length > 0 ) {
+				members.sort(this.ordering.apply(null,arguments));
 			}
 			return this;
 		};
