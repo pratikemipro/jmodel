@@ -464,7 +464,19 @@
 			<dd><span style="color:red">document this</span></dd>
 			
 			<dt><code>copy <span class="arguments">()</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>copy</code> makes a fresh copy of a set.</p></dd>
+			<dd class="example">
+				<p>
+					<code>var test1 = set(7,2,5,6,4);
+					<br/>var test2 = test1.copy();
+					<br/>test1.add(9);
+					<br/>test2.remove(2);
+					<br/>test1.get()</code>
+					<br/><span class="output">&rArr; <code>[7, 2, 5, 6, 4, 9]</code></span>
+					<br/><code>test2.get()</code>
+					<br/><span class="output">&rArr; <code>[7, 5, 6, 4]</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>jQuery <span class="arguments">()</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
