@@ -852,3 +852,5 @@ function OPAL () {
 	return opal;
 
 }
+
+if ( typeof _ == 'undefined' ) { _ = OPAL(); }
