@@ -377,7 +377,21 @@
 			</dd>
 		
 			<dt><code>sum <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>sum</code> adds all the values in the set. If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(7,2,5,6,4).sum();</code>
+					<br/><span class="output">&rArr; <code>24</code></span>
+				</p>
+				<p>
+					<code>set(
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'widget',price:64},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'gadget',price:57},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'gizmo',price:92}
+						<br/>).sum(Property('price'));</code>
+					<br/><span class="output">&rArr; <code>213</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>range <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
 			<dd><p><code>range</code> returns the an object containing the minimum and maximum values in the set (with respect to the usual comparison operator). If an extractor is passed as an argument, that function is used to extract a value before the comparisons.</p></dd>
