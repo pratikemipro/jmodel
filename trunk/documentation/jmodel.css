@@ -43,6 +43,10 @@ code {
 	font-family: Courier New;
 }
 
+.optional {
+	color: #999999;
+}
+
 span.output {
 	color: #3030d0;
 	margin-left: 14px;
