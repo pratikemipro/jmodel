@@ -86,7 +86,7 @@
 			<dd><p><code>PropertyPath</code> returns a function that dereferences a path on an object, so that <code>PropertyPath('a/b/c','/')(obj)</code> is equivalent to <code>obj.a.b.c</code>. The default value for the separator is the '.' character. If an elements of the path is a methods then the method will be invoked during dereferencing.</p></dd>
 			<dd class="example">
 				<p>
-					<code>PropertyPath('name.last')({name:{first:'john',last:'smith'},age:27})</code>
+					<code>PropertyPath('name.last')({name:{first:'john',last:'smith'},age:27});</code>
 					<br/><span class="output">&rArr; <code>'smith'</code></span>
 				</p>
 			</dd>
@@ -113,7 +113,25 @@
 		<dl>
 		
 			<dt><code>add <span class="arguments">(object<span class="optional">,success,failure</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>add</code> adds an object to a set. Note that a set can only contain one copy of an object so adding the same object more than once is equivalent to adding it once. The <code>success</code> and <code>failure</code> parameters are for callback functions that are invoked if the object is added or not added respectively. Within the callback function, <code>this</code> is the set. The object is passed through to the callback as a parameter.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set().add('red').count();</code>
+					<br/><span class="output">&rArr; <code>1</code></span>
+				</p>
+				<p>
+					<code>set().add('red').add('red').count();</code>
+					<br/><span class="output">&rArr; <code>1</code></span>
+				</p>
+				<p>
+					<code>set().add('red').add('green').count();</code>
+					<br/><span class="output">&rArr; <code>2</code></span>
+				</p>
+				<p>
+					<code>set().add('red', function (obj) { console.log('Added "'+obj+'"'); });</code>
+					<br/><span class="output">&rArr; <code>Added "red"</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>remove <span class="arguments">(predicate)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
@@ -415,6 +433,45 @@
 			<dt><code>contains <span class="arguments">(predicate)</span></code></dt>
 			<span style="color:red">document this</span>
 		
+		</dl>
+		
+		<h2>Formatters</h2>
+
+		<dl>
+			
+			<dt><code>NoFormat</code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Prepend <span class="arguments">(prefix)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Append <span class="arguments">(suffix)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Join <span class="arguments">(separator)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Concatenate <span class="arguments">(formatter1,formatter 2... separator)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Surround <span class="arguments">(affix)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Decimal <span class="arguments">(places)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Locale</code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Percentage</code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Currency <span class="arguments">(symbol,places)</span></code></dt>
+			<span style="color:red">document this</span>
+			
+			<dt><code>Listing <span class="arguments">(formatter,terminal)</span></code></dt>
+			<span style="color:red">document this</span>
+			
 		</dl>
 
 		<h2>Utility Functions</h2>
