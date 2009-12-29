@@ -433,7 +433,17 @@
 		<dl>
 	
 			<dt><code>format <span class="arguments">(formatter)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>format</code> applies a formatter to the set.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(7,2,5,6,4).format(listing());</code>
+					<br/><span class="output">&rArr; <code>7, 2, 5, 6 and 4</code></span>
+				</p>
+				<p>
+					<code>set(7,2,5,6,4).format(listing(currency('£')));</code>
+					<br/><span class="output">&rArr; <code>£7.00, £2.00, £5.00, £6.00 and £4.00</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>join <span class="arguments">(separator)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
