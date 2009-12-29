@@ -417,7 +417,7 @@ function OPAL () {
 		},
 		
 		mean: function () {
-			var stat = this.aggregate(parallel(plus,count()),{sum:0,count:0}).apply(this,arrayFromArguments(arguments));
+			var stat = this.aggregate(parallel(plus,count()),{sum:0,count:0}).apply(this,arguments);
 			return stat.sum/stat.count;
 		},
 		
