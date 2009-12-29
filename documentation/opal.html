@@ -285,7 +285,15 @@
 			</dd>
 		
 			<dt><code>map <span class="arguments">(mapping<span class="optional">,mapped</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>map</code> transforms each element of the set by a mapping function and adds the transformed value to an output collection. By default the output begins as an empty list but if a <code>mapped</code> parameter is included then this will be used as the output collection instead. Beware of using a set as the output object as the uniqueness constraint may result in unexpected behaviour. If a string is passed as the mapping it will be interpreted as the name of a method to be applied to each object.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(1,2,3).map(function (object) {
+					<br/>&nbsp;&nbsp;&nbsp;&nbsp;return object*2;
+					<br/>}).get();</code>
+					<br/><span class="output">&rArr; <code>[2, 4, 6]</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>reduce <span class="arguments">(reduction<span class="optional">,accumulator</span>)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
@@ -432,12 +440,30 @@
 			
 			<dt><code>union <span class="arguments">(a,b,c...)</span></code></dt>
 			<dd><p>The <code>union</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of any of <code>a,b,c...</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>union(set(1,2,3),set(2,3,4)).get();</code>
+					<br/><span class="output">&rArr; <code>[1, 2, 3, 4]</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>intersection <span class="arguments">(a,b,c...)</span></code></dt>
 			<dd><p>The <code>intersection</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of all of <code>a,b,c...</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>intersection(set(1,2,3),set(2,3,4)).get();</code>
+					<br/><span class="output">&rArr; <code>[2, 3]</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>difference <span class="arguments">(first,second)</span></code></dt>
 			<dd><p>The <code>difference</code> of two sets <code>first</code> and <code>second</code> is a set containing all elements of <code>first</code> that are not members of <code>second</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>difference(set(1,2,3),set(2,3,4)).get();</code>
+					<br/><span class="output">&rArr; <code>[1]</code></span>
+				</p>
+			</dd>
 			
 		</dl>
 		
