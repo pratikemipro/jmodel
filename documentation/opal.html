@@ -171,7 +171,11 @@
 					<br/><span class="output">&rArr; <code>"red"</code></span>
 				</p>
 				<p>
-					<code>set({id:1,colour:'red'},{id:2,colour:'green'},{id:3,colour:'blue'}).index(Property('id')).get(2);</code>
+					<code>set(
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{id:1,colour:'red'},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{id:2,colour:'green'},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{id:3,colour:'blue'}
+						<br/>).index(Property('id')).get(2);</code>
 					<br/><span class="output">&rArr; <code>{id:2,colour:'green'}</code></span>
 				</p>
 				<p>
