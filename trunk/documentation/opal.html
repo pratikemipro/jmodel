@@ -411,8 +411,21 @@
 			</dd>
 		
 			<dt><code>mean <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
-		
+			<dd><p><code>mean</code> calculates the mean ("average") of the values in the set. If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(7,2,5,6,4).mean();</code>
+					<br/><span class="output">&rArr; <code>4.8</code></span>
+				</p>
+				<p>
+					<code>set(
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'widget',price:64},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'gadget',price:57},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{item:'gizmo',price:92}
+						<br/>).mean(Property('price'));</code>
+					<br/><span class="output">&rArr; <code>71</code></span>
+				</p>
+			</dd>
 		</dl>
 		
 		<h3>Formatting Methods</h3>
