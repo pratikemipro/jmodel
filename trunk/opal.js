@@ -855,3 +855,14 @@ function OPAL () {
 
 var opal = OPAL();
 if ( typeof _ == 'undefined' ) { var _ = OPAL(); }
+
+
+// ============================================================================
+//															 Opal jQuery plugin
+// ============================================================================
+
+if ( typeof jQuery != 'undefined' ) {
+	jQuery.fn.opal = function () {
+		return opal.set(this);
+	};
+}
