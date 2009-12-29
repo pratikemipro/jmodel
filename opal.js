@@ -431,6 +431,13 @@ function OPAL () {
 			},'');
 		},
 		
+		jQuery: function () {
+			return jQuery( this
+							.map(function (obj) { return obj.jquery ? obj.get() : obj; })
+								.reduce(Method('concat'),set())
+									.get() );
+		},
+		
 		delegateFor: function (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
