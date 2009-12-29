@@ -806,6 +806,106 @@ function OPAL () {
 		CompositeOrdering: 	CompositeOrdering,
 		composite: 			CompositeOrdering
 	});
+	
+	
+	// ------------------------------------------------------------------------
+	// 														 		 Formatters
+	// ------------------------------------------------------------------------
+	
+	function NoFormat (object) { return object; }
+	
+	function Prepend (prefix) {
+		return function (string) {
+			return prefix+string;
+		};
+	}
+	
+	function Append (suffix) {
+		return function (string) {
+			return string+suffix;
+		};
+	}
+	
+	function Join (separator) {
+		return Method('join',separator);
+	}
+	
+	function Concatenate () {
+		var formatters = arrayFromArguments(arguments),
+			separator = ' ';
+		if ( typeof formatters[formatters.length-1] == 'string' ) {
+			separator = formatters.pop();
+		}
+		return function (object) {
+			var mapped = [];
+			for (var i=0; i<formatters.length; i++) {
+				mapped.push(formatters[i](object));
+			}
+			return mapped.join(separator);
+		};
+	}
+	
+	function Surround (affix) {
+		return compose(Prepend(affix),Append(affix));
+	}
+	
+	function Decimal (places) {
+		return Method('toFixed',places);
+	}
+	
+	function Locale () {
+		return Method('toLocaleString');
+	}
+	
+	function Percentage () {
+		return Append('%');
+	}
+	
+	function Currency (symbol,decimals) {
+		return function (number) {
+			return compose(	Prepend(number < 0 ? '-' : ''),
+							Prepend(symbol),
+							Locale(),
+							Decimal(decimals===false ? 0 : 2) 		)(Math.abs(number));
+		};
+	}
+	
+	function Listing () {
+		var formatter, terminal;
+		if ( typeof arguments[0] == 'function' ) {
+			formatter	= arguments[0];
+			terminal	= arguments[1];
+		}
+		else {
+			formatter 	= NoFormat;
+			terminal	= arguments[0];
+		}
+		terminal = terminal || ' and ';
+		return function (list) {
+			var length = list.count(),
+				terminalPosition = length > 1 ? length-1 : -1,
+				index=0;
+			return list.reduce(function (acc,object) {
+				var separator = index == terminalPosition ? terminal : ', ';	
+				index++;			
+				return acc + (acc ? separator : '') + formatter(object);
+			},'');
+		}
+	}
+	
+	opal.extend({
+		noformat: 	NoFormat(),
+		prepend: 	Prepend,
+		append: 	Append,
+		join: 		Join,
+		concat: 	Concatenate,
+		surround: 	Surround,
+		decimal: 	Decimal,
+		locale: 	Locale(),
+		percent: 	Percentage(),
+		currency: 	Currency,
+		listing: 	Listing
+	});
 
 
 	// ------------------------------------------------------------------------
