@@ -215,8 +215,12 @@ function OPAL () {
 			
 		this.added = null;
 
+		this.constraint = function (obj) {
+			return !this.member(obj);
+		}
+
 		this.add = function (object,success,failure) {
-			if ( this.constraint(object) && !this.member(object) ) {	
+			if ( this.constraint(object) ) {	
 				members.push(object);
 				if ( index ) {
 					index.add(object);
@@ -354,7 +358,7 @@ function OPAL () {
 		
 		map: function (mapping,mapped) {
 			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
-			return this.reduce(add(null,mapping), mapped || set() );
+			return this.reduce(add(null,mapping), mapped || list() );
 		},
 		
 		reduce: function (fn,acc) {
@@ -493,6 +497,31 @@ function OPAL () {
 		union: 			union,
 		intersection: 	intersection,
 		difference: 	difference
+	});
+
+
+	// ------------------------------------------------------------------------
+	//															           List
+	// ------------------------------------------------------------------------
+
+	function List () {
+		var elements = set(arguments);
+		elements.constraint = function (obj) { return true; };
+		elements.delegateFor(this);
+	}
+	
+	function list () {
+		 if ( arguments.length == 1 && arguments[0].callee ) {
+			return new List(arrayFromArguments(arguments[0]));
+		}
+		else {
+			return new List(arrayFromArguments(arguments));
+		}
+	}
+
+	opal.extend({
+		List: List,
+		list: list
 	});
 
 
