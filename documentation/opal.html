@@ -185,7 +185,13 @@
 			</dd>
 		
 			<dt><code>select <span class="arguments">(selector)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>select</code> returns the first element of the set if the special token <code>':first'</code> is passed. Future versions will introduce further selectors that can be used with this method.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set('red','green','blue').select(':first');</code>
+					<br/><span class="output">&rArr; <code>"red"</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>first <span class="arguments">()</span></code></dt>
 			<dd><p><code>first</code> is equivalent to <code>select(':first')</code> </p></dd>
