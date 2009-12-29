@@ -160,7 +160,25 @@
 			</dd>
 		
 			<dt><code>get <span class="arguments">(key)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>get</code> returns one or more elements of the set. If called with no arguments, an array containing all elements will be returned. If the special token <code>':first'</code> is passed, the first element will be returned. If an index key is passed then the index is used to perform a lookup. Otherwise, the key is treated as a predicate and the first matching entry is returned.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set('red','green','blue').get();</code>
+					<br/><span class="output">&rArr; <code>["red", "green", "blue"]</code></span>
+				</p>
+				<p>
+					<code>set('red','green','blue').get(':first');</code>
+					<br/><span class="output">&rArr; <code>"red"</code></span>
+				</p>
+				<p>
+					<code>set({id:1,colour:'red'},{id:2,colour:'green'},{id:3,colour:'blue'}).index(Property('id')).get(2);</code>
+					<br/><span class="output">&rArr; <code>{id:2,colour:'green'}</code></span>
+				</p>
+				<p>
+					<code>set(7,6,4,7,9,10).get(gt(5));</code>
+					<br/><span class="output">&rArr; <code>7</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>select <span class="arguments">(selector)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
