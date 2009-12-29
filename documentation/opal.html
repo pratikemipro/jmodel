@@ -272,7 +272,17 @@
 		<dl>
 		
 			<dt><code>each <span class="arguments">(callback)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>each</code> applies a callback function to each element of the set. Within the callback, <code>this</code> is set to be the element. An index and the element are passed to the callback.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set('red','green','blue').each(function (index,object) {
+					<br/>&nbsp;&nbsp;&nbsp;&nbsp;console.log(index+': '+object);
+					<br/>});</code>
+					<br/><span class="output">&rArr; <code>0: red</code></span>
+					<br/><span class="output"><span style="color: #eeeeee;">&rArr; </span><code>1: green</code></span>
+					<br/><span class="output"><span style="color: #eeeeee;">&rArr; </span><code>2: blue</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>map <span class="arguments">(mapping<span class="optional">,mapped</span>)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
