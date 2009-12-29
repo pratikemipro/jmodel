@@ -211,7 +211,7 @@ function OPAL () {
 		var members = objects || [],
 			index = false;
 			
-		members = members.jquery ? members.get() : members;
+		members = ( members.jquery && jQuery ) ? set(members.get()).map(jQuery).get() : members;
 			
 		this.added = null;
 
@@ -449,8 +449,15 @@ function OPAL () {
 	opal.Set = Set;
 
 	function set () {
-		return ( arguments.length == 1 && arguments[0].callee ) ? new Set(arrayFromArguments(arguments[0]))
-					: new Set(arrayFromArguments(arguments));
+		if ( arguments.length == 1 && arguments[0].jquery ) {
+			return new Set(arguments[0]);
+		}
+		else if ( arguments.length == 1 && arguments[0].callee ) {
+			return new Set(arrayFromArguments(arguments[0]));
+		}
+		else {
+			return new Set(arrayFromArguments(arguments));
+		}
 	}
 	opal.set = set;
 
