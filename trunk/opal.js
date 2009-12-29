@@ -388,6 +388,9 @@ function OPAL () {
 			if ( parameter == ':empty' ) {
 				return EmptySetPredicate;
 			}
+			else if ( parameter instanceof RegExp ) {
+				return RegularExpressionPredicate(parameter);
+			}
 			else if ( typeof parameter == 'function' ) {
 				return parameter;
 			}
