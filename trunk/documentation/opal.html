@@ -160,7 +160,7 @@
 			</dd>
 		
 			<dt><code>get <span class="arguments">(key)</span></code></dt>
-			<dd><p><code>get</code> returns one or more elements of the set. If called with no arguments, an array containing all elements will be returned. If the special token <code>':first'</code> is passed, the first element will be returned. If an index key is passed then the index is used to perform a lookup. Otherwise, the key is treated as a predicate and the first matching entry is returned.</p></dd>
+			<dd><p><code>get</code> returns one or more elements of the set. If called with no arguments, an array containing all elements will be returned. If the special token <code>':first'</code> is passed, the first element will be returned. If the set is indexed then the key is used to perform a lookup in the index. Otherwise, the key is treated as a predicate and the first matching entry is returned.</p></dd>
 			<dd class="example">
 				<p>
 					<code>set('red','green','blue').get();</code>
