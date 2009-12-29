@@ -411,7 +411,8 @@ function OPAL () {
 		
 		aggregate: function (combiner,acc) {
 			acc = acc || null;
-			return function (extractor) {
+			return function () {
+				var extractor = ( arguments.length > 1 ) ? pipe.apply(null,arguments) : arguments[0];
 				return this.map(extractor || Identity).reduce(combiner,acc);
 			};
 		},
