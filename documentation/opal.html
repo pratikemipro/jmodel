@@ -224,8 +224,18 @@
 			<dt><code>index <span class="arguments">(key)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
 		
-			<dt><code>sort <span class="arguments">(ordering)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dt><code>sort <span class="arguments">(<span class="optional">ordering1,ordering2...</span>)</span></code></dt>
+			<dd><p><code>sort</code> sorts the set according to the specified ordering. If called with multiple arguments an implicit composite ordering is generated. If called with no arguments an implicit value ordering is used.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set('red','green','blue').sort().get();</code>
+					<br/><span class="output">&rArr; <code>["blue", "green", "red"]</code></span>
+				</p>
+				<p>
+					<code>set('red',5,'green',2,8,'blue',3).sort(score(type('string')),value).get();</code>
+					<br/><span class="output">&rArr; <code>["blue", "green", "red", 2, 3, 5, 8]</code></span>
+				</p>
+			</dd>
 		
 		</dl>
 		
