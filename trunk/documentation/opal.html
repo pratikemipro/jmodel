@@ -293,6 +293,22 @@
 					<br/>}).get();</code>
 					<br/><span class="output">&rArr; <code>[2, 4, 6]</code></span>
 				</p>
+				<p>
+					<code>set('red','green','blue').map('toUpperCase').get();</code>
+					<br/><span class="output">&rArr; <code>["RED", "GREEN", "BLUE"]</code></span>
+				</p>
+				<p>
+					<code>set('red','green','blue')
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.map('toUpperCase',set('CYAN','MAGENTA','YELLOW')).get();</code>
+					<br/><span class="output">&rArr; <code>["RED", "GREEN", "BLUE"]</code></span>
+				</p>
+				<p>
+					<code>set('red','green','blue')
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.map(pipe(Method('toUpperCase'),Method('substring',0,1))).get();</code>
+					<br/><span class="output">&rArr; <code>["R", "G", "B"]</code></span>
+				</p>
+				
+				
 			</dd>
 		
 			<dt><code>reduce <span class="arguments">(reduction<span class="optional">,accumulator</span>)</span></code></dt>
@@ -471,9 +487,9 @@
 					<br/>var test2 = test1.copy();
 					<br/>test1.add(9);
 					<br/>test2.remove(2);
-					<br/>test1.get()</code>
+					<br/>test1.get();</code>
 					<br/><span class="output">&rArr; <code>[7, 2, 5, 6, 4, 9]</code></span>
-					<br/><code>test2.get()</code>
+					<br/><code>test2.get();</code>
 					<br/><span class="output">&rArr; <code>[7, 5, 6, 4]</code></span>
 				</p>
 			</dd>
