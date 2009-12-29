@@ -247,8 +247,21 @@
 			<dd><span style="color:red">document this</span></dd>
 		
 			<dt><code>partition <span class="arguments">(predicate<span class="optional">,passname,failname</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
-		
+			<dd><p><code>partition</code> returns two sets, one of those elements that match the predicate and the other of those that don't match. By default these are called <code>pass</code> and <code>fail</code> but the names can be overridden using the <code>passname</code> and <code>failname</code> arguments.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set('red',5,'green',2,8,'blue',3)
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.partition(type('string'),'strings','others').strings.get();</code>
+					<br/><span class="output">&rArr; <code>["red", "green", "blue"]</code></span>
+				</p>
+				<p>
+					<code>set('red',5,'green',2,8,'blue',3)
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.partition(type('string'),'strings','others').others.get();</code>
+					<br/><span class="output">&rArr; <code>[5, 2, 8, 3]</code></span>
+				</p>
+			</dd>
+
+
 			<dt><code>filter <span class="arguments">(<span class="optional">predicate,selector</span>)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
 		
