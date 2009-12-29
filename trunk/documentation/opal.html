@@ -312,7 +312,21 @@
 			<dd><span style="color:red">document this</span></dd>
 		
 			<dt><code>max <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>max</code> returns the biggest element in the set (with respect to the usual comparison operator). If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(7,2,5,6,4).max();</code>
+					<br/><span class="output">&rArr; <code>7</code></span>
+				</p>
+				<p>
+					<code>set(
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{name:'john',age:16},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{name:'jane',age:18},
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;{name:'steve',age:17}
+						<br/>).max(Property('age'));</code>
+					<br/><span class="output">&rArr; <code>18</code></span>
+				</p>
+			</dd>
 		
 			<dt><code>min <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
