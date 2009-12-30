@@ -475,7 +475,7 @@
 			</dd>
 		
 			<dt><code>join <span class="arguments">(<span class="optional">separator</span>)</span></code></dt>
-			<dd><p><code>join</code> concatenates string representations of values in the array, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
+			<dd><p><code>join</code> concatenates string representations of values in the set, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
 			<dd class="example">
 				<p>
 					<code>set(7,2,5,6,4).join();</code>
@@ -828,14 +828,32 @@
 			<dt><code>NoFormat</code></dt>
 			<span style="color:red">document this</span>
 			
-			<dt><code>Prepend <span class="arguments">(prefix)</span></code></dt>
-			<span style="color:red">document this</span>
+			<dt><code>prepend <span class="arguments">(prefix)</span></code></dt>
+			<dd><p><code>prepend(prefix)</code> concatenates the prefix and a string.</p></dd>
+			<dd class="example">
+				<p>
+					<code>prepend('the ')('cat');</code>
+					<br/><span class="output">&rArr; <code>the cat</code></span>
+				</p>
+			</dd>
 			
-			<dt><code>Append <span class="arguments">(suffix)</span></code></dt>
-			<span style="color:red">document this</span>
+			<dt><code>append <span class="arguments">(suffix)</span></code></dt>
+			<dd><p><code>append(suffix)</code> concatenates the string and a suffix.</p></dd>
+			<dd class="example">
+				<p>
+					<code>append('-san')('Cat');</code>
+					<br/><span class="output">&rArr; <code>Cat-san</code></span>
+				</p>
+			</dd>
 			
-			<dt><code>Join <span class="arguments">(separator)</span></code></dt>
-			<span style="color:red">document this</span>
+			<dt><code>join <span class="arguments">(<span class="optional">separator</span>)</span></code></dt>
+			<dd><p><code>join</code> concatenates string representations of values in a set or list, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
+			<dd class="example">
+				<p>
+					<code>join(';')(set('red','green','blue'));</code>
+					<br/><span class="output">&rArr; <code>red;green;blue</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>Concatenate <span class="arguments">(formatter1,formatter 2... separator)</span></code></dt>
 			<span style="color:red">document this</span>
