@@ -151,7 +151,7 @@ function OPAL () {
 	});
 	
 	var count = function (predicate) {
-		var predicate = predicate || AllPredicate();
+		var predicate = predicate || AllPredicate;
 		return extend({unit:0,label:'count'}, function (a,b) {
 			return a += (predicate(b) ? 1 : 0);
 		});
@@ -163,7 +163,7 @@ function OPAL () {
 	};
 	
 	var add = function () {
-		var predicate   = arguments[0] || AllPredicate(),
+		var predicate   = arguments[0] || AllPredicate,
 			mapping		= arguments[1] || Identity;
 		return extend({unit:set()}, function (a,b) {
 			return predicate(b) ? a.add(mapping(b)) : a;
@@ -277,7 +277,7 @@ function OPAL () {
 	
 	Set.prototype = {
 		
-		constraint: AllPredicate(),
+		constraint: AllPredicate,
 		
 		first: function () {
 			var members = this.get();
@@ -342,7 +342,7 @@ function OPAL () {
 				return this;
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'string' && arguments[0].charAt(0) == ':' ) {
-				predicate 	= AllPredicate();
+				predicate 	= AllPredicate;
 				selector	= arguments[0];
 			}
 			else {
@@ -395,7 +395,7 @@ function OPAL () {
 		
 		predicate: function (parameter) {
 			if ( parameter === null || parameter === undefined ) {
-				return AllPredicate();
+				return AllPredicate;
 			}
 			if ( parameter == ':empty' ) {
 				return EmptySetPredicate;
@@ -409,7 +409,7 @@ function OPAL () {
 			else if ( typeof parameter == 'object' || typeof parameter == 'string' || typeof parameter == 'number' ) {
 				return ObjectIdentityPredicate(parameter);
 			}
-			return AllPredicate();
+			return AllPredicate;
 		},
 		
 		ordering: function () {
@@ -583,16 +583,12 @@ function OPAL () {
 
 	// Generic
 
-	function AllPredicate () {
-		return function (candidate) {
+	function AllPredicate (candidate) {
 			return true;
-		};
 	}
 
-	function NonePredicate () {
-		return function (candidate) {
-			return false;
-		};
+	function NonePredicate (candidate) {
+		return false;
 	}
 
 	function TruePredicate (candidate) {

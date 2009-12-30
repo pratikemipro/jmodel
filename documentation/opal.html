@@ -588,49 +588,49 @@
 			<dt><code>predicate <span class="arguments">(specifier)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
 			
-			<dt><code>AllPredicate <span class="arguments">()</span></code></dt>
+			<dt><code>AllPredicate</code></dt>
 			<dd><p><code>AllPredicate</code> matches all candidates.</p></dd>
 			<dd class="example">
 				<p>
-					<code>AllPredicate()('test');</code>
+					<code>AllPredicate('test');</code>
 					<br/><span class="output">&rArr; <code>true</code></span>
 				</p>
 				<p>
-					<code>AllPredicate()(7);</code>
+					<code>AllPredicate(7);</code>
 					<br/><span class="output">&rArr; <code>true</code></span>
 				</p>
 				<p>
-					<code>AllPredicate()(false);</code>
+					<code>AllPredicate(false);</code>
 					<br/><span class="output">&rArr; <code>true</code></span>
 				</p>
 				<p>
-					<code>AllPredicate()(null);</code>
+					<code>AllPredicate(null);</code>
 					<br/><span class="output">&rArr; <code>true</code></span>
 				</p>
 			</dd>
 			
-			<dt><code>NonePredicate <span class="arguments">()</span></code></dt>
+			<dt><code>NonePredicate</code></dt>
 			<dd><p><code>NonePredicate</code> matches no candidates.</p></dd>
 			<dd class="example">
 				<p>
-					<code>NonePredicate()('test');</code>
+					<code>NonePredicate('test');</code>
 					<br/><span class="output">&rArr; <code>false</code></span>
 				</p>
 				<p>
-					<code>NonePredicate()(7);</code>
+					<code>NonePredicate(7);</code>
 					<br/><span class="output">&rArr; <code>false</code></span>
 				</p>
 				<p>
-					<code>NonePredicate()(true);</code>
+					<code>NonePredicate(true);</code>
 					<br/><span class="output">&rArr; <code>false</code></span>
 				</p>
 				<p>
-					<code>NonePredicate()(null);</code>
+					<code>NonePredicate(null);</code>
 					<br/><span class="output">&rArr; <code>false</code></span>
 				</p>
 			</dd>
 			
-			<dt><code>TruePredicate <span class="arguments">()</span></code></dt>
+			<dt><code>TruePredicate</code></dt>
 			<dd><p><code>TruePredicate</code> matches the boolean value <code>true</code>.</p></dd>
 			<dd class="example">
 				<p>
