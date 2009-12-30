@@ -274,7 +274,7 @@ var jModel = function () {
 		var union = new Set();
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = makeCollection(arguments[i]);
-			collection.each(function (index,object) {
+			collection.each(function (object) {
 				union.add(object);
 			});
 		}
@@ -292,7 +292,7 @@ var jModel = function () {
 	
 	external.intersection = function() {
 		var intersection = new Set();
-		makeCollection(arguments[0]).each(function (index,object) {
+		makeCollection(arguments[0]).each(function (object) {
 			intersection.add(object);
 		});
 		for (var i=1; i<arguments.length; i++ ) {
@@ -359,7 +359,7 @@ var jModel = function () {
 		};
 				
 		this.checkpoint = function () {
-			this.entities.each(function (index,entity) {
+			this.entities.each(function (entity) {
 				entity.objects.each('clean');
 				entity.deleted.remove(AllPredicate(),true);
 			});
@@ -375,7 +375,7 @@ var jModel = function () {
 		this.debug = function (showSubscribers) {
 			log().startGroup('Context: '+name);
 			this.notifications.debug();
-			this.entities.each(function (index,entity) {
+			this.entities.each(function (entity) {
 				log().startGroup(entity.name);
 				entity.objects.debug(showSubscribers);
 				entity.deleted.debug(false);
@@ -501,7 +501,7 @@ var jModel = function () {
 			var plural	= options.plural || name+'s',
 				entity = this;
 			
-			set(targets).each(function (index,target) {
+			set(targets).each(function (target) {
 			
 				target[name]	 			= delegateTo(entity,'object');
 				target[plural]				= delegateTo(entity.objects,'filter');
@@ -549,7 +549,7 @@ var jModel = function () {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			messages
 				.filter(TypePredicate('function'))
-					.each(function (index,message) {
+					.each(function (message) {
 						if ( !filter(message) ) {
 						}
 						else if ( active || !message.subscription.application ) {
@@ -787,7 +787,7 @@ var jModel = function () {
 		this.remove = function (predicate,fromHere,removeSubscribers) {
 			predicate = And(specification.predicate,this.predicate(predicate));
 			if ( fromHere ) {
-				objects.remove(predicate).each(function (index,object) {
+				objects.remove(predicate).each(function (object) {
 					object.removed();
 					subscribers.notify({method:'remove',object:object,description:'object removal'});
 					if (removeSubscribers) {
@@ -818,7 +818,7 @@ var jModel = function () {
 			}
 
 			// Remember old order
-			objects.each(function (index) {
+			objects.each(function (object,index) {
 				this.domain.tags.position = index;
 			});
 
@@ -827,7 +827,7 @@ var jModel = function () {
 
 			// Find permutation
 			var permutation = [];
-			objects.each(function (index) {
+			objects.each(function (object,index) {
 				permutation[index] = this.domain.tags.position;
 				delete this.domain.tags.position;
 			});
@@ -928,7 +928,7 @@ var jModel = function () {
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
-				this.each(function (index,object) {
+				this.each(function (object) {
 					this.context.notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}));	
 				});
 				log('subscriptions/subscribe').endGroup();
@@ -1066,7 +1066,7 @@ var jModel = function () {
 		// NOTE: this is ugly, and really should be done by subscription initialisation
 		parent
 			.filter(predicate)
-				.each(function (index,object) {
+				.each(function (object) {
 					child.add(object);
 				});
 		
@@ -1264,7 +1264,7 @@ var jModel = function () {
 			}
 			else if ( arguments[0].each ) {
 				var values = {};
-				arguments[0].each(function (index,key) {
+				arguments[0].each(function (key) {
 					values[key] = fields.get(key);
 				});
 				return values;
@@ -1480,7 +1480,7 @@ var jModel = function () {
 				},
 						
 				push: function () {
-					fields.each(function (index,field) {
+					fields.each(function (field) {
 						subscribers.notify({key:field.name,description:'field value'});
 					});
 				},
@@ -1595,6 +1595,7 @@ var jModel = function () {
 		
 		var relationships = set().index(Property('name')).delegateFor(this);
 		
+		// NOTE: Fix this
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		
 		this.predicate = function (parameter) {
@@ -1665,7 +1666,7 @@ var jModel = function () {
 /*		if ( relationship.cascade ) {
 			parent.subscribe({
 				removed: 	function () {
-								children.each(function (index,child) {
+								children.each(function (child) {
 									entities[relationship.prototype].objects.remove(child);
 								});
 							}
