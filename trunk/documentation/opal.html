@@ -822,6 +822,14 @@
 		</dl>
 		
 		<h2>Formatters</h2>
+		
+		<div class="example">
+			<p>
+				<code>set({forename:'John',surname:'Connor'},{forename:'Sarah',surname:'Connor'})
+				<br/>&nbsp;&nbsp;&nbsp;&nbsp;.format(listing(concat(Property('forename'),Property('surname'),' ')));</code>
+				<br/><span class="output">&rArr; <code>John Connor and Sarah Connor</code></span>
+			</p>
+		</div>
 
 		<dl>
 			
