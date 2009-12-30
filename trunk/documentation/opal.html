@@ -610,7 +610,25 @@
 			</dd>
 			
 			<dt><code>NonePredicate <span class="arguments">()</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>NonePredicate</code> matches no candidates.</p></dd>
+			<dd class="example">
+				<p>
+					<code>NonePredicate()('test');</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+				<p>
+					<code>NonePredicate()(7);</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+				<p>
+					<code>NonePredicate()(true);</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+				<p>
+					<code>NonePredicate()(null);</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>TruePredicate <span class="arguments">()</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
