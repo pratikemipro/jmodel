@@ -705,7 +705,21 @@
 			<dd><span style="color:red">document this</span></dd>
 			
 			<dt><code>EqualityPredicate <span class="arguments">(value)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>EqualityPredicate(value)</code> matches candidates which are equal to <code>value</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>EqualityPredicate(4)(4);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+				<p>
+					<code>EqualityPredicate(4)(5);</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+				<p>
+					<code>EqualityPredicate('red')('red');</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>LessThanPredicate <span class="arguments">(value)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
