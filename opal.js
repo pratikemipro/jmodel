@@ -356,9 +356,15 @@ function OPAL () {
 
 		},
 		
-		map: function (mapping,mapped) {
-			mapping	= ( typeof mapping == 'string' ) ? Method(mapping) : mapping;
-			return this.reduce(add(null,mapping), mapped || list() );
+		map: function () {
+			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
+			var lastArgument 	= arguments[arguments.length-1],
+				lastIsObject	= typeof lastArgument == 'object',
+				mapped			= lastIsObject ? lastArgument : list(),
+				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
+				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
+						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
+			return this.reduce(add(null,mapping),mapped);
 		},
 		
 		reduce: function (fn,acc) {
