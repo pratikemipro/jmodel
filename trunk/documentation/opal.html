@@ -284,8 +284,8 @@
 				</p>
 			</dd>
 		
-			<dt><code>map <span class="arguments">(mapping<span class="optional">,mapped</span>)</span></code></dt>
-			<dd><p><code>map</code> transforms each element of the set by a mapping function and adds the transformed value to an output collection. By default the output begins as an empty list but if a <code>mapped</code> parameter is included then this will be used as the output collection instead. Beware of using a set as the output object as the uniqueness constraint may result in unexpected behaviour. If a string is passed as the mapping it will be interpreted as the name of a method to be applied to each object.</p></dd>
+			<dt><code>map <span class="arguments">(mapping<span class="optional">,mapping2...,mapped</span>)</span></code></dt>
+			<dd><p><code>map</code> transforms each element of the set by a mapping function and adds the transformed value to an output collection. By default the output begins as an empty list but if a <code>mapped</code> parameter is included then this will be used as the output collection instead. Beware of using a set as the output object as the uniqueness constraint may result in unexpected behaviour. If a string is passed as the mapping it will be interpreted as the name of a method to be applied to each object. If multiple mappings are passed an implicit <code>pipe</code> will be generated.</p></dd>
 			<dd class="example">
 				<p>
 					<code>set(1,2,3).map(function (object) {
@@ -304,8 +304,13 @@
 				</p>
 				<p>
 					<code>set('red','green','blue')
-						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.map(pipe(Method('toUpperCase'),Method('substring',0,1))).get();</code>
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.map('toUpperCase',Method('substring',0,1)).get();</code>
 					<br/><span class="output">&rArr; <code>["R", "G", "B"]</code></span>
+				</p>
+				<p>
+					<code>set('red','green','blue')
+						<br/>&nbsp;&nbsp;&nbsp;&nbsp;.map('toUpperCase',Method('substring',0,1),set('C','M','Y')).get();</code>
+					<br/><span class="output">&rArr; <code>["C", "M", "Y", "R", "G", "B"]</code></span>
 				</p>
 				
 				
