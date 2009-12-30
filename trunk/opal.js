@@ -306,11 +306,13 @@ function OPAL () {
 			}
 		},
 		
-		each: function (callback) {
-			callback = ( typeof callback == 'string' ) ? Method(callback) : callback;
-			var members = this.get();
+		each: function () {
+			function makeCallback (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
+			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
+							: pipe.apply(null,set(arguments).map(makeCallback).get()),
+				members = this.get();
 			for (var index in members) {
-				callback.apply(members[index],[index,members[index]]);
+				callback.apply(members[index],[members[index],index]);
 			}
 			return this;
 		},
@@ -322,7 +324,7 @@ function OPAL () {
 			var pass		= [],
 				fail		= [];
 
-			this.each(function (index,object) {
+			this.each(function (object) {
 				(predicate(object) ? pass : fail).push(object);
 			});
 			
@@ -369,7 +371,7 @@ function OPAL () {
 		
 		reduce: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-			this.each(function (index,object) {
+			this.each(function (object) {
 				acc = fn(acc,object);
 			});
 			return acc;
@@ -970,7 +972,7 @@ function OPAL () {
 		
 		remove: function () {
 			var that = this;
-			set(arguments).each(function (index,key) {
+			set(arguments).each(function (key) {
 				delete that[key];
 			});
 			return this;
