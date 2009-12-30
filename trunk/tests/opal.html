@@ -441,7 +441,7 @@
 			test('AllPredicate', function () {
 				
 				var object = {Forename:'Test1'};
-				equals( opal.AllPredicate()(object), true, "returns true on generic object" );
+				equals( opal.AllPredicate(object), true, "returns true on generic object" );
 			
 			});
 			
@@ -449,7 +449,7 @@
 			test('NonePredicate', function () {
 				
 				var object = {Forename:'Test1'};
-				equals( opal.NonePredicate()(object), false, "returns false on generic object" );
+				equals( opal.NonePredicate(object), false, "returns false on generic object" );
 			
 			});
 			

@@ -237,7 +237,7 @@ var jModel = function () {
 		nonempty: 	Not(EmptySetPredicate),
 		
 		all: 		function () {
-						return arguments.length === 0 ? AllPredicate() : AllSetPredicate.apply(null,arguments);
+						return arguments.length === 0 ? AllPredicate : AllSetPredicate.apply(null,arguments);
 					},
 		
 		some: 		SomeSetPredicate,
@@ -354,14 +354,14 @@ var jModel = function () {
 		this.collection = collection;
 		
 		this.reset = function () {
-			this.all.remove(AllPredicate(),true);
+			this.all.remove(AllPredicate,true);
 			return this;
 		};
 				
 		this.checkpoint = function () {
 			this.entities.each(function (entity) {
 				entity.objects.each('clean');
-				entity.deleted.remove(AllPredicate(),true);
+				entity.deleted.remove(AllPredicate,true);
 			});
 			return this;
 		};
@@ -543,7 +543,7 @@ var jModel = function () {
 		
 		var	notifications 	= set().delegateFor(this),
 			active			= true,
-			filter			= AllPredicate();
+			filter			= AllPredicate;
 		
 		this.send = function (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
@@ -743,7 +743,7 @@ var jModel = function () {
 		var that=this;
 		
 		specification			= specification || {};
-		specification.predicate = specification.predicate || AllPredicate();
+		specification.predicate = specification.predicate || AllPredicate;
 
 		this.context = specification.context || contexts('default');
 		
@@ -956,7 +956,7 @@ var jModel = function () {
 			else if ( typeof parameter == 'number' ) {
 				return IdentityPredicate(parameter);
 			}
-			return AllPredicate();
+			return AllPredicate;
 		};
 		
 		function ordering () {
