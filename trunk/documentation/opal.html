@@ -474,8 +474,22 @@
 				</p>
 			</dd>
 		
-			<dt><code>join <span class="arguments">(separator)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dt><code>join <span class="arguments">(<span class="optional">separator</span>)</span></code></dt>
+			<dd><p><code>join</code> concatenates string representations of values in the array, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
+			<dd class="example">
+				<p>
+					<code>set(7,2,5,6,4).join();</code>
+					<br/><span class="output">&rArr; <code>7,2,5,6,4</code></span>
+				</p>
+				<p>
+					<code>set(7,2,5,6,4).join('.');</code>
+					<br/><span class="output">&rArr; <code>7.2.5.6.4</code></span>
+				</p>
+				<p>
+					<code>set('red','green','blue').join(', ');</code>
+					<br/><span class="output">&rArr; <code>red, green, blue</code></span>
+				</p>
+			</dd>
 		
 		</dl>
 		
