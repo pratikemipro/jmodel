@@ -662,7 +662,16 @@
 			<dd><span style="color:red">document this</span></dd>
 			
 			<dt><code>ObjectIdentityPredicate <span class="arguments">(object)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>ObjectIdentityPredicate(object)</code> matches the candidate if the candidate is the same object as <code>object</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>var person = {forename:'john',surname:'smith'};
+					<br/>ObjectIdentityPredicate(person)(person);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+					<br/><code>ObjectIdentityPredicate(person)({forename:'john',surname:'smith'});
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>TypePredicate <span class="arguments">(type)</span></code></dt>
 			<dd><p><code>TypePredicate(type)</code> matches candidates whose type is <code>type</code>.</p></dd>
