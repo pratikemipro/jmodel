@@ -631,7 +631,29 @@
 			</dd>
 			
 			<dt><code>TruePredicate <span class="arguments">()</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+				<dd><p><code>TruePredicate</code> matches the boolean value <code>true</code>.</p></dd>
+				<dd class="example">
+					<p>
+						<code>TruePredicate('test');</code>
+						<br/><span class="output">&rArr; <code>false</code></span>
+					</p>
+					<p>
+						<code>TruePredicate(7);</code>
+						<br/><span class="output">&rArr; <code>false</code></span>
+					</p>
+					<p>
+						<code>TruePredicate(true);</code>
+						<br/><span class="output">&rArr; <code>true</code></span>
+					</p>
+					<p>
+						<code>TruePredicate(false);</code>
+						<br/><span class="output">&rArr; <code>false</code></span>
+					</p>
+					<p>
+						<code>TruePredicate(null);</code>
+						<br/><span class="output">&rArr; <code>false</code></span>
+					</p>
+				</dd>
 			
 			<dt><code>FunctionPredicate <span class="arguments">(fn)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
