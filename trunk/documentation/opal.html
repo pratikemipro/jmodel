@@ -589,7 +589,25 @@
 			<dd><span style="color:red">document this</span></dd>
 			
 			<dt><code>AllPredicate <span class="arguments">()</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>AllPredicate</code> matches all candidates.</p></dd>
+			<dd class="example">
+				<p>
+					<code>AllPredicate()('test');</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+				<p>
+					<code>AllPredicate()(7);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+				<p>
+					<code>AllPredicate()(false);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+				<p>
+					<code>AllPredicate()(null);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>NonePredicate <span class="arguments">()</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
