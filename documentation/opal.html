@@ -682,7 +682,21 @@
 			</dd>
 			
 			<dt><code>InstancePredicate <span class="arguments">(constructor)</span></code></dt>
-			<dd><span style="color:red">document this</span></dd>
+			<dd><p><code>InstancePredicate(constructor)</code> matches candidates whose constructor function is <code>constructor</code>.</p></dd>
+			<dd class="example">
+				<p>
+					<code>InstancePredicate(Array)('test');</code>
+					<br/><span class="output">&rArr; <code>false</code></span>
+				</p>
+				<p>
+					<code>InstancePredicate(Array)([1,2,3]);</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+				<p>
+					<code>InstancePredicate(Set)(set(1,2,3));</code>
+					<br/><span class="output">&rArr; <code>true</code></span>
+				</p>
+			</dd>
 			
 			<dt><code>PropertyPredicate <span class="arguments">(path,predicate)</span></code></dt>
 			<dd><span style="color:red">document this</span></dd>
