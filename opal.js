@@ -73,9 +73,13 @@ function OPAL () {
 		return typeof object;
 	}
 
-	function Property (property) {
-		return function (object) {
+	function Property (property,value) {
+		return arguments.length == 1 ? function (object) {
 			return object[property];
+		}
+		: function (object) {
+			object[property] = value;
+			return object;
 		};
 	}
 
