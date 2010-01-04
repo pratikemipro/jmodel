@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {};
+	var opal = {opal_version:'0.8.0'};
 
 	function extend (object,target) {
 		target = target || this;
