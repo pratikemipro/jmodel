@@ -74,8 +74,14 @@ function OPAL () {
 	}
 
 	function Property (property,value) {
-		return arguments.length == 1 ? function (object) {
-			return object[property];
+		return arguments.length == 1 ? function (object,value) {
+			if ( arguments.length == 1 ) {
+				return object[property];
+			}
+			else {
+				object[property] = value;
+				return object;
+			}
 		}
 		: function (object) {
 			object[property] = value;
@@ -85,24 +91,22 @@ function OPAL () {
 
 	function Method () {
 		var name = arguments[0],
-			args1 = arrayFromArguments(arguments).slice(1),
-			method = function (object) {
+			args1 = arrayFromArguments(arguments).slice(1);
+		return function (object) {
 				if ( ! ( object[name] && typeof object[name] == 'function' ) ) {
 					return false;
 				}
 				var args = args1.concat(arrayFromArguments(arguments).slice(1));
 				return args ? object[name].apply(object,args) : object[name].apply(object);
 			};
-		method.apply = method;
-		return method;
 	}
 	
 	function Resolve (name) {
-		var method = Method(name),
-			property = Property(name);
+		var method = Method.apply(null,arguments),
+			property = Property.apply(null,arguments);
 		return function (object) {
-			return object[name] && typeof object[name] == 'function' ? method(object)
-						: property(object);
+			return object[name] && typeof object[name] == 'function' ? method.apply(null,arguments)
+						: property.apply(null,arguments);
 		}
 	}
 
@@ -126,6 +130,13 @@ function OPAL () {
 		};
 	}
 
+	function transform (name,transformer) {
+		var resolve = Resolve(name);
+		return function (object) {
+			return resolve(object,transformer(resolve(object)));
+		}
+	}
+
 	opal.extend({
 		apply: apply,
 		ApplyTo: ApplyTo,
@@ -137,8 +148,10 @@ function OPAL () {
 		Type: Type,
 		Property: Property,
 		Method: Method,
+		Resolve: Resolve,
 		PropertyPath: PropertyPath,
-		PropertySet: PropertySet
+		PropertySet: PropertySet,
+		transform: transform
 	});
 
 
