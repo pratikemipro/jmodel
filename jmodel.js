@@ -15,8 +15,19 @@
 
 var jModel = function () {
 
+	//
+	// Import OPAL
+	//
+
+	var opal = OPAL();
+	for ( var i in opal ) {
+		eval('var '+i+' = opal.'+i);
+	}
+
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
+		
+	external.jmodel_version = '0.4.3';
 
 
 	// ------------------------------------------------------------------------
@@ -171,16 +182,6 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	//															 Initialisation
 	// ------------------------------------------------------------------------
-
-
-	//
-	// Import OPAL
-	//
-
-	var opal = OPAL();
-	for ( var i in opal ) {
-		eval('var '+i+' = opal.'+i);
-	}
 
 	//
 	// Define local variables
@@ -1955,8 +1956,8 @@ var jModel = function () {
 	
 }();
 
-if (!_) {
-	var _=jModel;
+if (_ && _.opal_version) {
+	var _ = jModel;
 }
 
 
