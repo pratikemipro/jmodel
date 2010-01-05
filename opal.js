@@ -183,10 +183,14 @@ function OPAL () {
 		});
 	};
 	
-	var push = function (a,b) {
-		a.push(b);
-		return a;
-	};
+	var withmethod = function(name) {
+		var method = Method(name);
+		return function (a,b) {
+			return method(a,b);
+		}
+	}
+	
+	var push = withmethod('push');
 	
 	var add = function () {
 		var predicate   = arguments[0] || AllPredicate,
@@ -209,6 +213,7 @@ function OPAL () {
 		plus: plus,
 		times: times,
 		count: count,
+		withmethod: withmethod,
 		push: push,
 		add: add,
 		contains: contains,
@@ -514,6 +519,13 @@ function OPAL () {
 	//
 	// Set operations
 	//
+	
+	function zip (first,second,zipper) {
+		second = second.get();
+		return first.map(function (obj) {
+			return zipper(obj,second.shift());
+		});
+	}
 
 	function union () {
 		return set(arguments).reduce(Method('concat'),set());
@@ -528,6 +540,7 @@ function OPAL () {
 	}
 
 	opal.extend({
+		zip: 			zip,
 		union: 			union,
 		intersection: 	intersection,
 		difference: 	difference
