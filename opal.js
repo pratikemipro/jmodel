@@ -64,6 +64,13 @@ function OPAL () {
 			return fn.apply(null,args);
 		} : args[args.length-1].apply(null,args.slice(0,args.length-1));
 	}
+	
+	function curry (fn) {
+		var args1 = arrayFromArguments(arguments).slice(1);
+		return function () {
+			return fn.apply(null,args1.concat(arrayFromArguments(arguments)));
+		};
+	}
 
 	function Identity (object) {
 		return object;
@@ -145,6 +152,7 @@ function OPAL () {
 		compose: compose,
 		pipe: pipe,
 		parallel: parallel,
+		curry: curry,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
