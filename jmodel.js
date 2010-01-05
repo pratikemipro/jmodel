@@ -1345,7 +1345,7 @@ var jModel = function () {
 			} 
 
 			subscription.source = this;
-			subscription.format = subscription.format || NoFormat;
+			subscription.format = subscription.format || noformat;
 
 			if ( subscription.removed ) {
 				subscription.type		= RemovalNotification;
