@@ -521,6 +521,7 @@ function OPAL () {
 	//
 	
 	function zip (first,second,zipper) {
+		first = ! (first instanceof Set || first instanceof List) ? list(first) : first;
 		second = second.get();
 		return first.map(function (obj) {
 			return zipper(obj,second.shift());
@@ -552,13 +553,16 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 
 	function List () {
-		var elements = set(arguments);
+		var elements = set.apply(null,arguments);
 		elements.constraint = function (obj) { return true; };
 		elements.delegateFor(this);
 	}
 	
 	function list () {
-		 if ( arguments.length == 1 && arguments[0].callee ) {
+		if ( arguments.length == 1 && arguments[0].jquery ) {
+			return new List(arguments[0]);
+		}
+		else if ( arguments.length == 1 && arguments[0].callee ) {
 			return new List(arrayFromArguments(arguments[0]));
 		}
 		else {
