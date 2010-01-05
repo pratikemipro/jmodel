@@ -130,10 +130,11 @@ function OPAL () {
 		};
 	}
 
-	function transform (name,transformer) {
+	function transform (name,transformer,extractor) {
 		var resolve = Resolve(name);
+		extractor = extractor || resolve;
 		return function (object) {
-			return resolve(object,transformer(resolve(object)));
+			return resolve(object,transformer(extractor(object)));
 		}
 	}
 
@@ -949,7 +950,7 @@ function OPAL () {
 	}
 	
 	opal.extend({
-		noformat: 	NoFormat(),
+		noformat: 	NoFormat,
 		prepend: 	Prepend,
 		append: 	Append,
 		join: 		Join,
