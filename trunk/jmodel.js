@@ -385,10 +385,6 @@ var jModel = function () {
 			log().endGroup();
 		};
 		
-		this.entity = function (name) {
-			return this[name];
-		};
-		
 		this.setDefault = function () {
 			isDefault				= true;
 			defaultContext			= this;
@@ -527,11 +523,6 @@ var jModel = function () {
 
 	};
 	
-	// NOTE: Remove this
-	external.entity = function (name) {
-		return external[name];
-	}
-	
 	
 	
 	// ------------------------------------------------------------------------
@@ -574,8 +565,7 @@ var jModel = function () {
 			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			active = true;
 			notifications.map(apply);
-			this.flush();
-			return this;
+			return this.flush();
 		};
 		
 		this.flush = function (predicate) {
