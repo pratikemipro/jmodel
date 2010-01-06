@@ -892,6 +892,11 @@ var jModel = function () {
 		};
 		
 		
+		this.group = function (extractor) {
+			return new Grouping(this,extractor);
+		}
+		
+		
 		this.debug = function (showSubscribers) {
 			if ( Not(EmptySetPredicate)(objects) ) {
 				log().debug('Objects:  '+objects.map('primaryKeyValue').join(', '));
@@ -1093,6 +1098,32 @@ var jModel = function () {
 		
 	};
 	
+	
+	function Grouping (parent,extractor) {
+		
+		extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
+		var groups	= set().index(Property('value')).delegateFor(this),
+			that	= this;
+		
+		this.build = function () {
+			return parent.reduce(Method('add'),this);
+		}
+		
+		this.add = function (object) {
+			var value = extractor(object);
+			( groups.get(value) || groups.add(new Group(parent,extractor,value)).added ).add(object);
+			return this;
+		}
+		
+		this.build();
+		
+	}
+	
+	
+	function Group (parent,extractor,value) {
+		this.value		= value;
+		this.objects	= parent.context.collection().delegateFor(this);
+	}
 	
 	
 	// ------------------------------------------------------------------------
