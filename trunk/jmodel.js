@@ -349,13 +349,6 @@ var jModel = function () {
 		this.entities		= new EntityTypeSet(this);
 		this.all			= this.collection({description:'All Objects in context '+this.name});
 		
-/*		this.setDefault = function () {
-			this.isDefault			= true;
-			defaultContext			= this;
-			external.context		= this;
-			external.notifications	= this.notifications;
-		}; */
-		
 	}
 	
 	Context.prototype = {
@@ -409,7 +402,7 @@ var jModel = function () {
 			log().endGroup();
 		}
 		
-	}
+	};
 	
 	var	defaultContext	= contexts.create('default').setDefault();
 	
@@ -420,18 +413,8 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		
-		this.context = context;
-		
-		var	types = set().index(Property('name')).delegateFor(this);
-		
-		this.predicate = function (parameter) {
-			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				return extend({unique:true},PropertyPredicate('name',parameter));
-			}
-			else {
-				return types.predicate(parameter);
-			}
-		};
+		this.context	= context;
+		this.__delegate	= set().index(Property('name')).delegateFor(this);
 		
 	}
 	
@@ -439,9 +422,18 @@ var jModel = function () {
 		
 		create: function (name,constructor,options) {
 			return this.add(new EntityType(this.context,name,constructor,options)).added;
+		},
+		
+		predicate: function (parameter) {
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				return extend({unique:true},PropertyPredicate('name',parameter));
+			}
+			else {
+				return this.__delegate.predicate(parameter);
+			}
 		}
 		
-	}
+	};
 	
 	
 	
