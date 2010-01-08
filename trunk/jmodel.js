@@ -201,8 +201,6 @@ var jModel = function () {
 	var	contexts		= function (predicate) { return contexts.get(predicate); };
 	ContextSet.apply(contexts);
 	
-	var	defaultContext	= contexts.create('default').setDefault();
-	
 	external.extend = opal.extend;
 	
 	external.extend({
@@ -349,32 +347,29 @@ var jModel = function () {
 		this.name			= name;
 		this.notifications	= new NotificationQueue(this);
 		this.entities		= new EntityTypeSet(this);
-		this.all			= collection({description:'All Objects in context '+this.name});
+		this.all			= this.collection({description:'All Objects in context '+this.name});
 		
-		// Register a new constructor
-		this.register = function (name,constructor,options) {
-			return this.entities
-						.create(name,constructor,options)
-							.exposeAt( this.isDefault ? [this,external] : [this] )
-							.context;
-		}; 
-		
-		// Create a new collection
-		function collection (specification) {
-			return new DomainObjectCollection( extend({context:context},specification) );
-		}
-		this.collection = collection;
-		
-		this.setDefault = function () {
+/*		this.setDefault = function () {
 			this.isDefault			= true;
 			defaultContext			= this;
 			external.context		= this;
 			external.notifications	= this.notifications;
-		};
+		}; */
 		
 	}
 	
 	Context.prototype = {
+		
+		register: function (name,constructor,options) {
+			return this.entities
+						.create(name,constructor,options)
+							.exposeAt( this.isDefault ? [this,external] : [this] )
+							.context;
+		},
+		
+		collection: function (specification) {
+			return new DomainObjectCollection( extend({context:this},specification) );
+		},
 		
 		reset: function () {
 			this.all.remove(AllPredicate,true);
@@ -395,6 +390,13 @@ var jModel = function () {
 						.filter(function (result) { return result.messages !== ''; });
 		},
 		
+		setDefault: function () {
+			this.isDefault			= true;
+			defaultContext			= this;
+			external.context		= this;
+			external.notifications	= this.notifications;
+		},
+		
 		debug: function (showSubscribers) {
 			log().startGroup('Context: '+name);
 			this.notifications.debug();
@@ -409,6 +411,7 @@ var jModel = function () {
 		
 	}
 	
+	var	defaultContext	= contexts.create('default').setDefault();
 	
 	
 	// ------------------------------------------------------------------------
