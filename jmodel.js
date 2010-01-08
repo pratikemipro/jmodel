@@ -342,22 +342,22 @@ var jModel = function () {
 	
 	
 	function Context (name) {
-		
-		var	isDefault		= false,
-			context			= this;
-		
+
+		var context = this;
+
+		this.isDefault		= false;
 		this.name			= name;
-		this.notifications	= new NotificationQueue(context);
-		this.entities		= new EntityTypeSet(context);
-		this.all			= collection({description:'All Objects in context '+context.name});
+		this.notifications	= new NotificationQueue(this);
+		this.entities		= new EntityTypeSet(this);
+		this.all			= collection({description:'All Objects in context '+this.name});
 		
 		// Register a new constructor
 		this.register = function (name,constructor,options) {
 			return this.entities
 						.create(name,constructor,options)
-							.exposeAt( isDefault ? [context,external] : [context] )
+							.exposeAt( this.isDefault ? [this,external] : [this] )
 							.context;
-		};
+		}; 
 		
 		// Create a new collection
 		function collection (specification) {
@@ -365,26 +365,37 @@ var jModel = function () {
 		}
 		this.collection = collection;
 		
-		this.reset = function () {
+		this.setDefault = function () {
+			this.isDefault			= true;
+			defaultContext			= this;
+			external.context		= this;
+			external.notifications	= this.notifications;
+		};
+		
+	}
+	
+	Context.prototype = {
+		
+		reset: function () {
 			this.all.remove(AllPredicate,true);
 			return this;
-		};
-				
-		this.checkpoint = function () {
+		},
+		
+		checkpoint: function () {
 			this.entities.each(function (entity) {
 				entity.objects.each('clean');
 				entity.deleted.remove(AllPredicate,true);
 			});
 			return this;
-		};
+		},
 		
-		this.validate = function () {
+		validate: function () {
 			return this.all
 					.map(function (object) {return {object:object, messages:object.validate()};})
 						.filter(function (result) { return result.messages !== ''; });
-		};
-				
-		this.debug = function (showSubscribers) {
+		},
+		
+		debug: function (showSubscribers) {
 			log().startGroup('Context: '+name);
 			this.notifications.debug();
 			this.entities.each(function (entity) {
@@ -394,14 +405,7 @@ var jModel = function () {
 				log().endGroup();
 			});
 			log().endGroup();
-		};
-		
-		this.setDefault = function () {
-			isDefault				= true;
-			defaultContext			= this;
-			external.context		= this;
-			external.notifications	= this.notifications;
-		};
+		}
 		
 	}
 	
