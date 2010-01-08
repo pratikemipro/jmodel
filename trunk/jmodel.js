@@ -36,13 +36,19 @@ var jModel = function () {
 	
 	function Logger (flags) {
 		
-		var active = false;
+		var active = false,
+			logElement = null;
 		
 		function log (type, message) {
 				
 			var console = window.console;
 			
-			if ( type == 'startgroup' ) {
+			if (logElement) {
+				var p = document.createElement('p');
+				p.innerText = message;
+				logElement.appendChild(p);
+			}
+			else if ( type == 'startgroup' ) {
 				if ( console && console.group ) {
 					console.group(message);
 				}
@@ -140,6 +146,11 @@ var jModel = function () {
 			setFlag(flag,false);
 			return this;
 		};
+		
+		external.element = function (element) {
+			logElement = element;
+			return this;
+		}
 		
 		return external;
 			
