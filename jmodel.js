@@ -1522,48 +1522,50 @@ var jModel = function () {
 	// 															  		 Fields
 	// ------------------------------------------------------------------------
 	
-	function FieldSet (object,subscribers) {
+	function FieldSet (object,subscribers) {	
+		this.__delegate	= set().index(Property('accessor')).delegateFor(this);
+		this.getField	= delegateTo(this.__delegate,'get');
+	}
+	
+	FieldSet.prototype = {
 		
-		var fields = set().index(Property('accessor')).delegateFor(this);
+		get: function (name) {
+			try {
+				return this.__delegate.get(name).get();
+			}
+			catch (e) {
+				return null;
+			}
+		},
 		
-		this.predicate = function (parameter) {
+		set: function (name,value,publisher) {
+			try {
+				return this.__delegate.get(name).set(value,publisher);
+			}
+			catch (e) {
+				return null;
+			}
+		},
+		
+		keys: function () {
+			return this.__delegate.map(Property('accessor'));
+		},
+		
+		predicate: function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('accessor',parameter));
 			}
 			else {
-				return fields.predicate(parameter);
+				return this.__delegate.predicate(parameter);
 			}
-		};
+		},
 		
-		this.get = function (name) {
-			try {
-				return fields.get(name).get();
-			}
-			catch (e) {
-				return null;
-			}
-		};
-		
-		this.getField = delegateTo(fields,'get');
-		
-		this.set = function (name,value,publisher) {
-			try {
-				return fields.get(name).set(value,publisher);
-			}
-			catch (e) {
-				return null;
-			}
-		};
-		
-		this.keys = function () {
-			return fields.map( function (field) { return field.accessor; } );
-		};
-		
-		this.debug = function () {
+		debug: function () {
 			this.each('debug');
-		};
+		}
 		
-	}
+	};
+	
 	
 	function Field (field,subscribers) {
 		
