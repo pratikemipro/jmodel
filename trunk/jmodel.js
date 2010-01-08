@@ -470,21 +470,6 @@ var jModel = function () {
 							
 		this.deleted = new DeletedObjectsCollection(this.objects);
 
-		this.name	= name;
-
-
-		this.object = function (criterion) {
-			criterion = ( typeof criterion == 'string' && options.primaryKey && parseInt(criterion) ) ? parseInt(criterion) : criterion;
-			if ( typeof criterion == 'number' && options.primaryKey ) {
-				return this.objects.get(criterion);
-			}
-			else {
-				var objects = this.objects.filter.apply(this.objects,arguments);
-				return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
-			}
-		};
-
-
 		this.create = function (data) {
 			
 			log('domainobject/create').startGroup('Creating a new '+name);
@@ -511,16 +496,31 @@ var jModel = function () {
 			return newObject;
 
 		};
+
+	};
+	
+	EntityType.prototype = {
 		
+		object: function (criterion) {
+			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion) ) ? parseInt(criterion) : criterion;
+			if ( typeof criterion == 'number' && this.options.primaryKey ) {
+				return this.objects.get(criterion);
+			}
+			else {
+				var objects = this.objects.filter.apply(this.objects,arguments);
+				return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
+			}
+		},
 		
-		this.exposeAt = function (targets) {
+		exposeAt: function (targets) {
 			
-			var plural	= options.plural || name+'s',
-				entity = this;
+			var name	= this.name,
+				plural	= this.options.plural || this.name+'s',
+				entity	= this;
 			
 			set(targets).each(function (target) {
 			
-				target[name]	 			= delegateTo(entity,'object');
+				target[name] 				= delegateTo(entity,'object');
 				target[plural]				= delegateTo(entity.objects,'filter');
 
 				target['create'+name]		= delegateTo(entity,'create');
@@ -533,16 +533,13 @@ var jModel = function () {
 			
 			return this;
 			
-		}
-
-
-		this.generateID = function () {	
+		},
+		
+		generateID: function () {	
 			return -(this.context.all.count()+1);
 		}
 		
-
-	};
-	
+	}
 	
 	
 	// ------------------------------------------------------------------------
