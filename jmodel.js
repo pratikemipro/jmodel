@@ -439,58 +439,29 @@ var jModel = function () {
 	
 	function EntityType (context,name,constructor,options) {
 
-		options  		= options || {};
-		
-		this.options		= options;
+		this.options		= options || {};
 		this.name			= name;
 		this.constructor	= constructor;
 		this.context		= context;
 
 		this.objects =	this.context.collection({
 							base: 			this.context.all,
-							predicate: 		InstancePredicate(constructor),
-							ordering: 		options.ordering,
-							description: 	name
+							predicate: 		InstancePredicate(this.constructor),
+							ordering: 		this.options.ordering,
+							description: 	this.name
 						});
 							
 		// Index if there's a primary key
-		if ( options.primaryKey ) {
-			this.objects.index(Method(options.primaryKey));
+		if ( this.options.primaryKey ) {
+			this.objects.index(Method(this.options.primaryKey));
 		}
 							
 		// EntityType methods
-		if ( options.methods ) {
-			extend(options.methods,this.objects);
+		if ( this.options.methods ) {
+			extend(this.options.methods,this.objects);
 		}
 							
 		this.deleted = new DeletedObjectsCollection(this.objects);
-
-		this.create = function (data) {
-			
-			log('domainobject/create').startGroup('Creating a new '+name);
-
-			data = (typeof data == 'object') ? data : {};
-
-			var newObject = new constructor();
-			DomainObject.call(newObject,this.context);
-			
-			var primaryKey	= options.primaryKey;
-			newObject.primaryKey = primaryKey;
-
-			data[primaryKey] = data[primaryKey] || this.generateID();
-			newObject.domain.init(data);
-
-			this.context.all.add(newObject);
-			
-			if ( newObject.initialise ) {
-				newObject.initialise();
-			}
-
-			log('domainobject/create').endGroup();
-			
-			return newObject;
-
-		};
 
 	};
 	
@@ -505,6 +476,33 @@ var jModel = function () {
 				var objects = this.objects.filter.apply(this.objects,arguments);
 				return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
 			}
+		},
+		
+		create: function (data) {
+
+			log('domainobject/create').startGroup('Creating a new '+this.name);
+
+			data = (typeof data == 'object') ? data : {};
+
+			var newObject = new this.constructor();
+			DomainObject.call(newObject,this.context);
+
+			var primaryKey	= this.options.primaryKey;
+			newObject.primaryKey = primaryKey;
+
+			data[primaryKey] = data[primaryKey] || this.generateID();
+			newObject.domain.init(data);
+
+			this.context.all.add(newObject);
+
+			if ( newObject.initialise ) {
+				newObject.initialise();
+			}
+
+			log('domainobject/create').endGroup();
+
+			return newObject;
+
 		},
 		
 		exposeAt: function (targets) {
