@@ -1612,22 +1612,23 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		
-		var relationships = set().index(Property('name')).delegateFor(this);
-		
-		// NOTE: Fix this
+		this.__delegate = set().index(Property('name')).delegateFor(this);
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
+	}
+	
+	RelationshipSet.prototype = {
 		
-		this.predicate = function (parameter) {
+		predicate: function (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
-				return relationships.predicate(parameter);
+				return this.__delegate.predicate(parameter);
 			}
-		};
+		}
 		
-	}
+	};
+	
 	
 	function OneToOneRelationship (parent,relationship) {
 		
