@@ -1568,22 +1568,20 @@ var jModel = function () {
 	
 	
 	function Field (field,subscribers) {
-		
-		var data 		= field.defaultValue || null,
-			predicate	= field.validation ? field.validation.predicate || AllPredicate : AllPredicate,
-			message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
-		
+		this.__delegate		= field.defaultValue || null;
+		this.predicate		= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
+		this.message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
+		this.subscribers	= subscribers;
 		this.accessor	= field.accessor;
-		
-		this.get = function () {
-			return data;
-		};
-		
-		this.set = function (value,publisher) {
-			if ( predicate(value) ) {
-				log('domainobject/set').debug('Setting '+field.accessor+' to "'+value+'"');
-				data = value;
-				subscribers.notify({key:field.accessor,description:'field value change: '+field.accessor});
+	}
+	
+	Field.prototype = {
+	
+		set: function (value,publisher) {
+			if ( this.predicate(value) ) {
+				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
+				this.__delegate = value;
+				this.subscribers.notify({key:this.accessor,description:'field value change: '+this.accessor});
 				if ( publisher && publisher.success ) {
 					publisher.success();
 				}
@@ -1596,13 +1594,17 @@ var jModel = function () {
 				}
 				return false;
 			}
-		};
+		},
+	
+		get: function () {
+			return this.__delegate;
+		},
+	
+		debug: function () {
+			log().debug(this.accessor+': '+this.__delegate);
+		}
 		
-		this.debug = function () {
-			log().debug(field.accessor+': '+data);
-		};
-		
-	}
+	};
 	
 	
 	// ------------------------------------------------------------------------
