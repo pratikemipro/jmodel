@@ -430,11 +430,16 @@ var jModel = function () {
 			}
 		};
 		
-		this.create = function (name,constructor,options) {
-			return this.add(new EntityType(context,name,constructor,options)).added;
+	}
+	
+	EntityTypeSet.prototype = {
+		
+		create: function (name,constructor,options) {
+			return this.add(new EntityType(this.context,name,constructor,options)).added;
 		}
 		
 	}
+	
 	
 	
 	function EntityType (context,name,constructor,options) {
