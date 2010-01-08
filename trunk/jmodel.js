@@ -690,33 +690,39 @@ var jModel = function () {
 	
 	function SubscriberSet (notifications) {
 		
-		var subscribers = set().delegateFor(this),
-			that = this;
+		this.__delegate		= set().delegateFor(this);
+		this.notifications	= notifications;
 		
-		this.add = function (subscriber) {
-			subscribers.add(subscriber, function () {
+	};
+	
+	SubscriberSet.prototype = {
+		
+		add: function (subscriber) {
+			var that = this;
+			this.__delegate.add(subscriber, function () {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
 				that.added = subscriber;
 			});
 			return this;
-		};
+		},
 		
-		this.notify = function (event) {
-			var messages = subscribers.map(ApplyTo(event)).filter(function (notification) {return notification != false;});
+		notify: function (event) {
+			var messages = this.__delegate.map(ApplyTo(event)).filter(function (notification) {return notification != false;});
 			if ( _.nonempty(messages) ) {
 				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
-				notifications.send(messages);
+				this.notifications.send(messages);
 				log('subscriptions/notify').endGroup();
 			}
-		};
+		},
 		
-		this.debug = function () {
-			if ( _.nonempty(subscribers) ) {
-				log().debug('Subscribers:  '+subscribers.count());
+		debug: function () {
+			if ( _.nonempty(this.__delegate) ) {
+				log().debug('Subscribers:  '+this.__delegate.count());
 			}
-		};
+		}
 		
-	};
+	}
+	
 		
 	function CollectionSubscriber (subscription) {
 		return function (event) {
@@ -743,95 +749,135 @@ var jModel = function () {
 		
 		var that=this;
 		
-		specification			= specification || {};
-		specification.predicate = specification.predicate || AllPredicate;
+		specification		= specification || {};
+		this.__predicate	= specification.predicate || AllPredicate;
 
-		this.context = specification.context || contexts('default');
-		this.description = specification.description;
+		this.context		= specification.context || contexts('default');
+		this.description	= specification.description;
 		
-		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
+		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+this.description);
 		
-		var objects	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
-		objects.delegateFor(this);
+		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		this.__delegate.delegateFor(this);
+		this.__delegate.sorted = false;
 		
-		var subscribers		= new SubscriberSet(this.context.notifications);
-		this.subscribers	= delegateTo(subscribers,'filter');
+		this.subscribers	= delegateTo(new SubscriberSet(this.context.notifications),'filter');
+				
+		if ( specification.__ordering ) {
+			this.__ordering = this.ordering(this.__ordering);
+			this.sort();
+			this.__delegate.sorted = true;
+		}
+		
+		// This collection is a materialised view over a base collection
+		if ( specification.base ) {
+			var view = new View(specification.base,this,specification.predicate);
+		}
+		else if ( specification.base ) {
+			throw 'Error: Invalid base collection type';
+		}
+		
+		log('domainobjectcollection/create').endGroup();
 		
 		
-		this.add = function (object) {
-			objects.add(object, function () {
-				subscribers.notify({method:'add',object:object,description:'object addition'});
+	};
+	
+	DomainObjectCollection.prototype = {
+		
+		add: function (object) {
+			var that = this;
+			this.__delegate.add(object, function () {
+				that.subscribers().notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: that,
 					key: ':any',
 					change: function (object) {
-						sorted = false;
-						subscribers.notify({
+						that.__delegate.sorted = false;
+						that.subscribers().notify({
 							method:'change',
 							object:object,
 							description:'object change'
 						}); 
 					},
-					description: 'object change for '+specification.description+' collection change'
+					description: 'object change for '+this.description+' collection change'
 				});
-				sorted = false;
+				that.__delegate.sorted = false;
 			});
 			return this;
-		};
-
-
-		this.first = function () {
-			if ( !sorted ) { this.sort(); }
-			return objects.first();
-		};
+		},
 		
-		
-		this.remove = function (predicate,fromHere,removeSubscribers) {
-			predicate = And(specification.predicate,this.predicate(predicate));
+		remove: function (predicate,fromHere,removeSubscribers) {
+			predicate = And(this.__predicate,this.predicate(predicate));
+			var that = this;
 			if ( fromHere ) {
-				objects.remove(predicate).each(function (object) {
+				this.__delegate.remove(predicate).each(function (object) {
 					object.removed();
-					subscribers.notify({method:'remove',object:object,description:'object removal'});
+					that.subscribers().notify({method:'remove',object:object,description:'object removal'});
 					if (removeSubscribers) {
 						object.subscribers().remove(AllPredicate);
 					}	
 				});
 			}
 			else {
-				specification.context.all.remove(And(MembershipPredicate(objects),predicate),true,true);
+				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);
 			}
+
+		},
 		
-		};
+		first: function () {
+			if ( !this.__delegate.sorted ) { this.sort(); }
+			return this.__delegate.first();
+		},
 		
+		select: function (selector) {
+			return selector == ':first' ? this.first() : this;
+		},
 		
-/*		this.by = function () {			
-			return this.context.collection({
-				objects: this.copy(),
-				ordering: this.ordering.apply(null,arguments),
-				description:'ordered '+this.description
-			});
-		}; */
+		filter: function () {
+
+			if ( arguments.length === 0 ) {
+				return this;
+			}
+
+			var filtered = this.__delegate.filter.apply(this,arguments);
+
+			if ( filtered instanceof Set ) {
+				return this.context.collection({
+					objects: filtered,
+					description:'filtered '+this.description
+				});
+			}
+			else {
+				return filtered;
+			} 
+
+		},
 		
+		each: function (callback) {
+			if ( !this.__delegate.sorted ) { this.sort(); }
+			this.__delegate.each(callback);
+			return this;
+		},
 		
-		this.sort = function () {
+		sort: function () {
 
 			if (arguments.length > 0) {
-				specification.ordering = this.ordering.apply(null,arguments);
+				this.__ordering = this.ordering.apply(null,arguments);
 			}
 
 			// Remember old order
-			objects.each(function (object,index) {
-				this.domain.tags.position = index;
+			this.__delegate.each(function (object,index) {
+				object.domain.tags.position = index;
 			});
 
 			// Sort
-			objects.sort(specification.ordering);
+			this.__delegate.sort(this.__ordering);
 
 			// Find permutation
 			var permutation = [];
-			objects.each(function (object,index) {
-				permutation[index] = this.domain.tags.position;
-				delete this.domain.tags.position;
+			this.__delegate.each(function (object,index) {
+				permutation[index] = object.domain.tags.position;
+				delete object.domain.tags.position;
 			});
 
 			// Find whether permutation is not identity permutation
@@ -845,60 +891,28 @@ var jModel = function () {
 
 			// Notify subscribers
 			if ( permuted ) {
-				subscribers.notify({method:'sort',permutation:permutation,description:'collection sort'});
+				this.subscribers().notify({method:'sort',permutation:permutation,description:'collection sort'});
 			}
 
-			sorted = true;
+			this.__delegate.sorted = true;
 
 			return this;
 
-		};
+		},
 		
+		by : function () {			
+			return this.context.collection({
+				objects: this.copy(),
+				ordering: this.ordering.apply(null,arguments),
+				description:'ordered '+this.description
+			});
+		},
 		
-		this.each = function (callback) {
-			if ( !sorted ) { this.sort(); }
-			objects.each(callback);
-			return this;
-		};
-		
-		
-		this.select = function (selector) {
-			if ( selector == ':first' ) {
-				return this.first();
-			}
-			else {
-				return this;
-			}
-		};
-		
-		
-		this.filter = function () {
-
-			if ( arguments.length === 0 ) {
-				return this;
-			}
-			
-			var filtered = objects.filter.apply(this,arguments);
-			
-			if ( filtered instanceof Set ) {
-				return this.context.collection({
-					objects: filtered,
-					description:'filtered '+specification.description
-				});
-			}
-			else {
-				return filtered;
-			} 
-			
-		};
-		
-		
-/*		this.group = function (extractor) {
+		group: function (extractor) {
 			return new Grouping(this,extractor);
-		} */
+		},
 		
-		
-		this.subscribe = function (subscription) {
+		subscribe: function (subscription) {
 			
 			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
 
@@ -921,7 +935,7 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			var subscriber = subscribers.add(CollectionSubscriber(subscription)).added;
+			var subscriber = this.subscribers().add(CollectionSubscriber(subscription)).added;
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
@@ -935,9 +949,28 @@ var jModel = function () {
 			
 			return subscriber;	
 			
-		};
+		},
 		
-		function ordering () {
+		predicate: function (parameter) {
+			if ( parameter == ':empty' ) {
+				return EmptySetPredicate;
+			}
+			else if ( typeof parameter == 'function' ) {
+				return parameter;
+			}
+			else if ( parameter && parameter.domain ) {
+				return ObjectIdentityPredicate(parameter);
+			}
+			else if ( typeof parameter == 'object' && parameter !== null ) {
+				return ExamplePredicate(parameter);
+			} 
+			else if ( typeof parameter == 'number' ) {
+				return IdentityPredicate(parameter);
+			}
+			return AllPredicate;
+		},
+		
+		ordering: function () {
 			if ( arguments.length > 1 ) {
 				for ( var i=0; i<arguments.length; i++ ) {
 					arguments[i] = ordering(arguments[i]);
@@ -962,71 +995,6 @@ var jModel = function () {
 					return DescendingOrdering(FieldOrdering(pieces[0]));
 				}
 			}
-		}
-		
-		this.ordering = ordering;
-		
-		
-		if ( specification.ordering ) {
-			specification.ordering = this.ordering(specification.ordering);
-		}
-
-		var sorted = false;
-		
-		this.length = objects.count;
-		
-		
-		// Initial sort
-		if ( specification.ordering ) {
-			this.sort();
-			sorted = true;
-		}
-		
-		
-		// This collection is a materialised view over a base collection
-		if ( specification.base ) {
-			var view = new View(specification.base,this,specification.predicate);
-		}
-		else if ( specification.base ) {
-			throw 'Error: Invalid base collection type';
-		}
-		
-		log('domainobjectcollection/create').endGroup();
-		
-		
-	};
-	
-	DomainObjectCollection.prototype = {
-		
-		by : function () {			
-			return this.context.collection({
-				objects: this.copy(),
-				ordering: this.ordering.apply(null,arguments),
-				description:'ordered '+this.description
-			});
-		},
-		
-		group: function (extractor) {
-			return new Grouping(this,extractor);
-		},
-		
-		predicate: function (parameter) {
-			if ( parameter == ':empty' ) {
-				return EmptySetPredicate;
-			}
-			else if ( typeof parameter == 'function' ) {
-				return parameter;
-			}
-			else if ( parameter && parameter.domain ) {
-				return ObjectIdentityPredicate(parameter);
-			}
-			else if ( typeof parameter == 'object' && parameter !== null ) {
-				return ExamplePredicate(parameter);
-			} 
-			else if ( typeof parameter == 'number' ) {
-				return IdentityPredicate(parameter);
-			}
-			return AllPredicate;
 		},
 		
 		debug: function (showSubscribers) {
