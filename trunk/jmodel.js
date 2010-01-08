@@ -754,6 +754,7 @@ var jModel = function () {
 		specification.predicate = specification.predicate || AllPredicate;
 
 		this.context = specification.context || contexts('default');
+		this.description = specification.description;
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+specification.description);
 		
@@ -810,13 +811,13 @@ var jModel = function () {
 		};
 		
 		
-		this.by = function () {			
+/*		this.by = function () {			
 			return this.context.collection({
-				objects: objects.copy(),
+				objects: this.copy(),
 				ordering: this.ordering.apply(null,arguments),
-				description:'ordered '+specification.description
+				description:'ordered '+this.description
 			});
-		};
+		}; */
 		
 		
 		this.sort = function () {
@@ -899,19 +900,9 @@ var jModel = function () {
 		};
 		
 		
-		this.group = function (extractor) {
+/*		this.group = function (extractor) {
 			return new Grouping(this,extractor);
-		}
-		
-		
-		this.debug = function (showSubscribers) {
-			if ( Not(EmptySetPredicate)(objects) ) {
-				log().debug('Objects:  '+objects.map('primaryKeyValue').join(', '));
-			}
-			if ( showSubscribers ) {
-				subscribers.debug();
-			}
-		};
+		} */
 		
 		
 		this.subscribe = function (subscription) {
@@ -951,25 +942,6 @@ var jModel = function () {
 			
 			return subscriber;	
 			
-		};
-		
-		this.predicate = function (parameter) {
-			if ( parameter == ':empty' ) {
-				return EmptySetPredicate;
-			}
-			else if ( typeof parameter == 'function' ) {
-				return parameter;
-			}
-			else if ( parameter && parameter.domain ) {
-				return ObjectIdentityPredicate(parameter);
-			}
-			else if ( typeof parameter == 'object' && parameter !== null ) {
-				return ExamplePredicate(parameter);
-			} 
-			else if ( typeof parameter == 'number' ) {
-				return IdentityPredicate(parameter);
-			}
-			return AllPredicate;
 		};
 		
 		function ordering () {
@@ -1028,6 +1000,50 @@ var jModel = function () {
 		
 		log('domainobjectcollection/create').endGroup();
 		
+		
+	};
+	
+	DomainObjectCollection.prototype = {
+		
+		by : function () {			
+			return this.context.collection({
+				objects: this.copy(),
+				ordering: this.ordering.apply(null,arguments),
+				description:'ordered '+this.description
+			});
+		},
+		
+		group: function (extractor) {
+			return new Grouping(this,extractor);
+		},
+		
+		predicate: function (parameter) {
+			if ( parameter == ':empty' ) {
+				return EmptySetPredicate;
+			}
+			else if ( typeof parameter == 'function' ) {
+				return parameter;
+			}
+			else if ( parameter && parameter.domain ) {
+				return ObjectIdentityPredicate(parameter);
+			}
+			else if ( typeof parameter == 'object' && parameter !== null ) {
+				return ExamplePredicate(parameter);
+			} 
+			else if ( typeof parameter == 'number' ) {
+				return IdentityPredicate(parameter);
+			}
+			return AllPredicate;
+		},
+		
+		debug: function (showSubscribers) {
+			if ( Not(EmptySetPredicate)(this) ) {
+				log().debug('Objects:  '+this.format(listing(Method('primaryKeyValue'))));
+			}
+			if ( showSubscribers ) {
+				this.subscribers().debug();
+			}
+		}
 		
 	};
 	
