@@ -1074,24 +1074,25 @@ var jModel = function () {
 	
 	
 	function Grouping (parent,extractor) {
-		
-		extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
-		var groups	= set().index(Property('value')).delegateFor(this),
-			that	= this;
-		
-		this.build = function () {
-			return parent.reduce(Method('add'),this);
-		};
-		
-		this.add = function (object) {
-			var value = extractor(object);
-			( groups.get(value) || groups.add(new Group(parent,extractor,value)).added ).add(object);
-			return this;
-		};
-		
+		this.parent		= parent;
+		this.extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
+		this.__delegate	= set().index(Property('value')).delegateFor(this);
 		this.build();
-		
 	}
+	
+	Grouping.prototype = {
+		
+		build: function () {
+			return this.parent.reduce(Method('add'),this);
+		},
+		
+		add: function (object) {
+			var value = this.extractor(object);
+			( this.__delegate.get(value) || this.__delegate.add(new Group(this.parent,this.extractor,value)).added ).add(object);
+			return this;
+		}
+		
+	};
 	
 	
 	function Group (parent,extractor,value) {
