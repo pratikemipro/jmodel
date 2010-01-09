@@ -1384,17 +1384,7 @@ var jModel = function () {
 
 			if ( subscription.key instanceof Array ) {
 				for(var i=0;i<subscription.key.length;i++) {
-					this.subscribe({
-						source: subscription.source,
-						target: subscription.target,
-						key: subscription.key[i],
-						format: subscription.format,
-						value: subscription.value,
-						change: subscription.change,
-						removed: subscription.remove,
-						initialise: subscription.initialise,
-						description: subscription.description
-					});
+					this.subscribe(copy(subscription).set('key',subscription.key[i]));
 				}
 			} 
 
@@ -1888,7 +1878,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function copyArray (original) {
-		copy = [];
+		var copy = [];
 		for (var i in original) {
 			copy[i] = original[i];
 		}
@@ -1896,7 +1886,7 @@ var jModel = function () {
 	}
 	
 	function copyObject (original) {
-		copy = {};
+		var copy = {};
 		for (var i in original) {
 			if ( typeof original[i] == 'object' ) {
 				copy[i] = copyObject(original[i]);
