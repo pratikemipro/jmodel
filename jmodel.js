@@ -1264,7 +1264,10 @@ var jModel = function () {
 					
 			push: function () {
 				fields.each(function (field) {
-					subscribers.notify({key:field.name,description:'field value'});
+					subscribers.notify({
+						key: field.name,
+						description: 'field value'
+					});
 				});
 			},
 					
