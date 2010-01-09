@@ -936,7 +936,11 @@ var jModel = function () {
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				this.each(function (object) {
-					this.context.notifications.send(subscriber({method:'initialise',object:object,description:'initialisation'}));	
+					this.context.notifications.send(subscriber({
+						method: 'initialise',
+						object: object,
+						description: 'initialisation'
+					}));	
 				});
 				log('subscriptions/subscribe').endGroup();
 			}
