@@ -1621,31 +1621,32 @@ var jModel = function () {
 	
 	
 	function OneToOneRelationship (parent,relationship) {
+		this.parent			= parent;
+		this.relationship	= relationship;
+		this.accessor		= relationship.accessor;
+		this.name			= relationship.accessor;		
+	};
+	
+	OneToOneRelationship.prototype = {
 		
-		this.accessor	= relationship.accessor;
-		this.name		= relationship.accessor;
-		
-		this.get = function (create) {
-			var child = this.parent.context.entities.get(relationship.prototype).object(parent.get(relationship.field));
+		get: function (create) {
+			var child = this.parent.context.entities.get(this.relationship.prototype)
+							.object(this.parent.get(this.relationship.field));
 			if ( child ) {
 				return child;
 			}
 			else if ( create ) {
 				return this.add();
 			}
-		};
+		},
 		
-		this.add = function (data) {
-
-			var newObject = parent.context.entities.get(relationship.prototype).create( data || {} );
-			
-			parent.set(relationship.field, newObject.primaryKeyValue());
-			
+		add: function (data) {
+			var newObject = this.parent.context.entities.get(relationship.prototype).create( data || {} );
+			this.parent.set(relationship.field, newObject.primaryKeyValue());
 			return newObject;
-			
-		};
+		}
 		
-	};
+	}
 	
 	external.OneToOneRelationship = OneToOneRelationship;
 	
