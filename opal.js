@@ -49,7 +49,7 @@ function OPAL () {
 				result[label] = fns[i].apply(null,arguments);
 			}
 			return result;
-		}
+		};
 	}
 	
 	function apply () {
@@ -114,7 +114,7 @@ function OPAL () {
 		return function (object) {
 			return object[name] && typeof object[name] == 'function' ? method.apply(null,arguments)
 						: property.apply(null,arguments);
-		}
+		};
 	}
 
 	function PropertyPath (path,separator) {
@@ -126,7 +126,7 @@ function OPAL () {
 			catch (error) {
 				return false;
 			}
-		}
+		};
 	}
 
 	function PropertySet (paths,separator) {
@@ -142,7 +142,7 @@ function OPAL () {
 		extractor = extractor || resolve;
 		return function (object) {
 			return resolve(object,transformer(extractor(object)));
-		}
+		};
 	}
 
 	opal.extend({
@@ -187,8 +187,8 @@ function OPAL () {
 		var method = Method(name);
 		return function (a,b) {
 			return method(a,b);
-		}
-	}
+		};
+	};
 	
 	var push = withmethod('push');
 	
@@ -206,8 +206,8 @@ function OPAL () {
 		});
 	};
 	
-	var max = extend({label:'max'}, function (a,b) { return a > b ? a : b});
-	var min = extend({label:'min'}, function (a,b) { return ( a < b && a != null ) ? a : b});
+	var max = extend({label:'max'}, function (a,b) { return a > b ? a : b; } );
+	var min = extend({label:'min'}, function (a,b) { return ( a < b && a != null ) ? a : b; });
 
 	opal.extend({
 		plus: plus,
@@ -248,7 +248,7 @@ function OPAL () {
 
 		this.constraint = function (obj) {
 			return !this.member(obj);
-		}
+		};
 
 		this.add = function (object,success,failure) {
 			if ( this.constraint(object) ) {	
@@ -409,7 +409,7 @@ function OPAL () {
 		},
 		
 		copy: function () {
-			return this.reduce(Method('add'),set())
+			return this.reduce(Method('add'),set());
 		},
 		
 		union: function () {
@@ -707,8 +707,8 @@ function OPAL () {
 		return function (value) {
 			return function (candidate) {
 				return operator(candidate,value);
-			}
-		}
+			};
+		};
 	}
 	
 	var EqualityPredicate         = ComparisonPredicate(eq),
@@ -971,7 +971,7 @@ function OPAL () {
 				index++;			
 				return acc + (acc ? separator : '') + formatter(object);
 			},'');
-		}
+		};
 	}
 	
 	opal.extend({
@@ -1022,7 +1022,7 @@ function OPAL () {
 			return this;
 		}
 		
-	}
+	};
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments,
