@@ -412,10 +412,8 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
-		
 		this.context	= context;
 		this.__delegate	= set().index(Property('name')).delegateFor(this);
-		
 	}
 	
 	EntityTypeSet.prototype = {
@@ -1321,7 +1319,7 @@ var jModel = function () {
 			}
 			else if ( arguments[0].each ) {
 				var values	= {},
-					that	= this
+					that	= this;
 				arguments[0].each(function (key) {
 					values[key] = that.fields().get(key);
 				});
@@ -1636,7 +1634,7 @@ var jModel = function () {
 			return newObject;
 		}
 		
-	}
+	};
 	
 	external.OneToOneRelationship = OneToOneRelationship;
 	
