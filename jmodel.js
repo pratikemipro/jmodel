@@ -1230,7 +1230,7 @@ var jModel = function () {
 	function MembershipPredicate (collection) {		
 		collection = makeCollection(collection);
 		return function (candidate) {
-			return Not(EmptySetPredicate)(collection.filter(ObjectIdentityPredicate(candidate)));
+			return collection.member(candidate);
 		};
 	};
 	
