@@ -66,7 +66,7 @@ var jModel = function () {
 					case 'error': 	if (console && console.error) {console.error(message); break;}
 					case 'warning': if (console && console.warn)  {console.warn(message);  break;}
 					case 'debug': 	if (console && console.debug) {console.debug(message); break;}
-					case 'info': 	if (console && console.info)  {console.debug(message); break;}
+					case 'info': 	if (console && console.info)  {console.info(message);  break;}
 					default: 		if (console && console.log)   {console.log(message);   break;}	
 				}
 			}
@@ -150,7 +150,7 @@ var jModel = function () {
 		external.element = function (element) {
 			logElement = element;
 			return this;
-		}
+		};
 		
 		return external;
 			
@@ -468,7 +468,7 @@ var jModel = function () {
 	EntityType.prototype = {
 		
 		object: function (criterion) {
-			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion) ) ? parseInt(criterion) : criterion;
+			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion,10) ) ? parseInt(criterion,10) : criterion;
 			if ( typeof criterion == 'number' && this.options.primaryKey ) {
 				return this.objects.get(criterion);
 			}
@@ -484,14 +484,13 @@ var jModel = function () {
 
 			data = (typeof data == 'object') ? data : {};
 
-			var newObject = new this.constructor();
-			DomainObject.call(newObject,this.context);
-
 			var primaryKey	= this.options.primaryKey;
-			newObject.primaryKey = primaryKey;
-
 			data[primaryKey] = data[primaryKey] || this.generateID();
-			newObject.domain.init(data);
+			
+			var newObject = new this.constructor();
+			newObject.__delegate = new DomainObject(this.context,newObject,data);
+			newObject.__delegate.primaryKey = primaryKey;
+			newObject.__delegate.delegateFor(newObject);
 
 			this.context.all.add(newObject);
 
@@ -532,7 +531,7 @@ var jModel = function () {
 			return -(this.context.all.count()+1);
 		}
 		
-	}
+	};
 	
 	
 	// ------------------------------------------------------------------------
@@ -721,7 +720,7 @@ var jModel = function () {
 			}
 		}
 		
-	}
+	};
 	
 		
 	function CollectionSubscriber (subscription) {
@@ -1091,13 +1090,13 @@ var jModel = function () {
 		
 		this.build = function () {
 			return parent.reduce(Method('add'),this);
-		}
+		};
 		
 		this.add = function (object) {
 			var value = extractor(object);
 			( groups.get(value) || groups.add(new Group(parent,extractor,value)).added ).add(object);
 			return this;
-		}
+		};
 		
 		this.build();
 		
@@ -1253,11 +1252,42 @@ var jModel = function () {
 	
 	
 	// ------------------------------------------------------------------------
-	// 														Domain Object mixin
+	// 													 Domain Object delegate
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (context) {
+	function DomainObject (context,parent,data) {
 		
+		var that = this;
+		
+		this.domain = {
+			
+			dirty: false,
+			
+			tags: {},
+			
+			clean: function () {
+				that.domain.dirty = false;
+				return that;
+			},
+					
+			push: function () {
+				fields.each(function (field) {
+					subscribers.notify({key:field.name,description:'field value'});
+				});
+			},
+					
+			debug: function (showSubscribers) {
+				log().startGroup('Domain Object');
+				fields.debug();
+				if ( showSubscribers ) {
+					subscribers.debug();
+				}
+				log().endGroup();
+			}
+			
+		};
+		
+		this.parent = parent;
 		
 		var notifications	= context.notifications,
 			subscribers 	= new SubscriberSet(notifications),
@@ -1273,26 +1303,38 @@ var jModel = function () {
 		this.constraints	= delegateTo(constraints,'filter');
 		this.context		= context;
 		
-		this.get = function () {
+		this.reifyFields();
+		this.set(data);
+		this.reifyRelationships();
+		this.reifyConstraints();		
+
+	};
+	
+	DomainObject.prototype = {
 		
-			if ( arguments[0] == ':all' ) {
+		get: function () {
+		
+			if ( arguments.length == 0 || typeof arguments[0] == 'undefined' ) {
+				return false;
+			}
+			else if ( arguments[0] == ':all' ) {
 				return this.get(fields.keys());
 			}
 			else if ( arguments[0].each ) {
 				var values = {};
 				arguments[0].each(function (key) {
-					values[key] = fields.get(key);
+					values[key] = this.fields().get(key);
 				});
 				return values;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
 				var key = arguments[0], field;
-				if ( field = fields.getField(key) ) {
+				if ( field = this.fields().getField(key) ) {
 					return field.get(key);
 				}
 				else {
-					if ( relationships.get(key) ) {
-						return relationships.get(key).get();
+					if ( this.relationships().get(key) ) {
+						return this.relationships().get(key).get();
 					}
 				}
 			}
@@ -1300,23 +1342,22 @@ var jModel = function () {
 				var keys = arguments[0];
 				var values = {};
 				for ( var key in keys ) {
-					values[keys[key]] = fields.get(keys[key]);
+					values[keys[key]] = this.fields().get(keys[key]);
 				}
 				return values;
 			}
 	
-		};
+		},
 		
-		
-		this.set = function () {
+		set: function () {
 			
 			var key;
 
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				key = arguments[0];
 				var value = arguments[1];
-				if ( fields.set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
-					subscribers.notify({key:':any',description:'field value change: any'});
+				if ( this.fields().set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
+					this.subscribers().notify({key:':any',description:'field value change: any'});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1325,7 +1366,7 @@ var jModel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				subscribers.notify({key:':any',description:'field value change: any'});
+				this.subscribers().notify({key:':any',description:'field value change: any'});
 				log('domainobject/set').endGroup();
 			}
 
@@ -1333,15 +1374,13 @@ var jModel = function () {
 
 			return this;
 	
-		};
+		},
 		
+		removed: function (collection) {
+			this.subscribers().notify({removed:true,description:'object removal'});
+		},
 		
-		this.removed = function (collection) {
-			subscribers.notify({removed:true,description:'object removal'});
-		};
-		
-		
-		this.subscribe = function (subscription) {
+		subscribe: function (subscription) {
 
 			if ( subscription.key instanceof Array ) {
 				for(var i=0;i<subscription.key.length;i++) {
@@ -1380,141 +1419,92 @@ var jModel = function () {
 				subscription.type = ContentNotification;
 			}
 
-			var subscriber = subscribers.add(ObjectSubscriber(subscription)).added;
+			var subscriber = this.subscribers().add(ObjectSubscriber(subscription)).added;
 
 			if ( subscription.initialise ) {
-				notifications.send(subscriber({key:subscription.key}));
+				this.context.notifications.send(subscriber({key:subscription.key}));
 			}
 
 			return subscriber;
 
-		};
+		},
 		
-		
-		this.primaryKeyValue = function () {
+		primaryKeyValue: function () {
 			return this.get(this.primaryKey);
-		};
+		},
 		
-		
-		this.matches = function (predicate) {
+		matches: function (predicate) {
 			return predicate(this);
-		};
+		},
 		
-		
-		this.validate = function () {
-			
+		validate: function () {
 			var obj = this;
-			return constraints
+			return this.constraints()
 						.filter(function (constraint) {return Not(constraint)(obj);})
 							.map(function (constraint) {return constraint.message;})
 								.join('; ');
-		};
+		},
 		
+		reifyFields: function () {
+			log('domainobject/create').startGroup('Reifying fields');
+			for ( var i in this.parent.has ) {
+				var descriptor  = this.parent.has[i],
+					field		= this.fields().add(new Field(descriptor,this.subscribers())).added;
+				this.parent[descriptor.accessor]	= delegateTo(field,'get');
+				this.parent['set'+field.accessor]	= delegateTo(field,'set');
+			}
+			log('domainobject/create').endGroup();
+		},
 		
-		this.domain = function () {
-			
-			var that = this;
-			
-			function reifyFields () {
+		reifyRelationships: function () {
 
-				log('domainobject/create').startGroup('Reifying fields');
+			this.parent.hasOne	= this.parent.hasOne || [];
+			this.parent.hasMany	= this.parent.hasMany || [];
 
-				for ( var i in that.has ) {
-					var descriptor  			= that.has[i],
-						field					= new Field(descriptor,subscribers);
-					fields.add(field);
-					that[descriptor.accessor]	= delegateTo(field,'get');
-					that['set'+field.accessor]	= delegateTo(field,'set');
-				}
-				
-				log('domainobject/create').endGroup();
+			var i, descriptor, relationship;
 
+			log('domainobject/create').startGroup('Reifying OneToOne relationships');
+			for ( i in this.parent.hasOne ) {
+				descriptor = this.parent.hasOne[i];
+				relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
+				this.parent[descriptor.accessor]				= delegateTo(relationship,'get');
+				this.parent['add'+descriptor.accessor]			= delegateTo(relationship,'add');
 			}
-			
-			function reifyRelationships () {
+			log('domainobject/create').endGroup();
 
-				that.hasOne			= that.hasOne || [];
-				that.hasMany		= that.hasMany || [];
-
-				var i, descriptor, relationship;
-
-				log('domainobject/create').startGroup('Reifying OneToOne relationships');
-				for ( i in that.hasOne ) {
-					descriptor = that.hasOne[i];
-					relationship 							= new OneToOneRelationship(that,descriptor);
-					relationships.add(relationship);
-					that[descriptor.accessor]				= delegateTo(relationship,'get');
-					that['add'+descriptor.accessor]			= delegateTo(relationship,'add');
-				}
-				log('domainobject/create').endGroup();
-
-				log('domainobject/create').startGroup('Reifying OneToMany relationships');
-				for ( i in that.hasMany ) {
-					descriptor = that.hasMany[i];
-					relationship											= new OneToManyRelationship(that,descriptor);
-					relationships.add(relationship);
-					that[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
-					that['add'+descriptor.accessor]							= delegateTo(relationship,'add');
-					that['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
-					that['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
-				}
-				log('domainobject/create').endGroup();
-
+			log('domainobject/create').startGroup('Reifying OneToMany relationships');
+			for ( i in this.parent.hasMany ) {
+				descriptor = this.parent.hasMany[i];
+				relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
+				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
+				this.parent['add'+descriptor.accessor]							= delegateTo(relationship,'add');
+				this.parent['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
+				this.parent['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
 			}
-			
-			function reifyConstraints () {
-				
-				that.must = that.must || [];
-				
-				log('domainobject/create').startGroup('Reifying constraints');
-				for (var i in that.must ) {
-					descriptor = that.must[i];
-					descriptor.predicate.message = descriptor.message;
-					constraints.add(descriptor.predicate);
-				}
-				log('domainobject/create').endGroup();
-				
-			}
-			
-			return {
-				
-				dirty: false,
-				
-				tags: {},
-				
-				init: function (initialData) {
-					reifyFields();
-					that.set(initialData); // Must do this before reifying relationships or else initial population of children fails
-					reifyRelationships();
-					reifyConstraints();
-					return that.domain.clean();
-				},
-				
-				clean: function () {
-					that.domain.dirty = false;
-					return that;
-				},
-						
-				push: function () {
-					fields.each(function (field) {
-						subscribers.notify({key:field.name,description:'field value'});
-					});
-				},
-						
-				debug: function (showSubscribers) {
-					log().startGroup('Domain Object');
-					fields.debug();
-					if ( showSubscribers ) {
-						subscribers.debug();
-					}
-					log().endGroup();
-				}
-				
-			};
-			
-		}.call(this);
+			log('domainobject/create').endGroup();
+
+		},
 		
-
+		reifyConstraints: function () {
+			this.parent.must = this.parent.must || [];
+			log('domainobject/create').startGroup('Reifying constraints');
+			for (var i in this.parent.must ) {
+				descriptor = this.parent.must[i];
+				descriptor.predicate.message = descriptor.message;
+				this.constraints().add(descriptor.predicate);
+			}
+			log('domainobject/create').endGroup();
+		},
+		
+		delegateFor: function (host) {
+			for (var i in this) {
+				if ( !host[i] ) {
+					host[i] = this[i];
+				}
+			}
+			return this;
+		}
+		
 	};
 	
 	
@@ -1561,7 +1551,7 @@ var jModel = function () {
 		},
 		
 		debug: function () {
-			this.each('debug');
+			this.__delegate.each('debug');
 		}
 		
 	};
@@ -1636,7 +1626,7 @@ var jModel = function () {
 		this.name		= relationship.accessor;
 		
 		this.get = function (create) {
-			var child = parent.context.entities.get(relationship.prototype).object(parent.get(relationship.field));
+			var child = this.parent.context.entities.get(relationship.prototype).object(parent.get(relationship.field));
 			if ( child ) {
 				return child;
 			}
@@ -1738,7 +1728,7 @@ var jModel = function () {
 	
 	function ConstraintSet () {
 		
-		var constraints = extend({constraint:TypePredicate('function')},set()).delegateFor(this);
+		extend({constraint:TypePredicate('function')},set()).delegateFor(this);
 		
 	}
 	
@@ -1765,6 +1755,7 @@ var jModel = function () {
 				if ( context.entities.get(key) ) {
 					log('json/thaw').debug('creating free object');
 					object = context.entities.get(key).create(partitionedData.fields);
+					log('json/thaw').debug('-----');
 				}
 				else {
 					log('json/thaw').debug('unknown entity type: '+key);
