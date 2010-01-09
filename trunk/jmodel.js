@@ -1574,7 +1574,7 @@ var jModel = function () {
 				return true;
 			}
 			else {
-				log('domainobject/set').debug('Setting '+field.accessor+' to "'+value+'" failed validation');
+				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'" failed validation');
 				if ( publisher && publisher.failure ) {
 					publisher.failure(message);
 				}
