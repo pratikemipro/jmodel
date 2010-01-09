@@ -1018,7 +1018,7 @@ var jModel = function () {
 		
 		deleted.debug = function () {
 			if ( Not(EmptySetPredicate)(deleted) ) {
-				log().debug('Deleted:  '+deleted.map('primaryKeyValue').join(', '));
+				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
 			}
 		};
 		
