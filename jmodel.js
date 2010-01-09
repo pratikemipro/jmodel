@@ -1050,16 +1050,10 @@ var jModel = function () {
 		});
 		
 		// NOTE: this is ugly, and really should be done by subscription initialisation
-		parent
-			.filter(predicate)
-				.each(function (object) {
-					child.add(object);
-				});
+		parent.reduce(add(predicate),child);
 		
 		function parentAdd(collection,object) {
-			if ( predicate(object) ) {
-				child.add(object);
-			}
+			add(predicate)(child,object);
 		};
 		
 		function parentRemove(collection,object) {
