@@ -1313,12 +1313,13 @@ var jModel = function () {
 				return false;
 			}
 			else if ( arguments[0] == ':all' ) {
-				return this.get(fields.keys());
+				return this.get(this.fields().keys());
 			}
 			else if ( arguments[0].each ) {
-				var values = {};
+				var values	= {},
+					that	= this
 				arguments[0].each(function (key) {
-					values[key] = this.fields().get(key);
+					values[key] = that.fields().get(key);
 				});
 				return values;
 			}
