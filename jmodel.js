@@ -688,10 +688,8 @@ var jModel = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		
 		this.__delegate		= set().delegateFor(this);
 		this.notifications	= notifications;
-		
 	};
 	
 	SubscriberSet.prototype = {
@@ -750,22 +748,21 @@ var jModel = function () {
 		
 		specification		= specification || {};
 		this.__predicate	= specification.predicate || AllPredicate;
-
 		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
 		
 		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+this.description);
 		
-		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects : new Set(specification.objects);
+		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects
+								: new Set(specification.objects);
 		this.__delegate.delegateFor(this);
 		this.__delegate.sorted = false;
 		
 		this.subscribers	= delegateTo(new SubscriberSet(this.context.notifications),'filter');
 				
-		if ( specification.__ordering ) {
-			this.__ordering = this.ordering(this.__ordering);
+		if ( specification.ordering ) {
+			this.__ordering = this.ordering(specification.ordering);
 			this.sort();
-			this.__delegate.sorted = true;
 		}
 		
 		// This collection is a materialised view over a base collection
