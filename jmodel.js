@@ -1328,7 +1328,7 @@ var jModel = function () {
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
 				var key = arguments[0], field, relationship;
 				if ( field = this.fields().getField(key) ) {
-					return field.get(key);
+					return field.get();
 				}
 				else {
 					if ( relationship = this.relationships(key) ) {
