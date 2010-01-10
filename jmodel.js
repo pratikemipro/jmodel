@@ -1629,8 +1629,8 @@ var jModel = function () {
 		},
 		
 		add: function (data) {
-			var newObject = this.parent.context.entities.get(relationship.prototype).create( data || {} );
-			this.parent.set(relationship.field, newObject.primaryKeyValue());
+			var newObject = this.parent.context.entities.get(this.relationship.prototype).create( data || {} );
+			this.parent.set(this.relationship.field, newObject.primaryKeyValue());
 			return newObject;
 		}
 		
