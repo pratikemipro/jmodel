@@ -1326,13 +1326,13 @@ var jModel = function () {
 				return values;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				var key = arguments[0], field;
+				var key = arguments[0], field, relationship;
 				if ( field = this.fields().getField(key) ) {
 					return field.get(key);
 				}
 				else {
-					if ( this.relationships().get(key) ) {
-						return this.relationships().get(key).get();
+					if ( relationship = this.relationships(key) ) {
+						return relationship.get();
 					}
 				}
 			}
