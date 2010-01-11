@@ -241,12 +241,12 @@ function OPAL () {
 
 	function Set (objects) {
 
-		var members = objects || [],
-			index = false;
+		this.added = null;
+		this.__index = false;
+
+		var members = objects || [];
 			
 		members = ( members.jquery && jQuery ) ? set(members.get()).map(jQuery).get() : members;
-			
-		this.added = null;
 
 		this.constraint = function constraint (obj) {
 			return !this.member(obj);
@@ -255,8 +255,8 @@ function OPAL () {
 		this.add = function _add (object,success,failure) {
 			if ( this.constraint(object) ) {	
 				members.push(object);
-				if ( index ) {
-					index.add(object);
+				if ( this.__index ) {
+					this.__index.add(object);
 				}
 				this.added = object;
 				if (success && typeof success=='function') {
@@ -278,8 +278,8 @@ function OPAL () {
 			else if ( key == ':first' ) {
 				return this.first();
 			}
-			else if (index) {
-				return index.get(key);
+			else if (this.__index) {
+				return this.__index.get(key);
 			}
 			else {
 				var obj = this.filter(key);
@@ -290,8 +290,8 @@ function OPAL () {
 		this.remove = function _remove (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			members = partition.keep.get();
-			if ( index ) {
-				partition.remove.reduce(Method('remove'),index);
+			if ( this.__index ) {
+				partition.remove.reduce(Method('remove'),this.__index);
 			}
 			return partition.remove; 
 		};
@@ -302,11 +302,6 @@ function OPAL () {
 
 		this.sort = function _sort () {
 			members.sort(this.ordering.apply(null,arguments));
-			return this;
-		};
-
-		this.index = function _index (key) {
-			index = new UniqueIndex(this,key);
 			return this;
 		};
 
@@ -322,7 +317,8 @@ function OPAL () {
 		},
 		
 		member: function _member (object) {
-			return this.reduce(contains(ObjectIdentityPredicate(object)));
+			return this.__index ? this.__index.member(object)
+			 		: this.reduce(contains(ObjectIdentityPredicate(object)));
 		},
 		
 		concat : function _concat (second) {
@@ -412,6 +408,11 @@ function OPAL () {
 		
 		copy: function _copy () {
 			return this.reduce(Method('add'),set());
+		},
+		
+		index: function _index (key) {
+			this.__index = new UniqueIndex(this,key);
+			return this;
 		},
 		
 		union: function _union () {
@@ -584,9 +585,9 @@ function OPAL () {
 
 	function UniqueIndex (set,key) {
 
-		this.set	= set;
-		this.key	= key;
-		this.index	= copy({});
+		this.set		= set;
+		this.key		= key;
+		this.__delegate	= copy({});
 		
 		this.build();
 
@@ -599,17 +600,21 @@ function OPAL () {
 		},
 
 		add: function _add (object) {
-			this.index[this.key(object)] = object;
+			this.__delegate[this.key(object)] = object;
 			return this;
 		},
 
 		remove: function _remove (object) {
-			delete this.index[this.key(object)];
+			delete this.__delegate[this.key(object)];
 			return this; 
 		},
 
 		get: function _get (keyval) {
-			return this.index[keyval];
+			return this.__delegate[keyval];
+		},
+		
+		member: function _member (object) {
+			return this.__delegate.hasOwnProperty(this.key(object));
 		}
 		
 	};
