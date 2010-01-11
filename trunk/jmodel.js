@@ -546,19 +546,17 @@ var jModel = function () {
 		
 		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
-			messages
-				.filter(TypePredicate('function'))
-					.each(function __send (message) {
-						if ( !filter(message) ) {
-						}
-						else if ( active || !message.subscription.application ) {
-							message();
-						}
-						else {
-							log('notifications/send').debug('Adding a notification to the queue');
-							notifications.add(message);
-						}
-					});
+			messages.each(function __send (message) {
+				if ( !filter(message) ) {
+				}
+				else if ( active || !message.subscription.application ) {
+					message();
+				}
+				else {
+					log('notifications/send').debug('Adding a notification to the queue');
+					notifications.add(message);
+				}
+			});
 			return this;
 		};
 		
@@ -702,8 +700,9 @@ var jModel = function () {
 		},
 		
 		notify: function _notify (event) {
-			var messages = this.__delegate.map(ApplyTo(event)).filter(function __notify (notification) {return notification != false;});
-			if ( _.nonempty(messages) ) {
+			var messages = this.__delegate.map(ApplyTo(event))
+								.filter(function (msg) { return msg != null; } );
+			if ( messages.count() > 0 ) {
 				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				this.notifications.send(messages);
 				log('subscriptions/notify').endGroup();
@@ -721,7 +720,7 @@ var jModel = function () {
 		
 	function CollectionSubscriber (subscription) {
 		return function _collectionsubscriber (event) {
-			return ( subscription.filter && !subscription.filter(event) ) ? false
+			return ( subscription.filter && !subscription.filter(event) ) ? null
 				:  subscription.type(subscription,event);
 		};
 	}
@@ -730,7 +729,7 @@ var jModel = function () {
 		return function _objectsubscriber (event) {
 			return ( event.removed && subscription.removed ) || ( event.key == subscription.key ) ?
 				subscription.type(subscription,event)
-				: false;
+				: null;
 		};
 	}
 
