@@ -491,7 +491,7 @@ function OPAL () {
 		
 		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
-				if ( i.substr(0,2) != '__' && !host[i] ) {
+				if ( !host[i] ) {
 					host[i] = this[i];
 				}
 			}
