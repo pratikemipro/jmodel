@@ -446,13 +446,9 @@ var jModel = function () {
 							base: 			this.context.all,
 							predicate: 		InstancePredicate(this.constructor),
 							ordering: 		this.options.ordering,
-							description: 	this.name
+							description: 	this.name,
+							primaryKey: 	this.options.primaryKey
 						});
-							
-		// Index if there's a primary key
-		if ( this.options.primaryKey ) {
-			this.objects.index(Method(this.options.primaryKey));
-		}
 							
 		// EntityType methods
 		if ( this.options.methods ) {
@@ -752,6 +748,9 @@ var jModel = function () {
 		
 		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects
 								: new Set(specification.objects);
+		if ( specification.primaryKey ) {
+			this.__delegate.index(Method('primaryKeyValue'));
+		}
 		this.__delegate.delegateFor(this);
 		this.__delegate.sorted = false;
 		
