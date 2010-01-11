@@ -195,8 +195,10 @@ function OPAL () {
 	var add = function _add () {
 		var predicate   = arguments[0] || AllPredicate,
 			mapping		= arguments[1] || Identity;
+			mapfirst	= arguments[2] || false;
 		return extend({unit:set()}, function __add (a,b) {
-			return predicate(b) ? a.add(mapping(b)) : a;
+			var mapped = mapping(b);
+			return predicate(mapfirst ? mapped : b) ? a.add(mapped) : a;
 		});
 	};
 	
@@ -397,7 +399,7 @@ function OPAL () {
 				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
 				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
 						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
-			return this.reduce(add(function (obj) { return obj != null; },mapping),mapped);
+			return this.reduce(add(function (obj) {return obj != null;},mapping,true),mapped);
 		},
 		
 		reduce: function _reduce (fn,acc) {
