@@ -293,6 +293,10 @@ function OPAL () {
 			}
 			return partition.remove; 
 		};
+		
+		this.count = function _count (predicate) {
+			return arguments.length == 0 ? members.length : this.reduce(count(predicate));
+		},
 
 		this.sort = function _sort () {
 			members.sort(this.ordering.apply(null,arguments));
@@ -317,10 +321,6 @@ function OPAL () {
 		
 		member: function _member (object) {
 			return this.reduce(contains(ObjectIdentityPredicate(object)));
-		},
-		
-		count: function _count (predicate) {
-			return this.reduce(count(predicate));
 		},
 		
 		concat : function _concat (second) {
@@ -397,7 +397,7 @@ function OPAL () {
 				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
 				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
 						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
-			return this.reduce(add(null,mapping),mapped);
+			return this.reduce(add(function (obj) { return obj != null; },mapping),mapped);
 		},
 		
 		reduce: function _reduce (fn,acc) {
