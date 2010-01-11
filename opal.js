@@ -26,7 +26,7 @@ function OPAL () {
 
 	function compose () {
 		var fns = arguments;
-		return function (x) {
+		return function _compose (x) {
 			for (var i=fns.length-1;i>=0;i--) {
 				x = fns[i](x);
 			}
@@ -40,7 +40,7 @@ function OPAL () {
 	
 	function parallel () {
 		var fns = arguments;
-		return function () {
+		return function _parallel () {
 			var args0 = arguments[0],
 				result = {};
 			for (var i=0; i<fns.length;i++) {
@@ -60,14 +60,14 @@ function OPAL () {
 
 	function ApplyTo () {
 		var args = arrayFromArguments(arguments);
-		return args.length == 1 ? function (fn) {
+		return args.length == 1 ? function _applyto (fn) {
 			return fn.apply(null,args);
 		} : args[args.length-1].apply(null,args.slice(0,args.length-1));
 	}
 	
 	function curry (fn) {
 		var args1 = arrayFromArguments(arguments).slice(1);
-		return function () {
+		return function _curry () {
 			return fn.apply(null,args1.concat(arrayFromArguments(arguments)));
 		};
 	}
@@ -81,7 +81,7 @@ function OPAL () {
 	}
 
 	function Property (property,value) {
-		return arguments.length == 1 ? function (object,value) {
+		return arguments.length == 1 ? function _property (object,value) {
 			if ( arguments.length == 1 ) {
 				return object[property];
 			}
@@ -90,7 +90,7 @@ function OPAL () {
 				return object;
 			}
 		}
-		: function (object) {
+		: function _property (object) {
 			object[property] = value;
 			return object;
 		};
@@ -99,7 +99,7 @@ function OPAL () {
 	function Method () {
 		var name = arguments[0],
 			args1 = arrayFromArguments(arguments).slice(1);
-		return function (object) {
+		return function _method (object) {
 				if ( ! ( object[name] && typeof object[name] == 'function' ) ) {
 					return false;
 				}
@@ -111,7 +111,7 @@ function OPAL () {
 	function Resolve (name) {
 		var method = Method.apply(null,arguments),
 			property = Property.apply(null,arguments);
-		return function (object) {
+		return function _resolve (object) {
 			return object[name] && typeof object[name] == 'function' ? method.apply(null,arguments)
 						: property.apply(null,arguments);
 		};
@@ -119,7 +119,7 @@ function OPAL () {
 
 	function PropertyPath (path,separator) {
 		var resolvers = set( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
-		return function (object) {
+		return function _propertypath (object) {
 			try {
 				return resolvers.reduce(ApplyTo,object);
 			}
@@ -131,8 +131,8 @@ function OPAL () {
 
 	function PropertySet (paths,separator) {
 		paths = ( paths instanceof Set ) ? paths : new Set(paths);
-		paths = paths.map(function (path) { return PropertyPath(path,separator); });
-		return function (object) {
+		paths = paths.map(function _propertyset (path) { return PropertyPath(path,separator); });
+		return function __propertyset (object) {
 			return paths.map(ApplyTo(object));
 		};
 	}
@@ -140,7 +140,7 @@ function OPAL () {
 	function transform (name,transformer,extractor) {
 		var resolve = Resolve(name);
 		extractor = extractor || resolve;
-		return function (object) {
+		return function _transform (object) {
 			return resolve(object,transformer(extractor(object)));
 		};
 	}
@@ -168,46 +168,46 @@ function OPAL () {
 	// Reduction functions
 	//
 
-	var plus = extend({unit:0,label:'sum'},function (a,b) {
+	var plus = extend({unit:0,label:'sum'},function _plus (a,b) {
 		return a+b;
 	});
 
-	var times = extend({unit:1,label:'product'},function (a,b) {
+	var times = extend({unit:1,label:'product'},function _times (a,b) {
 		return a*b;
 	});
 	
-	var count = function (predicate) {
+	var count = function _count (predicate) {
 		var predicate = predicate || AllPredicate;
-		return extend({unit:0,label:'count'}, function (a,b) {
+		return extend({unit:0,label:'count'}, function __count (a,b) {
 			return a += (predicate(b) ? 1 : 0);
 		});
 	};
 	
-	var withmethod = function(name) {
+	var withmethod = function _withmethod (name) {
 		var method = Method(name);
-		return function (a,b) {
+		return function __withmethod (a,b) {
 			return method(a,b);
 		};
 	};
 	
 	var push = withmethod('push');
 	
-	var add = function () {
+	var add = function _add () {
 		var predicate   = arguments[0] || AllPredicate,
 			mapping		= arguments[1] || Identity;
-		return extend({unit:set()}, function (a,b) {
+		return extend({unit:set()}, function __add (a,b) {
 			return predicate(b) ? a.add(mapping(b)) : a;
 		});
 	};
 	
-	var contains = function (predicate) {
-		return extend({unit:false}, function (a,b) {
+	var contains = function _contains (predicate) {
+		return extend({unit:false}, function __contains (a,b) {
 			return a || predicate(b);
 		});
 	};
 	
-	var max = extend({label:'max'}, function (a,b) { return a > b ? a : b; } );
-	var min = extend({label:'min'}, function (a,b) { return ( a < b && a != null ) ? a : b; });
+	var max = extend({label:'max'}, function _max (a,b) { return a > b ? a : b; } );
+	var min = extend({label:'min'}, function _min (a,b) { return ( a < b && a != null ) ? a : b; });
 
 	opal.extend({
 		plus: plus,
@@ -355,7 +355,7 @@ function OPAL () {
 			var pass		= [],
 				fail		= [];
 
-			this.each(function (object) {
+			this.each(function __partition (object) {
 				(predicate(object) ? pass : fail).push(object);
 			});
 			
@@ -402,7 +402,7 @@ function OPAL () {
 		
 		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-			this.each(function (object) {
+			this.each(function __reduce (object) {
 				acc = fn(acc,object);
 			});
 			return acc;
@@ -458,7 +458,7 @@ function OPAL () {
 		
 		aggregate: function _aggregate (combiner,acc) {
 			acc = acc || null;
-			return function () {
+			return function __aggregate () {
 				var extractor = ( arguments.length > 1 ) ? pipe.apply(null,arguments) : arguments[0];
 				return this.map(extractor || Identity).reduce(combiner,acc);
 			};
@@ -474,14 +474,14 @@ function OPAL () {
 		},
 		
 		join: function _join (separator) {
-			return this.reduce(function (a,b) {
+			return this.reduce(function __join (a,b) {
 				return a+(a ? (separator||',') : '')+b;
 			},'');
 		},
 		
 		jQuery: function _jQuery () {
 			return jQuery( this
-							.map(function (obj) { return obj.jquery ? obj.get() : obj; })
+							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
 								.reduce(Method('concat'),set())
 									.get() );
 		},
@@ -523,7 +523,7 @@ function OPAL () {
 	function zip (first,second,zipper) {
 		first = ! (first instanceof Set || first instanceof List) ? list(first) : first;
 		second = second.get();
-		return first.map(function (obj) {
+		return first.map(function _zip (obj) {
 			return zipper(obj,second.shift());
 		});
 	}
@@ -554,7 +554,7 @@ function OPAL () {
 
 	function List () {
 		var elements = set.apply(null,arguments);
-		elements.constraint = function (obj) { return true; };
+		elements.constraint = function _list (obj) { return true; };
 		elements.delegateFor(this);
 	}
 	
@@ -592,21 +592,21 @@ function OPAL () {
 	
 	UniqueIndex.prototype = {
 	
-		build: function () {
+		build: function _build () {
 			this.set.reduce(Method('add'),this);
 		},
 
-		add: function (object) {
+		add: function _add (object) {
 			this.index[this.key(object)] = object;
 			return this;
 		},
 
-		remove: function (object) {
+		remove: function _remove (object) {
 			delete this.index[this.key(object)];
 			return this; 
 		},
 
-		get: function (keyval) {
+		get: function _get (keyval) {
 			return this.index[keyval];
 		}
 		
@@ -639,7 +639,7 @@ function OPAL () {
 	}
 
 	function FunctionPredicate (fn) {
-		return function (candidate) {
+		return function _functionpredicate (candidate) {
 			return fn(candidate);
 		};
 	}
@@ -670,7 +670,7 @@ function OPAL () {
 	function InstancePredicate (constructor) {
 		// NOTE: Put this next line into jModel
 		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
-		return function (candidate) {
+		return function _instancepredicate (candidate) {
 			return candidate instanceof constructor;
 		};
 	}
@@ -682,7 +682,7 @@ function OPAL () {
 
 	function PropertySetPredicate (paths,predicate) {
 		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return function (candidate) {
+		return function _propertysetpredicate (candidate) {
 			return predicate(PropertySet(paths)(candidate));
 		};
 	}
@@ -704,8 +704,8 @@ function OPAL () {
 	// Value comparisons
 
 	function ComparisonPredicate (operator) {
-		return function (value) {
-			return function (candidate) {
+		return function _comparisonpredicate (value) {
+			return function __comparisonpredicate (candidate) {
 				return operator(candidate,value);
 			};
 		};
@@ -718,13 +718,13 @@ function OPAL () {
 		GreaterThanEqualPredicate = ComparisonPredicate(gte);
 
 	function BetweenPredicate (lower,higher) {
-		return function (candidate) {
+		return function _betweenpredicate (candidate) {
 			return lower <= candidate && candidate <= higher;
 		};
 	}
 
 	function RegularExpressionPredicate (regex) {
-		return function (candidate) {
+		return function _regularexpressionpredicate (candidate) {
 			return regex.test(candidate);
 		};
 	}
@@ -752,7 +752,7 @@ function OPAL () {
 	// Membership
 
 	function MembershipPredicate (set) {
-		return function (candidate) {
+		return function _membershippredicate (candidate) {
 			return set.member(candidate);
 		};
 	}
@@ -765,14 +765,14 @@ function OPAL () {
 	// Logical connectives
 	//
 	
-	var or  = extend({unit:false}, function (a,b) { return a || b; } ),
-		nor = extend({unit:false}, function (a,b) { return !( a || b ); } ),
-		and = extend({unit:true},  function (a,b) { return a && b; } ); 
+	var or  = extend({unit:false}, function _or  (a,b) { return a || b; } ),
+		nor = extend({unit:false}, function _nor (a,b) { return !( a || b ); } ),
+		and = extend({unit:true},  function _and (a,b) { return a && b; } ); 
 
 	function ConjunctionPredicate (conjunction) {
-		return function () {
+		return function _conjunctionpredicate () {
 			var predicates = opal.set(arrayFromArguments(arguments));
-			return function (candidate) {
+			return function __conjunctionpredicate (candidate) {
 				return predicates.map(ApplyTo(candidate)).reduce(conjunction);
 			};
 		};
@@ -801,9 +801,9 @@ function OPAL () {
 	var EmptySetPredicate = CardinalityPredicate(0);
 
 	function SetPredicate (conjunction) {
-		return function () {
+		return function _setpredicate () {
 			var predicate = And.apply(null,arguments);
-			return function (candidate) {
+			return function __setpredicate (candidate) {
 				return set(candidate).map(predicate).reduce(conjunction);
 			};
 		};
@@ -834,7 +834,7 @@ function OPAL () {
 	var makeOrdering = (new Set()).ordering;
 
 	function FunctionOrdering (fn) {
-		return function (a,b) {
+		return function _functionordering (a,b) {
 			var fna = fn(a),
 				fnb = fn(b);
 			if ( fna < fnb ) {
@@ -851,20 +851,20 @@ function OPAL () {
 
 	function PredicateOrdering () {
 		var predicates = set(arguments);
-		return FunctionOrdering( function (obj) {
+		return FunctionOrdering( function _predicateordering (obj) {
 			return -predicates.count(ApplyTo(obj));
 		});
 	}
 
 	function DescendingOrdering (ordering) {
-		return function (a,b) {
+		return function _descendingordering (a,b) {
 			return -ordering(a,b);
 		};
 	}
 
 	function CompositeOrdering () {
 		var orderings = arrayFromArguments(arguments);
-		return function (a,b) {
+		return function _compositeordering (a,b) {
 			for (var i=0; i<orderings.length; i++) {
 				var value = orderings[i](a,b);
 				if ( value !== 0 ) {
@@ -896,13 +896,13 @@ function OPAL () {
 	function NoFormat (object) { return object; }
 	
 	function Prepend (prefix) {
-		return function (string) {
+		return function _prepend (string) {
 			return prefix+string;
 		};
 	}
 	
 	function Append (suffix) {
-		return function (string) {
+		return function _append (string) {
 			return string+suffix;
 		};
 	}
@@ -917,7 +917,7 @@ function OPAL () {
 		if ( typeof formatters[formatters.length-1] == 'string' ) {
 			separator = formatters.pop();
 		}
-		return function (object) {
+		return function _concatenate (object) {
 			var mapped = [];
 			for (var i=0; i<formatters.length; i++) {
 				mapped.push(formatters[i](object));
@@ -943,7 +943,7 @@ function OPAL () {
 	}
 	
 	function Currency (symbol,decimals) {
-		return function (number) {
+		return function _currency (number) {
 			return compose(	Prepend(number < 0 ? '-' : ''),
 							Prepend(symbol),
 							Locale(),
@@ -962,11 +962,11 @@ function OPAL () {
 			terminal	= arguments[0];
 		}
 		terminal = terminal || ' and ';
-		return function (list) {
+		return function _listing (list) {
 			var length = list.count(),
 				terminalPosition = length > 1 ? length-1 : -1,
 				index=0;
-			return list.reduce(function (acc,object) {
+			return list.reduce(function __listing (acc,object) {
 				var separator = index == terminalPosition ? terminal : ', ';	
 				index++;			
 				return acc + (acc ? separator : '') + formatter(object);
@@ -1005,19 +1005,19 @@ function OPAL () {
 	
 	EnhancedObject.prototype = {
 		
-		add: function (attributes) {
+		add: function _add (attributes) {
 			return extend(attributes,this);
 		},
 		
-		remove: function () {
+		remove: function _remove () {
 			var that = this;
-			set(arguments).each(function (key) {
+			set(arguments).each(function __remove (key) {
 				delete that[key];
 			});
 			return this;
 		},
 		
-		set: function (key,value) {
+		set: function _set (key,value) {
 			this[key] = value;
 			return this;
 		}
