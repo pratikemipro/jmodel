@@ -246,11 +246,11 @@ function OPAL () {
 			
 		this.added = null;
 
-		this.constraint = function (obj) {
+		this.constraint = function constraint (obj) {
 			return !this.member(obj);
 		};
 
-		this.add = function (object,success,failure) {
+		this.add = function _add (object,success,failure) {
 			if ( this.constraint(object) ) {	
 				members.push(object);
 				if ( index ) {
@@ -269,7 +269,7 @@ function OPAL () {
 			return this;
 		}; 
 
-		this.get = function (key) {
+		this.get = function _get (key) {
 			if ( arguments.length == 0 ) {
 				return members;
 			}
@@ -285,7 +285,7 @@ function OPAL () {
 			}
 		};
 
-		this.remove = function (predicate) {
+		this.remove = function _remove (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			members = partition.keep.get();
 			if ( index ) {
@@ -294,12 +294,12 @@ function OPAL () {
 			return partition.remove; 
 		};
 
-		this.sort = function () {
+		this.sort = function _sort () {
 			members.sort(this.ordering.apply(null,arguments));
 			return this;
 		};
 
-		this.index = function (key) {
+		this.index = function _index (key) {
 			index = new UniqueIndex(this,key);
 			return this;
 		};
@@ -310,34 +310,34 @@ function OPAL () {
 		
 		constraint: AllPredicate,
 		
-		first: function () {
+		first: function _first () {
 			var members = this.get();
 			return members.length > 0 ? members[0] : false;
 		},
 		
-		member: function (object) {
+		member: function _member (object) {
 			return this.reduce(contains(ObjectIdentityPredicate(object)));
 		},
 		
-		count: function (predicate) {
+		count: function _count (predicate) {
 			return this.reduce(count(predicate));
 		},
 		
-		concat : function (second) {
+		concat : function _concat (second) {
 			return second && second.reduce ? second.reduce(Method('add'),this) : this;
 		},
 		
-		select : function (selector) {
+		select : function _select (selector) {
 			return selector == ':first' ? this.first() : this;
 		},
 		
-		when : function (predicate,callback) {
+		when : function _when (predicate,callback) {
 			if ( this.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
 		},
 		
-		each: function () {
+		each: function _each () {
 			function makeCallback (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
 							: pipe.apply(null,set(arguments).map(makeCallback).get()),
@@ -348,7 +348,7 @@ function OPAL () {
 			return this;
 		},
 		
-		partition: function (predicate,passName,failName) {
+		partition: function _partition (predicate,passName,failName) {
 
 			predicate = this.predicate(predicate);
 
@@ -365,7 +365,7 @@ function OPAL () {
 
 		},
 		
-		filter: function () {
+		filter: function _filter () {
 
 			var predicate, selector;
 
@@ -389,7 +389,7 @@ function OPAL () {
 
 		},
 		
-		map: function () {
+		map: function _map () {
 			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
 			var lastArgument 	= arguments[arguments.length-1],
 				lastIsObject	= typeof lastArgument == 'object',
@@ -400,7 +400,7 @@ function OPAL () {
 			return this.reduce(add(null,mapping),mapped);
 		},
 		
-		reduce: function (fn,acc) {
+		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			this.each(function (object) {
 				acc = fn(acc,object);
@@ -408,23 +408,23 @@ function OPAL () {
 			return acc;
 		},
 		
-		copy: function () {
+		copy: function _copy () {
 			return this.reduce(Method('add'),set());
 		},
 		
-		union: function () {
+		union: function _union () {
 			return union.apply(null,[this].concat(arrayFromArguments(arguments)));
 		},
 		
-		intersection: function () {
+		intersection: function _intersection () {
 			return intersection.apply(null,[this].concat(arrayFromArguments(arguments)));
 		},
 		
-		difference: function (set) {
+		difference: function _difference (set) {
 			return difference(this,set);
 		},
 		
-		predicate: function (parameter) {
+		predicate: function _predicate (parameter) {
 			if ( parameter === null || parameter === undefined ) {
 				return AllPredicate;
 			}
@@ -443,7 +443,7 @@ function OPAL () {
 			return AllPredicate;
 		},
 		
-		ordering: function () {
+		ordering: function _ordering () {
 			if ( arguments.length > 1 ) {
 				return CompositeOrdering.apply(null,arguments);
 			}
@@ -456,7 +456,7 @@ function OPAL () {
 			return arguments[0];
 		},
 		
-		aggregate: function (combiner,acc) {
+		aggregate: function _aggregate (combiner,acc) {
 			acc = acc || null;
 			return function () {
 				var extractor = ( arguments.length > 1 ) ? pipe.apply(null,arguments) : arguments[0];
@@ -464,29 +464,29 @@ function OPAL () {
 			};
 		},
 		
-		mean: function () {
+		mean: function _mean () {
 			var stat = this.aggregate(parallel(plus,count()),{sum:0,count:0}).apply(this,arguments);
 			return stat.sum/stat.count;
 		},
 		
-		format: function (formatter) {
+		format: function _format (formatter) {
 			return formatter(this);
 		},
 		
-		join: function (separator) {
+		join: function _join (separator) {
 			return this.reduce(function (a,b) {
 				return a+(a ? (separator||',') : '')+b;
 			},'');
 		},
 		
-		jQuery: function () {
+		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function (obj) { return obj.jquery ? obj.get() : obj; })
 								.reduce(Method('concat'),set())
 									.get() );
 		},
 		
-		delegateFor: function (host) {
+		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
 					host[i] = this[i];
