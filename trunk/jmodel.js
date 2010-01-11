@@ -110,24 +110,24 @@ var jModel = function () {
 		}		
 		
 		var externalActive = {
-			startGroup: function (title) { log('startgroup',title); 	return externalActive; },
-			endGroup: 	function () { log('endgroup'); 					return externalActive; },
-			error: 		function (message) { log('error',message); 		return externalActive; },
-			warning: 	function (message) { log('warning',message);	return externalActive; },
-			debug: 		function (message) { log('debug',message); 		return externalActive; },
-			info: 		function (message) { log('info',message); 		return externalActive; }
+			startGroup: function _startGroup (title) { log('startgroup',title); 	return externalActive; },
+			endGroup: 	function _endGroup () { log('endgroup'); 					return externalActive; },
+			error: 		function _error (message) { log('error',message); 		return externalActive; },
+			warning: 	function _warning (message) { log('warning',message);	return externalActive; },
+			debug: 		function _debug (message) { log('debug',message); 		return externalActive; },
+			info: 		function _info (message) { log('info',message); 		return externalActive; }
 		};
 		
 		var externalInactive = {
-			startGroup: function () { return externalInactive; },
-			endGroup: 	function () { return externalInactive; },
-			error: 		function () { return externalInactive; },
-			warning: 	function () { return externalInactive; },
-			debug: 		function () { return externalInactive; },
-			info: 		function () { return externalInactive; }
+			startGroup: function _startGroup () { return externalInactive; },
+			endGroup: 	function _endGroup () { return externalInactive; },
+			error: 		function _error () { return externalInactive; },
+			warning: 	function _warning () { return externalInactive; },
+			debug: 		function _debug () { return externalInactive; },
+			info: 		function _info () { return externalInactive; }
 		};
 		
-		var external = function (condition) {	
+		var external = function _external (condition) {	
 			if ( arguments.length === 0 || ( active && enabled(condition) ) ) {
 				return externalActive;
 			}
@@ -136,18 +136,18 @@ var jModel = function () {
 			}
 		};
 		
-		external.enable = function (flag) {
+		external.enable = function _enable (flag) {
 			setFlag(flag,true);
 			active = true;
 			return this;
 		};
 
-		external.disable = function (flag) {
+		external.disable = function _disable (flag) {
 			setFlag(flag,false);
 			return this;
 		};
 		
-		external.element = function (element) {
+		external.element = function _element (element) {
 			logElement = element;
 			return this;
 		};
@@ -198,7 +198,7 @@ var jModel = function () {
 	// Define local variables
 	//
 
-	var	contexts		= function (predicate) { return contexts.get(predicate); };
+	var	contexts		= function _contexts (predicate) { return contexts.get(predicate); };
 	ContextSet.apply(contexts);
 	
 	external.extend = opal.extend;
@@ -246,7 +246,7 @@ var jModel = function () {
 		empty: 		EmptySetPredicate,
 		nonempty: 	Not(EmptySetPredicate),
 		
-		all: 		function () {
+		all: 		function _all () {
 						return arguments.length === 0 ? AllPredicate : AllSetPredicate.apply(null,arguments);
 					},
 		
@@ -280,11 +280,11 @@ var jModel = function () {
 		}
 	};
 	
-	external.union = function() {
+	external.union = function _union () {
 		var union = new Set();
 		for (var i=0; i<arguments.length; i++ ) {
 			var collection = makeCollection(arguments[i]);
-			collection.each(function (object) {
+			collection.each(function __union (object) {
 				union.add(object);
 			});
 		}
@@ -300,9 +300,9 @@ var jModel = function () {
 	};
 	external.union.unit = set();
 	
-	external.intersection = function() {
+	external.intersection = function _intersection () {
 		var intersection = new Set();
-		makeCollection(arguments[0]).each(function (object) {
+		makeCollection(arguments[0]).each(function __intersection (object) {
 			intersection.add(object);
 		});
 		for (var i=1; i<arguments.length; i++ ) {
@@ -319,7 +319,7 @@ var jModel = function () {
 		}
 	};
 	
-	external.difference = function(first,second) {
+	external.difference = function difference (first,second) {
 		return makeCollection(first).filter( Not(MembershipPredicate(second)) );
 	};
 
@@ -332,7 +332,7 @@ var jModel = function () {
 		
 		var contexts = set().index(Property('name')).delegateFor(this);
 	
-		this.create = function (name) {
+		this.create = function _create (name) {
 			return this.add(new Context(name)).added;
 		};
 	
@@ -353,47 +353,47 @@ var jModel = function () {
 	
 	Context.prototype = {
 		
-		register: function (name,constructor,options) {
+		register: function _register (name,constructor,options) {
 			return this.entities
 						.create(name,constructor,options)
 							.exposeAt( this.isDefault ? [this,external] : [this] )
 							.context;
 		},
 		
-		collection: function (specification) {
+		collection: function _collection (specification) {
 			return new DomainObjectCollection( extend({context:this},specification) );
 		},
 		
-		reset: function () {
+		reset: function _reset () {
 			this.all.remove(AllPredicate,true);
 			return this;
 		},
 		
-		checkpoint: function () {
-			this.entities.each(function (entity) {
+		checkpoint: function _checkpoint () {
+			this.entities.each(function __checkpoint (entity) {
 				entity.objects.each('clean');
 				entity.deleted.remove(AllPredicate,true);
 			});
 			return this;
 		},
 		
-		validate: function () {
+		validate: function _validate () {
 			return this.all
-					.map(function (object) {return {object:object, messages:object.validate()};})
-						.filter(function (result) { return result.messages !== ''; });
+					.map(function __validate (object) {return {object:object, messages:object.validate()};})
+						.filter(function ___validate (result) { return result.messages !== ''; });
 		},
 		
-		setDefault: function () {
+		setDefault: function _setDefault () {
 			this.isDefault			= true;
 			defaultContext			= this;
 			external.context		= this;
 			external.notifications	= this.notifications;
 		},
 		
-		debug: function (showSubscribers) {
+		debug: function _debug (showSubscribers) {
 			log().startGroup('Context: '+name);
 			this.notifications.debug();
-			this.entities.each(function (entity) {
+			this.entities.each(function __debug (entity) {
 				log().startGroup(entity.name);
 				entity.objects.debug(showSubscribers);
 				entity.deleted.debug(false);
@@ -418,11 +418,11 @@ var jModel = function () {
 	
 	EntityTypeSet.prototype = {
 		
-		create: function (name,constructor,options) {
+		create: function _create (name,constructor,options) {
 			return this.add(new EntityType(this.context,name,constructor,options)).added;
 		},
 		
-		predicate: function (parameter) {
+		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
@@ -465,7 +465,7 @@ var jModel = function () {
 	
 	EntityType.prototype = {
 		
-		object: function (criterion) {
+		object: function _object (criterion) {
 			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion,10) ) ? parseInt(criterion,10) : criterion;
 			if ( typeof criterion == 'number' && this.options.primaryKey ) {
 				return this.objects.get(criterion);
@@ -476,7 +476,7 @@ var jModel = function () {
 			}
 		},
 		
-		create: function (data) {
+		create: function _create (data) {
 
 			log('domainobject/create').startGroup('Creating a new '+this.name);
 
@@ -502,13 +502,13 @@ var jModel = function () {
 
 		},
 		
-		exposeAt: function (targets) {
+		exposeAt: function _exposeAt (targets) {
 			
 			var name	= this.name,
 				plural	= this.options.plural || this.name+'s',
 				entity	= this;
 			
-			set(targets).each(function (target) {
+			set(targets).each(function __exposeAt (target) {
 			
 				target[name] 				= delegateTo(entity,'object');
 				target[plural]				= delegateTo(entity.objects,'filter');
@@ -525,7 +525,7 @@ var jModel = function () {
 			
 		},
 		
-		generateID: function () {	
+		generateID: function __generateID () {	
 			return -(this.context.all.count()+1);
 		}
 		
@@ -544,11 +544,11 @@ var jModel = function () {
 			active			= true,
 			filter			= AllPredicate;
 		
-		this.send = function (messages) {
+		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			messages
 				.filter(TypePredicate('function'))
-					.each(function (message) {
+					.each(function __send (message) {
 						if ( !filter(message) ) {
 						}
 						else if ( active || !message.subscription.application ) {
@@ -562,31 +562,31 @@ var jModel = function () {
 			return this;
 		};
 		
-		this.suspend = function () {
+		this.suspend = function _suspend () {
 			log('notifications/control').debug('Suspending notifications for '+this.context.name);
 			active = false;
 			return this;
 		};
 		
-		this.resume = function () {
+		this.resume = function _resume () {
 			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			active = true;
 			notifications.map(apply);
 			return this.flush();
 		};
 		
-		this.flush = function (predicate) {
+		this.flush = function _flush (predicate) {
 			log('notifications/control').debug('Flushing notifications for '+this.context.name);
 			notifications.remove(predicate);
 			return this;
 		};
 		
-		this.setFilter = function (predicate) {
+		this.setFilter = function _setFilter (predicate) {
 			filter = predicate;
 			return this;
 		};
 		
-		this.debug = function () {
+		this.debug = function _debug () {
 			log().debug('Pending notifications: '+this.count());
 		};
 		
@@ -598,7 +598,7 @@ var jModel = function () {
 	//
 	
 	function ContentNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _contentnotification () {
 			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
 			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
 			subscription.target.html(subscription.format(value));
@@ -606,21 +606,21 @@ var jModel = function () {
 	};
 	
 	function ValueNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _valuenotification () {
 			log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		});
 	};
 	
 	function MethodNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _methodnotification () {
 			log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		});	
 	};
 	
 	function EventNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _eventnotification () {
 			log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		});
@@ -628,14 +628,14 @@ var jModel = function () {
 	
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	function RemovalNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _removalnotification () {
 			log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		});
 	};
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _collectionmethodnotification () {
 			if (subscription[event.method] && event.permutation) {
 				log('notifications/send').debug('Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
@@ -648,14 +648,14 @@ var jModel = function () {
 	};
 	
 	function CollectionEventNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _collectioneventnotification () {
 			// NOTE: Implement this
 		});
 	};
 	
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function () {
+		return extend({subscription:subscription}, function _collectionmembernotification () {
 			log('notifications/send').debug('Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
 												subscription.member.key
@@ -692,17 +692,17 @@ var jModel = function () {
 	
 	SubscriberSet.prototype = {
 		
-		add: function (subscriber) {
+		add: function _add (subscriber) {
 			var that = this;
-			this.__delegate.add(subscriber, function () {
+			this.__delegate.add(subscriber, function __add () {
 				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
 				that.added = subscriber;
 			});
 			return this;
 		},
 		
-		notify: function (event) {
-			var messages = this.__delegate.map(ApplyTo(event)).filter(function (notification) {return notification != false;});
+		notify: function _notify (event) {
+			var messages = this.__delegate.map(ApplyTo(event)).filter(function __notify (notification) {return notification != false;});
 			if ( _.nonempty(messages) ) {
 				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				this.notifications.send(messages);
@@ -710,7 +710,7 @@ var jModel = function () {
 			}
 		},
 		
-		debug: function () {
+		debug: function _debug () {
 			if ( _.nonempty(this.__delegate) ) {
 				log().debug('Subscribers:  '+this.__delegate.count());
 			}
@@ -720,14 +720,14 @@ var jModel = function () {
 	
 		
 	function CollectionSubscriber (subscription) {
-		return function (event) {
+		return function _collectionsubscriber (event) {
 			return ( subscription.filter && !subscription.filter(event) ) ? false
 				:  subscription.type(subscription,event);
 		};
 	}
 	
 	function ObjectSubscriber (subscription) {
-		return function (event) {
+		return function _objectsubscriber (event) {
 			return ( event.removed && subscription.removed ) || ( event.key == subscription.key ) ?
 				subscription.type(subscription,event)
 				: false;
@@ -778,14 +778,14 @@ var jModel = function () {
 	
 	DomainObjectCollection.prototype = {
 		
-		add: function (object) {
+		add: function _add (object) {
 			var that = this;
-			this.__delegate.add(object, function () {
+			this.__delegate.add(object, function __add () {
 				that.subscribers().notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: that,
 					key: ':any',
-					change: function (object) {
+					change: function _change (object) {
 						that.__delegate.sorted = false;
 						that.subscribers().notify({
 							method:'change',
@@ -800,11 +800,11 @@ var jModel = function () {
 			return this;
 		},
 		
-		remove: function (predicate,fromHere,removeSubscribers) {
+		remove: function _remove (predicate,fromHere,removeSubscribers) {
 			predicate = And(this.__predicate,this.predicate(predicate));
 			var that = this;
 			if ( fromHere ) {
-				this.__delegate.remove(predicate).each(function (object) {
+				this.__delegate.remove(predicate).each(function __remove (object) {
 					object.removed();
 					that.subscribers().notify({method:'remove',object:object,description:'object removal'});
 					if (removeSubscribers) {
@@ -818,16 +818,16 @@ var jModel = function () {
 
 		},
 		
-		first: function () {
+		first: function _first () {
 			if ( !this.__delegate.sorted ) { this.sort(); }
 			return this.__delegate.first();
 		},
 		
-		select: function (selector) {
+		select: function _select (selector) {
 			return selector == ':first' ? this.first() : this;
 		},
 		
-		filter: function () {
+		filter: function _filter () {
 
 			if ( arguments.length === 0 ) {
 				return this;
@@ -847,20 +847,20 @@ var jModel = function () {
 
 		},
 		
-		each: function (callback) {
+		each: function _each (callback) {
 			if ( !this.__delegate.sorted ) { this.sort(); }
 			this.__delegate.each(callback);
 			return this;
 		},
 		
-		sort: function () {
+		sort: function _sort () {
 
 			if (arguments.length > 0) {
 				this.__ordering = this.ordering.apply(null,arguments);
 			}
 
 			// Remember old order
-			this.__delegate.each(function (object,index) {
+			this.__delegate.each(function __sort (object,index) {
 				object.domain.tags.position = index;
 			});
 
@@ -869,7 +869,7 @@ var jModel = function () {
 
 			// Find permutation
 			var permutation = [];
-			this.__delegate.each(function (object,index) {
+			this.__delegate.each(function ___sort (object,index) {
 				permutation[index] = object.domain.tags.position;
 				delete object.domain.tags.position;
 			});
@@ -894,7 +894,7 @@ var jModel = function () {
 
 		},
 		
-		by : function () {			
+		by : function _by () {			
 			return this.context.collection({
 				objects: this.copy(),
 				ordering: this.ordering.apply(null,arguments),
@@ -902,19 +902,19 @@ var jModel = function () {
 			});
 		},
 		
-		group: function (extractor) {
+		group: function _group (extractor) {
 			return new Grouping(this,extractor);
 		},
 		
-		subscribe: function (subscription) {
+		subscribe: function _subscribe (subscription) {
 			
 			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
 
 			if ( subscription.predicate || subscription.selector ) {
 				log('subscriptions/subscribe').debug('Creating a collection member subscription: '+subscription.description);
 				subscription.type	= 	CollectionMemberNotification;
-				subscription.filter = 	function (collection) {
-											return function (event) {
+				subscription.filter = 	function __subscribe (collection) {
+											return function ___subscribe (event) {
 												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
 														&& ( event.method == 'add' || event.method == 'initialise' ); // NOTE: Fix this
 											};
@@ -933,7 +933,7 @@ var jModel = function () {
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
-				this.each(function (object) {
+				this.each(function __subcribe (object) {
 					this.context.notifications.send(subscriber({
 						method: 'initialise',
 						object: object,
@@ -949,7 +949,7 @@ var jModel = function () {
 			
 		},
 		
-		predicate: function (parameter) {
+		predicate: function _predicate (parameter) {
 			if ( parameter == ':empty' ) {
 				return EmptySetPredicate;
 			}
@@ -968,7 +968,7 @@ var jModel = function () {
 			return AllPredicate;
 		},
 		
-		ordering: function () {
+		ordering: function _ordering () {
 			if ( arguments.length > 1 ) {
 				for ( var i=0; i<arguments.length; i++ ) {
 					arguments[i] = ordering(arguments[i]);
@@ -998,7 +998,7 @@ var jModel = function () {
 			}
 		},
 		
-		debug: function (showSubscribers) {
+		debug: function _debug (showSubscribers) {
 			if ( Not(EmptySetPredicate)(this) ) {
 				log().debug('Objects:  '+this.format(listing(Method('primaryKeyValue'))));
 			}
@@ -1010,7 +1010,7 @@ var jModel = function () {
 	};
 	
 	// NOTE: Make this a method of Context
-	external.collection = function() {
+	external.collection = function _collection () {
 			return new DomainObjectCollection({
 				context: contexts('default'),
 				objects: set(arguments).reduce(push,[]),
@@ -1021,7 +1021,7 @@ var jModel = function () {
 		
 		var deleted = collection.context.collection({description:'deleted'});
 		
-		deleted.debug = function () {
+		deleted.debug = function _debug () {
 			if ( Not(EmptySetPredicate)(deleted) ) {
 				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
 			}
@@ -1034,7 +1034,7 @@ var jModel = function () {
 			description: 	'deleted object collection'
 		});
 		
-		function collectionRemove(collection,object) {
+		function collectionRemove (collection,object) {
 			deleted.add(object);
 		}
 		
@@ -1057,15 +1057,15 @@ var jModel = function () {
 		// NOTE: this is ugly, and really should be done by subscription initialisation
 		parent.reduce(add(predicate),child);
 		
-		function parentAdd(collection,object) {
+		function parentAdd (collection,object) {
 			add(predicate)(child,object);
 		};
 		
-		function parentRemove(collection,object) {
+		function parentRemove (collection,object) {
 			child.remove(object,true);
 		};
 		
-		function parentChange(collection,object) {
+		function parentChange (collection,object) {
 			// Object sometimes null here
 			if ( predicate(object) ) {
 				child.add(object);
@@ -1087,11 +1087,11 @@ var jModel = function () {
 	
 	Grouping.prototype = {
 		
-		build: function () {
+		build: function _build () {
 			return this.parent.reduce(Method('add'),this);
 		},
 		
-		add: function (object) {
+		add: function _add (object) {
 			var value = this.extractor(object);
 			( this.__delegate.get(value) || this.__delegate.add(new Group(this.parent,this.extractor,value)).added ).add(object);
 			return this;
@@ -1114,12 +1114,12 @@ var jModel = function () {
 	
 
 	function FieldOrdering (fieldName) {
-		return FunctionOrdering( function (obj) {return obj.get(fieldName);} );
+		return FunctionOrdering( function _fieldordering (obj) {return obj.get(fieldName);} );
 	};
 	
 	
 	function FieldPathOrdering (fieldpath) {	
-		return FunctionOrdering( function (obj) {
+		return FunctionOrdering( function _fieldpathordering (obj) {
 			var property, value;
 			for (var i=0; i<path.length; i++) {
 				value = obj.get(path[i]);
@@ -1153,14 +1153,14 @@ var jModel = function () {
 	//
 	
 	function FieldPredicate (field,predicate) {
-		return function (candidate) {
+		return function _fieldpredicate (candidate) {
 			return candidate && candidate.get ? predicate(candidate.get(field)) : false;
 		};
 	}
 	
 	function FieldOrValuePredicate (ValuePredicate,numberValueArguments) {
 		numberValueArguments = numberValueArguments || 1;
-		return function () {
+		return function _fieldorvaluepredicate () {
 			var field = arguments[arguments.length-1],
 				value = arrayFromArguments(arguments).slice(0,numberValueArguments);
 			return arguments.length > numberValueArguments ?
@@ -1191,13 +1191,13 @@ var jModel = function () {
 
 	// Primary Key Identity
 	
-	var IdentityPredicate = external.id = function (id) {
+	var IdentityPredicate = external.id = function _id (id) {
 		return FunctionValuePredicate(Method('primaryKeyValue'),id);
 	};
 
 	// Example
 	
-	var ExamplePredicate = external.example = function (example) {
+	var ExamplePredicate = external.example = function _example (example) {
 
 		var predicates = [];
 		
@@ -1222,7 +1222,7 @@ var jModel = function () {
 	
 	// Relationship
 	
-	var RelationshipPredicate = external.related = function (parent,field) {
+	var RelationshipPredicate = external.related = function _related (parent,field) {
 		return FieldPredicate(field,Eq(parent.primaryKeyValue()));
 	};
 	
@@ -1230,7 +1230,7 @@ var jModel = function () {
 	
 	function MembershipPredicate (collection) {		
 		collection = makeCollection(collection);
-		return function (candidate) {
+		return function _member (candidate) {
 			return collection.member(candidate);
 		};
 	};
@@ -1239,8 +1239,8 @@ var jModel = function () {
 	
 	// Modification state
 	
-	var ModifiedPredicate = function () {
-		return function (candidate) {
+	var ModifiedPredicate = function _dirty () {
+		return function __dirty (candidate) {
 			return candidate.domain.dirty;
 		};
 	};	
@@ -1262,13 +1262,13 @@ var jModel = function () {
 			
 			tags: {},
 			
-			clean: function () {
+			clean: function _clean () {
 				that.domain.dirty = false;
 				return that;
 			},
 					
-			push: function () {
-				fields.each(function (field) {
+			push: function _push () {
+				fields.each(function __push (field) {
 					subscribers.notify({
 						key: field.name,
 						description: 'field value'
@@ -1276,7 +1276,7 @@ var jModel = function () {
 				});
 			},
 					
-			debug: function (showSubscribers) {
+			debug: function _debug (showSubscribers) {
 				log().startGroup('Domain Object');
 				fields.debug();
 				if ( showSubscribers ) {
@@ -1312,7 +1312,7 @@ var jModel = function () {
 	
 	DomainObject.prototype = {
 		
-		get: function () {
+		get: function _get () {
 		
 			if ( arguments.length == 0 || typeof arguments[0] == 'undefined' ) {
 				return false;
@@ -1323,7 +1323,7 @@ var jModel = function () {
 			else if ( arguments[0].each ) {
 				var values	= {},
 					that	= this;
-				arguments[0].each(function (key) {
+				arguments[0].each(function __get (key) {
 					values[key] = that.fields().get(key);
 				});
 				return values;
@@ -1350,7 +1350,7 @@ var jModel = function () {
 	
 		},
 		
-		set: function () {
+		set: function _set () {
 			
 			var key;
 
@@ -1377,11 +1377,11 @@ var jModel = function () {
 	
 		},
 		
-		removed: function (collection) {
+		removed: function _removed (collection) {
 			this.subscribers().notify({removed:true,description:'object removal'});
 		},
 		
-		subscribe: function (subscription) {
+		subscribe: function _subscribe (subscription) {
 
 			if ( subscription.key instanceof Array ) {
 				for(var i=0;i<subscription.key.length;i++) {
@@ -1420,23 +1420,23 @@ var jModel = function () {
 
 		},
 		
-		primaryKeyValue: function () {
+		primaryKeyValue: function _primaryKeyValue () {
 			return this.get(this.primaryKey);
 		},
 		
-		matches: function (predicate) {
+		matches: function _matches (predicate) {
 			return predicate(this);
 		},
 		
-		validate: function () {
+		validate: function _validate () {
 			var obj = this;
 			return this.constraints()
-						.filter(function (constraint) {return Not(constraint)(obj);})
-							.map(function (constraint) {return constraint.message;})
+						.filter(function __validate (constraint) {return Not(constraint)(obj);})
+							.map(function ___validate (constraint) {return constraint.message;})
 								.join('; ');
 		},
 		
-		reifyFields: function () {
+		reifyFields: function _reifyFields () {
 			log('domainobject/create').startGroup('Reifying fields');
 			for ( var i in this.parent.has ) {
 				var descriptor  = this.parent.has[i],
@@ -1447,7 +1447,7 @@ var jModel = function () {
 			log('domainobject/create').endGroup();
 		},
 		
-		reifyRelationships: function () {
+		reifyRelationships: function _reifyRelationships () {
 
 			this.parent.hasOne	= this.parent.hasOne || [];
 			this.parent.hasMany	= this.parent.hasMany || [];
@@ -1476,7 +1476,7 @@ var jModel = function () {
 
 		},
 		
-		reifyConstraints: function () {
+		reifyConstraints: function _reifyConstraints () {
 			this.parent.must = this.parent.must || [];
 			log('domainobject/create').startGroup('Reifying constraints');
 			for (var i in this.parent.must ) {
@@ -1487,7 +1487,7 @@ var jModel = function () {
 			log('domainobject/create').endGroup();
 		},
 		
-		delegateFor: function (host) {
+		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
 				if ( !host[i] ) {
 					host[i] = this[i];
@@ -1510,7 +1510,7 @@ var jModel = function () {
 	
 	FieldSet.prototype = {
 		
-		get: function (name) {
+		get: function _get (name) {
 			try {
 				return this.__delegate.get(name).get();
 			}
@@ -1519,7 +1519,7 @@ var jModel = function () {
 			}
 		},
 		
-		set: function (name,value,publisher) {
+		set: function _set (name,value,publisher) {
 			try {
 				return this.__delegate.get(name).set(value,publisher);
 			}
@@ -1528,11 +1528,11 @@ var jModel = function () {
 			}
 		},
 		
-		keys: function () {
+		keys: function _keys () {
 			return this.__delegate.map(Property('accessor'));
 		},
 		
-		predicate: function (parameter) {
+		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('accessor',parameter));
 			}
@@ -1541,7 +1541,7 @@ var jModel = function () {
 			}
 		},
 		
-		debug: function () {
+		debug: function _debug () {
 			this.__delegate.each('debug');
 		}
 		
@@ -1558,7 +1558,7 @@ var jModel = function () {
 	
 	Field.prototype = {
 	
-		set: function (value,publisher) {
+		set: function _set (value,publisher) {
 			if ( this.predicate(value) ) {
 				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
 				this.__delegate = value;
@@ -1577,11 +1577,11 @@ var jModel = function () {
 			}
 		},
 	
-		get: function () {
+		get: function _get () {
 			return this.__delegate;
 		},
 	
-		debug: function () {
+		debug: function _debug () {
 			log().debug(this.accessor+': '+this.__delegate);
 		}
 		
@@ -1599,7 +1599,7 @@ var jModel = function () {
 	
 	RelationshipSet.prototype = {
 		
-		predicate: function (parameter) {
+		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
@@ -1620,7 +1620,7 @@ var jModel = function () {
 	
 	OneToOneRelationship.prototype = {
 		
-		get: function (create) {
+		get: function _get (create) {
 			var child = this.parent.context.entities.get(this.relationship.prototype)
 							.object(this.parent.get(this.relationship.field));
 			if ( child ) {
@@ -1631,7 +1631,7 @@ var jModel = function () {
 			}
 		},
 		
-		add: function (data) {
+		add: function _add (data) {
 			var newObject = this.parent.context.entities.get(this.relationship.prototype).create( data || {} );
 			this.parent.set(this.relationship.field, newObject.primaryKeyValue());
 			return newObject;
@@ -1690,7 +1690,7 @@ var jModel = function () {
 		this.get = delegateTo(children,'filter');
 		
 		// NOTE: Should this work with arrays of objects too?
-		this.add = function (data) {
+		this.add = function _add (data) {
 			
 			data = data || {};
 			data[relationship.field] = parent.primaryKeyValue();
@@ -1698,7 +1698,7 @@ var jModel = function () {
 			
 		};
 		
-		this.debug = function () {
+		this.debug = function _debug () {
 			log().startGroup('Relationship: '+relationship.accessor);
 			log().debug('Object: '+parent.domain.debug());
 			if ( relationship.subscription ) {
@@ -1747,7 +1747,6 @@ var jModel = function () {
 				if ( context.entities.get(key) ) {
 					log('json/thaw').debug('creating free object');
 					object = context.entities.get(key).create(partitionedData.fields);
-					log('json/thaw').debug('-----');
 				}
 				else {
 					log('json/thaw').debug('unknown entity type: '+key);
@@ -1760,7 +1759,7 @@ var jModel = function () {
 				for ( var i=0; i<childData.length; i++) {
 					makeObject(childKey,childData[i],object||parent,context);
 				}
-			}
+			} 
 			
 			log('json/thaw').endGroup();
 
@@ -1769,7 +1768,7 @@ var jModel = function () {
 		
 		return {
 			
-			thaw: 	function (context,data,options) {
+			thaw: 	function _thaw (context,data,options) {
 						log('json/thaw').startGroup('thawing JSON');
 						options = options || {};
 						data = ( data instanceof Array ) ? data : [data];
@@ -1809,7 +1808,7 @@ var jModel = function () {
 		var Base = function(){};
 
 		// Create a new Base that inherits from this class
-		Base.extend = function(prop) {
+		Base.extend = function _extend (prop) {
 
 			var _super = this.prototype;
 
@@ -1848,7 +1847,7 @@ var jModel = function () {
 			}
 
 			// The dummy class constructor
-			function Base() {
+			function Base () {
 				// All construction is actually done in the init method
 				if ( !initializing && this.init ) {
 					this.init.apply(this, arguments);
@@ -1927,7 +1926,7 @@ var jModel = function () {
 		return partition;
 	}
 	
-	function delegateTo(context,methodName) {
+	function delegateTo (context,methodName) {
 		return function () {
 			return context[methodName].apply(context,arguments);
 		}
@@ -1974,11 +1973,11 @@ jQuery.fn.publish = function (publication) {
 	
 	function Publisher (source,target,key,failure,success) {
 		
-		var publish = function (event) {
+		var publish = function _publish (event) {
 			target.set(key,jQuery(event.target).val());
 		};
 		
-		publish.failure = failure || function (message) {
+		publish.failure = failure || function _failure (message) {
 			source
 				.attr('title',message)
 				.animate({
@@ -1989,7 +1988,7 @@ jQuery.fn.publish = function (publication) {
 				},500);
 		};
 		
-		publish.success = success || function () {
+		publish.success = success || function _success () {
 			source
 				.attr('title','')
 				.animate({
