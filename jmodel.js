@@ -2255,7 +2255,7 @@ jQuery.fn.domainSelect = function (binding) {
 	return this.each(function (index,element) {
 	
 		function addOption (collection,option) {
-			jQuery(element).append('<option value="'+binding.value(option)+'">'+binding.label(option)+'</option>');
+			jQuery(element).append(	$('<option/>').attr('value',binding.value(option)).text(binding.label(option)) );
 		}
 		
 		function removeOption (collection, option) {
