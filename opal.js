@@ -194,13 +194,26 @@ function OPAL () {
 	var push = withmethod('push');
 	
 	var add = function _add () {
-		var predicate   = arguments[0] || AllPredicate,
-			mapping		= arguments[1] || Identity;
-			mapfirst	= arguments[2] || false;
-		return extend({unit:set()}, function __add (a,b) {
-			var mapped = mapping(b);
-			return predicate(mapfirst ? mapped : b) ? a.add(mapped) : a;
-		});
+		if ( arguments.length == 0 ) {
+			return function __add (a,b) {
+				return a.add(b);
+			};
+		}
+		else if ( arguments.length == 1 ) {
+			var predicate = arguments[0];
+			return function __add (a,b) {
+				return predicate(b) ? a.add(b) : a;
+			};
+		}
+		else {
+			var predicate   = arguments[0],
+				mapping		= arguments[1],
+				mapfirst	= arguments[2] || false;
+			return function __add (a,b) {
+				var mapped = mapping(b);
+				return predicate(mapfirst ? mapped : b) ? a.add(mapped) : a;
+			};
+		}
 	};
 	
 	var contains = function _contains (predicate) {
