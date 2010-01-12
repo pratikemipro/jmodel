@@ -1254,36 +1254,9 @@ var jModel = function () {
 		
 		var that = this;
 		
-		this.domain = {
-			
-			dirty: false,
-			
-			tags: {},
-			
-			clean: function _clean () {
-				that.domain.dirty = false;
-				return that;
-			},
-					
-			push: function _push () {
-				fields.each(function __push (field) {
-					subscribers.notify({
-						key: field.name,
-						description: 'field value'
-					});
-				});
-			},
-					
-			debug: function _debug (showSubscribers) {
-				log().startGroup('Domain Object');
-				fields.debug();
-				if ( showSubscribers ) {
-					subscribers.debug();
-				}
-				log().endGroup();
-			}
-			
-		};
+		this.domain = {};
+		
+		(new Domain(this)).delegateFor(this.domain);
 		
 		this.parent = parent;
 		
@@ -1483,6 +1456,50 @@ var jModel = function () {
 				this.constraints().add(descriptor.predicate);
 			}
 			log('domainobject/create').endGroup();
+		},
+		
+		delegateFor: function _delegateFor (host) {
+			for (var i in this) {
+				if ( !host[i] ) {
+					host[i] = this[i];
+				}
+			}
+			return this;
+		}
+		
+	};
+	
+	
+	function Domain (object) {
+		this.dirty = false;
+		this.tags = {};
+		this.object = object;
+	}
+	
+	Domain.prototype = {
+		
+		clean: function _clean () {
+			this.object.domain.dirty = false;
+			return that;
+		},
+				
+		push: function _push () {
+			var that = this;
+			this.object.fields().each(function __push (field) {
+				that.object.subscribers.notify({
+					key: field.name,
+					description: 'field value'
+				});
+			});
+		},
+				
+		debug: function _debug (showSubscribers) {
+			log().startGroup('Domain Object');
+			this.object.fields().debug();
+			if ( showSubscribers ) {
+				this.object.subscribers().debug();
+			}
+			log().endGroup();
 		},
 		
 		delegateFor: function _delegateFor (host) {
