@@ -862,19 +862,19 @@ var jModel = function () {
 			}
 
 			// Remember old order
-			this.__delegate.each(function __sort (object,index) {
-				object.domain.tags.position = index;
-			});
+//			this.__delegate.each(function __sort (object,index) {
+//				object.domain.tags.position = index;
+//			});
 
 			// Sort
 			this.__delegate.sort(this.__ordering);
 
 			// Find permutation
 			var permutation = [];
-			this.__delegate.each(function ___sort (object,index) {
-				permutation[index] = object.domain.tags.position;
-				delete object.domain.tags.position;
-			});
+//			this.__delegate.each(function ___sort (object,index) {
+//				permutation[index] = object.domain.tags.position;
+//				delete object.__delegate.domain.tags.position;
+//			});
 
 			// Find whether permutation is not identity permutation
 			var permuted = false;
