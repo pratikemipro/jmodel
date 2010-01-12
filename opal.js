@@ -340,7 +340,7 @@ function OPAL () {
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
 							: pipe.apply(null,set(arguments).map(makeCallback).get()),
 				members = this.get();
-			for (var index in members) {
+			for (var index=0; index<members.length; index++) {
 				callback.apply(members[index],[members[index],index]);
 			}
 			return this;
