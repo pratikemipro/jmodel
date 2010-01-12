@@ -241,20 +241,24 @@ function OPAL () {
 
 	function Set (objects) {
 
-		this.added = null;
-		this.__index = false;
+		this.__members = ( objects && objects.jquery && jQuery ) ?
+								set(objects.get()).map(jQuery).get()
+								: (objects || []);
 
-		var members = objects || [];
-			
-		members = ( members.jquery && jQuery ) ? set(members.get()).map(jQuery).get() : members;
+		this.__index	= false;
+		this.added		= null;
 
-		this.constraint = function constraint (obj) {
+	}
+	
+	Set.prototype = {
+		
+		constraint: function constraint (obj) {
 			return !this.member(obj);
-		};
-
-		this.add = function _add (object,success,failure) {
+		},
+		
+		add: function _add (object,success,failure) {
 			if ( this.constraint(object) ) {	
-				members.push(object);
+				this.__members.push(object);
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
@@ -269,11 +273,11 @@ function OPAL () {
 				}	
 			}
 			return this;
-		}; 
-
-		this.get = function _get (key) {
+		},
+		
+		get: function _get (key) {
 			if ( arguments.length == 0 ) {
-				return members;
+				return this.__members;
 			}
 			else if ( key == ':first' ) {
 				return this.first();
@@ -285,31 +289,20 @@ function OPAL () {
 				var obj = this.filter(key);
 				return obj.each ? obj.first() : obj;
 			}
-		};
-
-		this.remove = function _remove (predicate) {
+		},
+		
+		remove: function _remove (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
-			members = partition.keep.get();
+			this.__members = partition.keep.get();
 			if ( this.__index ) {
 				partition.remove.reduce(Method('remove'),this.__index);
 			}
 			return partition.remove; 
-		};
-		
-		this.count = function _count (predicate) {
-			return arguments.length == 0 ? members.length : this.reduce(count(predicate));
 		},
-
-		this.sort = function _sort () {
-			members.sort(this.ordering.apply(null,arguments));
-			return this;
-		};
-
-	}
-	
-	Set.prototype = {
 		
-		constraint: AllPredicate,
+		count: function _count (predicate) {
+			return arguments.length == 0 ? this.__members.length : this.reduce(count(predicate));
+		},
 		
 		first: function _first () {
 			var members = this.get();
@@ -319,6 +312,11 @@ function OPAL () {
 		member: function _member (object) {
 			return this.__index ? this.__index.member(object)
 			 		: this.reduce(contains(ObjectIdentityPredicate(object)));
+		},
+		
+		sort: function _sort () {
+			this.__members.sort(this.ordering.apply(null,arguments));
+			return this;
 		},
 		
 		concat : function _concat (second) {
