@@ -1471,8 +1471,8 @@ var jModel = function () {
 	
 	
 	function Domain (object) {
-		this.dirty = false;
-		this.tags = {};
+		this.dirty	= false;
+		this.tags	= {};
 		this.object = object;
 	}
 	
@@ -1568,7 +1568,7 @@ var jModel = function () {
 		this.predicate		= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
 		this.message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
 		this.subscribers	= subscribers;
-		this.accessor	= field.accessor;
+		this.accessor		= field.accessor;
 	}
 	
 	Field.prototype = {
