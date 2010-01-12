@@ -858,19 +858,19 @@ var jModel = function () {
 			}
 
 			// Remember old order
-			this.__delegate.each(function __sort (object,index) {
-				object.domain.tags.position = index;
-			});
+//			this.__delegate.each(function __sort (object,index) {
+//				object.domain.tags.position = index;
+//			});
 
 			// Sort
 			this.__delegate.sort(this.__ordering);
 
 			// Find permutation
 			var permutation = [];
-			this.__delegate.each(function ___sort (object,index) {
-				permutation[index] = object.domain.tags.position;
-				delete object.domain.tags.position;
-			});
+//			this.__delegate.each(function ___sort (object,index) {
+//				permutation[index] = object.domain.tags.position;
+//				delete object.domain.tags.position;
+//			});
 
 			// Find whether permutation is not identity permutation
 			var permuted = false;
@@ -1252,11 +1252,10 @@ var jModel = function () {
 	
 	function DomainObject (context,parent,data) {
 		
-		var that = this;
-		
-		this.domain = {};
-		
-		(new Domain(this)).delegateFor(this.domain);
+		this.domain = {
+			dirty: 	false,
+			tags: 	{}
+		};
 		
 		this.parent = parent;
 		
@@ -1458,49 +1457,29 @@ var jModel = function () {
 			log('domainobject/create').endGroup();
 		},
 		
-		delegateFor: function _delegateFor (host) {
-			for (var i in this) {
-				if ( !host[i] ) {
-					host[i] = this[i];
-				}
-			}
-			return this;
-		}
-		
-	};
-	
-	
-	function Domain (object) {
-		this.dirty	= false;
-		this.tags	= {};
-		this.object = object;
-	}
-	
-	Domain.prototype = {
-		
 		clean: function _clean () {
-			this.object.domain.dirty = false;
-			return that;
+			this.domain.dirty = false;
+			return this;
 		},
-				
+		
+		debug: function _debug (showSubscribers) {
+			log().startGroup('Domain Object');
+			this.fields().debug();
+			if ( showSubscribers ) {
+				this.subscribers().debug();
+			}
+			log().endGroup();
+		},
+		
 		push: function _push () {
 			var that = this;
-			this.object.fields().each(function __push (field) {
-				that.object.subscribers.notify({
+			this.fields().each(function __push (field) {
+				that.subscribers.notify({
 					key: field.name,
 					description: 'field value'
 				});
 			});
 		},
-				
-		debug: function _debug (showSubscribers) {
-			log().startGroup('Domain Object');
-			this.object.fields().debug();
-			if ( showSubscribers ) {
-				this.object.subscribers().debug();
-			}
-			log().endGroup();
-		},
 		
 		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
@@ -1512,7 +1491,7 @@ var jModel = function () {
 		}
 		
 	};
-	
+
 	
 	// ------------------------------------------------------------------------
 	// 															  		 Fields
@@ -1715,9 +1694,9 @@ var jModel = function () {
 		
 		this.debug = function _debug () {
 			log().startGroup('Relationship: '+relationship.accessor);
-			log().debug('Object: '+parent.domain.debug());
+			log().debug('Object: '+parent.debug());
 			if ( relationship.subscription ) {
-				log().debug('Subscription target: '+subscription.target.domain.debug());
+				log().debug('Subscription target: '+subscription.target.debug());
 			}
 			log().endGroup();
 		};
