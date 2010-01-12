@@ -26,7 +26,7 @@ function OPAL () {
 
 	function compose () {
 		var fns = arguments;
-		return function _compose (x) {
+		return fns.length == 1 ? fns[0] : function _compose (x) {
 			for (var i=fns.length-1;i>=0;i--) {
 				x = fns[i](x);
 			}
@@ -35,7 +35,8 @@ function OPAL () {
 	}
 
 	function pipe () {
-		return compose.apply(null,arrayFromArguments(arguments).reverse());
+		return arguments.length == 1 ? arguments[0]
+				: compose.apply(null,arrayFromArguments(arguments).reverse());
 	}
 	
 	function parallel () {
