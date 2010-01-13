@@ -1649,12 +1649,6 @@ var jModel = function () {
 		this.accessor			= relationship.accessor;
 		this.name				= relationship.plural || relationship.accessor+'s';
 
-		var example = {};
-		log('domainobject/create').startGroup('Getting primary key value');
-		example[relationship.field] = parent.primaryKeyValue();
-		log('domainobject/create').endGroup();
-
-
 		log('domainobject/create').startGroup('Creating children collection');
 		var children = 	parent.context.collection({
 							base: 	     	parent.context.entities.get(relationship.prototype).objects,
