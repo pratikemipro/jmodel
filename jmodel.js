@@ -747,6 +747,7 @@ var jModel = function () {
 		
 		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects
 								: new Set(specification.objects);
+		this.length = this.__delegate.length;
 		if ( specification.primaryKey ) {
 			this.__delegate.index(Method('primaryKeyValue'));
 		}
@@ -778,6 +779,7 @@ var jModel = function () {
 		add: function _add (object) {
 			var that = this;
 			this.__delegate.add(object, function __add () {
+				that.length++;
 				that.subscribers().notify({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: that,
@@ -808,6 +810,7 @@ var jModel = function () {
 						object.subscribers().remove(AllPredicate);
 					}	
 				});
+				this.length = this.__delegate.length;
 			}
 			else {
 				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);

@@ -259,6 +259,7 @@ function OPAL () {
 								set(objects.get()).map(jQuery).get()
 								: (objects || []);
 
+		this.length		= this.__members.length;
 		this.__index	= false;
 		this.added		= null;
 
@@ -273,6 +274,7 @@ function OPAL () {
 		add: function _add (object,success,failure) {
 			if ( this.constraint(object) ) {	
 				this.__members.push(object);
+				this.length++;
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
@@ -308,6 +310,7 @@ function OPAL () {
 		remove: function _remove (predicate) {
 			var partition = this.partition(predicate,'remove','keep');
 			this.__members = partition.keep.get();
+			this.length = this.__members.length;
 			if ( this.__index ) {
 				partition.remove.reduce(Method('remove'),this.__index);
 			}
@@ -315,7 +318,7 @@ function OPAL () {
 		},
 		
 		count: function _count (predicate) {
-			return arguments.length == 0 ? this.__members.length : this.reduce(count(predicate));
+			return arguments.length == 0 ? this.length : this.reduce(count(predicate));
 		},
 		
 		first: function _first () {
