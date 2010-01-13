@@ -739,7 +739,7 @@ var jModel = function () {
 		
 		specification		= specification || {};
 		this.__predicate	= specification.predicate || AllPredicate;
-		this.__base			= specification.base
+		this.__base			= specification.base;
 		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
 		
