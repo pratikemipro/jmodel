@@ -1049,6 +1049,11 @@ function OPAL () {
 		}
 		
 	};
+	
+	EnhancedObject.prototype._add = EnhancedObject.prototype.add;
+	EnhancedObject.prototype._remove = EnhancedObject.prototype.remove;
+	EnhancedObject.prototype._defaults = EnhancedObject.prototype._efaults;
+	EnhancedObject.prototype._set = EnhancedObject.prototype.set;
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments,
