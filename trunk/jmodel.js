@@ -482,9 +482,7 @@ var jModel = function () {
 			data[primaryKey] = data[primaryKey] || this.generateID();
 			
 			var newObject = new this.constructor();
-			newObject.__delegate = new DomainObject(this.context,newObject,data);
-			newObject.__delegate.primaryKey = primaryKey;
-			newObject.__delegate.delegateFor(newObject);
+			newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey)).delegateFor(newObject);
 
 			this.context.all.add(newObject);
 
@@ -545,7 +543,7 @@ var jModel = function () {
 			messages.each(function __send (message) {
 				if ( !filter(message) ) {
 				}
-				else if ( active || !message.subscription.application ) {
+				else if ( ( active || !message.subscription.application ) && typeof message == 'function' ) {
 					message();
 				}
 				else {
@@ -741,6 +739,7 @@ var jModel = function () {
 		
 		specification		= specification || {};
 		this.__predicate	= specification.predicate || AllPredicate;
+		this.__base			= specification.base
 		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
 		
@@ -762,8 +761,8 @@ var jModel = function () {
 		}
 		
 		// This collection is a materialised view over a base collection
-		if ( specification.base ) {
-			var view = new View(specification.base,this,specification.predicate);
+		if ( this.__base ) {
+			var view = new View(this.__base,this,this.__predicate);
 		}
 		else if ( specification.base ) {
 			throw 'Error: Invalid base collection type';
@@ -1254,14 +1253,15 @@ var jModel = function () {
 	// 													 Domain Object delegate
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (context,parent,data) {
+	function DomainObject (context,parent,data,primaryKey) {
 		
 		this.domain = {
 			dirty: 	false,
 			tags: 	{}
 		};
 		
-		this.parent = parent;
+		this.primaryKey	= primaryKey;
+		this.parent		= parent;
 		
 		var notifications	= context.notifications,
 			subscribers 	= new SubscriberSet(notifications),
@@ -1640,7 +1640,7 @@ var jModel = function () {
 	external.OneToOneRelationship = OneToOneRelationship;
 	
 	
-	function OneToManyRelationship (parent,relationship) {
+	function OneToManyRelationship (owner,relationship) {
 
 		log('domainobject/create').startGroup('Reifying '+relationship.accessor);
 
@@ -1650,9 +1650,9 @@ var jModel = function () {
 		this.name				= relationship.plural || relationship.accessor+'s';
 
 		log('domainobject/create').startGroup('Creating children collection');
-		var children = 	parent.context.collection({
-							base: 	     	parent.context.entities.get(relationship.prototype).objects,
-							predicate: 	 	RelationshipPredicate(parent,relationship.field),
+		var children = 	owner.context.collection({
+							base: 	     	owner.context.entities.get(relationship.prototype).objects,
+							predicate: 	 	RelationshipPredicate(owner,relationship.field),
 							description: 	'children by relationship '+relationship.accessor
 						});
 		log('domainobject/create').endGroup();
@@ -1662,7 +1662,7 @@ var jModel = function () {
 	
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {
-			parent.subscribe({
+			owner.subscribe({
 				removed: 	function () {
 								children.each(function (child) {
 									entities[relationship.prototype].objects.remove(child);
@@ -1676,7 +1676,7 @@ var jModel = function () {
 			this.subscription = children.subscribe(copy(relationship.subscription)._add({
 				application: true,
 				source: children,
-				target: parent
+				target: owner
 			}).defaults({
 				description: 'subscription by relationship '+this.accessor
 			}));
@@ -1684,13 +1684,13 @@ var jModel = function () {
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function _add (data) {
-			return parent.context.entities.get(relationship.prototype)
-					.create( copy(data).set(relationship.field,parent.primaryKeyValue()) );
+			return owner.context.entities.get(relationship.prototype)
+					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
 		};
 		
 		this.debug = function _debug () {
 			log().startGroup('Relationship: '+relationship.accessor);
-			log().debug('Object: '+parent.debug());
+			log().debug('Object: '+owner.debug());
 			if ( relationship.subscription ) {
 				log().debug('Subscription target: '+subscription.target.debug());
 			}
