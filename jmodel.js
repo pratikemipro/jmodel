@@ -1673,7 +1673,7 @@ var jModel = function () {
 		
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
-			this.subscription = children.subscribe(copyObject(relationship.subscription).add({
+			this.subscription = children.subscribe(copy(relationship.subscription)._add({
 				application: true,
 				source: children,
 				target: parent
