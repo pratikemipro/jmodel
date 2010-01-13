@@ -497,6 +497,10 @@ function OPAL () {
 			},'');
 		},
 		
+		zip: function _zip (set2,zipper) {
+			return zip(this,set2,zipper);
+		},
+		
 		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
@@ -540,7 +544,8 @@ function OPAL () {
 	
 	function zip (first,second,zipper) {
 		first = ! (first instanceof Set || first instanceof List) ? list(first) : first;
-		second = second.get();
+		second = second.shift ? second : second.get();
+		zipper = typeof zipper == 'string' ? Method(zipper) : zipper;
 		return first.map(function _zip (obj) {
 			return zipper(obj,second.shift());
 		});
@@ -1080,4 +1085,7 @@ if ( typeof jQuery != 'undefined' ) {
 	jQuery.fn.opal = function () {
 		return opal.set(this);
 	};
+	if ( typeof _$ == 'undefined') {
+		_$ = opal.pipe(jQuery,opal.set);
+	}
 }
