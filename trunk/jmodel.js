@@ -1679,7 +1679,7 @@ var jModel = function () {
 			this.subscription = children.subscribe(copy(relationship.subscription)._add({
 				application: true,
 				source: children,
-				target: owner
+				target: owner.parent
 			}).defaults({
 				description: 'subscription by relationship '+this.accessor
 			}));
