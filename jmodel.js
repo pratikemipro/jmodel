@@ -2086,37 +2086,29 @@ jQuery.fn.subscribe = function (subscription) {
 		return this.each(function (index,element) {
 			subscription.key = subscription.key instanceof Array ? subscription.key : [subscription.key];
 			jQuery.each(subscription.key,function (index,key) {
-				subscription.source.subscribe({
+				subscription.source.subscribe(opal.copy(subscription).defaults({
+					description: 'application subscription'
+				})._add({
 					application: true,
-					source: subscription.source,
 					target: jQuery(element),
-					key: key,
-					change: subscription.change,
-					removed: subscription.remove,
-					initialise: subscription.initialise,
-					format: subscription.format,
-					value: subscription.value,
-					description: subscription.description || 'application subscription'
-				});
+					key: key
+				}));
 			});
 		});
 		
 	}
 	else if ( subscription.bindings ) { // Multiple subscription through selector/key mapping
-		
+
 		return this.each(function (index,element) {
 			for (var selector in subscription.bindings) {
 				jQuery(selector,element).each(function (index,object) {
-					subscription.source.subscribe({
+					subscription.source.subscribe(opal.copy(subscription).defaults({
+						description: 'application subscription'
+					})._add({
 						application: true,
-						source: subscription.source,
 						target: jQuery(object),
-						key: subscription.bindings[selector],
-						initialise: subscription.initialise,
-						format: subscription.format,
-						value: subscription.value,
-						description: subscription.description || 'application subscription'
-					});
+						key: subscription.bindings[selector]
+					}));
 				});
 			}
 		});
@@ -2127,70 +2119,49 @@ jQuery.fn.subscribe = function (subscription) {
 		return this.each(function (index,element) {
 			for (var selector in subscription.member.bindings) {
 				jQuery(selector,element).each(function (index,object) {
-					subscription.source.subscribe({
+					subscription.source.subscribe(opal.copy(subscription).defaults({
+						description: 'application subscription'
+					})._add({
 						application: true,
-						source: subscription.source,
-						predicate: subscription.predicate,
-						selector: subscription.selector,
-						initialise: subscription.initialise,
-						description: subscription.description || 'application subscription',
-						member: {
+						member: opal.copy(subscription.member).defaults({
+							description: 'application subscription'
+						})._add({
 							application: true,
 							target: jQuery(object),
-							key: subscription.member.bindings[selector],
-							change: subscription.member.change,
-							initialise: subscription.member.initialise,
-							format: subscription.member.format,
-							value: subscription.member.value,
-							description: subscription.member.description || 'application subscription'
-						}
-					});
+							key: subscription.member.bindings[selector]
+						})
+					}));
 				});
 			}
 		});
 
 	} 
 	else if ( ( subscription.predicate || subscription.selector ) && subscription.member ) { // Subscription to members of collection
-
+		
 		return this.each(function (index,element) {
-			subscription.source.subscribe({
+			subscription.source.subscribe(opal.copy(subscription).defaults({
+				description: 'application subscription'
+			})._add({
 				application: true,
-				source: subscription.source,
-				predicate: subscription.predicate,
-				selector: subscription.selector,
-				initialise: subscription.initialise,
-				description: subscription.description || 'application subscription',
-				member: {
+				member: opal.copy(subscription.member).defaults({
+					description: 'application subscription'
+				}).add({
 					application: true,
-					target: jQuery(element),
-					key: subscription.member.key,
-					change: subscription.member.change,
-					initialise: subscription.member.initialise,
-					format: subscription.member.format,
-					value: subscription.member.value,
-					description: subscription.member.description || 'application subscription'
-				}
-			});
+					target: jQuery(element)
+				})
+			}))
 		});
 		
 	}
 	else { // Subscription to collection
 		
 		return this.each(function (index,element) {
-			subscription.source.subscribe({
+			subscription.source.subscribe(opal.copy(subscription).defaults({
+				description: 'application subscription'
+			})._add({
 				application: true,
-				source: subscription.source,
-				target: jQuery(element),
-				predicate: subscription.predicate,
-				add: subscription.add,
-				remove: subscription.remove,
-				change: subscription.change,
-				sort: subscription.sort,
-				initialise: subscription.initialise,
-				format: subscription.format,
-				value: subscription.value,
-				description: subscription.description || 'application subscription'
-			});
+				target: jQuery(element)
+			}));
 		});
 		
 	}
