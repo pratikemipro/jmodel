@@ -2169,10 +2169,9 @@ jQuery.fn.subscribe = function (subscription) {
 };
 
 jQuery.fn.pubsub = function (pubsub) {
-	// NOTE: Should rewrite publication here rather than using this shortcut
-	pubsub.source = pubsub.object;
-	pubsub.target = pubsub.object;
-	return this.subscribe(pubsub).publish(pubsub);
+	return this
+			.subscribe(opal.copy(pubsub).add({source:pubsub.object}).remove('object'))
+			.publish(opal.copy(pubsub).add({target:pubsub.object}).remove('object'));
 };
 
 jQuery.fn.permute = function (permutation) {
