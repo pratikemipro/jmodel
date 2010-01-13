@@ -2149,7 +2149,7 @@ jQuery.fn.subscribe = function (subscription) {
 					application: true,
 					target: jQuery(element)
 				})
-			}))
+			}));
 		});
 		
 	}
