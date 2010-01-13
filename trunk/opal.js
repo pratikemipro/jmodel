@@ -1036,6 +1036,13 @@ function OPAL () {
 			return this;
 		},
 		
+		defaults: function _defaults (attributes) {
+			for ( var key in attributes ) {
+				this[key] = this[key] || attributes[key];
+			}
+			return this;
+		},
+		
 		set: function _set (key,value) {
 			this[key] = value;
 			return this;
