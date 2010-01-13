@@ -1657,6 +1657,9 @@ var jModel = function () {
 						});
 		log('domainobject/create').endGroup();
 	
+		children.delegateFor(this);
+		this.get = delegateTo(children,'filter');
+	
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {
 			parent.subscribe({
@@ -1670,24 +1673,19 @@ var jModel = function () {
 		
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
-			var subscription = copyObject(relationship.subscription);
-			subscription.application = true;
-			subscription.source = children;
-			subscription.target = parent;
-			subscription.description = subscription.description || 'subscription by relationship '+relationship.accessor;
-			this.subscription = children.subscribe(subscription);
+			this.subscription = children.subscribe(copyObject(relationship.subscription).add({
+				application: true,
+				source: children,
+				target: parent
+			}).defaults({
+				description: 'subscription by relationship '+this.accessor
+			}));
 		}
-		
-		children.delegateFor(this);
-		this.get = delegateTo(children,'filter');
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function _add (data) {
-			
-			data = data || {};
-			data[relationship.field] = parent.primaryKeyValue();
-			return parent.context.entities.get(relationship.prototype).create(data);
-			
+			return parent.context.entities.get(relationship.prototype)
+					.create( copy(data).set(relationship.field,parent.primaryKeyValue()) );
 		};
 		
 		this.debug = function _debug () {
