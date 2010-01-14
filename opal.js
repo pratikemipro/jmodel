@@ -954,9 +954,9 @@ function OPAL () {
 	}
 	
 	function Replace (find,replace) {
-		return function _replace (string) {
-			return string.replace(find,replace);
-		};
+		replace = arguments.length == 2 ? replace
+					: pipe.apply(null,arrayFromArguments(arguments).slice(1));
+		return Method('replace',find,replace);
 	}
 	
 	function Surround (affix) {
