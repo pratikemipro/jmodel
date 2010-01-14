@@ -953,6 +953,12 @@ function OPAL () {
 		};
 	}
 	
+	function Replace (find,replace) {
+		return function _replace (string) {
+			return string.replace(find,replace);
+		};
+	}
+	
 	function Surround (affix) {
 		return compose(Prepend(affix),Append(affix));
 	}
@@ -1007,6 +1013,7 @@ function OPAL () {
 		append: 	Append,
 		join: 		Join,
 		concat: 	Concatenate,
+		replace: 	Replace,
 		surround: 	Surround,
 		decimal: 	Decimal,
 		locale: 	Locale(),
