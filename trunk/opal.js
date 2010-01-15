@@ -72,6 +72,35 @@ function OPAL () {
 			return fn.apply(null,args1.concat(arrayFromArguments(arguments)));
 		};
 	}
+	
+	var suspend = curry;
+
+	//
+	// Concurrency functions
+	//
+	
+	function sequence () {
+		var operations	= arrayFromArguments(arguments),
+			operation	= operations.shift()
+			callback	= operations.shift();
+		function makeCallback () {
+			return function () {
+				callback.apply(null,arguments);
+				if ( operation = operations.shift(), callback = operations.shift() ) {
+					performOperation();
+				}
+			}
+		}
+		function performOperation () {
+			operation(makeCallback());
+		}
+		return performOperation()
+	}
+
+
+	//
+	// Object functions
+	// 
 
 	function Identity (object) {
 		return object;
@@ -154,6 +183,8 @@ function OPAL () {
 		pipe: pipe,
 		parallel: parallel,
 		curry: curry,
+		suspend: suspend,
+		sequence: sequence,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
