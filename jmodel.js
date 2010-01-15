@@ -740,6 +740,7 @@ var jModel = function () {
 		specification		= specification || {};
 		this.__predicate	= specification.predicate || AllPredicate;
 		this.__base			= specification.base;
+		this.__ordering		= specification.ordering;
 		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
 		
@@ -756,8 +757,7 @@ var jModel = function () {
 		
 		this.subscribers	= delegateTo(new SubscriberSet(this.context.notifications),'filter');
 				
-		if ( specification.ordering ) {
-			this.__ordering = this.ordering(specification.ordering);
+		if ( this.__ordering ) {
 			this.sort();
 		}
 		
@@ -859,8 +859,11 @@ var jModel = function () {
 				return this;
 			}
 
-			if (arguments.length > 0) {
+			if ( arguments.length > 0 ) {
 				this.__ordering = this.ordering.apply(null,arguments);
+			}
+			else if ( typeof this.__ordering != 'function' ) {
+				this.__ordering = this.ordering(this.__ordering);
 			}
 
 			// Remember old order
@@ -987,6 +990,9 @@ var jModel = function () {
 			}
 			else if ( typeof arguments[0] == 'function' ) {
 				return arguments[0];
+			}
+			else if ( typeof arguments[0] == 'undefined' ) {
+				return ValueOrdering;
 			}
 			else {
 				var pieces = arguments[0].split(' ');
