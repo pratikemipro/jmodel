@@ -82,7 +82,26 @@
 						<span class="arguments">(suspension1,callback1,suspension2,callback2...)</span>
 					</code>
 				</dt>
-				<dd><span style="color:red">document this</span></dd>
+				<dd class="example">
+					<p>
+						<code>
+							sequence(																<br/>
+							&#160;&#160;&#160;&#160;suspend($.getJSON,'a.js'), function (data) {	<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('A done');	<br/>
+							&#160;&#160;&#160;&#160;},												<br/>
+							&#160;&#160;&#160;&#160;suspend($.getJSON,'b.js'), function (data) {	<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('B done');	<br/>
+							&#160;&#160;&#160;&#160;},												<br/>
+							&#160;&#160;&#160;&#160;suspend($.getJSON,'c.js'), function (data) {	<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('C done')	<br/>
+							&#160;&#160;&#160;&#160;}												<br/>
+							);
+						</code>
+					</p>
+				</dd>
 			</dl>
 			
 		</article>
