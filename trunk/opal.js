@@ -81,20 +81,39 @@ function OPAL () {
 	
 	function sequence () {
 		var operations	= arrayFromArguments(arguments),
-			operation	= operations.shift()
+			operation	= operations.shift(),
 			callback	= operations.shift();
 		function makeCallback () {
 			return function () {
 				callback.apply(null,arguments);
-				if ( operation = operations.shift(), callback = operations.shift() ) {
+				operation = operations.shift();
+				callback = operations.shift();
+				if ( operation && callback ) {
 					performOperation();
 				}
-			}
+			};
 		}
 		function performOperation () {
 			operation(makeCallback());
 		}
-		return performOperation()
+		return performOperation();
+	}
+	
+	function synchronise () {
+		var args = arrayFromArguments(arguments),
+			last = args.pop(),
+			left = args.length/2;
+		while ( args.length > 0 ) {
+			(function () {
+				var operation = args.shift(), callback = args.shift();
+				operation(function () {
+					callback.apply(null,arguments);
+					if ( --left == 0 ) {
+						last();
+					}
+				});
+			})();	
+		}
 	}
 
 
@@ -185,6 +204,8 @@ function OPAL () {
 		curry: curry,
 		suspend: suspend,
 		sequence: sequence,
+		synchronise: synchronise,
+		synchronize: synchronise,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
