@@ -940,19 +940,16 @@ function OPAL () {
 			return -ordering(a,b);
 		};
 	}
-
+	
 	function CompositeOrdering () {
-		var orderings = arrayFromArguments(arguments);
-		return function _compositeordering (a,b) {
-			for (var i=0; i<orderings.length; i++) {
-				var value = orderings[i](a,b);
-				if ( value !== 0 ) {
-					return value;
-				}
-			}
-			return 0;
-		};
+	    var orderings = set(arguments);
+	    return function _compositeordering (a,b) {
+	        return orderings.reduce(function (acc,ordering) {
+	           return acc || ordering(a,b);
+	        },0);
+	    };
 	}
+	
 
 	opal.extend({
 		FunctionOrdering: 	FunctionOrdering,
