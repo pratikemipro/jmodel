@@ -24,19 +24,19 @@ function OPAL () {
 	}
 	opal.extend = extend;
 
-	function compose () {
+	function pipe () {
 		var fns = arguments;
-		return fns.length == 1 ? fns[0] : function _compose (x) {
-			for (var i=fns.length-1;i>=0;i--) {
+		return fns.length == 1 ? fns[0] : function _pipe (x) {
+			for (var i=0;i<fns.length;i++) {
 				x = fns[i](x);
 			}
 			return x;
 		};
 	}
-
-	function pipe () {
+	
+	function compose () {
 		return arguments.length == 1 ? arguments[0]
-				: compose.apply(null,arrayFromArguments(arguments).reverse());
+				: pipe.apply(null,arrayFromArguments(arguments).reverse());
 	}
 	
 	function parallel () {
