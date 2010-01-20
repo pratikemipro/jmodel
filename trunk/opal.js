@@ -221,25 +221,25 @@ function OPAL () {
 	// Reduction functions
 	//
 
-	var plus = extend({unit:0,label:'sum'},function _plus (a,b) {
-		return a+b;
+	var plus = extend({unit:0,label:'sum'},function _plus (acc,value) {
+		return acc + value;
 	});
 
-	var times = extend({unit:1,label:'product'},function _times (a,b) {
-		return a*b;
+	var times = extend({unit:1,label:'product'},function _times (acc,value) {
+		return acc * value;
 	});
 	
 	var count = function _count (predicate) {
 		var predicate = predicate || AllPredicate;
-		return extend({unit:0,label:'count'}, function __count (a,b) {
-			return a += (predicate(b) ? 1 : 0);
+		return extend({unit:0,label:'count'}, function __count (acc,value) {
+			return acc += (predicate(value) ? 1 : 0);
 		});
 	};
 	
 	var withmethod = function _withmethod (name) {
 		var method = Method(name);
-		return function __withmethod (a,b) {
-			return method(a,b);
+		return function __withmethod (acc,value) {
+			return method(acc,value);
 		};
 	};
 	
@@ -247,35 +247,40 @@ function OPAL () {
 	
 	var add = function _add () {
 		if ( arguments.length == 0 ) {
-			return function __add (a,b) {
-				return a.add(b);
+			return function __add (acc,value) {
+				return acc.add(value);
 			};
 		}
 		else if ( arguments.length == 1 ) {
 			var predicate = arguments[0];
-			return function __add (a,b) {
-				return predicate(b) ? a.add(b) : a;
+			return function __add (acc,value) {
+				return predicate(value) ? acc.add(value) : acc;
 			};
 		}
 		else {
 			var predicate   = arguments[0],
 				mapping		= arguments[1],
 				mapfirst	= arguments[2] || false;
-			return function __add (a,b) {
-				var mapped = mapping(b);
-				return predicate(mapfirst ? mapped : b) ? a.add(mapped) : a;
+			return function __add (acc,value) {
+				var mapped = mapping(value);
+				return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
 			};
 		}
 	};
 	
 	var contains = function _contains (predicate) {
-		return extend({unit:false}, function __contains (a,b) {
-			return a || predicate(b);
+		return extend({unit:false}, function __contains (acc,value) {
+			return acc || predicate(value);
 		});
 	};
 	
-	var max = extend({label:'max'}, function _max (a,b) { return a > b ? a : b; } );
-	var min = extend({label:'min'}, function _min (a,b) { return ( a < b && a != null ) ? a : b; });
+	var max = extend({label:'max'}, function _max (acc,value) {
+		return acc > value ? acc : value;
+	});
+	
+	var min = extend({label:'min'}, function _min (acc,value) {
+		return ( acc < value && acc != null ) ? acc : value;
+	});
 
 	opal.extend({
 		plus: plus,
@@ -544,8 +549,8 @@ function OPAL () {
 		},
 		
 		join: function _join (separator) {
-			return this.reduce(function __join (a,b) {
-				return a+(a ? (separator||',') : '')+b;
+			return this.reduce(function __join (acc,value) {
+				return acc+(acc ? (separator||',') : '')+value;
 			},'');
 		},
 		
