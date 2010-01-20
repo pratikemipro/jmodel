@@ -554,9 +554,7 @@ function OPAL () {
 		},
 		
 		join: function _join (separator) {
-			return this.reduce(function __join (acc,value) {
-				return acc+(acc ? (separator||',') : '')+value;
-			},'');
+			return this.__members.join(separator);
 		},
 		
 		zip: function _zip (set2,zipper) {
