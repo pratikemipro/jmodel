@@ -412,6 +412,7 @@ function OPAL () {
 			if ( this.predicate(predicate)(this) ) {
 				callback.call(this,this);
 			}
+			return this;
 		},
 		
 		each: function _each () {
