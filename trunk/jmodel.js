@@ -476,6 +476,8 @@ var jModel = function () {
 
 			log('domainobject/create').startGroup('Creating a new '+this.name);
 
+			this.context.notifications.suspend();
+
 			data = (typeof data == 'object') ? data : {};
 
 			var primaryKey	= this.options.primaryKey;
@@ -489,6 +491,8 @@ var jModel = function () {
 			if ( newObject.initialise ) {
 				newObject.initialise();
 			}
+			
+			this.context.notifications.resume();
 
 			log('domainobject/create').endGroup();
 
@@ -546,7 +550,7 @@ var jModel = function () {
 				else if ( ( active || !message.subscription.application ) && typeof message == 'function' ) {
 					message();
 				}
-				else {
+				else if ( typeof message == 'function' ) {
 					log('notifications/send').debug('Adding a notification to the queue');
 					notifications.add(message);
 				}
@@ -2103,7 +2107,7 @@ jQuery.fn.subscribe = function (subscription) {
 		});
 		
 	}
-	else if ( subscription.bindings ) { // Multiple subscription through selector/key mapping
+	else if ( !subscription.member && subscription.bindings ) { // Multiple subscription through selector/key mapping
 
 		return this.each(function (index,element) {
 			for (var selector in subscription.bindings) {
