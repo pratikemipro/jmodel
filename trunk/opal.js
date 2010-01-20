@@ -410,10 +410,14 @@ function OPAL () {
 		each: function _each () {
 			function makeCallback (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
-							: pipe.apply(null,set(arguments).map(makeCallback).get()),
-				members = this.get();
-			for (var index=0; index<members.length; index++) {
-				callback.apply(members[index],[members[index],index]);
+							: pipe.apply(null,set(arguments).map(makeCallback).get())
+			if ( this.__members.forEach ) {
+				this.__members.forEach(callback,null);
+			}
+			else {
+				for (var index=0; index<this.__members.length; index++) {
+					callback.apply(null,[this.__members[index],index]);
+				}
 			}
 			return this;
 		},
