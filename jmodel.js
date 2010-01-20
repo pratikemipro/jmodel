@@ -1003,7 +1003,7 @@ var jModel = function () {
 				if ( pieces.length === 1 || pieces[1].toLowerCase() != 'desc' ) {
 					return FieldOrdering(pieces[0]);
 				}
-				else if ( piece.length > 0 ) {
+				else if ( pieces.length > 0 ) {
 					return DescendingOrdering(FieldOrdering(pieces[0]));
 				}
 				else {
