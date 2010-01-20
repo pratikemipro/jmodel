@@ -492,7 +492,7 @@ function OPAL () {
 		},
 		
 		copy: function _copy () {
-			return this.reduce(Method('add'),set());
+			return set.apply(null,this.__members.slice(0));
 		},
 		
 		index: function _index (key) {
