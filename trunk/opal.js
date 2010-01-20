@@ -384,8 +384,15 @@ function OPAL () {
 		},
 		
 		member: function _member (object) {
-			return this.__index ? this.__index.member(object)
-			 		: this.reduce(contains(ObjectIdentityPredicate(object)));
+			if ( this.__index ) {
+				return this.__index.member(object);
+			}
+			else if ( this.__members.indexOf ) {
+				return this.__members.indexOf(object) > -1;
+			}
+			else {
+				return this.reduce(contains(ObjectIdentityPredicate(object)));
+			}
 		},
 		
 		sort: function _sort () {
