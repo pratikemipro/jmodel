@@ -379,8 +379,7 @@ function OPAL () {
 		},
 		
 		first: function _first () {
-			var members = this.get();
-			return members.length > 0 ? members[0] : false;
+			return this.__members[0] || false;
 		},
 		
 		member: function _member (object) {
