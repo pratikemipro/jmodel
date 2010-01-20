@@ -459,7 +459,8 @@ function OPAL () {
 				selector = ':first';
 			}
 
-			return this.reduce(add(predicate),set()).select(selector);		
+			return this.__members.filter ? set(this.__members.filter(predicate)).select(selector)
+					: this.reduce(add(predicate),set()).select(selector);		
 
 		},
 		
