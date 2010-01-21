@@ -419,11 +419,11 @@ function OPAL () {
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
 							: pipe.apply(null,set(arguments).map(makeCallback).get());
 			if ( this.__members.forEach ) {
-				this.__members.forEach(callback,null);
+				this.__members.forEach(callback,this);
 			}
 			else {
 				for (var index=0; index<this.__members.length; index++) {
-					callback.apply(null,[this.__members[index],index]);
+					callback.apply(this,[this.__members[index],index]);
 				}
 			}
 			return this;
