@@ -60,10 +60,10 @@ function OPAL () {
 	}
 
 	function ApplyTo () {
-		var args = arrayFromArguments(arguments);
-		return args.length == 1 ? function _applyto (fn) {
+		var args = arguments;
+		return function _applyto (fn) {
 			return fn.apply(null,args);
-		} : args[args.length-1].apply(null,args.slice(0,args.length-1));
+		};
 	}
 	
 	function curry (fn) {
@@ -170,7 +170,7 @@ function OPAL () {
 		var resolvers = set( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
 		return function _propertypath (object) {
 			try {
-				return resolvers.reduce(ApplyTo,object);
+				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
 			}
 			catch (error) {
 				return false;
@@ -484,10 +484,15 @@ function OPAL () {
 		
 		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-			this.each(function __reduce (object) {
-				acc = fn(acc,object);
-			});
-			return acc;
+			if ( this.__members.reduce ) {
+				return this.__members.reduce(fn,acc);
+			}
+			else {
+				this.each(function __reduce (object) {
+					acc = fn(acc,object);
+				});
+				return acc;
+			}
 		},
 		
 		copy: function _copy () {
@@ -771,7 +776,7 @@ function OPAL () {
 
 	function PropertyPredicate (path,predicate) {
 		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return compose(predicate,PropertyPath(path));
+		return pipe(PropertyPath(path),predicate);
 	}
 
 	function PropertySetPredicate (paths,predicate) {
