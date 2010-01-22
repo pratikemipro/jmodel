@@ -484,15 +484,15 @@ function OPAL () {
 		
 		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-			if ( this.__members.reduce ) {
+/*			if ( this.__members.reduce ) {
 				return this.__members.reduce(fn,acc);
 			}
-			else {
+			else { */
 				this.each(function __reduce (object) {
 					acc = fn(acc,object);
 				});
 				return acc;
-			}
+//			}
 		},
 		
 		copy: function _copy () {
