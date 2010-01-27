@@ -944,8 +944,9 @@ var jModel = function () {
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
+				var context = this.context;
 				this.each(function __subcribe (object) {
-					this.context.notifications.send(subscriber({
+					context.notifications.send(subscriber({
 						method: 'initialise',
 						object: object,
 						description: 'initialisation'
