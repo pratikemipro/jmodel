@@ -377,6 +377,13 @@ var jModel = function () {
 			return this;
 		},
 		
+		transaction: function _transaction (trans,that) {
+			this.notifications.suspend();
+			trans.call(that);
+			this.notifications.resume();
+			return this;
+		},
+		
 		validate: function _validate () {
 			return this.all
 					.map(function __validate (object) {return {object:object, messages:object.validate()};})
@@ -388,6 +395,7 @@ var jModel = function () {
 			defaultContext			= this;
 			external.context		= this;
 			external.notifications	= this.notifications;
+			external.transaction	= this.transaction;
 		},
 		
 		debug: function _debug (showSubscribers) {
@@ -476,23 +484,25 @@ var jModel = function () {
 
 			log('domainobject/create').startGroup('Creating a new '+this.name);
 
-			this.context.notifications.suspend();
+			var newObject;
 
-			data = (typeof data == 'object') ? data : {};
+			this.context.transaction(function () {
+				
+				data = (typeof data == 'object') ? data : {};
 
-			var primaryKey	= this.options.primaryKey;
-			data[primaryKey] = data[primaryKey] || this.generateID();
-			
-			var newObject = new this.constructor();
-			newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey)).delegateFor(newObject);
+				var primaryKey	= this.options.primaryKey;
+				data[primaryKey] = data[primaryKey] || this.generateID();
 
-			this.context.all.add(newObject);
+				newObject = new this.constructor();
+				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey)).delegateFor(newObject);
 
-			if ( newObject.initialise ) {
-				newObject.initialise();
-			}
-			
-			this.context.notifications.resume();
+				this.context.all.add(newObject);
+
+				if ( newObject.initialise ) {
+					newObject.initialise();
+				}
+				
+			},this);
 
 			log('domainobject/create').endGroup();
 
