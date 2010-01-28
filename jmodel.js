@@ -539,7 +539,7 @@ var jModel = function () {
 		this.context = context;
 		
 		var	notifications 	= set().delegateFor(this),
-			active			= true,
+			suspensions		= 0,
 			filter			= AllPredicate;
 		
 		this.send = function _send (messages) {
@@ -547,7 +547,7 @@ var jModel = function () {
 			messages.each(function __send (message) {
 				if ( !filter(message) ) {
 				}
-				else if ( ( active || !message.subscription.application ) && typeof message == 'function' ) {
+				else if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
 					message();
 				}
 				else if ( typeof message == 'function' ) {
@@ -560,15 +560,19 @@ var jModel = function () {
 		
 		this.suspend = function _suspend () {
 			log('notifications/control').debug('Suspending notifications for '+this.context.name);
-			active = false;
+			suspensions++;
 			return this;
 		};
 		
 		this.resume = function _resume () {
 			log('notifications/control').debug('resuming notifications for '+this.context.name);
-			active = true;
-			notifications.map(apply);
-			return this.flush();
+			if ( --suspensions == 0 ) {
+				notifications.map(apply);
+				return this.flush();
+			}
+			else {
+				return this;
+			}
 		};
 		
 		this.flush = function _flush (predicate) {
