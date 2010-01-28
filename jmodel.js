@@ -1305,10 +1305,11 @@ var jModel = function () {
 		this.constraints	= delegateTo(constraints,'filter');
 		this.context		= context;
 		
-		this.reifyFields();
-		this.set(data);
-		this.reifyRelationships();
-		this.reifyConstraints();		
+		this
+			.reifyFields()
+			.set(data)
+			.reifyRelationships()
+			.reifyConstraints();		
 
 	};
 	
@@ -1447,6 +1448,7 @@ var jModel = function () {
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 			}
 			log('domainobject/create').endGroup();
+			return this;
 		},
 		
 		reifyRelationships: function _reifyRelationships () {
@@ -1475,6 +1477,8 @@ var jModel = function () {
 				this.parent['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
 			}
 			log('domainobject/create').endGroup();
+			
+			return this;
 
 		},
 		
@@ -1487,6 +1491,7 @@ var jModel = function () {
 				this.constraints().add(descriptor.predicate);
 			}
 			log('domainobject/create').endGroup();
+			return this;
 		},
 		
 		clean: function _clean () {
