@@ -126,7 +126,7 @@ function OPAL () {
 	}
 
 	function Type (object) {
-		return typeof object;
+		return object != null && typeof object;
 	}
 
 	function Property (property,value) {
