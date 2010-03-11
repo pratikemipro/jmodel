@@ -1212,13 +1212,16 @@ var jModel = function () {
 		this.primaryKey	= primaryKey;
 		this.parent		= parent;
 		
+		this.events	= new EventRegistry(context.notifications,'_any','removed');
+		this.event	= delegateTo(this.events,'filter');
+		
 		var notifications	= context.notifications,
-			subscribers 	= new SubscriberSet(notifications),
-			fields			= new FieldSet(this,subscribers),
+	/*		subscribers 	= new SubscriberSet(notifications), */
+			fields			= new FieldSet(this,this.events),
 			relationships	= new RelationshipSet(),
 			constraints		= new ConstraintSet;
 			
-		this.subscribers	= delegateTo(subscribers, 'filter');
+//		this.subscribers	= delegateTo(subscribers, 'filter');
 		this.fields			= delegateTo(fields,'filter');
 		this.field			= delegateTo(fields,'getField');
 		this.relationships	= delegateTo(relationships,'filter');
@@ -1282,7 +1285,8 @@ var jModel = function () {
 				key = arguments[0];
 				var value = arguments[1];
 				if ( this.fields().set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
-					this.subscribers().notify({key:':any',description:'field value change: any'});
+					this.event('_any').raise({key:':any',description:'field value change: any'});
+//					this.subscribers().notify({key:':any',description:'field value change: any'});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1291,7 +1295,8 @@ var jModel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				this.subscribers().notify({key:':any',description:'field value change: any'});
+				this.event('_any').raise({key:':any',description:'field value change: any'});
+//				this.subscribers().notify({key:':any',description:'field value change: any'});
 				log('domainobject/set').endGroup();
 			}
 
@@ -1302,7 +1307,8 @@ var jModel = function () {
 		},
 		
 		removed: function _removed (collection) {
-			this.subscribers().notify({removed:true,description:'object removal'});
+			this.event('removed').raise({removed:true,description:'object removal'});
+//			this.subscribers().notify({removed:true,description:'object removal'});
 		},
 		
 		subscribe: function _subscribe (subscription) {
@@ -1334,7 +1340,14 @@ var jModel = function () {
 				subscription.type = ContentNotification;
 			}
 
-			var subscriber = this.subscribers().add(ObjectSubscriber(subscription)).added;
+			var subscriber = ObjectSubscriber(subscription);
+			if ( subscription.key ) {
+				var key = subscription.key == ':any' ? '_any' : subscription.key
+				this.event(key).subscribe(subscriber);
+			}
+			else if ( subscription.removed ) {
+				this.event('removed').subscribe();
+			}
 
 			if ( subscription.initialise ) {
 				this.context.notifications.send(subscriber({key:subscription.key}));
@@ -1364,9 +1377,10 @@ var jModel = function () {
 			log('domainobject/create').startGroup('Reifying fields');
 			for ( var i in this.parent.has ) {
 				var descriptor  = this.parent.has[i],
-					field		= this.fields().add(new Field(descriptor,this.subscribers())).added;
+					field		= this.fields().add(new Field(descriptor,this.events)).added;
 				this.parent[descriptor.accessor]	= delegateTo(field,'get');
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
+				this.events.register(descriptor.accessor);
 			}
 			log('domainobject/create').endGroup();
 			return this;
@@ -1455,7 +1469,7 @@ var jModel = function () {
 	// 															  		 Fields
 	// ------------------------------------------------------------------------
 	
-	function FieldSet (object,subscribers) {	
+	function FieldSet (object,events) {	
 		this.__delegate	= set().index(Property('accessor')).delegateFor(this);
 		this.getField	= delegateTo(this.__delegate,'get');
 	}
@@ -1500,11 +1514,11 @@ var jModel = function () {
 	};
 	
 	
-	function Field (field,subscribers) {
+	function Field (field,events) {
 		this.__delegate		= field.defaultValue || null;
 		this.predicate		= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
 		this.message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
-		this.subscribers	= subscribers;
+		this.events			= events;
 		this.accessor		= field.accessor;
 	}
 	
@@ -1514,7 +1528,8 @@ var jModel = function () {
 			if ( this.predicate(value) ) {
 				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
 				this.__delegate = value;
-				this.subscribers.notify({key:this.accessor,description:'field value change: '+this.accessor});
+				this.event(this.accessor).raise({key:this.accessor,description:'field value change: '+this.accessor});
+//				this.subscribers.notify({key:this.accessor,description:'field value change: '+this.accessor});
 				if ( publisher && publisher.success ) {
 					publisher.success();
 				}
