@@ -1514,6 +1514,7 @@ var jModel = function () {
 		this.predicate		= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
 		this.message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
 		this.events			= events;
+		this.event			= delegateTo(this.events,'filter');
 		this.accessor		= field.accessor;
 	}
 	
