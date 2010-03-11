@@ -650,7 +650,9 @@ var jModel = function () {
 	
 	function ObjectSubscriber (subscription) {
 		return function _objectsubscriber (event) {
-			return ( event.removed && subscription.removed ) || ( event.key == subscription.key ) ?
+			return ( event.removed && subscription.removed )
+					|| (subscription.key == ':any') 
+					|| ( event.key == subscription.key ) ?
 				subscription.type(subscription,event)
 				: null;
 		};
@@ -684,7 +686,8 @@ var jModel = function () {
 		this.__delegate.delegateFor(this);
 		this.__delegate.sorted = false;
 		
-		this.subscribers	= delegateTo(new SubscriberSet(this.context.notifications),'filter');
+		this.events	= new EventRegistry(this.context.notifications,'add','remove','change','sort');
+		this.event	= delegateTo(this.events,'filter');
 				
 		if ( this.__ordering ) {
 			this.sort();
@@ -709,17 +712,17 @@ var jModel = function () {
 			var that = this;
 			this.__delegate.add(object, function __add () {
 				that.length++;
-				that.subscribers().notify({method:'add',object:object,description:'object addition'});
+				that.event('add').raise({method:'add',object:object,description:'object addition'});
 				object.subscribe({
 					target: that,
 					key: ':any',
 					change: function _change (object) {
 						that.__delegate.sorted = false;
-						that.subscribers().notify({
+						that.event('change').raise({
 							method:'change',
 							object:object,
 							description:'object change'
-						}); 
+						});  
 					},
 					description: 'object change for '+this.description+' collection change'
 				});
@@ -734,7 +737,7 @@ var jModel = function () {
 			if ( fromHere ) {
 				this.__delegate.remove(predicate).each(function __remove (object) {
 					object.removed();
-					that.subscribers().notify({method:'remove',object:object,description:'object removal'});
+					that.event('remove').raise({method:'remove',object:object,description:'object removal'});
 					if (removeSubscribers) {
 						object.subscribers().remove(AllPredicate);
 					}	
@@ -821,7 +824,7 @@ var jModel = function () {
 
 			// Notify subscribers
 			if ( permuted ) {
-				this.subscribers().notify({method:'sort',permutation:permutation,description:'collection sort'});
+				this.event('sort').raise({method:'sort',permutation:permutation,description:'collection sort'});
 			}
 
 			this.__delegate.sorted = true;
@@ -865,7 +868,12 @@ var jModel = function () {
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
-			var subscriber = this.subscribers().add(CollectionSubscriber(subscription)).added;
+			var that = this, subscriber;
+			set('add','remove','change','sort').each(function (method) {
+				if ( subscription[method] ) {
+					subscriber = that.event(method).subscribe(CollectionSubscriber(subscription)).added;
+				}
+			});
 			
 			if ( subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);

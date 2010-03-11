@@ -77,7 +77,7 @@ var emerald = function () {
 	EventType.prototype = {
 	
 		subscribe: function _subscribe (subscriber) {
-			this.subscribers().add(subscriber);
+			return this.subscribers().add(subscriber).added;
 		},
 	
 		raise: function _raise (event) {
