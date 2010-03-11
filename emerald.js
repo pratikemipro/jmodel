@@ -32,9 +32,12 @@ var emerald = function () {
 	// 															  EventRegistry
 	// ------------------------------------------------------------------------
 
-	function EventRegistry (notifications) {
+	function EventRegistry (notifications) {;
 		this.notifications	= notifications;
-		this.__delegate		= set().index(Property('name')).delegateFor(this);	
+		this.__delegate		= set().index(Property('name')).delegateFor(this);
+		if ( arguments.length > 1 ) {
+			this.register.apply(this,arrayFromArguments(arguments).slice(1));
+		}
 	}
 	
 	EventRegistry.prototype = {

@@ -356,9 +356,9 @@ var jModel = function () {
 		this.notifications	= new NotificationQueue(this);
 		this.entities		= new EntityTypeSet(this);
 		this.all			= this.collection({description:'All Objects in context '+this.name});
-		this.events			= new EventRegistry(this.notifications);
+		
+		this.events			= new EventRegistry(this.notifications,'checkpoint');
 		this.event			= delegateTo(this.events,'filter');
-		this.events.register('checkpoint');
 		
 	}
 	
