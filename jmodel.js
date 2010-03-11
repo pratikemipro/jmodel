@@ -24,6 +24,14 @@ var jModel = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
+	//
+	// Import Emerald
+	//
+	
+	for ( var i in emerald ) {
+		eval('var '+i+' = emerald.'+i);
+	}
+
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
@@ -348,6 +356,9 @@ var jModel = function () {
 		this.notifications	= new NotificationQueue(this);
 		this.entities		= new EntityTypeSet(this);
 		this.all			= this.collection({description:'All Objects in context '+this.name});
+		this.events			= new EventRegistry(this.notifications);
+		this.event			= delegateTo(this.events,'filter');
+		this.events.register('checkpoint');
 		
 	}
 	
@@ -370,10 +381,7 @@ var jModel = function () {
 		},
 		
 		checkpoint: function _checkpoint () {
-			this.entities.each(function __checkpoint (entity) {
-				entity.objects.each('clean');
-				entity.deleted.remove(AllPredicate,true);
-			});
+			this.event('checkpoint').raise();
 			return this;
 		},
 		
@@ -421,7 +429,7 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		this.context	= context;
-		this.__delegate	= set().index(Property('name')).delegateFor(this);	
+		this.__delegate	= set().index(Property('name')).delegateFor(this);
 	}
 	
 	EntityTypeSet.prototype = {
@@ -464,6 +472,12 @@ var jModel = function () {
 		}
 							
 		this.deleted = new DeletedObjectsCollection(this.objects);
+		
+		var that = this;
+		this.context.event('checkpoint').subscribe(function () {
+			that.objects.each('clean');
+			that.deleted.remove(AllPredicate,true);
+		});
 
 	};
 	
@@ -543,65 +557,6 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	//															  Notifications
 	// ------------------------------------------------------------------------
-	
-	function NotificationQueue (context) {
-		
-		this.context = context;
-		
-		var	notifications 	= set().delegateFor(this),
-			suspensions		= 0,
-			filter			= AllPredicate;
-		
-		this.send = function _send (messages) {
-			messages = (messages instanceof Set) ? messages : new Set([messages]);
-			messages.each(function __send (message) {
-				if ( !filter(message) ) {
-				}
-				else if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
-					message();
-				}
-				else if ( typeof message == 'function' ) {
-					log('notifications/send').debug('Adding a notification to the queue');
-					notifications.add(message);
-				}
-			});
-			return this;
-		};
-		
-		this.suspend = function _suspend () {
-			log('notifications/control').debug('Suspending notifications for '+this.context.name);
-			suspensions++;
-			return this;
-		};
-		
-		this.resume = function _resume () {
-			log('notifications/control').debug('resuming notifications for '+this.context.name);
-			if ( --suspensions == 0 ) {
-				notifications.map(apply);
-				return this.flush();
-			}
-			else {
-				return this;
-			}
-		};
-		
-		this.flush = function _flush (predicate) {
-			log('notifications/control').debug('Flushing notifications for '+this.context.name);
-			notifications.remove(predicate);
-			return this;
-		};
-		
-		this.setFilter = function _setFilter (predicate) {
-			filter = predicate;
-			return this;
-		};
-		
-		this.debug = function _debug () {
-			log().debug('Pending notifications: '+this.count());
-		};
-		
-	};
-	
 	
 	//
 	// Notification types
@@ -686,50 +641,6 @@ var jModel = function () {
 		});
 	};
 	
-	
-	//
-	// Subscriber Set
-	//
-	// This contains a list of subscription objects, each of which produces
-	// notification objects when required and adds them to the notification
-	// queue.
-	//
-	
-	function SubscriberSet (notifications) {
-		this.__delegate		= set().delegateFor(this);
-		this.notifications	= notifications;
-	};
-	
-	SubscriberSet.prototype = {
-		
-		add: function _add (subscriber) {
-			var that = this;
-			this.__delegate.add(subscriber, function __add () {
-				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
-				that.added = subscriber;
-			});
-			return this;
-		},
-		
-		notify: function _notify (event) {
-			var messages = this.__delegate.map(ApplyTo(event))
-								.filter(function (msg) { return msg != null; } );
-			if ( messages.count() > 0 ) {
-				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
-				this.notifications.send(messages);
-				log('subscriptions/notify').endGroup();
-			}
-		},
-		
-		debug: function _debug () {
-			if ( _.nonempty(this.__delegate) ) {
-				log().debug('Subscribers:  '+this.__delegate.count());
-			}
-		}
-		
-	};
-	
-		
 	function CollectionSubscriber (subscription) {
 		return function _collectionsubscriber (event) {
 			return ( subscription.filter && !subscription.filter(event) ) ? null
@@ -1951,12 +1862,6 @@ var jModel = function () {
 			}
 		}
 		return partition;
-	}
-	
-	function delegateTo (context,methodName) {
-		return function () {
-			return context[methodName].apply(context,arguments);
-		}
 	}
 	
 	
