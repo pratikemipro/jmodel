@@ -1216,12 +1216,10 @@ var jModel = function () {
 		this.event	= delegateTo(this.events,'filter');
 		
 		var notifications	= context.notifications,
-	/*		subscribers 	= new SubscriberSet(notifications), */
 			fields			= new FieldSet(this,this.events),
 			relationships	= new RelationshipSet(),
 			constraints		= new ConstraintSet;
-			
-//		this.subscribers	= delegateTo(subscribers, 'filter');
+
 		this.fields			= delegateTo(fields,'filter');
 		this.field			= delegateTo(fields,'getField');
 		this.relationships	= delegateTo(relationships,'filter');
@@ -1286,7 +1284,6 @@ var jModel = function () {
 				var value = arguments[1];
 				if ( this.fields().set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
 					this.event('_any').raise({key:':any',description:'field value change: any'});
-//					this.subscribers().notify({key:':any',description:'field value change: any'});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1296,7 +1293,6 @@ var jModel = function () {
 					this.set(key,mappings[key],false);
 				}
 				this.event('_any').raise({key:':any',description:'field value change: any'});
-//				this.subscribers().notify({key:':any',description:'field value change: any'});
 				log('domainobject/set').endGroup();
 			}
 
@@ -1308,7 +1304,6 @@ var jModel = function () {
 		
 		removed: function _removed (collection) {
 			this.event('removed').raise({removed:true,description:'object removal'});
-//			this.subscribers().notify({removed:true,description:'object removal'});
 		},
 		
 		subscribe: function _subscribe (subscription) {
@@ -1529,7 +1524,6 @@ var jModel = function () {
 				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
 				this.__delegate = value;
 				this.event(this.accessor).raise({key:this.accessor,description:'field value change: '+this.accessor});
-//				this.subscribers.notify({key:this.accessor,description:'field value change: '+this.accessor});
 				if ( publisher && publisher.success ) {
 					publisher.success();
 				}
