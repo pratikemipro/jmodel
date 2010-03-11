@@ -421,7 +421,7 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		this.context	= context;
-		this.__delegate	= set().index(Property('name')).delegateFor(this);
+		this.__delegate	= set().index(Property('name')).delegateFor(this);	
 	}
 	
 	EntityTypeSet.prototype = {
@@ -498,9 +498,9 @@ var jModel = function () {
 
 				this.context.all.add(newObject);
 
-				if ( newObject.initialise ) {
+/*				if ( newObject.initialise ) {
 					newObject.initialise();
-				}
+				} */
 				
 			},this);
 
@@ -1757,14 +1757,14 @@ var jModel = function () {
 		
 		function makeObject (key,data,parent,context) {
 			
-			log('json/thaw').startGroup('thawing a '+key);
-			
+			log('json/thaw').startGroup('thawing '+key);
+
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
-			if ( parent && parent.relationships && _.nonempty(parent.relationships(PropertyPredicate('accessor',key))) ) {
+			if ( parent && parent.relationships && parent.relationships(key) ) {
 				log('json/thaw').debug('adding object to relationship');
-				object = parent.relationships(PropertyPredicate('accessor',key)).first().add(partitionedData.fields);
+				object = parent.relationships(key).add(partitionedData.fields);
 			}
 			else {
 				if ( context.entities.get(key) ) {
@@ -1777,11 +1777,15 @@ var jModel = function () {
 			}
 			
 			for ( var childKey in partitionedData.children ) {
-				var childData = partitionedData.children[childKey];
-				childData = ( childData instanceof Array ) ? childData : [childData];
-				for ( var i=0; i<childData.length; i++) {
-					makeObject(childKey,childData[i],object||parent,context);
-				}
+			    if ( childKey != '__metadata' && childKey != '__deferred' ) {
+			        var childData = partitionedData.children[childKey];
+    				childData = ( childData instanceof Array ) ? childData : [childData];
+    				for ( var i=0; i<childData.length; i++) {
+    				    if ( !(childData[i] && childData[i].__deferred) ) {
+    				        makeObject(childKey,childData[i],object||parent,context);
+    				    }
+    				}
+			    }
 			} 
 			
 			log('json/thaw').endGroup();
@@ -1791,13 +1795,13 @@ var jModel = function () {
 		
 		return {
 			
-			thaw: 	function _thaw (context,data,options) {
+			thaw: 	function _thaw (context,data,options,baseType) {
 						log('json/thaw').startGroup('thawing JSON');
 						options = options || {};
-						data = ( data instanceof Array ) ? data : [data];
+					//	data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
 							for ( var key in data[i] ) {
-								makeObject(key,data[i][key],options.parent,context);
+								makeObject(baseType || key,data[i][key],options.parent,context);
 							}
 						}
 						log('json/thaw').endGroup();
