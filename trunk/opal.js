@@ -1100,6 +1100,12 @@ function OPAL () {
 		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
 	}
 	
+	function delegateTo (context,methodName) {
+		return function () {
+			return context[methodName].apply(context,arguments);
+		}
+	}
+	
 	function copy (obj,exact) {
 		return extend(obj, exact ? {} : new EnhancedObject() );
 	}
@@ -1141,6 +1147,7 @@ function OPAL () {
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments,
+		delegateTo: 					delegateTo,
 		copy: 							copy
 	});
 
