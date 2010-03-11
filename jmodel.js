@@ -713,19 +713,21 @@ var jModel = function () {
 			this.__delegate.add(object, function __add () {
 				that.length++;
 				that.event('add').raise({method:'add',object:object,description:'object addition'});
-				object.subscribe({
-					target: that,
-					key: ':any',
-					change: function _change (object) {
-						that.__delegate.sorted = false;
-						that.event('change').raise({
-							method:'change',
-							object:object,
-							description:'object change'
-						});  
-					},
-					description: 'object change for '+this.description+' collection change'
-				});
+/*				if ( that.event('change').subscribers(':first') ) {
+					object.subscribe({
+						target: that,
+						key: ':any',
+						change: function _change (object) {
+							that.__delegate.sorted = false;
+							that.event('change').raise({
+								method:'change',
+								object:object,
+								description:'object change'
+							});  
+						},
+						description: 'object change for '+this.description+' collection change'
+					});
+				} */
 				that.__delegate.sorted = false;
 			});
 			return this;
