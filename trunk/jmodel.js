@@ -877,7 +877,7 @@ var jModel = function () {
 				}
 			});
 			
-			if ( subscription.initialise ) {
+			if ( subscriber && subscription.initialise ) {
 				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
 				this.each(function __subcribe (object) {
@@ -1309,7 +1309,6 @@ var jModel = function () {
 		subscribe: function _subscribe (subscription) {
 
 			if ( subscription.key instanceof Array ) {
-			    console.log(subscription.key);
 				for(var i=0;i<subscription.key.length;i++) {
 					this.subscribe(copy(subscription).set('key',subscription.key[i]));
 				}
@@ -1340,7 +1339,6 @@ var jModel = function () {
     			var subscriber = ObjectSubscriber(subscription);
     			if ( subscription.key ) {
     				var key = subscription.key == ':any' ? '_any' : subscription.key;
-    				console.log(key);
     				this.event(key).subscribe(subscriber);
     			}
     			else if ( subscription.removed ) {
