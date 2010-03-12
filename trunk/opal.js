@@ -79,6 +79,10 @@ function OPAL () {
 	// Concurrency functions
 	//
 	
+	function async () {
+		setTimeout(suspend.apply(null,arguments),1);
+	}
+	
 	function sequence () {
 		var operations	= arrayFromArguments(arguments),
 			operation	= operations.shift(),
@@ -203,6 +207,7 @@ function OPAL () {
 		parallel: parallel,
 		curry: curry,
 		suspend: suspend,
+		async: async,
 		sequence: sequence,
 		synchronise: synchronise,
 		synchronize: synchronise,
@@ -1103,7 +1108,7 @@ function OPAL () {
 	function delegateTo (context,methodName) {
 		return function () {
 			return context[methodName].apply(context,arguments);
-		}
+		};
 	}
 	
 	function copy (obj,exact) {
