@@ -405,6 +405,7 @@ var jModel = function () {
 			external.context		= this;
 			external.notifications	= this.notifications;
 			external.transaction	= this.transaction;
+			return this;
 		},
 		
 		debug: function _debug (showSubscribers) {
@@ -1897,6 +1898,13 @@ var jModel = function () {
 	}
 	
 	
+	// ------------------------------------------------------------------------
+	// 													Plugin extension points 
+	// ------------------------------------------------------------------------
+	
+	external.plugin = {
+		context: Context.prototype
+	};
 	
 	// ------------------------------------------------------------------------
 	// 																	Fluency 
