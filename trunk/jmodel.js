@@ -1391,9 +1391,6 @@ var jModel = function () {
 		
 		reifyRelationships: function _reifyRelationships () {
 
-			this.parent.hasOne	= this.parent.hasOne || [];
-			this.parent.hasMany	= this.parent.hasMany || [];
-
 			var i, descriptor, relationship;
 
 			log('domainobject/create').startGroup('Reifying OneToOne relationships');
@@ -1423,7 +1420,6 @@ var jModel = function () {
 		},
 		
 		reifyConstraints: function _reifyConstraints () {
-			this.parent.must = this.parent.must || [];
 			log('domainobject/create').startGroup('Reifying constraints');
 			var constraints = this.entitytype.options.must || this.parent.must;
 			for (var i in constraints ) {
