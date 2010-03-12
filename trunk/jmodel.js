@@ -1441,6 +1441,10 @@ var jModel = function () {
 			log().endGroup();
 		},
 		
+		isa: function _isa (cons) {
+		    return isa(cons)(this);
+		},
+		
 		push: function _push () {
 			var that = this;
 			this.fields().each(function __push (field) {
