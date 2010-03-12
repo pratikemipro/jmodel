@@ -160,7 +160,7 @@ var emerald = function () {
 				if ( !filter(message) ) {
 				}
 				else if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
-					message();
+					async(message);
 				}
 				else if ( typeof message == 'function' ) {
 //					log('notifications/send').debug('Adding a notification to the queue');
@@ -179,7 +179,7 @@ var emerald = function () {
 		this.resume = function _resume () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			if ( --suspensions == 0 ) {
-				notifications.map(apply);
+				notifications.map(async);
 				return this.flush();
 			}
 			else {
