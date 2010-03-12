@@ -686,7 +686,7 @@ var jModel = function () {
 		this.__delegate.delegateFor(this);
 		this.__delegate.sorted = false;
 		
-		this.events	= new EventRegistry(this.context.notifications,'add','remove','change','sort');
+		this.events	= new EventRegistry(this.context.notifications,'add','remove','initialise','change','sort');
 		this.event	= delegateTo(this.events,'filter');
 				
 		if ( this.__ordering ) {
@@ -871,9 +871,10 @@ var jModel = function () {
 			}
 			
 			var that = this, subscriber;
-			set('add','remove','change','sort').each(function (method) {
+			set('add','remove','initialise','change','sort').each(function (method) {
 				if ( subscription[method] ) {
-					subscriber = that.event(method).subscribe(CollectionSubscriber(subscription)).added;
+				    subscriber = CollectionSubscriber(subscription);
+					that.event(method).subscribe(subscriber);
 				}
 			});
 			
