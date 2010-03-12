@@ -1377,7 +1377,7 @@ var jModel = function () {
 		
 		reifyFields: function _reifyFields () {
 			log('domainobject/create').startGroup('Reifying fields');
-			var fields = this.entitytype.options.has || this.parent.has;
+			var fields = this.entitytype.options.has || this.parent.has || [];
 			for ( var i in fields ) {
 				var descriptor  = fields[i],
 					field		= this.fields().add(new Field(descriptor,this.events)).added;
@@ -1394,7 +1394,7 @@ var jModel = function () {
 			var i, descriptor, relationship;
 
 			log('domainobject/create').startGroup('Reifying OneToOne relationships');
-			var oneToOnes = this.entitytype.options.hasOne || this.parent.hasOne;
+			var oneToOnes = this.entitytype.options.hasOne || this.parent.hasOne || [];
 			for ( i in oneToOnes ) {
 				descriptor = oneToOnes[i];
 				relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
@@ -1404,7 +1404,7 @@ var jModel = function () {
 			log('domainobject/create').endGroup();
 
 			log('domainobject/create').startGroup('Reifying OneToMany relationships');
-			var oneToManys = this.entitytype.options.hasMany || this.parent.hasMany
+			var oneToManys = this.entitytype.options.hasMany || this.parent.hasMany || [];
 			for ( i in oneToManys ) {
 				descriptor = oneToManys[i];
 				relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
@@ -1421,7 +1421,7 @@ var jModel = function () {
 		
 		reifyConstraints: function _reifyConstraints () {
 			log('domainobject/create').startGroup('Reifying constraints');
-			var constraints = this.entitytype.options.must || this.parent.must;
+			var constraints = this.entitytype.options.must || this.parent.must || [];
 			for (var i in constraints ) {
 				descriptor = constraints[i];
 				descriptor.predicate.message = descriptor.message;
