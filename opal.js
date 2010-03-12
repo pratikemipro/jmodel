@@ -2,7 +2,7 @@
  *	OPAL Javascript Library v0.8.0
  *	http://code.google.com/p/jmodel/
  *
- *	Copyright (c) 2009 Richard Baker
+ *	Copyright (c) 2009-2010 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
  */

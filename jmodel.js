@@ -1,8 +1,8 @@
 /*
- *	jModel Javascript Library v0.4.3
+ *	jModel Javascript Library v0.5.0
  *	http://code.google.com/p/jmodel/
  *
- *	Copyright (c) 2009 Richard Baker
+ *	Copyright (c) 2009-2010 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
  *	Requires opal.js
@@ -35,7 +35,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.4.3';
+	external.jmodel_version = '0.5.0';
 
 
 	// ------------------------------------------------------------------------
