@@ -472,7 +472,7 @@ function OPAL () {
 		},
 		
 		map: function _map () {
-			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
+			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Resolve(obj) : obj; }
 			var lastArgument 	= arguments[arguments.length-1],
 				lastIsObject	= typeof lastArgument == 'object',
 				mapped			= lastIsObject ? lastArgument : list(),
