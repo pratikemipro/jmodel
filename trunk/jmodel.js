@@ -741,7 +741,9 @@ var jModel = function () {
 					object.removed();
 					that.event('remove').raise({method:'remove',object:object,description:'object removal'});
 					if (removeSubscribers) {
-						object.subscribers().remove(AllPredicate);
+					    object.events.each(function (event) {
+					        event.subscribers().remove(AllPredicate);
+					    })
 					}	
 				});
 				this.length = this.__delegate.length;
