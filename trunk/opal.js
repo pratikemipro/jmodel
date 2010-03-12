@@ -80,7 +80,7 @@ function OPAL () {
 	//
 	
 	function async () {
-		setTimeout(suspend.apply(null,arguments),1);
+		return setTimeout(suspend.apply(null,arguments),1);
 	}
 	
 	function sequence () {
