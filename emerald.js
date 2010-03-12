@@ -51,6 +51,14 @@ var emerald = function () {
 			return this;
 		},
 		
+		filter: function _filter () {
+		    events = this.__delegate.filter.apply(this,arguments);
+		    if ( !events ) {
+		        throw 'Emerald exception: unknown event "'+arguments[0]+'"';
+		    }
+		    return events;
+		},
+		
 		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
