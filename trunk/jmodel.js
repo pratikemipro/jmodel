@@ -1309,46 +1309,51 @@ var jModel = function () {
 		subscribe: function _subscribe (subscription) {
 
 			if ( subscription.key instanceof Array ) {
+			    console.log(subscription.key);
 				for(var i=0;i<subscription.key.length;i++) {
 					this.subscribe(copy(subscription).set('key',subscription.key[i]));
 				}
-			} 
-
-			subscription.source = this;
-			subscription.format = subscription.format || noformat;
-
-			if ( subscription.removed ) {
-				subscription.type		= RemovalNotification;
-			}
-			else if ( subscription.change && typeof subscription.change == 'string' ) {
-				subscription.type		= EventNotification;
-				subscription.event		= subscription.change;
-			}
-			else if ( subscription.change && typeof subscription.change == 'function' ) {
-				subscription.type		= MethodNotification;
-				subscription.method		= subscription.change;
-			}
-			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-				subscription.type = ValueNotification;
 			}
 			else {
-				subscription.type = ContentNotification;
-			}
+			    
+			    subscription.source = this;
+    			subscription.format = subscription.format || noformat;
 
-			var subscriber = ObjectSubscriber(subscription);
-			if ( subscription.key ) {
-				var key = subscription.key == ':any' ? '_any' : subscription.key
-				this.event(key).subscribe(subscriber);
-			}
-			else if ( subscription.removed ) {
-				this.event('removed').subscribe();
-			}
+    			if ( subscription.removed ) {
+    				subscription.type		= RemovalNotification;
+    			}
+    			else if ( subscription.change && typeof subscription.change == 'string' ) {
+    				subscription.type		= EventNotification;
+    				subscription.event		= subscription.change;
+    			}
+    			else if ( subscription.change && typeof subscription.change == 'function' ) {
+    				subscription.type		= MethodNotification;
+    				subscription.method		= subscription.change;
+    			}
+    			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
+    				subscription.type = ValueNotification;
+    			}
+    			else {
+    				subscription.type = ContentNotification;
+    			}
 
-			if ( subscription.initialise ) {
-				this.context.notifications.send(subscriber({key:subscription.key}));
-			}
+    			var subscriber = ObjectSubscriber(subscription);
+    			if ( subscription.key ) {
+    				var key = subscription.key == ':any' ? '_any' : subscription.key;
+    				console.log(key);
+    				this.event(key).subscribe(subscriber);
+    			}
+    			else if ( subscription.removed ) {
+    				this.event('removed').subscribe();
+    			}
 
-			return subscriber;
+    			if ( subscription.initialise ) {
+    				this.context.notifications.send(subscriber({key:subscription.key}));
+    			}
+
+    			return subscriber;
+			    
+			}
 
 		},
 		
