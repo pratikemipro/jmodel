@@ -508,7 +508,7 @@ var jModel = function () {
 				data[primaryKey] = data[primaryKey] || this.generateID();
 
 				newObject = new this.constructor();
-				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey)).delegateFor(newObject);
+				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey,this)).delegateFor(newObject);
 
 				this.context.all.add(newObject);
 
@@ -1205,7 +1205,7 @@ var jModel = function () {
 	// 													 Domain Object delegate
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (context,parent,data,primaryKey) {
+	function DomainObject (context,parent,data,primaryKey,entitytype) {
 		
 		this.domain = {
 			dirty: 	false,
@@ -1214,6 +1214,7 @@ var jModel = function () {
 		
 		this.primaryKey	= primaryKey;
 		this.parent		= parent;
+		this.entitytype = entitytype;
 		
 		this.events	= new EventRegistry(context.notifications,'_any','removed');
 		this.event	= delegateTo(this.events,'filter');
@@ -1376,8 +1377,9 @@ var jModel = function () {
 		
 		reifyFields: function _reifyFields () {
 			log('domainobject/create').startGroup('Reifying fields');
-			for ( var i in this.parent.has ) {
-				var descriptor  = this.parent.has[i],
+			var fields = this.entitytype.options.has || this.parent.has;
+			for ( var i in fields ) {
+				var descriptor  = fields[i],
 					field		= this.fields().add(new Field(descriptor,this.events)).added;
 				this.parent[descriptor.accessor]	= delegateTo(field,'get');
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
@@ -1395,8 +1397,9 @@ var jModel = function () {
 			var i, descriptor, relationship;
 
 			log('domainobject/create').startGroup('Reifying OneToOne relationships');
-			for ( i in this.parent.hasOne ) {
-				descriptor = this.parent.hasOne[i];
+			var oneToOnes = this.entitytype.options.hasOne || this.parent.hasOne;
+			for ( i in oneToOnes ) {
+				descriptor = oneToOnes[i];
 				relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
 				this.parent[descriptor.accessor]				= delegateTo(relationship,'get');
 				this.parent['add'+descriptor.accessor]			= delegateTo(relationship,'add');
@@ -1404,8 +1407,9 @@ var jModel = function () {
 			log('domainobject/create').endGroup();
 
 			log('domainobject/create').startGroup('Reifying OneToMany relationships');
-			for ( i in this.parent.hasMany ) {
-				descriptor = this.parent.hasMany[i];
+			var oneToManys = this.entitytype.options.hasMany || this.parent.hasMany
+			for ( i in oneToManys ) {
+				descriptor = oneToManys[i];
 				relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
 				this.parent['add'+descriptor.accessor]							= delegateTo(relationship,'add');
@@ -1421,8 +1425,9 @@ var jModel = function () {
 		reifyConstraints: function _reifyConstraints () {
 			this.parent.must = this.parent.must || [];
 			log('domainobject/create').startGroup('Reifying constraints');
-			for (var i in this.parent.must ) {
-				descriptor = this.parent.must[i];
+			var constraints = this.entitytype.options.must || this.parent.must;
+			for (var i in constraints ) {
+				descriptor = constraints[i];
 				descriptor.predicate.message = descriptor.message;
 				this.constraints().add(descriptor.predicate);
 			}
