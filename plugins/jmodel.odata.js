@@ -20,8 +20,8 @@ jModel.plugin.context.fromService = function (url) {
 			
 			var entityTypeName = $(entitytype).attr('Name'),
 				has			   = parseFields(entitytype),
-				hasOne		   = parseRelationship(entitytype,csdl,'Dependent'),
-				hasMany		   = parseRelationship(entitytype,csdl,'Principal');
+				hasOne		   = parseRelationships(entitytype,csdl,'Dependent'),
+				hasMany		   = parseRelationships(entitytype,csdl,'Principal');
 			
 		});
 		
@@ -36,7 +36,7 @@ jModel.plugin.context.fromService = function (url) {
 		}).get();
 	}
 	
-	function parseRelationship (entitytype,csdl,type) {
+	function parseRelationships (entitytype,csdl,type) {
 		return $('NavigationProperty',entitytype).filter(function (index,relationship) {
 			return $('Association[Name="'+$(relationship).attr('Relationship').split('.').pop()+'"] '
 					 +type+'[Role="'+$(entitytype).attr('Name')+'"]',csdl).length > 0;
