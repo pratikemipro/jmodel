@@ -683,10 +683,7 @@ function OPAL () {
 			}
 
 			if ( failed ) {
-				if ( failure && typeof failure=='function') {
-					failure.call(this,object);
-				}
-				return this;
+				throw "Opal: Invalid type in TypedSet.";
 			}
 			else {
 				return Set.prototype.add.call(this,object);
