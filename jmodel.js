@@ -1569,7 +1569,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		Set.apply(this,arguments);
+		TypedSet.apply(this);
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		return this.index(Property('name'));
 	}
@@ -1585,17 +1585,21 @@ var jModel = function () {
 			}
 		}
 		
-	}, new Set() );
+	}, new TypedSet(Relationship) );
+	
+
+	function Relationship () {};
 	
 	
 	function OneToOneRelationship (parent,relationship) {
+		Relationship.apply(this);
 		this.parent			= parent;
 		this.relationship	= relationship;
 		this.accessor		= relationship.accessor;
 		this.name			= relationship.accessor;		
 	};
 	
-	OneToOneRelationship.prototype = {
+	OneToOneRelationship.prototype = extend({
 		
 		get: function _get (create) {
 			var child = this.parent.context.entities.get(this.relationship.prototype)
@@ -1614,7 +1618,7 @@ var jModel = function () {
 			return newObject;
 		}
 		
-	};
+	}, new Relationship() );
 	
 	external.OneToOneRelationship = OneToOneRelationship;
 	
@@ -1622,6 +1626,8 @@ var jModel = function () {
 	function OneToManyRelationship (owner,relationship) {
 
 		log('domainobject/create').startGroup('Reifying '+relationship.accessor);
+
+		Relationship.apply(this);
 
 		relationship.direction	= 'reverse';
 		this.enabled 			= relationship.enabled;
@@ -1679,6 +1685,8 @@ var jModel = function () {
 		log('domainobject/create').endGroup();
 		
 	};
+	
+	OneToManyRelationship.prototype = new Relationship();
 	
 	external.OneToManyRelationship = OneToManyRelationship;
 	
