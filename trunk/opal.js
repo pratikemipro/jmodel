@@ -659,8 +659,9 @@ function OPAL () {
 	//															           List
 	// ------------------------------------------------------------------------
 	
-	TypedSet = function (cons) {
-		this.__cons = this.__cons || cons;
+	TypedSet = function (constructor) {
+		constructor = constructor && constructor.entitytype ? constructor.entitytype.constructor : constructor;
+		this.__constructor = this.__constructor || constructor;
 		Set.apply(this,null);
 		return this;
 	}
@@ -672,11 +673,11 @@ function OPAL () {
 		add: function (object,success,failure) {
 			
 			if ( object.constructor === Object || ! (object instanceof Object) ) {
-				object = this.__cons(object)
+				object = new this.__constructor(object)
 			}
 
 			var failed;
-			switch (this.__cons) {
+			switch (this.__constructor) {
 
 				case Number:
 					failed = isNaN(object);
@@ -685,6 +686,9 @@ function OPAL () {
 				case Date:
 					failed = object.toString() === 'Invalid Date';
 					break;
+					
+				default:
+					failed = ! (object instanceof this.__constructor);
 
 			}
 
