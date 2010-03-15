@@ -422,7 +422,7 @@ var jModel = function () {
 		
 	};
 	
-	var	defaultContext	= contexts.create('default').setDefault();
+	
 	
 	
 	// ------------------------------------------------------------------------
@@ -430,8 +430,9 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
-		this.context	= context;
-		this.__delegate	= set().of(EntityType).index(Property('name')).delegateFor(this);
+		TypedSet.call(this);
+		this.context = context;
+		return this.index(Property('name'));
 	}
 	
 	EntityTypeSet.prototype = extend({
@@ -449,9 +450,9 @@ var jModel = function () {
 			}
 		}
 		
-	}, new Set() );
+	}, new TypedSet(EntityType) );
 	
-	
+	var	defaultContext	= contexts.create('default').setDefault();
 	
 	function EntityType (context,name,constructor,options) {
 
