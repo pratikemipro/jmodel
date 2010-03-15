@@ -347,7 +347,7 @@ function OPAL () {
 			}
 			else {
 				if (failure && typeof failure=='function') {
-					success.call(this,object);
+					failure.call(this,object);
 				}	
 			}
 			return this;
@@ -578,6 +578,10 @@ function OPAL () {
 			return zip(this,set2,zipper);
 		},
 		
+		of: function _of (cons) {
+			return this.reduce(Method('add'),new TypedSet(cons));
+		},
+		
 		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
@@ -646,6 +650,51 @@ function OPAL () {
 		intersection: 	intersection,
 		difference: 	difference
 	});
+
+
+
+	// ------------------------------------------------------------------------
+	//															           List
+	// ------------------------------------------------------------------------
+	
+	TypedSet = function (cons) {
+		this.__cons = cons;
+		Set.apply(this,null);
+		return this;
+	}
+	
+	TypedSet.prototype = extend({
+		
+		add: function (object,success,failure) {
+
+			object = object instanceof this.__cons ? object : new this.__cons(object);
+
+			var failed;
+			switch (this.__cons) {
+
+				case Number:
+					failed = isNaN(object);
+					break;
+
+				case Date:
+					failed = object.toString() === 'Invalid Date';
+					break;
+
+			}
+
+			if ( failed ) {
+				if ( failure && typeof failure=='function') {
+					failure.call(this,object);
+				}
+				return this;
+			}
+			else {
+				return Set.prototype.add.call(this,object);
+			}
+
+		}
+		
+	}, new Set() );
 
 
 	// ------------------------------------------------------------------------
