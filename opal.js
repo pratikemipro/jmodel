@@ -329,6 +329,8 @@ function OPAL () {
 	
 	Set.prototype = {
 		
+		constructor: Set,
+		
 		constraint: function constraint (obj) {
 			return !this.member(obj);
 		},
@@ -665,9 +667,13 @@ function OPAL () {
 	
 	TypedSet.prototype = extend({
 		
+		constructor: TypedSet,
+		
 		add: function (object,success,failure) {
-
-			object = object instanceof this.__cons ? object : new this.__cons(object);
+			
+			if ( object.constructor === Object || ! (object instanceof Object) ) {
+				object = this.__cons(object)
+			}
 
 			var failed;
 			switch (this.__cons) {
@@ -739,6 +745,8 @@ function OPAL () {
 	}
 	
 	UniqueIndex.prototype = {
+		
+		constructor: UniqueIndex,
 	
 		build: function _build () {
 			this.set.reduce(Method('add'),this);
@@ -1166,6 +1174,8 @@ function OPAL () {
 	function EnhancedObject () {}
 	
 	EnhancedObject.prototype = {
+		
+		constructor: EnhancedObject,
 		
 		add: function _add (attributes) {
 			return extend(attributes,this);

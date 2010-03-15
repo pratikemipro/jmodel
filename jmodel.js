@@ -365,6 +365,8 @@ var jModel = function () {
 	
 	Context.prototype = {
 		
+		constructor: Context,
+		
 		register: function _register (name,constructor,options) {
 			return this.entities
 						.create(name,constructor,options)
@@ -420,9 +422,7 @@ var jModel = function () {
 			log().endGroup();
 		}
 		
-	};
-	
-	
+	};	
 	
 	
 	// ------------------------------------------------------------------------
@@ -436,6 +436,8 @@ var jModel = function () {
 	}
 	
 	EntityTypeSet.prototype = extend({
+		
+		constructor: EntityTypeSet,
 		
 		create: function _create (name,constructor,options) {
 			return this.add(new EntityType(this.context,name,constructor,options)).added;
@@ -485,6 +487,8 @@ var jModel = function () {
 	};
 	
 	EntityType.prototype = {
+		
+		constructor: EntityType,
 		
 		object: function _object (criterion) {
 			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion,10) ) ? parseInt(criterion,10) : criterion;
@@ -710,6 +714,8 @@ var jModel = function () {
 	};
 	
 	DomainObjectCollection.prototype = {
+		
+		constructor: DomainObjectCollection,
 		
 		add: function _add (object) {
 			var that = this;
@@ -1043,6 +1049,8 @@ var jModel = function () {
 	
 	Grouping.prototype = {
 		
+		constructor: Grouping,
+		
 		build: function _build () {
 			return this.parent.reduce(Method('add'),this);
 		},
@@ -1243,6 +1251,8 @@ var jModel = function () {
 	};
 	
 	DomainObject.prototype = {
+		
+		constructor: DomainObject,
 		
 		get: function _get () {
 		
@@ -1485,6 +1495,8 @@ var jModel = function () {
 	
 	FieldSet.prototype = {
 		
+		constructor: FieldSet,
+		
 		get: function _get (name) {
 			try {
 				return this.__delegate.get(name).get();
@@ -1533,6 +1545,8 @@ var jModel = function () {
 	}
 	
 	Field.prototype = {
+		
+		constructor: Field,
 	
 		set: function _set (value,publisher) {
 			if ( this.predicate(value) ) {
@@ -1576,6 +1590,8 @@ var jModel = function () {
 	
 	RelationshipSet.prototype = extend({
 		
+		constructor: RelationshipSet,
+		
 		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
@@ -1589,6 +1605,7 @@ var jModel = function () {
 	
 
 	function Relationship () {};
+	Relationship.prototype.constructor = Relationship;
 	
 	
 	function OneToOneRelationship (parent,relationship) {
@@ -1600,6 +1617,8 @@ var jModel = function () {
 	};
 	
 	OneToOneRelationship.prototype = extend({
+		
+		constructor: OneToOneRelationship,
 		
 		get: function _get (create) {
 			var child = this.parent.context.entities.get(this.relationship.prototype)
@@ -1687,6 +1706,7 @@ var jModel = function () {
 	};
 	
 	OneToManyRelationship.prototype = new Relationship();
+	OneToManyRelationship.prototype.constructor = OneToManyRelationship;
 	
 	external.OneToManyRelationship = OneToManyRelationship;
 	
@@ -1700,6 +1720,8 @@ var jModel = function () {
 		set().of(Function).delegateFor(this);
 		
 	}
+	
+	ConstraintSet.prototype.constructor = ConstraintSet;
 	
 	
 	// ------------------------------------------------------------------------
