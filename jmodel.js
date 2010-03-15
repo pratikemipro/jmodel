@@ -1569,11 +1569,12 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		this.__delegate = set().index(Property('name')).delegateFor(this);
+		Set.apply(this,arguments);
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
+		return this.index(Property('name'));
 	}
 	
-	RelationshipSet.prototype = {
+	RelationshipSet.prototype = extend({
 		
 		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
@@ -1584,7 +1585,7 @@ var jModel = function () {
 			}
 		}
 		
-	};
+	}, new Set() );
 	
 	
 	function OneToOneRelationship (parent,relationship) {
