@@ -337,8 +337,8 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function ContextSet () {
-		
-		var contexts = set().index(Property('name')).delegateFor(this);
+
+		var contexts = set().of(Context).index(Property('name')).delegateFor(this);
 	
 		this.create = function _create (name) {
 			return this.add(new Context(name)).added;
@@ -431,10 +431,10 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		this.context	= context;
-		this.__delegate	= set().index(Property('name')).delegateFor(this);
+		this.__delegate	= set().of(EntityType).index(Property('name')).delegateFor(this);
 	}
 	
-	EntityTypeSet.prototype = {
+	EntityTypeSet.prototype = extend({
 		
 		create: function _create (name,constructor,options) {
 			return this.add(new EntityType(this.context,name,constructor,options)).added;
@@ -449,7 +449,7 @@ var jModel = function () {
 			}
 		}
 		
-	};
+	}, new Set() );
 	
 	
 	
@@ -1478,7 +1478,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function FieldSet (object,events) {	
-		this.__delegate	= set().index(Property('accessor')).delegateFor(this);
+		this.__delegate	= set().of(Field).index(Property('accessor')).delegateFor(this);
 		this.getField	= delegateTo(this.__delegate,'get');
 	}
 	
@@ -1687,7 +1687,7 @@ var jModel = function () {
 	
 	function ConstraintSet () {
 		
-		extend({constraint:TypePredicate('function')},set()).delegateFor(this);
+		set().of(Function).delegateFor(this);
 		
 	}
 	
