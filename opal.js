@@ -658,7 +658,7 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 	
 	TypedSet = function (cons) {
-		this.__cons = cons;
+		this.__cons = this.__cons || cons;
 		Set.apply(this,null);
 		return this;
 	}
@@ -692,6 +692,8 @@ function OPAL () {
 		}
 		
 	}, new Set() );
+
+	opal.TypedSet = TypedSet;
 
 
 	// ------------------------------------------------------------------------
