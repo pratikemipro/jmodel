@@ -36,166 +36,6 @@ var jModel = function () {
 		_				= external;
 		
 	external.jmodel_version = '0.5.0';
-
-
-	// ------------------------------------------------------------------------
-	//																	Logging
-	// ------------------------------------------------------------------------
-	
-	function Logger (flags) {
-		
-		var active = false,
-			logElement = null;
-		
-		function log (type, message) {
-				
-			var console = window.console;
-			
-			if (logElement) {
-				var p = document.createElement('p');
-				p.innerText = message;
-				logElement.appendChild(p);
-			}
-			else if ( type == 'startgroup' ) {
-				if ( console && console.group ) {
-					console.group(message);
-				}
-				else if ( console && console.log ) {
-					console.log(message);
-				}
-			}
-			else if ( type == 'endgroup' ) {
-				if ( console && console.groupEnd ) {
-					console.groupEnd();
-				}
-			}
-			else {
-				switch (type) {	
-					case 'error': 	if (console && console.error) {console.error(message); break;}
-					case 'warning': if (console && console.warn)  {console.warn(message);  break;}
-					case 'debug': 	if (console && console.debug) {console.debug(message); break;}
-					case 'info': 	if (console && console.info)  {console.info(message);  break;}
-					default: 		if (console && console.log)   {console.log(message);   break;}	
-				}
-			}
-			
-		}
-				
-		function enabled (path) {
-			if ( !path ) {
-				return false;
-			}
-			var pieces = path.split('/'),
-				property = flags;
-			for ( var i=0; i<pieces.length; i++ ) {
-				if ( typeof property.all == 'boolean' && property.all ) {
-					return true;
-				}
-				property = property[pieces[i]];
-				if ( !property ) {
-					return false;
-				}
-				else if ( property && typeof property == 'boolean' ) {
-					return property;
-				}
-			}
-			return false;
-		}
-				
-		function setFlag (path,value) {
-			var pieces = path.split('/'),
-				property = flags;
-			for (var i=0; i<pieces.length-1; i++) {
-				if ( typeof property[pieces[i]] == 'object' ) {
-					property = property[pieces[i]];
-				}
-				else if ( typeof property[pieces[i]] == 'undefined' ) {
-					property[pieces[i]] = {all:false};
-					property = property[pieces[i]];
-				}
-			}
-			property[pieces[pieces.length-1]] = value;
-		}		
-		
-		var externalActive = {
-			startGroup: function _startGroup (title) { log('startgroup',title); 	return externalActive; },
-			endGroup: 	function _endGroup () { log('endgroup'); 					return externalActive; },
-			error: 		function _error (message) { log('error',message); 		return externalActive; },
-			warning: 	function _warning (message) { log('warning',message);	return externalActive; },
-			debug: 		function _debug (message) { log('debug',message); 		return externalActive; },
-			info: 		function _info (message) { log('info',message); 		return externalActive; }
-		};
-		
-		var externalInactive = {
-			startGroup: function _startGroup () { return externalInactive; },
-			endGroup: 	function _endGroup () { return externalInactive; },
-			error: 		function _error () { return externalInactive; },
-			warning: 	function _warning () { return externalInactive; },
-			debug: 		function _debug () { return externalInactive; },
-			info: 		function _info () { return externalInactive; }
-		};
-		
-		var external = function _external (condition) {	
-			if ( arguments.length === 0 || ( active && enabled(condition) ) ) {
-				return externalActive;
-			}
-			else {
-				return externalInactive;
-			}
-		};
-		
-		external.enable = function _enable (flag) {
-			setFlag(flag,true);
-			active = true;
-			return this;
-		};
-
-		external.disable = function _disable (flag) {
-			setFlag(flag,false);
-			return this;
-		};
-		
-		external.element = function _element (element) {
-			logElement = element;
-			return this;
-		};
-		
-		return external;
-			
-	}
-	
-	var log = external.log = Logger({
-		
-		all: false,
-		application: {
-			all: false
-		},
-		domainobject: {
-			all: false,
-			create: false,
-			set: false
-		},
-		domainobjectcollection: {
-			all: false,
-			create: false,
-			add: false
-		},
-		subscriptions: {
-			all: false,
-			subscribe: false,
-			notify: false
-		},
-		notifications: {
-			all: false,
-			control: false,
-			send: false
-		},
-		json: {
-			all: false,
-			thaw: false
-		}
-		
-	});
 	
 	
 	// ------------------------------------------------------------------------
@@ -555,7 +395,7 @@ var jModel = function () {
 	
 	function ContentNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _contentnotification () {
-			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
+//			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
 			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
 			subscription.target.html(subscription.format(value));
 		});	
@@ -563,21 +403,21 @@ var jModel = function () {
 	
 	function ValueNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _valuenotification () {
-			log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
+//			log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		});
 	};
 	
 	function MethodNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _methodnotification () {
-			log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
+//			log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		});	
 	};
 	
 	function EventNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _eventnotification () {
-			log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
+//			log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		});
 	};
@@ -585,7 +425,7 @@ var jModel = function () {
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	function RemovalNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _removalnotification () {
-			log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);
+//			log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		});
 	};
@@ -593,11 +433,11 @@ var jModel = function () {
 	function CollectionMethodNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectionmethodnotification () {
 			if (subscription[event.method] && event.permutation) {
-				log('notifications/send').debug('Receiving a sort notification');
+//				log('notifications/send').debug('Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
 			}
 			else if (subscription[event.method] && typeof subscription[event.method] == 'function' ) {
-				log('notifications/send').debug('Receiving a collection method notification'+': '+subscription.description);
+//				log('notifications/send').debug('Receiving a collection method notification'+': '+subscription.description);
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		});
@@ -612,7 +452,7 @@ var jModel = function () {
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectionmembernotification () {
-			log('notifications/send').debug('Receiving a collection member notification');
+//			log('notifications/send').debug('Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
 												subscription.member.key
 												: [subscription.member.key];
@@ -839,10 +679,10 @@ var jModel = function () {
 		
 		subscribe: function _subscribe (subscription) {
 			
-			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
+//			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
 
 			if ( subscription.predicate || subscription.selector ) {
-				log('subscriptions/subscribe').debug('Creating a collection member subscription: '+subscription.description);
+//				log('subscriptions/subscribe').debug('Creating a collection member subscription: '+subscription.description);
 				subscription.type	= 	CollectionMemberNotification;
 				subscription.filter = 	function __subscribe (collection) {
 											return function ___subscribe (event) {
@@ -852,11 +692,11 @@ var jModel = function () {
 										}(this);							
 			}
 			else if ( ( typeof subscription.add == 'string' ) && ( typeof subscription.remove == 'string' ) ) {
-				log('subscriptions/subscribe').debug('Creating a collection event subscription: '+subscription.description);
+//				log('subscriptions/subscribe').debug('Creating a collection event subscription: '+subscription.description);
 				subscription.type	= CollectionEventNotification;
 			}
 			else {
-				log('subscriptions/subscribe').debug('Creating a collection method subscription: '+subscription.description);
+//				log('subscriptions/subscribe').debug('Creating a collection method subscription: '+subscription.description);
 				subscription.type	= CollectionMethodNotification; 
 			}
 			
@@ -869,7 +709,7 @@ var jModel = function () {
 			});
 			
 			if ( subscriber && subscription.initialise ) {
-				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
+//				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
 				this.each(function __subcribe (object) {
 					context.notifications.send(subscriber({
@@ -878,10 +718,10 @@ var jModel = function () {
 						description: 'initialisation'
 					}));	
 				});
-				log('subscriptions/subscribe').endGroup();
+//				log('subscriptions/subscribe').endGroup();
 			}
 			
-			log('subscriptions/subscribe').endGroup();
+//			log('subscriptions/subscribe').endGroup();
 			
 			return subscriber;	
 			
@@ -1598,7 +1438,7 @@ var jModel = function () {
 	
 	function OneToManyRelationship (owner,relationship) {
 
-		log('domainobject/create').startGroup('Reifying '+relationship.accessor);
+//		log('domainobject/create').startGroup('Reifying '+relationship.accessor);
 
 		Relationship.apply(this);
 
@@ -1607,13 +1447,13 @@ var jModel = function () {
 		this.accessor			= relationship.accessor;
 		this.name				= relationship.plural || relationship.accessor+'s';
 
-		log('domainobject/create').startGroup('Creating children collection');
+//		log('domainobject/create').startGroup('Creating children collection');
 		var children = 	owner.context.collection({
 							base: 	     	owner.context.entities.get(relationship.prototype).objects,
 							predicate: 	 	RelationshipPredicate(owner,relationship.field),
 							description: 	'children by relationship '+relationship.accessor
 						});
-		log('domainobject/create').endGroup();
+//		log('domainobject/create').endGroup();
 	
 		children.delegateFor(this);
 		this.get = delegateTo(children,'filter');
@@ -1647,15 +1487,15 @@ var jModel = function () {
 		};
 		
 		this.debug = function _debug () {
-			log().startGroup('Relationship: '+relationship.accessor);
-			log().debug('Object: '+owner.debug());
+//			log().startGroup('Relationship: '+relationship.accessor);
+//			log().debug('Object: '+owner.debug());
 			if ( relationship.subscription ) {
-				log().debug('Subscription target: '+subscription.target.debug());
+//				log().debug('Subscription target: '+subscription.target.debug());
 			}
-			log().endGroup();
+//			log().endGroup();
 		};
 		
-		log('domainobject/create').endGroup();
+//		log('domainobject/create').endGroup();
 		
 	};
 	
@@ -1687,22 +1527,22 @@ var jModel = function () {
 		
 		function makeObject (key,data,parent,context) {
 			
-			log('json/thaw').startGroup('thawing '+key);
+//			log('json/thaw').startGroup('thawing '+key);
 
 			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
 			
 			var object;
 			if ( parent && parent.relationships && parent.relationships(key) ) {
-				log('json/thaw').debug('adding object to relationship');
+//				log('json/thaw').debug('adding object to relationship');
 				object = parent.relationships(key).add(partitionedData.fields);
 			}
 			else {
 				if ( context.entities.get(key) ) {
-					log('json/thaw').debug('creating free object');
+//					log('json/thaw').debug('creating free object');
 					object = context.entities.get(key).create(partitionedData.fields);
 				}
 				else {
-					log('json/thaw').debug('unknown entity type: '+key);
+//					log('json/thaw').debug('unknown entity type: '+key);
 				}
 			}
 			
@@ -1718,7 +1558,7 @@ var jModel = function () {
 			    }
 			} 
 			
-			log('json/thaw').endGroup();
+//			log('json/thaw').endGroup();
 
 		}
 		
@@ -1904,21 +1744,14 @@ var jModel = function () {
 	// 																	Fluency 
 	// ------------------------------------------------------------------------
 	
-	external.log.context		= external.context;
-	external.log.notifications	= external.notifications;
-	external.log.json			= external.json;
-	
 	external.context.notifications		= external.notifications;
 	external.context.json				= external.json;
-	external.context.log				= external.log;
 	
 	external.notifications.context		= external.context;
 	external.notifications.json			= external.json;
-	external.notifications.log			= external.log;
 	
 	external.json.context				= external.context;
 	external.json.notifications			= external.notifications;
-	external.json.log					= external.log;
 	
 	return external;
 	
