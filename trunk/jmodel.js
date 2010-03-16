@@ -408,18 +408,6 @@ var jModel = function () {
 			external.notifications	= this.notifications;
 			external.transaction	= this.transaction;
 			return this;
-		},
-		
-		debug: function _debug (showSubscribers) {
-			log().startGroup('Context: '+name);
-			this.notifications.debug();
-			this.entities.each(function __debug (entity) {
-				log().startGroup(entity.name);
-				entity.objects.debug(showSubscribers);
-				entity.deleted.debug(false);
-				log().endGroup();
-			});
-			log().endGroup();
 		}
 		
 	};	
@@ -503,8 +491,6 @@ var jModel = function () {
 		
 		create: function _create (data) {
 
-			log('domainobject/create').startGroup('Creating a new '+this.name);
-
 			var newObject;
 
 			this.context.transaction(function () {
@@ -524,8 +510,6 @@ var jModel = function () {
 				} */
 				
 			},this);
-
-			log('domainobject/create').endGroup();
 
 			return newObject;
 
@@ -958,15 +942,6 @@ var jModel = function () {
 					return ValueOrdering;
 				}
 			}
-		},
-		
-		debug: function _debug (showSubscribers) {
-			if ( Not(EmptySetPredicate)(this) ) {
-				log().debug('Objects:  '+this.format(listing(Method('primaryKeyValue'))));
-			}
-			if ( showSubscribers ) {
-				this.subscribers().debug();
-			}
 		}
 		
 	};
@@ -1245,7 +1220,8 @@ var jModel = function () {
 		this
 			.reifyFields()
 			.set(data)
-			.reifyRelationships()
+			.reifyOneToOneRelationships()
+			.reifyOneToManyRelationships()
 			.reifyConstraints();		
 
 	};
@@ -1292,7 +1268,17 @@ var jModel = function () {
 	
 		},
 		
-		set: function _set () {
+		set: extend({
+			
+			fields: function () {
+				var mappings = arguments[0];
+				for ( key in mappings ) {
+					this.set(key,mappings[key],false);
+				}
+				this.event('_any').raise({key:':any',description:'field value change: any'});
+			}
+			
+		}, function _set () {
 			
 			var key;
 
@@ -1304,20 +1290,14 @@ var jModel = function () {
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
-				log('domainobject/set').startGroup('Setting fields');
-				var mappings = arguments[0];
-				for ( key in mappings ) {
-					this.set(key,mappings[key],false);
-				}
-				this.event('_any').raise({key:':any',description:'field value change: any'});
-				log('domainobject/set').endGroup();
+				this.set.fields.apply(this,arguments);
 			}
 
 			this.domain.dirty = true;
 
 			return this;
 	
-		},
+		}),
 		
 		removed: function _removed (collection) {
 			this.event('removed').raise({removed:true,description:'object removal'});
@@ -1389,7 +1369,6 @@ var jModel = function () {
 		},
 		
 		reifyFields: function _reifyFields () {
-			log('domainobject/create').startGroup('Reifying fields');
 			var fields = this.entitytype.options.has || this.parent.has || [];
 			for ( var i in fields ) {
 				var descriptor  = fields[i],
@@ -1398,64 +1377,47 @@ var jModel = function () {
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 				this.events.register(descriptor.accessor);
 			}
-			log('domainobject/create').endGroup();
 			return this;
 		},
 		
-		reifyRelationships: function _reifyRelationships () {
-
-			var i, descriptor, relationship;
-
-			log('domainobject/create').startGroup('Reifying OneToOne relationships');
+		reifyOneToOneRelationships: function _reifyOneToOneRelationships () {
 			var oneToOnes = this.entitytype.options.hasOne || this.parent.hasOne || [];
-			for ( i in oneToOnes ) {
-				descriptor = oneToOnes[i];
-				relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
+			for ( var i in oneToOnes ) {
+				var descriptor = oneToOnes[i];
+				var relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
 				this.parent[descriptor.accessor]				= delegateTo(relationship,'get');
 				this.parent['add'+descriptor.accessor]			= delegateTo(relationship,'add');
 			}
-			log('domainobject/create').endGroup();
-
-			log('domainobject/create').startGroup('Reifying OneToMany relationships');
+			return this;
+		},
+		
+		reifyOneToManyRelationships: function _reifyOneToManyRelationships() {
 			var oneToManys = this.entitytype.options.hasMany || this.parent.hasMany || [];
-			for ( i in oneToManys ) {
-				descriptor = oneToManys[i];
-				relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
+			for ( var i in oneToManys ) {
+				var descriptor = oneToManys[i];
+				var relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
 				this.parent['add'+descriptor.accessor]							= delegateTo(relationship,'add');
 				this.parent['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
 				this.parent['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
 			}
-			log('domainobject/create').endGroup();
-			
 			return this;
 
 		},
 		
 		reifyConstraints: function _reifyConstraints () {
-			log('domainobject/create').startGroup('Reifying constraints');
 			var constraints = this.entitytype.options.must || this.parent.must || [];
 			for (var i in constraints ) {
 				descriptor = constraints[i];
 				descriptor.predicate.message = descriptor.message;
 				this.constraints().add(descriptor.predicate);
 			}
-			log('domainobject/create').endGroup();
 			return this;
 		},
 		
 		clean: function _clean () {
 			this.domain.dirty = false;
 			return this;
-		},
-		
-		debug: function _debug (showSubscribers) {
-			log().startGroup('Domain Object');
-			this.fields().debug();
-			if ( showSubscribers ) {
-				this.subscribers().debug();
-			}
-			log().endGroup();
 		},
 		
 		isa: function _isa (cons) {
@@ -1526,10 +1488,6 @@ var jModel = function () {
 			else {
 				return this.__delegate.predicate(parameter);
 			}
-		},
-		
-		debug: function _debug () {
-			this.__delegate.each('debug');
 		}
 		
 	};
@@ -1569,10 +1527,6 @@ var jModel = function () {
 	
 		get: function _get () {
 			return this.__delegate;
-		},
-	
-		debug: function _debug () {
-			log().debug(this.accessor+': '+this.__delegate);
 		}
 		
 	};
@@ -1935,7 +1889,15 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	external.plugin = {
-		context: Context.prototype
+		context: Context.prototype,
+		entitytype: EntityType.prototype,
+		domaincollection: DomainObjectCollection.prototype,
+		domainobject: DomainObject.prototype,
+		fieldset: FieldSet.prototype,
+		field: Field.prototype,
+		relationship: {
+			onetomany: OneToManyRelationship.prototype
+		}
 	};
 	
 	// ------------------------------------------------------------------------
