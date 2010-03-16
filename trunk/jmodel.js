@@ -1726,7 +1726,6 @@ var jModel = function () {
 		return {
 			
 			thaw: 	function _thaw (context,data,options,baseType) {
-						log('json/thaw').startGroup('thawing JSON');
 						options = options || {};
 					//	data = ( data instanceof Array ) ? data : [data];
 						for ( var i in data ) {
@@ -1734,7 +1733,6 @@ var jModel = function () {
 								makeObject(baseType || key,data[i][key],options.parent,context);
 							}
 						}
-						log('json/thaw').endGroup();
 						return external.json;
 					}
 			
