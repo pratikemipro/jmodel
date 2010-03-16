@@ -1506,24 +1506,28 @@ var jModel = function () {
 		
 		constructor: Field,
 	
-		set: function _set (value,publisher) {
-			if ( this.predicate(value) ) {
-				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
+		set: extend({
+			
+			valid: function (value,publisher) {
 				this.__delegate = value;
 				this.event(this.accessor).raise({key:this.accessor,description:'field value change: '+this.accessor});
 				if ( publisher && publisher.success ) {
 					publisher.success();
 				}
 				return true;
-			}
-			else {
-				log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'" failed validation');
+			},
+			
+			invalid: function (value,publisher) {
 				if ( publisher && publisher.failure ) {
 					publisher.failure(message);
 				}
 				return false;
 			}
-		},
+			
+		}, function _set (value,publisher) {
+			return this.predicate(value) ? this.set.valid.apply(this,arguments)
+				   : this.set.invalid.apply(this,arguments);
+		}),
 	
 		get: function _get () {
 			return this.__delegate;

@@ -178,6 +178,24 @@
 	
 	extend({
 		
+		set: extend({
+			
+			valid: aspect({
+				target: plugin.field.set.valid,
+				pre: function (value) {
+					log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'"');
+				}
+			}),
+			
+			invalid: aspect({
+				target: plugin.field.set.invalid,
+				pre: function (value) {
+					log('domainobject/set').debug('Setting '+this.accessor+' to "'+value+'" failed validation');
+				}
+			})
+			
+		}, plugin.field.set),
+		
 		debug: function _debug () {
 			log().debug(this.accessor+': '+this.__delegate);
 		}
