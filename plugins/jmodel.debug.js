@@ -124,7 +124,7 @@
 				}
 			})
 			
-		}, plugin.domainobject.set )
+		}, plugin.domainobject.set ),
 		
 		reifyFields: aspect({
 			target: plugin.domainobject.reifyFields,
