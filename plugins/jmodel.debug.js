@@ -19,12 +19,10 @@
 	
 		return function () {
 		
-			var returnValue;
-		
 			if ( options.pre ) {
 				options.pre.apply(this,arguments);
 			}
-			returnValue = options.target.apply(this,arguments);
+			var returnValue = options.target.apply(this,arguments);
 			if ( options.post ) {
 				options.post.apply(this,arguments);
 			}
