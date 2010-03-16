@@ -45,7 +45,18 @@
 				log().endGroup();
 			});
 			log().endGroup();
-		}
+		},
+		
+		collection: aspect({
+			target: plugin.context.collection,
+			pre: function (specification) {
+				log('domainobjectcollection/create')
+					.startGroup('Creating a DomainObjectCollection: '+specification.description);
+			},
+			post: function () {
+				log('domainobjectcollection/create').endGroup();
+			}
+		})
 		
 	}, plugin.context );
 
@@ -95,6 +106,17 @@
 		})
 		
 	}, plugin.domaincollection );
+
+
+	_.collection = aspect({
+		target: _.collection,
+		pre: function () {
+			log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: set');
+		},
+		post: function () {
+			log('domainobjectcollection/create').endGroup();
+		}
+	});
 
 	
 	//
