@@ -666,8 +666,6 @@ var jModel = function () {
 		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
 		
-		log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: '+this.description);
-		
 		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects
 								: new Set(specification.objects);
 		this.length = this.__delegate.length;
@@ -691,9 +689,6 @@ var jModel = function () {
 		else if ( specification.base ) {
 			throw 'Error: Invalid base collection type';
 		}
-		
-		log('domainobjectcollection/create').endGroup();
-		
 		
 	};
 	
@@ -948,10 +943,11 @@ var jModel = function () {
 	
 	// NOTE: Make this a method of Context
 	external.collection = function _collection () {
-			return new DomainObjectCollection({
-				context: contexts('default'),
-				objects: set(arguments).reduce(push,[]),
-				description: 'set'});
+		return new DomainObjectCollection({
+			context: contexts('default'),
+			objects: set(arguments).reduce(push,[]),
+			description: 'set'
+		});
 	};
 	
 	function DeletedObjectsCollection (collection) {
