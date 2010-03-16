@@ -17,7 +17,7 @@
 			}
 			returnValue = options.target.apply(this,arguments);
 			if ( options.post ) {
-				options.post.call(this,returnValue);
+				options.post.apply(this,arguments);
 			}
 		
 			return returnValue;
@@ -27,7 +27,24 @@
 	};
 	
 	_.aspect = aspect;
+	
+	
+	//
+	// SubscriberSet
+	//
 
+	extend({
+		
+		add: aspect({
+			target: plugin.subscribers.add,
+			post: function (subscriber) {
+				if ( this.added ) {
+					log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
+				}
+			}
+		})
+		
+	}, plugin.subscribers );
 
 	//
 	// Context

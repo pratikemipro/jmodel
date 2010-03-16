@@ -114,8 +114,8 @@ var emerald = function () {
 		
 		add: function _add (subscriber) {
 			var that = this;
+			this.added = null;
 			this.__delegate.add(subscriber, function __add () {
-//				log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
 				that.added = subscriber;
 			});
 			return this;
@@ -164,7 +164,7 @@ var emerald = function () {
 				}
 				else if ( typeof message == 'function' ) {
 //					log('notifications/send').debug('Adding a notification to the queue');
-					notifications.add(message);
+					this.add(message);
 				}
 			});
 			return this;
@@ -179,7 +179,7 @@ var emerald = function () {
 		this.resume = function _resume () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			if ( --suspensions == 0 ) {
-				notifications.map(async);
+				this.map(async);
 				return this.flush();
 			}
 			else {
@@ -189,7 +189,7 @@ var emerald = function () {
 
 		this.flush = function _flush (predicate) {
 //			log('notifications/control').debug('Flushing notifications for '+this.context.name);
-			notifications.remove(predicate);
+			this.remove(predicate);
 			return this;
 		};
 
