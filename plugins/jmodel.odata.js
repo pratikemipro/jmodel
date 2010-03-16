@@ -9,25 +9,47 @@
  *
  */
 
+var metadata;
 
 jModel.plugin.context.fromService = function (url) {
 	
-	var $ = jQuery;
+	var $       = jQuery,
+	    context = this;
 	
 	$.get(url+'/$metadata',function (csdl) {
+	    
+	    metadata = csdl;
 		
-		$('EntityType',csdl).each(function (index,entitytype) {
+		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
 			
-			var entityTypeName = $(entitytype).attr('Name'),
-				has			   = parseFields(entitytype),
-				hasOne		   = parseRelationships(entitytype,csdl,'Dependent'),
-				hasMany		   = parseRelationships(entitytype,csdl,'Principal');
+			var name            = entityTypeName(entitytype);
+				
+			context.register(name,_.Base.extend({
+			    has:        fields(entitytype),
+			    hasOne:     relationships(entitytype,csdl,'Dependent'),
+			    hasMany:    relationships(entitytype,csdl,'Principal')
+			}),{
+			    primaryKey: primaryKey(entitytype,csdl)
+			});
 			
 		});
 		
 	},'xml');
 	
-	function parseFields (entitytype) {
+	return this;
+	
+	function entityTypeName (entitytype) {
+	    return $(entitytype).attr('Name');
+	}
+	
+	function primaryKey (entitytype,csdl) {
+	    while ( $('Key',entitytype).length === 0  ) {
+	        entitytype = $('EntityType[Name='+$(entitytype).attr('BaseType').split('.').pop()+']',csdl);
+	    }
+	    return $('Key PropertyRef',entitytype).attr('Name');
+	}
+	
+	function fields (entitytype) {
 		return $('Property',entitytype).map(function (index,property) {
 			return {
 				accessor: $(property).attr('Name'),
@@ -36,15 +58,14 @@ jModel.plugin.context.fromService = function (url) {
 		}).get();
 	}
 	
-	function parseRelationships (entitytype,csdl,type) {
-		return $('NavigationProperty',entitytype).filter(function (index,relationship) {
-			return $('Association[Name="'+$(relationship).attr('Relationship').split('.').pop()+'"] '
-					 +type+'[Role="'+$(entitytype).attr('Name')+'"]',csdl).length > 0;
-		}).map(function (index,relationship) {
-			return {
-				accessor: $(relationship).attr('Name')
-			};
-		}).get();
+	function relationships (entitytype,csdl,reltype) {
+	    return $('Association:has('+reltype+'[Role='+$(entitytype).attr('Name')+'])',csdl).map(function () {
+	        return {
+	            accessor:   $('NavigationProperty[Relationship$=.'+$(this).attr('Name')+']',entitytype).attr('Name'),
+	            prototype:  $(reltype == 'Principal' ? 'Dependent' : 'Principal',this).attr('Role'),
+	            field:      $(reltype+' PropertyRef',this).attr('Name')
+	        }
+	    }).get();
 	}
 
 };
