@@ -248,5 +248,23 @@
 		
 	}, plugin.field );
 	
+	
+	//
+	// JSON
+	//
+	
+	extend({
+		
+		thaw: aspect({
+			target: _.json.thaw,
+			pre: function () {
+				log('json/thaw').startGroup('thawing JSON');
+			},
+			post: function () {
+				log('json/thaw').endGroup();
+			}
+		})
+		
+	}, _.json);
 
 })();
