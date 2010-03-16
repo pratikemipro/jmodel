@@ -125,7 +125,6 @@ var emerald = function () {
 			var messages = this.map(ApplyTo(event))
 								.filter(function (msg) { return msg != null; } );
 			if ( messages.count() > 0 ) {
-				console.log('here');
 //				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				this.notifications.send(messages);
 //				log('subscriptions/notify').endGroup();
