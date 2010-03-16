@@ -17,7 +17,7 @@
 			}
 			returnValue = options.target.apply(this,arguments);
 			if ( options.post ) {
-				options.post.apply(this,arguments);
+				options.post.call(this,returnValue);
 			}
 		
 			return returnValue;
