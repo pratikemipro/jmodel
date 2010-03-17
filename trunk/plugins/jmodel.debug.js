@@ -1,5 +1,5 @@
 /*
- *	jModel Debug Plugin v0.1.0
+ *	jModel Debug Plugin v0.1.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -419,18 +419,23 @@
 	// JSON
 	//
 	
-	extend({
+	if ( _.json ) {
 		
-		thaw: aspect({
-			target: _.json.thaw,
-			pre: function () {
-				log('json/thaw').startGroup('thawing JSON');
-			},
-			post: function () {
-				log('json/thaw').endGroup();
-			}
-		})
+		extend({
+
+			thaw: aspect({
+				target: _.json.thaw,
+				pre: function () {
+					log('json/thaw').startGroup('thawing JSON');
+				},
+				post: function () {
+					log('json/thaw').endGroup();
+				}
+			})
+
+		}, _.json);	
 		
-	}, _.json);
+	}
+	
 
 })();

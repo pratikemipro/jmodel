@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.5.1
+ *	jModel Javascript Library v0.5.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -1518,71 +1518,7 @@ var jModel = function () {
 	
 	ConstraintSet.prototype.constructor = ConstraintSet;
 	
-	
-	// ------------------------------------------------------------------------
-	// 																	   JSON
-	// ------------------------------------------------------------------------
-	
-	external.json = function () {
-		
-		
-		function makeObject (key,data,parent,context) {
-			
-//			log('json/thaw').startGroup('thawing '+key);
 
-			var partitionedData = partitionObject(data,TypePredicate('object'),'children','fields');
-			
-			var object;
-			if ( parent && parent.relationships && parent.relationships(key) ) {
-//				log('json/thaw').debug('adding object to relationship');
-				object = parent.relationships(key).add(partitionedData.fields);
-			}
-			else {
-				if ( context.entities.get(key) ) {
-//					log('json/thaw').debug('creating free object');
-					object = context.entities.get(key).create(partitionedData.fields);
-				}
-				else {
-//					log('json/thaw').debug('unknown entity type: '+key);
-				}
-			}
-			
-			for ( var childKey in partitionedData.children ) {
-			    if ( childKey != '__metadata' && childKey != '__deferred' ) {
-			        var childData = partitionedData.children[childKey];
-    				childData = ( childData instanceof Array ) ? childData : [childData];
-    				for ( var i=0; i<childData.length; i++) {
-    				    if ( !(childData[i] && childData[i].__deferred) ) {
-    				        makeObject(childKey,childData[i],object||parent,context);
-    				    }
-    				}
-			    }
-			} 
-			
-//			log('json/thaw').endGroup();
-
-		}
-		
-		
-		return {
-			
-			thaw: 	function _thaw (context,data,options,baseType) {
-						options = options || {};
-					//	data = ( data instanceof Array ) ? data : [data];
-						for ( var i in data ) {
-							for ( var key in data[i] ) {
-								makeObject(baseType || key,data[i][key],options.parent,context);
-							}
-						}
-						return external.json;
-					}
-			
-		};
-		
-		
-	}();
-	
-	
 	
 	// ------------------------------------------------------------------------
 	//													  Inheritance utilities
@@ -1700,28 +1636,6 @@ var jModel = function () {
 		});
 	}
 	
-	function partitionObject (object,predicate,passName,failName) {
-		return partition( object, predicate, passName, failName, Object, function (destination,index,object) {
-			destination[index] = object;
-		});
-	}
-	
-	function partition (source,predicate,passName,failName,constructor,add) {
-		var partition = {};
-		var pass = partition[passName||'pass'] = new constructor();
-		var fail = partition[failName||'fail'] = new constructor();
-		for (var i in source) {
-			var candidate = source[i];
-			if ( predicate(candidate) ) {
-				add(pass,i,candidate);
-			}
-			else {
-				add(fail,i,candidate);
-			}
-		}
-		return partition;
-	}
-	
 	
 	// ------------------------------------------------------------------------
 	// 													Plugin extension points 
@@ -1746,13 +1660,8 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	external.context.notifications		= external.notifications;
-	external.context.json				= external.json;
 	
 	external.notifications.context		= external.context;
-	external.notifications.json			= external.json;
-	
-	external.json.context				= external.context;
-	external.json.notifications			= external.notifications;
 	
 	return external;
 	
