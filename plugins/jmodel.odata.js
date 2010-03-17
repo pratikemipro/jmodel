@@ -9,7 +9,7 @@
  *
  */
 
-jModel.plugin.context.fromService = function (url) {
+jModel.plugin.context.fromService = function (url, callback) {
 	
 	var $       = jQuery,
 	    _       = jModel,
@@ -20,6 +20,8 @@ jModel.plugin.context.fromService = function (url) {
 		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
 			registerEntityType(entitytype,_.Base);
 		});
+		
+		callback();
 		
 		function registerEntityType (entitytype,parentConstructor,parentName) {
 
