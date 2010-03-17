@@ -9,8 +9,6 @@
  *
  */
 
-var metadata;
-
 jModel.plugin.context.fromService = function (url) {
 	
 	var $       = jQuery,
@@ -18,8 +16,6 @@ jModel.plugin.context.fromService = function (url) {
 	    context = this;
 	
 	$.get(url+'/$metadata',function (csdl) {
-	    
-	    metadata = csdl;
 		
 		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
 			registerEntityType(entitytype,_.Base);
