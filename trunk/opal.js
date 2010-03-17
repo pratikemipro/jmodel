@@ -659,7 +659,7 @@ function OPAL () {
 	//															           List
 	// ------------------------------------------------------------------------
 	
-	TypedSet = function (constructor) {
+	function TypedSet (constructor) {
 		constructor = constructor && constructor.entitytype ? constructor.entitytype.constructor : constructor;
 		this.__constructor = this.__constructor || constructor;
 		Set.apply(this,null);
@@ -673,7 +673,7 @@ function OPAL () {
 		add: function (object,success,failure) {
 			
 			if ( object.constructor === Object || ! (object instanceof Object) ) {
-				object = new this.__constructor(object)
+				object = new this.__constructor(object);
 			}
 
 			var failed;
