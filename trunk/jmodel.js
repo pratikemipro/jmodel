@@ -396,7 +396,6 @@ var jModel = function () {
 	
 	function ContentNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _contentnotification () {
-//			log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
 			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
 			subscription.target.html(subscription.format(value));
 		});	
@@ -404,21 +403,18 @@ var jModel = function () {
 	
 	function ValueNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _valuenotification () {
-//			log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
 			subscription.target.val(subscription.source.get(subscription.key));
 		});
 	};
 	
 	function MethodNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _methodnotification () {
-//			log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
 			subscription.method.call(subscription.target,subscription.source);
 		});	
 	};
 	
 	function EventNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _eventnotification () {
-//			log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
 			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 		});
 	};
@@ -426,7 +422,6 @@ var jModel = function () {
 	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
 	function RemovalNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _removalnotification () {
-//			log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);
 			subscription.removed.call(subscription.target,subscription.source);
 		});
 	};
@@ -453,7 +448,6 @@ var jModel = function () {
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectionmembernotification () {
-//			log('notifications/send').debug('Receiving a collection member notification');
 			subscription.member.key = ( subscription.member.key instanceof Array ) ?
 												subscription.member.key
 												: [subscription.member.key];
@@ -471,6 +465,17 @@ var jModel = function () {
 				});
 			}
 		});
+	};
+	
+	external.notification = {
+		ContentNotification: ContentNotification,
+		ValueNotification: ValueNotification,
+		MethodNotification: MethodNotification,
+		EventNotification: EventNotification,
+		RemovalNotification: RemovalNotification,
+		CollectionMethodNotification: CollectionMethodNotification,
+		CollectionEventNotification: CollectionEventNotification,
+		CollectionMemberNotification: CollectionMemberNotification
 	};
 	
 	function CollectionSubscriber (subscription) {
@@ -684,7 +689,7 @@ var jModel = function () {
 
 			if ( subscription.predicate || subscription.selector ) {
 //				log('subscriptions/subscribe').debug('Creating a collection member subscription: '+subscription.description);
-				subscription.type	= 	CollectionMemberNotification;
+				subscription.type	= 	external.notification.CollectionMemberNotification;
 				subscription.filter = 	function __subscribe (collection) {
 											return function ___subscribe (event) {
 												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
@@ -694,11 +699,11 @@ var jModel = function () {
 			}
 			else if ( ( typeof subscription.add == 'string' ) && ( typeof subscription.remove == 'string' ) ) {
 //				log('subscriptions/subscribe').debug('Creating a collection event subscription: '+subscription.description);
-				subscription.type	= CollectionEventNotification;
+				subscription.type	= external.notification.CollectionEventNotification;
 			}
 			else {
 //				log('subscriptions/subscribe').debug('Creating a collection method subscription: '+subscription.description);
-				subscription.type	= CollectionMethodNotification; 
+				subscription.type	= external.notification.CollectionMethodNotification; 
 			}
 			
 			var that = this, subscriber;
@@ -1153,21 +1158,21 @@ var jModel = function () {
     			subscription.format = subscription.format || noformat;
 
     			if ( subscription.removed ) {
-    				subscription.type		= RemovalNotification;
+    				subscription.type		= external.notification.RemovalNotification;
     			}
     			else if ( subscription.change && typeof subscription.change == 'string' ) {
-    				subscription.type		= EventNotification;
+    				subscription.type		= external.notification.EventNotification;
     				subscription.event		= subscription.change;
     			}
     			else if ( subscription.change && typeof subscription.change == 'function' ) {
-    				subscription.type		= MethodNotification;
+    				subscription.type		= external.notification.MethodNotification;
     				subscription.method		= subscription.change;
     			}
     			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-    				subscription.type = ValueNotification;
+    				subscription.type = external.notification.ValueNotification;
     			}
     			else {
-    				subscription.type = ContentNotification;
+    				subscription.type = external.notification.ContentNotification;
     			}
 
     			var subscriber = ObjectSubscriber(subscription);

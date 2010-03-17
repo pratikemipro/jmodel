@@ -23,10 +23,14 @@
 			}
 			var returnValue = options.target.apply(this,arguments);
 			if ( options.post ) {
-				options.post.apply(this,arguments);
+				return options.post.call(this,{
+					args: arguments,
+					returnValue: returnValue
+				});
 			}
-		
-			return returnValue;
+			else {
+				return returnValue;
+			}
 		
 		};
 	
@@ -210,14 +214,89 @@
 		
 		add: aspect({
 			target: plugin.subscribers.add,
-			post: function (subscriber) {
+			post: function (state) {
 				if ( this.added ) {
-					log('subscriptions/subscribe').debug('added subscriber: '+subscriber.description);
+					log('subscriptions/subscribe').debug('added subscriber: '+state.args[0].description);
 				}
+				return state.returnValue;
 			}
 		})
 		
 	}, plugin.subscribers );
+	
+	
+	//
+	// Notifications
+	//
+	
+	extend({
+		
+		ContentNotification: aspect({
+			target: _.notification.ContentNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving a content notification for '+subscription.key+': '+subscription.description+' ('+subscription.source.get(subscription.key)+')');
+					state.returnValue();
+				});
+			}
+		}),
+		
+		ValueNotification: aspect({
+			target: _.notification.ValueNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving a value notification for '+subscription.key+': '+subscription.description);
+					state.returnValue();
+				});
+			}
+		}),
+		
+		MethodNotification: aspect({
+			target: _.notification.MethodNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving an object method notification'+': '+subscription.description);
+					state.returnValue();
+				});
+			}
+		}),
+		
+		EventNotification: aspect({
+			target: _.notification.EventNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving an event notification'+': '+subscription.description);
+					state.returnValue();
+				});
+			}
+		}),
+		
+		RemovalNotification: aspect({
+			target: _.notification.RemovalNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);					state.returnValue();
+				});
+			}
+		}),
+		
+/*		CollectionMemberNotification: aspect({
+			target: _.notification.CollectionMemberNotification,
+			post: function (state) {
+				return extend(state.returnValue,function () {
+					var subscription = state.args[0];
+					log('notifications/send').debug('Receiving a collection member notification');
+				});
+			}
+		}) */
+		
+	}, _.notification );
+	
 
 	//
 	// Context
@@ -243,8 +322,9 @@
 				log('domainobjectcollection/create')
 					.startGroup('Creating a DomainObjectCollection: '+specification.description);
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobjectcollection/create').endGroup();
+				return state.returnValue;
 			}
 		})
 		
@@ -262,8 +342,9 @@
 			pre: function () {
 				log('domainobject/create').startGroup('Creating a new '+this.name);
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobject/create').endGroup();
+				return state.returnValue;
 			}
 		})
 		
@@ -290,8 +371,9 @@
 			pre: function () {
 				log('domainobject/create').startGroup('Creating a new '+this.name);
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobject/create').endGroup();
+				return state.returnValue;
 			}
 		})
 		
@@ -303,8 +385,9 @@
 		pre: function () {
 			log('domainobjectcollection/create').startGroup('Creating a DomainObjectCollection: set');
 		},
-		post: function () {
+		post: function (state) {
 			log('domainobjectcollection/create').endGroup();
+			return state.returnValue;
 		}
 	});
 
@@ -331,8 +414,9 @@
 				pre: function () {
 					log('domainobject/set').startGroup('Setting fields');
 				},
-				post: function () {
+				post: function (state) {
 					log('domainobject/set').endGroup();
+					return state.returnValue;
 				}
 			})
 			
@@ -343,8 +427,9 @@
 			pre: function () {
 				log('domainobject/create').startGroup('Reifying fields');
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobject/create').endGroup();
+				return state.returnValue;
 			}
 		}),
 		
@@ -353,8 +438,9 @@
 			pre: function () {
 				log('domainobject/create').startGroup('Reifying one-to-one relationships');
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobject/create').endGroup();
+				return state.returnValue;
 			}
 		}),
 		
@@ -363,8 +449,9 @@
 			pre: function () {
 				log('domainobject/create').startGroup('Reifying one-to-many relationships');
 			},
-			post: function () {
+			post: function (state) {
 				log('domainobject/create').endGroup();
+				return state.returnValue;
 			}
 		})
 		
@@ -428,8 +515,9 @@
 				pre: function () {
 					log('json/thaw').startGroup('thawing JSON');
 				},
-				post: function () {
+				post: function (state) {
 					log('json/thaw').endGroup();
+					return state.returnValue;
 				}
 			})
 
