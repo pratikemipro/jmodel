@@ -741,7 +741,7 @@ function OPAL () {
 	function UniqueIndex (set,key) {
 
 		this.set		= set;
-		this.key		= key;
+		this.key		= typeof key === 'function' ? key : Resolve(key);
 		this.__delegate	= copy({});
 		
 		this.build();
