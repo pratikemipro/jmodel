@@ -14,6 +14,7 @@ var metadata;
 jModel.plugin.context.fromService = function (url) {
 	
 	var $       = jQuery,
+	    _       = jModel,
 	    context = this;
 	
 	$.get(url+'/$metadata',function (csdl) {
@@ -21,18 +22,32 @@ jModel.plugin.context.fromService = function (url) {
 	    metadata = csdl;
 		
 		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
-			
-			var name            = entityTypeName(entitytype);
-				
-			context.register(name,_.Base.extend({
-			    has:        fields(entitytype),
-			    hasOne:     relationships(entitytype,csdl,'Dependent'),
-			    hasMany:    relationships(entitytype,csdl,'Principal')
-			}),{
-			    primaryKey: primaryKey(entitytype,csdl)
-			});
-			
+			registerEntityType(entitytype,_.Base);
 		});
+		
+		function registerEntityType (entitytype,parentConstructor,parentName) {
+
+    	    var name = entityTypeName(entitytype),
+    	        entityConstructor = parentConstructor.extend({
+        		    has:        fields(entitytype),
+        		    hasOne:     relationships(entitytype,csdl,'Dependent'),
+        		    hasMany:    relationships(entitytype,csdl,'Principal')
+        		}),
+        		entityOptions = {
+        		    primaryKey: primaryKey(entitytype,csdl)
+        		};
+        		
+        	if ( parentName ) {
+        	    entityOptions.parent = parentName;
+        	}
+
+    		context.register(name,entityConstructor,entityOptions);
+    		
+    		$('EntityType[BaseType$=.'+name+']',csdl).each(function (index,entitytype) {
+    		    registerEntityType(entitytype,entityConstructor,name);
+    		});
+
+    	}
 		
 	},'xml');
 	
