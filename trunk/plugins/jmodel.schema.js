@@ -12,32 +12,46 @@
 jModel.plugin.entitytype.pushOneToManyRelationship = function (accessor) {
 
     var relationships = this.constructor.prototype.hasMany,
-        relationshipIndex;
+        context = this.context;
     
-    for ( index in relationships ) {
-        if ( relationships[index].accessor === accessor ) {
-            relationshipIndex = index;
-            break;
-        }
-    }
-    
-    if ( relationshipIndex ) {
-        var specification = relationships[relationshipIndex];
-        relationships.splice(relationshipIndex,1);
+    var foundIndex = relationshipIndex(accessor,relationships)
+    if ( foundIndex ) {
         return {
             entitytype: this,
             context: this.context,
-            specification: specification,
+            specification: relationships[foundIndex],
             to: function (entityTypeName,relationshipName) {
+                var targetEntity = this.context.entity(entityTypeName);
+                removeRelationship(this.specification.accessor,targetEntity.options.parent);
                 if ( relationshipName ) {
-                    specification.accessor = relationshipName;
+                    this.specification.accessor = relationshipName;
                 }
-                this.context.entity(entityTypeName).constructor.prototype.hasMany.push(specification);
+                targetEntity.constructor.prototype.hasMany.push(this.specification);
                 return this.entitytype;
             }
         }
+    } else {
+        return false;
     }
     
-    return false;
+    function relationshipIndex (accessor,relationships) {
+        for ( index in relationships ) {
+            if ( relationships[index].accessor === accessor ) {
+                foundIndex = index;
+                break;
+            }
+        }
+        return foundIndex;
+    }
+    
+    function removeRelationship (accessor,entityName) {
+        while ( entityName ) {
+            var entity = context.entity(entityName),
+                relationships = entity.constructor.prototype.hasMany;
+            relationships.splice(relationshipIndex(accessor,relationships),1);
+            entityName = entity.options.parent;
+        }
+        
+    }
      
 }
