@@ -1,11 +1,12 @@
 /*
- *	jModel Javascript Library v0.5.0
+ *	jModel Javascript Library v0.5.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
- *	Requires opal.js
+ *	Requires opal.js and emerald.js
+ *
  */
 
 
