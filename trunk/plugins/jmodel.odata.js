@@ -21,7 +21,9 @@ jModel.plugin.context.fromService = function (url, callback) {
 			registerEntityType(entitytype,_.Base);
 		});
 		
-		callback();
+		if ( typeof callback === 'function' ) {
+			callback();
+		}
 		
 		function registerEntityType (entitytype,parentConstructor,parentName) {
 
