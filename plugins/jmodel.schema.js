@@ -12,7 +12,7 @@ jModel.plugin.entitytype.pushOneToManyRelationship = function (accessor) {
     var relationships = this.constructor.prototype.hasMany,
         context = this.context;
     
-    var foundIndex = relationshipIndex(accessor,relationships)
+    var foundIndex = relationshipIndex(accessor,relationships);
     if ( foundIndex ) {
         return {
             entitytype: this,
@@ -27,7 +27,7 @@ jModel.plugin.entitytype.pushOneToManyRelationship = function (accessor) {
                 targetEntity.constructor.prototype.hasMany.push(this.specification);
                 return this.entitytype;
             }
-        }
+        };
     } else {
         return false;
     }
@@ -52,4 +52,4 @@ jModel.plugin.entitytype.pushOneToManyRelationship = function (accessor) {
         
     }
      
-}
+};

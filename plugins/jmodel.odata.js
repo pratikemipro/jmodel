@@ -79,7 +79,7 @@ jModel.plugin.context.fromService = function (url, callback) {
 	            accessor:   $('NavigationProperty[Relationship$=.'+$(this).attr('Name')+']',entitytype).attr('Name'),
 	            prototype:  $(reltype == 'Principal' ? 'Dependent' : 'Principal',this).attr('Role'),
 	            field:      $(reltype+' PropertyRef',this).attr('Name')
-	        }
+	        };
 	    }).get();
 	}
 

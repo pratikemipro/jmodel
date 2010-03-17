@@ -572,7 +572,7 @@ var jModel = function () {
 					if (removeSubscribers) {
 					    object.events.each(function (event) {
 					        event.subscribers().remove(AllPredicate);
-					    })
+					    });
 					}	
 				});
 				this.length = this.__delegate.length;
