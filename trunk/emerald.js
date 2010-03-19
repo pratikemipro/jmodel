@@ -150,7 +150,7 @@ var emerald = function () {
 
 		this.context = context;
 
-		var	notifications 	= set().delegateFor(this),
+		var	notifications 	= set().of(Function).delegateFor(this),
 			suspensions		= 0,
 			filter			= AllPredicate;
 
