@@ -10,22 +10,21 @@
 jModel.plugin.entitytype.pushOneToManyRelationship = function (accessor) {
 
     var relationships = this.constructor.prototype.hasMany,
-        context = this.context;
+        context = this.context,
+        entitytype = this;
     
     var foundIndex = relationshipIndex(accessor,relationships);
     if ( foundIndex ) {
+        var specification = relationships[foundIndex];
         return {
-            entitytype: this,
-            context: this.context,
-            specification: relationships[foundIndex],
             to: function (entityTypeName,relationshipName) {
-                var targetEntity = this.context.entity(entityTypeName);
-                removeRelationship(this.specification.accessor,targetEntity.options.parent);
+                var targetEntity = context.entity(entityTypeName);
+          //      removeRelationship(specification.accessor,targetEntity.options.parent);
                 if ( relationshipName ) {
-                    this.specification.accessor = relationshipName;
+                    specification.accessor = relationshipName;
                 }
-                targetEntity.constructor.prototype.hasMany.push(this.specification);
-                return this.entitytype;
+                targetEntity.constructor.prototype.hasMany.push(specification);
+                return entitytype;
             }
         };
     } else {
