@@ -707,10 +707,10 @@ var jModel = function () {
 			}
 			
 			var that = this, subscriber;
-			set('add','remove','initialise','change','sort').each(function (method) {
-				if ( subscription[method] ) {
+			set('add','remove','initialise','change','sort').each(function (eventtype) {
+				if ( subscription[eventtype] ) {
 				    subscriber = CollectionSubscriber(subscription);
-					that.event(method).subscribe(subscriber);
+					that.event(eventtype).subscribe(subscriber);
 				}
 			});
 			
