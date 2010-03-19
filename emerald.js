@@ -34,7 +34,7 @@ var emerald = function () {
 
 	function EventRegistry (notifications) {;
 		this.notifications	= notifications;
-		this.__delegate		= set().index(Property('name')).delegateFor(this);
+		this.__delegate		= set().of(EventType).index(Property('name')).delegateFor(this);
 		if ( arguments.length > 1 ) {
 			this.register.apply(this,arrayFromArguments(arguments).slice(1));
 		}
@@ -106,7 +106,7 @@ var emerald = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		this.__delegate		= set().delegateFor(this);
+		this.__delegate		= set().of(Function).delegateFor(this);
 		this.notifications	= notifications;
 	};
 	
