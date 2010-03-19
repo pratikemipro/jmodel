@@ -46,7 +46,7 @@ var emerald = function () {
 			var args = set(arguments),
 				that = this;
 			args.each(function (name) {
-				that.add(new EventType(that,name));
+				that.__delegate.add(that,name);
 			});
 			return this;
 		},
@@ -113,11 +113,8 @@ var emerald = function () {
 	SubscriberSet.prototype = {
 		
 		add: function _add (subscriber) {
-			var that = this;
-			this.added = null;
-			this.__delegate.add(subscriber, function __add () {
-				that.added = subscriber;
-			});
+			this.__delegate.add(subscriber);
+			this.added = this.__delegate.added;
 			return this;
 		},
 		
@@ -150,8 +147,8 @@ var emerald = function () {
 
 		this.context = context;
 
-		var	notifications 	= set().of(Function).delegateFor(this)
-		suspensions		= 0;
+		var	notifications 	= set().of(Function).delegateFor(this),
+			suspensions		= 0;
 
 		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
