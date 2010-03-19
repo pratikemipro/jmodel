@@ -378,11 +378,19 @@
 	extend({
 		
 		debug: function _debug (showSubscribers) {
+		    if ( showSubscribers ) {
+		        log().startGroup('DomainObjectCollection')
+		    }
 			if ( _.Not(_.EmptySetPredicate)(this) ) {
 				log().debug('Objects:  '+this.format(_.listing(_.Method('primaryKeyValue'))));
 			}
 			if ( showSubscribers ) {
-				this.subscribers().debug();
+			    log().startGroup('events');
+				this.events.each(function (eventtype) {
+				    log().debug(eventtype.name+': '+eventtype.subscribers().count());
+				});
+				log().endGroup();
+				log().endGroup();
 			}
 		},
 		
