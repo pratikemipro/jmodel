@@ -151,15 +151,12 @@ var emerald = function () {
 		this.context = context;
 
 		var	notifications 	= set().of(Function).delegateFor(this),
-			suspensions		= 0,
-			filter			= AllPredicate;
+			suspensions		= 0;
 
 		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			messages.each(function __send (message) {
-				if ( !filter(message) ) {
-				}
-				else if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
+				if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
 					/*async(*/message();
 				}
 				else if ( typeof message == 'function' ) {
@@ -190,11 +187,6 @@ var emerald = function () {
 		this.flush = function _flush (predicate) {
 //			log('notifications/control').debug('Flushing notifications for '+this.context.name);
 			this.remove(predicate);
-			return this;
-		};
-
-		this.setFilter = function _setFilter (predicate) {
-			filter = predicate;
 			return this;
 		};
 
