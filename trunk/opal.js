@@ -670,10 +670,11 @@ function OPAL () {
 		
 		constructor: TypedSet,
 		
-		add: function (object,success,failure) {
+		add: function () {
 			
-			if ( object.constructor === Object || ! (object instanceof Object) ) {
-				object = new this.__constructor(object);
+			var object = arguments[0];
+			if ( arguments.length > 1 || object.constructor === Object || ! ( object instanceof Object) ) {
+				object = this.__construct.apply(this,arguments);
 			}
 
 			var failed;
@@ -699,6 +700,10 @@ function OPAL () {
 				return Set.prototype.add.call(this,object);
 			}
 
+		},
+		
+		__construct: function (object) {
+			return new this.__constructor(object);
 		}
 		
 	}, new Set() );
