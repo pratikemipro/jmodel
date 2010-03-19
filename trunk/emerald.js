@@ -160,7 +160,7 @@ var emerald = function () {
 				if ( !filter(message) ) {
 				}
 				else if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
-					async(message);
+					/*async(*/message();
 				}
 				else if ( typeof message == 'function' ) {
 //					log('notifications/send').debug('Adding a notification to the queue');
