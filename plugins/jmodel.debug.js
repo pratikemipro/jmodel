@@ -34,7 +34,7 @@
 		
 		};
 	
-	};
+	}
 	
 	_.aspect = aspect;
 	
@@ -230,13 +230,17 @@
 	//
 	
 	extend({
+	    
+		debug: function _debug () {
+			log().debug('Pending notifications: '+this.count());
+        },
 	   
-	   flush: aspect({
-	       target: plugin.notifications.flush,
-	       pre: function () {
-	           log('notifications/control').debug('Flushing notifications for '+this.context.name);
-	       }
-	   })
+	    flush: aspect({
+            target: plugin.notifications.flush,
+            pre: function () {
+	            log('notifications/control').debug('Flushing notifications for '+this.context.name);
+	        }
+        })
 	    
 	}, plugin.notifications );
 	
@@ -299,7 +303,7 @@
 					log('notifications/send').debug('Receiving a removal notification'+': '+subscription.description);					state.returnValue();
 				});
 			}
-		}),
+		})
 		
 /*		CollectionMemberNotification: aspect({
 			target: _.notification.CollectionMemberNotification,
