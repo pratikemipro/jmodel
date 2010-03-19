@@ -184,9 +184,7 @@ var emerald = function () {
 			}
 		};
 
-		this.debug = function _debug () {
-//			log().debug('Pending notifications: '+this.count());
-		};
+
 
 	};
 	
