@@ -1561,6 +1561,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	external.plugin = {
+		events: EventRegistry.prototype,
 		notifications: NotificationQueue.prototype,
 		subscribers: SubscriberSet.prototype,
 		context: Context.prototype,
