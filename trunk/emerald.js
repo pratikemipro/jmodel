@@ -150,8 +150,8 @@ var emerald = function () {
 
 		this.context = context;
 
-		var	notifications 	= set().of(Function).delegateFor(this),
-			suspensions		= 0;
+		var	notifications 	= set().of(Function).delegateFor(this)
+		suspensions		= 0;
 
 		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
@@ -176,7 +176,7 @@ var emerald = function () {
 		this.resume = function _resume () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
 			if ( --suspensions == 0 ) {
-				this.map(async);
+				this.map(apply);
 				return this.flush();
 			}
 			else {
