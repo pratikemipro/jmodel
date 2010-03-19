@@ -226,6 +226,22 @@
 	
 	
 	//
+	// NotificationQueue
+	//
+	
+	extend({
+	   
+	   flush: aspect({
+	       target: plugin.notifications.flush,
+	       pre: function () {
+	           log('notifications/control').debug('Flushing notifications for '+this.context.name);
+	       }
+	   })
+	    
+	}, plugin.notifications );
+	
+	
+	//
 	// Notifications
 	//
 	
