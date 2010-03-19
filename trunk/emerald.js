@@ -184,16 +184,19 @@ var emerald = function () {
 			}
 		};
 
-		this.flush = function _flush (predicate) {
-//			log('notifications/control').debug('Flushing notifications for '+this.context.name);
-			this.remove(predicate);
-			return this;
-		};
-
 		this.debug = function _debug () {
 //			log().debug('Pending notifications: '+this.count());
 		};
 
+	};
+	
+	NotificationQueue.prototype = {
+	    
+	    flush: function _flush (predicate) {	
+			this.remove(predicate);
+			return this;
+		}
+	    
 	};
 	
 	em.NotificationQueue = NotificationQueue;
