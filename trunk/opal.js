@@ -702,8 +702,46 @@ function OPAL () {
 
 		},
 		
-		__construct: function (object) {
-			return new this.__constructor(object);
+		__construct: function () {
+			
+			var object;
+			
+			// This is ugly. Is there a better way?
+			switch (arguments.length) {
+				
+				case 0:
+					object = new this.__constructor();
+					break;
+					
+				case 1:
+					object = new this.__constructor(arguments[0]);
+					break;
+					
+				case 2:
+					object = new this.__constructor(arguments[0],
+						                            arguments[1]);
+					break;
+													
+				case 3:
+					object = new this.__constructor(arguments[0],
+												    arguments[1],
+												    arguments[2]);
+					break;
+												
+				case 4:
+					object = new this.__constructor(arguments[0],
+												    arguments[1],
+												    arguments[2],
+												    arguments[3]);
+					break;
+												
+				default:
+					throw "Opal: too many arguments passed to constructor";
+				
+			}
+			
+			return object;
+			
 		}
 		
 	}, new Set() );
