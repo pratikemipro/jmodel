@@ -228,10 +228,10 @@
 		add: aspect({
 			target: plugin.subscribers.add,
 			post: function (state) {
+				var subscription = state.args[0].subscription || {};
 				if ( this.added ) {
-			//		var description = state.args[0].subscription.description || 'unknown';
-					log('subscriptions/subscribe').debug('added subscriber: unknown');
-					console.log(state.args[0].subscription);
+					var description = typeof subscription.description != 'unknown' ? subscription.description : 'unknown';
+					log('subscriptions/subscribe').debug('added subscriber: '+description);
 				}
 				return state.returnValue;
 			}
