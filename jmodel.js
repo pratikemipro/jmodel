@@ -479,20 +479,20 @@ var jModel = function () {
 	};
 	
 	function CollectionSubscriber (subscription) {
-		return function _collectionsubscriber (event) {
+		return extend({subscription:subscription},function _collectionsubscriber (event) {
 			return ( subscription.filter && !subscription.filter(event) ) ? null
 				:  subscription.type(subscription,event);
-		};
+		});
 	}
 	
 	function ObjectSubscriber (subscription) {
-		return function _objectsubscriber (event) {
+		return extend({subscription:subscription},function _objectsubscriber (event) {
 			return ( event.removed && subscription.removed )
 					|| (subscription.key == ':any') 
 					|| ( event.key == subscription.key ) ?
 				subscription.type(subscription,event)
 				: null;
-		};
+		});
 	}
 
 	
@@ -705,6 +705,8 @@ var jModel = function () {
 //				log('subscriptions/subscribe').debug('Creating a collection method subscription: '+subscription.description);
 				subscription.type	= external.notification.CollectionMethodNotification; 
 			}
+			
+			subscription.description = subscription.description || 'unknown';
 			
 			var that = this, subscriber;
 			set('add','remove','initialise','change','sort').each(function (eventtype) {
@@ -1174,6 +1176,8 @@ var jModel = function () {
     			else {
     				subscription.type = external.notification.ContentNotification;
     			}
+
+				subscription.description = subscription.description || 'unknown';
 
     			var subscriber = ObjectSubscriber(subscription);
     			if ( subscription.key ) {
