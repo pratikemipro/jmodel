@@ -559,7 +559,7 @@ var jModel = function () {
 								description:'object change'
 							});  
 						},
-						description: 'object change for '+this.description+' collection change'
+						description: 'object change for '+that.description+' collection change'
 					});
 				}
 				that.__delegate.sorted = false;
@@ -812,7 +812,7 @@ var jModel = function () {
 			source: 		collection,
 			target: 		deleted,
 			remove: 		collectionRemove,
-			description: 	'deleted object collection'
+			description: 	'deleted '+collection.description+' collection'
 		});
 		
 		function collectionRemove (collection,object) {
@@ -832,7 +832,7 @@ var jModel = function () {
 			add: 			parentAdd,
 			remove: 		parentRemove,
 			change: 		parentChange,
-			description: 	'view'
+			description: 	'view: '+parent.description+' -> '+child.description
 		});
 		
 		// NOTE: this is ugly, and really should be done by subscription initialisation
