@@ -205,6 +205,19 @@
 	//															   Debug output
 	// ------------------------------------------------------------------------
 	
+	//
+	// EventRegistry
+	//
+	
+	extend({
+	    
+		debug: function _debug () {
+			this.each(function (eventtype) {
+				log().debug(eventtype.name);
+			});
+        }
+	    
+	}, plugin.events );
 	
 	//
 	// SubscriberSet
@@ -216,7 +229,9 @@
 			target: plugin.subscribers.add,
 			post: function (state) {
 				if ( this.added ) {
-					log('subscriptions/subscribe').debug('added subscriber: '+state.args[0].description);
+			//		var description = state.args[0].subscription.description || 'unknown';
+					log('subscriptions/subscribe').debug('added subscriber: unknown');
+					console.log(state.args[0].subscription);
 				}
 				return state.returnValue;
 			}
@@ -379,7 +394,7 @@
 		
 		debug: function _debug (showSubscribers) {
 		    if ( showSubscribers ) {
-		        log().startGroup('DomainObjectCollection')
+		        log().startGroup('DomainObjectCollection');
 		    }
 			if ( _.Not(_.EmptySetPredicate)(this) ) {
 				log().debug('Objects:  '+this.format(_.listing(_.Method('primaryKeyValue'))));
