@@ -89,6 +89,7 @@ var emerald = function () {
 		},
 	
 		raise: function _raise (event) {
+//			console.log('Raising '+this.name+' ('+this.subscribers().__delegate.count()+' subscribers)');
 			this.subscribers().notify(event);
 		}
 		
@@ -122,6 +123,7 @@ var emerald = function () {
 			var messages = this.map(ApplyTo(event))
 								.filter(function (msg) { return msg != null; } );
 			if ( messages.count() > 0 ) {
+//				console.log('Notifying '+messages.count()+' subscribers of '+event.description);
 //				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				this.notifications.send(messages);
 //				log('subscriptions/notify').endGroup();
@@ -152,13 +154,17 @@ var emerald = function () {
 
 		this.send = function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
+			var that = this;
 			messages.each(function __send (message) {
-				if ( ( suspensions === 0 || !message.subscription.application ) && typeof message == 'function' ) {
+				if ( suspensions === 0 || !message.subscription.application ) {
+//					console.log('Sending immediately');
 					/*async(*/message();
 				}
-				else if ( typeof message == 'function' ) {
+				else {
+//					console.log('Adding to queue');
 //					log('notifications/send').debug('Adding a notification to the queue');
-					this.add(message);
+					that.add(message);
+//					console.log(notifications.count()+' messages on queue');
 				}
 			});
 			return this;
