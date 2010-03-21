@@ -147,16 +147,18 @@ var emerald = function () {
 
 	function NotificationQueue (context) {
 
-		this.context = context;
+		this.context		= context;
+		this.__suspensions	= 0;
 
-		var	notifications 	= set().of(Function).delegateFor(this),
-			suspensions		= 0;
-
-		this.send = function _send (messages) {
+	};
+	
+	NotificationQueue.prototype = extend({
+		
+		send: function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-				if ( suspensions === 0 || !message.subscription.application ) {
+				if ( that.__suspensions === 0 || !message.subscription.application ) {
 //					console.log('Sending immediately');
 					/*async(*/message();
 				}
@@ -168,37 +170,31 @@ var emerald = function () {
 				}
 			});
 			return this;
-		};
-
-		this.suspend = function _suspend () {
+		},
+		
+		suspend: function _suspend () {
 //			log('notifications/control').debug('Suspending notifications for '+this.context.name);
-			suspensions++;
+			this.__suspensions++;
 			return this;
-		};
+		},
 
-		this.resume = function _resume () {
+		resume: function _resume () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
-			if ( --suspensions == 0 ) {
+			if ( --this.__suspensions == 0 ) {
 				this.map(apply);
 				return this.flush();
 			}
 			else {
 				return this;
 			}
-		};
-
-
-
-	};
-	
-	NotificationQueue.prototype = {
+		},
 	    
 	    flush: function _flush (predicate) {	
 			this.remove(predicate);
 			return this;
 		}
 	    
-	};
+	}, new TypedSet(Function) );
 	
 	em.NotificationQueue = NotificationQueue;
 	
