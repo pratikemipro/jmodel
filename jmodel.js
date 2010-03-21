@@ -716,6 +716,13 @@ var jModel = function () {
 				}
 			});
 			
+			if ( subscription.member ) {
+				subscriber = CollectionSubscriber(subscription);
+				this.event('add').subscribe(subscriber);
+				this.event('change').subscribe(subscriber);
+				this.event('initialise').subscribe(subscriber);
+			}
+			
 			if ( subscriber && subscription.initialise ) {
 //				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
