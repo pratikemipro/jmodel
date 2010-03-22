@@ -197,6 +197,19 @@ function OPAL () {
 			return resolve(object,transformer(extractor(object)));
 		};
 	}
+	
+	function aspect (options) {
+		return function () {
+			if ( options.pre ) {
+				options.pre.apply(this,arguments);
+			}
+			var returnValue = options.target.apply(this,arguments);
+			return options.post ? options.post.call(this,{
+				args: arguments,
+				returnValue: returnValue
+			}) : returnValue;
+		};
+	}
 
 	opal.extend({
 		apply: apply,
@@ -218,7 +231,8 @@ function OPAL () {
 		Resolve: Resolve,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet,
-		transform: transform
+		transform: transform,
+		aspect: aspect
 	});
 
 
