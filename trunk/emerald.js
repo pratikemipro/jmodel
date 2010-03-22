@@ -123,7 +123,7 @@ var emerald = function () {
 			var messages = this.map(ApplyTo(event))
 								.filter(function (msg) { return msg != null; } );
 			if ( messages.count() > 0 ) {
-//				console.log('Notifying '+messages.count()+' subscribers of '+event.description);
+				console.log('Notifying '+messages.count()+' subscribers of '+event.description);
 //				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
 				this.notifications.send(messages);
 //				log('subscriptions/notify').endGroup();
@@ -203,19 +203,57 @@ var emerald = function () {
 	//														  Subscribable Sets
 	// ------------------------------------------------------------------------
 	
+	function subscribable (proto) {
+		
+		return extend({
+			
+			add: aspect({
+				target: proto.add,
+				post: function (state) {
+					if (this.added) {
+						this.event('add').raise({
+							method: 'add',
+							object: this.added,
+							description: 'object addition'
+						});
+					}
+					return state.returnValue;
+				}
+			}),
+			
+			remove: aspect({
+				target: proto.remove,
+				post: function (state) {
+					var that = this;
+					state.returnValue.each(function (item) {
+						that.event('remove').raise({
+							method: 'remove',
+							object :item,
+							description: 'object removal'
+						});
+					})
+					return state.returnValue;
+				}
+			})
+			
+		},copy(proto,true));
+		
+	}
+	
 	function SubscribableSet (notifications) {
 		Set.apply(this);
 		makeSubscribable.call(this,notifications);
 	}
-	SubscribableSet.prototype = Set.prototype;
+	
+	SubscribableSet.prototype = subscribable(Set.prototype);
 	
 	function SubscribableTypedSet (constructor,notifications) {
 		TypedSet.call(this,constructor);
 		makeSubscribable.call(this,notifications);
 	}
-	SubscribableTypedSet.prototype = TypedSet.prototype;
+	SubscribableTypedSet.prototype = subscribable(TypedSet.prototype);
 	
-	function makeSubscribable () {
+	function makeSubscribable (notifications) {
 		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort');
 		this.event	= delegateTo(this.events,'filter');
 		return this;
