@@ -254,6 +254,7 @@ var emerald = function () {
 	SubscribableTypedSet.prototype = subscribable(TypedSet.prototype);
 	
 	function makeSubscribable (notifications) {
+		notifications = notifications || new NotificationQueue();
 		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort');
 		this.event	= delegateTo(this.events,'filter');
 		return this;
