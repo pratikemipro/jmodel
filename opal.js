@@ -1261,6 +1261,11 @@ function OPAL () {
 		copy: 							copy
 	});
 
+	opal.plugin = {
+		set: Set.prototype,
+		typedset: TypedSet.prototype
+	};
+
 
 	return opal;
 

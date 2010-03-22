@@ -16,14 +16,10 @@
 
 var jModel = function () {
 
-	//
-	// Import OPAL
-	//
-
-	var opal = OPAL();
-	for ( var i in opal ) {
-		eval('var '+i+' = opal.'+i);
-	}
+	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
+		_				= external;
+		
+	external.jmodel_version = '0.5.0';
 
 	//
 	// Import Emerald
@@ -31,12 +27,10 @@ var jModel = function () {
 	
 	for ( var i in emerald ) {
 		eval('var '+i+' = emerald.'+i);
+		external[i] = emerald[i];
 	}
 
-	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
-		_				= external;
-		
-	external.jmodel_version = '0.5.0';
+
 	
 	
 	// ------------------------------------------------------------------------
@@ -60,10 +54,6 @@ var jModel = function () {
 	// External interface to OPAL
 	//
 	
-	for (var i in opal) {
-		external[i] = opal[i];
-	}
-	
 	external.extend({
 		
 		method: 	Method,
@@ -71,7 +61,7 @@ var jModel = function () {
 		times: 		times,
 		
 		/* Set */
-		set: 		opal.set,
+		set: 		set,
 		
 		/* Predicates */
 		predicate: 	predicate,
@@ -1571,7 +1561,7 @@ var jModel = function () {
 	// 													Plugin extension points 
 	// ------------------------------------------------------------------------
 	
-	external.plugin = {
+	external.plugin = extend({
 		events: EventRegistry.prototype,
 		notifications: NotificationQueue.prototype,
 		subscribers: SubscriberSet.prototype,
@@ -1584,7 +1574,7 @@ var jModel = function () {
 		relationship: {
 			onetomany: OneToManyRelationship.prototype
 		}
-	};
+	},external.plugin);
 	
 	// ------------------------------------------------------------------------
 	// 																	Fluency 
