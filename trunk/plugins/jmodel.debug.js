@@ -11,32 +11,8 @@
 
 	var _ 		= jModel,
 		extend	= _.extend,
-		plugin	= _.plugin;
-
-
-	function aspect (options) {
-	
-		return function () {
-		
-			if ( options.pre ) {
-				options.pre.apply(this,arguments);
-			}
-			var returnValue = options.target.apply(this,arguments);
-			if ( options.post ) {
-				return options.post.call(this,{
-					args: arguments,
-					returnValue: returnValue
-				});
-			}
-			else {
-				return returnValue;
-			}
-		
-		};
-	
-	}
-	
-	_.aspect = aspect;
+		plugin	= _.plugin,
+		aspect	= _.aspect;
 	
 	
 	// ------------------------------------------------------------------------
