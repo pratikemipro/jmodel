@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= {emerald_version:'0.1.0'},
+	var em		= extend({emerald_version:'0.1.0'},opal),
 		_		= em;
 
 
@@ -197,6 +197,37 @@ var emerald = function () {
 	}, new TypedSet(Function) );
 	
 	em.NotificationQueue = NotificationQueue;
+	
+	
+	// ------------------------------------------------------------------------
+	//														  Subscribable Sets
+	// ------------------------------------------------------------------------
+	
+	function SubscribableSet (notifications) {
+		Set.apply(this);
+		makeSubscribable.call(this,notifications);
+	}
+	SubscribableSet.prototype = Set.prototype;
+	
+	function SubscribableTypedSet (constructor,notifications) {
+		TypedSet.call(this,constructor);
+		makeSubscribable.call(this,notifications);
+	}
+	SubscribableTypedSet.prototype = TypedSet.prototype;
+	
+	function makeSubscribable () {
+		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort');
+		this.event	= delegateTo(this.events,'filter');
+		return this;
+	}
+	
+	em.plugin.set.asSubscribable = function (notifications) {
+		return this.reduce(Method('add'),new SubscribableSet(notifications));
+	};
+	
+	em.plugin.typedset.asSubscribable = function (notifications) {
+		return this.reduce(Method('add'),new SubscribableTypedSet(this.__constructor,notifications));
+	}
 	
 	return em;
 	
