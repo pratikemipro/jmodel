@@ -350,6 +350,7 @@ function OPAL () {
 		},
 		
 		add: function _add (object,success,failure) {
+			this.added = undefined;
 			if ( this.constraint(object) ) {	
 				this.__members.push(object);
 				this.length++;
