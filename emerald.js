@@ -227,7 +227,7 @@ var emerald = function () {
 	
 	em.plugin.typedset.asSubscribable = function (notifications) {
 		return this.reduce(Method('add'),new SubscribableTypedSet(this.__constructor,notifications));
-	}
+	};
 	
 	return em;
 	
