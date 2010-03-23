@@ -43,12 +43,13 @@ var emerald = function () {
 	EventRegistry.prototype = {
 		
 		register: function _register () {
-			var args = set(arguments),
+			return set(arguments).reduce(Method('add',this),this);
+/*			var args = set(arguments),
 				that = this;
 			args.each(function (name) {
-				that.__delegate.add(that,name);
+				that.add(that,name);
 			});
-			return this;
+			return this; */
 		},
 		
 		filter: function _filter () {
