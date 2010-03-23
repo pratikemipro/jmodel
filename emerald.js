@@ -117,21 +117,8 @@ var emerald = function () {
 			return Subscriber(specification);
 		},
 		
-		notify: function _notify (event) {
-			var messages = this.map(ApplyTo(event))
-							.filter(function (msg) { return true;  } );
-			if ( messages.count() > 0 ) {
-//				console.log('Notifying '+messages.count()+' subscribers of '+event.description);
-//				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
-				this.notifications.send(messages);
-//				log('subscriptions/notify').endGroup();
-			}
-		},
-		
-		debug: function _debug () {
-			if ( _.nonempty(this.__delegate) ) {
-//				log().debug('Subscribers:  '+this.__delegate.count());
-			}
+		notify: function _notify (event) {		
+			this.notifications.send(this.map(ApplyTo(event)).filter(Identity));
 		}
 		
 	};

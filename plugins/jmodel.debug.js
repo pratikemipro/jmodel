@@ -201,6 +201,10 @@
 
 	extend({
 		
+		debug: function _debug () {
+			log().debug('Subscribers:  '+this.count());
+		}
+		
 		add: aspect({
 			target: plugin.subscribers.add,
 			post: function (state) {
@@ -211,7 +215,14 @@
 				}
 				return state.returnValue;
 			}
-		})
+		}),
+		
+		notify: aspect({
+            target: plugin.subscribers.notify,
+            pre: function (event) {
+	            log('notifications/send').debug('Notifying subscribers of '+event.description);
+	        }
+        })
 		
 	}, plugin.subscribers );
 	
