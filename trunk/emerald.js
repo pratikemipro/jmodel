@@ -119,7 +119,7 @@ var emerald = function () {
 		
 		notify: function _notify (event) {
 			var messages = this.map(ApplyTo(event))
-								.filter(function (msg) { return msg != null; } );
+							.filter(function (msg) { return true;  } );
 			if ( messages.count() > 0 ) {
 //				console.log('Notifying '+messages.count()+' subscribers of '+event.description);
 //				log('subscriptions/notify').startGroup('Notifying subscribers of '+event.description);
@@ -145,7 +145,7 @@ var emerald = function () {
 		return function (event) {
 			return predicate(event) ? function () {
 				return message(event);
-			} : null;
+			} : undefined;
 		};
 	}
 	
