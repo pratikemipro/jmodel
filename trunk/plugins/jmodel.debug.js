@@ -203,7 +203,7 @@
 		
 		debug: function _debug () {
 			log().debug('Subscribers:  '+this.count());
-		}
+		},
 		
 		add: aspect({
 			target: plugin.subscribers.add,

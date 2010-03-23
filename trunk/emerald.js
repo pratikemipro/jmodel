@@ -102,11 +102,15 @@ var emerald = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		set().of(Function).delegateFor(this);
+		this.__delegate = set().of(Function).delegateFor(this);
 		this.notifications	= notifications;
 	};
 	
 	SubscriberSet.prototype = {
+		
+		add: function () {
+			return this.__delegate.add.apply(this,arguments);
+		},
 		
 		__construct: function (specification) {
 			return Subscriber(specification);
