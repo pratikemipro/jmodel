@@ -108,7 +108,7 @@ var emerald = function () {
 	
 	SubscriberSet.prototype = {
 		
-		add: function () {
+		add: function () { // To support debug plugin
 			return this.__delegate.add.apply(this,arguments);
 		},
 		
