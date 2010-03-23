@@ -249,12 +249,12 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
-		TypedSet.call(this);
+		set().of(EntityType).delegateFor(this);
 		this.context = context;
 		return this.index(Property('name'));
 	}
 	
-	EntityTypeSet.prototype = extend({
+	EntityTypeSet.prototype = {
 		
 		constructor: EntityTypeSet,
 		
@@ -271,7 +271,7 @@ var jModel = function () {
 			}
 		}
 		
-	}, new TypedSet(EntityType) );
+	};
 	
 	var	defaultContext	= contexts.create('default').setDefault();
 	
@@ -1384,12 +1384,12 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		TypedSet.apply(this);
+		set().of(Relationship).delegateFor(this);
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		return this.index(Property('name'));
 	}
 	
-	RelationshipSet.prototype = extend({
+	RelationshipSet.prototype = {
 		
 		constructor: RelationshipSet,
 		
@@ -1402,7 +1402,7 @@ var jModel = function () {
 			}
 		}
 		
-	}, new TypedSet(Relationship) );
+	};
 	
 
 	function Relationship () {};
