@@ -89,7 +89,7 @@ var emerald = function () {
 		},
 	
 		raise: function _raise (event) {
-//			console.log('Raising '+this.name+' ('+this.subscribers().__delegate.count()+' subscribers)');
+//			console.log('Raising '+this.name+' ('+this.subscribers().count()+' subscribers)');
 			this.subscribers().notify(event);
 		}
 		
@@ -107,16 +107,14 @@ var emerald = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		this.__delegate		= set().of(Function).delegateFor(this);
+		set().of(Function).delegateFor(this);
 		this.notifications	= notifications;
 	};
 	
 	SubscriberSet.prototype = {
 		
-		add: function _add (subscriber) {
-			this.__delegate.add(subscriber);
-			this.added = this.__delegate.added;
-			return this;
+		__construct: function (specification) {
+			return Subscriber(specification);
 		},
 		
 		notify: function _notify (event) {
@@ -139,6 +137,17 @@ var emerald = function () {
 	};
 	
 	em.SubscriberSet = SubscriberSet;
+	
+	
+	function Subscriber (specification) {
+		var predicate = specification.predicate || AllPredicate,
+			message = specification.message;			
+		return function (event) {
+			return predicate(event) ? function () {
+				return message(event);
+			} : null;
+		};
+	}
 	
 	
 	// ------------------------------------------------------------------------
