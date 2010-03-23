@@ -199,8 +199,8 @@ var jModel = function () {
 		constructor: Context,
 		
 		register: function _register (name,constructor,options) {
-			return this.entities
-						.create(name,constructor,options)
+			return this.entities.add(name,constructor,options)
+						.added
 							.exposeAt( this.isDefault ? [this,external] : [this] )
 							.context;
 		},
@@ -258,8 +258,8 @@ var jModel = function () {
 		
 		constructor: EntityTypeSet,
 		
-		create: function _create (name,constructor,options) {
-			return this.add(new EntityType(this.context,name,constructor,options)).added;
+		__construct: function (name,constructor,options) {
+			return new EntityType(this.context,name,constructor,options);
 		},
 		
 		predicate: function _predicate (parameter) {
