@@ -256,6 +256,9 @@ var emerald = function () {
 		return this;
 	}
 	
+	em.SubscribableSet = SubscribableSet;
+	em.SubscribableTypedSet = SubscribableTypedSet;
+	
 	em.plugin.set.asSubscribable = function (notifications) {
 		return this.reduce(Method('add'),new SubscribableSet(notifications));
 	};
