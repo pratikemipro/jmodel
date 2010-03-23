@@ -501,7 +501,7 @@ function OPAL () {
 				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
 				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
 						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
-			return this.reduce(add(function (obj) {return obj != null;},mapping,true),mapped);
+			return this.reduce(add(function (obj) {return obj !== undefined;},mapping,true),mapped);
 		},
 		
 		reduce: function _reduce (fn,acc) {
