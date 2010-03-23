@@ -156,12 +156,13 @@ var emerald = function () {
 
 	function NotificationQueue (context) {
 
+		set().of(Function).delegateFor(this);
 		this.context		= context;
 		this.__suspensions	= 0;
 
 	};
 	
-	NotificationQueue.prototype = extend({
+	NotificationQueue.prototype = {
 		
 		send: function _send (messages) {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
@@ -203,7 +204,7 @@ var emerald = function () {
 			return this;
 		}
 	    
-	}, new TypedSet(Function) );
+	};
 	
 	em.NotificationQueue = NotificationQueue;
 	
