@@ -384,7 +384,7 @@
 		        log().startGroup('DomainObjectCollection');
 		    }
 			if ( _.Not(_.EmptySetPredicate)(this) ) {
-				log().debug('Objects:  '+this.format(_.listing(_.Method('primaryKeyValue'))));
+				log().debug('Objects:  '+this.format(_.listing(_.Method('name'))));
 			}
 			if ( showSubscribers ) {
 			    log().startGroup('events');
