@@ -332,7 +332,7 @@ var jModel = function () {
 				data[primaryKey] = data[primaryKey] || this.generateID();
 
 				newObject = new this.constructor();
-				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey,this)).delegateFor(newObject);
+				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey,this,this.options.nameField)).delegateFor(newObject);
 
 				this.context.all.add(newObject);
 
@@ -1032,7 +1032,7 @@ var jModel = function () {
 	// 													 Domain Object delegate
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (context,parent,data,primaryKey,entitytype) {
+	function DomainObject (context,parent,data,primaryKey,entitytype,nameField) {
 		
 		this.domain = {
 			dirty: 	false,
@@ -1040,6 +1040,7 @@ var jModel = function () {
 		};
 		
 		this.primaryKey	= primaryKey;
+		this.nameField  = nameField;
 		this.parent		= parent;
 		this.entitytype = entitytype;
 		
@@ -1193,6 +1194,10 @@ var jModel = function () {
 			    
 			}
 
+		},
+		
+		name: function _name () {
+		    return this.get( this.nameField || this.primaryKey );
 		},
 		
 		primaryKeyValue: function _primaryKeyValue () {
@@ -1455,11 +1460,20 @@ var jModel = function () {
 		this.name				= relationship.plural || relationship.accessor+'s';
 
 //		log('domainobject/create').startGroup('Creating children collection');
-		var children = 	owner.context.collection({
-							base: 	     	owner.context.entities.get(relationship.prototype).objects,
-							predicate: 	 	RelationshipPredicate(owner,relationship.field),
-							description: 	'children by relationship '+relationship.accessor
-						});
+        var children;
+        if ( relationship.field ) {
+            children = 	owner.context.collection({
+        		base: 	     	owner.context.entities.get(relationship.prototype).objects,
+				predicate: 	 	RelationshipPredicate(owner,relationship.field),
+				description: 	'children by relationship '+relationship.accessor
+			});
+        }
+        else {
+            children =  owner.context.collection({
+                description: 'children by relationship '+relationship.accessor
+            });
+        }
+
 //		log('domainobject/create').endGroup();
 	
 		children.delegateFor(this);
@@ -1489,8 +1503,16 @@ var jModel = function () {
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function _add (data) {
-			return owner.context.entities.get(relationship.prototype)
-					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
+		    if ( relationship.field ) {
+		        return owner.context.entities.get(relationship.prototype)
+    					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
+		    }
+		    else {
+		        var newObject = owner.context.entities.get(relationship.prototype).create(data);
+		        console.log(newObject);
+		        children.add(newObject);
+		        return newObject;
+		    }
 		};
 		
 		this.debug = function _debug () {
