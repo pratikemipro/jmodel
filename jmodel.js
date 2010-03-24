@@ -1509,7 +1509,6 @@ var jModel = function () {
 		    }
 		    else {
 		        var newObject = owner.context.entities.get(relationship.prototype).create(data);
-		        console.log(newObject);
 		        children.add(newObject);
 		        return newObject;
 		    }
