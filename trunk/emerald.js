@@ -224,7 +224,7 @@ var emerald = function () {
 					state.returnValue.each(function (item) {
 						that.event('remove').raise({
 							method: 'remove',
-							object :item,
+							object: item,
 							description: 'object removal'
 						});
 					})
