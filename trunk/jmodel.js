@@ -332,7 +332,12 @@ var jModel = function () {
 				data[primaryKey] = data[primaryKey] || this.generateID();
 
 				newObject = new this.constructor();
-				newObject.__delegate = (new DomainObject(this.context,newObject,data,primaryKey,this,this.options.nameField)).delegateFor(newObject);
+				newObject.__delegate = (new DomainObject(
+				                                this.context,
+				                                newObject,
+				                                data,
+				                                primaryKey || this.options.relativeKey,
+				                                this,this.options.nameField) ).delegateFor(newObject);
 
 				this.context.all.add(newObject);
 
@@ -745,8 +750,8 @@ var jModel = function () {
 			else if ( typeof parameter == 'object' && parameter !== null ) {
 				return ExamplePredicate(parameter);
 			} 
-			else if ( typeof parameter == 'number' ) {
-				return IdentityPredicate(parameter);
+			else if ( typeof parameter == 'number' || typeof parameter == 'string' ) {
+				return extend({unique:true},IdentityPredicate(parameter));
 			}
 			return AllPredicate;
 		},
@@ -1244,7 +1249,8 @@ var jModel = function () {
 			for ( var i in oneToManys ) {
 				var descriptor = oneToManys[i];
 				var relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
-				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'get');
+				this.parent[descriptor.accessor]                            	= delegateTo(relationship,'filter');
+				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'filter');
 				this.parent['add'+descriptor.accessor]							= delegateTo(relationship,'add');
 				this.parent['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
 				this.parent['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
@@ -1470,14 +1476,16 @@ var jModel = function () {
         }
         else {
             children =  owner.context.collection({
-                description: 'children by relationship '+relationship.accessor
+                description: 'children by relationship '+relationship.accessor,
+                primaryKey: relationship.relativeKey
             });
         }
 
 //		log('domainobject/create').endGroup();
 	
 		children.delegateFor(this);
-		this.get = delegateTo(children,'filter');
+		this.filter = delegateTo(children,'filter');
+		this.get    = delegateTo(children,'get');
 	
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {

@@ -485,7 +485,7 @@ function OPAL () {
 			}
 
 			if ( predicate && predicate.unique ) {
-				selector = ':first';
+			    selector = ':first';
 			}
 
 			return this.__members.filter ? set(this.__members.filter(predicate)).select(selector)
@@ -552,7 +552,7 @@ function OPAL () {
 				return parameter;
 			}
 			else if ( typeof parameter == 'object' || typeof parameter == 'string' || typeof parameter == 'number' ) {
-				return ObjectIdentityPredicate(parameter);
+				return extend({unique:true},ObjectIdentityPredicate(parameter));
 			}
 			return AllPredicate;
 		},
