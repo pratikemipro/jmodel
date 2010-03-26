@@ -125,13 +125,13 @@ var emerald = function () {
 	em.SubscriberSet = SubscriberSet;
 	
 	
-	function Subscriber (specification) {
-		var predicate = specification.predicate || AllPredicate,
-			message = specification.message;			
+	function Subscriber (subscription) {
+		var predicate = subscription.predicate || AllPredicate,
+			message = subscription.message;			
 		return function (event) {
-			return predicate(event) ? function () {
+			return predicate(event) ? extend({subscription:subscription},function () {
 				return message(event);
-			} : undefined;
+			}) : undefined;
 		};
 	}
 	
