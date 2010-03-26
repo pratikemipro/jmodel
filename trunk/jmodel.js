@@ -169,7 +169,9 @@ var jModel = function () {
 	
 	function ContextSet () {
 
-		var contexts = set().of(Context).index(Property('name')).delegateFor(this);
+		var contexts = set().of(Context).asSubscribable()
+						.index(Property('name'))
+						.delegateFor(this);
 	
 		this.create = function _create (name) {
 			return this.add(new Context(name)).added;
@@ -249,7 +251,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
-		set().of(EntityType).delegateFor(this);
+		set().of(EntityType).asSubscribable().delegateFor(this);
 		this.context = context;
 		return this.index(Property('name'));
 	}
