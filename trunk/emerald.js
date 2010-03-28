@@ -130,7 +130,7 @@ var emerald = function () {
 			message = subscription.message;			
 		return function (event) {
 			return predicate(event) ? extend({subscription:subscription},function () {
-				return message(event,subscription);
+				return message(event);
 			}) : undefined;
 		};
 	}
@@ -143,21 +143,9 @@ var emerald = function () {
 		});
 	}
 	
-	// NOTE: This is obsolescent
-	function ObjectSubscriber (subscription) {
-		return extend({subscription:subscription},function _objectsubscriber (event) {
-			return ( event.removed && subscription.removed )
-					|| (subscription.key == ':any') 
-					|| ( event.key == subscription.key ) ?
-				subscription.type(subscription,event)
-				: null;
-		});
-	}
-	
 	em.extend({
 		Subscriber: Subscriber,
-		CollectionSubscriber: CollectionSubscriber,
-		ObjectSubscriber: ObjectSubscriber
+		CollectionSubscriber: CollectionSubscriber
 	});
 	
 	
