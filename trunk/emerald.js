@@ -130,7 +130,7 @@ var emerald = function () {
 			message = subscription.message;			
 		return function (event) {
 			return predicate(event) ? extend({subscription:subscription},function () {
-				return message(event);
+				return message(event,subscription);
 			}) : undefined;
 		};
 	}
