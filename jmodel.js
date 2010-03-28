@@ -391,25 +391,35 @@ var jModel = function () {
 	// Notification types
 	//
 	
-	function ContentNotification (event,subscription) {
-		var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
-		subscription.target.html(subscription.format(value));
+	function ContentNotification (subscription) {
+		return function (event) {
+			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
+			subscription.target.html(subscription.format(value));
+		};
 	};
 	
-	function ValueNotification (event,subscription) {
-		subscription.target.val(subscription.source.get(subscription.key));
+	function ValueNotification (subscription) {
+		return function (event) {
+			subscription.target.val(subscription.source.get(subscription.key));
+		};
 	};
 	
-	function MethodNotification (event,subscription) {
-		subscription.method.call(subscription.target,subscription.source);
+	function FunctionNotification (subscription) {
+		return function (event) {
+			subscription.change.call(subscription.target,subscription.source);
+		};
 	};
 	
-	function EventNotification (event,subscription) {
-		subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
+	function EventNotification (subscription) {
+		return function (event) {
+			subscription.target.trigger(jQuery.Event(subscription.change),subscription.source);
+		};
 	};
 	
-	function RemovalNotification (event,subscription) {
-		subscription.removed.call(subscription.target,subscription.source);
+	function RemovalNotification (subscription) {
+		return function (event) {
+			subscription.removed.call(subscription.target,subscription.source);
+		};
 	};
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
@@ -456,7 +466,7 @@ var jModel = function () {
 	external.notification = {
 		ContentNotification: ContentNotification,
 		ValueNotification: ValueNotification,
-		MethodNotification: MethodNotification,
+		FunctionNotification: FunctionNotification,
 		EventNotification: EventNotification,
 		RemovalNotification: RemovalNotification,
 		CollectionMethodNotification: CollectionMethodNotification,
@@ -1162,30 +1172,30 @@ var jModel = function () {
     			subscription.format 		= subscription.format || noformat;
 				subscription.description	= subscription.description || 'unknown';
 
-				var event;
+				var event, message;
     			if ( subscription.removed ) {
-					event					= 'removed';
-    				subscription.message	= external.notification.RemovalNotification;
+					event	= 'removed';
+    				message	= external.notification.RemovalNotification(subscription);
     			}
 				else {
 					event = subscription.key == ':any' ? '_any' : subscription.key;
 					if ( subscription.change && typeof subscription.change == 'string' ) {
-	    				subscription.message	= external.notification.EventNotification;
-	    				subscription.event		= subscription.change;
+	    				message	= external.notification.EventNotification(subscription);
 	    			}
 	    			else if ( subscription.change && typeof subscription.change == 'function' ) {
-	    				subscription.message	= external.notification.MethodNotification;
-	    				subscription.method		= subscription.change;
+	    				message	= external.notification.FunctionNotification(subscription);
 	    			}
 	    			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-	    				subscription.message = external.notification.ValueNotification;
+	    				message = external.notification.ValueNotification(subscription);
 	    			}
 	    			else {
-	    				subscription.message = external.notification.ContentNotification;
+	    				message = external.notification.ContentNotification(subscription);
 	    			}
 				}	
 
-				var subscriber = this.event(event).subscribe(subscription);
+				var subscriber = this.event(event).subscribe({
+					message: message
+				});
 
     			if ( subscription.initialise ) {
     				this.context.notifications.send(subscriber({
