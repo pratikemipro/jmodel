@@ -543,7 +543,11 @@ var jModel = function () {
 			var that = this;
 			this.__delegate.add(object, function __add () {
 				that.length++;
-				that.event('add').raise({method:'add',object:object,description:'object addition'});
+				that.event('add').raise({
+					method: 'add',
+					object: object,
+					description: 'object addition'
+				});
 				if ( that.event('change').subscribers(':first') ) {
 					object.subscribe({
 						target: that,
@@ -551,9 +555,9 @@ var jModel = function () {
 						change: function _change (object) {
 							that.__delegate.sorted = false;
 							that.event('change').raise({
-								method:'change',
-								object:object,
-								description:'object change'
+								method: 'change',
+								object: object,
+								description: 'object change'
 							});  
 						},
 						description: 'object change for '+that.description+' collection change'
@@ -570,7 +574,11 @@ var jModel = function () {
 			if ( fromHere ) {
 				this.__delegate.remove(predicate).each(function __remove (object) {
 					object.removed();
-					that.event('remove').raise({method:'remove',object:object,description:'object removal'});
+					that.event('remove').raise({
+						method:'remove',
+						object:object,
+						description:'object removal'
+					});
 					if (removeSubscribers) {
 					    object.events.each(function (event) {
 					        event.subscribers().remove(AllPredicate);
@@ -659,7 +667,11 @@ var jModel = function () {
 
 			// Notify subscribers
 			if ( permuted ) {
-				this.event('sort').raise({method:'sort',permutation:permutation,description:'collection sort'});
+				this.event('sort').raise({
+					method:'sort',
+					permutation:permutation,
+					description:'collection sort'
+				});
 			}
 
 			this.__delegate.sorted = true;
@@ -1124,7 +1136,10 @@ var jModel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				this.event('_any').raise({key:':any',description:'field value change: any'});
+				this.event('_any').raise({
+					key: ':any',
+					description: 'field value change: any'
+				});
 			}
 			
 		}, function _set () {
@@ -1135,7 +1150,10 @@ var jModel = function () {
 				key = arguments[0];
 				var value = arguments[1];
 				if ( this.fields().set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
-					this.event('_any').raise({key:':any',description:'field value change: any'});
+					this.event('_any').raise({
+						key: ':any',
+						description: 'field value change: any'
+					});
 				}
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1149,7 +1167,10 @@ var jModel = function () {
 		}),
 		
 		removed: function _removed (collection) {
-			this.event('removed').raise({removed:true,description:'object removal'});
+			this.event('removed').raise({
+				removed: true,
+				description: 'object removal'
+			});
 		},
 		
 		subscribe: function _subscribe (subscription) {
@@ -1366,7 +1387,10 @@ var jModel = function () {
 			
 			valid: function (value,publisher) {
 				this.__delegate = value;
-				this.event(this.accessor).raise({key:this.accessor,description:'field value change: '+this.accessor});
+				this.event(this.accessor).raise({
+					key: this.accessor,
+					description:'field value change: '+this.accessor
+				});
 				if ( publisher && publisher.success ) {
 					publisher.success();
 				}
