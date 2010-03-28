@@ -705,8 +705,8 @@ var jModel = function () {
 				subscription.type	= 	external.notification.CollectionMemberNotification;
 				subscription.filter = 	function __subscribe (collection) {
 											return function ___subscribe (event) {
-												return collection.filter(subscription.predicate).select(subscription.selector) === event.object
-														&& ( event.method == 'add' || event.method == 'initialise' ); // NOTE: Fix this
+												return ( event.method == 'add' || event.method == 'initialise' ) 
+														&& collection.filter(subscription.predicate).select(subscription.selector) === event.object;
 											};
 										}(this);							
 			}
