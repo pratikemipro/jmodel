@@ -539,34 +539,38 @@ var jModel = function () {
 		
 		constructor: DomainObjectCollection,
 		
-		add: function _add (object) {
-			var that = this;
-			this.__delegate.add(object, function __add () {
-				that.length++;
-				that.event('add').raise({
-					method: 'add',
-					object: object,
-					description: 'object addition'
-				});
-				if ( that.event('change').subscribers(':first') ) {
-					object.subscribe({
-						target: that,
-						key: ':any',
-						change: function _change (object) {
-							that.__delegate.sorted = false;
-							that.event('change').raise({
-								method: 'change',
-								object: object,
-								description: 'object change'
-							});  
-						},
-						description: 'object change for '+that.description+' collection change'
+		add: aspect({
+			target: Set.prototype.add,
+			post: function (state) {
+				var object = state.args[0];
+				if ( this.added ) {
+					this.length++;
+					this.event('add').raise({
+						method: 'add',
+						object: object,
+						description: 'object addition'
 					});
+					if ( this.event('change').subscribers(':first') ) {
+						var that = this;
+						object.subscribe({
+							target: this,
+							key: ':any',
+							change: function _change (object) {
+								that.__delegate.sorted = false;
+								that.event('change').raise({
+									method: 'change',
+									object: object,
+									description: 'object change'
+								});  
+							},
+							description: 'object change for '+that.description+' collection change'
+						});
+					}
+					this.__delegate.sorted = false;
 				}
-				that.__delegate.sorted = false;
-			});
-			return this;
-		},
+				return state.returnValue;
+			}
+		}),
 		
 		remove: function _remove (predicate,fromHere,removeSubscribers) {
 			predicate = And(this.__predicate,this.predicate(predicate));
