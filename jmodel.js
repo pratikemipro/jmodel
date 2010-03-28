@@ -475,23 +475,6 @@ var jModel = function () {
 		CollectionMemberNotification: CollectionMemberNotification
 	};
 	
-	function CollectionSubscriber (subscription) {
-		return extend({subscription:subscription},function _collectionsubscriber (event) {
-			return ( subscription.filter && !subscription.filter(event) ) ? null
-				:  subscription.type(subscription,event);
-		});
-	}
-	
-	function ObjectSubscriber (subscription) {
-		return extend({subscription:subscription},function _objectsubscriber (event) {
-			return ( event.removed && subscription.removed )
-					|| (subscription.key == ':any') 
-					|| ( event.key == subscription.key ) ?
-				subscription.type(subscription,event)
-				: null;
-		});
-	}
-
 	
 	
 	// ------------------------------------------------------------------------
