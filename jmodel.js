@@ -391,36 +391,25 @@ var jModel = function () {
 	// Notification types
 	//
 	
-	function ContentNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _contentnotification () {
-			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
-			subscription.target.html(subscription.format(value));
-		});	
+	function ContentNotification (event,subscription) {
+		var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
+		subscription.target.html(subscription.format(value));
 	};
 	
-	function ValueNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _valuenotification () {
-			subscription.target.val(subscription.source.get(subscription.key));
-		});
+	function ValueNotification (event,subscription) {
+		subscription.target.val(subscription.source.get(subscription.key));
 	};
 	
-	function MethodNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _methodnotification () {
-			subscription.method.call(subscription.target,subscription.source);
-		});	
+	function MethodNotification (event,subscription) {
+		subscription.method.call(subscription.target,subscription.source);
 	};
 	
-	function EventNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _eventnotification () {
-			subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
-		});
+	function EventNotification (event,subscription) {
+		subscription.target.trigger(jQuery.Event(subscription.event),subscription.source);
 	};
 	
-	// NOTE: Should implement separate RemovalMethodNotification and RemovalEventNotification objects
-	function RemovalNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _removalnotification () {
-			subscription.removed.call(subscription.target,subscription.source);
-		});
+	function RemovalNotification (event,subscription) {
+		subscription.removed.call(subscription.target,subscription.source);
 	};
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
@@ -1169,39 +1158,39 @@ var jModel = function () {
 			}
 			else {
 			    
-			    subscription.source = this;
-    			subscription.format = subscription.format || noformat;
+			    subscription.source 		= this;
+    			subscription.format 		= subscription.format || noformat;
+				subscription.description	= subscription.description || 'unknown';
 
 				var event;
     			if ( subscription.removed ) {
 					event					= 'removed';
-    				subscription.type		= external.notification.RemovalNotification;
+    				subscription.message	= external.notification.RemovalNotification;
     			}
 				else {
 					event = subscription.key == ':any' ? '_any' : subscription.key;
 					if ( subscription.change && typeof subscription.change == 'string' ) {
-	    				subscription.type		= external.notification.EventNotification;
+	    				subscription.message	= external.notification.EventNotification;
 	    				subscription.event		= subscription.change;
 	    			}
 	    			else if ( subscription.change && typeof subscription.change == 'function' ) {
-	    				subscription.type		= external.notification.MethodNotification;
+	    				subscription.message	= external.notification.MethodNotification;
 	    				subscription.method		= subscription.change;
 	    			}
 	    			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-	    				subscription.type = external.notification.ValueNotification;
+	    				subscription.message = external.notification.ValueNotification;
 	    			}
 	    			else {
-	    				subscription.type = external.notification.ContentNotification;
+	    				subscription.message = external.notification.ContentNotification;
 	    			}
-				}
-    			
-				subscription.description = subscription.description || 'unknown';
+				}	
 
-    			var subscriber = ObjectSubscriber(subscription);
-				this.event(event).subscribe(subscriber);
+				var subscriber = this.event(event).subscribe(subscription);
 
     			if ( subscription.initialise ) {
-    				this.context.notifications.send(subscriber({key:subscription.key}));
+    				this.context.notifications.send(subscriber({
+						description: 'Initialisation: '+event
+					}));
     			}
 
     			return subscriber;
