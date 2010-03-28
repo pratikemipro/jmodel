@@ -135,6 +135,31 @@ var emerald = function () {
 		};
 	}
 	
+	// NOTE: This is obsolescent
+	function CollectionSubscriber (subscription) {
+		return extend({subscription:subscription},function _collectionsubscriber (event) {
+			return ( subscription.filter && !subscription.filter(event) ) ? null
+				:  subscription.type(subscription,event);
+		});
+	}
+	
+	// NOTE: This is obsolescent
+	function ObjectSubscriber (subscription) {
+		return extend({subscription:subscription},function _objectsubscriber (event) {
+			return ( event.removed && subscription.removed )
+					|| (subscription.key == ':any') 
+					|| ( event.key == subscription.key ) ?
+				subscription.type(subscription,event)
+				: null;
+		});
+	}
+	
+	em.extend({
+		Subscriber: Subscriber,
+		CollectionSubscriber: CollectionSubscriber,
+		ObjectSubscriber: ObjectSubscriber
+	});
+	
 	
 	// ------------------------------------------------------------------------
 	//															  Notifications
