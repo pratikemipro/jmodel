@@ -1172,34 +1172,33 @@ var jModel = function () {
 			    subscription.source = this;
     			subscription.format = subscription.format || noformat;
 
+				var event;
     			if ( subscription.removed ) {
+					event					= 'removed';
     				subscription.type		= external.notification.RemovalNotification;
     			}
-    			else if ( subscription.change && typeof subscription.change == 'string' ) {
-    				subscription.type		= external.notification.EventNotification;
-    				subscription.event		= subscription.change;
-    			}
-    			else if ( subscription.change && typeof subscription.change == 'function' ) {
-    				subscription.type		= external.notification.MethodNotification;
-    				subscription.method		= subscription.change;
-    			}
-    			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
-    				subscription.type = external.notification.ValueNotification;
-    			}
-    			else {
-    				subscription.type = external.notification.ContentNotification;
-    			}
-
+				else {
+					event = subscription.key == ':any' ? '_any' : subscription.key;
+					if ( subscription.change && typeof subscription.change == 'string' ) {
+	    				subscription.type		= external.notification.EventNotification;
+	    				subscription.event		= subscription.change;
+	    			}
+	    			else if ( subscription.change && typeof subscription.change == 'function' ) {
+	    				subscription.type		= external.notification.MethodNotification;
+	    				subscription.method		= subscription.change;
+	    			}
+	    			else if ( subscription.target.is('input:input,input:checkbox,input:hidden,select') ) {
+	    				subscription.type = external.notification.ValueNotification;
+	    			}
+	    			else {
+	    				subscription.type = external.notification.ContentNotification;
+	    			}
+				}
+    			
 				subscription.description = subscription.description || 'unknown';
 
     			var subscriber = ObjectSubscriber(subscription);
-    			if ( subscription.key ) {
-    				var key = subscription.key == ':any' ? '_any' : subscription.key;
-    				this.event(key).subscribe(subscriber);
-    			}
-    			else if ( subscription.removed ) {
-    				this.event('removed').subscribe();
-    			}
+				this.event(event).subscribe(subscriber);
 
     			if ( subscription.initialise ) {
     				this.context.notifications.send(subscriber({key:subscription.key}));
