@@ -126,6 +126,7 @@ var emerald = function () {
 	
 	
 	function Subscriber (subscription) {
+		subscription = typeof subscription === 'function' ? {message:subscription} : subscription;
 		var predicate = subscription.predicate || AllPredicate,
 			message = subscription.message;			
 		return function (event) {
