@@ -11,15 +11,92 @@
 
 jModel.plugin.context.fromService = function (url, callback) {
 	
-	var $       = jQuery,
-	    _       = jModel,
-	    context = this;
+	var $                   = jQuery,
+	    _                   = jModel,
+	    applicationContext  = this,
+	    schemaContext       = _.contexts('schema');
+	
+	//
+	// Populate schema context from service metadata
+	//
 	
 	$.get(url+'/$metadata',function (csdl) {
+	    
+	    $('Schema',csdl).each(function (index,schemaData) {
+	        
+	        var schema = schemaContext.Schema($(schemaData).attr('Namespace'));
+	        if ( !schema ) {
+	            schema = schemaContext.createSchema({
+    	            Namespace: $(schemaData).attr('Namespace')
+    	        });
+	        }
+	        
+	        $('EntityType',schemaData).each(function (index,entitytypeData) {
+	            
+    	        var entitytype = schema.addEntityType({
+    	            Name:       $(entitytypeData).attr('Name'),
+    	            PrimaryKey: $('Key PropertyRef',entitytypeData).attr('Name')
+    	        });
+    	        
+    	        $('Property',entitytypeData).each(function (index,propertyData) {
+    	            entitytype.addProperty({
+    	                Name: $(propertyData).attr('Name'),
+    	                Type: $(propertyData).attr('Type')
+    	            });
+    	        });
+    	        
+ /*   	        $('NavigationProperty',entitytypeData).each(function (index,relationshipData) {
+    	            var association = $('Association[Name='+$(relationshipData).attr('Relationship').split('.').pop()+']',schemaData)
+    	            entitytype.addRelationship({
+    	                Name:       $(relationshipData).attr('Name')
+    	                Type:       $
+    	                ToEntity:   
+    	                Field:      
+    	            });
+    	        }); */
+    	        
+    	    });
+    	    
+    	    $('Association',schemaData).each(function (index,associationData) {
+    	        
+                var associationName     = $(associationData).attr('Name'),
+                    principalRole       = $('Principal',associationData).attr('Role'),
+                    dependentRole       = $('Dependent',associationData).attr('Role');
+                
+                if ( $('Principal',associationData).length === 0 ) {
+                    return false; // Many-to-many relationships are not currently supported
+                }
+                else {
+                    
+                    var principalEntityName = $('End[Role='+principalRole+']',associationData).attr('Type').split('.').pop(),
+                        dependentEntityName = $('End[Role='+dependentRole+']',associationData).attr('Type').split('.').pop(),
+                        principalEntity     = schema.EntityType(principalEntityName),
+                        dependentEntity     = schema.EntityType(dependentEntityName);
+
+                    principalEntity.addRelationship({
+                        Name:       $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                        Type:       'toMany',
+                        ToEntity:   dependentEntityName,
+                        Field:      $('Principal PropertyRef',associationData).attr('Name')
+                    });
+
+                    dependentEntity.addRelationship({
+                        Name:       $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                        Type:       'toOne',
+                        ToEntity:   principalEntityName,
+                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
+                    });
+                    
+                }
+                
+    	    });
+    	    
+	        
+	    });
 		
-		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
+/*		$('EntityType:not([BaseType])',csdl).each(function (index,entitytype) {
 			registerEntityType(entitytype,_.Base);
-		});
+		}); */
 		
 		if ( typeof callback === 'function' ) {
 			callback();
