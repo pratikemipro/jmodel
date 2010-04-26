@@ -220,7 +220,9 @@
 		notify: aspect({
             target: plugin.subscribers.notify,
             pre: function (event) {
-	            log('notifications/send').debug('Notifying subscribers of '+event.description);
+                if ( event ) {
+                    log('notifications/send').debug('Notifying subscribers of '+event.description);
+                }
 	        }
         })
 		
