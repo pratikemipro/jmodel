@@ -1257,11 +1257,11 @@ var jModel = function () {
 			for ( var i in oneToManys ) {
 				var descriptor = oneToManys[i];
 				var relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
-				this.parent[descriptor.accessor]                            	= delegateTo(relationship,'filter');
-				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	= delegateTo(relationship,'filter');
-				this.parent['add'+descriptor.accessor]							= delegateTo(relationship,'add');
-				this.parent['remove'+descriptor.accessor]						= delegateTo(relationship,'remove');
-				this.parent['debug'+descriptor.accessor]						= delegateTo(relationship,'debug');
+				this.parent[(descriptor.singular || descriptor.accessor)]           = delegateTo(relationship,'filter');
+				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	    = delegateTo(relationship,'filter');
+				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= delegateTo(relationship,'add');
+				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'remove');
+				this.parent['debug'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'debug');
 			}
 			return this;
 
