@@ -1522,15 +1522,28 @@ var jModel = function () {
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function _add (data) {
-		    if ( relationship.field ) {
-		        return owner.context.entities.get(relationship.prototype)
-    					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
+		    if (data.__delegate && data.__delegate instanceof DomainObject) {
+		        if ( relationship.field ) {
+		            data.set(relationship.field,owner.primaryKeyValue());
+		            owner.context.entities.get(relationship.prototype).add(data);
+		        }
+		        else {
+		            children.add(data);
+		            return data;
+		        }
 		    }
 		    else {
-		        var newObject = owner.context.entities.get(relationship.prototype).create(data);
-		        children.add(newObject);
-		        return newObject;
+    		    if ( relationship.field ) {
+    		        return owner.context.entities.get(relationship.prototype)
+        					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
+    		    }
+    		    else {
+    		        var newObject = owner.context.entities.get(relationship.prototype).create(data);
+    		        children.add(newObject);
+    		        return newObject;
+    		    }
 		    }
+
 		};
 		
 		this.debug = function _debug () {
