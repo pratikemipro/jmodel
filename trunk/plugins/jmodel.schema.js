@@ -40,15 +40,24 @@
                     {   accessor: 'PrimaryKey', defaultValue: ''    }
                 ],
                 
+        hasOne:     [
+                        {   accessor: 'BaseType',
+                            prototype: 'EntityType' }
+                    ],
+                
         hasMany:    [
                         {   accessor:       'Property',
                             plural:         'Properties',
                             prototype:      'Property',
-                            relativeKey:    'Name'      },
+                            relativeKey:    'Name'          },
                             
                         {   accessor:       'Relationship',
                             prototype:      'Relationship',
-                            relativeKey:    'Name'      }
+                            relativeKey:    'Name'          },
+                            
+                        {   accessor:       'DerivedType',
+                            prototype:      'EntityType',
+                            relativeKey:    'Name'          }
                     ]
 
     }), {
@@ -90,6 +99,19 @@
     });
     
     
+    schemaContext.Schemas().event('add').subscribe(function (event) {
+        var schema = event.object;
+        schema.EntityTypes().event('add').subscribe(function (event) {
+            var entityType = event.object;
+            entityType.DerivedTypes().event('add').subscribe(function (event) {
+                var derivedType = event.object;
+                derivedType.addBaseType(entityType);
+                schema.addEntityType(derivedType);
+            });
+        });
+    });
+    
+    
     plugin.context.withSchema = function (namespace) {
         
         var applicationContext  = this,
@@ -97,11 +119,12 @@
                 Namespace: namespace
             });
         
-        schema.EntityTypes().event('add').subscribe(function (event) {    
-    	    var entitytype = event.object;
+        schema.EntityTypes().event('add').subscribe(function (event) {
+    	    var entitytype = event.object,
+    	        cons = entitytype.BaseType() ? applicationContext.entities.get(entitytype.BaseType().Name()).constructor : _.Base;
     	    applicationContext.register(
     	        entitytype.Name(),
-    	        _.Base.extend({ has:[], hasOne:[], hasMany:[] }),
+    	        cons.extend({ has:[], hasOne:[], hasMany:[] }),
     	        { primaryKey: entitytype.PrimaryKey() }
     	    );
     	});
