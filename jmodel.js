@@ -1436,27 +1436,33 @@ var jModel = function () {
 		this.parent			= parent;
 		this.relationship	= relationship;
 		this.accessor		= relationship.accessor;
-		this.name			= relationship.accessor;		
+		this.name			= relationship.accessor;
+		this.related        = undefined;	
 	};
 	
 	OneToOneRelationship.prototype = extend({
 		
 		constructor: OneToOneRelationship,
 		
-		get: function _get (create) {
-			var child = this.parent.context.entities.get(this.relationship.prototype)
-							.object(this.parent.get(this.relationship.field));
-			if ( child ) {
-				return child;
-			}
-			else if ( create ) {
-				return this.add();
-			}
+		get: function _get () {
+		    return this.relationship.field ? this.parent.context.entities.get(this.relationship.prototype).object(this.parent.get(this.relationship.field))
+		                    : this.related;
 		},
 		
 		add: function _add (data) {
-			var newObject = this.parent.context.entities.get(this.relationship.prototype).create( data || {} );
-			this.parent.set(this.relationship.field, newObject.primaryKeyValue());
+		    var newObject;
+		    if ( data.__delegate && data.__delegate instanceof DomainObject ) {
+	            newObject = data;
+	        }
+	        else {
+		        newObject = this.parent.context.entities.get(this.relationship.prototype).create( data || {} );
+            }
+			if ( this.relationship.field ) {
+			    this.parent.set(this.relationship.field, newObject.primaryKeyValue());
+			}
+			else {
+			    this.related = newObject;
+			}
 			return newObject;
 		}
 		
