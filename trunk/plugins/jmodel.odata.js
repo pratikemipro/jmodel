@@ -35,6 +35,7 @@ jModel.plugin.context.fromService = function (url, callback) {
 	            
     	        var entitytype = schema.addEntityType({
     	            Name:       $(entitytypeData).attr('Name'),
+    	            Plural:     $('EntitySet[EntityType$=.'+$(entitytypeData).attr('Name')+']',schemaData).attr('Name'),
     	            PrimaryKey: $('Key PropertyRef',entitytypeData).attr('Name')
     	        });
     	        
@@ -44,16 +45,6 @@ jModel.plugin.context.fromService = function (url, callback) {
     	                Type: $(propertyData).attr('Type')
     	            });
     	        });
-    	        
- /*   	        $('NavigationProperty',entitytypeData).each(function (index,relationshipData) {
-    	            var association = $('Association[Name='+$(relationshipData).attr('Relationship').split('.').pop()+']',schemaData)
-    	            entitytype.addRelationship({
-    	                Name:       $(relationshipData).attr('Name')
-    	                Type:       $
-    	                ToEntity:   
-    	                Field:      
-    	            });
-    	        }); */
     	        
     	    });
     	    
