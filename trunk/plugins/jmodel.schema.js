@@ -36,8 +36,9 @@
     schemaContext.register('EntityType', _.Base.extend({
 
         has:    [  
-                    {	accessor: 'Name',		defaultValue: ''	},
-                    {   accessor: 'PrimaryKey', defaultValue: ''    }
+                    {	accessor: 'Name',		defaultValue: ''	    },
+                    {   accessor: 'Plural',     defaultValue: undefined },
+                    {   accessor: 'PrimaryKey', defaultValue: ''        }
                 ],
                 
         hasOne:     [
@@ -125,7 +126,10 @@
     	    applicationContext.register(
     	        entitytype.Name(),
     	        cons.extend({ has:[], hasOne:[], hasMany:[] }),
-    	        { primaryKey: entitytype.PrimaryKey() }
+    	        {
+    	            plural: entitytype.Plural(),
+    	            primaryKey: entitytype.PrimaryKey()
+    	        }
     	    );
     	});
 
