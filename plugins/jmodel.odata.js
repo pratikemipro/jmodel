@@ -75,6 +75,8 @@ jModel.plugin.context.fromService = function (url, callback) {
 
                     principalEntity.addRelationship({
                         Name:       $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                        Singular:   dependentEntityName,
+                        Plural:     $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
                         Type:       'toMany',
                         ToEntity:   dependentEntityName,
                         Field:      $('Principal PropertyRef',associationData).attr('Name')

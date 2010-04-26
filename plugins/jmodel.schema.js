@@ -87,6 +87,8 @@
 
         has:    [  
                     {	accessor: 'Name',		defaultValue: ''	        },
+                    {   accessor: 'Singular',   defaultValue: undefined     },
+                    {   accessor: 'Plural',     defaultValue: undefined     },
                     {   accessor: 'Type',       defaultValue: 'toMany'      },
                     {   accessor: 'ToEntity',   defaultValue: ''            },
                     {   accessor: 'Field',      defaultValue: ''            }
@@ -149,6 +151,8 @@
     	        var relationship = event.object,
     	            specification = {
     	                accessor: relationship.Name(),
+    	                singular: relationship.Singular(),
+    	                plural: relationship.Plural(),
                 		prototype: relationship.ToEntity(),
                 		field: relationship.Field()
     	            };
