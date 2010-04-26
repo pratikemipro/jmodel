@@ -444,15 +444,13 @@ var jModel = function () {
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectionmembernotification () {
-			subscription.member.key = ( subscription.member.key instanceof Array ) ?
-												subscription.member.key
-												: [subscription.member.key];
-			for (var i in subscription.member.key) {
+			var keys = ( subscription.member.key instanceof Array ) ? subscription.member.key : [subscription.member.key];
+			for (var i in keys) {
 				event.object.subscribe({
 					application: subscription.application,
 					source: event.object,
 					target: subscription.member.target,
-					key: subscription.member.key[i],
+					key: keys[i],
 					change: subscription.member.change,
 					initialise: subscription.member.initialise,
 					format: subscription.member.format,
@@ -679,6 +677,8 @@ var jModel = function () {
 		},
 		
 		subscribe: function _subscribe (subscription) {
+		    
+		    subscription = copy(subscription);
 			
 //			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
 
