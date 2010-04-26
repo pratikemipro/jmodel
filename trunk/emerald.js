@@ -169,8 +169,10 @@ var emerald = function () {
 			var that = this;
 			messages.each(function __send (message) {
 				if ( that.__suspensions === 0 || !message.subscription.application ) {
-//					console.log('Sending immediately');
-					/*async(*/message();
+				    if ( typeof message === 'function' ) {
+    //					console.log('Sending immediately');
+    					/*async(*/message();
+				    }
 				}
 				else {
 //					console.log('Adding to queue');
