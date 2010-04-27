@@ -624,10 +624,10 @@ function OPAL () {
 	opal.Set = Set;
 
 	function set () {
-		if ( arguments.length == 1 && arguments[0].jquery ) {
+		if ( arguments.length == 1 && arguments[0] && arguments[0].jquery ) {
 			return new Set(arguments[0]);
 		}
-		else if ( arguments.length == 1 && arguments[0].callee ) {
+		else if ( arguments.length == 1 && arguments[0] && arguments[0].callee ) {
 			return new Set(arrayFromArguments(arguments[0]));
 		}
 		else {
