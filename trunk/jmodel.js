@@ -1406,7 +1406,7 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		set().of(Relationship).delegateFor(this);
+		this.__delegate = set().of(Relationship).delegateFor(this);
 		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
 		return this.index(Property('name'));
 	}
