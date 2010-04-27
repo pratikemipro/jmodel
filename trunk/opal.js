@@ -397,7 +397,7 @@ function OPAL () {
 		},
 		
 		count: function _count (predicate) {
-			return arguments.length == 0 ? this.length : this.reduce(count(predicate));
+			return this.reduce(count(predicate));
 		},
 		
 		first: function _first () {
