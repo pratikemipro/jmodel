@@ -675,7 +675,9 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 	
 	function TypedSet (constructor) {
-		constructor = constructor && constructor.entitytype ? constructor.entitytype.constructor : constructor;
+	    if ( typeof constructor === 'object' ) {
+	        constructor = constructor.entitytype ? constructor.entitytpe.constructor : constructor.constructor;
+	    }
 		this.__constructor = this.__constructor || constructor;
 		Set.apply(this,null);
 		return this;
@@ -688,32 +690,36 @@ function OPAL () {
 		add: function () {
 			
 			var object = arguments[0];
-			if ( arguments.length > 1 || object.constructor === Object || ! ( object instanceof Object) ) {
-				object = this.__construct.apply(this,arguments);
+			
+			if ( this.__constructor ) {
+			    
+			    if ( arguments.length > 1 || object.constructor === Object || ! ( object instanceof Object) ) {
+    				object = this.__construct ? this.__construct.apply(this,arguments) : object;
+    			}
+
+    			var failed;
+    			switch (this.__constructor) {
+
+    				case Number:
+    					failed = isNaN(object);
+    					break;
+
+    				case Date:
+    					failed = object.toString() === 'Invalid Date';
+    					break;
+
+    				default:
+    					failed = ! (object instanceof this.__constructor);
+
+    			}
+    			
+    			if ( failed ) {
+    				throw "Opal: Invalid type in TypedSet.";
+    			}
+			    
 			}
 
-			var failed;
-			switch (this.__constructor) {
-
-				case Number:
-					failed = isNaN(object);
-					break;
-
-				case Date:
-					failed = object.toString() === 'Invalid Date';
-					break;
-					
-				default:
-					failed = ! (object instanceof this.__constructor);
-
-			}
-
-			if ( failed ) {
-				throw "Opal: Invalid type in TypedSet.";
-			}
-			else {
-				return Set.prototype.add.call(this,object);
-			}
+			return Set.prototype.add.call(this,object);
 
 		},
 		
