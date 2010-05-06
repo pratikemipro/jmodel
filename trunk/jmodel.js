@@ -207,10 +207,6 @@ var jModel = function () {
 							.context;
 		},
 		
-		collection: function _collection (specification) {
-			return new DomainObjectCollection( extend({context:this},specification) );
-		},
-		
 		reset: function _reset () {
 			this.all.remove(AllPredicate,true);
 			return this;
@@ -241,7 +237,11 @@ var jModel = function () {
 			external.notifications	= this.notifications;
 			external.transaction	= this.transaction;
 			return this;
-		}
+		},
+		
+		collection: function _collection (specification) {
+			return new DomainObjectCollection( extend({context:this},specification) );
+		},
 		
 	};	
 	
@@ -284,7 +284,8 @@ var jModel = function () {
 		this.constructor	= constructor;
 		this.context		= context;
 
-		this.objects =	this.context.collection({
+		this.objects =	this.collection({
+		                    entitytype:     this,
 							base: 			this.context.all,
 							predicate: 		InstancePredicate(this.constructor),
 							ordering: 		this.options.ordering,
@@ -317,8 +318,17 @@ var jModel = function () {
 				return this.objects.get(criterion);
 			}
 			else {
+			    var args = arrayFromArguments(arguments);
+			    if ( args[args.length-1] !== ':first' ) {
+			        args.push(':first');
+			    }
+			    return this.objects.filter.apply(this.objects,args);
+/*			    console.log('here');
 				var objects = this.objects.filter.apply(this.objects,arguments);
-				return ( objects instanceof DomainObjectCollection ) ? objects.first() : objects;
+				console.log(objects);
+				console.log(typeof objects.first === 'function');
+				console.log(typeof objects.first === 'function' ? objects.first() : objects);
+				return objects.first ? objects.first() : objects; */
 			}
 		},
 		
@@ -343,9 +353,9 @@ var jModel = function () {
 
 				this.context.all.add(newObject);
 
-/*				if ( newObject.initialise ) {
+				if ( newObject.initialise ) {
 					newObject.initialise();
-				} */
+				}
 				
 			},this);
 
@@ -378,7 +388,11 @@ var jModel = function () {
 		
 		generateID: function __generateID () {	
 			return -(this.context.all.count()+1);
-		}
+		},
+		
+		collection: function _collection (specification) {
+			return new DomainObjectCollection( extend({entitytype:this},specification) );
+		},
 		
 	};
 	
@@ -480,27 +494,41 @@ var jModel = function () {
 	
 	function DomainObjectCollection (specification) {
 		
-		var that=this;
+		var that = this;
 		
-		specification		= specification || {};
+		specification               = specification || {};
+		
+		this.entitytype             = specification.entitytype;
+		
+		if ( this.entitytype ) {
+		    this.context                = this.entitytype.context || contexts('default');
+		    this.__delegate             = new SubscribableTypedSet(this.entitytype,this.context.notifications);
+    		this.__delegate.__construct = _.delegateTo(this.entitytype,'create');
+		}
+		else {
+		    this.context    = specification.context || contexts('default');
+		    this.__delegate = new SubscribableTypedSet(undefined,this.context.notifications);
+		}
+		this.__delegate.delegateFor(this);
+		
 		this.__predicate	= specification.predicate || AllPredicate;
 		this.__base			= specification.base;
 		this.__ordering		= specification.ordering;
-		this.context		= specification.context || contexts('default');
 		this.description	= specification.description;
-		
-		this.__delegate	= ( specification.objects && specification.objects instanceof Set ) ? specification.objects
-								: new Set(specification.objects);
+								
+		if ( specification.objects ) {
+		    specification.objects = specification.objects instanceof Array ? set(specification.objects) : specification.objects;
+		    specification.objects.reduce(Method('add'),this);
+		}						
+								
 		this.length = this.__delegate.length;
 		if ( specification.primaryKey ) {
 			this.__delegate.index(Method('primaryKeyValue'));
 		}
-		this.__delegate.delegateFor(this);
 		this.__delegate.sorted = false;
 		
-		this.events	= new EventRegistry(this.context.notifications,'add','remove','initialise','change','sort');
-		this.event	= delegateTo(this.events,'filter');
-				
+		this.events.register('change');
+
 		if ( this.__ordering ) {
 			this.sort();
 		}
@@ -519,7 +547,7 @@ var jModel = function () {
 		
 		constructor: DomainObjectCollection,
 		
-		add: aspect({
+/*		add: aspect({
 			target: Set.prototype.add,
 			post: function (state) {
 				var object = state.args[0];
@@ -575,7 +603,7 @@ var jModel = function () {
 				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);
 			}
 
-		},
+		}, */
 		
 		first: function _first () {
 			if ( !this.__delegate.sorted ) { this.sort(); }
@@ -792,13 +820,13 @@ var jModel = function () {
 	};
 	
 	// NOTE: Make this a method of Context
-	external.collection = function _collection () {
+/*	external.collection = function _collection () {
 		return new DomainObjectCollection({
 			context: contexts('default'),
 			objects: set(arguments).reduce(push,[]),
 			description: 'set'
 		});
-	};
+	}; */
 	
 	function DeletedObjectsCollection (collection) {
 		
@@ -861,7 +889,7 @@ var jModel = function () {
 	};
 	
 	
-	function Grouping (parent,extractor) {
+/*	function Grouping (parent,extractor) {
 		this.parent		= parent;
 		this.extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
 		this.__delegate	= set().index(Property('value')).delegateFor(this);
@@ -888,7 +916,7 @@ var jModel = function () {
 	function Group (parent,extractor,value) {
 		this.value		= value;
 		this.objects	= parent.context.collection().delegateFor(this);
-	}
+	} */
 	
 	
 	// ------------------------------------------------------------------------
@@ -1178,7 +1206,7 @@ var jModel = function () {
     				message	= external.notification.RemovalNotification(subscription);
     			}
 				else {
-					event = subscription.key == ':any' ? '_any' : subscription.key;
+					event = ( subscription.key == ':any' || !subscription.key ) ? '_any' : subscription.key;
 					if ( subscription.change && typeof subscription.change == 'string' ) {
 	    				message	= external.notification.EventNotification(subscription);
 	    			}
@@ -1485,14 +1513,14 @@ var jModel = function () {
 //		log('domainobject/create').startGroup('Creating children collection');
         var children;
         if ( relationship.field ) {
-            children = 	owner.context.collection({
+            children = 	owner.context.entities.get(relationship.prototype).collection({
         		base: 	     	owner.context.entities.get(relationship.prototype).objects,
 				predicate: 	 	RelationshipPredicate(owner,relationship.field),
 				description: 	'children by relationship '+relationship.accessor
 			});
         }
         else {
-            children =  owner.context.collection({
+            children =  owner.context.entities.get(relationship.prototype).collection({
                 description: 'children by relationship '+relationship.accessor,
                 primaryKey: relationship.relativeKey
             });
@@ -1528,6 +1556,7 @@ var jModel = function () {
 		
 		// NOTE: Should this work with arrays of objects too?
 		this.add = function _add (data) {
+		    data = data || {};
 		    if (data.__delegate && data.__delegate instanceof DomainObject) {
 		        if ( relationship.field ) {
 		            data.set(relationship.field,owner.primaryKeyValue());
