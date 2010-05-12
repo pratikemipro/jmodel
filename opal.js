@@ -112,7 +112,8 @@ function OPAL () {
 				var operation = args.shift(), callback = args.shift();
 				operation(function () {
 					callback.apply(null,arguments);
-					if ( --left == 0 ) {
+					left --;
+					if ( left === 0 ) {
 						last();
 					}
 				});
@@ -130,7 +131,7 @@ function OPAL () {
 	}
 
 	function Type (object) {
-		return object != null && typeof object;
+		return object !== null && typeof object;
 	}
 
 	function Property (property,value) {
@@ -249,7 +250,7 @@ function OPAL () {
 	});
 	
 	var count = function _count (predicate) {
-		var predicate = predicate || AllPredicate;
+		predicate = predicate || AllPredicate;
 		return extend({unit:0,label:'count'}, function __count (acc,value) {
 			return acc += (predicate(value) ? 1 : 0);
 		});
@@ -265,20 +266,21 @@ function OPAL () {
 	var push = withmethod('push');
 	
 	var add = function _add () {
-		if ( arguments.length == 0 ) {
+	    var predicate;
+		if ( arguments.length === 0 ) {
 			return function __add (acc,value) {
 				return acc.add(value);
 			};
 		}
 		else if ( arguments.length == 1 ) {
-			var predicate = arguments[0];
+			predicate = arguments[0];
 			return function __add (acc,value) {
 				return predicate(value) ? acc.add(value) : acc;
 			};
 		}
 		else {
-			var predicate   = arguments[0],
-				mapping		= arguments[1],
+			predicate   = arguments[0];
+			var	mapping		= arguments[1],
 				mapfirst	= arguments[2] || false;
 			return function __add (acc,value) {
 				var mapped = mapping(value);
@@ -298,7 +300,7 @@ function OPAL () {
 	});
 	
 	var min = extend({label:'min'}, function _min (acc,value) {
-		return ( acc < value && acc != null ) ? acc : value;
+		return ( acc < value && acc !== null ) ? acc : value;
 	});
 
 	opal.extend({
@@ -371,7 +373,7 @@ function OPAL () {
 		},
 		
 		get: function _get (key) {
-			if ( arguments.length == 0 ) {
+			if ( arguments.length === 0 ) {
 				return this.__members;
 			}
 			else if ( key == ':first' ) {
@@ -564,7 +566,7 @@ function OPAL () {
 			else if ( arguments[0] instanceof Array ) {
 				return CompositeOrdering(arguments[0]);
 			}
-			else if ( arguments.length == 0 ) {
+			else if ( arguments.length === 0 ) {
 				return ValueOrdering;
 			}
 			return arguments[0];
@@ -710,6 +712,7 @@ function OPAL () {
 
     				default:
     					failed = ! (object instanceof this.__constructor);
+    					break;
 
     			}
     			
@@ -863,7 +866,7 @@ function OPAL () {
 	}
 
 	function TruePredicate (candidate) {
-		return candidate == true;
+		return candidate === true;
 	}
 
 	function FunctionPredicate (fn) {

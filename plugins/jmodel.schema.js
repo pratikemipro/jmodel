@@ -167,7 +167,7 @@
     	        
     	    });
 
-    	})
+    	});
     	
     	return this;
         
@@ -176,15 +176,15 @@
     
     plugin.entitytype.addProperty = function (specification) {
         this.constructor.prototype.has.push(specification);
-    }
+    };
     
     plugin.entitytype.addOneToOneRelationship = function (specification) {
         this.constructor.prototype.hasOne.push(specification);
-    }
+    };
     
     plugin.entitytype.addOneToManyRelationship = function (specification) {
         this.constructor.prototype.hasMany.push(specification);
-    }
+    };
   	
  	
      plugin.entitytype.pushOneToManyRelationship = function (accessor) {
