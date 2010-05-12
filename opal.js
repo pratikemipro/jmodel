@@ -88,7 +88,7 @@ function OPAL () {
 			operation	= operations.shift(),
 			callback	= operations.shift();
 		function makeCallback () {
-			return function () {
+			return function _callback () {
 				callback.apply(null,arguments);
 				operation = operations.shift();
 				callback = operations.shift();
