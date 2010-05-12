@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.0
+ *	jModel Javascript Library v0.6.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.0';
+	external.jmodel_version = '0.6.1';
 
 	//
 	// Import Emerald
@@ -322,6 +322,14 @@ var jModel = function () {
 			that.objects.each('clean');
 			that.deleted.remove(AllPredicate,true);
 		});
+		
+		this.objects.event('remove').subscribe(function (event) {
+			var removed = event.object;
+			removed.event('deleted').raise({object:removed});
+			removed.events.each(function (event) {
+		        event.subscribers().remove(AllPredicate);
+		    });
+		});
 
 	}
 	
@@ -548,10 +556,21 @@ var jModel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
+		// We need to observe objects added to the collection
 		this.event('add').subscribe(function (event) {
+			
+			var object = event.object;
+			
 		    that.__delegate.sorted = false;
-		    if ( that.event('change').subscribers(':first') ) {
-				var object = event.object;
+		
+			// If the object is deleted we should remove it from the collection
+			object.event('deleted').subscribe(function (event) {
+				that.remove(event.object);
+			});
+		    
+			// If there are any subscribers to the "change" event
+			// we must watch the object for changes
+			if ( that.event('change').subscribers(':first') ) {
 				object.subscribe({
 					target: this,
 					key: ':any',
@@ -566,6 +585,8 @@ var jModel = function () {
 					description: 'object change for '+that.description+' collection change'
 				});
 			}
+			
+			
 		});
 		
 	}
@@ -574,7 +595,12 @@ var jModel = function () {
 		
 		constructor: DomainObjectCollection,
 		
-		remove: function _remove (predicate,fromHere,removeSubscribers) {
+		remove: function (predicate) {
+			predicate = this.predicate(predicate);
+			this.__delegate.remove(predicate);
+		},
+		
+/*		remove: function _remove (predicate,fromHere,removeSubscribers) {
 			predicate = And(this.__predicate,this.predicate(predicate));
 			var that = this;
 			if ( fromHere ) {
@@ -598,7 +624,7 @@ var jModel = function () {
 				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);
 			}
 
-		},
+		}, */
 		
 		first: function _first () {
 			if ( !this.__delegate.sorted ) { this.sort(); }
@@ -825,24 +851,19 @@ var jModel = function () {
 	
 	function DeletedObjectsCollection (collection) {
 		
-		var deleted = collection.context.collection({description:'deleted'});
+		var deleted = collection.entitytype.collection({description:'deleted'});
 		
 		deleted.debug = function _debug () {
-			if ( Not(EmptySetPredicate)(deleted) ) {
-				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
-			}
+//			if ( Not(EmptySetPredicate)(deleted) ) {
+				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
+//				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
+//			}
 		};
 		
-		collection.subscribe({
-			source: 		collection,
-			target: 		deleted,
-			remove: 		collectionRemove,
-			description: 	'deleted '+collection.description+' collection'
+		collection.event('remove').subscribe(function (event) {
+			console.log(event.object);
+			deleted.add(event.object);
 		});
-		
-		function collectionRemove (collection,object) {
-			deleted.add(object);
-		}
 		
 		return deleted;
 		
@@ -1077,7 +1098,7 @@ var jModel = function () {
 		this.entitytype = entitytype;
 		this.context	= entitytype.context;
 		
-		this.events	= new EventRegistry(this.context.notifications,'_any','removed');
+		this.events	= new EventRegistry(this.context.notifications,'_any','removed','deleted');
 		this.event	= delegateTo(this.events,'filter');
 		
 		var fields			= new FieldSet(this,this.events),
@@ -1610,6 +1631,12 @@ var jModel = function () {
 			if ( !predicate(added) ) {
 				added.set(foreignKey,relationship.owner.primaryKeyValue());
 			}
+		});
+		
+		// If an object is removed directly from the relationship
+		// we must clear its foreign key
+		relationship.event('remove').subscribe(function (event) {
+			event.object.set(foreignKey,null);
 		});
 		
 		// Initialise the members of the relationship
