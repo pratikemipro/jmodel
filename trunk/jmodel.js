@@ -191,6 +191,8 @@ var jModel = function () {
 		this.entities		= new EntityTypeSet(this);
 		this.entity         = delegateTo(this.entities,'filter');
 		
+		// Adding a new object of a type in the context should add to the context's
+		// collection of all objects
 		this.entities.event('add').subscribe(function (event) {
 		    var entitytype = event.object;
 		    entitytype.objects.event('add').subscribe(function (event) {
@@ -1573,10 +1575,17 @@ var jModel = function () {
 		var predicate = RelationshipPredicate(relationship.owner,foreignKey);
 
 		range.event('add').subscribe(function (event) {
+
 		    var possible = event.object;
+
+			// Adding an object to a relationship's range might add the
+			// object to the relationship
 			if ( predicate(possible) ) {
 		    	relationship.add(possible);
 		  	}
+
+			// Changing the foreign key value of an object in the range
+			// might add the object to the relationship or remove it
 		    possible.event(foreignKey).subscribe(function (event) {
 		        if ( predicate(possible) ) {
 		            relationship.add(possible);
@@ -1585,12 +1594,17 @@ var jModel = function () {
 		            relationship.remove(possible);
 		        }
 		    });
+
 		});
 		
+		// Removing an object from the range will remove the object
+		// from the relationship
 		range.event('remove').subscribe(function (event) {
 		    relationship.remove(event.object);
 		});
 		
+		// If an object is added directly to the relationship
+		// we need to make sure its foreign key is correct
 		relationship.event('add').subscribe(function (event) {
 			var added = event.object;
 			if ( !predicate(added) ) {
@@ -1598,6 +1612,7 @@ var jModel = function () {
 			}
 		});
 		
+		// Initialise the members of the relationship
 		range.reduce(add(predicate),relationship);
 		
 	}
