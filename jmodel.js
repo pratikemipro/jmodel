@@ -187,8 +187,17 @@ var jModel = function () {
 		this.isDefault		= false;
 		this.name			= name;
 		this.notifications	= new NotificationQueue(this);
+		
 		this.entities		= new EntityTypeSet(this);
 		this.entity         = delegateTo(this.entities,'filter');
+		
+		this.entities.event('add').subscribe(function (event) {
+		    var entitytype = event.object;
+		    entitytype.objects.event('add').subscribe(function (event) {
+		        context.all.add(event.object);
+		    });
+		});
+		
 		this.all			= this.collection({description:'All Objects in context '+this.name});
 		
 		this.events			= new EventRegistry(this.notifications,'checkpoint');
@@ -240,8 +249,8 @@ var jModel = function () {
 		},
 		
 		collection: function _collection (specification) {
-			return new DomainObjectCollection( extend({context:this},specification) );
-		},
+			return new DomainObjectCollection( extend({context:this},specification || {}) );
+		}
 		
 	};	
 	
@@ -286,12 +295,20 @@ var jModel = function () {
 
 		this.objects =	this.collection({
 		                    entitytype:     this,
-							base: 			this.context.all,
+		                 /*   base:           this.options.parent ?
+		                                        this.context.entity(this.options.parent).objects : null, */
 							predicate: 		InstancePredicate(this.constructor),
 							ordering: 		this.options.ordering,
 							description: 	this.name,
 							primaryKey: 	this.options.primaryKey
 						});
+		
+		var base = this.options.parent ? this.context.entity(this.options.parent).objects : null
+		if ( base ) {
+		    this.objects.event('add').subscribe(function (event) {
+		        base.add(event.object);
+		    });
+		}					
 							
 		// EntityType methods
 		if ( this.options.methods ) {
@@ -351,7 +368,7 @@ var jModel = function () {
 				                                primaryKey || this.options.relativeKey,
 				                                this,this.options.nameField) ).delegateFor(newObject);
 
-				this.context.all.add(newObject);
+                this.objects.add(newObject);
 
 				if ( newObject.initialise ) {
 					newObject.initialise();
@@ -361,7 +378,7 @@ var jModel = function () {
 
 			return newObject;
 
-		},
+		}, 
 		
 		exposeAt: function _exposeAt (targets) {
 			
@@ -392,7 +409,7 @@ var jModel = function () {
 		
 		collection: function _collection (specification) {
 			return new DomainObjectCollection( extend({entitytype:this},specification) );
-		},
+		}
 		
 	};
 	
@@ -541,6 +558,27 @@ var jModel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
+		var that = this;
+		this.event('add').subscribe(function (event) {
+		    that.__delegate.sorted = false;
+		    if ( that.event('change').subscribers(':first') ) {
+				var object = event.object;
+				object.subscribe({
+					target: this,
+					key: ':any',
+					change: function _change (object) {
+						that.__delegate.sorted = false;
+						that.event('change').raise({
+							method: 'change',
+							object: object,
+							description: 'object change'
+						});  
+					},
+					description: 'object change for '+that.description+' collection change'
+				});
+			}
+		})
+		
 	};
 	
 	DomainObjectCollection.prototype = {
@@ -578,19 +616,20 @@ var jModel = function () {
 				}
 				return state.returnValue;
 			}
-		}),
+		}), */
 		
 		remove: function _remove (predicate,fromHere,removeSubscribers) {
 			predicate = And(this.__predicate,this.predicate(predicate));
 			var that = this;
 			if ( fromHere ) {
 				this.__delegate.remove(predicate).each(function __remove (object) {
+				    console.log('object removed');
 					object.removed();
 					that.event('remove').raise({
 						method:'remove',
 						object:object,
 						description:'object removal'
-					});
+					}); 
 					if (removeSubscribers) {
 					    object.events.each(function (event) {
 					        event.subscribers().remove(AllPredicate);
@@ -603,7 +642,7 @@ var jModel = function () {
 				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);
 			}
 
-		}, */
+		},
 		
 		first: function _first () {
 			if ( !this.__delegate.sorted ) { this.sort(); }
