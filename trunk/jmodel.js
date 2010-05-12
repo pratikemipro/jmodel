@@ -354,25 +354,15 @@ var jModel = function () {
 			var newObject;
 
 			this.context.transaction(function () {
-				
-				data = (typeof data == 'object') ? data : {};
-
-				var primaryKey	= this.options.primaryKey;
-				data[primaryKey] = data[primaryKey] || this.generateID();
 
 				newObject = new this.constructor();
-				newObject.__delegate = (new DomainObject(
-				                                this.context,
-				                                newObject,
-				                                data,
-				                                primaryKey || this.options.relativeKey,
-				                                this,this.options.nameField) ).delegateFor(newObject);
-
-                this.objects.add(newObject);
+				newObject.__delegate = (new DomainObject(this,newObject,data)).delegateFor(newObject);
 
 				if ( newObject.initialise ) {
 					newObject.initialise();
 				}
+				
+				this.objects.add(newObject);
 				
 			},this);
 
@@ -1104,23 +1094,27 @@ var jModel = function () {
 	// 													 Domain Object delegate
 	// ------------------------------------------------------------------------
 	
-	function DomainObject (context,parent,data,primaryKey,entitytype,nameField) {
+	function DomainObject (entitytype,parent,data) {
 		
 		this.domain = {
 			dirty: 	false,
 			tags: 	{}
 		};
 		
-		this.primaryKey	= primaryKey;
-		this.nameField  = nameField;
+		data = (typeof data == 'object') ? data : {};
+
+		this.primaryKey         = entitytype.options.primaryKey || entitytype.options.relativeKey;
+		data[this.primaryKey]   = data[this.primaryKey] || entitytype.generateID();
+		
+		this.nameField  = entitytype.options.nameField;
 		this.parent		= parent;
 		this.entitytype = entitytype;
+		this.context	= entitytype.context;
 		
-		this.events	= new EventRegistry(context.notifications,'_any','removed');
+		this.events	= new EventRegistry(this.context.notifications,'_any','removed');
 		this.event	= delegateTo(this.events,'filter');
 		
-		var notifications	= context.notifications,
-			fields			= new FieldSet(this,this.events),
+		var fields			= new FieldSet(this,this.events),
 			relationships	= new RelationshipSet(),
 			constraints		= new ConstraintSet;
 
@@ -1129,7 +1123,6 @@ var jModel = function () {
 		this.relationships	= delegateTo(relationships,'filter');
 		this.relationship   = delegateTo(relationships,'get');
 		this.constraints	= delegateTo(constraints,'filter');
-		this.context		= context;
 		
 		this
 			.reifyFields()
