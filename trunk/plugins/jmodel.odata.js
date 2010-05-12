@@ -70,14 +70,14 @@ jModel.plugin.context.fromService = function (url, callback) {
                         Plural:     $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
                         Type:       'toMany',
                         ToEntity:   dependentEntityName,
-                        Field:      $('Principal PropertyRef',associationData).attr('Name')
+                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
                     });
 
                     dependentEntity.addRelationship({
                         Name:       $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
                         Type:       'toOne',
                         ToEntity:   principalEntityName,
-                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
+                        Field:      $('Principal PropertyRef',associationData).attr('Name')
                     });
                     
                 }
