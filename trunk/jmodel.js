@@ -295,8 +295,6 @@ var jModel = function () {
 
 		this.objects =	this.collection({
 		                    entitytype:     this,
-		                 /*   base:           this.options.parent ?
-		                                        this.context.entity(this.options.parent).objects : null, */
 							predicate: 		InstancePredicate(this.constructor),
 							ordering: 		this.options.ordering,
 							description: 	this.name,
@@ -574,39 +572,6 @@ var jModel = function () {
 	DomainObjectCollection.prototype = {
 		
 		constructor: DomainObjectCollection,
-		
-/*		add: aspect({
-			target: Set.prototype.add,
-			post: function (state) {
-				var object = state.args[0];
-				if ( this.added ) {
-					this.length++;
-					this.event('add').raise({
-						method: 'add',
-						object: object,
-						description: 'object addition'
-					});
-					if ( this.event('change').subscribers(':first') ) {
-						var that = this;
-						object.subscribe({
-							target: this,
-							key: ':any',
-							change: function _change (object) {
-								that.__delegate.sorted = false;
-								that.event('change').raise({
-									method: 'change',
-									object: object,
-									description: 'object change'
-								});  
-							},
-							description: 'object change for '+that.description+' collection change'
-						});
-					}
-					this.__delegate.sorted = false;
-				}
-				return state.returnValue;
-			}
-		}), */
 		
 		remove: function _remove (predicate,fromHere,removeSubscribers) {
 			predicate = And(this.__predicate,this.predicate(predicate));
