@@ -130,7 +130,8 @@
     	        cons.extend({ has:[], hasOne:[], hasMany:[] }),
     	        {
     	            plural: entitytype.Plural(),
-    	            primaryKey: entitytype.PrimaryKey()
+    	            primaryKey: entitytype.PrimaryKey(),
+    	            parent: entitytype.BaseType() ? entitytype.BaseType().Name() : null
     	        }
     	    );
     	});
