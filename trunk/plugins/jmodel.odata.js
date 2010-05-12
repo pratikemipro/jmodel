@@ -122,35 +122,5 @@ jModel.plugin.context.fromService = function (url, callback) {
 	},'xml');
 	
 	return this;
-	
-	function entityTypeName (entitytype) {
-	    return $(entitytype).attr('Name');
-	}
-	
-	function primaryKey (entitytype,csdl) {
-	    while ( $('Key',entitytype).length === 0  ) {
-	        entitytype = $('EntityType[Name='+$(entitytype).attr('BaseType').split('.').pop()+']',csdl);
-	    }
-	    return $('Key PropertyRef',entitytype).attr('Name');
-	}
-	
-	function fields (entitytype) {
-		return $('Property',entitytype).map(function (index,property) {
-			return {
-				accessor: $(property).attr('Name'),
-				defaultValue: $(property).attr('Type') == 'Edm.String' ? '' : 0
-			};
-		}).get();
-	}
-	
-	function relationships (entitytype,csdl,reltype) {
-	    return $('Association:has('+reltype+'[Role='+$(entitytype).attr('Name')+'])',csdl).map(function () {
-	        return {
-	            accessor:   $('NavigationProperty[Relationship$=.'+$(this).attr('Name')+']',entitytype).attr('Name'),
-	            prototype:  $(reltype == 'Principal' ? 'Dependent' : 'Principal',this).attr('Role'),
-	            field:      $(reltype+' PropertyRef',this).attr('Name')
-	        };
-	    }).get();
-	}
 
 };

@@ -117,7 +117,7 @@ var jModel = function () {
 		else {
 			return new Set();
 		}
-	};
+	}
 	
 	external.union = function _union () {
 		var union = new Set();
@@ -301,7 +301,7 @@ var jModel = function () {
 							primaryKey: 	this.options.primaryKey
 						});
 		
-		var base = this.options.parent ? this.context.entity(this.options.parent).objects : null
+		var base = this.options.parent ? this.context.entity(this.options.parent).objects : null;
 		if ( base ) {
 		    this.objects.event('add').subscribe(function (event) {
 		        base.add(event.object);
@@ -321,7 +321,7 @@ var jModel = function () {
 			that.deleted.remove(AllPredicate,true);
 		});
 
-	};
+	}
 	
 	EntityType.prototype = {
 		
@@ -415,31 +415,31 @@ var jModel = function () {
 			var value = subscription.value ? subscription.value(subscription.source) : subscription.source.get(subscription.key);
 			subscription.target.html(subscription.format(value));
 		};
-	};
+	}
 	
 	function ValueNotification (subscription) {
 		return function (event) {
 			subscription.target.val(subscription.source.get(subscription.key));
 		};
-	};
+	}
 	
 	function FunctionNotification (subscription) {
 		return function (event) {
 			subscription.change.call(subscription.target,subscription.source);
 		};
-	};
+	}
 	
 	function EventNotification (subscription) {
 		return function (event) {
 			subscription.target.trigger(jQuery.Event(subscription.change),subscription.source);
 		};
-	};
+	}
 	
 	function RemovalNotification (subscription) {
 		return function (event) {
 			subscription.removed.call(subscription.target,subscription.source);
 		};
-	};
+	}
 	
 	function CollectionMethodNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectionmethodnotification () {
@@ -452,13 +452,13 @@ var jModel = function () {
 				subscription[event.method].call(subscription.target,subscription.source,event.object);
 			}
 		});
-	};
+	}
 	
 	function CollectionEventNotification (subscription,event,subscriber) {
 		return extend({subscription:subscription}, function _collectioneventnotification () {
 			// NOTE: Implement this
 		});
-	};
+	}
 	
 	// NOTE: Make this work with bindings
 	function CollectionMemberNotification (subscription,event,subscriber) {
@@ -478,7 +478,7 @@ var jModel = function () {
 				});
 			}
 		});
-	};
+	}
 	
 	external.notification = {
 		ContentNotification: ContentNotification,
@@ -546,7 +546,6 @@ var jModel = function () {
 			throw 'Error: Invalid base collection type';
 		}
 		
-		var that = this;
 		this.event('add').subscribe(function (event) {
 		    that.__delegate.sorted = false;
 		    if ( that.event('change').subscribers(':first') ) {
@@ -565,9 +564,9 @@ var jModel = function () {
 					description: 'object change for '+that.description+' collection change'
 				});
 			}
-		})
+		});
 		
-	};
+	}
 	
 	DomainObjectCollection.prototype = {
 		
@@ -845,7 +844,7 @@ var jModel = function () {
 		
 		return deleted;
 		
-	};
+	}
 	
 	
 	function View (parent,child,predicate) {
@@ -864,11 +863,11 @@ var jModel = function () {
 		
 		function parentAdd (collection,object) {
 			add(predicate)(child,object);
-		};
+		}
 		
 		function parentRemove (collection,object) {
 			child.remove(object,true);
-		};
+		}
 		
 		function parentChange (collection,object) {
 			// Object sometimes null here
@@ -878,9 +877,9 @@ var jModel = function () {
 			else {
 				child.remove(object,true);
 			}
-		};
+		}
 		
-	};
+	}
 	
 	
 /*	function Grouping (parent,extractor) {
@@ -922,7 +921,7 @@ var jModel = function () {
 
 	function FieldOrdering (fieldName) {
 		return FunctionOrdering( function _fieldordering (obj) {return obj.get(fieldName);} );
-	};
+	}
 	
 	
 	function FieldPathOrdering (fieldpath) {	
@@ -939,7 +938,7 @@ var jModel = function () {
 			}
 			return 0;
 		});	
-	};
+	}
 	
 	
 	external.extend({
@@ -1040,7 +1039,7 @@ var jModel = function () {
 		return function _member (candidate) {
 			return collection.member(candidate);
 		};
-	};
+	}
 	
 	external.member = MembershipPredicate;
 	
@@ -1096,7 +1095,7 @@ var jModel = function () {
 			.reifyOneToManyRelationships()
 			.reifyConstraints();		
 
-	};
+	}
 	
 	DomainObject.prototype = {
 		
@@ -1104,34 +1103,37 @@ var jModel = function () {
 		
 		get: function _get () {
 		
-			if ( arguments.length == 0 || typeof arguments[0] == 'undefined' ) {
+		    var values = {};
+		
+			if ( arguments.length === 0 || typeof arguments[0] === 'undefined' ) {
 				return false;
 			}
 			else if ( arguments[0] == ':all' ) {
 				return this.get(this.fields().keys());
 			}
 			else if ( arguments[0].each ) {
-				var values	= {},
-					that	= this;
+				var that = this;
 				arguments[0].each(function __get (key) {
 					values[key] = that.fields().get(key);
 				});
 				return values;
 			}
 			else if ( !(arguments[0] instanceof Array) ) { // Just a key
-				var key = arguments[0], field, relationship;
-				if ( field = this.fields().getField(key) ) {
+				var key = arguments[0],
+				    field = this.fields().getField(key),
+				    relationship;
+				if ( field ) {
 					return field.get();
 				}
 				else {
-					if ( relationship = this.relationships(key) ) {
+				    relationship = this.relationships(key);
+					if ( relationship ) {
 						return relationship.get();
 					}
 				}
 			}
 			else { // Array of keys
 				var keys = arguments[0];
-				var values = {};
 				for ( var key in keys ) {
 					values[keys[key]] = this.fields().get(keys[key]);
 				}
@@ -1452,7 +1454,7 @@ var jModel = function () {
 	};
 	
 
-	function Relationship () {};
+	function Relationship () {}
 	Relationship.prototype.constructor = Relationship;
 	
 	
@@ -1463,7 +1465,7 @@ var jModel = function () {
 		this.accessor		= relationship.accessor;
 		this.name			= relationship.accessor;
 		this.related        = undefined;	
-	};
+	}
 	
 	OneToOneRelationship.prototype = extend({
 		
@@ -1558,6 +1560,7 @@ var jModel = function () {
 		        if ( relationship.field ) {
 		            data.set(relationship.field,owner.primaryKeyValue());
 		            owner.context.entities.get(relationship.prototype).add(data);
+		            return data;
 		        }
 		        else {
 		            children.add(data);
@@ -1589,7 +1592,7 @@ var jModel = function () {
 		
 //		log('domainobject/create').endGroup();
 		
-	};
+	}
 	
 	OneToManyRelationship.prototype = new Relationship();
 	OneToManyRelationship.prototype.constructor = OneToManyRelationship;

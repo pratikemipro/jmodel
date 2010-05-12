@@ -104,7 +104,7 @@ var emerald = function () {
 	function SubscriberSet (notifications) {
 		this.__delegate = set().of(Function).delegateFor(this);
 		this.notifications	= notifications;
-	};
+	}
 	
 	SubscriberSet.prototype = {
 		
@@ -160,7 +160,7 @@ var emerald = function () {
 		this.context		= context;
 		this.__suspensions	= 0;
 
-	};
+	}
 	
 	NotificationQueue.prototype = {
 		
@@ -192,7 +192,8 @@ var emerald = function () {
 
 		resume: function _resume () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
-			if ( --this.__suspensions == 0 ) {
+            this.__suspensions--;
+			if ( this.__suspensions === 0 ) {
 				this.map(apply);
 				return this.flush();
 			}
@@ -243,7 +244,7 @@ var emerald = function () {
 							object: item,
 							description: 'object removal'
 						});
-					})
+					});
 					return state.returnValue;
 				}
 			})
