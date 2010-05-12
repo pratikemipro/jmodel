@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.5.2
+ *	jModel Javascript Library v0.6.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -1505,31 +1505,27 @@ var jModel = function () {
 		Relationship.apply(this);
 
 		relationship.direction	= 'reverse';
-		this.enabled 			= relationship.enabled;
-		this.accessor			= relationship.accessor;
-		this.name				= relationship.plural || relationship.accessor+'s';
+		this.owner		= owner;
+		this.enabled 	= relationship.enabled;
+		this.accessor	= relationship.accessor;
+		this.name		= relationship.plural || relationship.accessor+'s';
 
 //		log('domainobject/create').startGroup('Creating children collection');
-        var children;
-        if ( relationship.field ) {
-            children = 	owner.context.entities.get(relationship.prototype).collection({
-        		base: 	     	owner.context.entities.get(relationship.prototype).objects,
-				predicate: 	 	RelationshipPredicate(owner,relationship.field),
-				description: 	'children by relationship '+relationship.accessor
+		var childEntityType = owner.context.entities.get(relationship.prototype),
+			children = 	childEntityType.collection({
+				description: 	'children by relationship '+relationship.accessor,
+				primaryKey: 	childEntityType.options.primaryKey || relationship.relativeKe
 			});
-        }
-        else {
-            children =  owner.context.entities.get(relationship.prototype).collection({
-                description: 'children by relationship '+relationship.accessor,
-                primaryKey: relationship.relativeKey
-            });
-        }
-
 //		log('domainobject/create').endGroup();
-	
+		
 		children.delegateFor(this);
 		this.filter = delegateTo(children,'filter');
 		this.get    = delegateTo(children,'get');
+
+		if ( relationship.field ) {
+			var base = owner.context.entities.get(relationship.prototype).objects;
+			var referentialConstraint = new ReferentialConstraint(this,base,relationship.field);
+		}
 	
 		// Deletions might cascade								
 /*		if ( relationship.cascade ) {
@@ -1553,34 +1549,6 @@ var jModel = function () {
 			}));
 		}
 		
-		// NOTE: Should this work with arrays of objects too?
-		this.add = function _add (data) {
-		    data = data || {};
-		    if (data.__delegate && data.__delegate instanceof DomainObject) {
-		        if ( relationship.field ) {
-		            data.set(relationship.field,owner.primaryKeyValue());
-		            owner.context.entities.get(relationship.prototype).add(data);
-		            return data;
-		        }
-		        else {
-		            children.add(data);
-		            return data;
-		        }
-		    }
-		    else {
-    		    if ( relationship.field ) {
-    		        return owner.context.entities.get(relationship.prototype)
-        					.create( copy(data).set(relationship.field,owner.primaryKeyValue()) );
-    		    }
-    		    else {
-    		        var newObject = owner.context.entities.get(relationship.prototype).create(data);
-    		        children.add(newObject);
-    		        return newObject;
-    		    }
-		    }
-
-		};
-		
 		this.debug = function _debug () {
 //			log().startGroup('Relationship: '+relationship.accessor);
 //			log().debug('Object: '+owner.debug());
@@ -1598,6 +1566,41 @@ var jModel = function () {
 	OneToManyRelationship.prototype.constructor = OneToManyRelationship;
 	
 	external.OneToManyRelationship = OneToManyRelationship;
+	
+	
+	function ReferentialConstraint (relationship,range,foreignKey) {
+		
+		var predicate = RelationshipPredicate(relationship.owner,foreignKey);
+
+		range.event('add').subscribe(function (event) {
+		    var possible = event.object;
+			if ( predicate(possible) ) {
+		    	relationship.add(possible);
+		  	}
+		    possible.event(foreignKey).subscribe(function (event) {
+		        if ( predicate(possible) ) {
+		            relationship.add(possible);
+		        }
+		        else {
+		            relationship.remove(possible);
+		        }
+		    });
+		});
+		
+		range.event('remove').subscribe(function (event) {
+		    relationship.remove(event.object);
+		});
+		
+		relationship.event('add').subscribe(function (event) {
+			var added = event.object;
+			if ( !predicate(added) ) {
+				added.set(foreignKey,relationship.owner.primaryKeyValue());
+			}
+		});
+		
+		range.reduce(add(predicate),relationship);
+		
+	}
 	
 	
 	// ------------------------------------------------------------------------
