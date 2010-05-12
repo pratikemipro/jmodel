@@ -331,20 +331,22 @@
 		debug: function _debug (showSubscribers) {
 			log().startGroup('Context: '+name);
 			this.notifications.debug();
+			log().debug('EntityTypes: '+this.entities.count());
 			this.entities.each(function __debug (entity) {
 				log().startGroup(entity.name);
 				entity.objects.debug(showSubscribers);
-				entity.deleted.debug(false);
+//				entity.deleted.debug(false); // NOTE: Fix this
 				log().endGroup();
 			});
 			log().endGroup();
 		},
-		
+
 		collection: aspect({
 			target: plugin.context.collection,
 			pre: function (specification) {
+			    var description = (specification && specification.description) ? ': '+specification.description : '';
 				log('domainobjectcollection/create')
-					.startGroup('Creating a DomainObjectCollection: '+specification.description);
+					.startGroup('Creating a DomainObjectCollection: '+description);
 			},
 			post: function (state) {
 				log('domainobjectcollection/create').endGroup();
@@ -370,6 +372,18 @@
 				log('domainobject/create').endGroup();
 				return state.returnValue;
 			}
+		}),
+
+		collection: aspect({
+			target: plugin.entitytype.collection,
+			pre: function (specification) {
+				log('domainobjectcollection/create')
+					.startGroup('Creating a typed DomainObjectCollection: '+specification.description);
+			},
+			post: function (state) {
+				log('domainobjectcollection/create').endGroup();
+				return state.returnValue;
+			}
 		})
 		
 	}, plugin.entitytype );
@@ -386,7 +400,7 @@
 		        log().startGroup('DomainObjectCollection');
 		    }
 			if ( _.Not(_.EmptySetPredicate)(this) ) {
-				log().debug('Objects:  '+this.format(_.listing(_.Method('name'))));
+				log().debug('Objects ('+this.count()+'):  '+this.format(_.listing(_.Method('name'))));
 			}
 			if ( showSubscribers ) {
 			    log().startGroup('events');
