@@ -206,10 +206,9 @@ var jModel = function () {
 		constructor: Context,
 		
 		register: function _register (name,constructor,options) {
-			return this.entities.add(name,constructor,options)
-						.added 
-							.exposeAt( this.isDefault ? [this,external] : [this] )
-							.context;
+			return this.entities.create(name,constructor,options)
+						.exposeAt( this.isDefault ? [this,external] : [this] )
+						.context;
 		},
 		
 		reset: function _reset () {
