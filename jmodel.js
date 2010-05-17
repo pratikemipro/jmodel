@@ -340,12 +340,6 @@ var jModel = function () {
 			        args.push(':first');
 			    }
 			    return this.objects.filter.apply(this.objects,args);
-/*			    console.log('here');
-				var objects = this.objects.filter.apply(this.objects,arguments);
-				console.log(objects);
-				console.log(typeof objects.first === 'function');
-				console.log(typeof objects.first === 'function' ? objects.first() : objects);
-				return objects.first ? objects.first() : objects; */
 			}
 		},
 		
