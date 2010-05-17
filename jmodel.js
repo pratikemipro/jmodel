@@ -176,28 +176,28 @@ var jModel = function () {
 	
 	function Context (name) {
 
-		var context = this;
-
 		this.isDefault		= false;
 		this.name			= name;
+		
 		this.notifications	= new NotificationQueue(this);
 		
 		this.entities		= new EntityTypeSet(this);
 		this.entity         = delegateTo(this.entities,'filter');
 		
+		this.events			= new EventRegistry(this.notifications,'checkpoint');
+		this.event			= delegateTo(this.events,'filter');
+		
+		this.all			= this.collection({description:'All Objects in context '+this.name});
+		
 		// Adding a new object of a type in the context should add to the context's
 		// collection of all objects
+		var context = this;
 		this.entities.event('add').subscribe(function (event) {
 		    var entitytype = event.object;
 		    entitytype.objects.event('add').subscribe(function (event) {
 		        context.all.add(event.object);
 		    });
 		});
-		
-		this.all			= this.collection({description:'All Objects in context '+this.name});
-		
-		this.events			= new EventRegistry(this.notifications,'checkpoint');
-		this.event			= delegateTo(this.events,'filter');
 		
 	}
 	
