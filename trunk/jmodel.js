@@ -168,15 +168,9 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function ContextSet () {
-
-		var contexts = set().of(Context).asSubscribable()
-						.index(Property('name'))
-						.delegateFor(this);
-	
-		this.create = function _create (name) {
-			return this.add(new Context(name)).added;
-		};
-	
+		set().of(Context).asSubscribable()
+			.index(Property('name'))
+			.delegateFor(this);
 	}
 	
 	

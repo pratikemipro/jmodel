@@ -766,6 +766,11 @@ function OPAL () {
 			
 			return object;
 			
+		},
+		
+		create: function () {
+			this.add.apply(this,arguments);
+			return this.added;
 		}
 		
 	}, new Set() );
