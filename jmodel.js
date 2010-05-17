@@ -255,9 +255,8 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
-		set().of(EntityType).asSubscribable().delegateFor(this);
 		this.context = context;
-		return this.index(Property('name'));
+		set().of(EntityType).asSubscribable().index(Property('name')).delegateFor(this);
 	}
 	
 	EntityTypeSet.prototype = {
