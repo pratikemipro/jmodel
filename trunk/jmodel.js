@@ -213,7 +213,7 @@ var jModel = function () {
 		
 		register: function _register (name,constructor,options) {
 			return this.entities.add(name,constructor,options)
-						.added
+						.added 
 							.exposeAt( this.isDefault ? [this,external] : [this] )
 							.context;
 		},
@@ -855,13 +855,13 @@ var jModel = function () {
 		
 		deleted.debug = function _debug () {
 //			if ( Not(EmptySetPredicate)(deleted) ) {
-				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
+//				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
 //				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
 //			}
 		};
 		
 		collection.event('remove').subscribe(function (event) {
-			console.log(event.object);
+//			console.log(event.object);
 			deleted.add(event.object);
 		});
 		
@@ -1309,7 +1309,11 @@ var jModel = function () {
 				var relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
 				this.parent[(descriptor.singular || descriptor.accessor)]           = delegateTo(relationship,'filter');
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	    = delegateTo(relationship,'filter');
-				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= delegateTo(relationship,'add');
+				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= function (relationship) {
+				    return function (data) {
+				        return relationship.add(data).added;
+				    };
+				}(relationship); 
 				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'remove');
 				this.parent['debug'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'debug');
 			}
