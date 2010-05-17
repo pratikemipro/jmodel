@@ -77,7 +77,7 @@ jModel.plugin.context.fromService = function (url, callback) {
                         Name:       $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
                         Type:       'toOne',
                         ToEntity:   principalEntityName,
-                        Field:      $('Principal PropertyRef',associationData).attr('Name')
+                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
                     });
                     
                 }
