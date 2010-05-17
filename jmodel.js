@@ -1311,7 +1311,7 @@ var jModel = function () {
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	    = delegateTo(relationship,'filter');
 				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= function (relationship) {
 				    return function (data) {
-				        return relationship.add(data).added;
+				        return relationship.add(data||{}).added;
 				    };
 				}(relationship); 
 				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'remove');
