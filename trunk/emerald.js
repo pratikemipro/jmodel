@@ -135,6 +135,10 @@ var emerald = function () {
 				active = false;
 			});
 			return derivedEventType;
+		},
+		
+		between: function (startEvent,stopEvent) {
+			return this.after(startEvent).before(stopEvent);
 		}
 		
 	};
