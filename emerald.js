@@ -98,6 +98,23 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		until: function (predicate,inclusive) {
+			var derivedEventType = new EventType(this.registry),
+				active = true,
+				inclusive = typeof inclusive === 'undefined' ? true : inclusive;
+		    this.subscribe(function (event) {
+				var last = false;
+		        if ( predicate(event) ) {
+					active = false;
+					last = true;
+				}
+				if ( active || (last && inclusive) ) {
+		            derivedEventType.raise(event);
+		        }
+		    });
+		    return derivedEventType;
+		},
+		
 		drop: function (number) {
 		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
