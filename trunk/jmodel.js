@@ -554,25 +554,30 @@ var jModel = function () {
 				that.remove(event.object);
 			});
 		    
-			// If there are any subscribers to the "change" event
-			// we must watch the object for changes
-			if ( that.event('change').subscribers(':first') ) {
-				object.subscribe({
-					target: this,
-					key: ':any',
-					change: function _change (object) {
-						that.__delegate.sorted = false;
-						that.event('change').raise({
-							method: 'change',
-							object: object,
-							description: 'object change'
-						});  
-					},
-					description: 'object change for '+that.description+' collection change'
-				});
-			}
-			
-			
+		    object.event('_any').subscribe(function _change (event) {
+		        var object = event.object;
+				that.__delegate.sorted = false;
+				that.event('change').raise({
+					method: 'change',
+					object: object,
+					description: 'object change'
+				});  
+			});
+		    
+/*			object.subscribe({
+				target: this,
+				key: ':any',
+				change: function _change (object) {
+					that.__delegate.sorted = false;
+					that.event('change').raise({
+						method: 'change',
+						object: object,
+						description: 'object change'
+					});  
+				},
+				description: 'object change for '+that.description+' collection change'
+			}); */
+
 		});
 		
 	}
@@ -1158,10 +1163,10 @@ var jModel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-				this.event('_any').raise({
+/*				this.event('_any').raise({
 					key: ':any',
 					description: 'field value change: any'
-				});
+				}); */
 			}
 			
 		}, function _set () {
@@ -1171,12 +1176,13 @@ var jModel = function () {
 			if ( arguments.length == 2 || arguments.length == 3 ) {  // Arguments are key and value
 				key = arguments[0];
 				var value = arguments[1];
-				if ( this.fields().set(key,value,arguments.callee.caller) && ( arguments.length == 2 || arguments[2] ) ) {
+/*				if ( */this.fields().set(key,value,arguments.callee.caller);/* && ( arguments.length == 2 || arguments[2] ) ) {
+				    console.log('Raising _any');
 					this.event('_any').raise({
 						key: ':any',
 						description: 'field value change: any'
-					});
-				}
+					}); 
+				} */
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
 				this.set.fields.apply(this,arguments);
@@ -1266,13 +1272,17 @@ var jModel = function () {
 		},
 		
 		reifyFields: function _reifyFields () {
-			var fields = this.entitytype.options.has || this.parent.has || [];
+			var fields = this.entitytype.options.has || this.parent.has || [],
+			    that = this;
 			for ( var i in fields ) {
 				var descriptor  = fields[i],
 					field		= this.fields().add(new Field(descriptor,this.events)).added;
 				this.parent[descriptor.accessor]	= delegateTo(field,'get');
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 				this.events.register(descriptor.accessor);
+			    this.event(descriptor.accessor).subscribe(function (event) {
+			        that.event('_any').raise({object:that.parent});
+			    });
 			}
 			return this;
 		},
