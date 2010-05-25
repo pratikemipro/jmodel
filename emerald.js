@@ -128,6 +128,15 @@ var emerald = function () {
 		
 		between: function (startEvent,stopEvent) {
 			return this.after(startEvent).before(stopEvent);
+		},
+		
+		accumulate: function (fn,acc) {
+			var derivedEventType = new EventType(this.registry);
+		    this.subscribe(function (event) {
+		        acc = fn(acc,event);
+				derivedEventType.raise(acc);
+		    });
+		    return derivedEventType;
 		}
 		
 	};
