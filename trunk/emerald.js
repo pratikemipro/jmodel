@@ -86,6 +86,27 @@ var emerald = function () {
 		raise: function _raise (event) {
 //			console.log('Raising '+this.name+' ('+this.subscribers().count()+' subscribers)');
 			this.subscribers().notify(event);
+		},
+		
+		where: function (predicate) {
+		    derivedEventType = new EventType(this.registry);
+		    this.subscribe(function (event) {
+		        if ( predicate(event) ) {
+		            derivedEventType.raise(event);
+		        }
+		    });
+		    return derivedEventType;
+		},
+		
+		drop: function (number) {
+		    derivedEventType = new EventType(this.registry);
+		    this.subscribe(function (event) {
+		        if ( number <= 0 ) {
+		            derivedEventType.raise(event);
+		        }
+		        number--;
+		    });
+		    return derivedEventType
 		}
 		
 	};
