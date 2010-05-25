@@ -109,39 +109,30 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		after: function (controlEvent) {
-			var derivedEventType = new EventType(this.registry),
-				active = false;
-			this.subscribe(function (event) {
-				if ( active ) {
-					derivedEventType.raise(event);
-				}
-			});
-			controlEvent.subscribe(function (event) {
-				active = true;
-			});
-			return derivedEventType;
-		},
-		
-		before: function (controlEvent) {
-			var derivedEventType = new EventType(this.registry),
-				active = true;
-			this.subscribe(function (event) {
-				if ( active ) {
-					derivedEventType.raise(event);
-				}
-			});
-			controlEvent.subscribe(function (event) {
-				active = false;
-			});
-			return derivedEventType;
-		},
-		
 		between: function (startEvent,stopEvent) {
 			return this.after(startEvent).before(stopEvent);
 		}
 		
 	};
+	
+	function SwitchCombinator (initialState) {
+		return function (controlEvent) {
+			var derivedEventType = new EventType(this.registry),
+				active = initialState;
+			this.subscribe(function (event) {
+				if ( active ) {
+					derivedEventType.raise(event);
+				}
+			});
+			controlEvent.subscribe(function (event) {
+				active = !initialState;
+			});
+			return derivedEventType;
+		};
+	}
+	
+	EventType.prototype.before 	= SwitchCombinator(true);
+	EventType.prototype.after 	= SwitchCombinator(false);
 	
 	em.EventType = EventType;
 	
