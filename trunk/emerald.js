@@ -89,7 +89,7 @@ var emerald = function () {
 		},
 		
 		where: function (predicate) {
-		    derivedEventType = new EventType(this.registry);
+		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
 		        if ( predicate(event) ) {
 		            derivedEventType.raise(event);
@@ -99,14 +99,42 @@ var emerald = function () {
 		},
 		
 		drop: function (number) {
-		    derivedEventType = new EventType(this.registry);
+		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
 		        if ( number <= 0 ) {
 		            derivedEventType.raise(event);
 		        }
 		        number--;
 		    });
-		    return derivedEventType
+		    return derivedEventType;
+		},
+		
+		after: function (controlEvent) {
+			var derivedEventType = new EventType(this.registry),
+				active = false;
+			this.subscribe(function (event) {
+				if ( active ) {
+					derivedEventType.raise(event);
+				}
+			});
+			controlEvent.subscribe(function (event) {
+				active = true;
+			});
+			return derivedEventType;
+		},
+		
+		before: function (controlEvent) {
+			var derivedEventType = new EventType(this.registry),
+				active = true;
+			this.subscribe(function (event) {
+				if ( active ) {
+					derivedEventType.raise(event);
+				}
+			});
+			controlEvent.subscribe(function (event) {
+				active = false;
+			});
+			return derivedEventType;
 		}
 		
 	};
