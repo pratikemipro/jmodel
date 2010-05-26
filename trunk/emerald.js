@@ -202,6 +202,7 @@ var emerald = function () {
 	
 	em.EventType = EventType;
 	
+	
 	//
 	// Event generators
 	//
@@ -209,11 +210,18 @@ var emerald = function () {
 	em.event = {
 	    
 	    from: function (element,name) {
-    	    var derivedEvent = new EventType();
+    	    var derivedEventType = new EventType();
     	    jQuery(element).bind(name, function (event) {
-    	        derivedEvent.raise(event);
+    	        derivedEventType.raise(event);
     	    });
-    	    return derivedEvent;
+    	    return derivedEventType;
+    	},
+    	
+    	every: function (interval) {
+    	    var derivedEventType = new EventType();
+    	    function raise() { derivedEventType.raise(); };
+    	    setInterval(raise,interval);
+    	    return derivedEventType;
     	}
 	    
 	};
