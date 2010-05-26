@@ -282,24 +282,9 @@ var emerald = function () {
 	}
 	
 	Subscriber.prototype.match = function (event) {
-		var that = this,
-			args = arguments;
-		return this.predicate(event) ? function () {
-			that.message.apply(that,args);
-		} : undefined;
+		return this.predicate(event) ? new Notification(this.message,arguments) : undefined;
 	}
 	
-	
-/*	function Subscriber (subscription) {
-		subscription = typeof subscription === 'function' ? {message:subscription} : subscription;
-		var predicate = subscription.predicate || AllPredicate,
-			message = subscription.message;			
-		return function (event) {
-			return predicate(event) ? extend({subscription:subscription},function () {
-				return message(event);
-			}) : undefined;
-		};
-	} */
 	
 	// NOTE: This is obsolescent
 	function CollectionSubscriber (subscription) {
@@ -321,7 +306,7 @@ var emerald = function () {
 
 	function NotificationQueue (context,application) {
 
-		set().of(Function).delegateFor(this);
+		set().of(Notification).delegateFor(this);
 		this.context		= context;
 		this.__suspensions	= 0;
 		this.application    = application;
@@ -335,12 +320,8 @@ var emerald = function () {
 							: new List([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-				if ( that.__suspensions === 0 || /*(!this.application &&*/ !message.subscription.application/* )*/ ) {
-				    if ( typeof message === 'function' ) {
-    					/*async(*/message();
-				    }
-				    else {
-				    }
+				if ( that.__suspensions === 0 || ( message.subscription && !message.subscription.application ) ) {
+					message.deliver();
 				}
 				else {
 //					console.log('Adding to queue');
@@ -378,6 +359,16 @@ var emerald = function () {
 	};
 	
 	em.NotificationQueue = NotificationQueue;
+	
+	
+	function Notification (message,args) {
+		this.message	= message;
+		this.args		= args
+	}
+	
+	Notification.prototype.deliver = function () {
+		this.message.apply(null,this.args);
+	}
 	
 	
 	// ------------------------------------------------------------------------
