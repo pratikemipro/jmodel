@@ -131,6 +131,7 @@ var emerald = function () {
 		},
 		
 		accumulate: function (fn,acc) {
+			acc = arguments.length > 1 ? acc : fn.unit;
 			var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
 		        acc = fn(acc,event);
