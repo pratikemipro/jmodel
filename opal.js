@@ -695,7 +695,10 @@ function OPAL () {
 			
 			if ( this.__constructor ) {
 			    
-			    if ( arguments.length > 1 || object.constructor === Object || ! ( object instanceof Object) ) {
+			    if ( arguments.length > 1
+					 || typeof object === 'function'
+					 || object.constructor === Object
+					 || ! ( object instanceof Object) ) {
     				object = this.__construct ? this.__construct.apply(this,arguments) : object;
     			}
 
