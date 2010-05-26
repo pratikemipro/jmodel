@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.2.0
+ *	Emerald Javascript Library v0.3.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -343,7 +343,7 @@ var emerald = function () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
-				this.map(apply);
+				this.each('deliver'})
 				return this.flush();
 			}
 			else {
