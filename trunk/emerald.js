@@ -249,7 +249,7 @@ var emerald = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		this.__delegate = set().of(Function).delegateFor(this);
+		this.__delegate = set().of(Subscriber).delegateFor(this);
 		this.notifications	= notifications;
 	}
 	
@@ -260,11 +260,14 @@ var emerald = function () {
 		},
 		
 		__construct: function (specification) {
-			return Subscriber(specification);
+			return new Subscriber(specification);
 		},
 		
-		notify: function _notify (event) {		
-			this.notifications.send(this.map(ApplyTo.apply(null,arguments)).filter(Identity));
+		notify: function _notify (event) {
+			var args = arguments;
+			this.notifications.send(this.map(function (subscriber) {
+				return subscriber.match.apply(subscriber,args);
+			}));
 		}
 		
 	};
@@ -273,6 +276,21 @@ var emerald = function () {
 	
 	
 	function Subscriber (subscription) {
+		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
+		this.predicate		= subscription.predicate || AllPredicate;
+		this.message		= this.subscription.message;
+	}
+	
+	Subscriber.prototype.match = function (event) {
+		var that = this,
+			args = arguments;
+		return this.predicate(event) ? function () {
+			that.message.apply(that,args);
+		} : undefined;
+	}
+	
+	
+/*	function Subscriber (subscription) {
 		subscription = typeof subscription === 'function' ? {message:subscription} : subscription;
 		var predicate = subscription.predicate || AllPredicate,
 			message = subscription.message;			
@@ -281,7 +299,7 @@ var emerald = function () {
 				return message(event);
 			}) : undefined;
 		};
-	}
+	} */
 	
 	// NOTE: This is obsolescent
 	function CollectionSubscriber (subscription) {
@@ -313,13 +331,12 @@ var emerald = function () {
 	NotificationQueue.prototype = {
 		
 		send: function _send (messages) {
-			messages = (messages instanceof Set) ? messages : new Set([messages]);
+			messages = (messages instanceof Set || messages instanceof List) ? messages
+							: new List([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-				console.log('here');
 				if ( that.__suspensions === 0 || /*(!this.application &&*/ !message.subscription.application/* )*/ ) {
 				    if ( typeof message === 'function' ) {
-  //  					console.log('Sending immediately');
     					/*async(*/message();
 				    }
 				    else {
