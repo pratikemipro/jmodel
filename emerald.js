@@ -92,7 +92,7 @@ var emerald = function () {
 		where: function (predicate) {
 		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
-		        if ( predicate(event) ) {
+		        if ( predicate.apply(null,arguments) ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		    });
