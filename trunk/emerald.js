@@ -72,10 +72,10 @@ var emerald = function () {
 	// 																  EventType
 	// ------------------------------------------------------------------------
 	
-	function EventType (registry,name) {
+	function EventType (registry,name,notifications) {
 		this.registry		= registry || em.registry;
 		this.name			= name;
-		this.subscribers	= delegateTo(new SubscriberSet(this.registry.notifications),'filter');
+		this.subscribers	= delegateTo(new SubscriberSet(notifications || this.registry.notifications),'filter');
 	}
 	
 	EventType.prototype = {
@@ -148,6 +148,19 @@ var emerald = function () {
 				active = false;
 			});
 			return derivedEventType;
+		},
+		
+		waitFor: function (startEventType) {
+		    var notifications       = new NotificationQueue(null,true),
+		        derivedEventType    = new EventType(this.registry,null,notifications);
+		    notifications.suspend();
+		    this.subscribe(function () {
+		        derivedEventType.raise.apply(derivedEventType,arguments);
+		    })
+		    startEventType.subscribe(function () {
+		        notifications.resume();
+		    })
+		    return derivedEventType;
 		},
 		
 		effect: function (fn) {
@@ -251,9 +264,6 @@ var emerald = function () {
 		},
 		
 		notify: function _notify (event) {		
-		    if ( !this.notifications.send ) {
-		        console.log(this.notifications);
-		    }
 			this.notifications.send(this.map(ApplyTo.apply(null,arguments)).filter(Identity));
 		}
 		
@@ -291,11 +301,12 @@ var emerald = function () {
 	//															  Notifications
 	// ------------------------------------------------------------------------
 
-	function NotificationQueue (context) {
+	function NotificationQueue (context,application) {
 
 		set().of(Function).delegateFor(this);
 		this.context		= context;
 		this.__suspensions	= 0;
+		this.application    = application;
 
 	}
 	
@@ -305,10 +316,13 @@ var emerald = function () {
 			messages = (messages instanceof Set) ? messages : new Set([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-				if ( that.__suspensions === 0 || !message.subscription.application ) {
+				console.log('here');
+				if ( that.__suspensions === 0 || /*(!this.application &&*/ !message.subscription.application/* )*/ ) {
 				    if ( typeof message === 'function' ) {
-    //					console.log('Sending immediately');
+  //  					console.log('Sending immediately');
     					/*async(*/message();
+				    }
+				    else {
 				    }
 				}
 				else {
