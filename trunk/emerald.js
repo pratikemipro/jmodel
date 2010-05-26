@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.1.0
+ *	Emerald Javascript Library v0.2.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
