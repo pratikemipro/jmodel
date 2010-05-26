@@ -33,7 +33,7 @@ var emerald = function () {
 	// ------------------------------------------------------------------------
 
 	function EventRegistry (notifications) {
-		this.notifications	= notifications;
+		this.notifications	= notifications || new NotificationQueue();
 		this.__delegate		= set().of(EventType).index(Property('name')).delegateFor(this);
 		if ( arguments.length > 1 ) {
 			this.register.apply(this,arrayFromArguments(arguments).slice(1));
@@ -67,12 +67,13 @@ var emerald = function () {
 	
 	em.EventRegistry = EventRegistry;
 	
+	
 	// ------------------------------------------------------------------------
 	// 																  EventType
 	// ------------------------------------------------------------------------
 	
 	function EventType (registry,name) {
-		this.registry		= registry;
+		this.registry		= registry || em.registry;
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(this.registry.notifications),'filter');
 	}
@@ -176,6 +177,22 @@ var emerald = function () {
 	
 	em.EventType = EventType;
 	
+	//
+	// Event generators
+	//
+	
+	em.event = {
+	    
+	    from: function (element,name) {
+    	    var derivedEvent = new EventType();
+    	    jQuery(element).bind(name, function (event) {
+    	        derivedEvent.raise(event);
+    	    });
+    	    return derivedEvent;
+    	}
+	    
+	};
+	
 	
 	//
 	// Subscriber Set
@@ -201,6 +218,9 @@ var emerald = function () {
 		},
 		
 		notify: function _notify (event) {		
+		    if ( !this.notifications.send ) {
+		        console.log(this.notifications);
+		    }
 			this.notifications.send(this.map(ApplyTo(event)).filter(Identity));
 		}
 		
@@ -368,6 +388,15 @@ var emerald = function () {
 		return this.reduce(Method('add'),new SubscribableTypedSet(this.__constructor,notifications));
 	};
 	
+	
+	//
+	// Create default EventRegistry
+	//
+	
+	em.registry = new EventRegistry();
+	
+	
 	return em;
+
 	
 }();
