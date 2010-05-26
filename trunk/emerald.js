@@ -127,7 +127,20 @@ var emerald = function () {
 		},
 		
 		between: function (startEvent,stopEvent) {
-			return this.after(startEvent).before(stopEvent);
+			var derivedEventType = new EventType(this.registry),
+				active = false;
+			this.subscribe(function (event) {
+				if ( active ) {
+					derivedEventType.raise(event);
+				}
+			});
+			startEvent.subscribe(function (event) {
+				active = true;
+			});
+			stopEvent.subscribe(function (event) {
+				active = false;
+			});
+			return derivedEventType;
 		},
 		
 		accumulate: function (fn,acc) {
