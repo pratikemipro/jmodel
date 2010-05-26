@@ -144,6 +144,15 @@ var emerald = function () {
 			return derivedEventType;
 		},
 		
+		effect: function (fn) {
+		    var derivedEventType = new EventType(this.registry);
+		    this.subscribe(function (event) {
+		        fn(event);
+		        derivedEventType.raise(event);
+		    });
+		    return derivedEventType;
+		},
+		
 		accumulate: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			var derivedEventType = new EventType(this.registry);
