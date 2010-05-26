@@ -84,16 +84,16 @@ var emerald = function () {
 			return this.subscribers().add(subscriber).added;
 		},
 	
-		raise: function _raise (event) {
+		raise: function _raise () {
 //			console.log('Raising '+this.name+' ('+this.subscribers().count()+' subscribers)');
-			this.subscribers().notify(event);
+			this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
 		where: function (predicate) {
 		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
 		        if ( predicate(event) ) {
-		            derivedEventType.raise(event);
+		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		    });
 		    return derivedEventType;
@@ -110,7 +110,7 @@ var emerald = function () {
 					last = true;
 				}
 				if ( active || (last && inclusive) ) {
-		            derivedEventType.raise(event);
+		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		    });
 		    return derivedEventType;
@@ -118,27 +118,33 @@ var emerald = function () {
 		
 		drop: function (number) {
 		    var derivedEventType = new EventType(this.registry);
-		    this.subscribe(function (event) {
+		    this.subscribe(function () {
 		        if ( number <= 0 ) {
-		            derivedEventType.raise(event);
+		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		        number--;
 		    });
 		    return derivedEventType;
 		},
 		
-		between: function (startEvent,stopEvent) {
+		between: function (startEventType,stopEventType) {
 			var derivedEventType = new EventType(this.registry),
-				active = false;
+				active = false,
+				startEvent, stopEvent;
 			this.subscribe(function (event) {
 				if ( active ) {
-					derivedEventType.raise(event);
+				    args = arrayFromArguments(arguments);
+				    args.push(startEvent);
+				    args.push(stopEvent);
+					derivedEventType.raise.apply(derivedEventType,args);
 				}
 			});
-			startEvent.subscribe(function (event) {
+			startEventType.subscribe(function (event) {
+			    startEvent = event;
 				active = true;
 			});
-			stopEvent.subscribe(function (event) {
+			stopEventType.subscribe(function (event) {
+				stopEvent = event;
 				active = false;
 			});
 			return derivedEventType;
@@ -148,7 +154,7 @@ var emerald = function () {
 		    var derivedEventType = new EventType(this.registry);
 		    this.subscribe(function (event) {
 		        fn(event);
-		        derivedEventType.raise(event);
+		        derivedEventType.raise.apply(derivedEventType,arguments);
 		    });
 		    return derivedEventType;
 		},
@@ -169,9 +175,9 @@ var emerald = function () {
 		return function (controlEvent) {
 			var derivedEventType = new EventType(this.registry),
 				active = initialState;
-			this.subscribe(function (event) {
+			this.subscribe(function () {
 				if ( active ) {
-					derivedEventType.raise(event);
+					derivedEventType.raise.apply(derivedEventType,arguments);
 				}
 			});
 			controlEvent.subscribe(function (event) {
@@ -230,7 +236,7 @@ var emerald = function () {
 		    if ( !this.notifications.send ) {
 		        console.log(this.notifications);
 		    }
-			this.notifications.send(this.map(ApplyTo(event)).filter(Identity));
+			this.notifications.send(this.map(ApplyTo.apply(null,arguments)).filter(Identity));
 		}
 		
 	};
