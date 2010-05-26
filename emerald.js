@@ -167,6 +167,16 @@ var emerald = function () {
 				derivedEventType.raise(acc);
 		    });
 		    return derivedEventType;
+		},
+		
+		map: function (fn) {
+		    var derivedEventType = new EventType(this.registry);
+		    this.subscribe(function (event) {
+		        args = arrayFromArguments(arguments);
+		        args[0] = fn.apply(null,arguments);
+		        derivedEventType.raise.apply(derivedEventType,args);
+		    })
+		    return derivedEventType;
 		}
 		
 	};
