@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.3.1
+ *	Emerald Javascript Library v0.3.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.1.0'},opal),
+	var em		= extend({emerald_version:'0.3.2'},opal),
 		_		= em;
 
 
@@ -264,9 +264,11 @@ var emerald = function () {
 		
 		notify: function _notify (event) {
 			var args = arguments;
-			this.notifications.send(this.map(function (subscriber) {
-				return subscriber.match.apply(subscriber,args);
-			}));
+			this.notifications.send(
+			    this.map(function (subscriber) {
+				    return subscriber.match.apply(subscriber,args);
+			    })
+			);
 		}
 		
 	};
@@ -309,15 +311,17 @@ var emerald = function () {
 							: new List([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-				if ( that.__suspensions === 0 || ( message.subscription && !message.subscription.application ) ) {
-					message.deliver();
-				}
-				else {
-//					console.log('Adding to queue');
-//					log('notifications/send').debug('Adding a notification to the queue');
-					that.add(message);
-//					console.log(notifications.count()+' messages on queue');
-				}
+			    if ( message instanceof Notification ) {
+    				if ( that.__suspensions === 0 || ( message.subscription && !message.subscription.application ) ) {
+    					message.deliver();
+    				}
+    				else {
+    //					console.log('Adding to queue');
+    //					log('notifications/send').debug('Adding a notification to the queue');
+    					that.add(message);
+    //					console.log(notifications.count()+' messages on queue');
+    				}
+			    }
 			});
 			return this;
 		},
