@@ -465,8 +465,8 @@ function OPAL () {
 			});
 			
 			return copy({})
-						.set(passName||'pass',set(pass))
-						.set(failName||'fail',set(fail));
+						.setProperty(passName||'pass',set(pass))
+						.setProperty(failName||'fail',set(fail));
 
 		},
 		
