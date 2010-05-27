@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.1
+ *	jModel Javascript Library v0.6.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.1';
+	external.jmodel_version = '0.6.2';
 
 	//
 	// Import Emerald
@@ -766,7 +766,7 @@ var jModel = function () {
 //				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
 				this.each(function __subcribe (object) {
-					context.notifications.send(subscriber({
+					context.notifications.send(subscriber.match({
 						method: 'initialise',
 						object: object,
 						description: 'initialisation'
