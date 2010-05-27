@@ -85,7 +85,6 @@ var emerald = function () {
 		},
 	
 		raise: function _raise () {
-//			console.log('Raising '+this.name+' ('+this.subscribers().count()+' subscribers)');
 			this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
@@ -285,18 +284,8 @@ var emerald = function () {
 		return this.predicate(event) ? new Notification(this.message,arguments) : undefined;
 	}
 	
-	
-	// NOTE: This is obsolescent
-	function CollectionSubscriber (subscription) {
-		return extend({subscription:subscription},function _collectionsubscriber (event) {
-			return ( subscription.filter && !subscription.filter(event) ) ? null
-				:  subscription.type(subscription,event);
-		});
-	}
-	
 	em.extend({
-		Subscriber: Subscriber,
-		CollectionSubscriber: CollectionSubscriber
+		Subscriber: Subscriber
 	});
 	
 	
@@ -343,7 +332,7 @@ var emerald = function () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
-				this.each('deliver'})
+				this.each('deliver')
 				return this.flush();
 			}
 			else {

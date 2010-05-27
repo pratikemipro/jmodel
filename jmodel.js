@@ -437,8 +437,8 @@ var jModel = function () {
 		};
 	}
 	
-	function CollectionMethodNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _collectionmethodnotification () {
+	function CollectionMethodNotification (subscription) {
+		return extend({subscription:subscription}, function _collectionmethodnotification (event) {
 			if (subscription[event.method] && event.permutation) {
 //				log('notifications/send').debug('Receiving a sort notification');
 				subscription[event.method].call(subscription.target,event.permutation);
@@ -450,15 +450,15 @@ var jModel = function () {
 		});
 	}
 	
-	function CollectionEventNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _collectioneventnotification () {
+	function CollectionEventNotification (subscription) {
+		return extend({subscription:subscription}, function _collectioneventnotification (event) {
 			// NOTE: Implement this
 		});
 	}
 	
 	// NOTE: Make this work with bindings
-	function CollectionMemberNotification (subscription,event,subscriber) {
-		return extend({subscription:subscription}, function _collectionmembernotification () {
+	function CollectionMemberNotification (subscription) {
+		return extend({subscription:subscription}, function _collectionmembernotification (event) {
 			var keys = ( subscription.member.key instanceof Array ) ? subscription.member.key : [subscription.member.key];
 			for (var i in keys) {
 				event.object.subscribe({
@@ -717,42 +717,46 @@ var jModel = function () {
 		},
 		
 		subscribe: function _subscribe (subscription) {
-		    
-		    subscription = copy(subscription);
-			
+
+		    subscription = copy(subscription,true);
+
 //			log('subscriptions/subscribe').startGroup('Subscribing: '+subscription.description);
 
 			if ( subscription.predicate || subscription.selector ) {
 //				log('subscriptions/subscribe').debug('Creating a collection member subscription: '+subscription.description);
-				subscription.type	= 	external.notification.CollectionMemberNotification;
-				subscription.filter = 	function __subscribe (collection) {
+				subscription.message   = external.notification.CollectionMemberNotification(subscription);
+				subscription.predicate = function __subscribe (collection,predicate) {
 											return function ___subscribe (event) {
 												return ( event.method == 'add' || event.method == 'initialise' ) 
-														&& collection.filter(subscription.predicate).select(subscription.selector) === event.object;
+														&& collection.filter(predicate).select(subscription.selector) === event.object;
 											};
-										}(this);							
+										}(this,subscription.predicate);							
 			}
 			else if ( ( typeof subscription.add == 'string' ) && ( typeof subscription.remove == 'string' ) ) {
 //				log('subscriptions/subscribe').debug('Creating a collection event subscription: '+subscription.description);
-				subscription.type	= external.notification.CollectionEventNotification;
+				subscription.message	= external.notification.CollectionEventNotification(subscription);
 			}
 			else {
 //				log('subscriptions/subscribe').debug('Creating a collection method subscription: '+subscription.description);
-				subscription.type	= external.notification.CollectionMethodNotification; 
+				subscription.message	= external.notification.CollectionMethodNotification(subscription); 
 			}
 			
 			subscription.description = subscription.description || 'unknown';
+
 			
+			//
+			// NOTE: Simplify the next two sections
+			//
 			var that = this, subscriber;
 			set('add','remove','initialise','change','sort').each(function (eventtype) {
-				if ( subscription[eventtype] ) {
-				    subscriber = CollectionSubscriber(subscription);
+				if ( subscription.hasOwnProperty(eventtype) ) {
+				    subscriber = new Subscriber(subscription);
 					that.event(eventtype).subscribe(subscriber);
 				}
 			});
 			
 			if ( subscription.member ) {
-				subscriber = CollectionSubscriber(subscription);
+				subscriber = new Subscriber(subscription);
 				this.event('add').subscribe(subscriber);
 				this.event('change').subscribe(subscriber);
 				this.event('initialise').subscribe(subscriber);
@@ -1205,7 +1209,7 @@ var jModel = function () {
 
 			if ( subscription.key instanceof Array ) {
 				for(var i=0;i<subscription.key.length;i++) {
-					this.subscribe(copy(subscription).set('key',subscription.key[i]));
+					this.subscribe(copy(subscription).setProperty('key',subscription.key[i]));
 				}
 			}
 			else {
@@ -1240,7 +1244,7 @@ var jModel = function () {
 				});
 
     			if ( subscription.initialise ) {
-    				this.context.notifications.send(subscriber({
+    				this.context.notifications.send(subscriber.match({
 						description: 'Initialisation: '+event
 					}));
     			}
@@ -1563,7 +1567,7 @@ var jModel = function () {
 		
 		// Relationship might specify subscription to children							
 		if ( relationship.subscription ) {
-			this.subscription = children.subscribe(copy(relationship.subscription)._add({
+			this.subscription = children.subscribe(copy(relationship.subscription).addProperties({
 				application: true,
 				source: children,
 				target: owner.parent
