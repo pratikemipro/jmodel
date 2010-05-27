@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.3.2
+ *	Emerald Javascript Library v0.4.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.3.2'},opal),
+	var em		= extend({emerald_version:'0.4.0'},opal),
 		_		= em;
 
 
@@ -100,8 +100,8 @@ var emerald = function () {
 		
 		until: function (predicate,inclusive) {
 			var derivedEventType = new EventType(this.registry),
-				active = true,
-				inclusive = typeof inclusive === 'undefined' ? true : inclusive;
+				active = true;
+			inclusive = typeof inclusive === 'undefined' ? true : inclusive;
 		    this.subscribe(function (event) {
 				var last = false;
 		        if ( predicate(event) ) {
@@ -155,10 +155,10 @@ var emerald = function () {
 		    notifications.suspend();
 		    this.subscribe(function () {
 		        derivedEventType.raise.apply(derivedEventType,arguments);
-		    })
+		    });
 		    startEventType.subscribe(function () {
 		        notifications.resume();
-		    })
+		    });
 		    return derivedEventType;
 		},
 		
@@ -187,7 +187,7 @@ var emerald = function () {
 		        args = arrayFromArguments(arguments);
 		        args[0] = fn.apply(null,arguments);
 		        derivedEventType.raise.apply(derivedEventType,args);
-		    })
+		    });
 		    return derivedEventType;
 		}
 		
@@ -221,9 +221,44 @@ var emerald = function () {
 	        eventType.subscribe(function () {
 	            derivedEventType.raise.apply(derivedEventType,arguments);
 	        });
-	    })
+	    });
 	    return derivedEventType;
-	}
+	};
+	
+	em.conjoin = function () {
+	    
+	    var derivedEventType = new EventType(em.registry),
+	        that = this,
+	        buffer = list();    
+	        
+	    set(arrayFromArguments(arguments)).each(function (eventType) {
+	        var queue = buffer.add([]).added;
+	        eventType.subscribe(function () {
+    	        queue.push.apply(queue,arguments);
+	            if ( bufferReady() ) {
+	                sendMessage();
+	            }
+	        });
+	    });
+	    
+	    function bufferReady () {
+            return buffer.reduce(function (full,queue) {
+                return full && queue.length > 0;
+            },true);
+	    }
+	    
+	    function sendMessage () {
+	        derivedEventType.raise.apply(
+	            derivedEventType,
+	            buffer.map(function (queue) {
+	                return queue.shift();
+	            }).get()
+	        );
+	    }
+	    
+	    return derivedEventType;
+	    
+	};
 	
 	
 	//
@@ -242,7 +277,7 @@ var emerald = function () {
     	
     	every: function (interval) {
     	    var derivedEventType = new EventType();
-    	    function raise() { derivedEventType.raise(); };
+    	    function raise() { derivedEventType.raise({}); }
     	    setInterval(raise,interval);
     	    return derivedEventType;
     	}
@@ -295,7 +330,7 @@ var emerald = function () {
 	
 	Subscriber.prototype.match = function (event) {
 		return this.predicate(event) ? new Notification(this.message,arguments) : undefined;
-	}
+	};
 	
 	em.extend({
 		Subscriber: Subscriber
@@ -347,7 +382,7 @@ var emerald = function () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
-				this.each('deliver')
+				this.each('deliver');
 				return this.flush();
 			}
 			else {
@@ -367,12 +402,12 @@ var emerald = function () {
 	
 	function Notification (message,args) {
 		this.message	= message;
-		this.args		= args
+		this.args		= args;
 	}
 	
 	Notification.prototype.deliver = function () {
 		this.message.apply(null,this.args);
-	}
+	};
 	
 	
 	// ------------------------------------------------------------------------
