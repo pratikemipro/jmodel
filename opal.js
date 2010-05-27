@@ -18,7 +18,7 @@ function OPAL () {
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
-			target[i] = object[i];
+	        target[i] = object[i];
 		}
 		return target;
 	}
@@ -1256,11 +1256,11 @@ function OPAL () {
 		
 		constructor: EnhancedObject,
 		
-		add: function _add (attributes) {
+		addProperties: function _add (attributes) {
 			return extend(attributes,this);
 		},
 		
-		remove: function _remove () {
+		removeProperties: function _remove () {
 			var that = this;
 			set(arguments).each(function __remove (key) {
 				delete that[key];
@@ -1275,17 +1275,17 @@ function OPAL () {
 			return this;
 		},
 		
-		set: function _set (key,value) {
+		setProperty: function _set (key,value) {
 			this[key] = value;
 			return this;
 		}
 		
 	};
 	
-	EnhancedObject.prototype._add = EnhancedObject.prototype.add;
-	EnhancedObject.prototype._remove = EnhancedObject.prototype.remove;
-	EnhancedObject.prototype._defaults = EnhancedObject.prototype._efaults;
-	EnhancedObject.prototype._set = EnhancedObject.prototype.set;
+	EnhancedObject.prototype._add = EnhancedObject.prototype.addProperties;
+	EnhancedObject.prototype._remove = EnhancedObject.prototype.removeProperties;
+	EnhancedObject.prototype._defaults = EnhancedObject.prototype.defaults;
+	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments,

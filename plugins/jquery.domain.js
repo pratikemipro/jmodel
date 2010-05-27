@@ -141,7 +141,7 @@ jQuery.fn.subscribe = function (subscription) {
 			jQuery.each(subscription.key,function (index,key) {
 				subscription.source.subscribe(opal.copy(subscription).defaults({
 					description: 'application subscription'
-				})._add({
+				}).addProperties({
 					application: true,
 					target: jQuery(element),
 					key: key
@@ -157,7 +157,7 @@ jQuery.fn.subscribe = function (subscription) {
 				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe(opal.copy(subscription).defaults({
 						description: 'application subscription'
-					})._add({
+					}).addProperties({
 						application: true,
 						target: jQuery(object),
 						key: subscription.bindings[selector]
@@ -174,11 +174,11 @@ jQuery.fn.subscribe = function (subscription) {
 				jQuery(selector,element).each(function (index,object) {
 					subscription.source.subscribe(opal.copy(subscription).defaults({
 						description: 'application subscription'
-					})._add({
+					}).addProperties({
 						application: true,
 						member: opal.copy(subscription.member).defaults({
 							description: 'application subscription'
-						})._add({
+						}).addProperties({
 							application: true,
 							target: jQuery(object),
 							key: subscription.member.bindings[selector]
@@ -194,11 +194,11 @@ jQuery.fn.subscribe = function (subscription) {
 		return this.each(function (index,element) {
 			subscription.source.subscribe(opal.copy(subscription).defaults({
 				description: 'application subscription'
-			})._add({
+			}).addProperties({
 				application: true,
 				member: opal.copy(subscription.member).defaults({
 					description: 'application subscription'
-				}).add({
+				}).addProperties({
 					application: true,
 					target: jQuery(element)
 				})
@@ -211,7 +211,7 @@ jQuery.fn.subscribe = function (subscription) {
 		return this.each(function (index,element) {
 			subscription.source.subscribe(opal.copy(subscription).defaults({
 				description: 'application subscription'
-			})._add({
+			}).addProperties({
 				application: true,
 				target: jQuery(element)
 			}));
@@ -223,8 +223,8 @@ jQuery.fn.subscribe = function (subscription) {
 
 jQuery.fn.pubsub = function (pubsub) {
 	return this
-			.subscribe(opal.copy(pubsub).add({source:pubsub.object}).remove('object'))
-			.publish(opal.copy(pubsub).add({target:pubsub.object}).remove('object'));
+			.subscribe(opal.copy(pubsub).addProperties({source:pubsub.object}).removeProperties('object'))
+			.publish(opal.copy(pubsub).addProperties({target:pubsub.object}).removeProperties('object'));
 };
 
 jQuery.fn.view = function (options) {
