@@ -8,5 +8,9 @@
  */
 
 jQuery.fn.event = function (name) {
-	return emerald.event.from(this,name);
+    var events = [];
+    this.each(function (index,element) {
+        events.push(emerald.event.from(this,name));
+    })
+	return emerald.disjoin.apply(this,events);
 };

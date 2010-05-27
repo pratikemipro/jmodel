@@ -214,6 +214,17 @@ var emerald = function () {
 	
 	em.EventType = EventType;
 	
+	em.disjoin = function () {
+	    var derivedEventType = new EventType(em.registry),
+	        that = this;
+	    set(arrayFromArguments(arguments)).each(function (eventType) {
+	        eventType.subscribe(function () {
+	            derivedEventType.raise.apply(derivedEventType,arguments);
+	        });
+	    })
+	    return derivedEventType;
+	}
+	
 	
 	//
 	// Event generators
