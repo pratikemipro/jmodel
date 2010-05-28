@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.4.0
+ *	Emerald Javascript Library v0.4.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.4.0'},opal),
+	var em		= extend({emerald_version:'0.4.1'},opal),
 		_		= em;
 
 
@@ -33,11 +33,18 @@ var emerald = function () {
 	// ------------------------------------------------------------------------
 
 	function EventRegistry (notifications) {
+		
 		this.notifications	= notifications || new NotificationQueue();
-		this.__delegate		= set().of(EventType).index(Property('name')).delegateFor(this);
+		this.__delegate		= new TypedSet(EventType);
+		
+		this.__delegate
+			.index(Property('name'))
+			.delegateFor(this);
+		
 		if ( arguments.length > 1 ) {
-			this.register.apply(this,arrayFromArguments(arguments).slice(1));
+			this.register.apply(this,Array.prototype.slice.call(arguments,1));
 		}
+		
 	}
 	
 	EventRegistry.prototype = {
