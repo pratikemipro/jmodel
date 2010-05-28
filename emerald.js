@@ -432,10 +432,10 @@ var emerald = function () {
 	
 	
 	// ------------------------------------------------------------------------
-	//														  Subscribable Sets
+	//														  Observable Sets
 	// ------------------------------------------------------------------------
 	
-	function subscribable (proto) {
+	function observable (proto) {
 		
 		return extend({
 			
@@ -472,35 +472,35 @@ var emerald = function () {
 		
 	}
 	
-	function SubscribableSet (notifications) {
+	function ObservableSet (notifications) {
 		Set.apply(this);
-		makeSubscribable.call(this,notifications);
+		makeObservable.call(this,notifications);
 	}
 	
-	SubscribableSet.prototype = subscribable(Set.prototype);
+	ObservableSet.prototype = observable(Set.prototype);
 	
-	function SubscribableTypedSet (constructor,notifications) {
+	function ObservableTypedSet (constructor,notifications) {
 		TypedSet.call(this,constructor);
-		makeSubscribable.call(this,notifications);
+		makeObservable.call(this,notifications);
 	}
-	SubscribableTypedSet.prototype = subscribable(TypedSet.prototype);
+	ObservableTypedSet.prototype = observable(TypedSet.prototype);
 	
-	function makeSubscribable (notifications) {
+	function makeObservable (notifications) {
 		notifications = notifications || new NotificationQueue();
 		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort');
 		this.event	= delegateTo(this.events,'filter');
 		return this;
 	}
 	
-	em.SubscribableSet = SubscribableSet;
-	em.SubscribableTypedSet = SubscribableTypedSet;
+	em.ObservableSet = ObservableSet;
+	em.ObservableTypedSet = ObservableTypedSet;
 	
-	em.plugin.set.asSubscribable = function (notifications) {
-		return this.reduce(Method('add'),new SubscribableSet(notifications));
+	em.plugin.set.asObservable = function (notifications) {
+		return this.reduce(Method('add'),new ObservableSet(notifications));
 	};
 	
-	em.plugin.typedset.asSubscribable = function (notifications) {
-		return this.reduce(Method('add'),new SubscribableTypedSet(this.__constructor,notifications));
+	em.plugin.typedset.asObservable = function (notifications) {
+		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor,notifications));
 	};
 	
 	
