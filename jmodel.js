@@ -552,14 +552,20 @@ var jModel = function () {
 				that.remove(event.object);
 			});
 		    
-		    object.event('_any').map('object').subscribe(function _change (object) {
-				that.__delegate.sorted = false;
-				that.event('change').raise({
-					method: 'change',
-					object: object,
-					description: 'object change'
-				});  
-			});
+		    // If an object is changed we must assume that the collection becomes unsorted
+		    object.event('change').subscribe(function () {
+		        that.__delegate.sorted = false;
+		    });
+		    
+		    // Object changes are republished as collection changes
+		    object.event('change').map(function (event) {
+		        return {
+		            method: 'change',
+		            object: event.object,
+		            key: event.key,
+		            description: 'object change'
+		        };
+		    }).republish(that.event('change'))
 		    
 /*			object.subscribe({
 				target: this,
@@ -1091,7 +1097,7 @@ var jModel = function () {
 		this.entitytype = entitytype;
 		this.context	= entitytype.context;
 		
-		this.events	= new EventRegistry(this.context.notifications,'_any','removed','deleted');
+		this.events	= new EventRegistry(this.context.notifications,'change','removed','deleted');
 		this.event	= delegateTo(this.events,'filter');
 		
 		var fields			= new FieldSet(this,this.events),
@@ -1165,10 +1171,6 @@ var jModel = function () {
 				for ( key in mappings ) {
 					this.set(key,mappings[key],false);
 				}
-/*				this.event('_any').raise({
-					key: ':any',
-					description: 'field value change: any'
-				}); */
 			}
 			
 		}, function _set () {
@@ -1179,11 +1181,6 @@ var jModel = function () {
 				key = arguments[0];
 				var value = arguments[1];
 /*				if ( */this.fields().set(key,value,arguments.callee.caller);/* && ( arguments.length == 2 || arguments[2] ) ) {
-				    console.log('Raising _any');
-					this.event('_any').raise({
-						key: ':any',
-						description: 'field value change: any'
-					}); 
 				} */
 			}
 			else if ( arguments.length == 1 && typeof arguments[0] == 'object' ) { // Argument is an object containing mappings
@@ -1222,7 +1219,7 @@ var jModel = function () {
     				message	= external.notification.RemovalNotification(subscription);
     			}
 				else {
-					event = ( subscription.key == ':any' || !subscription.key ) ? '_any' : subscription.key;
+					event = ( subscription.key == ':any' || !subscription.key ) ? 'change' : subscription.key;
 					if ( subscription.change && typeof subscription.change == 'string' ) {
 	    				message	= external.notification.EventNotification(subscription);
 	    			}
@@ -1283,7 +1280,7 @@ var jModel = function () {
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 				this.events.register(descriptor.accessor);
 			    this.event(descriptor.accessor).subscribe(function (event) {
-			        that.event('_any').raise({object:that.parent});
+			        that.event('change').raise({object:that.parent,key:event.key});
 			    });
 			}
 			return this;
