@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.2
+ *	jModel Javascript Library v0.6.3
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.2';
+	external.jmodel_version = '0.6.3';
 
 	//
 	// Import Emerald
@@ -286,6 +286,8 @@ var jModel = function () {
 		this.name			= name;
 		this.constructor	= constructor;
 		this.context		= context;
+		
+		this.nextKey        = -1;
 
 		this.objects =	this.collection({
 		                    entitytype:     this,
@@ -388,7 +390,7 @@ var jModel = function () {
 		},
 		
 		generateID: function __generateID () {	
-			return -(this.context.all.count()+1);
+			return this.nextKey--;
 		},
 		
 		collection: function _collection (specification) {
