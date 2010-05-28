@@ -103,12 +103,9 @@
     });
     
     
-    schemaContext.Schemas().event('add').subscribe(function (event) {
-        var schema = event.object;
-        schema.EntityTypes().event('add').subscribe(function (event) {
-            var entityType = event.object;
-            entityType.DerivedTypes().event('add').subscribe(function (event) {
-                var derivedType = event.object;
+    schemaContext.Schemas().event('add').map('object').subscribe(function (schema) {
+        schema.EntityTypes().event('add').map('object').subscribe(function (entityType) {
+            entityType.DerivedTypes().event('add').map('object').subscribe(function (derivedType) {
                 derivedType.addBaseType(entityType);
                 schema.addEntityType(derivedType);
             });
@@ -123,9 +120,8 @@
                 Namespace: namespace
             });
         
-        schema.EntityTypes().event('add').subscribe(function (event) {
-    	    var entitytype = event.object,
-    	        cons = entitytype.BaseType() ? applicationContext.entities.get(entitytype.BaseType().Name()).constructor : _.Base;
+        schema.EntityTypes().event('add').map('object').subscribe(function (entitytype) {
+    	    var cons = entitytype.BaseType() ? applicationContext.entities.get(entitytype.BaseType().Name()).constructor : _.Base;
     	    applicationContext.register(
     	        entitytype.Name(),
     	        cons.extend({ has:[], hasOne:[], hasMany:[] }),
@@ -137,21 +133,17 @@
     	    );
     	});
 
-    	applicationContext.entities.event('add').subscribe(function (event) {
-
-    	    var entitytype = event.object;
-
-    	    schema.EntityTypes(entitytype.name).Properties().event('add').subscribe(function (event) {
-    	        var property = event.object;
+    	applicationContext.entities.event('add').map('object').subscribe(function (entitytype) {
+    	    
+    	    schema.EntityTypes(entitytype.name).Properties().event('add').map('object').subscribe(function (property) {
     	        entitytype.addProperty({
     	            accessor: property.Name()
     	        });
     	    });
 
-    	    schema.EntityTypes(entitytype.name).Relationships().event('add').subscribe(function (event) { 
+    	    schema.EntityTypes(entitytype.name).Relationships().event('add').map('object').subscribe(function (relationship) { 
     	        
-    	        var relationship = event.object,
-    	            specification = {
+    	        var specification = {
     	                accessor: relationship.Name(),
     	                singular: relationship.Singular(),
     	                plural: relationship.Plural(),
