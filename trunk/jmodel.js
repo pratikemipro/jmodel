@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.8
+ *	jModel Javascript Library v0.6.9
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.8';
+	external.jmodel_version = '0.6.9';
 
 	//
 	// Import Emerald
@@ -1276,12 +1276,8 @@ var jModel = function () {
 			    that = this;
 			    
 			for ( var i in fields ) {
-			    
-				var descriptor  = fields[i],
-					field		= this.fields().add(new Field(descriptor,this.events)).added;
-					
-				this.parent[descriptor.accessor]	= delegateTo(field,'get');
-				this.parent['set'+field.accessor]	= delegateTo(field,'set');
+				
+				var descriptor = fields[i];
 				
 				this.events.register(descriptor.accessor);
 				this.event(descriptor.accessor).map(function (event) {
@@ -1290,6 +1286,11 @@ var jModel = function () {
 				        key: event.key
 				    };
 				}).republish(that.event('change'));
+			    
+				var field = this.fields().add(new Field(descriptor,this.events)).added;
+					
+				this.parent[descriptor.accessor]	= delegateTo(field,'get');
+				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 				
 			}
 			
@@ -1413,9 +1414,9 @@ var jModel = function () {
 			}
 		},
 		
-		set: function _set (name,value,publisher) {
+		set: function _set (name,value) {
 			try {
-				return this.__delegate.get(name).set(value,publisher);
+				return this.__delegate.get(name).set(value);
 			}
 			catch (e) {
 				return null;
@@ -1442,40 +1443,37 @@ var jModel = function () {
 		this.__delegate		= field.defaultValue || null;
 		this.predicate		= field.validation ? field.validation.predicate || AllPredicate : AllPredicate;
 		this.message		= ( field.validation && field.validation.message ) ? field.validation.message : '';
-		this.events			= events;
-		this.event			= delegateTo(this.events,'filter');
 		this.accessor		= field.accessor;
+		this.event			= events.filter(this.accessor);
 	}
 	
 	Field.prototype = {
 		
 		constructor: Field,
 	
-		set: extend({
+		set: function (value) {
 			
-			valid: function (value,publisher) {
+			if ( this.predicate(value) ) {
+				
 				this.__delegate = value;
-				this.event(this.accessor).raise({
+				this.event.raise({
 					key: this.accessor,
 					description:'field value change: '+this.accessor
 				});
-				if ( publisher && publisher.success ) {
-					publisher.success();
-				}
 				return true;
-			},
-			
-			invalid: function (value,publisher) {
-				if ( publisher && publisher.failure ) {
-					publisher.failure(message);
-				}
+				
+			}
+			else {
+				
+				this.event.fail({
+					key: this.accessor,
+					description:'field value change failure: '+this.accessor
+				});
 				return false;
+				
 			}
 			
-		}, function _set (value,publisher) {
-			return this.predicate(value) ? this.set.valid.apply(this,arguments)
-				   : this.set.invalid.apply(this,arguments);
-		}),
+		},
 	
 		get: function _get () {
 			return this.__delegate;
