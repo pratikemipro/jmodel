@@ -565,7 +565,7 @@ var jModel = function () {
 		            key: event.key,
 		            description: 'object change for '+that.description+' collection change'
 		        };
-		    }).republish(that.event('change'))
+		    }).republish(that.event('change'));
 
 		});
 		
@@ -1607,6 +1607,10 @@ var jModel = function () {
 		
 		var related = RelationshipPredicate(relationship.owner,foreignKey);
 
+        //
+        // Handle addition to and removal from range
+        //
+
         // Adding an object to a relationship's range might add the object to the relationship
         range.event('add').map('object').where(related).subscribe(function (object) {
             relationship.add(object);
@@ -1616,35 +1620,41 @@ var jModel = function () {
 		range.event('remove').map('object').subscribe(function (object) {
 		    relationship.remove(object);
 		});
-
-		range.event('add').map('object').subscribe(function (possible) {
-
-			// Changing the foreign key value of an object in the range
-			// might add the object to the relationship or remove it
-		    possible.event(foreignKey).subscribe(function (event) {
-		        if ( related(possible) ) {
-		            relationship.add(possible);
-		        }
-		        else {
-		            relationship.remove(possible);
-		        }
-		    });
-
-		});
 		
-		// If an object is added directly to the relationship
-		// we need to make sure its foreign key is correct
+		//
+		// Handle foreign key changes
+		//
+		
+		foreignKeyChange = range.event('change').where(eq(foreignKey,'key')).map('object');
+
+        // Changed foreign key might add object to relationship
+        foreignKeyChange.where(related).subscribe(function (object) {
+            relationship.add(object);
+        });
+        
+        // Changed foreign key might remove object from relationship
+        foreignKeyChange.where(not(related)).subscribe(function (object) {
+            relationship.remove(object);
+        });
+		
+		//
+		// Handle direct manipulation of relationship collection
+		//
+		
+		// Make sure foreign keys are correct after addition
 		relationship.event('add').map('object').where(not(related)).subscribe(function (added) {
 		    added.set(foreignKey,relationship.owner.primaryKeyValue());
 		});
 		
-		// If an object is removed directly from the relationship
-		// we must clear its foreign key
+		// Make sure foreign keys are correct after removal
 		relationship.event('remove').map('object').subscribe(function (object) {
 			object.set(foreignKey,null);
 		});
 		
+		//
 		// Initialise the members of the relationship
+		//
+		
 		range.reduce(add(related),relationship);
 		
 	}
