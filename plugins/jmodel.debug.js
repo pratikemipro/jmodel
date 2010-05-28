@@ -335,7 +335,7 @@
 			this.entities.each(function __debug (entity) {
 				log().startGroup(entity.name);
 				entity.objects.debug(showSubscribers);
-//				entity.deleted.debug(false); // NOTE: Fix this
+				entity.deleted.debug(false);
 				log().endGroup();
 			});
 			log().endGroup();
