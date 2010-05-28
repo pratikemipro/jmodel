@@ -168,7 +168,8 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function ContextSet () {
-		set().of(Context).asSubscribable()
+		
+		set().of(Context).asObservable()
 			.index(Property('name'))
 			.delegateFor(this);
 	}
@@ -255,7 +256,7 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		this.context = context;
-		set().of(EntityType).asSubscribable().index(Property('name')).delegateFor(this);
+		set().of(EntityType).asObservable().index(Property('name')).delegateFor(this);
 	}
 	
 	EntityTypeSet.prototype = {
@@ -503,12 +504,12 @@ var jModel = function () {
 		
 		if ( this.entitytype ) {
 		    this.context                = this.entitytype.context || contexts('default');
-		    this.__delegate             = new SubscribableTypedSet(this.entitytype,this.context.notifications);
+		    this.__delegate             = new ObservableTypedSet(this.entitytype,this.context.notifications);
     		this.__delegate.__construct = _.delegateTo(this.entitytype,'create');
 		}
 		else {
 		    this.context    = specification.context || contexts('default');
-		    this.__delegate = new SubscribableTypedSet(undefined,this.context.notifications);
+		    this.__delegate = new ObservableTypedSet(undefined,this.context.notifications);
 		}
 		this.__delegate.delegateFor(this);
 		
