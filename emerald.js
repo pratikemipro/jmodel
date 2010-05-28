@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.2
+ *	Emerald Javascript Library v0.5.3
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.2'},opal),
+	var em		= extend({emerald_version:'0.5.3'},opal),
 		_		= em;
 
 
@@ -423,14 +423,12 @@ var emerald = function () {
 		},
 		
 		suspend: function _suspend () {
-//			log('notifications/control').debug('Suspending notifications for '+this.context.name);
 			this.__suspensions++;
 			this.__process = this.__store;
 			return this;
 		},
 
 		resume: function _resume () {
-//			log('notifications/control').debug('resuming notifications for '+this.context.name);
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
 				this.__process = this.__deliver;
