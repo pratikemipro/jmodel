@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.1
+ *	Emerald Javascript Library v0.5.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.1'},opal),
+	var em		= extend({emerald_version:'0.5.2'},opal),
 		_		= em;
 
 
@@ -95,8 +95,8 @@ var emerald = function () {
 			this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
-		error: function _error () {
-			this.subscribers().error.apply(this.subscribers(),arguments);
+		fail: function _error () {
+			this.subscribers().fail.apply(this.subscribers(),arguments);
 		},
 		
 		where: function (predicate) {
@@ -338,10 +338,10 @@ var emerald = function () {
 			});
 		},
 		
-		error: function _error (event) {
+		fail: function _error (event) {
 			var args = arguments;
 			this.each(function (subscriber) {
-				subscriber.error.apply(subscriber,args);
+				subscriber.fail.apply(subscriber,args);
 			});
 		}
 		
@@ -366,7 +366,7 @@ var emerald = function () {
 			}
 		},
 		
-		error: function (event) {
+		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
 				this.notifications.send(new Notification(this.error,arguments))
 			}
