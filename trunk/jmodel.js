@@ -192,10 +192,9 @@ var jModel = function () {
 		// Adding a new object of a type in the context should add to the context's
 		// collection of all objects
 		var context = this;
-		this.entities.event('add').subscribe(function (event) {
-		    var entitytype = event.object;
-		    entitytype.objects.event('add').subscribe(function (event) {
-		        context.all.add(event.object);
+		this.entities.event('add').map('object').subscribe(function (entitytype) {
+		    entitytype.objects.event('add').map('object').subscribe(function (object) {
+		        context.all.add(object);
 		    });
 		});
 		
@@ -299,8 +298,8 @@ var jModel = function () {
 		
 		var base = this.options.parent ? this.context.entity(this.options.parent).objects : null;
 		if ( base ) {
-		    this.objects.event('add').subscribe(function (event) {
-		        base.add(event.object);
+		    this.objects.event('add').map('object').subscribe(function (object) {
+		        base.add(object);
 		    });
 		}					
 							
@@ -317,8 +316,7 @@ var jModel = function () {
 			that.deleted.remove(AllPredicate,true);
 		});
 		
-		this.objects.event('remove').subscribe(function (event) {
-			var removed = event.object;
+		this.objects.event('remove').map('object').subscribe(function (removed) {
 			removed.event('deleted').raise({object:removed});
 			removed.events.each(function (event) {
 		        event.subscribers().remove(AllPredicate);
@@ -545,9 +543,7 @@ var jModel = function () {
 		}
 		
 		// We need to observe objects added to the collection
-		this.event('add').subscribe(function (event) {
-			
-			var object = event.object;
+		this.event('add').map('object').subscribe(function (object) {
 			
 		    that.__delegate.sorted = false;
 		
@@ -556,8 +552,7 @@ var jModel = function () {
 				that.remove(event.object);
 			});
 		    
-		    object.event('_any').subscribe(function _change (event) {
-		        var object = event.object;
+		    object.event('_any').map('object').subscribe(function _change (object) {
 				that.__delegate.sorted = false;
 				that.event('change').raise({
 					method: 'change',
@@ -857,9 +852,9 @@ var jModel = function () {
 //			}
 		};
 		
-		collection.event('remove').subscribe(function (event) {
+		collection.event('remove').map('object').subscribe(function (object) {
 //			console.log(event.object);
-			deleted.add(event.object);
+			deleted.add(object);
 		});
 		
 		return deleted;
@@ -1601,9 +1596,7 @@ var jModel = function () {
 		
 		var predicate = RelationshipPredicate(relationship.owner,foreignKey);
 
-		range.event('add').subscribe(function (event) {
-
-		    var possible = event.object;
+		range.event('add').map('object').subscribe(function (possible) {
 
 			// Adding an object to a relationship's range might add the
 			// object to the relationship
@@ -1626,23 +1619,20 @@ var jModel = function () {
 		
 		// Removing an object from the range will remove the object
 		// from the relationship
-		range.event('remove').subscribe(function (event) {
-		    relationship.remove(event.object);
+		range.event('remove').map('object').subscribe(function (object) {
+		    relationship.remove(object);
 		});
 		
 		// If an object is added directly to the relationship
 		// we need to make sure its foreign key is correct
-		relationship.event('add').subscribe(function (event) {
-			var added = event.object;
-			if ( !predicate(added) ) {
-				added.set(foreignKey,relationship.owner.primaryKeyValue());
-			}
+		relationship.event('add').map('object').where(not(predicate)).subscribe(function (added) {
+		    added.set(foreignKey,relationship.owner.primaryKeyValue());
 		});
 		
 		// If an object is removed directly from the relationship
 		// we must clear its foreign key
-		relationship.event('remove').subscribe(function (event) {
-			event.object.set(foreignKey,null);
+		relationship.event('remove').map('object').subscribe(function (object) {
+			object.set(foreignKey,null);
 		});
 		
 		// Initialise the members of the relationship
