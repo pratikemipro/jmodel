@@ -183,6 +183,7 @@ var emerald = function () {
 		
 		map: function (fn) {
 		    var derivedEventType = new EventType(this.registry);
+		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function (event) {
 		        args = arrayFromArguments(arguments);
 		        args[0] = fn.apply(null,arguments);
