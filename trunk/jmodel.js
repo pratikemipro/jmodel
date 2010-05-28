@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.6
+ *	jModel Javascript Library v0.6.7
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.6';
+	external.jmodel_version = '0.6.7';
 
 	//
 	// Import Emerald
@@ -1489,9 +1489,16 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		this.__delegate = set().of(Relationship).delegateFor(this);
-		this.constraint = Or( InstancePredicate(OneToOneRelationship), InstancePredicate(OneToManyRelationship) );
-		return this.index(Property('name'));
+		
+		this.constraint =	Or(	InstancePredicate(OneToOneRelationship), 
+								InstancePredicate(OneToManyRelationship) );
+		
+		this.__delegate = new TypedSet(Relationship);
+		
+		this.__delegate
+			.index(Property('name'))
+			.delegateFor(this);
+
 	}
 	
 	RelationshipSet.prototype = {
