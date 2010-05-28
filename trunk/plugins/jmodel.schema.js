@@ -72,7 +72,8 @@
 
         has:    [  
                     {	accessor: 'Name',		defaultValue: ''	        },
-                    {   accessor: 'Type',       defaultValue: 'Edm.Int32'   }
+                    {   accessor: 'Type',       defaultValue: 'Edm.Int32'   },
+                    {   accessor: 'Nullable',   defaultValue: true          }
                 ]
 
     }), {
