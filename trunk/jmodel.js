@@ -388,8 +388,7 @@ var jModel = function () {
 		},
 		
 		generateID: function __generateID () {	
-		    this.nextKey--;
-			return this.nextKey;
+			return this.nextKey--;
 		},
 		
 		collection: function _collection (specification) {
@@ -1596,10 +1595,10 @@ var jModel = function () {
 	
 	function ReferentialConstraint (relationship,range,foreignKey) {
 		
-		var predicate = RelationshipPredicate(relationship.owner,foreignKey);
+		var related = RelationshipPredicate(relationship.owner,foreignKey);
 
         // Adding an object to a relationship's range might add the object to the relationship
-        range.event('add').map('object').where(predicate).subscribe(function (object) {
+        range.event('add').map('object').where(related).subscribe(function (object) {
             relationship.add(object);
         });
 
@@ -1613,7 +1612,7 @@ var jModel = function () {
 			// Changing the foreign key value of an object in the range
 			// might add the object to the relationship or remove it
 		    possible.event(foreignKey).subscribe(function (event) {
-		        if ( predicate(possible) ) {
+		        if ( related(possible) ) {
 		            relationship.add(possible);
 		        }
 		        else {
@@ -1625,7 +1624,7 @@ var jModel = function () {
 		
 		// If an object is added directly to the relationship
 		// we need to make sure its foreign key is correct
-		relationship.event('add').map('object').where(not(predicate)).subscribe(function (added) {
+		relationship.event('add').map('object').where(not(related)).subscribe(function (added) {
 		    added.set(foreignKey,relationship.owner.primaryKeyValue());
 		});
 		
@@ -1636,7 +1635,7 @@ var jModel = function () {
 		});
 		
 		// Initialise the members of the relationship
-		range.reduce(add(predicate),relationship);
+		range.reduce(add(related),relationship);
 		
 	}
 	
