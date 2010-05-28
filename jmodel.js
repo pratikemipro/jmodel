@@ -1265,9 +1265,12 @@ var jModel = function () {
 				this.parent[descriptor.accessor]	= delegateTo(field,'get');
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
 				this.events.register(descriptor.accessor);
-			    this.event(descriptor.accessor).subscribe(function (event) {
-			        that.event('change').raise({object:that.parent,key:event.key});
-			    });
+				this.event(descriptor.accessor).map(function (event) {
+				    return {
+				        object: that.parent,
+				        key: event.key
+				    };
+				}).republish(that.event('change'));
 			}
 			return this;
 		},
