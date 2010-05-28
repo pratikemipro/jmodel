@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.5
+ *	jModel Javascript Library v0.6.6
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.5';
+	external.jmodel_version = '0.6.6';
 
 	//
 	// Import Emerald
@@ -1389,8 +1389,15 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function FieldSet (object,events) {	
-		this.__delegate	= set().of(Field).index(Property('accessor')).delegateFor(this);
+		
+		this.__delegate = new TypedSet(Field);
+		
+		this.__delegate
+			.index(Property('accessor'))
+			.delegateFor(this);
+
 		this.getField	= delegateTo(this.__delegate,'get');
+
 	}
 	
 	FieldSet.prototype = {
