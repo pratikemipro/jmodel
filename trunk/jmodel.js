@@ -1257,13 +1257,18 @@ var jModel = function () {
 		},
 		
 		reifyFields: function _reifyFields () {
+		    
 			var fields = this.entitytype.options.has || this.parent.has || [],
 			    that = this;
+			    
 			for ( var i in fields ) {
+			    
 				var descriptor  = fields[i],
 					field		= this.fields().add(new Field(descriptor,this.events)).added;
+					
 				this.parent[descriptor.accessor]	= delegateTo(field,'get');
 				this.parent['set'+field.accessor]	= delegateTo(field,'set');
+				
 				this.events.register(descriptor.accessor);
 				this.event(descriptor.accessor).map(function (event) {
 				    return {
@@ -1271,48 +1276,67 @@ var jModel = function () {
 				        key: event.key
 				    };
 				}).republish(that.event('change'));
+				
 			}
+			
 			return this;
+			
 		},
 		
 		reifyOneToOneRelationships: function _reifyOneToOneRelationships () {
+		    
 			var oneToOnes = this.entitytype.options.hasOne || this.parent.hasOne || [];
+			
 			for ( var i in oneToOnes ) {
-				var descriptor = oneToOnes[i];
-				var relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
+				var descriptor = oneToOnes[i],
+				    relationship = this.relationships().add(new OneToOneRelationship(this,descriptor)).added;
 				this.parent[descriptor.accessor]				= delegateTo(relationship,'get');
 				this.parent['add'+descriptor.accessor]			= delegateTo(relationship,'add');
 			}
+			
 			return this;
+			
 		},
 		
 		reifyOneToManyRelationships: function _reifyOneToManyRelationships() {
+		    
 			var oneToManys = this.entitytype.options.hasMany || this.parent.hasMany || [];
+			
 			for ( var i in oneToManys ) {
-				var descriptor = oneToManys[i];
-				var relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
+			    
+				var descriptor = oneToManys[i],
+				    relationship = this.relationships().add(new OneToManyRelationship(this,descriptor)).added;
+				
 				this.parent[(descriptor.singular || descriptor.accessor)]           = delegateTo(relationship,'filter');
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	    = delegateTo(relationship,'filter');
+				
 				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= function (relationship) {
 				    return function (data) {
 				        return relationship.add(data||{}).added;
 				    };
 				}(relationship); 
+				
 				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'remove');
 				this.parent['debug'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'debug');
+				
 			}
+			
 			return this;
 
 		},
 		
 		reifyConstraints: function _reifyConstraints () {
+		    
 			var constraints = this.entitytype.options.must || this.parent.must || [];
+			
 			for (var i in constraints ) {
 				descriptor = constraints[i];
 				descriptor.predicate.message = descriptor.message;
 				this.constraints().add(descriptor.predicate);
 			}
+			
 			return this;
+			
 		},
 		
 		clean: function _clean () {
