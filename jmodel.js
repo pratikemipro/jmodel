@@ -563,23 +563,9 @@ var jModel = function () {
 		            method: 'change',
 		            object: event.object,
 		            key: event.key,
-		            description: 'object change'
+		            description: 'object change for '+that.description+' collection change'
 		        };
 		    }).republish(that.event('change'))
-		    
-/*			object.subscribe({
-				target: this,
-				key: ':any',
-				change: function _change (object) {
-					that.__delegate.sorted = false;
-					that.event('change').raise({
-						method: 'change',
-						object: object,
-						description: 'object change'
-					});  
-				},
-				description: 'object change for '+that.description+' collection change'
-			}); */
 
 		});
 		
