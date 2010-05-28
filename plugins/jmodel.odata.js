@@ -42,7 +42,8 @@ jModel.plugin.context.fromService = function (url, callback) {
     	        $('Property',entitytypeData).each(function (index,propertyData) {
     	            entitytype.addProperty({
     	                Name: $(propertyData).attr('Name'),
-    	                Type: $(propertyData).attr('Type')
+    	                Type: $(propertyData).attr('Type'),
+    	                Nullable: $(propertyData).attr('Nullable')
     	            });
     	        });
     	        
