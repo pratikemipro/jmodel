@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.0
+ *	Emerald Javascript Library v0.5.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.0'},opal),
+	var em		= extend({emerald_version:'0.5.1'},opal),
 		_		= em;
 
 
@@ -390,6 +390,7 @@ var emerald = function () {
 
 		this.context		= context;
 		this.__suspensions	= 0;
+		this.__process		= this.__deliver;
 		this.application    = application;
 
 	}
@@ -401,24 +402,30 @@ var emerald = function () {
 							: new List([messages]);
 			var that = this;
 			messages.each(function __send (message) {
-			    if ( message instanceof Notification ) {
-    				if ( that.__suspensions === 0 || ( message.subscription && !message.subscription.application ) ) {
-    					message.deliver();
-    				}
-    				else {
-    //					console.log('Adding to queue');
-    //					log('notifications/send').debug('Adding a notification to the queue');
-    					that.add(message);
-    //					console.log(notifications.count()+' messages on queue');
-    				}
-			    }
+   				that.__process(message);
 			});
+			return this;
+		},
+		
+		__deliver: function (message) {
+			message.deliver();
+			return this;
+		},
+		
+		__store: function (message) {
+			if ( message.subscription && !message.subscription.application ) {
+				this.deliver(message);
+			}
+			else {
+				this.add(message);
+			}
 			return this;
 		},
 		
 		suspend: function _suspend () {
 //			log('notifications/control').debug('Suspending notifications for '+this.context.name);
 			this.__suspensions++;
+			this.__process = this.__store;
 			return this;
 		},
 
@@ -426,6 +433,7 @@ var emerald = function () {
 //			log('notifications/control').debug('resuming notifications for '+this.context.name);
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
+				this.__process = this.__deliver;
 				this.each('deliver');
 				return this.flush();
 			}
