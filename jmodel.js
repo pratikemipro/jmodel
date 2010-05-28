@@ -388,7 +388,8 @@ var jModel = function () {
 		},
 		
 		generateID: function __generateID () {	
-			return this.nextKey--;
+		    this.nextKey--;
+			return this.nextKey;
 		},
 		
 		collection: function _collection (specification) {
@@ -798,14 +799,15 @@ var jModel = function () {
 		},
 		
 		ordering: function _ordering () {
+		    var i;
 			if ( arguments.length > 1 ) {
-				for ( var i=0; i<arguments.length; i++ ) {
+				for ( i=0; i<arguments.length; i++ ) {
 					arguments[i] = _ordering(arguments[i]);
 				}
 				return CompositeOrdering.apply(null,arguments);
 			}
 			else if ( arguments[0] instanceof Array ) {
-				for ( var i=0; i<arguments[0].length; i++ ) {
+				for ( i=0; i<arguments[0].length; i++ ) {
 					arguments[0][i] = _ordering(arguments[0][i]);
 				}
 				return CompositeOrdering(arguments[0]);
@@ -1596,13 +1598,17 @@ var jModel = function () {
 		
 		var predicate = RelationshipPredicate(relationship.owner,foreignKey);
 
-		range.event('add').map('object').subscribe(function (possible) {
+        // Adding an object to a relationship's range might add the object to the relationship
+        range.event('add').map('object').where(predicate).subscribe(function (object) {
+            relationship.add(object);
+        });
 
-			// Adding an object to a relationship's range might add the
-			// object to the relationship
-			if ( predicate(possible) ) {
-		    	relationship.add(possible);
-		  	}
+        // Removing an object from the range will remove the object from the relationship
+		range.event('remove').map('object').subscribe(function (object) {
+		    relationship.remove(object);
+		});
+
+		range.event('add').map('object').subscribe(function (possible) {
 
 			// Changing the foreign key value of an object in the range
 			// might add the object to the relationship or remove it
@@ -1615,12 +1621,6 @@ var jModel = function () {
 		        }
 		    });
 
-		});
-		
-		// Removing an object from the range will remove the object
-		// from the relationship
-		range.event('remove').map('object').subscribe(function (object) {
-		    relationship.remove(object);
 		});
 		
 		// If an object is added directly to the relationship
