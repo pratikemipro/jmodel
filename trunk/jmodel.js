@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.4
+ *	jModel Javascript Library v0.6.5
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.4';
+	external.jmodel_version = '0.6.5';
 
 	//
 	// Import Emerald
@@ -258,8 +258,15 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function EntityTypeSet (context) {
+		
 		this.context = context;
-		set().of(EntityType).asObservable().index(Property('name')).delegateFor(this);
+		
+		this.__delegate = new ObservableTypedSet(EntityType,context.notifications);
+		
+		this.__delegate
+			.index(Property('name'))
+			.delegateFor(this);
+
 	}
 	
 	EntityTypeSet.prototype = {
