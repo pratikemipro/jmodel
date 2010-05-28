@@ -516,6 +516,7 @@ var jModel = function () {
 		this.__base			= specification.base;
 		this.__ordering		= specification.ordering;
 		this.description	= specification.description;
+		this.__removeOnDelete = (typeof specification.removeOnDelete === 'undefined') ? false : specification.removeOnDelete; 
 								
 		if ( specification.objects ) {
 		    specification.objects = specification.objects instanceof Array ? set(specification.objects) : specification.objects;
@@ -548,10 +549,12 @@ var jModel = function () {
 		    that.__delegate.sorted = false;
 		
 			// If the object is deleted we should remove it from the collection
-			object.event('deleted').subscribe(function (event) {
-				that.remove(event.object);
-			});
-		    
+			if ( that.__removeOnDelete ) {
+			    object.event('deleted').subscribe(function (event) {
+    				that.remove(event.object);
+    			});
+			}
+
 		    // If an object is changed we must assume that the collection becomes unsorted
 		    object.event('change').subscribe(function () {
 		        that.__delegate.sorted = false;
@@ -836,13 +839,13 @@ var jModel = function () {
 	
 	function DeletedObjectsCollection (collection) {
 		
-		var deleted = collection.entitytype.collection({description:'deleted'});
+		var deleted = collection.entitytype.collection({description:'deleted',removeOnDelete:false});
 		
 		deleted.debug = function _debug () {
-//			if ( Not(EmptySetPredicate)(deleted) ) {
-//				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
+			if ( Not(EmptySetPredicate)(deleted) ) {
+				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
 //				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
-//			}
+			}
 		};
 		
 		collection.event('remove').map('object').subscribe(function (object) {
@@ -1101,7 +1104,7 @@ var jModel = function () {
 			.set(data)
 			.reifyOneToOneRelationships()
 			.reifyOneToManyRelationships()
-			.reifyConstraints();		
+			.reifyConstraints();
 
 	}
 	
