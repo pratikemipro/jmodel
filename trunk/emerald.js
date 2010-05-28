@@ -190,6 +190,13 @@ var emerald = function () {
 		        derivedEventType.raise.apply(derivedEventType,args);
 		    });
 		    return derivedEventType;
+		},
+		
+		republish: function (republishedEventType) {
+		    this.subscribe(function () {
+	            republishedEventType.raise.apply(republishedEventType,arguments);
+	        });
+		    return this;
 		}
 		
 	};
