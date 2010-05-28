@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.4.3
+ *	Emerald Javascript Library v0.5.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.4.3'},opal),
+	var em		= extend({emerald_version:'0.5.0'},opal),
 		_		= em;
 
 
@@ -93,6 +93,10 @@ var emerald = function () {
 	
 		raise: function _raise () {
 			this.subscribers().notify.apply(this.subscribers(),arguments);
+		},
+		
+		error: function _error () {
+			this.subscribers().error.apply(this.subscribers(),arguments);
 		},
 		
 		where: function (predicate) {
@@ -323,17 +327,22 @@ var emerald = function () {
 			return this.__delegate.add.apply(this,arguments);
 		},
 		
-		__construct: function (specification) {
-			return new Subscriber(specification);
+		__construct: function (specification,notifications) {
+			return new Subscriber(specification,notifications || this.notifications);
 		},
 		
 		notify: function _notify (event) {
 			var args = arguments;
-			this.notifications.send(
-			    this.map(function (subscriber) {
-				    return subscriber.match.apply(subscriber,args);
-			    })
-			);
+			this.each(function (subscriber) {
+				subscriber.notify.apply(subscriber,args);
+			});
+		},
+		
+		error: function _error (event) {
+			var args = arguments;
+			this.each(function (subscriber) {
+				subscriber.error.apply(subscriber,args);
+			});
 		}
 		
 	};
@@ -341,14 +350,28 @@ var emerald = function () {
 	em.SubscriberSet = SubscriberSet;
 	
 	
-	function Subscriber (subscription) {
+	function Subscriber (subscription,notifications) {
 		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
+		this.notifications 	= notifications;
 		this.predicate		= subscription.predicate || AllPredicate;
 		this.message		= this.subscription.message;
+		this.error 			= this.subscription.error;
 	}
 	
-	Subscriber.prototype.match = function (event) {
-		return this.predicate(event) ? new Notification(this.message,arguments) : undefined;
+	Subscriber.prototype = {
+		
+		notify: function (event) {
+			if ( this.predicate(event) ) {
+				this.notifications.send(new Notification(this.message,arguments));
+			}
+		},
+		
+		error: function (event) {
+			if ( this.error && this.predicate(event) ) {
+				this.notifications.send(new Notification(this.error,arguments))
+			}
+		}
+		
 	};
 	
 	em.extend({

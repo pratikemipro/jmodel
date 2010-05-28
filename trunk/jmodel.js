@@ -769,11 +769,11 @@ var jModel = function () {
 //				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
 				this.each(function __subcribe (object) {
-					context.notifications.send(subscriber.match({
+					subscriber.notify({
 						method: 'initialise',
 						object: object,
 						description: 'initialisation'
-					}));	
+					});	
 				});
 //				log('subscriptions/subscribe').endGroup();
 			}
@@ -1239,9 +1239,9 @@ var jModel = function () {
 				});
 
     			if ( subscription.initialise ) {
-    				this.context.notifications.send(subscriber.match({
+    				subscriber.notify({
 						description: 'Initialisation: '+event
-					}));
+					});
     			}
 
     			return subscriber;
