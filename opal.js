@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.8.0
+ *	OPAL Javascript Library v0.8.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {opal_version:'0.8.0'};
+	var opal = {opal_version:'0.8.1'};
 
 	function extend (object,target) {
 		target = target || this;
@@ -351,7 +351,7 @@ function OPAL () {
 			return !this.member(obj);
 		},
 		
-		add: function _add (object,success,failure) {
+		add: function _add (object) {
 			this.added = undefined;
 			if ( object !== undefined && this.constraint(object) ) {	
 				this.__members.push(object);
@@ -360,14 +360,6 @@ function OPAL () {
 					this.__index.add(object);
 				}
 				this.added = object;
-				if (success && typeof success=='function') {
-					success.call(this,object);
-				}
-			}
-			else {
-				if (failure && typeof failure=='function') {
-					failure.call(this,object);
-				}	
 			}
 			return this;
 		},
