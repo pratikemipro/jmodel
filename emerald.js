@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.4.1
+ *	Emerald Javascript Library v0.4.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.4.1'},opal),
+	var em		= extend({emerald_version:'0.4.2'},opal),
 		_		= em;
 
 
@@ -309,8 +309,12 @@ var emerald = function () {
 	//
 	
 	function SubscriberSet (notifications) {
-		this.__delegate = set().of(Subscriber).delegateFor(this);
+		
 		this.notifications	= notifications;
+		
+		this.__delegate = new TypedSet(Subscriber);
+		this.__delegate.delegateFor(this);
+		
 	}
 	
 	SubscriberSet.prototype = {
