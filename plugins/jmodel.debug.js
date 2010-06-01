@@ -448,7 +448,7 @@
 			log().startGroup('Domain Object');
 			this.fields().debug();
 			if ( showSubscribers ) {
-				this.subscribers().debug();
+				this.events.debug();
 			}
 			log().endGroup();
 		},
