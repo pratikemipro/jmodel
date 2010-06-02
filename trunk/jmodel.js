@@ -753,13 +753,13 @@ var jModel = function () {
 			var that = this, subscriber;
 			set('add','remove','initialise','change','sort').each(function (eventtype) {
 				if ( subscription.hasOwnProperty(eventtype) ) {
-				    subscriber = new Subscriber(subscription);
+				    subscriber = new Subscriber(subscription,that.context.notifications);
 					that.event(eventtype).subscribe(subscriber);
 				}
 			});
 			
 			if ( subscription.member ) {
-				subscriber = new Subscriber(subscription);
+				subscriber = new Subscriber(subscription,this.context.notifications);
 				this.event('add').subscribe(subscriber);
 				this.event('change').subscribe(subscriber);
 				this.event('initialise').subscribe(subscriber);

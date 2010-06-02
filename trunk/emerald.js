@@ -314,7 +314,7 @@ var emerald = function () {
 	
 	function SubscriberSet (notifications) {
 		
-		this.notifications	= notifications;
+		this.notifications	= notifications || new NotificationQueue();
 		
 		this.__delegate = new TypedSet(Subscriber);
 		this.__delegate.delegateFor(this);
