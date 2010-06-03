@@ -875,9 +875,13 @@ function OPAL () {
 		};
 	}
 
-	function FunctionValuePredicate(fn,value) {
+	function FunctionValuePredicate (fn,value) {
 		return compose(EqualityPredicate(value),fn);
 	}
+
+    function NullPredicate (candidate) {
+        return candidate === null;
+    }
 
 	opal.extend({
 		AllPredicate: 			AllPredicate,
@@ -885,7 +889,8 @@ function OPAL () {
 		TruePredicate: 			TruePredicate,
 		FunctionPredicate: 		FunctionPredicate,
 		test: 					FunctionPredicate,
-		FunctionValuePredicate: FunctionValuePredicate
+		FunctionValuePredicate: FunctionValuePredicate,
+		isnull:                 NullPredicate
 	});
 
 	// Object Predicates
