@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.9
+ *	jModel Javascript Library v0.6.10
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.9';
+	external.jmodel_version = '0.6.10';
 
 	//
 	// Import Emerald
@@ -316,7 +316,7 @@ var jModel = function () {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
-				return this.__delegate.predicate(parameter);
+				return ObservableTypedSet.prototype.predicate.apply(this,arguments);
 			}
 		}
 		
