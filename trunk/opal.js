@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.8.1
+ *	OPAL Javascript Library v0.8.2
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {opal_version:'0.8.1'};
+	var opal = {opal_version:'0.8.2'};
 
 	function extend (object,target) {
 		target = target || this;
@@ -614,6 +614,8 @@ function OPAL () {
 	Set.prototype.min = Set.prototype.aggregate(min);
 	Set.prototype.sum = Set.prototype.aggregate(plus);
 	Set.prototype.range = Set.prototype.aggregate(parallel(min,max),{min:null,max:null});
+	
+	Set.prototype.constructor = Set;
 
 	opal.Set = Set;
 
@@ -770,6 +772,8 @@ function OPAL () {
 		
 	}, new Set() );
 
+	TypedSet.prototype.constructor = TypedSet;
+
 	opal.TypedSet = TypedSet;
 
 
@@ -778,10 +782,11 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 
 	function List () {
-		var elements = set.apply(null,arguments);
-		elements.constraint = function _list (obj) { return true; };
-		elements.delegateFor(this);
+		Set.apply(this,arguments);
 	}
+	
+	List.prototype				= new Set();
+	List.prototype.constructor	= List;
 	
 	function list () {
 		if ( arguments.length == 1 && arguments[0].jquery ) {
@@ -815,7 +820,7 @@ function OPAL () {
 
 	}
 	
-	UniqueIndex.prototype = {
+	UniqueIndex.prototype = extend({
 		
 		constructor: UniqueIndex,
 	
@@ -841,7 +846,9 @@ function OPAL () {
 			return this.__delegate.hasOwnProperty(this.key(object));
 		}
 		
-	};
+	}, copy({}) );
+	
+	UniqueIndex.prototype.constructor = UniqueIndex;
 
 	opal.extend({
 		UniqueIndex: UniqueIndex
@@ -1283,6 +1290,8 @@ function OPAL () {
 	EnhancedObject.prototype._remove = EnhancedObject.prototype.removeProperties;
 	EnhancedObject.prototype._defaults = EnhancedObject.prototype.defaults;
 	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
+
+	EnhancedObject.prototype.constructor = EnhancedObject;
 
 	opal.extend({
 		arrayFromArguments: 			arrayFromArguments,
