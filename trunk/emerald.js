@@ -6,6 +6,7 @@
  *	Dual licensed under the MIT and GPL licenses
  *
  *	Requires opal.js
+ *
  */
 
 
@@ -19,7 +20,7 @@ var emerald = function () {
 	// Import OPAL
 	//
 
-	var opal = OPAL();
+	var opal = window.opal;
 	for ( var i in opal ) {
 		eval('var '+i+' = opal.'+i);
 	}
