@@ -515,7 +515,7 @@
 	extend({
 		
 		debug: function _debug () {
-			this.__delegate.each('debug');
+			this.each('debug');
 		}
 		
 	}, plugin.fieldset );
