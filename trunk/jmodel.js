@@ -193,6 +193,8 @@ var jModel = function () {
 		
 		this.all			= this.collection({description:'All Objects in context '+this.name});
 		
+		this.constraints    = new TypedSet(GlobalReferentialConstraint);
+		
 		// Adding a new object of a type in the context should add to the context's
 		// collection of all objects
 		var context = this;
@@ -248,9 +250,44 @@ var jModel = function () {
 		
 		collection: function _collection (specification) {
 			return new DomainObjectCollection( extend({context:this},specification || {}) );
+		},
+		
+		createConstraints: function _constraints () {  
+		    var context = this;
+		    this.entities.each(function (entitytype) {
+	            set(entitytype.constructor.prototype.hasMany).reduce(Method('add',context,entitytype),context.constraints);
+		    });
 		}
 		
 	};	
+	
+	
+	function GlobalReferentialConstraint (context,parentType,relationship) {
+	    
+	    var range = context.entity(relationship.prototype).objects;
+
+        // Adding an object to a relationship's range or changing its foreign key might
+        // add the object to the relationship
+        disjoin(
+            range.event('add'),
+            range.event('change').where(eq(relationship.field,'key'))
+        )
+        .map('object').subscribe(function (child) {
+            var parent = parentType.object(child.get(relationship.field))
+            if ( parent ) {
+                parent.relationship(relationship.accessor).add(child);
+            }
+        });
+
+        // Removing an object from the range will remove the object from the relationship
+		range.event('remove').map('object').subscribe(function (child) {
+		    var parent = parentType.object(child.get(relationship.field));
+		    if ( parent ) {
+                parent.relationship(relationship.accessor).remove(child);
+            }
+		});
+	    
+	}
 	
 	
 	// ------------------------------------------------------------------------
@@ -981,8 +1018,8 @@ var jModel = function () {
 	//
 	
 	function FieldPredicate (field,predicate) {
-		return function _fieldpredicate (candidate) {
-			return candidate && candidate.get ? predicate(candidate.get(field)) : false;
+		return function _fieldpredicate (candidate) { 
+		    return predicate(Resolve(field)(candidate));
 		};
 	}
 	
@@ -1585,7 +1622,7 @@ var jModel = function () {
 
 		if ( relationship.field ) {
 			var base = owner.context.entities.get(relationship.prototype).objects;
-			var referentialConstraint = new ReferentialConstraint(this,base,relationship.field);
+			var referentialConstraint = new LocalReferentialConstraint(this,base,relationship.field);
 		}
 	
 		// Deletions might cascade								
@@ -1629,53 +1666,42 @@ var jModel = function () {
 	external.OneToManyRelationship = OneToManyRelationship;
 	
 	
-	function ReferentialConstraint (relationship,range,foreignKey) {
+	function LocalReferentialConstraint (relationship,range,foreignKey) {
 		
 		var related = RelationshipPredicate(relationship.owner,foreignKey);
-
-        //
-        // Handle addition to and removal from range
-        //
-
-        // Adding an object to a relationship's range might add the object to the relationship
-        range.event('add').map('object').where(related).subscribe(function (object) {
-            relationship.add(object);
-        });
-
-        // Removing an object from the range will remove the object from the relationship
-		range.event('remove').map('object').subscribe(function (object) {
-		    relationship.remove(object);
-		});
 		
 		//
 		// Handle foreign key changes
 		//
 		
-		foreignKeyChange = range.event('change').where(eq(foreignKey,'key')).map('object');
-
-        // Changed foreign key might add object to relationship
-        foreignKeyChange.where(related).subscribe(function (object) {
-            relationship.add(object);
-        });
-        
         // Changed foreign key might remove object from relationship
-        foreignKeyChange.where(not(related)).subscribe(function (object) {
-            relationship.remove(object);
-        });
+        relationship.event('change')
+            .where(Eq(foreignKey,'key'))
+            .map('object')
+            .where(not(related))
+            .subscribe(function (object) {
+                relationship.remove(object);
+            });
 		
 		//
 		// Handle direct manipulation of relationship collection
 		//
 		
 		// Make sure foreign keys are correct after addition
-		relationship.event('add').map('object').where(not(related)).subscribe(function (added) {
-		    added.set(foreignKey,relationship.owner.primaryKeyValue());
-		});
+		relationship.event('add')
+		    .map('object')
+		    .where(not(related))
+		    .subscribe(function (added) {
+    		    added.set(foreignKey,relationship.owner.primaryKeyValue());
+    		});
 		
 		// Make sure foreign keys are correct after removal
-		relationship.event('remove').map('object').subscribe(function (object) {
-			object.set(foreignKey,null);
-		});
+		relationship.event('remove')
+		    .map('object')
+		    .where(related)
+		    .subscribe(function (object) {
+    			object.set(foreignKey,null);
+    		});
 		
 		//
 		// Initialise the members of the relationship
