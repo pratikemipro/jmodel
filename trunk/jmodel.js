@@ -1153,6 +1153,10 @@ var jModel = function () {
 			.reifyOneToOneRelationships()
 			.reifyOneToManyRelationships()
 			.reifyConstraints();
+			
+    	if ( entitytype.options.primaryKey ) {
+    	    var primaryKeyConstraint = new PrimaryKeyConstraint(this);
+    	}
 
 	}
 	
@@ -1235,6 +1239,10 @@ var jModel = function () {
 				removed: true,
 				description: 'object removal'
 			});
+		},
+		
+		dispose: function _delete  () {
+		    this.entitytype.objects.remove(this);
 		},
 		
 		subscribe: function _subscribe (subscription) {
@@ -1421,6 +1429,16 @@ var jModel = function () {
 		
 	};
 
+
+    function PrimaryKeyConstraint (object) {
+        object.event(object.primaryKey)
+            .map('value')
+            .where(isnull)
+            .subscribe(function (event) {
+                object.parent.dispose();
+            });
+    }
+
 	
 	// ------------------------------------------------------------------------
 	// 															  		 Fields
@@ -1495,6 +1513,7 @@ var jModel = function () {
 				this.__delegate = value;
 				this.event.raise({
 					key: this.accessor,
+					value: value,
 					description:'field value change: '+this.accessor
 				});
 				return true;
@@ -1504,6 +1523,7 @@ var jModel = function () {
 				
 				this.event.fail({
 					key: this.accessor,
+					value: value,
 					description:'field value change failure: '+this.accessor
 				});
 				return false;
