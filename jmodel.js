@@ -296,17 +296,14 @@ var jModel = function () {
 	
 	function EntityTypeSet (context) {
 		
+		ObservableTypedSet.call(this,EntityType,context.notifications);
+		
 		this.context = context;
-		
-		this.__delegate = new ObservableTypedSet(EntityType,context.notifications);
-		
-		this.__delegate
-			.index(Resolve('name'))
-			.delegateFor(this);
+		this.index(Resolve('name'));
 
 	}
 	
-	EntityTypeSet.prototype = {
+	EntityTypeSet.prototype = extend({
 		
 		constructor: EntityTypeSet,
 		
@@ -323,7 +320,7 @@ var jModel = function () {
 			}
 		}
 		
-	};
+	}, new ObservableTypedSet(EntityType) );
 	
 	var	defaultContext	= contexts.create('default').setDefault();
 	
