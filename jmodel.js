@@ -172,7 +172,7 @@ var jModel = function () {
 		this.__delegate = new ObservableTypedSet(Context);
 		
 		this.__delegate
-			.index(Property('name'))
+			.index(Resolve('name'))
 			.delegateFor(this);
 			
 	}
@@ -270,7 +270,7 @@ var jModel = function () {
         // add the object to the relationship
         disjoin(
             range.event('add'),
-            range.event('change').where(eq(relationship.field,'key'))
+            range.event('change').where(Eq(relationship.field,'key')) 
         )
         .map('object').subscribe(function (child) {
             var parent = parentType.object(child.get(relationship.field))
@@ -301,7 +301,7 @@ var jModel = function () {
 		this.__delegate = new ObservableTypedSet(EntityType,context.notifications);
 		
 		this.__delegate
-			.index(Property('name'))
+			.index(Resolve('name'))
 			.delegateFor(this);
 
 	}
@@ -424,6 +424,7 @@ var jModel = function () {
 				target[plural]				= delegateTo(entity.objects,'filter');
 
 				target['create'+name]		= delegateTo(entity,'create');
+				target['remove'+name]       = delegateTo(entity.objects,'remove')
 				target['deleted'+plural]	= delegateTo(entity.deleted,'filter');
 
 				target[name].entitytype		= entity;
@@ -574,7 +575,7 @@ var jModel = function () {
 		this.length = this.__delegate.length;
 		if ( specification.primaryKey ) {
 			this.__delegate.index(Method('primaryKeyValue'));
-		}
+		} 
 		this.__delegate.sorted = false;
 		
 		this.events.register('change');
@@ -614,6 +615,7 @@ var jModel = function () {
 		            method: 'change',
 		            object: event.object,
 		            key: event.key,
+		            value: event.value,
 		            description: 'object change for '+that.description+' collection change'
 		        };
 		    }).republish(that.event('change'));
@@ -944,7 +946,7 @@ var jModel = function () {
 /*	function Grouping (parent,extractor) {
 		this.parent		= parent;
 		this.extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
-		this.__delegate	= set().index(Property('value')).delegateFor(this);
+		this.__delegate	= set().index(Resolve('value')).delegateFor(this);
 		this.build();
 	}
 	
@@ -1328,7 +1330,8 @@ var jModel = function () {
 				this.event(descriptor.accessor).map(function (event) {
 				    return {
 				        object: that.parent,
-				        key: event.key
+				        key: event.key,
+				        value: event.value
 				    };
 				}).republish(that.event('change'));
 			    
@@ -1449,7 +1452,7 @@ var jModel = function () {
 		this.__delegate = new TypedSet(Field);
 		
 		this.__delegate
-			.index(Property('accessor'))
+			.index(Resolve('accessor'))
 			.delegateFor(this);
 
 		this.getField	= delegateTo(this.__delegate,'get');
@@ -1551,7 +1554,7 @@ var jModel = function () {
 		this.__delegate = new TypedSet(Relationship);
 		
 		this.__delegate
-			.index(Property('name'))
+			.index(Resolve('name'))
 			.delegateFor(this);
 
 	}
@@ -1632,7 +1635,7 @@ var jModel = function () {
 		var childEntityType = owner.context.entities.get(relationship.prototype),
 			children = 	childEntityType.collection({
 				description: 	'children by relationship '+relationship.accessor,
-				primaryKey: 	childEntityType.options.primaryKey || relationship.relativeKe
+				primaryKey: 	childEntityType.options.primaryKey || relationship.relativeKey
 			});
 //		log('domainobject/create').endGroup();
 		
