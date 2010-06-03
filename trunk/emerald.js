@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.3
+ *	Emerald Javascript Library v0.5.4
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.3'},opal),
+	var em		= extend({emerald_version:'0.5.4'},opal),
 		_		= em;
 
 
@@ -70,6 +70,8 @@ var emerald = function () {
 		}
 		
 	}, new TypedSet(EventType) );
+	
+	EventRegistry.prototype.constructor = EventRegistry;
 	
 	em.EventRegistry = EventRegistry;
 	
@@ -230,6 +232,8 @@ var emerald = function () {
 	EventType.prototype.before 	= SwitchCombinator(true);
 	EventType.prototype.after 	= SwitchCombinator(false);
 	
+	EventType.prototype.constructor = EventType;
+	
 	em.EventType = EventType;
 	
 	em.disjoin = function () {
@@ -342,6 +346,8 @@ var emerald = function () {
 		
 	}, new TypedSet(Subscriber) );
 	
+	SubscriberSet.prototype.constructor = SubscriberSet;
+	
 	em.SubscriberSet = SubscriberSet;
 	
 	
@@ -363,11 +369,13 @@ var emerald = function () {
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
-				this.notifications.send(new Notification(this.error,arguments))
+				this.notifications.send(new Notification(this.error,arguments));
 			}
 		}
 		
 	};
+	
+	Subscriber.prototype.constructor = Subscriber;
 	
 	em.extend({
 		Subscriber: Subscriber
@@ -441,6 +449,8 @@ var emerald = function () {
 	    
 	}, new TypedSet(Notification) );
 	
+	NotificationQueue.prototype.constructor = NotificationQueue;
+	
 	em.NotificationQueue = NotificationQueue;
 	
 	
@@ -452,6 +462,8 @@ var emerald = function () {
 	Notification.prototype.deliver = function () {
 		this.message.apply(null,this.args);
 	};
+	
+	Notification.prototype.constructor = Notification;
 	
 	
 	// ------------------------------------------------------------------------
@@ -500,13 +512,16 @@ var emerald = function () {
 		makeObservable.call(this,notifications);
 	}
 	
-	ObservableSet.prototype = observable(Set.prototype);
+	ObservableSet.prototype				= observable(Set.prototype);
+	ObservableSet.prototype.constructor	= ObservableSet;
 	
 	function ObservableTypedSet (constructor,notifications) {
 		TypedSet.call(this,constructor);
 		makeObservable.call(this,notifications);
 	}
-	ObservableTypedSet.prototype = observable(TypedSet.prototype);
+	
+	ObservableTypedSet.prototype 				= observable(TypedSet.prototype);
+	ObservableTypedSet.prototype.constructor	= ObservableTypedSet;
 	
 	function makeObservable (notifications) {
 		notifications = notifications || new NotificationQueue();
