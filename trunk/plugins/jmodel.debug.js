@@ -189,7 +189,7 @@
 	    
 		debug: function _debug () {
 			this.each(function (eventtype) {
-				log().debug(eventtype.name);
+				log().debug(eventtype.name+': '+eventtype.subscribers().count());
 			});
         }
 	    
@@ -446,9 +446,13 @@
 		
 		debug: function _debug (showSubscribers) {
 			log().startGroup('Domain Object');
+			log().startGroup('fields');
 			this.fields().debug();
+			log().endGroup();
 			if ( showSubscribers ) {
+			    log().startGroup('events');
 				this.events.debug();
+				log().endGroup();
 			}
 			log().endGroup();
 		},
