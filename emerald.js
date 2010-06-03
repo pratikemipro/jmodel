@@ -34,12 +34,11 @@ var emerald = function () {
 
 	function EventRegistry (notifications) {
 		
-		this.notifications	= notifications || new NotificationQueue();
-		this.__delegate		= new TypedSet(EventType);
+		TypedSet.call(this,EventType);
 		
-		this.__delegate
-			.index(Resolve('name'))
-			.delegateFor(this);
+		this.notifications	= notifications || new NotificationQueue();
+		
+		this.index(Resolve('name'));
 		
 		if ( arguments.length > 1 ) {
 			this.register.apply(this,Array.prototype.slice.call(arguments,1));
@@ -47,14 +46,14 @@ var emerald = function () {
 		
 	}
 	
-	EventRegistry.prototype = {
+	EventRegistry.prototype = extend({
 		
 		register: function _register () {
 			return set(arguments).reduce(Method('add',this),this);
 		},
 		
 		filter: function _filter () {
-		    events = this.__delegate.filter.apply(this,arguments);
+		    events = TypedSet.prototype.filter.apply(this,arguments);
 		    if ( !events ) {
 		        throw 'Emerald exception: unknown event "'+arguments[0]+'"';
 		    }
@@ -66,11 +65,11 @@ var emerald = function () {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
-				return this.__delegate.predicate(parameter);
+				return TypedSet.prototype.predicate.call(this,parameter);
 			}
 		}
 		
-	};
+	}, new TypedSet(EventType) );
 	
 	em.EventRegistry = EventRegistry;
 	
@@ -314,17 +313,19 @@ var emerald = function () {
 	
 	function SubscriberSet (notifications) {
 		
+		TypedSet.call(this,Subscriber);
+		
 		this.notifications	= notifications || new NotificationQueue();
 		
-		this.__delegate = new TypedSet(Subscriber);
-		this.__delegate.delegateFor(this);
+/*		this.__delegate = new TypedSet(Subscriber);
+		this.__delegate.delegateFor(this); */
 		
 	}
 	
-	SubscriberSet.prototype = {
+	SubscriberSet.prototype = extend({
 		
 		add: function () { // To support debug plugin
-			return this.__delegate.add.apply(this,arguments);
+			return TypedSet.prototype.add.apply(this,arguments);
 		},
 		
 		__construct: function (specification,notifications) {
@@ -345,7 +346,7 @@ var emerald = function () {
 			});
 		}
 		
-	};
+	}, new TypedSet(Subscriber) );
 	
 	em.SubscriberSet = SubscriberSet;
 	
@@ -385,8 +386,10 @@ var emerald = function () {
 
 	function NotificationQueue (context,application) {
 
-		this.__delegate = new TypedSet(Notification);
-		this.__delegate.delegateFor(this);
+        TypedSet.call(this,Notification);
+
+/*		this.__delegate = new TypedSet(Notification);
+		this.__delegate.delegateFor(this); */
 
 		this.context		= context;
 		this.__suspensions	= 0;
@@ -395,7 +398,7 @@ var emerald = function () {
 
 	}
 	
-	NotificationQueue.prototype = {
+	NotificationQueue.prototype = extend({
 		
 		send: function _send (messages) {
 			messages = (messages instanceof Set || messages instanceof List) ? messages
@@ -445,7 +448,7 @@ var emerald = function () {
 			return this;
 		}
 	    
-	};
+	}, new TypedSet(Notification) );
 	
 	em.NotificationQueue = NotificationQueue;
 	
