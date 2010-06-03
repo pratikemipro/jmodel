@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.4
+ *	Emerald Javascript Library v0.5.5
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -24,7 +24,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.4'},opal),
+	var em		= extend({emerald_version:'0.5.5'},opal),
 		_		= em;
 
 
@@ -47,6 +47,8 @@ var emerald = function () {
 	}
 	
 	EventRegistry.prototype = extend({
+		
+		constructor: EventRegistry,
 		
 		register: function _register () {
 			return set(arguments).reduce(Method('add',this),this);
@@ -71,8 +73,6 @@ var emerald = function () {
 		
 	}, new TypedSet(EventType) );
 	
-	EventRegistry.prototype.constructor = EventRegistry;
-	
 	em.EventRegistry = EventRegistry;
 	
 	
@@ -87,6 +87,8 @@ var emerald = function () {
 	}
 	
 	EventType.prototype = {
+		
+		constructor: EventType,
 	
 		subscribe: function _subscribe (subscriber) {
 			return this.subscribers().add(subscriber).added;
@@ -232,8 +234,6 @@ var emerald = function () {
 	EventType.prototype.before 	= SwitchCombinator(true);
 	EventType.prototype.after 	= SwitchCombinator(false);
 	
-	EventType.prototype.constructor = EventType;
-	
 	em.EventType = EventType;
 	
 	em.disjoin = function () {
@@ -322,6 +322,8 @@ var emerald = function () {
 	
 	SubscriberSet.prototype = extend({
 		
+		constructor: SubscriberSet,
+		
 		add: function () { // To support debug plugin
 			return TypedSet.prototype.add.apply(this,arguments);
 		},
@@ -346,8 +348,6 @@ var emerald = function () {
 		
 	}, new TypedSet(Subscriber) );
 	
-	SubscriberSet.prototype.constructor = SubscriberSet;
-	
 	em.SubscriberSet = SubscriberSet;
 	
 	
@@ -360,6 +360,8 @@ var emerald = function () {
 	}
 	
 	Subscriber.prototype = {
+		
+		constructor: Subscriber,
 		
 		notify: function (event) {
 			if ( this.predicate(event) ) {
@@ -374,8 +376,6 @@ var emerald = function () {
 		}
 		
 	};
-	
-	Subscriber.prototype.constructor = Subscriber;
 	
 	em.extend({
 		Subscriber: Subscriber
@@ -398,6 +398,8 @@ var emerald = function () {
 	}
 	
 	NotificationQueue.prototype = extend({
+		
+		constructor: NotificationQueue,
 		
 		send: function _send (messages) {
 			messages = (messages instanceof Set || messages instanceof List) ? messages
@@ -449,8 +451,6 @@ var emerald = function () {
 	    
 	}, new TypedSet(Notification) );
 	
-	NotificationQueue.prototype.constructor = NotificationQueue;
-	
 	em.NotificationQueue = NotificationQueue;
 	
 	
@@ -459,11 +459,15 @@ var emerald = function () {
 		this.args		= args;
 	}
 	
-	Notification.prototype.deliver = function () {
-		this.message.apply(null,this.args);
-	};
-	
-	Notification.prototype.constructor = Notification;
+	Notification.prototype = {
+		
+		constructor: Notification,
+		
+		deliver: function () {
+			this.message.apply(null,this.args);
+		}
+		
+	}
 	
 	
 	// ------------------------------------------------------------------------
