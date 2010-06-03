@@ -388,9 +388,6 @@ var emerald = function () {
 
         TypedSet.call(this,Notification);
 
-/*		this.__delegate = new TypedSet(Notification);
-		this.__delegate.delegateFor(this); */
-
 		this.context		= context;
 		this.__suspensions	= 0;
 		this.__process		= this.__deliver;
