@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.10
+ *	jModel Javascript Library v0.6.11
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.10';
+	external.jmodel_version = '0.6.11';
 
 	//
 	// Import Emerald
@@ -700,7 +700,7 @@ var jModel = function () {
 			}
 
 			// Remember old order
-//			this.__delegate.each(function __sort (object,index) {
+//			this.each(function __sort (object,index) {
 //				object.domain.tags.position = index;
 //			});
 
@@ -709,7 +709,7 @@ var jModel = function () {
 
 			// Find permutation
 			var permutation = [];
-//			this.__delegate.each(function ___sort (object,index) {
+//			this.each(function ___sort (object,index) {
 //				permutation[index] = object.domain.tags.position;
 //				delete object.__delegate.domain.tags.position;
 //			});
@@ -1440,24 +1440,21 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function FieldSet (object,events) {	
-		
-		this.__delegate = new TypedSet(Field);
-		
-		this.__delegate
-			.index(Resolve('accessor'))
-			.delegateFor(this);
-
-		this.getField	= delegateTo(this.__delegate,'get');
-
+		TypedSet.call(this,Field);
+		this.index(Resolve('accessor'));
 	}
 	
-	FieldSet.prototype = {
+	FieldSet.prototype = extend({
 		
 		constructor: FieldSet,
 		
+		getField: function _getfield (name) {
+			return TypedSet.prototype.get.call(this,name);
+		},
+		
 		get: function _get (name) {
 			try {
-				return this.__delegate.get(name).get();
+				return this.getField(name).get();
 			}
 			catch (e) {
 				return null;
@@ -1466,7 +1463,7 @@ var jModel = function () {
 		
 		set: function _set (name,value) {
 			try {
-				return this.__delegate.get(name).set(value);
+				return this.getField(name).set(value);
 			}
 			catch (e) {
 				return null;
@@ -1474,7 +1471,7 @@ var jModel = function () {
 		},
 		
 		keys: function _keys () {
-			return this.__delegate.map(Property('accessor'));
+			return this.map(Property('accessor'));
 		},
 		
 		predicate: function _predicate (parameter) {
@@ -1482,11 +1479,11 @@ var jModel = function () {
 				return extend({unique:true},PropertyPredicate('accessor',parameter));
 			}
 			else {
-				return this.__delegate.predicate(parameter);
+				return TypedSet.prototype.predicate.apply(this,arguments);
 			}
 		}
 		
-	};
+	}, new TypedSet(Field) );
 	
 	
 	function Field (field,events) {
