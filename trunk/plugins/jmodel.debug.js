@@ -5,6 +5,8 @@
  *	Copyright (c) 2010 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
+ *	Requires opal.formatting.js plugin
+ *
  */
 
 (function () {
