@@ -541,22 +541,17 @@ var jModel = function () {
 	
 	function DomainObjectCollection (specification) {
 		
-		var that = this;
+		var that			= this;
+		specification		= specification || {};
+		this.entitytype		= specification.entitytype;
+		this.context		= this.entitytype ? this.entitytype.context
+								: ( specification.context || contexts('default') );
 		
-		specification               = specification || {};
-		
-		this.entitytype             = specification.entitytype;
+		ObservableTypedSet.call(this,this.entitytype,this.context.notifications);
 		
 		if ( this.entitytype ) {
-		    this.context                = this.entitytype.context || contexts('default');
-		    this.__delegate             = new ObservableTypedSet(this.entitytype,this.context.notifications);
-    		this.__delegate.__construct = _.delegateTo(this.entitytype,'create');
+			this.__construct = delegateTo(this.entitytype,'create');
 		}
-		else {
-		    this.context    = specification.context || contexts('default');
-		    this.__delegate = new ObservableTypedSet(undefined,this.context.notifications);
-		}
-		this.__delegate.delegateFor(this);
 		
 		this.__predicate	= specification.predicate || AllPredicate;
 		this.__base			= specification.base;
@@ -569,11 +564,11 @@ var jModel = function () {
 		    specification.objects.reduce(Method('add'),this);
 		}						
 								
-		this.length = this.__delegate.length;
+
 		if ( specification.primaryKey ) {
-			this.__delegate.index(Method('primaryKeyValue'));
+			this.index(Method('primaryKeyValue'));
 		} 
-		this.__delegate.sorted = false;
+		this.sorted = false;
 		
 		this.events.register('change');
 
@@ -592,7 +587,7 @@ var jModel = function () {
 		// We need to observe objects added to the collection
 		this.event('add').map('object').subscribe(function (object) {
 			
-		    that.__delegate.sorted = false;
+		    that.sorted = false;
 		
 			// If the object is deleted we should remove it from the collection
 			if ( that.__removeOnDelete ) {
@@ -603,7 +598,7 @@ var jModel = function () {
 
 		    // If an object is changed we must assume that the collection becomes unsorted
 		    object.event('change').subscribe(function () {
-		        that.__delegate.sorted = false;
+		        that.sorted = false;
 		    });
 		    
 		    // Object changes are republished as collection changes
@@ -621,13 +616,13 @@ var jModel = function () {
 		
 	}
 	
-	DomainObjectCollection.prototype = {
+	DomainObjectCollection.prototype = extend({
 		
 		constructor: DomainObjectCollection,
 		
 		remove: function (predicate) {
 			predicate = this.predicate(predicate);
-			this.__delegate.remove(predicate);
+			ObservableTypedSet.prototype.remove.call(this,predicate);
 		},
 		
 /*		remove: function _remove (predicate,fromHere,removeSubscribers) {
@@ -657,8 +652,8 @@ var jModel = function () {
 		}, */
 		
 		first: function _first () {
-			if ( !this.__delegate.sorted ) { this.sort(); }
-			return this.__delegate.first();
+			if ( !this.sorted ) { this.sort(); }
+			return ObservableTypedSet.prototype.first.apply(this);
 		},
 		
 		select: function _select (selector) {
@@ -671,7 +666,7 @@ var jModel = function () {
 				return this;
 			}
 
-			var filtered = this.__delegate.filter.apply(this,arguments);
+			var filtered = ObservableTypedSet.prototype.filter.apply(this,arguments);
 
 			if ( filtered instanceof Set ) {
 				return this.context.collection({
@@ -685,15 +680,15 @@ var jModel = function () {
 
 		},
 		
-		each: function _each (callback) {
-			if ( !this.__delegate.sorted ) { this.sort(); }
-			this.__delegate.each(callback);
+		each: function _each () {
+			if ( !this.sorted ) { this.sort(); }
+			ObservableTypedSet.prototype.each.apply(this,arguments);
 			return this;
 		},
 		
 		sort: function _sort () {
 
-			if ( this.__delegate.sorted ) {
+			if ( this.sorted ) {
 				return this;
 			}
 
@@ -710,7 +705,7 @@ var jModel = function () {
 //			});
 
 			// Sort
-			this.__delegate.sort(this.__ordering);
+			ObservableTypedSet.prototype.sort.call(this,this.__ordering);
 
 			// Find permutation
 			var permutation = [];
@@ -737,7 +732,7 @@ var jModel = function () {
 				});
 			}
 
-			this.__delegate.sorted = true;
+			this.sorted = true;
 
 			return this;
 
@@ -873,7 +868,7 @@ var jModel = function () {
 			}
 		}
 		
-	};
+	}, new ObservableTypedSet() );
 	
 	// NOTE: Make this a method of Context
 /*	external.collection = function _collection () {
