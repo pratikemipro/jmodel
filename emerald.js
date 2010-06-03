@@ -38,7 +38,7 @@ var emerald = function () {
 		this.__delegate		= new TypedSet(EventType);
 		
 		this.__delegate
-			.index(Property('name'))
+			.index(Resolve('name'))
 			.delegateFor(this);
 		
 		if ( arguments.length > 1 ) {
