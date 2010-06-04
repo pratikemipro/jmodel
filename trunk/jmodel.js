@@ -801,11 +801,12 @@ var jModel = function () {
 			}
 			
 			if ( subscriber && subscription.initialise ) {
+			    console.log('initialising subscription: '+subscription.description);
 //				log('subscriptions/subscribe').startGroup('initialising subscription: '+subscription.description);
 				var context = this.context;
 				this.each(function __subcribe (object) {
 					subscriber.notify({
-						method: 'initialise',
+						method: 'add',
 						object: object,
 						description: 'initialisation'
 					});	
