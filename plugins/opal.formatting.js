@@ -47,7 +47,7 @@
 	}
 	
 	function Surround (affix) {
-		return compose(Prepend(affix),Append(affix));
+		return opal.compose(Prepend(affix),Append(affix));
 	}
 	
 	function Decimal (places) {
@@ -64,10 +64,10 @@
 	
 	function Currency (symbol,decimals) {
 		return function _currency (number) {
-			return compose(	Prepend(number < 0 ? '-' : ''),
-							Prepend(symbol),
-							Locale(),
-							Decimal(decimals===false ? 0 : 2) 		)(Math.abs(number));
+			return opal.compose(	Prepend(number < 0 ? '-' : ''),
+						        	Prepend(symbol),
+        							Locale(),
+        							Decimal(decimals===false ? 0 : 2) 		)(Math.abs(number));
 		};
 	}
 	
