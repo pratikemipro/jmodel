@@ -1546,19 +1546,11 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	function RelationshipSet () {
-		
-		this.constraint =	Or(	InstancePredicate(OneToOneRelationship), 
-								InstancePredicate(OneToManyRelationship) );
-		
-		this.__delegate = new TypedSet(Relationship);
-		
-		this.__delegate
-			.index(Resolve('name'))
-			.delegateFor(this);
-
+		TypedSet.call(this,Relationship);
+		this.index(Resolve('name'));
 	}
 	
-	RelationshipSet.prototype = {
+	RelationshipSet.prototype = extend({
 		
 		constructor: RelationshipSet,
 		
@@ -1571,7 +1563,7 @@ var jModel = function () {
 			}
 		}
 		
-	};
+	}, new TypedSet(Relationship) );
 	
 
 	function Relationship () {}
