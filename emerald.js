@@ -291,18 +291,35 @@ var emerald = function () {
 	em.event = {
 	    
 	    from: function (element,name) {
-    	    var derivedEventType = new EventType();
+    	    var eventType = new EventType();
     	    jQuery(element).bind(name, function (event) {
-    	        derivedEventType.raise(event);
+    	        eventType.raise(event);
     	    });
-    	    return derivedEventType;
+    	    return eventType;
     	},
     	
     	every: function (interval) {
-    	    var derivedEventType = new EventType();
-    	    function raise() { derivedEventType.raise({}); }
+    	    var eventType = new EventType();
+    	    function raise() { eventType.raise({}); }
     	    setInterval(raise,interval);
-    	    return derivedEventType;
+    	    return eventType;
+    	},
+    	
+    	fromAsync: function () {
+    	    var eventType = new EventType(),
+    	        args = Array.prototype.slice.apply(arguments),
+    	        fn = args.shift();
+    	    args.push(function () {
+    	        eventType.raise.apply(eventType,arguments);
+    	    });
+    	    fn.apply(this,args);
+    	    return eventType;
+    	},
+    	
+    	fromJSON: function () {
+    	    var args = Array.prototype.slice.apply(arguments);
+    	    args.unshift(jQuery.getJSON);
+    	    return em.event.fromAsync.apply(null,args);
     	}
 	    
 	};
