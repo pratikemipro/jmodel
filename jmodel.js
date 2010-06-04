@@ -272,15 +272,19 @@ var jModel = function () {
             range.event('add'),
             range.event('change').where(Eq(relationship.field,'key')) 
         )
-        .map('object').subscribe(function (child) {
-            var parent = parentType.object(child.get(relationship.field))
-            if ( parent ) {
-                parent.relationship(relationship.accessor).add(child);
+        .map('object')
+        .subscribe(function (child) {
+            var key = child.get(relationship.field);
+            if ( key ) {
+                var parent = parentType.object(key);
+                if ( parent ) {
+                    parent.relationship(relationship.accessor).add(child);
+                }
             }
         });
 
         // Removing an object from the range will remove the object from the relationship
-		range.event('remove').map('object').subscribe(function (child) {
+        range.event('remove').map('object').subscribe(function (child) {
 		    var parent = parentType.object(child.get(relationship.field));
 		    if ( parent ) {
                 parent.relationship(relationship.accessor).remove(child);
@@ -557,7 +561,7 @@ var jModel = function () {
 		this.__base			= specification.base;
 		this.__ordering		= specification.ordering;
 		this.description	= specification.description;
-		this.__removeOnDelete = (typeof specification.removeOnDelete === 'undefined') ? false : specification.removeOnDelete; 
+		this.__removeOnDelete = (typeof specification.removeOnDelete !== 'undefined') ? specification.removeOnDelete : true; 
 								
 		if ( specification.objects ) {
 		    specification.objects = specification.objects instanceof Array ? set(specification.objects) : specification.objects;
@@ -1034,7 +1038,8 @@ var jModel = function () {
 		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
 		GtE		= FieldOrValuePredicate(GreaterThanPredicate),
 		Between	= FieldOrValuePredicate(BetweenPredicate,2),
-		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate);
+		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate),
+		IsNull	= FieldOrValuePredicate(NullPredicate,0);
 	
 	external.extend({
 		
@@ -1044,8 +1049,8 @@ var jModel = function () {
 		lte: 		LtE,
 		gte: 		GtE,
 		between: 	Between,
-		regex: 		RegEx
-					
+		regex: 		RegEx,
+		isnull:     IsNull			
 	});
 
 	// Primary Key Identity
@@ -1365,13 +1370,17 @@ var jModel = function () {
 				this.parent[(descriptor.singular || descriptor.accessor)]           = delegateTo(relationship,'filter');
 				this.parent[(descriptor.plural || descriptor.accessor+'s')] 	    = delegateTo(relationship,'filter');
 				
-				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= function (relationship) {
+				this.parent['add'+(descriptor.singular || descriptor.accessor)]		= (function (relationship) {
 				    return function (data) {
 				        return relationship.add(data||{}).added;
 				    };
-				}(relationship); 
+				})(relationship); 
 				
-				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'remove');
+				this.parent['remove'+(descriptor.singular || descriptor.accessor)]	= (function (relationship) {
+				    return function (predicate) {
+				        return relationship.remove(predicate);
+				    };
+				})(relationship);
 				this.parent['debug'+(descriptor.singular || descriptor.accessor)]	= delegateTo(relationship,'debug');
 				
 			}
@@ -1428,7 +1437,7 @@ var jModel = function () {
     function PrimaryKeyConstraint (object) {
         object.event(object.primaryKey)
             .map('value')
-            .where(isnull)
+            .where(IsNull)
             .subscribe(function (event) {
                 object.parent.dispose();
             });
