@@ -891,7 +891,7 @@ function OPAL () {
 		FunctionPredicate: 		FunctionPredicate,
 		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
-		isnull:                 NullPredicate
+		NullPredicate:          NullPredicate
 	});
 
 	// Object Predicates
