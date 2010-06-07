@@ -27,7 +27,7 @@ function OPAL () {
 	function pipe () {
 		var fns = arguments;
 		return fns.length == 1 ? fns[0] : function _pipe (x) {
-			for (var i=0;i<fns.length;i++) {
+			for (var i in fns) {
 				x = fns[i](x);
 			}
 			return x;
