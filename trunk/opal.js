@@ -36,7 +36,7 @@ function OPAL () {
 	
 	function compose () {
 		return arguments.length == 1 ? arguments[0]
-				: pipe.apply(null,arrayFromArguments(arguments).reverse());
+				: pipe.apply(null,Array.prototype.slice.call(arguments).reverse());
 	}
 	
 	function parallel () {
