@@ -75,7 +75,7 @@ function OPAL () {
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
 			fn		= args.shift();
 		return function _curry () {
-			return fn.apply(context,args.concat(arrayFromArguments(arguments)));
+			return fn.apply(context,args.concat(Array.prototype.slice.call(arguments)));
 		};
 	}
 	
@@ -164,16 +164,14 @@ function OPAL () {
 				object  = args1.shift(),
 				args2	= args.concat(args1);
 			return ( object[name] && typeof object[name] === 'function' ) ?
-						object[name].apply(object,args2) : false
+						object[name].apply(object,args2) : false;
 		}; 
 	}
 	
 	function Resolve (name) {
-		var method = Method.apply(null,arguments),
-			property = Property.apply(null,arguments);
 		return function _resolve (object) {
-			return object[name] && typeof object[name] == 'function' ? method.apply(null,arguments)
-						: property.apply(null,arguments);
+			var prop;
+			return ( typeof ( prop = object[name] ) === 'function' ) ? prop() : prop;
 		};
 	}
 
