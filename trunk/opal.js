@@ -44,7 +44,7 @@ function OPAL () {
 		return function _parallel () {
 			var args0 = arguments[0],
 				result = {};
-			for (var i=0; i<fns.length;i++) {
+			for (var i in fns) {
 				var label = fns[i] && fns[i].label ? fns[i].label : i;
 				arguments[0] = args0[label] != undefined ? args0[label] : args0;
 				result[label] = fns[i].apply(null,arguments);
