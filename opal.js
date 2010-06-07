@@ -171,7 +171,7 @@ function OPAL () {
 	function Resolve (name) {
 		return function _resolve (object) {
 			var prop;
-			return ( typeof ( prop = object[name] ) === 'function' ) ? prop() : prop;
+			return ( typeof ( prop = object[name] ) === 'function' ) ? prop.call(object) : prop;
 		};
 	}
 
@@ -188,7 +188,7 @@ function OPAL () {
 	}
 
 	function PropertySet (paths,separator) {
-		paths = ( paths instanceof Set ) ? paths : new Set(paths);
+		paths = ( paths instanceof Set ) ? paths : Set.fromArray(paths);
 		paths = paths.map(function _propertyset (path) { return PropertyPath(path,separator); });
 		return function __propertyset (object) {
 			return paths.map(ApplyTo(object));
@@ -337,9 +337,7 @@ function OPAL () {
 
 	function Set (objects) {
 
-		this.__members = ( objects && objects.jquery && jQuery ) ?
-								set(objects.get()).map(jQuery).get()
-								: (objects || []);
+		this.__members = Array.prototype.slice.call(arguments);
 
 		this.length		= this.__members.length;
 		this.__index	= false;
@@ -495,7 +493,7 @@ function OPAL () {
 			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Resolve(obj) : obj; }
 			var lastArgument 	= arguments[arguments.length-1],
 				lastIsObject	= typeof lastArgument == 'object',
-				mapped			= lastIsObject ? lastArgument : list(),
+				mapped			= lastIsObject ? lastArgument : new List(),
 				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
 				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
 						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
@@ -620,16 +618,33 @@ function OPAL () {
 	Set.prototype.range = Set.prototype.aggregate(parallel(min,max),{min:null,max:null});
 
 	opal.Set = Set;
+	
+	Set.fromArray = function (arr) {
+		var set = new Set();
+		Set.apply(set,arr);
+		return set;
+	}
+	
+	Set.fromArguments = function (args) {
+		return Set.fromArray(Array.prototype.slice.call(args));
+	}
+	
+	Set.fromJQuery = function (jq) {
+		return Set.fromArray(jq.get()).map(jQuery,new Set());
+	}
 
 	function set () {
-		if ( arguments.length == 1 && arguments[0] && arguments[0].jquery ) {
-			return new Set(arguments[0]);
+		if ( arguments.length === 1 && arguments[0] && arguments[0].jquery ) {
+			return Set.fromJQuery(arguments[0]);
 		}
-		else if ( arguments.length == 1 && arguments[0] && arguments[0].callee ) {
-			return new Set(arrayFromArguments(arguments[0]));
+		else if ( arguments.length === 1 && arguments[0] && arguments[0].callee ) {
+			return Set.fromArguments(arguments[0]);
+		}
+		else if ( arguments.length === 1 && arguments[0] instanceof Array ) {
+			return Set.fromArray(arguments[0]);
 		}
 		else {
-			return new Set(arrayFromArguments(arguments));
+			return Set.fromArguments(arguments);
 		}
 	}
 	opal.set = set;
@@ -669,7 +684,7 @@ function OPAL () {
 
 
 	// ------------------------------------------------------------------------
-	//															           List
+	//															       TypedSet
 	// ------------------------------------------------------------------------
 	
 	function TypedSet (constructor) {
@@ -759,7 +774,7 @@ function OPAL () {
 					break;
 												
 				default:
-					throw "Opal: too many arguments passed to constructor";
+					throw "Opal: too many arguments passed to constructor"; 
 				
 			}
 			
@@ -788,15 +803,32 @@ function OPAL () {
 	List.prototype				= new Set();
 	List.prototype.constructor	= List;
 	
+	List.fromArray = function (arr) {
+		var list = new List();
+		List.apply(list,arr);
+		return list;
+	}
+	
+	List.fromArguments = function (args) {
+		return List.fromArray(Array.prototype.slice.call(args));
+	}
+	
+	List.fromJQuery = function (jq) {
+		return List.fromArray(jq.get()).map(jQuery,new List());
+	}
+	
 	function list () {
-		if ( arguments.length == 1 && arguments[0].jquery ) {
-			return new List(arguments[0]);
+		if ( arguments.length === 1 && arguments[0].jquery ) {
+			return List.fromJQuery(arguments[0]);
 		}
-		else if ( arguments.length == 1 && arguments[0].callee ) {
-			return new List(arrayFromArguments(arguments[0]));
+		else if ( arguments.length === 1 && arguments[0].callee ) {
+			return List.fromArguments(arguments[0]);
+		}
+		else if ( arguments.length === 1 && arguments[0] instanceof Array ) {
+			return List.fromArray(arguments[0]);
 		}
 		else {
-			return new List(arrayFromArguments(arguments));
+			return List.fromArguments(arguments);
 		}
 	}
 
