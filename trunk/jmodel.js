@@ -720,7 +720,7 @@ var jModel = function () {
 
 			// Find whether permutation is not identity permutation
 			var permuted = false;
-			for(var i=0; i<permutation.length; i++) {
+			for(var i in permutation) {
 				if ( permutation[i] != i ) {
 					permuted = true;
 					break;
@@ -1248,7 +1248,7 @@ var jModel = function () {
 		subscribe: function _subscribe (subscription) {
 
 			if ( subscription.key instanceof Array ) {
-				for(var i=0;i<subscription.key.length;i++) {
+				for(var i in subscription.key) {
 					this.subscribe(copy(subscription).setProperty('key',subscription.key[i]));
 				}
 			}
