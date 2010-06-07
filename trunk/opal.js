@@ -67,17 +67,9 @@ function OPAL () {
 	}
 	
 	function curry () {
-        var context, fn, args;
-        if ( typeof arguments[0] === 'object' ) {
-            context = arguments[0];
-            fn = arguments[1];
-            args = Array.prototype.slice.call(arguments,2);
-        }
-		else {
-		    context = null;
-		    fn = arguments[0];
-		    args = Array.prototype.slice.call(arguments,1);
-		}
+		var args	= Array.prototype.slice.call(arguments),
+			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
+			fn		= args.shift();
 		return function _curry () {
 			return fn.apply(context,args.concat(arrayFromArguments(arguments)));
 		};
