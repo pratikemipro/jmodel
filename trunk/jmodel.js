@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.11
+ *	jModel Javascript Library v0.6.12
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -19,7 +19,7 @@ var jModel = function () {
 	var external		= function (predicate) { return defaultContext.all.filter.apply(all,arguments); }, /* NOTE: Fix this */
 		_				= external;
 		
-	external.jmodel_version = '0.6.11';
+	external.jmodel_version = '0.6.12';
 
 	//
 	// Import Emerald
@@ -255,7 +255,8 @@ var jModel = function () {
 		createConstraints: function _constraints () {  
 		    var context = this;
 		    this.entities.each(function (entitytype) {
-	            set(entitytype.constructor.prototype.hasMany).reduce(Method('add',context,entitytype),context.constraints);
+	            Set.fromArray(entitytype.constructor.prototype.hasMany)
+					.reduce(Method('add',context,entitytype),context.constraints);
 		    });
 		}
 		
@@ -419,7 +420,7 @@ var jModel = function () {
 				plural	= this.options.plural || this.name+'s',
 				entity	= this;
 			
-			set(targets).each(function __exposeAt (target) {
+			Set.fromArray(targets).each(function __exposeAt (target) {
 			
 				target[name] 				= delegateTo(entity,'object');
 				target[plural]				= delegateTo(entity.objects,'filter');
@@ -564,7 +565,7 @@ var jModel = function () {
 		this.__removeOnDelete = (typeof specification.removeOnDelete !== 'undefined') ? specification.removeOnDelete : true; 
 								
 		if ( specification.objects ) {
-		    specification.objects = specification.objects instanceof Array ? set(specification.objects) : specification.objects;
+		    specification.objects = specification.objects instanceof Array ? Set.fromArray(specification.objects) : specification.objects;
 		    specification.objects.reduce(Method('add'),this);
 		}						
 								
