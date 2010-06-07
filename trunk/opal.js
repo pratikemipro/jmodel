@@ -66,10 +66,20 @@ function OPAL () {
 		};
 	}
 	
-	function curry (fn) {
-		var args1 = arrayFromArguments(arguments).slice(1);
+	function curry () {
+        var context, fn, args;
+        if ( typeof arguments[0] === 'object' ) {
+            context = arguments[0];
+            fn = arguments[1];
+            args = Array.prototype.slice.call(arguments,2);
+        }
+		else {
+		    context = null;
+		    fn = arguments[0];
+		    args = Array.prototype.slice.call(arguments,1);
+		}
 		return function _curry () {
-			return fn.apply(null,args1.concat(arrayFromArguments(arguments)));
+			return fn.apply(context,args.concat(arrayFromArguments(arguments)));
 		};
 	}
 	
@@ -1206,7 +1216,7 @@ function OPAL () {
 }
 
 var opal = OPAL();
-if ( typeof _ == 'undefined' ) { var _ = opal }
+if ( typeof _ === 'undefined' ) { var _ = opal; }
 
 
 // ============================================================================
