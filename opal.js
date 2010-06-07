@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.8.3
+ *	OPAL Javascript Library v0.8.4
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {opal_version:'0.8.3'};
+	var opal = {opal_version:'0.8.4'};
 
 	function extend (object,target) {
 		target = target || this;
