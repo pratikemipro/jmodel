@@ -63,7 +63,10 @@ function OPAL () {
 	function ApplyTo () {
 		var args = arguments;
 		return function _applyto (fn) {
-			return fn.apply(null,args);
+			var args1	= Array.prototype.slice.call(arguments),
+				context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
+				fn		= args1.shift();
+			return fn.apply(context,args);
 		};
 	}
 	
