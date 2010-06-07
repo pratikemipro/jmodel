@@ -435,7 +435,7 @@ function OPAL () {
 		each: function _each () {
 			function makeCallback (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
-							: pipe.apply(null,set(arguments).map(makeCallback).get());
+							: pipe.apply(null,Set.fromArguments(arguments).map(makeCallback).get());
 			if ( this.__members.forEach ) {
 				this.__members.forEach(callback,this);
 			}
@@ -459,8 +459,8 @@ function OPAL () {
 			});
 			
 			return copy({})
-						.setProperty(passName||'pass',set(pass))
-						.setProperty(failName||'fail',set(fail));
+						.setProperty(passName||'pass',Set.fromArray(pass))
+						.setProperty(failName||'fail',Set.fromArray(fail));
 
 		},
 		
@@ -485,7 +485,7 @@ function OPAL () {
 			}
 
 			return this.__members.filter ? set(this.__members.filter(predicate)).select(selector)
-					: this.reduce(add(predicate),set()).select(selector);		
+					: this.reduce(add(predicate),new Set()).select(selector);		
 
 		},
 		
@@ -496,7 +496,7 @@ function OPAL () {
 				mapped			= lastIsObject ? lastArgument : new List(),
 				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
 				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
-						  			: pipe.apply(null,set(mappings).map(makeMapping).get());
+						  			: pipe.apply(null,List.fromArray(mappings).map(makeMapping).get());
 			return this.reduce(add(function (obj) {return obj !== undefined;},mapping,true),mapped);
 		},
 		
@@ -598,7 +598,7 @@ function OPAL () {
 		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
-								.reduce(Method('concat'),set())
+								.reduce(Method('concat'),new Set())
 									.get() );
 		},
 		
@@ -663,11 +663,11 @@ function OPAL () {
 	}
 
 	function union () {
-		return set(arguments).reduce(Method('concat'),set());
+		return Set.fromArguments(arguments).reduce(Method('concat'),new Set());
 	}
 
 	function intersection () {
-		return set(arguments).map(MembershipPredicate).reduce(Method('filter'),arguments[0].copy());
+		return Set.fromArguments(arguments).map(MembershipPredicate).reduce(Method('filter'),arguments[0].copy());
 	}
 
 	function difference (first,second) {
@@ -1044,7 +1044,7 @@ function OPAL () {
 
 	function ConjunctionPredicate (conjunction) {
 		return function _conjunctionpredicate () {
-			var predicates = opal.set(arrayFromArguments(arguments));
+			var predicates = Set.fromArguments(arguments);
 			return function __conjunctionpredicate (candidate) {
 				return predicates.map(ApplyTo(candidate)).reduce(conjunction);
 			};
@@ -1123,7 +1123,7 @@ function OPAL () {
 	var ValueOrdering = FunctionOrdering(Identity);
 
 	function PredicateOrdering () {
-		var predicates = set(arguments);
+		var predicates = Set.fromArguments(arguments);
 		return FunctionOrdering( function _predicateordering (obj) {
 			return -predicates.count(ApplyTo(obj));
 		});
@@ -1136,7 +1136,7 @@ function OPAL () {
 	}
 	
 	function CompositeOrdering () {
-	    var orderings = set(arguments);
+	    var orderings = Set.fromArguments(arguments);
 	    return function _compositeordering (a,b) {
 	        return orderings.reduce(function (acc,ordering) {
 	           return acc || ordering(a,b);
@@ -1200,7 +1200,7 @@ function OPAL () {
 		
 		removeProperties: function _remove () {
 			var that = this;
-			set(arguments).each(function __remove (key) {
+			Set.fromArguments(arguments).each(function __remove (key) {
 				delete that[key];
 			});
 			return this;
@@ -1251,9 +1251,9 @@ if ( typeof _ === 'undefined' ) { var _ = opal; }
 
 if ( typeof jQuery != 'undefined' ) {
 	jQuery.fn.opal = function () {
-		return opal.set(this);
+		return opal.Set.fromJQuery(this);
 	};
 	if ( typeof _$ == 'undefined') {
-		_$ = opal.pipe(jQuery,opal.set);
+		_$ = opal.pipe(jQuery,opal.Set.fromJQuery);
 	}
 }
