@@ -90,7 +90,7 @@ function OPAL () {
 	}
 	
 	function sequence () {
-		var operations	= arrayFromArguments(arguments),
+		var operations	= Array.prototype.slice.call(arguments),
 			operation	= operations.shift(),
 			callback	= operations.shift();
 		function makeCallback () {
@@ -110,7 +110,7 @@ function OPAL () {
 	}
 	
 	function synchronise () {
-		var args = arrayFromArguments(arguments),
+		var args = Array.prototype.slice.call(arguments),
 			last = args.pop(),
 			left = args.length/2;
 		while ( args.length > 0 ) {
@@ -118,7 +118,7 @@ function OPAL () {
 				var operation = args.shift(), callback = args.shift();
 				operation(function () {
 					callback.apply(null,arguments);
-					left --;
+					left--;
 					if ( left === 0 ) {
 						last();
 					}
