@@ -157,15 +157,15 @@ function OPAL () {
 	}
 
 	function Method () {
-		var name = arguments[0],
-			args1 = arrayFromArguments(arguments).slice(1);
+		var args = Array.prototype.slice.call(arguments),
+			name  = args.shift();
 		return function _method (object) {
-				if ( ! ( object[name] && typeof object[name] == 'function' ) ) {
-					return false;
-				}
-				var args = args1.concat(arrayFromArguments(arguments).slice(1));
-				return args ? object[name].apply(object,args) : object[name].apply(object);
-			};
+			var args1	= Array.prototype.slice.call(arguments),
+				object  = args1.shift(),
+				args2	= args.concat(args1);
+			return ( object[name] && typeof object[name] === 'function' ) ?
+						object[name].apply(object,args2) : false
+		}; 
 	}
 	
 	function Resolve (name) {
