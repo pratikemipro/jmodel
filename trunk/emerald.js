@@ -421,7 +421,7 @@ var emerald = function () {
 		
 		send: function _send (messages) {
 			messages = (messages instanceof Set || messages instanceof List) ? messages
-							: new List([messages]);
+							: list(messages);
 			var that = this;
 			messages.each(function __send (message) {
    				that.__process(message);
