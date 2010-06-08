@@ -494,11 +494,11 @@ function OPAL () {
 		},
 		
 		union: function _union () {
-			return union.apply(null,[this].concat(arrayFromArguments(arguments)));
+			return union.apply(null,[this].concat(Array.prototype.slice.call(arguments)));
 		},
 		
 		intersection: function _intersection () {
-			return intersection.apply(null,[this].concat(arrayFromArguments(arguments)));
+			return intersection.apply(null,[this].concat(Array.prototype.slice.call(arguments)));
 		},
 		
 		difference: function _difference (set) {
@@ -1150,10 +1150,6 @@ function OPAL () {
 	// ------------------------------------------------------------------------
 	// 														  Utility functions
 	// ------------------------------------------------------------------------
-
-	function arrayFromArguments (args) {
-		return ( args.length == 1 && args[0] instanceof Array ) ? args[0] : Array.prototype.slice.call(args);
-	}
 	
 	function delegateTo (context,methodName) {
 		return function () {
@@ -1203,7 +1199,6 @@ function OPAL () {
 	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
 
 	opal.extend({
-		arrayFromArguments: 			arrayFromArguments,
 		delegateTo: 					delegateTo,
 		copy: 							copy
 	});
