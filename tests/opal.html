@@ -189,6 +189,22 @@
 				
 			});
 			
+			test('Resolve', function () {
+			    
+			    var Person = function (forename,surname,age) {
+				    this.forename = forename;
+				    this.surname = surname;
+				    this.age = age;
+				    this.name = function () { return this.forename + ' ' + this.surname; };
+				}
+				
+				var person = new Person('John','Smith',18);
+				
+				equals( opal.Resolve('age')(person),  18,           'Resolve works with properties');
+				equals( opal.Resolve('name')(person), 'John Smith', 'Resolve works with methods');
+			    
+			});
+			
 			test('PropertyPath', function () {
 				
 			});

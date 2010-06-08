@@ -182,6 +182,7 @@ function OPAL () {
 		}; 
 	}
 	
+	// Tests: full
 	function Resolve (name) {
 		return function _resolve (object) {
 			var prop;
