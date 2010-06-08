@@ -440,7 +440,7 @@ function OPAL () {
 				this.__members.forEach(callback,this);
 			}
 			else {
-				for (var index=0; index<this.__members.length; index++) {
+				for (var i in this.__members) {
 					callback.apply(this,[this.__members[index],index]);
 				}
 			}
