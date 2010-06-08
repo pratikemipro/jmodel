@@ -151,9 +151,8 @@ var emerald = function () {
 				startEvent, stopEvent;
 			this.subscribe(function (event) {
 				if ( active ) {
-				    args = arrayFromArguments(arguments);
-				    args.push(startEvent);
-				    args.push(stopEvent);
+				    args = Array.prototype.slice.call(arguments);
+				    args.push(startEvent,stopEvent);
 					derivedEventType.raise.apply(derivedEventType,args);
 				}
 			});
