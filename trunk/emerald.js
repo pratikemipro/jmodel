@@ -103,8 +103,12 @@ var emerald = function () {
 			this.subscribers().fail.apply(this.subscribers(),arguments);
 		},
 		
+		derive: function (registry,name,notifications) {
+		  return new this.constructor(registry,name,notifications);
+		},
+		
 		where: function (predicate) {
-		    var derivedEventType = new EventType(this.registry);
+		    var derivedEventType = this.derive();
 		    this.subscribe(function (event) {
 		        if ( predicate.apply(null,arguments) ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
@@ -114,7 +118,7 @@ var emerald = function () {
 		},
 		
 		until: function (predicate,inclusive) {
-			var derivedEventType = new EventType(this.registry),
+			var derivedEventType = this.derive(),
 				active = true;
 			inclusive = typeof inclusive === 'undefined' ? true : inclusive;
 		    this.subscribe(function (event) {
@@ -131,7 +135,7 @@ var emerald = function () {
 		},
 		
 		drop: function (number) {
-		    var derivedEventType = new EventType(this.registry);
+		    var derivedEventType = this.derive();
 		    this.subscribe(function () {
 		        if ( number <= 0 ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
@@ -142,7 +146,7 @@ var emerald = function () {
 		},
 		
 		between: function (startEventType,stopEventType) {
-			var derivedEventType = new EventType(this.registry),
+			var derivedEventType = this.derive(),
 				active = false,
 				startEvent, stopEvent;
 			this.subscribe(function (event) {
@@ -166,7 +170,7 @@ var emerald = function () {
 		
 		waitFor: function (startEventType) {
 		    var notifications       = new NotificationQueue(null,true),
-		        derivedEventType    = new EventType(this.registry,null,notifications);
+		        derivedEventType    = this.derive(this.registry,null,notifications);
 		    notifications.suspend();
 		    this.subscribe(function () {
 		        derivedEventType.raise.apply(derivedEventType,arguments);
@@ -178,7 +182,7 @@ var emerald = function () {
 		},
 		
 		effect: function (fn) {
-		    var derivedEventType = new EventType(this.registry);
+		    var derivedEventType = this.derive();
 		    this.subscribe(function (event) {
 		        fn(event);
 		        derivedEventType.raise.apply(derivedEventType,arguments);
@@ -188,7 +192,7 @@ var emerald = function () {
 		
 		accumulate: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-			var derivedEventType = new EventType(this.registry);
+			var derivedEventType = this.derive();
 		    this.subscribe(function (event) {
 		        acc = fn(acc,event);
 				derivedEventType.raise(acc);
@@ -197,7 +201,7 @@ var emerald = function () {
 		},
 		
 		map: function (fn) {
-		    var derivedEventType = new EventType(this.registry);
+		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function (event) {
 		        args = arrayFromArguments(arguments);
@@ -218,7 +222,7 @@ var emerald = function () {
 	
 	function SwitchCombinator (initialState) {
 		return function (controlEvent) {
-			var derivedEventType = new EventType(this.registry),
+			var derivedEventType = this.derive(),
 				active = initialState;
 			this.subscribe(function () {
 				if ( active ) {
