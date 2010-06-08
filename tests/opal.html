@@ -174,13 +174,18 @@
 			
 			test('Method', function () {
 			
-				var test = {
-					ten: function () { return 10; },
-					double: function (x) { return 2*x; }
+				var Adder = function () {
+				    this.unit = function () { return 0; };
+				    this.add = function (a,b) { return a+b; };
 				}
 				
-				equals( opal.Method('ten')(test), 10, 'Method works without any arguments');
-				// Need to test arguments passed in Method functor as well as in method call
+				var adder = new Adder();
+				
+				equals( opal.Method('unit')(adder),    0,     'Method works without any arguments');
+				equals( opal.Method('test')(adder),    false, 'Method returns false if method does not exist.' )
+				equals( opal.Method('add',2,3)(adder), 5,     'Method works with arguments at creation time');
+				equals( opal.Method('add')(adder,2,3), 5,     'Method works with arguments at invocation time');
+				equals( opal.Method('add',2)(adder,3), 5,     'Method works with mixed arguments');
 				
 			});
 			
@@ -272,9 +277,7 @@
 				testSet.add('blue');
 				
 				var concat = '';
-				console.log('----');
 				testSet.each(function (item) {concat+=item});
-				console.log('----');
 				
 				equals( concat, 'redgreenblue', 'each works with functions');
 				

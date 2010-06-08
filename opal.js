@@ -169,6 +169,7 @@ function OPAL () {
 		};
 	}
 
+    // Tests: full
 	function Method () {
 		var args = Array.prototype.slice.call(arguments),
 			name  = args.shift();
