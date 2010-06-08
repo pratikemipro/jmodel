@@ -88,55 +88,6 @@ function OPAL () {
 	
 	var suspend = curry;
 
-	//
-	// Concurrency functions
-	//
-	
-	// Tests: none
-	function async () {
-		return setTimeout(suspend.apply(null,arguments),1);
-	}
-	
-	// Tests: none
-	function sequence () {
-		var operations	= Array.prototype.slice.call(arguments),
-			operation	= operations.shift(),
-			callback	= operations.shift();
-		function makeCallback () {
-			return function _callback () {
-				callback.apply(null,arguments);
-				operation = operations.shift();
-				callback = operations.shift();
-				if ( operation && callback ) {
-					performOperation();
-				}
-			};
-		}
-		function performOperation () {
-			operation(makeCallback());
-		}
-		return performOperation();
-	}
-	
-	// Tests: none
-	function synchronise () {
-		var args = Array.prototype.slice.call(arguments),
-			last = args.pop(),
-			left = args.length/2;
-		while ( args.length > 0 ) {
-			(function () {
-				var operation = args.shift(), callback = args.shift();
-				operation(function () {
-					callback.apply(null,arguments);
-					left--;
-					if ( left === 0 ) {
-						last();
-					}
-				});
-			})();	
-		}
-	}
-
 
 	//
 	// Object functions
@@ -240,10 +191,6 @@ function OPAL () {
 		parallel: parallel,
 		curry: curry,
 		suspend: suspend,
-		async: async,
-		sequence: sequence,
-		synchronise: synchronise,
-		synchronize: synchronise,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
