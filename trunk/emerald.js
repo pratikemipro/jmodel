@@ -68,7 +68,7 @@ var emerald = function () {
 				return extend({unique:true},PropertyPredicate('name',parameter));
 			}
 			else {
-				return TypedSet.prototype.predicate.call(this,parameter);
+				return TypedSet.prototype.predicate.apply(this,arguments);
 			}
 		}
 		
