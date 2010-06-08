@@ -65,7 +65,7 @@ function OPAL () {
 		return fn.apply(context,args);
 	}
 
-	function ApplyTo () {
+	function applyto () {
 		var args = arguments;
 		return function _applyto () {
 			var args1	= Array.prototype.slice.call(arguments),
@@ -196,7 +196,7 @@ function OPAL () {
 		paths = ( paths instanceof Set ) ? paths : Set.fromArray(paths);
 		paths = paths.map(function _propertyset (path) { return PropertyPath(path,separator); });
 		return function __propertyset (object) {
-			return paths.map(ApplyTo(object));
+			return paths.map(applyto(object));
 		};
 	}
 
@@ -223,8 +223,8 @@ function OPAL () {
 
 	opal.extend({
 		apply: apply,
-		ApplyTo: ApplyTo,
-		applyto: ApplyTo,
+		applyto: applyto,
+		applyto: applyto,
 		compose: compose,
 		pipe: pipe,
 		parallel: parallel,
@@ -1051,7 +1051,7 @@ function OPAL () {
 		return function _conjunctionpredicate () {
 			var predicates = Set.fromArguments(arguments);
 			return function __conjunctionpredicate (candidate) {
-				return predicates.map(ApplyTo(candidate)).reduce(conjunction);
+				return predicates.map(applyto(candidate)).reduce(conjunction);
 			};
 		};
 	}
@@ -1130,7 +1130,7 @@ function OPAL () {
 	function PredicateOrdering () {
 		var predicates = Set.fromArguments(arguments);
 		return FunctionOrdering( function _predicateordering (obj) {
-			return -predicates.count(ApplyTo(obj));
+			return -predicates.count(applyto(obj));
 		});
 	}
 
