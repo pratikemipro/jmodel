@@ -26,14 +26,11 @@
 	}
 	
 	function Concatenate () {
-		var formatters = opal.arrayFromArguments(arguments),
-			separator = ' ';
-		if ( typeof formatters[formatters.length-1] == 'string' ) {
-			separator = formatters.pop();
-		}
+	    var formatters  = Array.prototype.slice.call(arguments),
+	        separator   = ( typeof formatters[formatters.length-1] === 'string' ) ? formatters.pop() : ' ';
 		return function _concatenate (object) {
 			var mapped = [];
-			for (var i=0; i<formatters.length; i++) {
+			for ( var i in formatters ) {
 				mapped.push(formatters[i](object));
 			}
 			return mapped.join(separator);
