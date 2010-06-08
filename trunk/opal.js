@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.8.4
+ *	OPAL Javascript Library v0.8.5
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {opal_version:'0.8.4'};
+	var opal = {opal_version:'0.8.5'};
 
 	function extend (object,target) {
 		target = target || this;
@@ -62,7 +62,7 @@ function OPAL () {
 
 	function ApplyTo () {
 		var args = arguments;
-		return function _applyto (fn) {
+		return function _applyto () {
 			var args1	= Array.prototype.slice.call(arguments),
 				context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
@@ -159,7 +159,7 @@ function OPAL () {
 	function Method () {
 		var args = Array.prototype.slice.call(arguments),
 			name  = args.shift();
-		return function _method (object) {
+		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
 				args2	= args.concat(args1);
@@ -433,15 +433,15 @@ function OPAL () {
 		},
 		
 		each: function _each () {
-			function makeCallback (obj) { return ( typeof obj == 'string' ) ? Method(obj) : obj; }
+			function makeCallback (obj) { return ( typeof obj === 'string' ) ? Method(obj) : obj; }
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
 							: pipe.apply(null,Set.fromArguments(arguments).map(makeCallback).get());
 			if ( this.__members.forEach ) {
 				this.__members.forEach(callback,this);
 			}
 			else {
-				for (var i in this.__members) {
-					callback.apply(this,[this.__members[index],index]);
+				for ( var i in this.__members ) {
+					callback.call(this,this.__members[index],index);
 				}
 			}
 			return this;
@@ -623,15 +623,15 @@ function OPAL () {
 		var set = new Set();
 		Set.apply(set,arr);
 		return set;
-	}
+	};
 	
 	Set.fromArguments = function (args) {
 		return Set.fromArray(Array.prototype.slice.call(args));
-	}
+	};
 	
 	Set.fromJQuery = function (jq) {
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
-	}
+	};
 
 	function set () {
 		if ( arguments.length === 1 && arguments[0] && arguments[0].jquery ) {
@@ -807,15 +807,15 @@ function OPAL () {
 		var list = new List();
 		List.apply(list,arr);
 		return list;
-	}
+	};
 	
 	List.fromArguments = function (args) {
 		return List.fromArray(Array.prototype.slice.call(args));
-	}
+	};
 	
 	List.fromJQuery = function (jq) {
 		return List.fromArray(jq.get()).map(jQuery,new List());
-	}
+	};
 	
 	function list () {
 		if ( arguments.length === 1 && arguments[0].jquery ) {
