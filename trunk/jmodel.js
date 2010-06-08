@@ -986,7 +986,7 @@ var jModel = function () {
 	function FieldPathOrdering (fieldpath) {	
 		return FunctionOrdering( function _fieldpathordering (obj) {
 			var property, value;
-			for (var i=0; i<path.length; i++) {
+			for (var i in path) {
 				value = obj.get(path[i]);
 				if ( !(typeof value == 'object') ) {
 					return value;
