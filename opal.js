@@ -65,6 +65,7 @@ function OPAL () {
 		return fn.apply(context,args);
 	}
 
+    // Tests: full
 	function applyto () {
 		var args = arguments;
 		return function _applyto () {

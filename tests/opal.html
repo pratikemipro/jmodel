@@ -96,7 +96,18 @@
 				
 			});
 			
-			test('applyto', function () {
+			test('Applyto', function () {
+				
+				var double = function (x) { return 2*x; };
+				
+				var Tripler = function () {
+				    this.triple = function (x) { return 3*x; };
+				};
+				
+				var tripler = new Tripler();
+				
+				equals( opal.applyto(3)(double), 6, 'applyto works without context' );
+				equals( opal.applyto(3)(tripler,tripler.triple), 9, 'applyto works with context');
 				
 			});
 			
