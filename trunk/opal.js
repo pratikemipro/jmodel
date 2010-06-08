@@ -137,7 +137,7 @@ function OPAL () {
 	function Resolve (name) {
 		return function _resolve (object) {
 			var prop;
-			return ( typeof ( prop = object[name] ) === 'function' ) ? prop.call(object) : prop;
+			return ( typeof ( prop = object[name] ) === 'function' ) ? Method(name).apply(null,arguments) : Property(name).apply(null,arguments);
 		};
 	}
 
