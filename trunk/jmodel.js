@@ -843,13 +843,13 @@ var jModel = function () {
 		ordering: function _ordering () {
 		    var i;
 			if ( arguments.length > 1 ) {
-				for ( i=0; i<arguments.length; i++ ) {
+				for ( i in arguments ) {
 					arguments[i] = _ordering(arguments[i]);
 				}
 				return CompositeOrdering.apply(null,arguments);
 			}
 			else if ( arguments[0] instanceof Array ) {
-				for ( i=0; i<arguments[0].length; i++ ) {
+				for ( i in arguments ) {
 					arguments[0][i] = _ordering(arguments[0][i]);
 				}
 				return CompositeOrdering(arguments[0]);
