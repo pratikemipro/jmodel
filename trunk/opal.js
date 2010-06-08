@@ -15,6 +15,7 @@ function OPAL () {
 
 	var opal = {opal_version:'0.8.5'};
 
+    // Tests: full
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
@@ -24,6 +25,7 @@ function OPAL () {
 	}
 	opal.extend = extend;
 
+    // Tests: full
 	function pipe () {
 		var fns = arguments;
 		return fns.length == 1 ? fns[0] : function _pipe (x) {
@@ -34,11 +36,13 @@ function OPAL () {
 		};
 	}
 	
+	// Tests: full
 	function compose () {
 		return arguments.length == 1 ? arguments[0]
 				: pipe.apply(null,Array.prototype.slice.call(arguments).reverse());
 	}
 	
+	// Tests: full
 	function parallel () {
 		var fns = arguments;
 		return function _parallel () {
@@ -53,6 +57,7 @@ function OPAL () {
 		};
 	}
 	
+	// Tests: full
 	function apply () {
 		var args	= Array.prototype.slice.call(arguments),
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,

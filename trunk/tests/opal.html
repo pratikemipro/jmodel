@@ -16,18 +16,11 @@
 			module('Functions');
 			
 			test('Extend', function () {
-				
-			});
-			
-			test('Compose', function () {
-			
-				var double = function (x) { return 2*x; },
-					addten = function (x) { return x+10; };
-					
-				equals( opal.compose(double,addten)(7), 34, 'composition of two functions works' );
-				equals( opal.compose(addten,double)(7), 24, 'composition works in opposite direction' );
-				equals( opal.compose(double)(7), 14, 'composition of a single function is just that function' );	
-				equals( opal.compose()(7), 7, 'composition of no functions is identity' );
+			    
+			    var source = {forename:'John',surname:'Smith'},
+			        target = {};
+			        
+			    equals( opal.extend(source,target).forename, 'John', 'extension works');
 				
 			});
 			
@@ -43,7 +36,63 @@
 				
 			});
 			
+			test('Compose', function () {
+			
+				var double = function (x) { return 2*x; },
+					addten = function (x) { return x+10; };
+					
+				equals( opal.compose(double,addten)(7), 34, 'composition of two functions works' );
+				equals( opal.compose(addten,double)(7), 24, 'composition works in opposite direction' );
+				equals( opal.compose(double)(7), 14, 'composition of a single function is just that function' );	
+				equals( opal.compose()(7), 7, 'composition of no functions is identity' );
+				
+			});
+			
+			test('Parallel', function () {
+			   
+			    var double = function (x) { return 2*x; },
+					addten = function (x) { return x+10; };
+					
+				var result1 = opal.parallel(double,addten)(5);
+			    
+			    equals( result1[0], 10, 'parallel without labels returns correct first value');
+			    equals( result1[1], 15, 'parallel without labels returns correct second value');
+			    
+/*			    var result2 = opal.parallel({
+			        doubled: double,
+			        addedten: addten
+			    })(5);
+			    
+			    equals( result2.doubled,  10, 'parallel with label in call returns correct first value');
+			    equals( result2.addedten, 15, 'parallel with label in call returns correct second value'); */
+			    
+			    double.label = 'doubled';
+			    addten.label = 'addedten';
+			    
+			    var result3 = opal.parallel(double,addten)(5);
+			    
+			    equals( result3.doubled,  10, 'parallel with label as function properties returns correct first value');
+			    equals( result3.addedten, 15, 'parallel with label as function properties returns correct second value');
+			    
+			    var result4 = opal.parallel(double,addten)({doubled:2,addedten:3});
+			    
+			    equals( result4.doubled,  4,  'parallel with label as function properties and labelled parameters returns correct first value');
+			    equals( result4.addedten, 13, 'parallel with label as function properties and labelled parameters returns correct second value');
+			    
+			});
+			
 			test('Apply', function () {
+				
+				var double = function (x) { return 2*x; };
+				
+				var Tripler = function () {
+				    this.triple = function (x) { return 3*x; };
+				};
+				
+				var tripler = new Tripler();
+				
+				equals( opal.apply(double,3), 6, 'apply works without context' );
+				equals( opal.apply(tripler, tripler.triple, 3), 9, 'apply works with context' );
 				
 			});
 			
@@ -182,7 +231,9 @@
 				testSet.add('blue');
 				
 				var concat = '';
-				testSet.each(function () {concat+=this});
+				console.log('----');
+				testSet.each(function (item) {concat+=item});
+				console.log('----');
 				
 				equals( concat, 'redgreenblue', 'each works with functions');
 				
@@ -692,5 +743,15 @@
 		<h2 id="userAgent"></h2>
 		<ol id="tests"></ol>
 		<div id="main"></div>
+		
+		
+		<table id="values">
+		    <tr><td>-</td></tr>
+		    <tr><td>-</td></tr>
+		    <tr><td>-</td></tr>
+		    <tr><td>-</td></tr>
+		    <tr><td>-</td></tr>
+		</table>
+		
 	</body>
 </html>
