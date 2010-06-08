@@ -167,6 +167,9 @@
 				equals( opal.Property('surname')(fred), 'Smith', 'Property works on properties that exist' );
 				equals( opal.Property('age')(fred), undefined, 'Property returns "undefined" for properties that do not exist');
 				
+				equals( opal.Property('surname','Jones')(fred).surname, 'Jones', 'Property allows setting of values at creation time' );
+				equals( opal.Property('surname')(fred,'Smith').surname, 'Smith', 'Property allows setting of values at invocation time' );
+				
 			});
 			
 			test('Method', function () {

@@ -152,6 +152,7 @@ function OPAL () {
 		return object !== null && typeof object;
 	}
 
+    // Tests: full
 	function Property (property,value) {
 		return arguments.length == 1 ? function _property (object,value) {
 			if ( arguments.length == 1 ) {
