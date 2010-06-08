@@ -144,7 +144,7 @@ var jModel = function () {
 		makeCollection(arguments[0]).each(function __intersection (object) {
 			intersection.add(object);
 		});
-		for (var i=1; i<arguments.length; i++ ) {
+		for (var i in arguments ) {
 			intersection = intersection.filter(MembershipPredicate(arguments[i]));
 		}
 		if ( arguments[0] instanceof Set ) {
