@@ -66,7 +66,7 @@
 			}
 			var pieces = path.split('/'),
 				property = flags;
-			for ( var i in pieces ) {
+		    for ( var i=0; i<pieces.length; i++ ) {
 				if ( typeof property.all == 'boolean' && property.all ) {
 					return true;
 				}
@@ -84,7 +84,7 @@
 		function setFlag (path,value) {
 			var pieces = path.split('/'),
 				property = flags;
-			for ( var i in pieces ) {
+			for (var i=0; i<pieces.length-1; i++) {
 				if ( typeof property[pieces[i]] == 'object' ) {
 					property = property[pieces[i]];
 				}
@@ -115,7 +115,7 @@
 		};
 		
 		var external = function _external (condition) {	
-			if ( arguments.length === 0 || ( active && enabled(condition) ) ) {
+			if ( arguments.length === 0 || ( active && enabled(condition)) ) {
 				return externalActive;
 			}
 			else {
