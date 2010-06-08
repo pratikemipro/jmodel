@@ -133,10 +133,16 @@ function OPAL () {
 		}; 
 	}
 	
-	// Tests: full
+	// Tests: partial
+	// NOTE: Need to test updating resolution
 	function Resolve (name) {
+	    var args = Array.prototype.slice.call(arguments),
+	        name = args.shift();
 		return function _resolve (object) {
-			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,arguments) : Property(name).apply(null,arguments);
+		    var args1   = Array.prototype.slice.call(arguments),
+		        object  = args1.shift(),
+		        args2   = [object].concat(args,args1);
+			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : Property(name).apply(null,args2);
 		};
 	}
 
