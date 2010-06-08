@@ -133,8 +133,7 @@ function OPAL () {
 		}; 
 	}
 	
-	// Tests: partial
-	// NOTE: Need to test updating resolution
+	// Tests: full
 	function Resolve (name) {
 	    var args = Array.prototype.slice.call(arguments),
 	        name = args.shift();
