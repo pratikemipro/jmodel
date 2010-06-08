@@ -205,9 +205,37 @@
 			
 			test('PropertyPath', function () {
 				
+				var person = {
+				    name: {
+				        first: 'John',
+				        last: 'Smith'
+				    },
+				    job: function () {
+				        return {
+				            company: 'Cyberdyne',
+				            title: 'Developer'
+				        };
+				    }
+				};
+				
+				equals( opal.PropertyPath('name.last')(person), 'Smith', 'PropertyPath works for paths specified in a string');
+				equals( opal.PropertyPath('name/last','/')(person), 'Smith', 'PropertyPath works for paths specified in a string with alternative separator');
+				equals( opal.PropertyPath(['name','first'])(person), 'John', 'PropertyPath works for paths specified in an array');
+				equals( opal.PropertyPath('job.title')(person), 'Developer', 'PropertyPath works for containing methods');
+				equals( opal.PropertyPath(['job','title'])(person), 'Developer', 'PropertyPath works for paths containing methods specified as arrays');
+				equals( opal.PropertyPath('job.salary')(person), undefined, 'PropertyPath returns undefined for paths that do not exist.');
+				
 			});
 			
 			test('PropertySet', function () {
+				
+			});
+			
+			test('Transform', function () {
+				
+			});
+			
+			test('Aspect', function () {
 				
 			});
 			
