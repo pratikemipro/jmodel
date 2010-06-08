@@ -241,9 +241,8 @@ var emerald = function () {
 	em.EventType = EventType;
 	
 	em.disjoin = function () {
-	    var derivedEventType = new EventType(em.registry),
-	        that = this;
-	    set(arrayFromArguments(arguments)).each(function (eventType) {
+	    var derivedEventType = new EventType(em.registry);
+	    Set.fromArguments(arguments).each(function (eventType) {
 	        eventType.subscribe(function () {
 	            derivedEventType.raise.apply(derivedEventType,arguments);
 	        });
@@ -254,10 +253,9 @@ var emerald = function () {
 	em.conjoin = function () {
 	    
 	    var derivedEventType = new EventType(em.registry),
-	        that = this,
 	        buffer = list();    
 	        
-	    set(arrayFromArguments(arguments)).each(function (eventType) {
+	    Set.fromArguments(arguments).each(function (eventType) {
 	        var queue = buffer.add([]).added;
 	        eventType.subscribe(function () {
     	        queue.push.apply(queue,arguments);
