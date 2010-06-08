@@ -121,7 +121,7 @@ var jModel = function () {
 	
 	external.union = function _union () {
 		var union = new Set();
-		for (var i=0; i<arguments.length; i++ ) {
+		for (var i in arguments ) {
 			var collection = makeCollection(arguments[i]);
 			collection.each(function __union (object) {
 				union.add(object);
