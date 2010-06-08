@@ -385,7 +385,7 @@ var jModel = function () {
 				return this.objects.get(criterion);
 			}
 			else {
-			    var args = arrayFromArguments(arguments);
+			    var args = Array.prototype.slice.call(arguments);
 			    if ( args[args.length-1] !== ':first' ) {
 			        args.push(':first');
 			    }
@@ -1026,11 +1026,10 @@ var jModel = function () {
 	function FieldOrValuePredicate (ValuePredicate,numberValueArguments) {
 		numberValueArguments = numberValueArguments || 1;
 		return function _fieldorvaluepredicate () {
-			var field = arguments[arguments.length-1],
-				value = arrayFromArguments(arguments).slice(0,numberValueArguments);
-			return arguments.length > numberValueArguments ?
-				FieldPredicate(field,ValuePredicate.apply(null,value))
-				: ValuePredicate.apply(null,value);
+		    var value    = Array.prototype.slice.call(arguments),
+		        field   = ( args.length > numberValueArguments ) ? args.pop() : undefined;
+			return field ? FieldPredicate(field,ValuePredicate.apply(null,value))
+				            : ValuePredicate.apply(null,value);
 		};
 	}
 	
