@@ -66,7 +66,7 @@
 			}
 			var pieces = path.split('/'),
 				property = flags;
-			for ( var i=0; i<pieces.length; i++ ) {
+			for ( var i in pieces ) {
 				if ( typeof property.all == 'boolean' && property.all ) {
 					return true;
 				}
@@ -84,7 +84,7 @@
 		function setFlag (path,value) {
 			var pieces = path.split('/'),
 				property = flags;
-			for (var i=0; i<pieces.length-1; i++) {
+			for ( var i in pieces ) {
 				if ( typeof property[pieces[i]] == 'object' ) {
 					property = property[pieces[i]];
 				}
