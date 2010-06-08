@@ -202,7 +202,7 @@ var emerald = function () {
 		map: function (fn) {
 		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
-		    this.subscribe(function (event) {
+		    this.subscribe(function () {
 		        args = Array.prototype.slice.call(arguments);
 		        args[0] = fn.apply(null,args);
 		        derivedEventType.raise.apply(derivedEventType,args);
