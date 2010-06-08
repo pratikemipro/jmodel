@@ -36,7 +36,7 @@ jModel.json = function () {
 		    if ( childKey != '__metadata' && childKey != '__deferred' ) {
 		        var childData = partitionedData.children[childKey];
    				childData = ( childData instanceof Array ) ? childData : [childData];
-   				for ( var i=0; i<childData.length; i++) {
+   				for ( var i in childData ) {
    				    if ( !(childData[i] && childData[i].__deferred) ) {
    				        makeObject(childKey,childData[i],object||parent,context);
    				    }
