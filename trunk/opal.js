@@ -76,6 +76,7 @@ function OPAL () {
 		};
 	}
 	
+	// Tests: full
 	function curry () {
 		var args	= Array.prototype.slice.call(arguments),
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
@@ -91,10 +92,12 @@ function OPAL () {
 	// Concurrency functions
 	//
 	
+	// Tests: none
 	function async () {
 		return setTimeout(suspend.apply(null,arguments),1);
 	}
 	
+	// Tests: none
 	function sequence () {
 		var operations	= Array.prototype.slice.call(arguments),
 			operation	= operations.shift(),
@@ -115,6 +118,7 @@ function OPAL () {
 		return performOperation();
 	}
 	
+	// Tests: none
 	function synchronise () {
 		var args = Array.prototype.slice.call(arguments),
 			last = args.pop(),
@@ -138,10 +142,12 @@ function OPAL () {
 	// Object functions
 	// 
 
+    // Tests: full
 	function Identity (object) {
 		return object;
 	}
 
+    // Tests: full
 	function Type (object) {
 		return object !== null && typeof object;
 	}
