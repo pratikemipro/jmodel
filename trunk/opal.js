@@ -458,12 +458,10 @@ function OPAL () {
 		
 		map: function _map () {
 			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Resolve(obj) : obj; }
-			var lastArgument 	= arguments[arguments.length-1],
-				lastIsObject	= typeof lastArgument == 'object',
-				mapped			= lastIsObject ? lastArgument : new List(),
-				mappings		= Array.prototype.slice.call(arguments,0,arguments.length - ( lastIsObject ? 1 : 0 )),
-				mapping 		= ( mappings.length == 1 ) ? makeMapping(mappings[0])
-						  			: pipe.apply(null,List.fromArray(mappings).map(makeMapping).get());
+			var args    = Array.prototype.slice.call(arguments),
+			    mapped  = ( typeof args[args.length-1] === 'object' ) ? args.pop() : new List(),
+			    mapping = ( args.length === 1 ) ? makeMapping(args[0])
+			                : pipe.apply(null, List.fromArray(args).map(makeMapping).get());
 			return this.reduce(add(function (obj) {return obj !== undefined;},mapping,true),mapped);
 		},
 		
@@ -1013,7 +1011,7 @@ function OPAL () {
 		return function _conjunctionpredicate () {
 			var predicates = Set.fromArguments(arguments);
 			return function __conjunctionpredicate (candidate) {
-				return predicates.map(applyto(candidate)).reduce(conjunction);
+			    return predicates.map(applyto(candidate)).reduce(conjunction);
 			};
 		};
 	}
