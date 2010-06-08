@@ -184,12 +184,22 @@
 				    this.surname = surname;
 				    this.age = age;
 				    this.name = function () { return this.forename + ' ' + this.surname; };
+				    this.Forename = function (forename) {
+			            this.forename = forename;
+			            return this;
+				    };
 				}
 				
 				var person = new Person('John','Smith',18);
 				
 				equals( opal.Resolve('age')(person),  18,           'Resolve works with properties');
 				equals( opal.Resolve('name')(person), 'John Smith', 'Resolve works with methods');
+				
+				equals( opal.Resolve('age',17)(person).age, 17, 'Resolve updates properties with values given at creation time');
+			    equals( opal.Resolve('age')(person,19).age, 19, 'Resolve updates properties with values given at invocation time');
+			    
+			    equals( opal.Resolve('Forename','Adam')(person).forename, 'Adam', 'Resolve updates methods with values given at creation time');
+			    equals( opal.Resolve('Forename')(person,'Bob').forename, 'Bob', 'Resolve updates methods with values given at invocation time');
 			    
 			});
 			
