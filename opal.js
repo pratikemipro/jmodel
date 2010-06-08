@@ -14,6 +14,12 @@
 function OPAL () {
 
 	var opal = {opal_version:'0.8.5'};
+	
+	function assert(condition,exception) {
+		if (!condition) {
+			throw 'Opal exception: '+exception;
+		}
+	}
 
     // Tests: full
 	function extend (object,target) {
@@ -585,16 +591,19 @@ function OPAL () {
 	opal.Set = Set;
 	
 	Set.fromArray = function (arr) {
+		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var set = new Set();
 		Set.apply(set,arr);
 		return set;
 	};
 	
 	Set.fromArguments = function (args) {
+		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
 		return Set.fromArray(Array.prototype.slice.call(args));
 	};
 	
 	Set.fromJQuery = function (jq) {
+		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
 	};
 
@@ -769,16 +778,19 @@ function OPAL () {
 	List.prototype.constructor	= List;
 	
 	List.fromArray = function (arr) {
+		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var list = new List();
 		List.apply(list,arr);
 		return list;
 	};
 	
 	List.fromArguments = function (args) {
+		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
 		return List.fromArray(Array.prototype.slice.call(args));
 	};
 	
 	List.fromJQuery = function (jq) {
+		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return List.fromArray(jq.get()).map(jQuery,new List());
 	};
 	
