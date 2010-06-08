@@ -52,7 +52,7 @@ var emerald = function () {
 		constructor: EventRegistry,
 		
 		register: function _register () {
-			return set(arguments).reduce(Method('add',this),this);
+			return Set.fromArguments(arguments).reduce(Method('add',this),this);
 		},
 		
 		filter: function _filter () {
@@ -422,7 +422,7 @@ var emerald = function () {
 		
 		send: function _send (messages) {
 			messages = (messages instanceof Set || messages instanceof List) ? messages
-							: list(messages);
+							: List.fromArguments(arguments);
 			var that = this;
 			messages.each(function __send (message) {
    				that.__process(message);
