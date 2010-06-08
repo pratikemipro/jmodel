@@ -145,14 +145,15 @@ function OPAL () {
 		};
 	}
 
+    // Tests: full
 	function PropertyPath (path,separator) {
-		var resolvers = set( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
+		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
 		return function _propertypath (object) {
 			try {
 				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
 			}
 			catch (error) {
-				return false;
+				return undefined;
 			}
 		};
 	}
