@@ -433,10 +433,14 @@
 			
 			test('Map', function () {
 				
-				var testSet = opal.set(1,2,3);
-				var doubled = testSet.map(function (obj) { return obj*2; });
+				var testSet = opal.set(1,2,3),
+				    double  = function (obj) { return obj*2; },
+				    addten  = function (obj) { return obj+10;};
 				
-				equals(doubled.first(),2,'mapping works');
+				equals(testSet.map(double).count(), 3, 'Map returns list with correct cardinality');
+				equals(testSet.map(double).first(), 2, 'Map correctly maps first element');
+				equals(testSet.map(double,addten).count(), 3, 'Pipeline mapping returns list with correct cardinality');
+				equals(testSet.map(double,addten).first(), 12, 'Pipeline mapping maps first element correctly');
 				
 			});
 			
