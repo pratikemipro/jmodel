@@ -257,6 +257,20 @@
 			    
 			});
 			
+			test('Set.fromArguments', function () {
+			   
+			   function makeSet () {
+			       return opal.Set.fromArguments(arguments);
+			   }
+			   
+			   var set = makeSet('red','green','blue');
+			   
+			   equals( set instanceof opal.Set, true, 'Set.fromArguments returns a set');
+			    equals( set.count(), 3, 'Set.fromArguments returns a set with correct cardinality');
+			    equals( set.first(), 'red', 'Set.fromArguments has correct first element');
+			    
+			});
+			
 			test('Set creation', function () {
 				
 				equals( opal.set(['red','green','blue']).count(), 3, "creation from array" );
