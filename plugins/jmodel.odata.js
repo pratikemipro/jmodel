@@ -65,21 +65,25 @@ jModel.plugin.context.fromService = function (url, callback) {
                         principalEntity     = schema.EntityType(principalEntityName),
                         dependentEntity     = schema.EntityType(dependentEntityName);
 
-                    principalEntity.addRelationship({
-                        Name:       $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
-                        Singular:   dependentEntityName,
-                        Plural:     $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
-                        Type:       'toMany',
-                        ToEntity:   dependentEntityName,
-                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
-                    });
+                    if ( $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).length > 0 ) {
+                        principalEntity.addRelationship({
+                            Name:       $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                            Singular:   dependentEntityName,
+                            Plural:     $('EntityType[Name='+principalEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                            Type:       'toMany',
+                            ToEntity:   dependentEntityName,
+                            Field:      $('Dependent PropertyRef',associationData).attr('Name')
+                        });
+                    }
 
-                    dependentEntity.addRelationship({
-                        Name:       $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
-                        Type:       'toOne',
-                        ToEntity:   principalEntityName,
-                        Field:      $('Dependent PropertyRef',associationData).attr('Name')
-                    });
+                    if ( $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).length > 0 ) {
+                        dependentEntity.addRelationship({
+                            Name:       $('EntityType[Name='+dependentEntityName+'] NavigationProperty[Relationship$=.'+associationName+']',schemaData).attr('Name'),
+                            Type:       'toOne',
+                            ToEntity:   principalEntityName,
+                            Field:      $('Dependent PropertyRef',associationData).attr('Name')
+                        });
+                    }
                     
                 }
                 
