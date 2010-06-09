@@ -247,6 +247,16 @@
 			
 			module('Set');
 			
+			test('Set.fromArray', function () {
+			    
+			    var set = opal.Set.fromArray(['red','green','blue']);
+			    
+			    equals( set instanceof opal.Set, true, 'Set.fromArray returns a set');
+			    equals( set.count(), 3, 'Set.fromArray returns a set with correct cardinality');
+			    equals( set.first(), 'red', 'Set.fromArray has correct first element');
+			    
+			});
+			
 			test('Set creation', function () {
 				
 				equals( opal.set(['red','green','blue']).count(), 3, "creation from array" );
