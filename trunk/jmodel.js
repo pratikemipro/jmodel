@@ -1074,13 +1074,13 @@ var jModel = function () {
 			}
 			else if ( typeof example[key] == 'object' ) {
 				predicates.push(FieldPredicate(key,SomeSetPredicate(ExamplePredicate(example[key]))));
-			} 
+			}
 			else {
 				predicates.push(FieldPredicate(key,EqualityPredicate(example[key])));
 			}
 		}
 		
-		return And(predicates);
+		return And.apply(null,predicates);
 
 	};
 	
