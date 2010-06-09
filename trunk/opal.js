@@ -76,7 +76,7 @@ function OPAL () {
 		var args = arguments;
 		return function _applyto () {
 			var args1	= Array.prototype.slice.call(arguments),
-				context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
+			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
 			return fn.apply(context,args);
 		};
@@ -308,7 +308,7 @@ function OPAL () {
 	//																		Set
 	// ------------------------------------------------------------------------
 
-	function Set (objects) {
+	function Set () {
 
 		this.__members = Array.prototype.slice.call(arguments);
 
@@ -457,7 +457,7 @@ function OPAL () {
 			    selector = ':first';
 			}
 
-			return this.__members.filter ? set(this.__members.filter(predicate)).select(selector)
+			return this.__members.filter ? Set.fromArray(this.__members.filter(predicate)).select(selector)
 					: this.reduce(add(predicate),new Set()).select(selector);		
 
 		},
