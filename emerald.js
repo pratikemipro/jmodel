@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.5.5
+ *	Emerald Javascript Library v0.6.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var em		= extend({emerald_version:'0.5.5'},opal),
+	var em		= extend({emerald_version:'0.6.0'},opal),
 		_		= em;
 
 
@@ -553,10 +553,9 @@ var emerald = function () {
 		var change = this.event('change');
 		this.event('add')
 			.map('object')
-			.where(function (object) {
-				return object.event && object.event('change');
-			})
+			.where(has('event','change'))
 			.subscribe(function (object) {
+				console.log(object);
 				object.event('change').subscribe(function (event) {
 					event.object = object;
 					change.raise(event);
