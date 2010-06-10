@@ -565,6 +565,77 @@ var emerald = function () {
 	};
 	
 	
+	// ------------------------------------------------------------------------
+	//														 Observable Objects
+	// ------------------------------------------------------------------------
+	
+	function ObservableObject (data,notifications) {
+		
+		this.__data = data;
+	
+		this.events = new EventRegistry(notifications || new NotificationQueue(),'change');
+		this.event	= delegateTo(this.events,'filter');
+		
+		for ( var field in this.__data ) {
+			
+			this.events.register(field);
+			
+			this[field] = (function (field) {
+				return function () {
+					return this.getField(field);
+				}				
+			})(field);
+			
+			this['set'+field] = (function (field) {
+				return function (value) {
+					return this.setField(field,value);
+				}
+			})(field);
+			
+		}
+	
+	}
+	
+	ObservableObject.prototype = {
+		
+		getField: function (field) {
+			return this.__data[field]
+		},
+		
+		setField: function (field,value) {
+			var oldValue = this.__data[field];
+			this.__data[field] = value;
+			try {
+				var event = this.event(field);
+				if ( value !== oldValue ) {
+					var descriptor = {
+						field: field,
+						value: value,
+						old: oldValue
+					}
+					event.raise(descriptor);
+					this.event('change').raise(descriptor);
+				}
+			}
+			catch (e) {
+				this.events.register(field);	
+			}
+			return this;
+		},
+		
+		set: function (values) {
+			for ( var field in values ) {
+				this.setField(field,values[field]);
+			}
+			return this;
+		}
+		
+	}
+	
+	em.ObservableObject = ObservableObject
+	
+	
+	
 	//
 	// Create default EventRegistry
 	//
