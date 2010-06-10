@@ -57,9 +57,6 @@ var emerald = function () {
 		
 		filter: function _filter () {
 		    events = TypedSet.prototype.filter.apply(this,arguments);
-		    if ( !events ) {
-		        throw 'Emerald exception: unknown event "'+arguments[0]+'"';
-		    }
 		    return events;
 		},
 		
@@ -486,7 +483,7 @@ var emerald = function () {
 			this.message.apply(null,this.args);
 		}
 		
-	}
+	};
 	
 	
 	// ------------------------------------------------------------------------
@@ -547,10 +544,27 @@ var emerald = function () {
 	ObservableTypedSet.prototype.constructor	= ObservableTypedSet;
 	
 	function makeObservable (notifications) {
+		
 		notifications = notifications || new NotificationQueue();
-		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort');
+		
+		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort','change');
 		this.event	= delegateTo(this.events,'filter');
+		
+		var change = this.event('change');
+		this.event('add')
+			.map('object')
+			.where(function (object) {
+				return object.event && object.event('change');
+			})
+			.subscribe(function (object) {
+				object.event('change').subscribe(function (event) {
+					event.object = object;
+					change.raise(event);
+				});
+			});
+		
 		return this;
+		
 	}
 	
 	em.ObservableSet = ObservableSet;
@@ -583,13 +597,13 @@ var emerald = function () {
 			this[field] = (function (field) {
 				return function () {
 					return this.getField(field);
-				}				
+				};
 			})(field);
 			
 			this['set'+field] = (function (field) {
 				return function (value) {
 					return this.setField(field,value);
-				}
+				};
 			})(field);
 			
 		}
@@ -599,7 +613,7 @@ var emerald = function () {
 	ObservableObject.prototype = {
 		
 		getField: function (field) {
-			return this.__data[field]
+			return this.__data[field];
 		},
 		
 		setField: function (field,value) {
@@ -612,7 +626,7 @@ var emerald = function () {
 						field: field,
 						value: value,
 						old: oldValue
-					}
+					};
 					event.raise(descriptor);
 					this.event('change').raise(descriptor);
 				}
@@ -630,9 +644,9 @@ var emerald = function () {
 			return this;
 		}
 		
-	}
+	};
 	
-	em.ObservableObject = ObservableObject
+	em.ObservableObject = ObservableObject;
 	
 	
 	
