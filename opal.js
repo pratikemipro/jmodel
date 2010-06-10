@@ -1,5 +1,5 @@
 /*
- *	OPAL Javascript Library v0.8.5
+ *	OPAL Javascript Library v0.8.6
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -13,7 +13,7 @@
 
 function OPAL () {
 
-	var opal = {opal_version:'0.8.5'};
+	var opal = {opal_version:'0.8.6'};
 	
 	function assert(condition,exception) {
 		if (!condition) {
@@ -109,19 +109,22 @@ function OPAL () {
 		return object !== null && typeof object;
 	}
 
-    // Tests: full
+    // Tests: partial
+	// NOTE: add test that it doesn't set properties that don't exist
 	function Property (property,value) {
 		return arguments.length == 1 ? function _property (object,value) {
 			if ( arguments.length == 1 ) {
 				return object[property];
 			}
-			else {
+			else if ( object[property] ) {
 				object[property] = value;
 				return object;
 			}
 		}
 		: function _property (object) {
-			object[property] = value;
+			if ( object[property] ) {
+				object[property] = value;
+			}
 			return object;
 		};
 	}
@@ -897,6 +900,13 @@ function OPAL () {
         return candidate === null;
     }
 
+	function ExistentialPredicate () {
+		var resolver = Resolve.apply(null,arguments);
+		return function (candidate) {
+			return Boolean(resolver(candidate));
+		};
+	}
+
 	opal.extend({
 		AllPredicate: 			AllPredicate,
 		NonePredicate: 			NonePredicate,
@@ -904,7 +914,8 @@ function OPAL () {
 		FunctionPredicate: 		FunctionPredicate,
 		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
-		NullPredicate:          NullPredicate
+		NullPredicate:          NullPredicate,
+		has: 					ExistentialPredicate
 	});
 
 	// Object Predicates
