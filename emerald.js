@@ -381,13 +381,13 @@ var emerald = function () {
 		
 		notify: function (event) {
 			if ( this.predicate(event) ) {
-				this.notifications.send(new Notification(this.message,arguments));
+				this.notifications.send(new Notification(this.message,arguments,this.subscription));
 			}
 		},
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
-				this.notifications.send(new Notification(this.error,arguments));
+				this.notifications.send(new Notification(this.error,arguments,this.subscription));
 			}
 		}
 		
@@ -434,7 +434,7 @@ var emerald = function () {
 		
 		__store: function (message) {
 			if ( message.subscription && !message.subscription.application ) {
-				this.deliver(message);
+				this.__deliver(message);
 			}
 			else {
 				this.add(message);
@@ -470,9 +470,10 @@ var emerald = function () {
 	em.NotificationQueue = NotificationQueue;
 	
 	
-	function Notification (message,args) {
-		this.message	= message;
-		this.args		= Array.prototype.slice.call(args);
+	function Notification (message,args,subscription) {
+		this.message	    = message;
+		this.args		    = Array.prototype.slice.call(args);
+		this.subscription   = subscription;
 	}
 	
 	Notification.prototype = {
