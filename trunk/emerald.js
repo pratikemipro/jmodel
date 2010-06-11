@@ -472,7 +472,7 @@ var emerald = function () {
 	
 	function Notification (message,args) {
 		this.message	= message;
-		this.args		= args;
+		this.args		= Array.prototype.slice.call(args);
 	}
 	
 	Notification.prototype = {
@@ -480,10 +480,25 @@ var emerald = function () {
 		constructor: Notification,
 		
 		deliver: function () {
-			this.message.apply(null,this.args);
+		    this.message.apply(null,this.args);
 		}
 		
 	};
+	
+	
+	function AsynchronousNotification (message,args) {
+	    Notification.call(this,message,args);
+	}
+	
+	AsynchronousNotification.prototype = extend({
+	    
+	    constructor: AsynchronousNotification,
+	    
+	    deliver: function () {
+	        async.apply(null,[this.message].concat(this.args));
+	    }
+	    
+	}, new Notification() );
 	
 	
 	// ------------------------------------------------------------------------
