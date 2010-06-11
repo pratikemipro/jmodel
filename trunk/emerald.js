@@ -570,7 +570,6 @@ var emerald = function () {
 			.map('object')
 			.where(has('event','change'))
 			.subscribe(function (object) {
-				console.log(object);
 				object.event('change').subscribe(function (event) {
 					event.object = object;
 					change.raise(event);
