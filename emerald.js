@@ -570,10 +570,12 @@ var emerald = function () {
 			.map('object')
 			.where(has('event','change'))
 			.subscribe(function (object) {
-				object.event('change').subscribe(function (event) {
-					event.object = object;
-					change.raise(event);
-				});
+				object.event('change')
+				    .map(function (event) {
+				        event.object = object;
+				        return event;
+				    })
+				    .republish(change);
 			});
 		
 		return this;
