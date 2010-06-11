@@ -381,6 +381,9 @@ var jModel = function () {
 		
 		object: function _object (criterion) {
 			criterion = ( typeof criterion == 'string' && this.options.primaryKey && parseInt(criterion,10) ) ? parseInt(criterion,10) : criterion;
+			if ( criterion === null || typeof criterion === 'undefined' ) {
+			    return false;
+			}
 			if ( typeof criterion == 'number' && this.options.primaryKey ) {
 				return this.objects.get(criterion);
 			}
@@ -575,7 +578,7 @@ var jModel = function () {
 		} 
 		this.sorted = false;
 		
-		this.events.register('change');
+//		this.events.register('change');
 
 		if ( this.__ordering ) {
 			this.sort();
@@ -607,7 +610,7 @@ var jModel = function () {
 		    });
 		    
 		    // Object changes are republished as collection changes
-		    object.event('change').map(function (event) {
+/*		    object.event('change').map(function (event) {
 		        return {
 		            method: 'change',
 		            object: event.object,
@@ -615,7 +618,7 @@ var jModel = function () {
 		            value: event.value,
 		            description: 'object change for '+that.description+' collection change'
 		        };
-		    }).republish(that.event('change'));
+		    }).republish(that.event('change')); */
 
 		});
 		
@@ -667,7 +670,7 @@ var jModel = function () {
 		
 		filter: function _filter () {
 
-			if ( arguments.length === 0 ) {
+			if ( arguments.length === 0  ) {
 				return this;
 			}
 
