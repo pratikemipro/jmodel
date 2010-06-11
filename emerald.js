@@ -472,7 +472,7 @@ var emerald = function () {
 	
 	function Notification (message,args,subscription) {
 		this.message	    = message;
-		this.args		    = Array.prototype.slice.call(args);
+		this.args		    = Array.prototype.slice.call(args||[]);
 		this.subscription   = subscription;
 	}
 	
@@ -636,16 +636,14 @@ var emerald = function () {
 			var oldValue = this.__data[field];
 			this.__data[field] = value;
 			try {
-				var event = this.event(field);
-				if ( value !== oldValue ) {
-					var descriptor = {
+				var event = this.event(field),
+					descriptor = {
 						field: field,
 						value: value,
 						old: oldValue
-					};
-					event.raise(descriptor);
-					this.event('change').raise(descriptor);
-				}
+				};
+				event.raise(descriptor);
+				this.event('change').raise(descriptor);
 			}
 			catch (e) {
 				this.events.register(field);	
