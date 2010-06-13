@@ -21,6 +21,7 @@
 		':up': 			38,
 		':right': 		39,
 		':down': 		40,
+		':delete': 		46,
 		':leftcmd': 	91,
 		':rightcmd': 	93
 	};
@@ -48,7 +49,7 @@
 			case 'function':
 				return function (event) {
 					return String.fromCharCode(event.which).match(identifier) || false; 
-				}
+				};
 				
 			case 'object':
 				return emerald.Or.apply(null,emerald.List.fromArray(identifier).map(key).get());
