@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.6.0
+ *	Emerald Javascript Library v0.6.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.6.0'},opal),
+	var em		= extend({emerald_version:'0.6.1'},opal),
 		_		= em;
  
  
@@ -98,6 +98,11 @@ var emerald = function () {
 		
 		fail: function _error () {
 			this.subscribers().fail.apply(this.subscribers(),arguments);
+		},
+		
+		as: function (name) {
+			this.name = name;
+			return this;
 		},
 		
 		derive: function (registry,name,notifications) {
