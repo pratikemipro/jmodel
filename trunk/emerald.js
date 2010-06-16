@@ -8,31 +8,31 @@
  *	Requires opal.js
  *
  */
-
-
+ 
+ 
 // ============================================================================
 //														Emerald Event Framework
 // ============================================================================
-
+ 
 var emerald = function () {
-
+ 
 	//
 	// Import OPAL
 	//
-
+ 
 	var opal = window.opal;
 	for ( var i in opal ) {
 		eval('var '+i+' = opal.'+i);
 	}
-
+ 
 	var em		= extend({emerald_version:'0.6.0'},opal),
 		_		= em;
-
-
+ 
+ 
 	// ------------------------------------------------------------------------
 	// 															  EventRegistry
 	// ------------------------------------------------------------------------
-
+ 
 	function EventRegistry (notifications) {
 		
 		TypedSet.call(this,EventType);
@@ -105,7 +105,8 @@ var emerald = function () {
 		},
 		
 		where: function (predicate) {
-		    var derivedEventType = this.derive();
+		    var derivedEventType = this.derive(),
+		        predicate        = arguments.length > 1 ? And.apply(null,arguments) : predicate;
 		    this.subscribe(function () {
 		        if ( predicate.apply(null,arguments) ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
@@ -401,16 +402,16 @@ var emerald = function () {
 	// ------------------------------------------------------------------------
 	//															  Notifications
 	// ------------------------------------------------------------------------
-
+ 
 	function NotificationQueue (context,application) {
-
+ 
         TypedSet.call(this,Notification);
-
+ 
 		this.context		= context;
 		this.__suspensions	= 0;
 		this.__process		= this.__deliver;
 		this.application    = application;
-
+ 
 	}
 	
 	NotificationQueue.prototype = extend({
@@ -447,7 +448,7 @@ var emerald = function () {
 			this.__process = this.__store;
 			return this;
 		},
-
+ 
 		resume: function _resume () {
             this.__suspensions--;
 			if ( this.__suspensions === 0 ) {
@@ -672,6 +673,6 @@ var emerald = function () {
 	
 	
 	return em;
-
+ 
 	
 }();
