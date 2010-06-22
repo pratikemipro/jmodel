@@ -52,7 +52,7 @@ var emerald = function () {
 		constructor: EventRegistry,
 		
 		register: function _register () {
-			return Set.fromArguments(arguments).reduce(Method('add',this),this);
+			return Set.fromArguments(arguments).reduce(Method('add'),this);
 		},
 		
 		filter: function _filter () {
