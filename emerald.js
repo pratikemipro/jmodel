@@ -109,7 +109,7 @@ var emerald = function () {
 		  return new this.constructor(registry,name,notifications);
 		},
 		
-		where: function (predicate) {
+		where: function () {
 		    var derivedEventType = this.derive(),
 		        predicate        = arguments.length > 1 ? And.apply(null,arguments) : predicate;
 		    this.subscribe(function () {
@@ -317,6 +317,15 @@ var emerald = function () {
     	        eventType.raise.apply(eventType,arguments);
     	    });
     	    fn.apply(this,args);
+    	    return eventType;
+    	},
+    	
+    	fromAjax: function (descriptor) {
+    	    var eventType = new EventType();
+    	    descriptor.success = function () {
+    	        eventType.raise.apply(eventType,arguments);
+    	    };
+    	    jQuery.ajax.call(null,descriptor);
     	    return eventType;
     	},
     	
