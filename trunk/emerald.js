@@ -111,7 +111,7 @@ var emerald = function () {
 		
 		where: function () {
 		    var derivedEventType = this.derive(),
-		        predicate        = arguments.length > 1 ? And.apply(null,arguments) : predicate;
+		        predicate        = arguments.length > 1 ? And.apply(null,arguments) : arguments[0];
 		    this.subscribe(function () {
 		        if ( predicate.apply(null,arguments) ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
