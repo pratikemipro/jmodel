@@ -1014,47 +1014,6 @@ var jModel = function () {
 	// ------------------------------------------------------------------------
 	
 	external.predicate = (new DomainObjectCollection()).predicate;
-	
-	//
-	// Field predicates
-	//
-	
-	function FieldPredicate (field,predicate) {
-		return function _fieldpredicate (candidate) { 
-		    return predicate(Resolve(field)(candidate));
-		};
-	}
-	
-	function FieldOrValuePredicate (ValuePredicate,numberValueArguments) {
-		numberValueArguments = numberValueArguments || 1;
-		return function _fieldorvaluepredicate () {
-		    var value    = Array.prototype.slice.call(arguments),
-		        field   = ( args.length > numberValueArguments ) ? args.pop() : undefined;
-			return field ? FieldPredicate(field,ValuePredicate.apply(null,value))
-				            : ValuePredicate.apply(null,value);
-		};
-	}
-	
-	var Eq		= FieldOrValuePredicate(EqualityPredicate),
-		Lt		= FieldOrValuePredicate(LessThanPredicate),
-		Gt		= FieldOrValuePredicate(GreaterThanPredicate),
-		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
-		GtE		= FieldOrValuePredicate(GreaterThanPredicate),
-		Between	= FieldOrValuePredicate(BetweenPredicate,2),
-		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate),
-		IsNull	= FieldOrValuePredicate(NullPredicate,0);
-	
-	external.extend({
-		
-		eq: 		Eq,
-		lt: 		Lt,
-		gt: 		Gt,
-		lte: 		LtE,
-		gte: 		GtE,
-		between: 	Between,
-		regex: 		RegEx,
-		isnull:     IsNull			
-	});
 
 	// Primary Key Identity
 	
