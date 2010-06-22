@@ -213,9 +213,12 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		republish: function (republishedEventType) {
+		republish: function () {
+		    var args1 = Array.prototype.slice.call(arguments),
+		        republishedEventType = args1.shift();
 		    this.subscribe(function () {
-	            republishedEventType.raise.apply(republishedEventType,arguments);
+		        var args2 = Array.prototype.slice.call(arguments);
+	            republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
 	        });
 		    return this;
 		}
