@@ -492,6 +492,7 @@ var emerald = function () {
 		this.message	    = message;
 		this.args		    = Array.prototype.slice.call(args||[]);
 		this.subscription   = subscription;
+		this.context		= ( subscription && subscription.context ) ? subscription.context : null;
 	}
 	
 	Notification.prototype = {
@@ -499,7 +500,7 @@ var emerald = function () {
 		constructor: Notification,
 		
 		deliver: function () {
-		    this.message.apply(null,this.args);
+		    this.message.apply(this.context,this.args);
 		}
 		
 	};
