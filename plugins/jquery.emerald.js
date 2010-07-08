@@ -11,6 +11,16 @@ jQuery.fn.event = function (name) {
     var events = [];
     this.each(function (index,element) {
         events.push(emerald.event.from(this,name));
-    })
+    });
 	return emerald.disjoin.apply(this,events);
 };
+
+
+jQuery.fn.subscribe = function (descriptor) {
+    this.each(function (index,element) {
+        descriptor.event.subscribe(function () {
+            descriptor.message.apply(element,arguments);
+        })
+    });
+    return this;
+}
