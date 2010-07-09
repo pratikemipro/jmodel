@@ -89,10 +89,14 @@ var emerald = function () {
 		constructor: EventType,
 	
 		subscribe: function _subscribe (subscriber) {
-			return this.subscribers().add(subscriber).added;
+			var subs = this.subscribers().add(subscriber).added;
+			if ( this.__last ) {
+				subs.notify.apply(subs,this.__last);
+			}
 		},
 	
 		raise: function _raise () {
+			this.__last = this.__remember ? arguments : undefined;
 			this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
@@ -103,6 +107,10 @@ var emerald = function () {
 		as: function (name) {
 			this.name = name;
 			return this;
+		},
+		
+		remember: function () {
+			this.__remember = true;
 		},
 		
 		derive: function (registry,name,notifications) {
