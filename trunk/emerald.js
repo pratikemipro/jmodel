@@ -339,6 +339,7 @@ var emerald = function () {
     	    var eventType = new EventType(),
     	        args = Array.prototype.slice.apply(arguments),
     	        fn = args.shift();
+			eventType.remember();
     	    args.push(function () {
     	        eventType.raise.apply(eventType,arguments);
     	    });
@@ -348,6 +349,7 @@ var emerald = function () {
     	
     	fromAjax: function (descriptor) {
     	    var eventType = new EventType();
+			eventType.remember();
     	    descriptor.success = function () {
     	        eventType.raise.apply(eventType,arguments);
     	    };
