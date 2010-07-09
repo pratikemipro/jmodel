@@ -148,6 +148,17 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		take: function (number) {
+			var derivedEventType = this.derive();
+		    this.subscribe(function () {
+		        if ( number >= 0 ) {
+		            derivedEventType.raise.apply(derivedEventType,arguments);
+		        }
+		        number--;
+		    });
+		    return derivedEventType;
+		},
+		
 		between: function (startEventType,stopEventType) {
 			var derivedEventType = this.derive(),
 				active = false,
