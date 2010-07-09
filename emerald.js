@@ -682,6 +682,13 @@ var emerald = function () {
 	em.ObservableObject = ObservableObject;
 	
 	
+	//
+	// Predicates
+	//
+	
+	em.changed = function (event) {
+		return event.value !== event.old;
+	};
 	
 	//
 	// Create default EventRegistry
