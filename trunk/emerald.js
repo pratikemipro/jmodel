@@ -114,7 +114,11 @@ var emerald = function () {
 		},
 		
 		derive: function (registry,name,notifications) {
-		  return new this.constructor(registry,name,notifications);
+			var derived = new this.constructor(registry,name,notifications);
+			if ( this.__remember ) {
+				derived.remember();
+			}
+			return derived;
 		},
 		
 		where: function () {
