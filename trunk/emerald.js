@@ -177,9 +177,11 @@ var emerald = function () {
 				startEvent, stopEvent;
 			this.subscribe(function (event) {
 				if ( active ) {
-				    args = Array.prototype.slice.call(arguments);
-				    args.push(startEvent,stopEvent);
-					derivedEventType.raise.apply(derivedEventType,args);
+					derivedEventType.raise.apply(
+						derivedEventType,
+						Array.prototype.slice.call(arguments)
+							.concat([startEvent,stopEvent])
+					);
 				}
 			});
 			startEventType.subscribe(function (event) {
