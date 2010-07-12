@@ -138,7 +138,7 @@ var emerald = function () {
 			inclusive = typeof inclusive === 'undefined' ? true : inclusive;
 		    this.subscribe(function (event) {
 				var last = false;
-		        if ( predicate(event) ) {
+		        if ( active && predicate(event) ) {
 					active = false;
 					last = true;
 				}
