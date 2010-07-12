@@ -175,7 +175,7 @@ var emerald = function () {
 			
 			var derivedEventType = this.derive(),
 				active = false,
-				startEvent, stopEvent;
+				startEvent;
 				
 			this.subscribe(function (event) {
 				if ( active ) {
@@ -193,7 +193,6 @@ var emerald = function () {
 			});
 			
 			stopEventType.subscribe(function (event) {
-				stopEvent = event;
 				active = false;
 			});
 			
