@@ -172,9 +172,11 @@ var emerald = function () {
 		},
 		
 		between: function (startEventType,stopEventType) {
+			
 			var derivedEventType = this.derive(),
 				active = false,
 				startEvent, stopEvent;
+				
 			this.subscribe(function (event) {
 				if ( active ) {
 					derivedEventType.raise.apply(
@@ -184,15 +186,19 @@ var emerald = function () {
 					);
 				}
 			});
+			
 			startEventType.subscribe(function (event) {
 			    startEvent = event;
 				active = true;
 			});
+			
 			stopEventType.subscribe(function (event) {
 				stopEvent = event;
 				active = false;
 			});
+			
 			return derivedEventType;
+			
 		},
 		
 		waitFor: function (startEventType) {
