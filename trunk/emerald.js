@@ -287,7 +287,7 @@ var emerald = function () {
 	    Set.fromArguments(arguments).each(function (eventType) {
 	        var queue = buffer.add([]).added;
 	        eventType.subscribe(function () {
-    	        queue.push.call(queue,arguments);
+    	        queue.push.call(queue,Array.prototype.slice.call(arguments));
 				if ( bufferReady() ) {
 	                sendMessage();
 	            }
@@ -303,12 +303,9 @@ var emerald = function () {
 	    function sendMessage () {
 	        derivedEventType.raise.apply(
 	            derivedEventType,
-	            buffer
-					.map(function (queue) {
-	                	return Array.prototype.slice.call(queue.shift());
-	            	})
-					.reduce(_.Method('concat'),new _.List())
-					.get()
+				Array.prototype.concat.apply([],buffer.map(function (queue) {
+					return queue.shift();
+				}).get())
 	        );
 	    }
 	    
