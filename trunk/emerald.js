@@ -215,8 +215,8 @@ var emerald = function () {
 		
 		effect: function (fn) {
 		    var derivedEventType = this.derive();
-		    this.subscribe(function (event) {
-		        fn(event);
+		    this.subscribe(function () {
+		        fn.apply(null,arguments);
 		        derivedEventType.raise.apply(derivedEventType,arguments);
 		    });
 		    return derivedEventType;
