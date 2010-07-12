@@ -236,9 +236,7 @@ var emerald = function () {
 		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function () {
-		        args = Array.prototype.slice.call(arguments);
-		        args[0] = fn.apply(null,args);
-		        derivedEventType.raise.apply(derivedEventType,args);
+				derivedEventType.raise.apply(derivedEventType,fn.apply(null,arguments));
 		    });
 		    return derivedEventType;
 		},
