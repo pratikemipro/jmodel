@@ -94,6 +94,15 @@ function OPAL () {
 	
 	var suspend = curry;
 
+	function nth (index) {
+		return function (args) {
+			return args[index];
+		};
+	}
+	
+	var first	= nth(1),
+		second	= nth(2);
+
 
 	//
 	// Object functions
@@ -205,6 +214,9 @@ function OPAL () {
 		parallel: parallel,
 		curry: curry,
 		suspend: suspend,
+		nth: nth,
+		first: first,
+		second: second,
 		Identity: Identity,
 		Type: Type,
 		Property: Property,
