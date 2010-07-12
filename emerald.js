@@ -225,8 +225,8 @@ var emerald = function () {
 		accumulate: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			var derivedEventType = this.derive();
-		    this.subscribe(function (event) {
-		        acc = fn(acc,event);
+		    this.subscribe(function () {
+		        acc = fn.apply(null,[acc].concat(Array.prototype.slice.call(arguments)));
 				derivedEventType.raise(acc);
 		    });
 		    return derivedEventType;
