@@ -171,25 +171,31 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		between: function (startEventType,stopEventType) {
+		between: function (startEventType,stopEventType,options) {
+			
+			options = options || {};
 			
 			var derivedEventType = this.derive(),
 				active = false,
-				startEvent;
+				startEvent,
+				last;
 				
-			this.subscribe(function (event) {
+			this.subscribe(function () {
+				var args = Array.prototype.slice.call(arguments);
 				if ( active ) {
-					derivedEventType.raise.apply(
-						derivedEventType,
-						Array.prototype.slice.call(arguments)
-							.concat([startEvent,stopEvent])
-					);
+					derivedEventType.raise.apply(derivedEventType,args.concat(startEvent));
+				}
+				else if (options.remember) {
+					last = args;
 				}
 			});
 			
-			startEventType.subscribe(function (event) {
-			    startEvent = event;
+			startEventType.subscribe(function () {
+			    startEvent = Array.prototype.slice.call(arguments);
 				active = true;
+				if ( options.remember && last ) {
+					derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
+				}
 			});
 			
 			stopEventType.subscribe(function (event) {
@@ -236,7 +242,7 @@ var emerald = function () {
 		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function () {
-				derivedEventType.raise.apply(derivedEventType,fn.apply(null,arguments));
+				derivedEventType.raise.call(derivedEventType,fn.apply(null,arguments));
 		    });
 		    return derivedEventType;
 		},
