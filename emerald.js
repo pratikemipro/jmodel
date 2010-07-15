@@ -338,6 +338,13 @@ var emerald = function () {
     	    });
     	    return eventType;
     	},
+
+		after: function (interval) {
+			var eventType = new EventType();
+			function raise() { eventType.raise({}); }
+			setTimeout(raise,interval);
+			return eventType;
+		},
     	
     	every: function (interval) {
     	    var eventType = new EventType();
@@ -374,6 +381,18 @@ var emerald = function () {
     	    return em.event.fromAsync.apply(null,args);
     	}
 	    
+	};
+	
+	em.seconds = function (interval) {
+		return 1000 * interval;
+	};
+	
+	em.minutes = function (interval) {
+		return 60000 * interval;
+	};
+	
+	em.hours = function (interval) {
+		return 3600000 * interval;
 	};
 	
 	
