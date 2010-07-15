@@ -341,15 +341,17 @@ var emerald = function () {
 
 		after: function (interval) {
 			var eventType = new EventType();
-			function raise() { eventType.raise({}); }
-			setTimeout(raise,interval);
+			setTimeout(function () {
+				eventType.raise({});
+			}, interval);
 			return eventType;
 		},
     	
     	every: function (interval) {
     	    var eventType = new EventType();
-    	    function raise() { eventType.raise({}); }
-    	    setInterval(raise,interval);
+    	    setInterval(function () {
+				eventType.raise({}); 
+			}, interval);
     	    return eventType;
     	},
     	
