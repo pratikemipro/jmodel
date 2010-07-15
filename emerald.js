@@ -357,12 +357,11 @@ var emerald = function () {
     	
     	fromAsync: function () {
     	    var eventType = new EventType(),
-    	        args = Array.prototype.slice.apply(arguments),
+    	        args = Array.prototype.slice.apply(arguments).concat(function () {
+					eventType.raise.apply(eventType,arguments);
+				}),
     	        fn = args.shift();
 			eventType.remember();
-    	    args.push(function () {
-    	        eventType.raise.apply(eventType,arguments);
-    	    });
     	    fn.apply(this,args);
     	    return eventType;
     	},
