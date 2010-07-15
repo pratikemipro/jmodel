@@ -395,6 +395,11 @@ var emerald = function () {
 		return 3600000 * interval;
 	};
 	
+	em.alarm = function (dateString) {
+		var interval = Date.parse(dateString) - (new Date()).getTime();
+		return em.event.after(interval);
+	};
+	
 	
 	//
 	// Subscriber Set
