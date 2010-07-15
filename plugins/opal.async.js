@@ -9,10 +9,6 @@
 
 (function () {
 	
-	function async () {
-		return setTimeout(opal.suspend.apply(null,arguments),1);
-	}
-	
 	// Tests: none
 	function sequence () {
 		var operations	= Array.prototype.slice.call(arguments),
@@ -54,7 +50,6 @@
 	}
 	
 	opal.extend({
-	    async: async,
 		sequence: sequence,
 		synchronise: synchronise,
 		synchronize: synchronise
