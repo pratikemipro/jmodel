@@ -377,8 +377,7 @@ var emerald = function () {
     	},
     	
     	fromJSON: function () {
-    	    var args = Array.prototype.slice.apply(arguments);
-    	    args.unshift(jQuery.getJSON);
+    	    var args = [jQuery.getJSON].concat(Array.prototype.slice.apply(arguments));
     	    return em.event.fromAsync.apply(null,args);
     	}
 	    
