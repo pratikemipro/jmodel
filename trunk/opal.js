@@ -204,6 +204,10 @@ function OPAL () {
 			}) : returnValue;
 		};
 	}
+	
+	function async () {
+		return setTimeout(opal.suspend.apply(null,arguments),1);
+	}
 
 	opal.extend({
 		apply: apply,
@@ -225,7 +229,8 @@ function OPAL () {
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet,
 		transform: transform,
-		aspect: aspect
+		aspect: aspect,
+		async: async
 	});
 
 

@@ -459,13 +459,13 @@ var emerald = function () {
 		
 		notify: function (event) {
 			if ( this.predicate(event) ) {
-				this.notifications.send(new Notification(this.message,arguments,this.subscription));
+				this.notifications.send(new AsynchronousNotification(this.message,arguments,this.subscription));
 			}
 		},
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
-				this.notifications.send(new Notification(this.error,arguments,this.subscription));
+				this.notifications.send(new AsynchronousNotification(this.error,arguments,this.subscription));
 			}
 		}
 		
