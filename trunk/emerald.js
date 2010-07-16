@@ -111,6 +111,7 @@ var emerald = function () {
 		
 		remember: function () {
 			this.__remember = true;
+			return this;
 		},
 		
 		derive: function (registry,name,notifications) {
@@ -342,9 +343,15 @@ var emerald = function () {
 	
 	em.event = {
 	    
-	    from: function (element,name) {
+	    from: function (element,name,options) {
     	    var eventType = new EventType();
     	    jQuery(element).bind(name, function (event) {
+				if ( options && options.preventDefault ) {
+					event.preventDefault();
+				}
+				if ( options && options.stopPropagation ) {
+					event.stopPropagation();
+				}
     	        eventType.raise(event);
     	    });
     	    return eventType;
