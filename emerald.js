@@ -219,6 +219,17 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		delay: function (interval) {
+			var derivedEventType = this.derive();
+			this.subscribe(function () {
+				var args = arguments;
+				setTimeout(function () {
+					derivedEventType.raise.apply(derivedEventType,args);
+				}, interval);
+			});
+			return derivedEventType;
+		},
+		
 		effect: function (fn) {
 		    var derivedEventType = this.derive();
 		    this.subscribe(function () {
@@ -459,13 +470,13 @@ var emerald = function () {
 		
 		notify: function (event) {
 			if ( this.predicate(event) ) {
-				this.notifications.send(new AsynchronousNotification(this.message,arguments,this.subscription));
+				this.notifications.send(new Notification(this.message,arguments,this.subscription));
 			}
 		},
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
-				this.notifications.send(new AsynchronousNotification(this.error,arguments,this.subscription));
+				this.notifications.send(new Notification(this.error,arguments,this.subscription));
 			}
 		}
 		
@@ -566,8 +577,8 @@ var emerald = function () {
 	};
 	
 	
-	function AsynchronousNotification (message,args) {
-	    Notification.call(this,message,args);
+	function AsynchronousNotification (message,args,subscription) {
+	    Notification.call(this,message,args,subscription);
 	}
 	
 	AsynchronousNotification.prototype = extend({
@@ -575,7 +586,7 @@ var emerald = function () {
 	    constructor: AsynchronousNotification,
 	    
 	    deliver: function () {
-	        async.apply(null,[this.message].concat(this.args));
+	        async.apply(this.context,[this.message].concat(this.args));
 	    }
 	    
 	}, new Notification() );
