@@ -206,7 +206,7 @@ function OPAL () {
 	}
 	
 	function async () {
-		return setTimeout(opal.suspend.apply(null,arguments),1);
+		return setTimeout(opal.suspend.apply(this,arguments),1);
 	}
 
 	opal.extend({
@@ -368,6 +368,9 @@ function OPAL () {
 			}
 			else if (this.__index) {
 				return this.__index.get(key);
+			}
+			else if ( typeof key === 'number' ) {
+				return this.__members[key];
 			}
 			else {
 				var obj = this.filter(key);
