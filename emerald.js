@@ -273,16 +273,24 @@ var emerald = function () {
 	};
 	
 	function SwitchCombinator (initialState) {
-		return function (controlEvent) {
+		return function (controlEvent,options) {
+			options = options || {};
 			var derivedEventType = this.derive(),
-				active = initialState;
+				active = initialState,
+				last;
 			this.subscribe(function () {
 				if ( active ) {
 					derivedEventType.raise.apply(derivedEventType,arguments);
 				}
+				else if (options.remember) {
+					last = arguments;
+				}
 			});
 			controlEvent.subscribe(function (event) {
 				active = !initialState;
+				if ( active && options.remember && last ) {
+					derivedEventType.raise.apply(derivedEventType,last);
+				}
 			});
 			return derivedEventType;
 		};
