@@ -7,10 +7,10 @@
  *
  */
 
-jQuery.fn.event = function (name) {
+jQuery.fn.event = function (name,options) {
     var events = [];
     this.each(function (index,element) {
-        events.push(emerald.event.from(this,name));
+        events.push(emerald.event.from(this,name,options));
     });
 	return emerald.disjoin.apply(this,events);
 };
