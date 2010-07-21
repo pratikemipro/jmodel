@@ -374,11 +374,15 @@ var emerald = function () {
 			return eventType;
 		},
     	
-    	every: function (interval) {
+    	every: function (interval,immediate) {
     	    var eventType = new EventType();
     	    setInterval(function () {
 				eventType.raise({}); 
 			}, interval);
+			if ( immediate ) {
+				eventType.remember(1);
+				eventType.raise({});
+			}
     	    return eventType;
     	},
     	
