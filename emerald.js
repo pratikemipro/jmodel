@@ -752,8 +752,10 @@ var emerald = function () {
 						value: value,
 						old: oldValue
 				};
-				event.raise(descriptor);
-				this.event('change').raise(descriptor);
+				if ( value != oldValue ) {
+					event.raise(descriptor);
+					this.event('change').raise(descriptor);
+				}
 			}
 			catch (e) {
 				this.events.register(field);	
