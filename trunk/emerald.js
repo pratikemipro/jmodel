@@ -745,24 +745,30 @@ var emerald = function () {
 		},
 		
 		setField: function (field,value) {
+			
 			var oldValue = this.__data[field];
 			this.__data[field] = value;
+			
 			try {
-				var event = this.event(field),
-					descriptor = {
-						field: field,
-						value: value,
-						old: oldValue
-				};
-				if ( value != oldValue ) {
-					event.raise(descriptor);
-					this.event('change').raise(descriptor);
-				}
+				var event = this.event(field);
 			}
 			catch (e) {
-				this.events.register(field);	
+				this.events.register(field);
+				return this;
 			}
+			
+			if ( value != oldValue ) {
+				var	descriptor = {
+					field: field,
+					value: value,
+					old: oldValue
+				};
+				event.raise(descriptor);
+				this.event('change').raise(descriptor);
+			}
+
 			return this;
+			
 		},
 		
 		set: function (values) {
