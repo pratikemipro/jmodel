@@ -309,9 +309,12 @@ var emerald = function () {
 	em.EventType = EventType;
 	
 	em.disjoin = function () {
-	    var derivedEventType = new EventType(em.registry),
-			events = arguments[0] instanceof Set ? arguments[0] : Set.fromArguments(arguments);
-	    events.each(function (eventType) {
+	    var derivedEventType	= new EventType(em.registry),
+			args				= Array.prototype.slice.call(arguments),
+			options				= args.length > 1 && !( args[args.length-1] instanceof EventType ) ? args.pop() : {},
+			eventTypes			= args[0] instanceof Set ? args[0] : Set.fromArray(args);
+		derivedEventType.remember(options.remember || 0);
+	    eventTypes.each(function (eventType) {
 	        eventType.subscribe(function () {
 	            derivedEventType.raise.apply(derivedEventType,arguments);
 	        });
