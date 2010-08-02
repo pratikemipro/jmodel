@@ -82,6 +82,8 @@ var emerald = function () {
 		this.registry		= registry || em.registry;
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(notifications || this.registry.notifications),'filter');
+		this.events			= [];
+		this.__rememeber	= 0;
 	}
 	
 	EventType.prototype = {
@@ -90,13 +92,18 @@ var emerald = function () {
 	
 		subscribe: function _subscribe (subscriber) {
 			var subs = this.subscribers().add(subscriber).added;
-			if ( this.__last ) {
-				subs.notify.apply(subs,this.__last);
+			for ( i in this.events ) {
+				subs.notify.apply(subs,this.events[i]);
 			}
 		},
 	
 		raise: function _raise () {
-			this.__last = this.__remember ? arguments : undefined;
+			if ( this.__remember ) {
+				this.events.push(arguments);
+				if ( this.__remember !== ':all' && this.events.length > this.__remember) {
+					this.events.shift();
+				}
+			}
 			this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
@@ -109,8 +116,8 @@ var emerald = function () {
 			return this;
 		},
 		
-		remember: function () {
-			this.__remember = true;
+		remember: function (number) {
+			this.__remember = number;
 			return this;
 		},
 		
