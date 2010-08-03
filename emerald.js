@@ -726,16 +726,18 @@ var emerald = function () {
 	//														 Observable Objects
 	// ------------------------------------------------------------------------
 	
-	function ObservableObject (data,notifications) {
+	function ObservableObject (data,options) {
 		
+		options		= options || {};
 		this.__data = {};
 	
-		this.events = new EventRegistry(notifications || new NotificationQueue(),'change');
+		this.events = new EventRegistry(options.notifications || new NotificationQueue(),'change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
 			
 			this.events.register(field);
+			this.event(field).remember(options.remember);
 			
 			this[field] = (function (field) {
 				return function () {
