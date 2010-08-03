@@ -798,6 +798,7 @@ function OPAL () {
 	}
 	
 	List.prototype				= new Set();
+	List.prototype.constraint	= AllPredicate;
 	List.prototype.constructor	= List;
 	
 	List.fromArray = function (arr) {
