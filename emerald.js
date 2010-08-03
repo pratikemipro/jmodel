@@ -204,8 +204,12 @@ var emerald = function () {
 				}
 			});
 			
-			stopEventType.subscribe(function (event) {
+			stopEventType.subscribe(function () {
+				var args = Array.prototype.slice.call(arguments);
 				active = false;
+				if ( options.inclusive ) {
+					derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
+				}
 			});
 			
 			return derivedEventType;
