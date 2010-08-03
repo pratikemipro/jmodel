@@ -60,6 +60,10 @@ var emerald = function () {
 		    return events;
 		},
 		
+		ensure: function _ensure (name) {
+			return this.filter(name) || this.register(name).filter(name);
+		},
+		
 		predicate: function _predicate (parameter) {
 			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
 				return extend({unique:true},PropertyPredicate('name',parameter));
@@ -272,28 +276,15 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		split: function (fn) {
-			
+		split: function (partition) {
 			var events = new EventRegistry();
-			
-			function ensureEventType (name) {
-				var event = events.filter(name);
-				if ( !event ) {
-					event = events.register(name).filter(name);
-				}
-				return event;
-			}
-			
 			this.subscribe(function () {
-				var partition	= fn.apply(null,arguments),
-					eventType	= ensureEventType(partition);
+				var eventType = events.ensure(partition.apply(null,arguments));
 				eventType.raise.apply(eventType,arguments);
 			});
-			
 			return {
-				event: ensureEventType
+				event: delegateTo(events,'ensure')
 			};
-			
 		},
 		
 		republish: function () {
