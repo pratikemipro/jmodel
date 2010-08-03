@@ -287,6 +287,29 @@ var emerald = function () {
 			};
 		},
 		
+		group: function (partition,fn,acc) {
+			var sourceEvents	= this.split(partition),
+				privateEvents	= new EventRegistry(),
+				targetEvents	= new EventRegistry();
+			this.subscribe(function () {
+				var group			= partition.apply(null,arguments),
+					privateEvent	= privateEvents.filter(group);
+				if ( !privateEvent ) {
+					var sourceEvent = sourceEvents.event(group);
+					privateEvent = privateEvents.add(
+						sourceEvent
+							.accumulate(fn,acc)
+							.as(group)
+							.republish(targetEvents.ensure(group))
+					).added;
+					sourceEvent.raise.apply(sourceEvent,arguments);
+				}
+			});
+			return {
+				event: delegateTo(targetEvents,'ensure')
+			};
+		},
+		
 		republish: function () {
 		    var args1 = Array.prototype.slice.call(arguments),
 		        republishedEventType = args1.shift();
