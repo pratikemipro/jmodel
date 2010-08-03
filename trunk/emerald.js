@@ -260,11 +260,14 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		map: function (fn) {
+		map: function (fn,each) {
 		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function () {
-				derivedEventType.raise.call(derivedEventType,fn.apply(null,arguments));
+				derivedEventType.raise.apply(
+					derivedEventType,
+					each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]
+				);
 		    });
 		    return derivedEventType;
 		},
@@ -799,7 +802,7 @@ var emerald = function () {
 	//
 	
 	em.changed = function (event) {
-		return arguments.length === 1 ? ( event.value !== event.old ) : ( arguments[0] !== arguments[1] );
+		return ( arguments.length === 1 && arguments[0].value ) ? ( event.value !== event.old ) : ( arguments[0] !== arguments[1] );
 	};
 	
 	//
