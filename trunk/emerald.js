@@ -770,13 +770,12 @@ var emerald = function () {
 			}
 			
 			if ( value != oldValue ) {
-				var	descriptor = {
+				event.raise(value,oldValue);
+				this.event('change').raise({
 					field: field,
 					value: value,
 					old: oldValue
-				};
-				event.raise(descriptor);
-				this.event('change').raise(descriptor);
+				});
 			}
 
 			return this;
@@ -800,7 +799,7 @@ var emerald = function () {
 	//
 	
 	em.changed = function (event) {
-		return event.value !== event.old;
+		return arguments.length === 1 ? ( event.value !== event.old ) : ( arguments[0] !== arguments[1] );
 	};
 	
 	//
