@@ -272,6 +272,30 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		split: function (fn) {
+			
+			var events = new EventRegistry();
+			
+			function ensureEventType (name) {
+				var event = events.filter(name);
+				if ( !event ) {
+					event = events.register(name).filter(name);
+				}
+				return event;
+			}
+			
+			this.subscribe(function () {
+				var partition	= fn.apply(null,arguments),
+					eventType	= ensureEventType(partition);
+				eventType.raise.apply(eventType,arguments);
+			});
+			
+			return {
+				event: ensureEventType
+			};
+			
+		},
+		
 		republish: function () {
 		    var args1 = Array.prototype.slice.call(arguments),
 		        republishedEventType = args1.shift();
