@@ -36,7 +36,7 @@
 			
 			case 'string':
 				return identifier.length === 1 ? function (event) {
-					return String.fromCharCode(event.which) === identifier.toUpperCase();
+					return String.fromCharCode(event.which).toUpperCase() === identifier.toUpperCase();
 				} : function (event) {
 					return event.which === codes[identifier];
 				};
@@ -48,7 +48,7 @@
 				
 			case 'function':
 				return function (event) {
-					return String.fromCharCode(event.which).match(identifier) || false; 
+					return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
 				};
 				
 			case 'object':
