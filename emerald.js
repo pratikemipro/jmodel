@@ -765,17 +765,19 @@ var emerald = function () {
 	// ------------------------------------------------------------------------
 	
 	function ObservableObject (data,options) {
-		
-		options		= options || {};
-		this.__data = {};
+
+		this.__data		= {};
+
+		this.options		= options || {};
+		this.options.tags	= this.options.tags || [];
 	
-		this.events = new EventRegistry(options.notifications || new NotificationQueue(),'change');
+		this.events = new EventRegistry(this.options.notifications || new NotificationQueue(),'change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
 			
 			this.events.register(field);
-			this.event(field).remember(options.remember);
+			this.event(field).remember(this.options.remember);
 			
 			this[field] = (function (field) {
 				return function () {
@@ -815,11 +817,12 @@ var emerald = function () {
 			}
 			
 			if ( value != oldValue ) {
-				event.raise(value,oldValue);
+				event.raise.apply(event,[value,oldValue].concat(this.options.tags));
 				this.event('change').raise({
 					field: field,
 					value: value,
-					old: oldValue
+					old: oldValue,
+					tags: this.options.tags
 				});
 			}
 
