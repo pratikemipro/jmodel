@@ -321,6 +321,16 @@ var emerald = function () {
 			};
 		},
 		
+		split: function () {
+			var matches = List.fromArguments(arguments);
+			this.subscribe(function () {
+				var args = arguments;
+				matches.each(function (match) {
+					match.apply(null,args);
+				});
+			});
+		},
+		
 		republish: function () {
 		    var args1 = Array.prototype.slice.call(arguments),
 		        republishedEventType = args1.shift();
@@ -411,6 +421,16 @@ var emerald = function () {
 	    
 	};
 	
+	
+	function match (predicate,eventtype) {
+		return function () {
+			if ( predicate.apply(null,arguments) ) {
+				eventtype.raise.apply(eventtype,arguments);
+			}
+		};
+	};
+	
+	em.match = match;
 	
 	//
 	// Event generators
