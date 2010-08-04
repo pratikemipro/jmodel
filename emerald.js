@@ -253,6 +253,16 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		tag: function () {
+			var derivedEventType = this.derive(),
+				tags = Array.prototype.slice.call(arguments);
+		    this.subscribe(function () {
+				var args = Array.prototype.slice.call(arguments);
+		        derivedEventType.raise.apply(derivedEventType,args.concat(tags));
+		    });
+		    return derivedEventType;
+		},
+		
 		accumulate: function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			var derivedEventType = this.derive();
