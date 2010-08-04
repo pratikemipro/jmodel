@@ -286,7 +286,7 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		split: function (partition) {
+		partition: function (partition) {
 			var events = new EventRegistry();
 			this.subscribe(function () {
 				var eventType = events.ensure(partition.apply(null,arguments));
@@ -298,7 +298,7 @@ var emerald = function () {
 		},
 		
 		group: function (partition,fn,acc) {
-			var sourceEvents	= this.split(partition),
+			var sourceEvents	= this.partition(partition),
 				privateEvents	= new EventRegistry(),
 				targetEvents	= new EventRegistry();
 			this.subscribe(function () {
@@ -308,6 +308,7 @@ var emerald = function () {
 					var sourceEvent = sourceEvents.event(group);
 					privateEvent = privateEvents.add(
 						sourceEvent
+							.tag(group)
 							.accumulate(fn,acc)
 							.as(group)
 							.republish(targetEvents.ensure(group))
