@@ -27,6 +27,111 @@ var emerald = function () {
  
 	var em		= extend({emerald_version:'0.7.0'},opal),
 		_		= em;
+		
+		
+		// ------------------------------------------------------------------------
+		//															  Notifications
+		// ------------------------------------------------------------------------
+
+		function NotificationQueue (context,application) {
+
+	        TypedSet.call(this,Notification);
+
+			this.context		= context;
+			this.__suspensions	= 0;
+			this.__process		= this.__deliver;
+			this.application    = application;
+
+		}
+
+		NotificationQueue.prototype = extend({
+
+			constructor: NotificationQueue,
+
+			send: function _send (messages) {
+				messages = (messages instanceof Set || messages instanceof List) ? messages
+								: List.fromArguments(arguments);
+				var that = this;
+				messages.each(function __send (message) {
+	   				that.__process(message);
+				});
+				return this;
+			},
+
+			__deliver: function (message) {
+				message.deliver();
+				return this;
+			},
+
+			__store: function (message) {
+				if ( message.subscription && !message.subscription.application ) {
+					this.__deliver(message);
+				}
+				else {
+					this.add(message);
+				}
+				return this;
+			},
+
+			suspend: function _suspend () {
+				this.__suspensions++;
+				this.__process = this.__store;
+				return this;
+			},
+
+			resume: function _resume () {
+	            this.__suspensions--;
+				if ( this.__suspensions === 0 ) {
+					this.__process = this.__deliver;
+					this.each('deliver');
+					return this.flush();
+				}
+				else {
+					return this;
+				}
+			},
+
+		    flush: function _flush (predicate) {	
+				this.remove(predicate);
+				return this;
+			}
+
+		}, new TypedSet(Notification) );
+
+		em.NotificationQueue = NotificationQueue;
+
+
+		function Notification (message,args,subscription) {
+			this.message	    = message;
+			this.args		    = Array.prototype.slice.call(args||[]);
+			this.subscription   = subscription;
+			this.context		= ( subscription && subscription.context ) ? subscription.context : null;
+		}
+
+		Notification.prototype = {
+
+			constructor: Notification,
+
+			deliver: function () {
+			    this.message.apply(this.context,this.args);
+			}
+
+		};
+
+
+		function AsynchronousNotification (message,args,subscription) {
+		    Notification.call(this,message,args,subscription);
+		}
+
+		AsynchronousNotification.prototype = extend({
+
+		    constructor: AsynchronousNotification,
+
+		    deliver: function () {
+		        async.apply(this.context,[this.message].concat(this.args));
+		    }
+
+		}, new Notification() );
  
  
 	// ------------------------------------------------------------------------
@@ -76,6 +181,12 @@ var emerald = function () {
 	}, new TypedSet(EventType) );
 	
 	em.EventRegistry = EventRegistry;
+	
+	//
+	// Create default EventRegistry
+	//
+	
+	em.registry = new EventRegistry();
 	
 	
 	// ------------------------------------------------------------------------
@@ -453,23 +564,11 @@ var emerald = function () {
     	},
 
 		after: function (interval) {
-			var eventType = new EventType();
-			setTimeout(function () {
-				eventType.raise({});
-			}, interval);
-			return eventType;
+			return new TimerEventType(interval);
 		},
     	
     	every: function (interval,immediate) {
-    	    var eventType = new EventType();
-    	    setInterval(function () {
-				eventType.raise({}); 
-			}, interval);
-			if ( immediate ) {
-				eventType.remember(1);
-				eventType.raise({});
-			}
-    	    return eventType;
+    	    return new PeriodicEventType(interval,immediate);
     	},
     	
     	fromAsync: function () {
@@ -499,6 +598,72 @@ var emerald = function () {
     	}
 	    
 	};
+	
+	
+	//
+	// PeriodicEventType
+	//
+	
+	function PeriodicEventType (interval,immediate) {
+		EventType.call(this);
+		this.interval	= interval;
+		this.immediate	= immediate;
+		this.start();
+	}
+	
+	PeriodicEventType.prototype = extend({
+	
+		start: function () {
+			var that = this;
+	   	    this.__timer = setInterval(function () {
+				that.raise({}); 
+			}, this.interval);
+			if ( this.immediate ) {
+				this.remember(1);
+				this.raise({});
+			}
+			return this;
+		},
+		
+		stop: function () {
+			clearInterval(this.__timer);
+			return this;
+		}
+		
+	}, new EventType() );
+	
+	
+	//
+	// TimerEventType
+	//
+	
+	function TimerEventType (interval) {
+		EventType.call(this);
+		this.interval = interval;
+		this.start();
+	}
+	
+	TimerEventType.prototype = extend({
+		
+		start: function () {
+			var that = this;
+			this.__timer = setTimeout(function () {
+				that.raise({});
+			}, this.interval);
+			return this;
+		},
+		
+		stop: function () {
+			clearTimeout(this.__timer);
+			return this;
+		}
+		
+	}, new EventType() );
+	
+	
+	//
+	// Helpful time functions
+	//
 	
 	em.seconds = function (interval) {
 		return 1000 * interval;
@@ -592,110 +757,6 @@ var emerald = function () {
 		Subscriber: Subscriber
 	});
 	
-	
-	// ------------------------------------------------------------------------
-	//															  Notifications
-	// ------------------------------------------------------------------------
- 
-	function NotificationQueue (context,application) {
- 
-        TypedSet.call(this,Notification);
- 
-		this.context		= context;
-		this.__suspensions	= 0;
-		this.__process		= this.__deliver;
-		this.application    = application;
- 
-	}
-	
-	NotificationQueue.prototype = extend({
-		
-		constructor: NotificationQueue,
-		
-		send: function _send (messages) {
-			messages = (messages instanceof Set || messages instanceof List) ? messages
-							: List.fromArguments(arguments);
-			var that = this;
-			messages.each(function __send (message) {
-   				that.__process(message);
-			});
-			return this;
-		},
-		
-		__deliver: function (message) {
-			message.deliver();
-			return this;
-		},
-		
-		__store: function (message) {
-			if ( message.subscription && !message.subscription.application ) {
-				this.__deliver(message);
-			}
-			else {
-				this.add(message);
-			}
-			return this;
-		},
-		
-		suspend: function _suspend () {
-			this.__suspensions++;
-			this.__process = this.__store;
-			return this;
-		},
- 
-		resume: function _resume () {
-            this.__suspensions--;
-			if ( this.__suspensions === 0 ) {
-				this.__process = this.__deliver;
-				this.each('deliver');
-				return this.flush();
-			}
-			else {
-				return this;
-			}
-		},
-	    
-	    flush: function _flush (predicate) {	
-			this.remove(predicate);
-			return this;
-		}
-	    
-	}, new TypedSet(Notification) );
-	
-	em.NotificationQueue = NotificationQueue;
-	
-	
-	function Notification (message,args,subscription) {
-		this.message	    = message;
-		this.args		    = Array.prototype.slice.call(args||[]);
-		this.subscription   = subscription;
-		this.context		= ( subscription && subscription.context ) ? subscription.context : null;
-	}
-	
-	Notification.prototype = {
-		
-		constructor: Notification,
-		
-		deliver: function () {
-		    this.message.apply(this.context,this.args);
-		}
-		
-	};
-	
-	
-	function AsynchronousNotification (message,args,subscription) {
-	    Notification.call(this,message,args,subscription);
-	}
-	
-	AsynchronousNotification.prototype = extend({
-	    
-	    constructor: AsynchronousNotification,
-	    
-	    deliver: function () {
-	        async.apply(this.context,[this.message].concat(this.args));
-	    }
-	    
-	}, new Notification() );
 	
 	
 	// ------------------------------------------------------------------------
@@ -880,12 +941,6 @@ var emerald = function () {
 	em.changed = function (event) {
 		return ( arguments.length === 1 && arguments[0].value ) ? ( event.value !== event.old ) : ( arguments[0] !== arguments[1] );
 	};
-	
-	//
-	// Create default EventRegistry
-	//
-	
-	em.registry = new EventRegistry();
 	
 	
 	return em;
