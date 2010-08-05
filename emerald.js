@@ -198,7 +198,7 @@ var emerald = function () {
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(notifications || this.registry.notifications),'filter');
 		this.events			= [];
-		this.__rememeber	= 0;
+		this.__remember		= 0;
 	}
 	
 	EventType.prototype = {
@@ -583,13 +583,7 @@ var emerald = function () {
     	},
     	
     	fromAjax: function (descriptor) {
-    	    var eventType = new EventType();
-			eventType.remember();
-    	    descriptor.success = function () {
-    	        eventType.raise.apply(eventType,arguments);
-    	    };
-    	    jQuery.ajax.call(null,descriptor);
-    	    return eventType;
+    	    return new AjaxEventType(descriptor);
     	},
     	
     	fromJSON: function () {
@@ -598,6 +592,42 @@ var emerald = function () {
     	}
 	    
 	};
+	
+	
+	//
+	// AjaxEventType
+	//
+	
+	function AjaxEventType (descriptor) {
+		
+		EventType.call(this);
+		this.remember(1);
+		var that = this;
+		
+		this.descriptor = copy(descriptor).addProperties({
+			success: function () {
+		        that.raise.apply(that,arguments);
+		    },
+			error: function () {
+				that.fail.apply(that,arguments);
+			}
+		});
+		
+		this.start();
+		
+	}
+	
+	AjaxEventType.prototype = extend({
+		
+		start: function () {
+			this.__ajax = jQuery.ajax.call(null,this.descriptor);
+		},
+		
+		stop: function () {
+			this.__ajax.abort();
+		}
+		
+	}, new EventType() );
 	
 	
 	//
