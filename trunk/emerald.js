@@ -897,7 +897,16 @@ var emerald = function () {
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
-			
+			this.instantiateField(field);
+			this.setField(field,data[field]);
+		}
+	
+	}
+	
+	ObservableObject.prototype = {
+		
+		instantiateField: function (field) {
+		
 			this.events.register(field);
 			this.event(field).remember(this.options.remember);
 			
@@ -913,13 +922,7 @@ var emerald = function () {
 				};
 			})(field);
 			
-			this.setField(field,data[field]);
-			
-		}
-	
-	}
-	
-	ObservableObject.prototype = {
+		},
 		
 		getField: function (field) {
 			return this.__data[field];
@@ -930,14 +933,12 @@ var emerald = function () {
 			var oldValue = this.__data[field];
 			this.__data[field] = value;
 			
-			try {
-				var event = this.event(field);
+			var event = this.event(field);
+			if ( !event ) {
+				this.instantiateField(field);
+				event = this.event(field);
 			}
-			catch (e) {
-				this.events.register(field);
-				return this;
-			}
-			
+
 			if ( value != oldValue ) {
 				event.raise.apply(event,[value,oldValue].concat(this.options.tags));
 				this.event('change').raise({
