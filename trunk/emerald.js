@@ -808,7 +808,7 @@ var emerald = function () {
 			add: aspect({
 				target: proto.add,
 				post: function (state) {
-					if (this.added) {
+					if ( typeof this.added !== 'undefined' ) {
 						this.event('add').raise({
 							method: 'add',
 							object: this.added,
