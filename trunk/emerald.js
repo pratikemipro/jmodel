@@ -378,9 +378,10 @@ var emerald = function () {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			var derivedEventType = this.derive();
 		    this.subscribe(function () {
-				acc = typeof acc === 'function' ? acc.apply(null,arguments) : acc;
-				acc = fn.apply(null,[acc].concat(Array.prototype.slice.call(arguments)));
-				derivedEventType.raise(acc);
+				var args = Array.prototype.slice.call(arguments);
+				acc = typeof acc === 'function' ? acc.apply(null,args) : acc;
+				acc = fn.apply(null,[acc].concat(args));
+				derivedEventType.raise.apply(derivedEventType,[acc].concat(args));
 		    });
 		    return derivedEventType;
 		},
