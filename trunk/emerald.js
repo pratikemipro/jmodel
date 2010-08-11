@@ -296,8 +296,9 @@ var emerald = function () {
 			
 			options = options || {};
 			
-			var derivedEventType = this.derive(),
-				active = false,
+			var derivedEventType	= this.derive(),
+				initial				= options.initial ? options.initial : false,
+				active				= initial,
 				startEvent,
 				last;
 				
@@ -313,7 +314,7 @@ var emerald = function () {
 			
 			startEventType.subscribe(function () {
 			    startEvent = Array.prototype.slice.call(arguments);
-				active = true;
+				active = !initial;
 				if ( options.remember && last ) {
 					derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
 				}
@@ -321,7 +322,7 @@ var emerald = function () {
 			
 			stopEventType.subscribe(function () {
 				var args = Array.prototype.slice.call(arguments);
-				active = false;
+				active = initial;
 				if ( options.inclusive ) {
 					derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
 				}
@@ -329,6 +330,12 @@ var emerald = function () {
 			
 			return derivedEventType;
 			
+		},
+		
+		notBetween: function (startEventType,stopEventType,options) {
+			options = options || {};
+			options.initial = true;
+			return this.between.call(this,startEventType,stopEventType,options);
 		},
 		
 		waitFor: function (startEventType) {
