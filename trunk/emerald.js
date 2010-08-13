@@ -382,15 +382,7 @@ var emerald = function () {
 		},
 		
 		accumulate: function (fn,acc) {
-			acc = arguments.length > 1 ? acc : fn.unit;
-			var derivedEventType = this.derive();
-		    this.subscribe(function () {
-				var args = Array.prototype.slice.call(arguments);
-				acc = typeof acc === 'function' ? acc.apply(null,args) : acc;
-				acc = fn.apply(null,[acc].concat(args));
-				derivedEventType.raise.apply(derivedEventType,[acc].concat(args));
-		    });
-		    return derivedEventType;
+			return new AccumulatorEventType(this,fn,acc);
 		},
 		
 		map: function (fn,each) {
@@ -491,6 +483,40 @@ var emerald = function () {
 	
 	em.EventType = EventType;
 	
+	
+	//
+	// AccumulatorEventType
+	//
+	
+	function AccumulatorEventType (source,fn,acc) {
+	
+		EventType.call(this);
+		acc = typeof acc !== 'undefined' ? acc : fn.unit;
+	
+		source.subscribe({
+			context: this,
+			message: function () {
+				var args = Array.prototype.slice.call(arguments);
+				acc = typeof acc === 'function' ? acc.apply(null,args) : acc;
+				acc = fn.apply(null,[acc].concat(args));
+				this.raise.apply(this,[acc].concat(args));
+			}
+	    });
+	
+		this.reset = function (value) {
+			acc = value;
+			this.raise.call(this,acc);
+		};
+	
+	}
+	
+	AccumulatorEventType.prototype = new EventType();
+	
+	
+	//
+	// Event combinators
+	//
+	
 	em.disjoin = function () {
 	    var derivedEventType	= new EventType(em.registry),
 			args				= Array.prototype.slice.call(arguments),
@@ -547,7 +573,7 @@ var emerald = function () {
 				eventtype.raise.apply(eventtype,arguments);
 			}
 		};
-	};
+	}
 	
 	em.match = match;
 	
