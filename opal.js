@@ -95,8 +95,8 @@ function OPAL () {
 	var suspend = curry;
 
 	function nth (index) {
-		return function (args) {
-			return args[index];
+		return function () {
+			return arguments[index];
 		};
 	}
 	
