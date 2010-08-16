@@ -100,8 +100,8 @@ function OPAL () {
 		};
 	}
 	
-	var first	= nth(1),
-		second	= nth(2);
+	var first	= nth(0),
+		second	= nth(1);
 
 
 	//
