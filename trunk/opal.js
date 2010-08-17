@@ -393,7 +393,11 @@ function OPAL () {
 		},
 		
 		first: function _first () {
-			return this.__members[0] || false;
+			return this.__members.length > 0 ? this.__members[0] : false;
+		},
+		
+		last: function _last () {
+			return this.__members.length > 0 ? this.__members[this.__members.length-1] : false;
 		},
 		
 		member: function _member (object) {
