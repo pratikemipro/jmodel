@@ -381,8 +381,8 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
-		accumulate: function (fn,acc) {
-			return new AccumulatorEventType(this,fn,acc);
+		accumulate: function (fn,acc,remember) {
+			return new AccumulatorEventType(this,fn,acc,remember ? 1 : 0);
 		},
 		
 		map: function (fn,each) {
@@ -488,10 +488,14 @@ var emerald = function () {
 	// AccumulatorEventType
 	//
 	
-	function AccumulatorEventType (source,fn,acc) {
+	function AccumulatorEventType (source,fn,acc,remember) {
 	
 		EventType.call(this);
 		acc = typeof acc !== 'undefined' ? acc : fn.unit;
+	
+		if ( remember ) {
+			this.remember(remember);
+		}
 	
 		source.subscribe({
 			context: this,
@@ -683,6 +687,7 @@ var emerald = function () {
 				that.raise({}); 
 			}, this.interval);
 			if ( this.immediate ) {
+				console.log('raising immediately');
 				this.remember(1);
 				this.raise({});
 			}
