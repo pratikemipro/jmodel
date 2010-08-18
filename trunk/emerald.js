@@ -934,6 +934,30 @@ var emerald = function () {
 			this.instantiateField(field);
 			this.setField(field,data[field]);
 		}
+		
+		if ( this.options.persist ) {
+			
+			this.event('change')
+				.subscribe({
+					context: {
+						store: 	this.options.persist,
+						prefix: this.options.prefix+'_'
+					},
+					message: function (event) {
+						this.store[this.prefix+event.field] = event.value;
+					}
+				});
+				
+			for ( var field in data ) {
+				this.setField(field, this.options.persist[this.options.prefix+'_'+field] || data[field]  );
+			}
+			
+		}
+		else {
+			for ( var field in data ) {
+				this.setField(field,data[field]);
+			}
+		}
 	
 	}
 	
