@@ -687,7 +687,6 @@ var emerald = function () {
 				that.raise({}); 
 			}, this.interval);
 			if ( this.immediate ) {
-				console.log('raising immediately');
 				this.remember(1);
 				this.raise({});
 			}
