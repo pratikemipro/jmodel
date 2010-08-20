@@ -340,7 +340,7 @@ var emerald = function () {
 		},
 		
 		waitFor: function (startEventType) {
-		    var derivedEventType    = this.derive(this.registry/*,null,notifications*/),
+		    var derivedEventType    = this.derive(),
 				events				= new List(),
 				active				= false;
 		    this.subscribe(function () {
