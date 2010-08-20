@@ -339,16 +339,24 @@ var emerald = function () {
 			return this.between.call(this,startEventType,stopEventType,options);
 		},
 		
-		// NOTE: Reimplement this
 		waitFor: function (startEventType) {
-		    var /*notifications       = new NotificationQueue(null,true),*/
-		        derivedEventType    = this.derive(this.registry/*,null,notifications*/);
-		    notifications.suspend();
+		    var derivedEventType    = this.derive(this.registry/*,null,notifications*/),
+				events				= new List(),
+				active				= false;
 		    this.subscribe(function () {
-		        derivedEventType.raise.apply(derivedEventType,arguments);
+				if ( active ) {
+					derivedEventType.raise.apply(derivedEventType,arguments);
+				}
+				else {
+					events.add(Array.prototype.slice.call(arguments));
+				}
+		        
 		    });
 		    startEventType.subscribe(function () {
-//		        notifications.resume();
+				active = true;
+				events.each(function (event) {
+					derivedEventType.raise.apply(derivedEventType,event);
+				});
 		    });
 		    return derivedEventType;
 		},
