@@ -987,8 +987,8 @@ var emerald = function () {
 			this.event(field).remember(this.options.remember);
 			
 			this[field] = (function (field) {
-				return function () {
-					return this.getField(field);
+				return function (value) {
+					return arguments.length === 0 ? this.getField(field) : this.setField(field,value);
 				};
 			})(field);
 			
