@@ -244,9 +244,10 @@ var emerald = function () {
 		
 		where: function () {
 		    var derivedEventType = this.derive(),
-		        predicate        = arguments.length > 1 ? And.apply(null,arguments) : arguments[0];
+				context			 = arguments[0].context   || this,
+		        predicate        = arguments[0].predicate || ( arguments.length > 1 ? And.apply(this,arguments) : arguments[0] );
 		    this.subscribe(function () {
-		        if ( predicate.apply(null,arguments) ) {
+		        if ( predicate.apply(context,arguments) ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		    });
