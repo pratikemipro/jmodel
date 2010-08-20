@@ -33,7 +33,7 @@ var emerald = function () {
 		//															  Notifications
 		// ------------------------------------------------------------------------
 
-		function NotificationQueue (context,application) {
+/*		function NotificationQueue (context,application) {
 
 	        TypedSet.call(this,Notification);
 
@@ -131,23 +131,23 @@ var emerald = function () {
 		        async.apply(this.context,[this.message].concat(this.args));
 		    }
 
-		}, new Notification() );
+		}, new Notification() ); */
  
  
 	// ------------------------------------------------------------------------
 	// 															  EventRegistry
 	// ------------------------------------------------------------------------
  
-	function EventRegistry (notifications) {
+	function EventRegistry (/*notifications*/) {
 		
 		TypedSet.call(this,EventType);
 		
-		this.notifications	= notifications || new NotificationQueue();
+//		this.notifications	= notifications || new NotificationQueue();
 		
 		this.index(Resolve('name'));
 		
-		if ( arguments.length > 1 ) {
-			this.register.apply(this,Array.prototype.slice.call(arguments,1));
+		if ( arguments.length > 0 ) {
+			this.register.apply(this,arguments);
 		}
 		
 	}
@@ -193,10 +193,10 @@ var emerald = function () {
 	// 																  EventType
 	// ------------------------------------------------------------------------
 	
-	function EventType (registry,name,notifications) {
+	function EventType (registry,name/*,notifications*/) {
 		this.registry		= registry || em.registry;
 		this.name			= name;
-		this.subscribers	= delegateTo(new SubscriberSet(notifications || this.registry.notifications),'filter');
+		this.subscribers	= delegateTo(new SubscriberSet(/*notifications || this.registry.notifications*/),'filter');
 		this.events			= [];
 		this.__remember		= 0;
 	}
@@ -236,8 +236,8 @@ var emerald = function () {
 			return this;
 		},
 		
-		derive: function (registry,name,notifications) {
-			var derived = new this.constructor(registry,name,notifications);
+		derive: function (registry,name/*,notifications*/) {
+			var derived = new this.constructor(registry,name/*,notifications*/);
 			derived.remember(this.__remember);
 			return derived;
 		},
@@ -338,15 +338,16 @@ var emerald = function () {
 			return this.between.call(this,startEventType,stopEventType,options);
 		},
 		
+		// NOTE: Reimplement this
 		waitFor: function (startEventType) {
-		    var notifications       = new NotificationQueue(null,true),
-		        derivedEventType    = this.derive(this.registry,null,notifications);
+		    var /*notifications       = new NotificationQueue(null,true),*/
+		        derivedEventType    = this.derive(this.registry/*,null,notifications*/);
 		    notifications.suspend();
 		    this.subscribe(function () {
 		        derivedEventType.raise.apply(derivedEventType,arguments);
 		    });
 		    startEventType.subscribe(function () {
-		        notifications.resume();
+//		        notifications.resume();
 		    });
 		    return derivedEventType;
 		},
@@ -761,7 +762,7 @@ var emerald = function () {
 	
 	function SubscriberSet (notifications) {
 		TypedSet.call(this,Subscriber);
-		this.notifications	= notifications || new NotificationQueue();
+//		this.notifications	= notifications || new NotificationQueue();
 	}
 	
 	SubscriberSet.prototype = extend({
@@ -772,8 +773,8 @@ var emerald = function () {
 			return TypedSet.prototype.add.apply(this,arguments);
 		},
 		
-		__construct: function (specification,notifications) {
-			return new Subscriber(specification,notifications || this.notifications);
+		__construct: function (specification/*,notifications*/) {
+			return new Subscriber(specification/*,notifications || this.notifications*/);
 		},
 		
 		notify: function _notify (event) {
@@ -795,12 +796,13 @@ var emerald = function () {
 	em.SubscriberSet = SubscriberSet;
 	
 	
-	function Subscriber (subscription,notifications) {
+	function Subscriber (subscription/*,notifications*/) {
 		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
-		this.notifications 	= notifications;
+//		this.notifications 	= notifications;
 		this.predicate		= subscription.predicate || AllPredicate;
 		this.message		= this.subscription.message;
 		this.error 			= this.subscription.error;
+		this.context		= ( subscription && subscription.context ) ? subscription.context : null;
 	}
 	
 	Subscriber.prototype = {
@@ -809,13 +811,15 @@ var emerald = function () {
 		
 		notify: function (event) {
 			if ( this.predicate(event) ) {
-				this.notifications.send(new Notification(this.message,arguments,this.subscription));
+				this.message.apply(this.context,arguments);
+//				this.notifications.send(new Notification(this.message,arguments,this.subscription));
 			}
 		},
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
-				this.notifications.send(new Notification(this.error,arguments,this.subscription));
+				this.error.apply(this.context,arguments);
+//				this.notifications.send(new Notification(this.error,arguments,this.subscription));
 			}
 		}
 		
@@ -868,27 +872,27 @@ var emerald = function () {
 		
 	}
 	
-	function ObservableSet (notifications) {
+	function ObservableSet (/*notifications*/) {
 		Set.apply(this);
-		makeObservable.call(this,notifications);
+		makeObservable.call(this/*,notifications*/);
 	}
 	
 	ObservableSet.prototype				= observable(Set.prototype);
 	ObservableSet.prototype.constructor	= ObservableSet;
 	
-	function ObservableTypedSet (constructor,notifications) {
+	function ObservableTypedSet (constructor/*,notifications*/) {
 		TypedSet.call(this,constructor);
-		makeObservable.call(this,notifications);
+		makeObservable.call(this/*,notifications*/);
 	}
 	
 	ObservableTypedSet.prototype 				= observable(TypedSet.prototype);
 	ObservableTypedSet.prototype.constructor	= ObservableTypedSet;
 	
-	function makeObservable (notifications) {
+	function makeObservable (/*notifications*/) {
 		
-		notifications = notifications || new NotificationQueue();
+//		notifications = notifications || new NotificationQueue();
 		
-		this.events	= new EventRegistry(notifications,'add','remove','initialise','sort','change');
+		this.events	= new EventRegistry(/*notifications,*/'add','remove','initialise','sort','change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		var change = this.event('change');
@@ -911,12 +915,12 @@ var emerald = function () {
 	em.ObservableSet = ObservableSet;
 	em.ObservableTypedSet = ObservableTypedSet;
 	
-	em.plugin.set.asObservable = function (notifications) {
-		return this.reduce(Method('add'),new ObservableSet(notifications));
+	em.plugin.set.asObservable = function (/*notifications*/) {
+		return this.reduce(Method('add'),new ObservableSet(/*notifications*/));
 	};
 	
-	em.plugin.typedset.asObservable = function (notifications) {
-		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor,notifications));
+	em.plugin.typedset.asObservable = function (/*notifications*/) {
+		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor/*,notifications*/));
 	};
 	
 	
@@ -931,7 +935,7 @@ var emerald = function () {
 		this.options		= options || {};
 		this.options.tags	= this.options.tags || [];
 	
-		this.events = new EventRegistry(this.options.notifications || new NotificationQueue(),'change');
+		this.events = new EventRegistry(/*this.options.notifications || new NotificationQueue(),*/'change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
