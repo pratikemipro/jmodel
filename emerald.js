@@ -981,22 +981,20 @@ var emerald = function () {
 	
 	ObservableObject.prototype = {
 		
+		constructor: ObservableObject,
+		
 		instantiateField: function (field) {
 		
 			this.events.register(field);
 			this.event(field).remember(this.options.remember);
 			
-			this[field] = (function (field) {
-				return function (value) {
-					return arguments.length === 0 ? this.getField(field) : this.setField(field,value);
-				};
-			})(field);
+			this[field] = function (value) {
+				return arguments.length === 0 ? this.getField(field) : this.setField(field,value);
+			};
 			
-			this['set'+field] = (function (field) {
-				return function (value) {
-					return this.setField(field,value);
-				};
-			})(field);
+			this['set'+field] = function (value) {
+				return this.setField(field,value);
+			};
 			
 		},
 		
