@@ -365,9 +365,11 @@ var emerald = function () {
 		},
 		
 		effect: function (fn) {
-		    var derivedEventType = this.derive();
+		    var derivedEventType	= this.derive(),
+				context				= fn.context || this,
+				fn					= fn.fn		 || fn;
 		    this.subscribe(function () {
-		        fn.apply(null,arguments);
+		        fn.apply(context,arguments);
 		        derivedEventType.raise.apply(derivedEventType,arguments);
 		    });
 		    return derivedEventType;
