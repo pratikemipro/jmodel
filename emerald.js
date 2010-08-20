@@ -350,7 +350,6 @@ var emerald = function () {
 				else {
 					events.add(Array.prototype.slice.call(arguments));
 				}
-		        
 		    });
 		    startEventType.subscribe(function () {
 				active = true;
