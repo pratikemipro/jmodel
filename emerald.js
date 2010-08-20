@@ -160,6 +160,11 @@ var emerald = function () {
 			return Set.fromArguments(arguments).reduce(Method('add',this),this);
 		},
 		
+		create: function _create () {
+			var args = Array.prototype.slice.call(arguments);
+			return TypedSet.prototype.create.apply(this,[this].concat(args));
+		},
+		
 		filter: function _filter () {
 		    events = TypedSet.prototype.filter.apply(this,arguments);
 		    return events;
@@ -876,7 +881,12 @@ var emerald = function () {
 					});
 					return state.returnValue;
 				}
-			})
+			}),
+			
+			create: function () {
+				var args = Array.prototype.slice.apply(arguments);
+				return proto.create.apply(this,[this].concat(arguments));
+			}
 			
 		},copy(proto,true));
 		
@@ -985,8 +995,8 @@ var emerald = function () {
 		
 		instantiateField: function (field) {
 		
-			this.events.register(field);
-			this.event(field).remember(this.options.remember);
+			this.events.create(field)
+				.remember(this.options.remember);
 			
 			this[field] = function (value) {
 				return arguments.length === 0 ? this.getField(field) : this.setField(field,value);
