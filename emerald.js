@@ -365,6 +365,19 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		transition: function (fn) {
+			var derivedEventType = this.derive(),
+				last;
+			this.subscribe(function () {
+				var current = fn ? fn.apply(null,arguments) : arguments[0];
+				if ( current !== last ) {
+					derivedEventType.raise.apply(derivedEventType,arguments);
+				}
+				last = current;
+			});
+			return derivedEventType;
+		},
+		
 		delay: function (interval) {
 			var derivedEventType = this.derive();
 			this.subscribe(function () {
