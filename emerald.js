@@ -305,7 +305,7 @@ var emerald = function () {
 			var derivedEventType	= this.derive(),
 				initial				= options.initial ? options.initial : false,
 				active				= initial,
-				startEvent,
+				startEvent			= null,
 				last;
 				
 			this.subscribe(function () {
@@ -318,21 +318,25 @@ var emerald = function () {
 				}
 			});
 			
-			startEventType.subscribe(function () {
-			    startEvent = Array.prototype.slice.call(arguments);
-				active = !initial;
-				if ( options.remember && last ) {
-					derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
-				}
-			});
+			startEventType
+				.where(function () { return !active; })		
+				.subscribe(function () {
+				    startEvent = Array.prototype.slice.call(arguments);
+					active = !initial;
+					if ( options.remember && last ) {
+						derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
+					}
+				});
 			
-			stopEventType.subscribe(function () {
-				var args = Array.prototype.slice.call(arguments);
-				active = initial;
-				if ( options.inclusive ) {
-					derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
-				}
-			});
+			stopEventType
+				.where(function () { return active; })
+				.subscribe(function () {
+					var args = Array.prototype.slice.call(arguments);
+					active = initial;
+					if ( options.inclusive ) {
+						derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
+					}
+				});
 			
 			return derivedEventType;
 			
