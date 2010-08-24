@@ -313,7 +313,7 @@ var emerald = function () {
 				if ( active ) {
 					derivedEventType.raise.apply(derivedEventType,args.concat(startEvent));
 				}
-				else if (options.remember) {
+				else if ( options.remember || options.inclusive ) {
 					last = args;
 				}
 			});
