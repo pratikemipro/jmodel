@@ -385,10 +385,10 @@ var emerald = function () {
 		delay: function (interval) {
 			var derivedEventType = this.derive();
 			this.subscribe(function () {
-				var args = arguments;
+				var args = Array.prototype.slice.call(arguments);
 				setTimeout(function () {
 					derivedEventType.raise.apply(derivedEventType,args);
-				}, interval);
+				}, interval || 0);
 			});
 			return derivedEventType;
 		},
@@ -486,6 +486,8 @@ var emerald = function () {
 		}
 		
 	};
+	
+	EventType.prototype.async = EventType.prototype.delay;
 	
 	function SwitchCombinator (initialState) {
 		return function (controlEvent,options) {
