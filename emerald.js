@@ -290,7 +290,7 @@ var emerald = function () {
 		take: function (number) {
 			var derivedEventType = this.derive();
 		    this.subscribe(function () {
-		        if ( number >= 0 ) {
+		        if ( number > 0 ) {
 		            derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		        number--;
