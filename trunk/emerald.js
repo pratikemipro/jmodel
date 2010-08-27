@@ -1034,7 +1034,7 @@ var emerald = function () {
 		setField: function (field,value) {
 			
 			var oldValue = this.__data[field];
-			this.__data[field] = value;
+			this.__data[field] = typeof value === 'function' ? value.call(this,oldValue) : value;
 			
 			var event = this.event(field);
 			if ( !event ) {
