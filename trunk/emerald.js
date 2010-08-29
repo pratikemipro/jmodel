@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.8.0
+ *	Emerald Javascript Library v0.9.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.8.0'},opal),
+	var em		= extend({emerald_version:'0.9.0'},opal),
 		_		= em;
 		
 		
@@ -1003,7 +1003,7 @@ var emerald = function () {
 	
 	
 	//
-	// Scalar value
+	// Scalar field
 	//
 	
 	function scalar (options) {
