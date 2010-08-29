@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.10.1
+ *	Emerald Javascript Library v0.11.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.10.1'},opal),
+	var em		= extend({emerald_version:'0.11.0'},opal),
 		_		= em;
 		
 		
@@ -1021,6 +1021,7 @@ var emerald = function () {
 		this.field		= field;
 		this.options 	= options;
 		
+		this.predicate	= this.options.predicate || AllPredicate;
 		this.value		= this.options.value || null;
 		
 		this.event		= null;
@@ -1074,9 +1075,11 @@ var emerald = function () {
 		set: function (value) {
 			
 			var oldValue = this.value;
-			this.value = typeof value === 'function' ? value.call(this,oldValue) : value;
+			value = typeof value === 'function' ? value.call(this,oldValue) : value;
 
-			if ( value != oldValue ) {
+			if ( value !== oldValue && this.predicate(value) ) {
+				
+				this.value = value;
 				
 				this.event.raise.apply(this.event,[value,oldValue].concat(this.options.tags));
 				
@@ -1087,6 +1090,9 @@ var emerald = function () {
 					tags: this.options.tags
 				});
 			
+			}
+			else if ( value !== oldValue ) {
+				this.event.fail.apply(this.event,[value,oldValue].concat(this.options.tags));
 			}
 
 			return this.object;
