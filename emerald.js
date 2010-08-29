@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.11.0
+ *	Emerald Javascript Library v0.11.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.11.0'},opal),
+	var em		= extend({emerald_version:'0.11.1'},opal),
 		_		= em;
 		
 		
@@ -1021,7 +1021,7 @@ var emerald = function () {
 		this.field		= field;
 		this.options 	= options;
 		
-		this.predicate	= this.options.predicate || AllPredicate;
+		this.constraint	= this.options.constraint || AllPredicate;
 		this.value		= this.options.value || null;
 		
 		this.event		= null;
@@ -1077,22 +1077,26 @@ var emerald = function () {
 			var oldValue = this.value;
 			value = typeof value === 'function' ? value.call(this,oldValue) : value;
 
-			if ( value !== oldValue && this.predicate(value) ) {
+			if ( value !== oldValue ) {
 				
-				this.value = value;
+				if ( this.constraint(value) ) {
+					
+					this.value = value;
+
+					this.event.raise.apply(this.event,[value,oldValue].concat(this.options.tags));
+
+					this.change.raise({
+						field: this.field,
+						value: value,
+						old: oldValue,
+						tags: this.options.tags
+					});
+					
+				}
+				else {
+					this.event.fail.apply(this.event,[value,oldValue].concat(this.options.tags));
+				}
 				
-				this.event.raise.apply(this.event,[value,oldValue].concat(this.options.tags));
-				
-				this.change.raise({
-					field: this.field,
-					value: value,
-					old: oldValue,
-					tags: this.options.tags
-				});
-			
-			}
-			else if ( value !== oldValue ) {
-				this.event.fail.apply(this.event,[value,oldValue].concat(this.options.tags));
 			}
 
 			return this.object;
