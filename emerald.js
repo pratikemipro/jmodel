@@ -1009,13 +1009,13 @@ var emerald = function () {
 	function scalar (options) {
 		options = typeof options === 'object' ? options : {value:options};
 		return function (object,field) {
-			return new ScalarValue(object,field,options);
+			return new ScalarField(object,field,options);
 		};
 	}
 	
 	em.scalar = scalar;
 	
-	function ScalarValue (object,field,options) {
+	function ScalarField (object,field,options) {
 		
 		this.object		= object;
 		this.field		= field;
@@ -1034,9 +1034,9 @@ var emerald = function () {
 	
 	}
 	
-	ScalarValue.prototype = {
+	ScalarField.prototype = {
 		
-		constructor: ScalarValue,
+		constructor: ScalarField,
 		
 		instantiate: function () {
 			
