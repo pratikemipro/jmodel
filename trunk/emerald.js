@@ -969,41 +969,14 @@ var emerald = function () {
 	
 	function ObservableObject (data,options) {
 
-		this.__data		= {};
-
 		this.options		= options || {};
 		this.options.tags	= this.options.tags || [];
 	
-		this.events = new EventRegistry(/*this.options.notifications || new NotificationQueue(),*/'change');
+		this.events = new EventRegistry('change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
-			this.instantiateField(field);
-			this.setField(field,data[field]);
-		}
-		
-		if ( this.options.persist ) {
-			
-			this.event('change')
-				.subscribe({
-					context: {
-						store: 	this.options.persist,
-						prefix: this.options.prefix+'_'
-					},
-					message: function (event) {
-						this.store[this.prefix+event.field] = event.value;
-					}
-				});
-				
-			for ( var field in data ) {
-				this.setField(field, this.options.persist[this.options.prefix+'_'+field] || data[field]  );
-			}
-			
-		}
-		else {
-			for ( var field in data ) {
-				this.setField(field,data[field]);
-			}
+			this.instantiateField(field,data[field],this.options);
 		}
 	
 	}
@@ -1012,53 +985,14 @@ var emerald = function () {
 		
 		constructor: ObservableObject,
 		
-		instantiateField: function (field) {
-		
-			this.events.create(field)
-				.remember(this.options.remember);
-			
-			this[field] = function (value) {
-				return arguments.length === 0 ? this.getField(field) : this.setField(field,value);
-			};
-			
-			this['set'+field] = function (value) {
-				return this.setField(field,value);
-			};
-			
-		},
-		
-		getField: function (field) {
-			return this.__data[field];
-		},
-		
-		setField: function (field,value) {
-			
-			var oldValue = this.__data[field];
-			this.__data[field] = typeof value === 'function' ? value.call(this,oldValue) : value;
-			
-			var event = this.event(field);
-			if ( !event ) {
-				this.instantiateField(field);
-				event = this.event(field);
-			}
-
-			if ( value != oldValue ) {
-				event.raise.apply(event,[value,oldValue].concat(this.options.tags));
-				this.event('change').raise({
-					field: field,
-					value: value,
-					old: oldValue,
-					tags: this.options.tags
-				});
-			}
-
-			return this;
-			
+		instantiateField: function (field,value) {
+			value = typeof value === 'function' ? value : scalar({value:value});
+			value.call(this,this,field);
 		},
 		
 		set: function (values) {
 			for ( var field in values ) {
-				this.setField(field,values[field]);
+				this[field].call(this,values[field]);
 			}
 			return this;
 		}
@@ -1066,6 +1000,100 @@ var emerald = function () {
 	};
 	
 	em.ObservableObject = ObservableObject;
+	
+	
+	//
+	// Scalar value
+	//
+	
+	function scalar (options) {
+		options = typeof options === 'object' ? options : {value:options};
+		return function (object,field) {
+			return new ScalarValue(object,field,options);
+		};
+	}
+	
+	em.scalar = scalar;
+	
+	function ScalarValue (object,field,options) {
+		
+		this.object		= object;
+		this.field		= field;
+		this.options 	= options;
+		
+		this.value		= this.options.value || null;
+		
+		this.event		= null;
+		this.change 	= this.object.event('change');
+		
+		this.instantiate();
+		
+		if ( this.object.options.persist ) {
+			this.persist();	
+		}
+	
+	}
+	
+	ScalarValue.prototype = {
+		
+		constructor: ScalarValue,
+		
+		instantiate: function () {
+			
+			this.event = this.object.events.create(this.field)
+				.remember(this.options.remember);
+			
+			var that = this;
+			this.object[this.field] = function (value) {
+				return arguments.length === 0 ? that.get() : that.set(value);
+			};
+			
+		},
+		
+		persist: function () {
+		
+			this.value = this.object.options.persist[this.object.options.prefix+'_'+this.field] || this.value;
+			
+			this.event
+				.subscribe({
+					context: {
+						store: 	this.object.options.persist,
+						key: 	this.object.options.prefix+'_'+this.field
+					},
+					message: function (value) {
+						this.store[this.key] = value;
+					}
+				});
+			
+		},
+		
+		get: function () {
+			return this.value;
+		},
+		
+		set: function (value) {
+			
+			var oldValue = this.value;
+			this.value = typeof value === 'function' ? value.call(this,oldValue) : value;
+
+			if ( value != oldValue ) {
+				
+				this.event.raise.apply(this.event,[value,oldValue].concat(this.options.tags));
+				
+				this.change.raise({
+					field: this.field,
+					value: value,
+					old: oldValue,
+					tags: this.options.tags
+				});
+			
+			}
+
+			return this.object;
+			
+		}
+		
+	};
 	
 	
 	//
