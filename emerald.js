@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.9.0
+ *	Emerald Javascript Library v0.10.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -25,7 +25,7 @@ var emerald = function () {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.9.0'},opal),
+	var em		= extend({emerald_version:'0.10.0'},opal),
 		_		= em;
 		
 		
@@ -1094,6 +1094,46 @@ var emerald = function () {
 		}
 		
 	};
+	
+	
+	//
+	// Collection field
+	//
+	
+	function many (type) {
+		return function (object,field) {
+			return new CollectionField(object,field,type);
+		};
+	}
+	
+	em.many = many;
+	
+	function CollectionField (object,field,type) {
+		
+		ObservableTypedSet.call(this,type);
+		
+		this.object			= object;
+		this.field			= field;
+		this.__constructor	= type;
+		
+		this.instantiate();
+	
+	}
+	
+	CollectionField.prototype = extend({
+		
+		constructor: CollectionField,
+		
+		instantiate: function () {
+			
+			var that = this;
+			this.object[this.field] = function () {
+				return that.filter.apply(that,arguments);
+			};
+			
+		}
+		
+	}, new ObservableTypedSet() );
 	
 	
 	//
