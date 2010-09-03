@@ -976,7 +976,7 @@ var emerald = function () {
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in data ) {
-			this.instantiateField(field,data[field],this.options);
+			this.instantiateField(field,data[field]);
 		}
 	
 	}
@@ -1040,9 +1040,9 @@ var emerald = function () {
 		constructor: ScalarField,
 		
 		instantiate: function () {
-			
+
 			this.event = this.object.events.create(this.field)
-				.remember(this.options.remember);
+				.remember( this.options.remember || this.object.options.remember );
 			
 			var that = this;
 			this.object[this.field] = function (value) {
@@ -1083,18 +1083,17 @@ var emerald = function () {
 					
 					this.value = value;
 
-					this.event.raise.apply(this.event,[value,oldValue].concat(this.options.tags));
+					this.event.raise.apply(this.event,[value,oldValue]);
 
 					this.change.raise({
 						field: this.field,
 						value: value,
-						old: oldValue,
-						tags: this.options.tags
+						old: oldValue
 					});
 					
 				}
 				else {
-					this.event.fail.apply(this.event,[value,oldValue].concat(this.options.tags));
+					this.event.fail.apply(this.event,[value,oldValue]);
 				}
 				
 			}
