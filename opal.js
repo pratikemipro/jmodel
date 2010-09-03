@@ -261,6 +261,7 @@ function OPAL () {
 		});
 	};
 	
+	// Tests: full
 	var withmethod = function _withmethod (name) {
 		var method = Method(name);
 		return function __withmethod (acc,value) {
