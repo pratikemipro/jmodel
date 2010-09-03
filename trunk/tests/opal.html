@@ -271,6 +271,14 @@
 			    
 			});
 			
+			test('Times', function () {
+			   
+			   equals( opal.times(2,3), 6, 'Times performs multiplication' ); 
+	           equals( opal.times(opal.times.unit,3), 3, 'Times has a unit' );
+		       equals( opal.times.label, 'product', 'The label for times is "product"' ); 
+			    
+			});
+			
 		
 			// ------------------------------------------------------------------------
 			//																		Set
