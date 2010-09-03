@@ -257,6 +257,20 @@
 			});
 			
 			
+			// ------------------------------------------------------------------------
+			//														Reduction functions
+			// ------------------------------------------------------------------------
+			
+			module('Reduction');
+			
+			test('Plus', function () {
+			   
+			   equals( opal.plus(2,3), 5, 'Plus performs addition' ); 
+	           equals( opal.plus(opal.plus.unit,3), 3, 'Plus has a unit' );
+		       equals( opal.plus.label, 'sum', 'The label for plus is "sum"' ); 
+			    
+			});
+			
 		
 			// ------------------------------------------------------------------------
 			//																		Set

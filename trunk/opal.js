@@ -195,6 +195,7 @@ function OPAL () {
 		};
 	}
 	
+	// Tests: none
 	function aspect (options) {
 		return function () {
 			if ( options.pre ) {
@@ -208,6 +209,7 @@ function OPAL () {
 		};
 	}
 	
+	// Tests: none
 	function async () {
 		return setTimeout(opal.suspend.apply(this,arguments),1);
 	}
