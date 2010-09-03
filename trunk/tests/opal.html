@@ -126,6 +126,14 @@
 			    
 			});
 			
+			test('Nth', function () {
+			    
+			    equals( opal.nth(2)('red','green','blue','cyan'), 'blue', 'nth works correctly' );
+			    equals( opal.first( 'red','green','blue','cyan'), 'red',  'first works correctly' );
+			    equals( opal.second('red','green','blue','cyan'), 'green','second works correctly' );
+			    
+			});
+			
 			test('Identity', function () {
 			
 				var fred = 'fred';

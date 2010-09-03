@@ -94,6 +94,7 @@ function OPAL () {
 	
 	var suspend = curry;
 
+	// Tests: full
 	function nth (index) {
 		return function () {
 			return arguments[index];
