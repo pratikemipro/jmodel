@@ -273,30 +273,33 @@ function OPAL () {
 	var push = function (acc,value) {
 		acc.push(value);
 		return acc;
-	}
+	};
 	
 	var add = function _add () {
-	    var predicate;
-		if ( arguments.length === 0 ) {
-			return function __add (acc,value) {
-				return acc.add(value);
-			};
+		switch (arguments.length) {
+			case 0:  return add0.apply(null,arguments);
+			case 1:  return add1.apply(null,arguments);
+			default: return add2.apply(null,arguments);
 		}
-		else if ( arguments.length == 1 ) {
-			predicate = arguments[0];
-			return function __add (acc,value) {
-				return predicate(value) ? acc.add(value) : acc;
-			};
-		}
-		else {
-			predicate   = arguments[0];
-			var	mapping		= arguments[1],
-				mapfirst	= arguments[2] || false;
-			return function __add (acc,value) {
-				var mapped = mapping(value);
-				return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
-			};
-		}
+	};
+	
+	function add0 () {
+		return function __add (acc,value) {
+			return acc.add(value);
+		};
+	}
+	
+	function add1 (predicate) {
+		return function __add (acc,value) {
+			return predicate(value) ? acc.add(value) : acc;
+		};
+	}
+	
+	function add2 (predicate,mapping,mapfirst) {
+		return function __add (acc,value) {
+			var mapped = mapping(value);
+			return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
+		};
 	};
 	
 	var contains = function _contains (predicate) {
@@ -1054,7 +1057,7 @@ function OPAL () {
 		LessThanEqualPredicate: 		LessThanEqualPredicate,
 		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
 		BetweenPredicate: 				BetweenPredicate,
-		RegularExpressionPredicate: 	RegularExpressionPredicate,
+		RegularExpressionPredicate: 	RegularExpressionPredicate
 	});
 	
 	var Eq		= FieldOrValuePredicate(EqualityPredicate),
