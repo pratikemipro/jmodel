@@ -33,7 +33,7 @@ function OPAL () {
 
     // Tests: full
 	function pipe () {
-		var fns = arguments;
+		var fns = Array.prototype.slice.call(arguments);
 		return fns.length == 1 ? fns[0] : function _pipe (x) {
 			for (var i in fns) {
 				x = fns[i](x);
@@ -50,7 +50,7 @@ function OPAL () {
 	
 	// Tests: full
 	function parallel () {
-		var fns = arguments;
+		var fns = Array.prototype.slice.call(arguments);
 		return function _parallel () {
 			var args0 = arguments[0],
 				result = {};
