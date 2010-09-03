@@ -186,6 +186,7 @@ function OPAL () {
 		};
 	}
 
+	// Tests: full
 	function transform (name,transformer,extractor) {
 		var resolve = Resolve(name);
 		extractor = extractor || resolve;

@@ -241,6 +241,15 @@
 			
 			test('Transform', function () {
 				
+				person = {
+				    forename: 'John',
+				    surname: 'Smith',
+				    fullname: ''
+				};
+				
+				equals( (opal.transform('forename',opal.Method('toUpperCase'))(person)).forename, 'JOHN', 'transform works correctly without extractor');
+				equals( (opal.transform('fullname',opal.Method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person)).fullname, 'JOHN SMITH', 'transform works correctly with extractor');
+				
 			});
 			
 			test('Aspect', function () {
