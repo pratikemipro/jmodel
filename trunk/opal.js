@@ -269,6 +269,7 @@ function OPAL () {
 		};
 	};
 	
+	// Tests: full
 	var push = function (acc,value) {
 		acc.push(value);
 		return acc;
