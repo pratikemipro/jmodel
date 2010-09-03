@@ -243,10 +243,12 @@ function OPAL () {
 	// Reduction functions
 	//
 
+	// Tests: full
 	var plus = extend({unit:0,label:'sum'},function _plus (acc,value) {
 		return acc + value;
 	});
 
+	// Tests: full
 	var times = extend({unit:1,label:'product'},function _times (acc,value) {
 		return acc * value;
 	});
