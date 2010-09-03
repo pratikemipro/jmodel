@@ -122,11 +122,11 @@ function OPAL () {
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
 	function Property (property,value) {
-		return arguments.length == 1 ? function _property (object,value) {
-			if ( arguments.length == 1 ) {
+		return arguments.length === 1 ? function _property (object,value) {
+			if ( arguments.length === 1 ) {
 				return object[property];
 			}
-			else if ( object[property] ) {
+			else if ( typeof object[property] !== 'undefined' ) {
 				object[property] = value;
 				return object;
 			}
@@ -177,6 +177,7 @@ function OPAL () {
 		};
 	}
 
+	// Tests: none
 	function PropertySet (paths,separator) {
 		paths = ( paths instanceof Set ) ? paths : Set.fromArray(paths);
 		paths = paths.map(function _propertyset (path) { return PropertyPath(path,separator); });
