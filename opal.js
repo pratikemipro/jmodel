@@ -253,6 +253,7 @@ function OPAL () {
 		return acc * value;
 	});
 	
+	// Tests: full
 	var count = function _count (predicate) {
 		predicate = predicate || AllPredicate;
 		return extend({unit:0,label:'count'}, function __count (acc,value) {

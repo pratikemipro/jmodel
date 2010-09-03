@@ -279,6 +279,16 @@
 			    
 			});
 			
+			test('Count', function () {
+			   
+			   equals( opal.count()(2,'red'), 3, 'Count without a predicate increments accumulator' );
+			   equals( opal.count(opal.type('string'))(2,'red'), 3, 'Count with a predicate increments accumulator on match' );
+	           equals( opal.count(opal.type('string'))(2,7), 2, 'Count with a predicate does not increment accumulator on no match' );
+		       equals( opal.count().unit, 0, 'Count has a unit');
+		       equals( opal.count().label, 'count', 'The label for count is "count"'); 
+			    
+			});
+			
 		
 			// ------------------------------------------------------------------------
 			//																		Set
