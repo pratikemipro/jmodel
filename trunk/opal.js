@@ -269,7 +269,10 @@ function OPAL () {
 		};
 	};
 	
-	var push = withmethod('push');
+	var push = function (acc,value) {
+		acc.push(value);
+		return acc;
+	}
 	
 	var add = function _add () {
 	    var predicate;
