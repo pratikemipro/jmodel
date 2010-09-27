@@ -1018,20 +1018,24 @@ var emerald = function () {
 	
 	function ScalarField (object,field,options) {
 		
-		this.object		= object;
-		this.field		= field;
-		this.options 	= options;
-		
-		this.constraint	= this.options.constraint || AllPredicate;
-		
-		this.event		= null;
-		this.change 	= this.object.event('change');
-		
-		this.instantiate();
-		this.set(typeof this.options.value !== 'undefined' ? this.options.value : null)
-		
-		if ( this.object.options.persist ) {
-			this.persist();	
+		if ( object && field && options ) {
+			
+			this.object		= object;
+			this.field		= field;
+			this.options 	= options || {};
+
+			this.constraint	= this.options.constraint || AllPredicate;
+
+			this.event		= null;
+			this.change 	= this.object.event('change');
+
+			this.instantiate();
+			this.set(typeof this.options.value !== 'undefined' ? this.options.value : null)
+
+			if ( this.object.options.persist ) {
+				this.persist();	
+			}
+			
 		}
 	
 	}
@@ -1054,7 +1058,10 @@ var emerald = function () {
 		
 		persist: function () {
 		
-			this.value = this.object.options.persist[this.object.options.prefix+'_'+this.field] || this.value;
+			var fromStore = this.object.options.persist[this.object.options.prefix+'_'+this.field] || undefined;
+			if ( fromStore ) {
+				this.set(fromStore);
+			}
 			
 			this.event
 				.subscribe({
@@ -1104,6 +1111,44 @@ var emerald = function () {
 		}
 		
 	};
+	
+	
+	//
+	// BooleanField
+	//
+	
+	function boolean (options) {
+		options = typeof options === 'object' ? options : {value:options};
+		return function (object,field) {
+			return new BooleanField(object,field,options);
+		};
+	}
+	
+	em.boolean = boolean;
+	
+	function BooleanField (object,field,options) {
+		ScalarField.call(this,object,field,options);
+	}
+	
+	BooleanField.prototype = extend({
+		
+		set: function (value) {
+			
+			if ( typeof value === 'string' && value.toLowerCase() === 'true' ) {
+				value = true;
+			}
+			else if ( typeof value === 'string' && value.toLowerCase() === 'false' ) {
+				value = false;
+			}
+			else {
+				value = Boolean(value);
+			}
+			
+			ScalarField.prototype.set.call(this,value);
+			
+		}
+		
+	}, new ScalarField() );
 	
 	
 	//
