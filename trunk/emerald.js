@@ -1024,7 +1024,7 @@ var emerald = function () {
 	//
 	
 	function scalar (options) {
-		options = typeof options === 'object' ? options : {value:options};
+		options = typeof options === 'object' ? options : {defaultValue:options};
 		return function (object,field) {
 			return new ScalarField(object,field,options);
 		};
@@ -1046,7 +1046,7 @@ var emerald = function () {
 			this.change 	= this.object.event('change');
 
 			this.instantiate();
-			this.set(typeof this.options.value !== 'undefined' ? this.options.value : null)
+			this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : null)
 
 			if ( this.object.options.persist ) {
 				this.persist();	
