@@ -1023,12 +1023,12 @@ var emerald = function () {
 		this.options 	= options;
 		
 		this.constraint	= this.options.constraint || AllPredicate;
-		this.value		= this.options.value || null;
 		
 		this.event		= null;
 		this.change 	= this.object.event('change');
 		
 		this.instantiate();
+		this.set(typeof this.options.value !== 'undefined' ? this.options.value : null)
 		
 		if ( this.object.options.persist ) {
 			this.persist();	
