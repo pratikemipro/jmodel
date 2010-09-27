@@ -968,7 +968,7 @@ var emerald = function () {
 	//														 Observable Objects
 	// ------------------------------------------------------------------------
 	
-	function ObservableObject (data,options) {
+	function ObservableObject (fields,options) {
 
 		this.options		= options || {};
 		this.options.tags	= this.options.tags || [];
@@ -976,8 +976,8 @@ var emerald = function () {
 		this.events = new EventRegistry('change');
 		this.event	= delegateTo(this.events,'filter');
 		
-		for ( var field in data ) {
-			this.instantiateField(field,data[field]);
+		for ( var field in fields ) {
+			this.instantiateField(field,fields[field]);
 		}
 	
 	}
@@ -1001,6 +1001,22 @@ var emerald = function () {
 	};
 	
 	em.ObservableObject = ObservableObject;
+	
+	
+	//
+	// Kind
+	//
+	
+	function Kind (fields,options) {
+		return extend({
+			prototype: new ObservableObject()
+		}, function (data) {
+			ObservableObject.call(this,fields,options);
+			this.set(data);
+		});
+	}
+	
+	em.Kind = Kind;
 	
 	
 	//
@@ -1161,6 +1177,8 @@ var emerald = function () {
 			return new IntegerField(object,field,options);
 		};
 	}
+	
+	em.integer = integer;
 	
 	function IntegerField (object,field,options) {
 		ScalarField.call(this,object,field,options);
