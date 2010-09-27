@@ -1152,6 +1152,31 @@ var emerald = function () {
 	
 	
 	//
+	// IntegerField
+	//
+	
+	function integer (options) {
+		options = typeof options === 'object' ? options : {value:options};
+		return function (object,field) {
+			return new IntegerField(object,field,options);
+		};
+	}
+	
+	function IntegerField (object,field,options) {
+		ScalarField.call(this,object,field,options);
+	}
+	
+	IntegerField.prototype = extend({
+		
+		set: function (value) {
+			value = typeof value === 'string' ? parseInt(value,10) : value;
+			ScalarField.prototype.set.call(this,value);
+		}
+		
+	}, new ScalarField() );
+	
+	
+	//
 	// Collection field
 	//
 	
