@@ -115,7 +115,7 @@ function OPAL () {
 	}
 
     // Tests: full
-	function Type (object) {
+	function type (object) {
 		return object !== null && typeof object;
 	}
 
@@ -227,7 +227,7 @@ function OPAL () {
 		first: first,
 		second: second,
 		Identity: Identity,
-		Type: Type,
+		type: type,
 		Property: Property,
 		Method: Method,
 		Resolve: Resolve,
@@ -965,8 +965,8 @@ function OPAL () {
 		return FunctionValuePredicate(Identity,object);
 	}
 
-	function TypePredicate (type) {
-		return FunctionValuePredicate(Type,type);
+	function TypePredicate (test) {
+		return FunctionValuePredicate(type,test);
 	}
 
 	function InstancePredicate (constructor) {
@@ -993,7 +993,7 @@ function OPAL () {
 		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
 		is: 						ObjectIdentityPredicate,
 		TypePredicate: 				TypePredicate,
-		type: 						TypePredicate,
+		is_of_type: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,
 		isa: 						InstancePredicate,
 		isan: 						InstancePredicate,
