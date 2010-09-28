@@ -140,9 +140,8 @@ function OPAL () {
 	}
 
     // Tests: full
-	function Method () {
-		var args = Array.prototype.slice.call(arguments),
-			name  = args.shift();
+	function Method (name) {
+		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
@@ -154,11 +153,9 @@ function OPAL () {
 	
 	// Tests: full
 	function Resolve (name) {
-	    var args = Array.prototype.slice.call(arguments),
-	        name = args.shift();
+	    var args = Array.prototype.slice.call(arguments,1);
 		return function _resolve (object) {
-		    var args1   = Array.prototype.slice.call(arguments),
-		        object  = args1.shift(),
+		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
 			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : Property(name).apply(null,args2);
 		};
@@ -709,7 +706,7 @@ function OPAL () {
 	        constructor = constructor.entitytype ? constructor.entitytpe.constructor : constructor.constructor;
 	    }
 		this.__constructor = this.__constructor || constructor;
-		Set.apply(this,[]);
+		Set.apply(this,Array.prototype.slice.call(arguments,1));
 		return this;
 	}
 	
