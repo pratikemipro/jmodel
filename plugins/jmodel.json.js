@@ -15,7 +15,7 @@ jModel.json = function () {
 
 //		log('json/thaw').startGroup('thawing '+key);
 
-		var partitionedData = partitionObject(data,_.TypePredicate('object'),'children','fields');
+		var partitionedData = partitionObject(data,_.is_of_type('object'),'children','fields');
 
 		var object;
 		if ( parent && parent.relationships && parent.relationships(key) ) {

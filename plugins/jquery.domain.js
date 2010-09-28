@@ -19,27 +19,31 @@ jQuery.fn.publish = function (publication) {
 
 	function Publisher (source,target,key,failure,success) {
 
+		target.event(key).subscribe({
+			
+			message: success || function _success () {
+				source
+					.attr('title','')
+					.animate({
+						backgroundColor: 'white'
+					},500);
+			},
+			
+			error: failure || function _failure (message) {
+				source
+					.attr('title',message)
+					.animate({
+						backgroundColor: 'red'
+					},250)
+					.animate({
+						backgroundColor: '#ff7777'
+					},500);
+			}
+			
+		});
+
 		var publish = function _publish (event) {
 			target.set(key,jQuery(event.target).val());
-		};
-
-		publish.failure = failure || function _failure (message) {
-			source
-				.attr('title',message)
-				.animate({
-					backgroundColor: 'red'
-				},250)
-				.animate({
-					backgroundColor: '#ff7777'
-				},500);
-		};
-
-		publish.success = success || function _success () {
-			source
-				.attr('title','')
-				.animate({
-					backgroundColor: 'white'
-				},500);
 		};
 
 		return publish;

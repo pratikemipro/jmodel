@@ -142,17 +142,17 @@
 				
 			});
 			
-			test('Type', function () {
+			test('type', function () {
 			
 				var fred = 'fred',
 					age = 12,
 					hello = function () { alert('hello'); },
 					obj = {};
 			
-				equals( opal.Type(fred),	'string',	'Type works on strings' );
-				equals( opal.Type(age),		'number',	'Type works on numbers' );
-				equals( opal.Type(hello),	'function', 'Type works on functions' );
-				equals( opal.Type(obj),		'object',	'Type works on objects' );
+				equals( opal.type(fred),	'string',	'type works on strings' );
+				equals( opal.type(age),		'number',	'type works on numbers' );
+				equals( opal.type(hello),	'function', 'type works on functions' );
+				equals( opal.type(obj),		'object',	'type works on objects' );
 				
 			});
 			
@@ -282,8 +282,8 @@
 			test('Count', function () {
 			   
 			   equals( opal.count()(2,'red'), 3, 'Count without a predicate increments accumulator' );
-			   equals( opal.count(opal.type('string'))(2,'red'), 3, 'Count with a predicate increments accumulator on match' );
-	           equals( opal.count(opal.type('string'))(2,7), 2, 'Count with a predicate does not increment accumulator on no match' );
+			   equals( opal.count(opal.is_of_type('string'))(2,'red'), 3, 'Count with a predicate increments accumulator on match' );
+	           equals( opal.count(opal.is_of_type('string'))(2,7), 2, 'Count with a predicate does not increment accumulator on no match' );
 		       equals( opal.count().unit, 0, 'Count has a unit');
 		       equals( opal.count().label, 'count', 'The label for count is "count"'); 
 			    
