@@ -630,6 +630,10 @@ function OPAL () {
 
 	opal.Set = Set;
 	
+	Set.from = function () {
+		return Set.fromArray(Array.prototype.slice.call(arguments));
+	}
+	
 	Set.fromArray = function (arr) {
 		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var set = new Set();
@@ -818,6 +822,10 @@ function OPAL () {
 	List.prototype				= new Set();
 	List.prototype.constraint	= AllPredicate;
 	List.prototype.constructor	= List;
+	
+	List.from = function () {
+		return List.fromArray(Array.prototype.slice.call(arguments));
+	}
 	
 	List.fromArray = function (arr) {
 		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
