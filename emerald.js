@@ -1,5 +1,5 @@
 /*
- *	Emerald Javascript Library v0.12.0
+ *	Emerald Javascript Library v0.12.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -27,122 +27,15 @@ var emerald = function () {
  
 	var em		= extend({emerald_version:'0.11.1'},opal),
 		_		= em;
-		
-		
-		// ------------------------------------------------------------------------
-		//															  Notifications
-		// ------------------------------------------------------------------------
-
-/*		function NotificationQueue (context,application) {
-
-	        TypedSet.call(this,Notification);
-
-			this.context		= context;
-			this.__suspensions	= 0;
-			this.__process		= this.__deliver;
-			this.application    = application;
-
-		}
-
-		NotificationQueue.prototype = extend({
-
-			constructor: NotificationQueue,
-
-			send: function _send (messages) {
-				messages = (messages instanceof Set || messages instanceof List) ? messages
-								: List.fromArguments(arguments);
-				var that = this;
-				messages.each(function __send (message) {
-	   				that.__process(message);
-				});
-				return this;
-			},
-
-			__deliver: function (message) {
-				message.deliver();
-				return this;
-			},
-
-			__store: function (message) {
-				if ( message.subscription && !message.subscription.application ) {
-					this.__deliver(message);
-				}
-				else {
-					this.add(message);
-				}
-				return this;
-			},
-
-			suspend: function _suspend () {
-				this.__suspensions++;
-				this.__process = this.__store;
-				return this;
-			},
-
-			resume: function _resume () {
-	            this.__suspensions--;
-				if ( this.__suspensions === 0 ) {
-					this.__process = this.__deliver;
-					this.each('deliver');
-					return this.flush();
-				}
-				else {
-					return this;
-				}
-			},
-
-		    flush: function _flush (predicate) {	
-				this.remove(predicate);
-				return this;
-			}
-
-		}, new TypedSet(Notification) );
-
-		em.NotificationQueue = NotificationQueue;
-
-
-		function Notification (message,args,subscription) {
-			this.message	    = message;
-			this.args		    = Array.prototype.slice.call(args||[]);
-			this.subscription   = subscription;
-			this.context		= ( subscription && subscription.context ) ? subscription.context : null;
-		}
-
-		Notification.prototype = {
-
-			constructor: Notification,
-
-			deliver: function () {
-			    this.message.apply(this.context,this.args);
-			}
-
-		};
-
-
-		function AsynchronousNotification (message,args,subscription) {
-		    Notification.call(this,message,args,subscription);
-		}
-
-		AsynchronousNotification.prototype = extend({
-
-		    constructor: AsynchronousNotification,
-
-		    deliver: function () {
-		        async.apply(this.context,[this.message].concat(this.args));
-		    }
-
-		}, new Notification() ); */
  
  
 	// ------------------------------------------------------------------------
 	// 															  EventRegistry
 	// ------------------------------------------------------------------------
  
-	function EventRegistry (/*notifications*/) {
+	function EventRegistry () {
 		
 		TypedSet.call(this,EventType);
-		
-//		this.notifications	= notifications || new NotificationQueue();
 		
 		this.index(Resolve('name'));
 		
@@ -201,7 +94,7 @@ var emerald = function () {
 	function EventType (registry,name/*,notifications*/) {
 		this.registry		= registry || em.registry;
 		this.name			= name;
-		this.subscribers	= delegateTo(new SubscriberSet(/*notifications || this.registry.notifications*/),'filter');
+		this.subscribers	= delegateTo(new SubscriberSet(),'filter');
 		this.events			= [];
 		this.__remember		= 0;
 	}
@@ -241,8 +134,8 @@ var emerald = function () {
 			return this;
 		},
 		
-		derive: function (registry,name/*,notifications*/) {
-			var derived = new this.constructor(registry,name/*,notifications*/);
+		derive: function (registry,name) {
+			var derived = new this.constructor(registry,name);
 			derived.remember(this.__remember);
 			return derived;
 		},
@@ -795,9 +688,8 @@ var emerald = function () {
 	// queue.
 	//
 	
-	function SubscriberSet (notifications) {
+	function SubscriberSet () {
 		TypedSet.call(this,Subscriber);
-//		this.notifications	= notifications || new NotificationQueue();
 	}
 	
 	SubscriberSet.prototype = extend({
@@ -808,8 +700,8 @@ var emerald = function () {
 			return TypedSet.prototype.add.apply(this,arguments);
 		},
 		
-		__construct: function (specification/*,notifications*/) {
-			return new Subscriber(specification/*,notifications || this.notifications*/);
+		__construct: function (specification) {
+			return new Subscriber(specification);
 		},
 		
 		notify: function _notify (event) {
@@ -831,9 +723,8 @@ var emerald = function () {
 	em.SubscriberSet = SubscriberSet;
 	
 	
-	function Subscriber (subscription/*,notifications*/) {
+	function Subscriber (subscription) {
 		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
-//		this.notifications 	= notifications;
 		this.predicate		= subscription.predicate || AllPredicate;
 		this.message		= this.subscription.message;
 		this.error 			= this.subscription.error;
@@ -847,14 +738,12 @@ var emerald = function () {
 		notify: function (event) {
 			if ( this.predicate(event) ) {
 				this.message.apply(this.context,arguments);
-//				this.notifications.send(new Notification(this.message,arguments,this.subscription));
 			}
 		},
 		
 		fail: function (event) {
 			if ( this.error && this.predicate(event) ) {
 				this.error.apply(this.context,arguments);
-//				this.notifications.send(new Notification(this.error,arguments,this.subscription));
 			}
 		}
 		
@@ -912,27 +801,25 @@ var emerald = function () {
 		
 	}
 	
-	function ObservableSet (/*notifications*/) {
+	function ObservableSet () {
 		Set.apply(this);
-		makeObservable.call(this/*,notifications*/);
+		makeObservable.call(this);
 	}
 	
 	ObservableSet.prototype				= observable(Set.prototype);
 	ObservableSet.prototype.constructor	= ObservableSet;
 	
-	function ObservableTypedSet (constructor/*,notifications*/) {
+	function ObservableTypedSet (constructor) {
 		TypedSet.call(this,constructor);
-		makeObservable.call(this/*,notifications*/);
+		makeObservable.call(this);
 	}
 	
 	ObservableTypedSet.prototype 				= observable(TypedSet.prototype);
 	ObservableTypedSet.prototype.constructor	= ObservableTypedSet;
 	
-	function makeObservable (/*notifications*/) {
+	function makeObservable () {
 		
-//		notifications = notifications || new NotificationQueue();
-		
-		this.events	= new EventRegistry(/*notifications,*/'add','remove','initialise','sort','change');
+		this.events	= new EventRegistry('add','remove','initialise','sort','change');
 		this.event	= delegateTo(this.events,'filter');
 		
 		var change = this.event('change');
@@ -955,12 +842,12 @@ var emerald = function () {
 	em.ObservableSet = ObservableSet;
 	em.ObservableTypedSet = ObservableTypedSet;
 	
-	em.plugin.set.asObservable = function (/*notifications*/) {
-		return this.reduce(Method('add'),new ObservableSet(/*notifications*/));
+	em.plugin.set.asObservable = function () {
+		return this.reduce(Method('add'),new ObservableSet());
 	};
 	
-	em.plugin.typedset.asObservable = function (/*notifications*/) {
-		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor/*,notifications*/));
+	em.plugin.typedset.asObservable = function () {
+		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor));
 	};
 	
 	
