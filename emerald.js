@@ -891,10 +891,10 @@ var emerald = function () {
 	
 	
 	//
-	// Kind
+	// Type
 	//
 	
-	function Kind (fields,options) {
+	function Type (fields,options) {
 		return extend({
 			prototype: new ObservableObject()
 		}, function (data) {
@@ -903,7 +903,7 @@ var emerald = function () {
 		});
 	}
 	
-	em.Kind = Kind;
+	em.Type = Type;
 	
 	
 	//
