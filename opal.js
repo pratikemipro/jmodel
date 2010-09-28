@@ -706,7 +706,8 @@ function OPAL () {
 	        constructor = constructor.entitytype ? constructor.entitytpe.constructor : constructor.constructor;
 	    }
 		this.__constructor = this.__constructor || constructor;
-		Set.apply(this,Array.prototype.slice.call(arguments,1));
+		Set.apply(this,[]);
+		Set.fromArray(Array.prototype.slice.call(arguments,1)).reduce(Method('add'),this);
 		return this;
 	}
 	
