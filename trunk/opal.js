@@ -632,7 +632,7 @@ function OPAL () {
 	
 	Set.from = function () {
 		return Set.fromArray(Array.prototype.slice.call(arguments));
-	}
+	};
 	
 	Set.fromArray = function (arr) {
 		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
@@ -649,6 +649,20 @@ function OPAL () {
 	Set.fromJQuery = function (jq) {
 		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
+	};
+	
+	Set.fromGenerator = function (fn) {
+		var next, items = [];
+		while ( typeof( next = fn() ) !== 'undefined' ) {
+			items.push(next);
+		}
+		return Set.fromArray(items);
+	};
+	
+	opal.range = function (lower, higher) {
+		return function () {
+			return lower <= higher ? lower++ : undefined;
+		};
 	};
 
 	function set () {
@@ -825,7 +839,7 @@ function OPAL () {
 	
 	List.from = function () {
 		return List.fromArray(Array.prototype.slice.call(arguments));
-	}
+	};
 	
 	List.fromArray = function (arr) {
 		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
@@ -842,6 +856,14 @@ function OPAL () {
 	List.fromJQuery = function (jq) {
 		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return List.fromArray(jq.get()).map(jQuery,new List());
+	};
+	
+	List.fromGenerator = function (fn) {
+		var next, items = [];
+		while ( typeof( next = fn() ) !== 'undefined' ) {
+			items.push(next);
+		}
+		return List.fromArray(items);
 	};
 	
 	function list () {
