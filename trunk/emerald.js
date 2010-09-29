@@ -1082,6 +1082,31 @@ var emerald = function () {
 	
 	
 	//
+	// StringField
+	//
+	
+	function string (options) {
+		options = typeof options === 'object' ? options : {defaultValue:options};
+		return function (object,field) {
+			return new StringField(object,field,options);
+		};
+	}
+	
+	em.string = string;
+	
+	function StringField (object,field,options) {
+		ScalarField.call(this,object,field,options);
+	}
+	
+	StringField.prototype = extend({
+		
+		set: function (value) {
+			ScalarField.prototype.set.call(this,String(value));
+		}
+		
+	}, new ScalarField() );
+	
+	//
 	// Collection field
 	//
 	
