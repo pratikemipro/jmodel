@@ -874,7 +874,7 @@ var emerald = function () {
 		constructor: ObservableObject,
 		
 		instantiateField: function (field,value) {
-			value = typeof value === 'function' ? value : scalar({value:value});
+			value = typeof value === 'function' ? value : scalar({defaultValue:value});
 			value.call(this,this,field);
 		},
 		
@@ -1021,7 +1021,7 @@ var emerald = function () {
 	//
 	
 	function boolean (options) {
-		options = typeof options === 'object' ? options : {value:options};
+		options = typeof options === 'object' ? options : {defaultValue:options};
 		return function (object,field) {
 			return new BooleanField(object,field,options);
 		};
@@ -1059,7 +1059,7 @@ var emerald = function () {
 	//
 	
 	function integer (options) {
-		options = typeof options === 'object' ? options : {value:options};
+		options = typeof options === 'object' ? options : {defaultValue:options};
 		return function (object,field) {
 			return new IntegerField(object,field,options);
 		};
