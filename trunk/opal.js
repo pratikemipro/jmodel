@@ -773,7 +773,14 @@ function OPAL () {
 
 		},
 		
-		__construct: function () {
+		__construct: function (value) {
+			
+			if ( this.__constructor === Number ) {
+				return Number(value);
+			}
+			else if ( this.__constructor === String ) {
+				return String(value);
+			}
 			
 			var object;
 			
