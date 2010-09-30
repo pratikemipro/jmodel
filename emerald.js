@@ -105,7 +105,7 @@ var emerald = function () {
 	
 		subscribe: function _subscribe (subscriber) {
 			var subs = this.subscribers().add(subscriber).added;
-			for ( i in this.events ) {
+			for ( var i in this.events ) {
 				subs.notify.apply(subs,this.events[i]);
 			}
 		},
@@ -704,7 +704,7 @@ var emerald = function () {
 			return new Subscriber(specification);
 		},
 		
-		notify: function _notify (event) {
+		notify: function _notify () {
 			var args = arguments;
 			this.each(function (subscriber) {
 				subscriber.notify.apply(subscriber,args);
@@ -988,7 +988,7 @@ var emerald = function () {
 			var oldValue = this.value;
 			value = typeof value === 'function' ? value.call(this,oldValue) : value;
 
-			if ( value !== oldValue ) {
+			if ( typeof value !== 'undefined' && value !== oldValue ) {
 				
 				if ( this.constraint(value) ) {
 					
