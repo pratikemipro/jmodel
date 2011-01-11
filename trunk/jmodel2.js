@@ -12,7 +12,8 @@
 var jModel = (function () {
 	
 	
-	var external = _;
+	var external	= _,
+		nextKey		= -1; // NOTE: make this nicer
 	
 	
 	//
@@ -91,12 +92,12 @@ var jModel = (function () {
 	function PrimaryKeyConstraint (field,entity_set) {
 		
 		if ( field.get() === null || typeof field.get() === 'undefined' ) {
-			console.log('Should generate key');
+			field.set(nextKey--);
 		}
 		
 		field.event.subscribe(function (value) {
 			if ( value === null || typeof value === 'undefined' ) {
-				console.log('Should generate key');
+				field.set(nextKey--);
 			}
 		});
 		
