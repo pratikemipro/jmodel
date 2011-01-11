@@ -1015,6 +1015,7 @@ var emerald = function () {
 		
 	};
 	
+	em.ScalarField = ScalarField;
 	
 	//
 	// BooleanField
@@ -1053,6 +1054,7 @@ var emerald = function () {
 		
 	}, new ScalarField() );
 	
+	em.BooleanField = BooleanField;
 	
 	//
 	// IntegerField
@@ -1080,6 +1082,7 @@ var emerald = function () {
 		
 	}, new ScalarField() );
 	
+	em.IntegerField = IntegerField;
 	
 	//
 	// StringField
@@ -1105,6 +1108,8 @@ var emerald = function () {
 		}
 		
 	}, new ScalarField() );
+	
+	em.StringField = StringField;
 	
 	//
 	// Collection field
@@ -1140,6 +1145,7 @@ var emerald = function () {
 		
 	}, new ObservableTypedSet() );
 	
+	em.CollectionField = CollectionField;
 	
 	//
 	// Predicates
