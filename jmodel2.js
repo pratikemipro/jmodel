@@ -90,12 +90,35 @@ var jModel = (function () {
 			}
 		};
 		
-		entityType.constructor	= entityType;
+		return extend({
+			
+			constructor:	entityType,
+			typeName:		options.name,
+			base:			options.base,
+			prototype:		options.proto || extend(fields.methods, new ObservableObject()),
+			
+			objects:		new EntitySet(entityType),
+			find:			delegateTo(entityType.objects,'filter'),
+			
+			subtype:		function (subfields,suboptions) {
+								return context.types.create(
+									copy(fields).addProperties(subfields).removeProperties('methods'),
+									copy(options).addProperties(suboptions).addProperties({
+										proto: extend(subfields.methods, new entityType()),
+										base: entityType
+									})
+								);
+							}
+			
+		}, entityType);
+		
+		
+/*		entityType.constructor	= entityType;
 		entityType.typeName		= options.name;
 		entityType.base			= options.base;
 		entityType.prototype	= options.proto || extend(fields.methods, new ObservableObject());
-		entityType.objects		= new EntitySet(entityType);
 		
+		entityType.objects		= new EntitySet(entityType);
 		entityType.find			= delegateTo(entityType.objects,'filter');
 		
 		entityType.subtype = function (subfields,suboptions) {
@@ -108,7 +131,7 @@ var jModel = (function () {
 			);
 		};
 		
-		return entityType;
+		return entityType; */
 		
 	}
 	
