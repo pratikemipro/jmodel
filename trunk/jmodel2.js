@@ -78,8 +78,9 @@ var jModel = (function () {
 	//
 	// EntityType
 	//
-	
 	// Note that this isn’t a constructor but a generator function that returns a constructor
+	//
+	
 	function EntityType (context,fields,options) {
 		
 		var entityType = function (data) {
@@ -110,28 +111,7 @@ var jModel = (function () {
 								);
 							}
 			
-		}, entityType);
-		
-		
-/*		entityType.constructor	= entityType;
-		entityType.typeName		= options.name;
-		entityType.base			= options.base;
-		entityType.prototype	= options.proto || extend(fields.methods, new ObservableObject());
-		
-		entityType.objects		= new EntitySet(entityType);
-		entityType.find			= delegateTo(entityType.objects,'filter');
-		
-		entityType.subtype = function (subfields,suboptions) {
-			return context.types.create(
-				copy(fields).addProperties(subfields).removeProperties('methods'),
-				copy(options).addProperties(suboptions).addProperties({
-					proto: extend(subfields.methods, new entityType()),
-					base: entityType
-				})
-			);
-		};
-		
-		return entityType; */
+		}, entityType );
 		
 	}
 	
