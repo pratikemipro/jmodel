@@ -14,6 +14,8 @@ var jModel = (function () {
 	
 	var external	= _,
 		nextKey		= -1; // NOTE: make this nicer
+		
+	external.jmodel_version = '2.0.0';
 	
 	
 	//
@@ -27,6 +29,13 @@ var jModel = (function () {
 	
 	
 	//
+	// Context
+	//
+	
+	external.context = {};
+	
+	
+	//
 	// EntityTypeSet
 	//
 	
@@ -35,7 +44,7 @@ var jModel = (function () {
 		ObservableTypedSet.call(this,EntityType);
 		
 		this.context = context;
-		this.index(Resolve('name'));
+		this.index(Resolve('typeName'));
 		
 	}
 	
@@ -45,7 +54,7 @@ var jModel = (function () {
 		constructor: EntityTypeSet,
 		
 		add: function (fields,options) {
-			return Set.prototype.add.call(this, fields instanceof Function ? fields : EntityType(fields,options));
+			return Set.prototype.add.call(this, fields instanceof Function ? fields : EntityType(this.context,fields,options));
 		},
 
 		create: function () {
@@ -64,32 +73,42 @@ var jModel = (function () {
 		
 	}, new ObservableSet() );
 	
-	external.EntityTypeSet = EntityTypeSet; // NOTE: Remove this when Context has been implemented
+	external.context.types = new EntityTypeSet(external.context);
 	
 	//
 	// EntityType
 	//
 	
 	// Note that this isn’t a constructor but a function that returns a constructor
-	function EntityType (fields,options) {
+	function EntityType (context,fields,options) {
 		
 		var entityType = function (data) {
 			ObservableObject.call(this,fields,options);
-			this.set(data);
-			entityType.objects.add(this);
+			if ( data ) {
+				this.set(data);
+				entityType.objects.add(this);
+			}
 		};
 		
 		entityType.constructor	= entityType;
-		entityType.name			= options.name;
-		entityType.prototype	= new ObservableObject();
+		entityType.typeName		= options.name;
+		entityType.prototype	= options.proto || new ObservableObject();
 		entityType.objects		= new EntitySet(entityType);
+		
 		entityType.find			= delegateTo(entityType.objects,'filter');
+		
+		entityType.subtype = function (subfields,suboptions) {
+			return context.types.create(
+				copy(fields).addProperties(subfields),
+				copy(options).addProperties(suboptions).addProperties({
+					proto: new entityType()
+				})
+			);
+		};
 		
 		return entityType;
 		
 	}
-	
-	external.EntityType = EntityType;
 	
 	
 	//
