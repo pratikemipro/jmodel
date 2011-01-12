@@ -95,7 +95,7 @@ var jModel = (function () {
 			
 			constructor:	entityType,
 			typeName:		options.name,
-			base:			options.base,
+			super:			options.super,
 			prototype:		options.proto || extend(fields.methods, new ObservableObject()),
 			
 			objects:		new EntitySet(entityType),
@@ -106,7 +106,7 @@ var jModel = (function () {
 									copy(fields).addProperties(subfields).removeProperties('methods'),
 									copy(options).addProperties(suboptions).addProperties({
 										proto: extend(subfields.methods, new entityType()),
-										base: entityType
+										super: entityType
 									})
 								);
 							}
