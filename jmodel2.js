@@ -92,6 +92,7 @@ var jModel = (function () {
 		
 		entityType.constructor	= entityType;
 		entityType.typeName		= options.name;
+		entityType.base			= options.base;
 		entityType.prototype	= options.proto || extend(fields.methods, new ObservableObject());
 		entityType.objects		= new EntitySet(entityType);
 		
@@ -101,7 +102,8 @@ var jModel = (function () {
 			return context.types.create(
 				copy(fields).addProperties(subfields).removeProperties('methods'),
 				copy(options).addProperties(suboptions).addProperties({
-					proto: extend(subfields.methods, new entityType())
+					proto: extend(subfields.methods, new entityType()),
+					base: entityType
 				})
 			);
 		};
