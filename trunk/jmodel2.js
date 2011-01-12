@@ -27,9 +27,50 @@ var jModel = (function () {
 	
 	
 	//
+	// EntityTypeSet
+	//
+	
+	function EntityTypeSet (context) {
+		
+		ObservableTypedSet.call(this,EntityType);
+		
+		this.context = context;
+		this.index(Resolve('name'));
+		
+	}
+	
+	// Can’t inherit from ObservableTypedSet as EntityType isn’t a constructor
+	EntityTypeSet.prototype = extend({
+		
+		constructor: EntityTypeSet,
+		
+		add: function (fields,options) {
+			return Set.prototype.add.call(this, fields instanceof Function ? fields : EntityType(fields,options));
+		},
+
+		create: function () {
+			this.add.apply(this,arguments);
+			return this.added;
+		},
+		
+		predicate: function _predicate (parameter) {
+			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
+				return extend({unique:true},PropertyPredicate('name',parameter));
+			}
+			else {
+				return ObservableSet.prototype.predicate.apply(this,arguments);
+			}
+		}
+		
+	}, new ObservableSet() );
+	
+	external.EntityTypeSet = EntityTypeSet; // NOTE: Remove this when Context has been implemented
+	
+	//
 	// EntityType
 	//
 	
+	// Note that this isn’t a constructor but a function that returns a constructor
 	function EntityType (fields,options) {
 		
 		var entityType = function (data) {
@@ -39,6 +80,7 @@ var jModel = (function () {
 		};
 		
 		entityType.constructor	= entityType;
+		entityType.name			= options.name;
 		entityType.prototype	= new ObservableObject();
 		entityType.objects		= new EntitySet(entityType);
 		entityType.find			= delegateTo(entityType.objects,'filter');
