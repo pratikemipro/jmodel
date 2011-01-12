@@ -79,7 +79,7 @@ var jModel = (function () {
 	// EntityType
 	//
 	
-	// Note that this isn’t a constructor but a function that returns a constructor
+	// Note that this isn’t a constructor but a generator function that returns a constructor
 	function EntityType (context,fields,options) {
 		
 		var entityType = function (data) {
