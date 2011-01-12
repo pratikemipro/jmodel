@@ -144,6 +144,7 @@ var jModel = (function () {
 	
 	function TypeInclusionConstraint (set,super) {
 		
+		// Adding to set adds to superset
 		set.event('add')
 			.map('object')
 			.subscribe({
@@ -153,6 +154,7 @@ var jModel = (function () {
 				}
 			});
 			
+		// Removing from set removes from superset
 		set.event('remove')
 			.map('object')
 			.subscribe({
@@ -161,7 +163,8 @@ var jModel = (function () {
 					this.remove(entity);
 				}
 			});
-			
+		
+		// Removing from superset removes from set	
 		super.event('remove')
 			.map('object')
 			.subscribe({
