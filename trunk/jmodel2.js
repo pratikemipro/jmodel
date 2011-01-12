@@ -92,16 +92,16 @@ var jModel = (function () {
 		
 		entityType.constructor	= entityType;
 		entityType.typeName		= options.name;
-		entityType.prototype	= options.proto || new ObservableObject();
+		entityType.prototype	= options.proto || extend(fields.methods, new ObservableObject());
 		entityType.objects		= new EntitySet(entityType);
 		
 		entityType.find			= delegateTo(entityType.objects,'filter');
 		
 		entityType.subtype = function (subfields,suboptions) {
 			return context.types.create(
-				copy(fields).addProperties(subfields),
+				copy(fields).addProperties(subfields).removeProperties('methods'),
 				copy(options).addProperties(suboptions).addProperties({
-					proto: new entityType()
+					proto: extend(subfields.methods, new entityType())
 				})
 			);
 		};
