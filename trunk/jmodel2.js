@@ -139,7 +139,7 @@ var jModel = (function () {
 	
 	
 	//
-	// InclusionConstraint
+	// TypeInclusionConstraint
 	//
 	
 	function TypeInclusionConstraint (set,super) {
