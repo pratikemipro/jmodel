@@ -98,7 +98,7 @@ var jModel = (function () {
 			super:			options.super,
 			prototype:		options.proto || extend(fields.methods, new ObservableObject()),
 			
-			objects:		new EntitySet(entityType),
+			objects:		new EntitySet(entityType,options.super ? options.super.objects : undefined),
 			find:			delegateTo(entityType.objects,'filter'),
 			
 			subtype:		function (subfields,suboptions) {
@@ -120,8 +120,11 @@ var jModel = (function () {
 	// EntitySet
 	//
 	
-	function EntitySet (constructor) {
-		TypedSet.call(this,constructor);
+	function EntitySet (constructor,super) {
+		ObservableTypedSet.call(this,constructor);
+		if ( super ) {
+			var constraint = new TypeInclusionConstraint(this,super);
+		}
 	}
 	
 	EntitySet.prototype = extend({
@@ -132,7 +135,43 @@ var jModel = (function () {
 			return this.__construct(data);
 		}
 		
-	}, new TypedSet() );
+	}, new ObservableTypedSet() );
+	
+	
+	//
+	// InclusionConstraint
+	//
+	
+	function TypeInclusionConstraint (set,super) {
+		
+		set.event('add')
+			.map('object')
+			.subscribe({
+				context: super,
+				message: function (entity) {
+					this.add(entity);
+				}
+			});
+			
+		set.event('remove')
+			.map('object')
+			.subscribe({
+				context: super,
+				message: function (entity) {
+					this.remove(entity);
+				}
+			});
+			
+		super.event('remove')
+			.map('object')
+			.subscribe({
+				context: set,
+				message: function (entity) {
+					this.remove(entity);
+				}
+			});
+		
+	}
 	
 	
 	//
