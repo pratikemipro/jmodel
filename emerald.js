@@ -878,9 +878,17 @@ var emerald = function () {
 			value.call(this,this,field);
 		},
 		
-		set: function (values) {
-			for ( var field in values ) {
-				this[field].call(this,values[field]);
+		set: function (properties) {
+			for ( var property in properties ) {
+				if ( property === 'methods' ) { // Methods
+					var methods = properties[property];
+					for ( var method in methods ) {
+						this[method] = methods[method];
+					}
+				}
+				else { // Field
+					this[property].call(this,properties[property]);
+				}
 			}
 			return this;
 		}
