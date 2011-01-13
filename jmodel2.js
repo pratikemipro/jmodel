@@ -15,7 +15,7 @@ var jModel = (function () {
 	var external	= _,
 		nextKey		= -1; // NOTE: make this nicer
 		
-	external.jmodel_version = '2.0.0';
+	external.jmodel_version = '2.0.1';
 	
 	
 	//
