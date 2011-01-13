@@ -320,7 +320,7 @@ var emerald = function () {
 					derivedEventType,
 					each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]
 				);
-		    });
+		    }); 
 		    return derivedEventType;
 		},
 		
@@ -824,7 +824,9 @@ var emerald = function () {
 		
 		var change = this.event('change');
 		this.event('add')
-			.map('object')
+			.map(function (event) {
+				return event.object;
+			})
 			.where(has('event','change'))
 			.subscribe(function (object) {
 				object.event('change')
@@ -832,7 +834,7 @@ var emerald = function () {
 				        event.object = object;
 				        return event;
 				    })
-				    .republish(change);
+				    .republish(change); 
 			});
 		
 		return this;
