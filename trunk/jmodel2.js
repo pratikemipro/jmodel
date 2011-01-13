@@ -34,6 +34,90 @@ var jModel = (function () {
 	
 	external.context = {};
 	
+	function Context (name) {
+
+		this.isDefault		= false;
+		this.name			= name;
+		
+		this.types			= new EntityTypeSet(this);
+		this.type			= delegateTo(this.types,'filter');
+		
+		this.events			= new EventRegistry(this.notifications,'checkpoint');
+		this.event			= delegateTo(this.events,'filter');
+		
+//		this.all			= new ObservableTypedSet(ObservableObject);
+		
+/*		this.constraints    = new TypedSet(GlobalReferentialConstraint); */
+		
+		// Adding a new object of a type in the context should add to the context's
+		// collection of all objects
+/*		this.types.event('add')
+			.map('object')
+			.subscribe({
+				context: this,
+				message: function (type) {
+					console.log('Creating inclusion constraint');
+					var constraint = TypeInclusionConstraint(type,this.all)
+				}
+			});*/
+		
+	}
+	
+	Context.prototype = {
+		
+		constructor: Context,
+		
+/*		register: function _register (name,constructor,options) {
+			return this.entities.create(name,constructor,options)
+						.exposeAt( this.isDefault ? [this,external] : [this] )
+						.context;
+		},
+		
+		reset: function _reset () {
+			this.all.remove(AllPredicate,true);
+			return this;
+		},
+		
+		checkpoint: function _checkpoint () {
+			this.event('checkpoint').raise();
+			return this;
+		},
+		
+		transaction: function _transaction (trans,that) {
+			this.notifications.suspend();
+			trans.call(that);
+			this.notifications.resume();
+			return this;
+		},
+		
+		validate: function _validate () {
+			return this.all
+					.map(function __validate (object) {return {object:object, messages:object.validate()};})
+						.filter(function ___validate (result) { return result.messages !== ''; });
+		},
+		
+		setDefault: function _setDefault () {
+			this.isDefault			= true;
+			defaultContext			= this;
+			external.context		= this;
+			external.notifications	= this.notifications;
+			external.transaction	= this.transaction;
+			return this;
+		},
+		
+		collection: function _collection (specification) {
+			return new DomainObjectCollection( extend({context:this},specification || {}) );
+		},
+		
+		createConstraints: function _constraints () {  
+		    var context = this;
+		    this.entities.each(function (entitytype) {
+	            Set.fromArray(entitytype.constructor.prototype.hasMany)
+					.reduce(Method('add',context,entitytype),context.constraints);
+		    });
+		} */
+		
+	};
 	
 	//
 	// EntityTypeSet
@@ -41,7 +125,7 @@ var jModel = (function () {
 	
 	function EntityTypeSet (context) {
 		
-		ObservableTypedSet.call(this,EntityType);
+		ObservableSet.call(this,EntityType);
 		
 		this.context = context;
 		this.index(Resolve('typeName'));
@@ -54,7 +138,7 @@ var jModel = (function () {
 		constructor: EntityTypeSet,
 		
 		add: function (fields,options) {
-			return Set.prototype.add.call(this, fields instanceof Function ? fields : EntityType(this.context,fields,options));
+			return ObservableSet.prototype.add.call(this, fields instanceof Function ? fields : EntityType(this.context,fields,options))
 		},
 
 		create: function () {
@@ -72,8 +156,7 @@ var jModel = (function () {
 		}
 		
 	}, new ObservableSet() );
-	
-	external.context.types = new EntityTypeSet(external.context);
+
 	
 	//
 	// EntityType
@@ -96,7 +179,7 @@ var jModel = (function () {
 			constructor:	entityType,
 			typeName:		options.name,
 			super:			options.super,
-			prototype:		options.proto || extend(fields.methods, new ObservableObject()),
+			prototype:		options.proto instanceof ObservableObject ? options.proto : extend(fields.methods, new ObservableObject()),
 			
 			objects:		new EntitySet(entityType,options.super ? options.super.objects : undefined),
 			find:			delegateTo(entityType.objects,'filter'),
@@ -211,6 +294,11 @@ var jModel = (function () {
 		
 	}
 	
+	//
+	// Default context
+	//
+	
+	external.context = new Context('default');
 	
 	return external;
 	
