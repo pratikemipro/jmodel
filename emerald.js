@@ -324,6 +324,19 @@ var emerald = function () {
 		    return derivedEventType;
 		},
 		
+		project: function () {
+			var derivedEventType = this.derive(),
+				indices = Array.prototype.slice.call(arguments);
+			this.subscribe(function () {
+				var args = [];
+				for ( var i in indices ) {
+					args.push(arguments[indices[i]]);
+				}
+				derivedEventType.raise.apply(derivedEventType,args)
+			});
+			return derivedEventType;
+		},
+		
 		partition: function (partition) {
 			var events = new EventRegistry();
 			this.subscribe(function () {
