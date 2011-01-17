@@ -767,11 +767,7 @@ var emerald = function () {
 				target: proto.add,
 				post: function (state) {
 					if ( typeof this.added !== 'undefined' ) {
-						this.event('add').raise({
-							method: 'add',
-							object: this.added,
-							description: 'object addition'
-						});
+						this.event('add').raise(this.added,this);
 					}
 					return state.returnValue;
 				}
@@ -782,11 +778,7 @@ var emerald = function () {
 				post: function (state) {
 					var that = this;
 					state.returnValue.each(function (item) {
-						that.event('remove').raise({
-							method: 'remove',
-							object: item,
-							description: 'object removal'
-						});
+						that.event('remove').raise(item,that);
 					});
 					return state.returnValue;
 				}
@@ -824,16 +816,9 @@ var emerald = function () {
 		
 		var change = this.event('change');
 		this.event('add')
-			.map(function (event) {
-				return event.object;
-			})
 			.where(has('event','change'))
 			.subscribe(function (object) {
 				object.event('change')
-				    .map(function (event) {
-				        event.object = object;
-				        return event;
-				    })
 				    .republish(change); 
 			});
 		
