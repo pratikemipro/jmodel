@@ -562,8 +562,8 @@ var emerald = function () {
     	    return eventType;
     	},
     	
-    	fromAjax: function (descriptor) {
-    	    return new AjaxEventType(descriptor);
+    	fromAjax: function (descriptor,immediate) {
+    	    return new AjaxEventType(descriptor,immediate);
     	},
     	
     	fromJSON: function () {
@@ -577,8 +577,11 @@ var emerald = function () {
 	//
 	// AjaxEventType
 	//
-	
-	function AjaxEventType (descriptor) {
+
+	function AjaxEventType (descriptor,settings) {
+		
+		this.settings = ( typeof settings === 'object' ) ? settings : {};
+		this.settings.immediate = ( typeof this.settings.immediate === 'undefined' ) ? true : this.settings.immediate;
 		
 		EventType.call(this);
 		this.remember(1);
@@ -593,18 +596,26 @@ var emerald = function () {
 			}
 		});
 		
-		this.start();
-		
+		if ( this.settings.immediate ) {
+			this.start();
+		}
+	
 	}
 	
 	AjaxEventType.prototype = extend({
 		
-		start: function () {
+		start: function (data) {
+			if ( this.settings.singleton ) {
+				this.stop();
+			}
+			this.descriptor.data = typeof data === 'object' ? extend(data,this.descriptor.data) : this.descriptor.data;
 			this.__ajax = jQuery.ajax.call(null,this.descriptor);
 		},
 		
 		stop: function () {
-			this.__ajax.abort();
+			if ( this.__ajax && this.__ajax.abort ) {
+				this.__ajax.abort();
+			}
 		}
 		
 	}, new EventType() );
