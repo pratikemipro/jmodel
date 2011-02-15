@@ -1007,7 +1007,7 @@ var emerald = function () {
 			var oldValue = this.value;
 			value = typeof value === 'function' ? value.call(this,oldValue) : value;
 
-			if ( typeof value !== 'undefined' && value !== oldValue ) {
+			if ( this.options.repeat || ( typeof value !== 'undefined' && value !== oldValue ) ) {
 				
 				if ( this.constraint(value) ) {
 					
