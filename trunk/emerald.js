@@ -760,7 +760,7 @@ var emerald = function () {
 		constructor: Subscriber,
 		
 		notify: function (event) {
-			if ( this.predicate(event) ) {
+			if ( this.message && this.predicate(event) ) {
 				this.message.apply(this.context,arguments);
 			}
 		},
