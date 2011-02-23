@@ -385,10 +385,16 @@ var emerald = function () {
 		republish: function () {
 		    var args1 = Array.prototype.slice.call(arguments),
 		        republishedEventType = args1.shift();
-		    this.subscribe(function () {
-		        var args2 = Array.prototype.slice.call(arguments);
-	            republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
-	        });
+		    this.subscribe({
+				message: function () {
+			        var args2 = Array.prototype.slice.call(arguments);
+		            republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
+		        },
+				error: function () {
+					var args2 = Array.prototype.slice.call(arguments);
+		            republishedEventType.fail.apply(republishedEventType,args1.concat(args2));
+				}
+			});
 		    return this;
 		}
 		
@@ -870,6 +876,7 @@ var emerald = function () {
 
 		this.options		= options || {};
 		this.options.tags	= this.options.tags || [];
+		this.fields			= [];
 	
 		this.events = new EventRegistry('change');
 		this.event	= delegateTo(this.events,'filter');
@@ -886,6 +893,7 @@ var emerald = function () {
 		
 		instantiateField: function (field,value) {
 			value = typeof value === 'function' ? value : scalar({defaultValue:value});
+			this.fields.push(field);
 			value.call(this,this,field);
 		},
 		
