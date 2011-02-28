@@ -1139,6 +1139,33 @@ var emerald = function () {
 	em.StringField = StringField;
 	
 	//
+	// DateField
+	//
+	
+	function date (options) {
+		options = typeof options === 'object' ? options : {defaultValue:options};
+		return function (object,field) {
+			return new DateField(object,field,options);
+		};
+	}
+	
+	em.date = date;
+	
+	function DateField (object,field,options) {
+		ScalarField.call(this,object,field,options);
+	}
+	
+	DateField.prototype = extend({
+		
+		set: function (value) {
+			ScalarField.prototype.set.call(this,typeof value === 'date' ? value : new Date(value))
+		}
+		
+	}, new ScalarField() );
+	
+	em.DateField = DateField;
+	
+	//
 	// Collection field
 	//
 	
