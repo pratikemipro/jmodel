@@ -1279,10 +1279,6 @@ function OPAL () {
 	
 	function delegateTo (context,methodName) {
 		return function () {
-			if ( !context[methodName] ) {
-				console.log(context);
-				console.log(methodName);
-			}
 			return context[methodName].apply(context,arguments);
 		};
 	}
