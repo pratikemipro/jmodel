@@ -328,15 +328,12 @@ var emerald = function () {
 		
 		project: function () {
 			var derivedEventType = this.derive(),
-				indices = Array.prototype.slice.call(arguments);
+				indices = Set.fromArguments(arguments);
 			this.subscribe(function () {
-				var args = [];
-				for ( var i in indices ) {
-					if ( indices.hasOwnProperty(i) ) {
-						args.push(arguments[indices[i]]);
-					}	
-				}
-				derivedEventType.raise.apply(derivedEventType,args)
+				var sourceArgs = arguments;
+				derivedEventType.raise.apply(derivedEventType, indices.reduce(function (args,index) {
+					retrun push(args,sourceArgs[index]);
+				}, []));
 			});
 			return derivedEventType;
 		},
