@@ -25,9 +25,9 @@ function OPAL () {
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
-			if ( object.hasOwnProperty(i) ) {
-				target[i] = object[i];
-			}        
+//			if ( object.hasOwnProperty(i) ) {
+				target[i] = object[i];     
+//			}
 		}
 		return target;
 	}
@@ -623,7 +623,7 @@ function OPAL () {
 		
 		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
-				if ( this.hasOwnProperty(i) && !host[i] ) {
+				if ( /*this.hasOwnProperty(i) &&*/ !host[i] ) {
 					host[i] = this[i];
 				}
 			}
@@ -1279,6 +1279,10 @@ function OPAL () {
 	
 	function delegateTo (context,methodName) {
 		return function () {
+			if ( !context[methodName] ) {
+				console.log(context);
+				console.log(methodName);
+			}
 			return context[methodName].apply(context,arguments);
 		};
 	}
