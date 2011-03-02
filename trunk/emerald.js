@@ -332,7 +332,7 @@ var emerald = function () {
 			this.subscribe(function () {
 				var sourceArgs = arguments;
 				derivedEventType.raise.apply(derivedEventType, indices.reduce(function (args,index) {
-					retrun push(args,sourceArgs[index]);
+					return push(args,sourceArgs[index]);
 				}, []));
 			});
 			return derivedEventType;
