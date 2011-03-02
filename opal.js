@@ -25,7 +25,9 @@ function OPAL () {
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
-	        target[i] = object[i];
+			if ( object.hasOwnProperty(i) ) {
+				target[i] = object[i];
+			}        
 		}
 		return target;
 	}
@@ -36,7 +38,9 @@ function OPAL () {
 		var fns = Array.prototype.slice.call(arguments);
 		return fns.length == 1 ? fns[0] : function _pipe (x) {
 			for (var i in fns) {
-				x = fns[i](x);
+				if ( fns.hasOwnProperty(i) ) {
+					x = fns[i](x);
+				}	
 			}
 			return x;
 		};
@@ -55,9 +59,11 @@ function OPAL () {
 			var args0 = arguments[0],
 				result = {};
 			for (var i in fns) {
-				var label = fns[i] && fns[i].label ? fns[i].label : i;
-				arguments[0] = args0[label] != undefined ? args0[label] : args0;
-				result[label] = fns[i].apply(null,arguments);
+				if ( fns.hasOwnProperty(i) ) {
+					var label = fns[i] && fns[i].label ? fns[i].label : i;
+					arguments[0] = args0[label] != undefined ? args0[label] : args0;
+					result[label] = fns[i].apply(null,arguments);
+				}
 			}
 			return result;
 		};
@@ -419,7 +425,7 @@ function OPAL () {
 			}
 			else if ( this.__members.indexOf ) {
 				return this.__members.indexOf(object) > -1;
-			}
+			} 
 			else {
 				return this.reduce(contains(ObjectIdentityPredicate(object)));
 			}
@@ -454,7 +460,9 @@ function OPAL () {
 			}
 			else {
 				for ( var index in this.__members ) {
-					callback.call(this,this.__members[index],index);
+					if ( this.__members.hasOwnProperty(index) ) {
+						callback.call(this,this.__members[index],index);
+					}	
 				}
 			}
 			return this;
@@ -615,7 +623,7 @@ function OPAL () {
 		
 		delegateFor: function _delegateFor (host) {
 			for (var i in this) {
-				if ( !host[i] ) {
+				if ( this.hasOwnProperty(i) && !host[i] ) {
 					host[i] = this[i];
 				}
 			}
@@ -1299,7 +1307,9 @@ function OPAL () {
 		
 		defaults: function _defaults (attributes) {
 			for ( var key in attributes ) {
-				this[key] = this[key] || attributes[key];
+				if ( attributes.hasOwnProperty(key) ) {
+					this[key] = this[key] || attributes[key];
+				}	
 			}
 			return this;
 		},
