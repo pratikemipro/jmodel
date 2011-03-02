@@ -95,7 +95,7 @@ var emerald = function () {
 		this.registry		= registry || em.registry;
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(),'filter');
-		this.events			= [];
+		this.events			= new List();
 		this.__remember		= 0;
 	}
 	
@@ -106,7 +106,9 @@ var emerald = function () {
 		subscribe: function _subscribe (subscriber) {
 			var subs = this.subscribers().add(subscriber).added;
 			for ( var i in this.events ) {
-				subs.notify.call(subs,this.events[i]);
+				if ( this.events.hasOwnProperty(i) ) {
+					subs.notify.call(subs,this.events[i]);
+				}
 			}
 		},
 	
@@ -330,7 +332,9 @@ var emerald = function () {
 			this.subscribe(function () {
 				var args = [];
 				for ( var i in indices ) {
-					args.push(arguments[indices[i]]);
+					if ( indices.hasOwnProperty(i) ) {
+						args.push(arguments[indices[i]]);
+					}	
 				}
 				derivedEventType.raise.apply(derivedEventType,args)
 			});
@@ -882,7 +886,9 @@ var emerald = function () {
 		this.event	= delegateTo(this.events,'filter');
 		
 		for ( var field in fields ) {
-			this.instantiateField(field,fields[field]);
+			if ( fields.hasOwnProperty(field) ) {
+				this.instantiateField(field,fields[field]);
+			}
 		}
 	
 	}
@@ -899,15 +905,19 @@ var emerald = function () {
 		
 		set: function (properties) {
 			for ( var property in properties ) {
-				if ( property === 'methods' ) { // Methods
-					var methods = properties[property];
-					for ( var method in methods ) {
-						this[method] = methods[method];
+				if ( properties.hasOwnProperty(property) ) {
+					if ( property === 'methods' ) { // Methods
+						var methods = properties[property];
+						for ( var method in methods ) {
+							if ( methods.hasOwnProperty(method) ) {
+								this[method] = methods[method];
+							}	
+						}
 					}
-				}
-				else { // Field
-					this[property].call(this,properties[property]);
-				}
+					else { // Field
+						this[property].call(this,properties[property]);
+					}
+				}	
 			}
 			return this;
 		}
