@@ -106,7 +106,7 @@ var emerald = function () {
 		subscribe: function _subscribe (subscriber) {
 			var subs = this.subscribers().add(subscriber).added;
 			for ( var i in this.events ) {
-				subs.notify.apply(subs,this.events[i]);
+				subs.notify.call(subs,this.events[i]);
 			}
 		},
 	

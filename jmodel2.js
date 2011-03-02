@@ -52,7 +52,6 @@ var jModel = (function () {
 		// Adding a new object of a type in the context should add to the context's
 		// collection of all objects
 /*		this.types.event('add')
-			.map('object')
 			.subscribe({
 				context: this,
 				message: function (type) {
@@ -229,7 +228,6 @@ var jModel = (function () {
 		
 		// Adding to set adds to superset
 		set.event('add')
-			.map('object')
 			.subscribe({
 				context: super,
 				message: function (entity) {
@@ -239,7 +237,6 @@ var jModel = (function () {
 			
 		// Removing from set removes from superset
 		set.event('remove')
-			.map('object')
 			.subscribe({
 				context: super,
 				message: function (entity) {
@@ -249,7 +246,6 @@ var jModel = (function () {
 		
 		// Removing from superset removes from set	
 		super.event('remove')
-			.map('object')
 			.subscribe({
 				context: set,
 				message: function (entity) {
