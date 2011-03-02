@@ -107,7 +107,7 @@ var emerald = function () {
 			var subs = this.subscribers().add(subscriber).added;
 			for ( var i in this.events ) {
 				if ( this.events.hasOwnProperty(i) ) {
-					subs.notify.call(subs,this.events[i]);
+					subs.notify.apply(subs,this.events[i]);
 				}
 			}
 		},
