@@ -28,8 +28,17 @@
 	
 	function key (identifier) {
 		
+		function matchRegex (event) {
+			return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
+		}
+		
 		if ( arguments.length > 1 ) {
 			return emerald.Or.apply(null,emerald.List.fromArguments(arguments).map(key).get());
+		}
+		else if ( identifier.test ) { // Regex
+			return function (event) {
+				return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
+			}
 		}
 		
 		switch (typeof identifier) {
@@ -45,14 +54,6 @@
 				return function (event) {
 					return event.which === identifier;
 				};
-				
-			case 'function':
-				return function (event) {
-					return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
-				};
-				
-			case 'object':
-				return emerald.Or.apply(null,emerald.List.fromArray(identifier).map(key).get());
 			
 		}
 		
