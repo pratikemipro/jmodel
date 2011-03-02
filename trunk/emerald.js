@@ -95,7 +95,7 @@ var emerald = function () {
 		this.registry		= registry || em.registry;
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(),'filter');
-		this.events			= new List();
+		this.events			= [];
 		this.__remember		= 0;
 	}
 	
