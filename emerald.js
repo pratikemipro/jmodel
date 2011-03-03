@@ -1022,7 +1022,7 @@ var emerald = function () {
 			var oldValue = this.value;
 			value = typeof value === 'function' ? value.call(this,oldValue) : value;
 
-			if ( this.options.repeat || ( typeof value !== 'undefined' && value !== oldValue ) ) {
+			if ( this.options.repeat || ( typeof value !== 'undefined' && !this.equals(value,oldValue) ) ) {
 				
 				if ( this.constraint(value) ) {
 					
@@ -1045,6 +1045,10 @@ var emerald = function () {
 
 			return this.object;
 			
+		},
+		
+		equals: function (a,b) {
+			return a === b;
 		}
 		
 	};
@@ -1171,6 +1175,40 @@ var emerald = function () {
 	}, new ScalarField() );
 	
 	em.DateField = DateField;
+	
+	//
+	// ObjectField
+	//
+	
+	function object (options) {
+		options = typeof options === 'object' ? options : {defaultValue:options};
+		return function (object,field) {
+			return new ObjectField(object,field,options);
+		};
+	}
+	
+	em.object = object;
+	
+	function ObjectField (object,field,options) {
+		ScalarField.call(this,object,field,options);
+	}
+	
+	ObjectField.prototype = extend({
+		
+		equals: function (a,b) {
+			var equal = true;
+			for ( var prop in a ) {
+				if ( a.hasOwnProperty(prop) ) {
+					equal = equal && ( typeof b !== 'undefined' ) && ( a[prop] === b[prop] );
+				}
+			}
+			return equal;
+		}
+		
+	}, new ScalarField() );
+	
+	em.ObjectField = ObjectField;
+	
 	
 	//
 	// Collection field
