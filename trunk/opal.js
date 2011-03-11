@@ -444,10 +444,10 @@ function OPAL () {
 		},
 		
 		select : function _select (selector) {
-			if ( selected === ':first' ) {
+			if ( selector === ':first' ) {
 				return this.first();
 			}
-			else if ( selected === ':last' ) {
+			else if ( selector === ':last' ) {
 				return this.last
 			}
 			else {
