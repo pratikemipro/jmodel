@@ -382,8 +382,11 @@ function OPAL () {
 			if ( arguments.length === 0 ) {
 				return this.__members;
 			}
-			else if ( key == ':first' ) {
+			else if ( key === ':first' ) {
 				return this.first();
+			}
+			else if ( key === ':last' ) {
+				return this.last();
 			}
 			else if (this.__index) {
 				return this.__index.get(key);
@@ -441,7 +444,15 @@ function OPAL () {
 		},
 		
 		select : function _select (selector) {
-			return selector == ':first' ? this.first() : this;
+			if ( selected === ':first' ) {
+				return this.first();
+			}
+			else if ( selected === ':last' ) {
+				return this.last
+			}
+			else {
+				return this;
+			}
 		},
 		
 		when : function _when (predicate,callback) {
