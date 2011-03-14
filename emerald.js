@@ -119,7 +119,7 @@ var emerald = function () {
 					this.events.shift();
 				}
 			}
-			this.subscribers().notify.apply(this.subscribers(),arguments);
+			return this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
 		fail: function _error () {
@@ -148,8 +148,9 @@ var emerald = function () {
 		        predicate        = arguments[0].predicate || ( arguments.length > 1 ? And.apply(this,arguments) : arguments[0] );
 		    this.subscribe(function () {
 		        if ( predicate.apply(context,arguments) ) {
-		            derivedEventType.raise.apply(derivedEventType,arguments);
+		            return derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
+				return true;
 		    });
 		    return derivedEventType;
 		},
@@ -165,8 +166,9 @@ var emerald = function () {
 					last = true;
 				}
 				if ( active || (last && inclusive) ) {
-		            derivedEventType.raise.apply(derivedEventType,arguments);
+		            return derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
+				return true;
 		    });
 		    return derivedEventType;
 		},
@@ -175,9 +177,10 @@ var emerald = function () {
 		    var derivedEventType = this.derive();
 		    this.subscribe(function () {
 		        if ( number <= 0 ) {
-		            derivedEventType.raise.apply(derivedEventType,arguments);
+		            return derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		        number--;
+				return true;
 		    });
 		    return derivedEventType;
 		},
@@ -186,9 +189,10 @@ var emerald = function () {
 			var derivedEventType = this.derive();
 		    this.subscribe(function () {
 		        if ( number > 0 ) {
-		            derivedEventType.raise.apply(derivedEventType,arguments);
+		            return derivedEventType.raise.apply(derivedEventType,arguments);
 		        }
 		        number--;
+				return true;
 		    });
 		    return derivedEventType;
 		},
@@ -206,11 +210,12 @@ var emerald = function () {
 			this.subscribe(function () {
 				var args = Array.prototype.slice.call(arguments);
 				if ( active ) {
-					derivedEventType.raise.apply(derivedEventType,args.concat(startEvent));
+					return derivedEventType.raise.apply(derivedEventType,args.concat(startEvent));
 				}
 				else if ( options.remember || options.inclusive ) {
 					last = args;
 				}
+				return true;
 			});
 			
 			startEventType
@@ -219,8 +224,9 @@ var emerald = function () {
 				    startEvent = Array.prototype.slice.call(arguments);
 					active = !initial;
 					if ( options.remember && last ) {
-						derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
+						return derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
 					}
+					return true;
 				});
 
 			stopEventType
@@ -229,8 +235,9 @@ var emerald = function () {
 					var args = Array.prototype.slice.call(arguments);
 					active = initial;
 					if ( options.inclusive ) {
-						derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
+						return derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
 					}
+					return true;
 				});
 			
 			
@@ -250,12 +257,14 @@ var emerald = function () {
 				active				= false;
 		    this.subscribe(function () {
 				if ( active ) {
-					derivedEventType.raise.apply(derivedEventType,arguments);
+					return derivedEventType.raise.apply(derivedEventType,arguments);
 				}
 				else {
 					events.add(Array.prototype.slice.call(arguments));
 				}
+				return true;
 		    });
+			// NOTE: handle return values here
 		    startEventType.subscribe(function () {
 				active = true;
 				events.each(function (event) {
@@ -271,9 +280,10 @@ var emerald = function () {
 			this.subscribe(function () {
 				var current = fn ? fn.apply(null,arguments) : arguments[0];
 				if ( current !== last ) {
-					derivedEventType.raise.apply(derivedEventType,arguments);
+					return derivedEventType.raise.apply(derivedEventType,arguments);
 				}
 				last = current;
+				return true;
 			});
 			return derivedEventType;
 		},
@@ -295,7 +305,7 @@ var emerald = function () {
 				fn					= fn.fn		 || fn;
 		    this.subscribe(function () {
 		        fn.apply(context,arguments);
-		        derivedEventType.raise.apply(derivedEventType,arguments);
+		        return derivedEventType.raise.apply(derivedEventType,arguments);
 		    });
 		    return derivedEventType;
 		},
@@ -305,7 +315,7 @@ var emerald = function () {
 				tags = Array.prototype.slice.call(arguments);
 		    this.subscribe(function () {
 				var args = Array.prototype.slice.call(arguments);
-		        derivedEventType.raise.apply(derivedEventType,args.concat(tags));
+		        return derivedEventType.raise.apply(derivedEventType,args.concat(tags));
 		    });
 		    return derivedEventType;
 		},
@@ -318,7 +328,7 @@ var emerald = function () {
 		    var derivedEventType = this.derive();
 		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 		    this.subscribe(function () {
-				derivedEventType.raise.apply(
+				return derivedEventType.raise.apply(
 					derivedEventType,
 					each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]
 				);
@@ -331,7 +341,7 @@ var emerald = function () {
 				indices = Set.fromArguments(arguments);
 			this.subscribe(function () {
 				var sourceArgs = arguments;
-				derivedEventType.raise.apply(derivedEventType, indices.reduce(function (args,index) {
+				return derivedEventType.raise.apply(derivedEventType, indices.reduce(function (args,index) {
 					return push(args,sourceArgs[index]);
 				}, []));
 			});
@@ -342,7 +352,7 @@ var emerald = function () {
 			var events = new EventRegistry();
 			this.subscribe(function () {
 				var eventType = events.ensure(partition.apply(null,arguments));
-				eventType.raise.apply(eventType,arguments);
+				return eventType.raise.apply(eventType,arguments);
 			});
 			return {
 				event: delegateTo(events,'ensure')
@@ -365,8 +375,9 @@ var emerald = function () {
 							.as(group)
 							.republish(targetEvents.ensure(group))
 					).added;
-					sourceEvent.raise.apply(sourceEvent,arguments);
+					return sourceEvent.raise.apply(sourceEvent,arguments);
 				}
+				return true;
 			});
 			return {
 				event: delegateTo(targetEvents,'ensure')
@@ -389,11 +400,11 @@ var emerald = function () {
 		    this.subscribe({
 				message: function () {
 			        var args2 = Array.prototype.slice.call(arguments);
-		            republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
+		            return republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
 		        },
 				error: function () {
 					var args2 = Array.prototype.slice.call(arguments);
-		            republishedEventType.fail.apply(republishedEventType,args1.concat(args2));
+		            return republishedEventType.fail.apply(republishedEventType,args1.concat(args2));
 				}
 			});
 		    return this;
@@ -411,17 +422,19 @@ var emerald = function () {
 				last;
 			this.subscribe(function () {
 				if ( active ) {
-					derivedEventType.raise.apply(derivedEventType,arguments);
+					return derivedEventType.raise.apply(derivedEventType,arguments);
 				}
 				else if (options.remember) {
 					last = arguments;
 				}
+				return true;
 			});
 			controlEvent.subscribe(function (event) {
 				active = !initialState;
 				if ( active && options.remember && last ) {
-					derivedEventType.raise.apply(derivedEventType,last);
+					return derivedEventType.raise.apply(derivedEventType,last);
 				}
+				return true;
 			});
 			return derivedEventType;
 		};
@@ -452,7 +465,7 @@ var emerald = function () {
 				var args = Array.prototype.slice.call(arguments);
 				acc = typeof acc === 'function' ? acc.apply(null,args) : acc;
 				acc = fn.apply(null,[acc].concat(args));
-				this.raise.apply(this,[acc].concat(args));
+				return this.raise.apply(this,[acc].concat(args));
 			}
 	    });
 	
@@ -478,7 +491,7 @@ var emerald = function () {
 		derivedEventType.remember(options.remember || 0);
 	    eventTypes.each(function (eventType) {
 	        eventType.subscribe(function () {
-	            derivedEventType.raise.apply(derivedEventType,arguments);
+	            return derivedEventType.raise.apply(derivedEventType,arguments);
 	        });
 	    });
 	    return derivedEventType;
@@ -495,8 +508,9 @@ var emerald = function () {
 	        eventType.subscribe(function () {
     	        queue.push.call(queue,Array.prototype.slice.call(arguments));
 				if ( bufferReady() ) {
-	                sendMessage();
+	                return sendMessage();
 	            }
+				return true;
 	        });
 	    });
 	    
@@ -507,7 +521,7 @@ var emerald = function () {
 	    }
 	    
 	    function sendMessage () {
-	        derivedEventType.raise.apply(
+	        return derivedEventType.raise.apply(
 	            derivedEventType,
 				Array.prototype.concat.apply([],buffer.map(function (queue) {
 					return queue.shift();
@@ -523,7 +537,7 @@ var emerald = function () {
 	function match (predicate,eventtype) {
 		return function () {
 			if ( predicate.apply(null,arguments) ) {
-				eventtype.raise.apply(eventtype,arguments);
+				return eventtype.raise.apply(eventtype,arguments);
 			}
 		};
 	}
@@ -545,7 +559,7 @@ var emerald = function () {
 				if ( options && options.stopPropagation ) {
 					event.stopPropagation();
 				}
-    	        eventType.raise(event);
+    	        return eventType.raise(event);
     	    });
     	    return eventType;
     	},
@@ -736,10 +750,13 @@ var emerald = function () {
 		},
 		
 		notify: function _notify () {
-			var args = arguments;
+			var args = arguments,
+				returnVal = true;
 			this.each(function (subscriber) {
-				subscriber.notify.apply(subscriber,args);
+				var returned = subscriber.notify.apply(subscriber,args);
+				returnVal = ( typeof returned !== 'undefined' ? returned : true ) && returnVal;
 			});
+			return returnVal;
 		},
 		
 		fail: function _error (event) {
@@ -768,8 +785,9 @@ var emerald = function () {
 		
 		notify: function (event) {
 			if ( this.message && this.predicate(event) ) {
-				this.message.apply(this.context,arguments);
+				return this.message.apply(this.context,arguments);
 			}
+			return true;
 		},
 		
 		fail: function (event) {
