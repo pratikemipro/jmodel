@@ -596,10 +596,10 @@ var emerald = function () {
 		
 		this.descriptor = copy(descriptor).addProperties({
 			success: function () {
-		        that.raise.apply(that,arguments);
+		        that.raise.apply(that,Array.prototype.slice.apply(arguments).concat(that.descriptor));
 		    },
 			error: function () {
-				that.fail.apply(that,arguments);
+				that.fail.apply(that,Array.prototype.slice.apply(arguments).concat(that.descriptor));
 			}
 		});
 		
