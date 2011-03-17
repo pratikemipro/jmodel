@@ -11,7 +11,7 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
-function OPAL () {
+define(function () {
 
 	var opal = {opal_version:'0.8.6'};
 	
@@ -1350,21 +1350,7 @@ function OPAL () {
 
 	return opal;
 
-}
+});
 
-var opal = OPAL();
-if ( typeof _ === 'undefined' ) { var _ = opal; }
-
-
-// ============================================================================
-//															 Opal jQuery plugin
-// ============================================================================
-
-if ( typeof jQuery != 'undefined' ) {
-	jQuery.fn.opal = function () {
-		return opal.Set.fromJQuery(this);
-	};
-	if ( typeof _$ == 'undefined') {
-		_$ = opal.pipe(jQuery,opal.Set.fromJQuery);
-	}
-}
+//var opal = OPAL();
+//if ( typeof _ === 'undefined' ) { var _ = opal; }
