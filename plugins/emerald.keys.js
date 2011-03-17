@@ -7,7 +7,7 @@
  *
  */
 
-(function () {
+define(['jmodel/emerald'], function (emerald) {
 	
 	var codes = {
 		':backspace': 	8,
@@ -63,4 +63,4 @@
 		key: key
 	});
 	
-})();
+});

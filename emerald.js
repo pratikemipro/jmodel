@@ -14,13 +14,12 @@
 //														Emerald Event Framework
 // ============================================================================
  
-var emerald = function () {
+define(['jmodel/opal'],function (opal) {
  
 	//
 	// Import OPAL
 	//
  
-	var opal = window.opal;
 	for ( var i in opal ) {
 		eval('var '+i+' = opal.'+i);
 	}
@@ -1276,4 +1275,4 @@ var emerald = function () {
 	return em;
  
 	
-}();
+});
