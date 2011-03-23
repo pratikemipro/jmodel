@@ -630,12 +630,14 @@ define(['jmodel/opal'],function (opal) {
 			}
 			this.descriptor.data = typeof data === 'object' ? extend(data,this.descriptor.data) : this.descriptor.data;
 			this.__ajax = jQuery.ajax.call(null,this.descriptor);
+			return this;
 		},
 		
 		stop: function () {
 			if ( this.__ajax && this.__ajax.abort ) {
 				this.__ajax.abort();
 			}
+			return this;
 		}
 		
 	}, new EventType() );
