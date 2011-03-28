@@ -159,21 +159,15 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		until: function (predicate,inclusive) {
-			var derivedEventType = this.derive(),
-				active = true;
+			var active = true;
 			inclusive = typeof inclusive === 'undefined' ? true : inclusive;
-		    this.subscribe(function (event) {
-				var last = false;
-		        if ( active && predicate(event) ) {
-					active = false;
-					last = true;
-				}
-				if ( active || (last && inclusive) ) {
-		            return derivedEventType.raise.apply(derivedEventType,arguments);
-		        }
-				return true;
-		    });
-		    return derivedEventType;
+			return this.derive(function (method) {
+				return function () {
+					var last = active && predicate.apply(null,arguments);
+					active = active && !last;
+					return ( active || (last && inclusive) ) ? method.apply(this,arguments) : true;
+				};
+			});
 		},
 		
 		drop: function (number) {
@@ -234,7 +228,6 @@ define(['jmodel/opal'],function (opal) {
 					}
 					return true;
 				});
-			
 			
 			return derivedEventType;
 			
