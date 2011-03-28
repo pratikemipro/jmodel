@@ -273,17 +273,15 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		transition: function (fn) {
-			var derivedEventType = this.derive(),
-				last;
-			this.subscribe(function () {
-				var current = fn ? fn.apply(null,arguments) : arguments[0];
-				if ( current !== last ) {
-					return derivedEventType.raise.apply(derivedEventType,arguments);
-				}
-				last = current;
-				return true;
+			fn = fn || function (x) {return x;};
+			var value;
+			return this.derive(function (method) {
+				return function () {
+					var last = value;
+					value = fn.apply(null,arguments);
+					return value !== last ? method.apply(this,arguments) : true;
+				};
 			});
-			return derivedEventType;
 		},
 		
 		delay: function (interval) {
