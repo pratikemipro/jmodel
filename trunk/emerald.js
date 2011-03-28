@@ -306,17 +306,16 @@ define(['jmodel/opal'],function (opal) {
 					fn.apply(context,arguments);
 			        return method.apply(this,arguments);
 				};
-			});
+			});2
 		},
 		
 		tag: function () {
-			var derivedEventType = this.derive(),
-				tags = Array.prototype.slice.call(arguments);
-		    this.subscribe(function () {
-				var args = Array.prototype.slice.call(arguments);
-		        return derivedEventType.raise.apply(derivedEventType,args.concat(tags));
-		    });
-		    return derivedEventType;
+			var tags = Array.prototype.slice.call(arguments);
+			return this.derive(function (method) {
+				return function () {
+					return method.apply(this,Array.prototype.slice.call(arguments).concat(tags));
+				};
+			});
 		},
 		
 		accumulate: function (fn,acc,remember) {
