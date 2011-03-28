@@ -135,9 +135,16 @@ define(['jmodel/opal'],function (opal) {
 			return this;
 		},
 		
-		derive: function (registry,name) {
-			var derived = new this.constructor(registry,name);
+		derive: function (handle_with) {
+			var derived = new this.constructor();
 			derived.remember(this.__remember);
+			if ( typeof handle_with === 'function' ) {
+				this.subscribe({
+					context: derived,
+					message: handle_with(derived.raise),
+					error: handle_with(derived.fail)
+				});
+			}
 			return derived;
 		},
 		
@@ -173,29 +180,19 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		drop: function (number) {
-		    var derivedEventType = this.derive();
-			function handle_with (method) {
+			return this.derive(function (method) {
 				return function () {
-					return --number < 0 ? method.apply(derivedEventType,arguments) : true;
+					return --number < 0 ? method.apply(this,arguments) : true;
 				};
-			}
-		    this.subscribe({
-				message: handle_with(derivedEventType.raise),
-				error: handle_with(derivedEventType.fail)
 			});
-		    return derivedEventType;
 		},
 		
 		take: function (number) {
-			var derivedEventType = this.derive();
-		    this.subscribe(function () {
-		        if ( number > 0 ) {
-		            return derivedEventType.raise.apply(derivedEventType,arguments);
-		        }
-		        number--;
-				return true;
-		    });
-		    return derivedEventType;
+			return this.derive(function (method) {
+				return function () {
+					return number-- > 0 ? method.apply(this,arguments) : true;
+				}
+			});
 		},
 		
 		between: function (startEventType,stopEventType,options) {
