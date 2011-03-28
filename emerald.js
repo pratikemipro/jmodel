@@ -141,8 +141,8 @@ define(['jmodel/opal'],function (opal) {
 			if ( typeof handle_with === 'function' ) {
 				this.subscribe({
 					context: derived,
-					message: handle_with(derived.raise),
-					error: handle_with(derived.fail)
+					message: handle_with.call(derived,derived.raise),
+					error: handle_with.call(derived,derived.fail)
 				});
 			}
 			return derived;
@@ -191,7 +191,7 @@ define(['jmodel/opal'],function (opal) {
 			return this.derive(function (method) {
 				return function () {
 					return number-- > 0 ? method.apply(this,arguments) : true;
-				}
+				};
 			});
 		},
 		
@@ -287,14 +287,15 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		delay: function (interval) {
-			var derivedEventType = this.derive();
-			this.subscribe(function () {
-				var args = Array.prototype.slice.call(arguments);
-				setTimeout(function () {
-					derivedEventType.raise.apply(derivedEventType,args);
-				}, interval || 0);
+			return this.derive(function (method) {
+				return function () {
+					var args = Array.prototype.slice.call(arguments),
+						that = this;
+					setTimeout(function () {
+						method.apply(that,args);
+					}, interval || 0);
+				};
 			});
-			return derivedEventType;
 		},
 		
 		effect: function (fn) {
