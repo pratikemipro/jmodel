@@ -149,16 +149,13 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		where: function () {
-		    var derivedEventType = this.derive(),
-				context			 = arguments[0].context   || this,
-		        predicate        = arguments[0].predicate || ( arguments.length > 1 ? And.apply(this,arguments) : arguments[0] );
-		    this.subscribe(function () {
-		        if ( predicate.apply(context,arguments) ) {
-		            return derivedEventType.raise.apply(derivedEventType,arguments);
-		        }
-				return true;
-		    });
-		    return derivedEventType;
+		    var context		= arguments[0].context   || this,
+		        predicate	= arguments[0].predicate || ( arguments.length > 1 ? And.apply(this,arguments) : arguments[0] );
+			return this.derive(function (method) {
+				return function () {
+					return predicate.apply(context,arguments) ? method.apply(this,arguments) : true;
+				};
+			});
 		},
 		
 		until: function (predicate,inclusive) {
