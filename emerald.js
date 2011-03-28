@@ -299,14 +299,14 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		effect: function (fn) {
-		    var derivedEventType	= this.derive(),
-				context				= fn.context || this,
-				fn					= fn.fn		 || fn;
-		    this.subscribe(function () {
-		        fn.apply(context,arguments);
-		        return derivedEventType.raise.apply(derivedEventType,arguments);
-		    });
-		    return derivedEventType;
+			var context	= fn.context || this,
+				fn		= fn.fn		 || fn;
+			return this.derive(function (method) {
+				return function () {
+					fn.apply(context,arguments);
+			        return method.apply(this,arguments);
+				};
+			});
 		},
 		
 		tag: function () {
