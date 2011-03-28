@@ -186,57 +186,32 @@ define(['jmodel/opal'],function (opal) {
 			});
 		},
 		
-		between: function (startEventType,stopEventType,options) {
+		between: function (start,stop,initial) {
 			
-			options = options || {};
+			var active = initial = ( typeof initial === 'undefined' ) ? false : initial,
+				startEvent;
 			
-			var derivedEventType	= this.derive(),
-				initial				= options.initial ? options.initial : false,
-				active				= initial,
-				startEvent			= null,
-				last;
-				
-			this.subscribe(function () {
-				var args = Array.prototype.slice.call(arguments);
-				if ( active ) {
-					return derivedEventType.raise.apply(derivedEventType,args.concat(startEvent));
+			start.subscribe(function () {
+				if ( active === initial ) {
+					startEvent	= Array.prototype.slice.call(arguments);
+					active		= !initial;
 				}
-				else if ( options.remember || options.inclusive ) {
-					last = args;
-				}
-				return true;
+			});
+
+			stop.subscribe(function () {
+				active = ( active !== initial ) ? initial : active
 			});
 			
-			startEventType
-				.where(function () { return active === initial; })		
-				.subscribe(function () {
-				    startEvent = Array.prototype.slice.call(arguments);
-					active = !initial;
-					if ( options.remember && last ) {
-						return derivedEventType.raise.apply(derivedEventType,last.concat(startEvent));
-					}
-					return true;
-				});
-
-			stopEventType
-				.where(function () { return active !== initial; })
-				.subscribe(function () {
-					var args = Array.prototype.slice.call(arguments);
-					active = initial;
-					if ( options.inclusive ) {
-						return derivedEventType.raise.apply(derivedEventType,[].concat(last,startEvent,args));
-					}
-					return true;
-				});
-			
-			return derivedEventType;
+			return this.derive(function (method) {
+				return function () {
+					return active ? method.apply(this,Array.prototype.slice.call(arguments).concat(startEvent)) : true;
+				};
+			});
 			
 		},
 		
-		notBetween: function (startEventType,stopEventType,options) {
-			options = options || {};
-			options.initial = true;
-			return this.between.call(this,startEventType,stopEventType,options);
+		notBetween: function (start,stop) {
+			return this.between.call(this,start,stop,true);
 		},
 		
 		waitFor: function (startEventType) {
