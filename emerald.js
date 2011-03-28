@@ -174,13 +174,15 @@ define(['jmodel/opal'],function (opal) {
 		
 		drop: function (number) {
 		    var derivedEventType = this.derive();
-		    this.subscribe(function () {
-		        if ( number <= 0 ) {
-		            return derivedEventType.raise.apply(derivedEventType,arguments);
-		        }
-		        number--;
-				return true;
-		    });
+			function handle_with (method) {
+				return function () {
+					return --number < 0 ? method.apply(derivedEventType,arguments) : true;
+				};
+			}
+		    this.subscribe({
+				message: handle_with(derivedEventType.raise),
+				error: handle_with(derivedEventType.fail)
+			});
 		    return derivedEventType;
 		},
 		
