@@ -323,15 +323,12 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		map: function (fn,each) {
-		    var derivedEventType = this.derive();
-		    fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
-		    this.subscribe(function () {
-				return derivedEventType.raise.apply(
-					derivedEventType,
-					each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]
-				);
-		    }); 
-		    return derivedEventType;
+			fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
+			return this.derive(function (method) {
+				return function () {
+					method.apply(this, each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]);
+				};
+			});
 		},
 		
 		project: function () {
