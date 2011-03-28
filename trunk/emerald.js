@@ -199,7 +199,7 @@ define(['jmodel/opal'],function (opal) {
 			});
 
 			stop.subscribe(function () {
-				active = ( active !== initial ) ? initial : active
+				active = initial;
 			});
 			
 			return this.derive(function (method) {
@@ -269,7 +269,7 @@ define(['jmodel/opal'],function (opal) {
 					fn.apply(context,arguments);
 			        return method.apply(this,arguments);
 				};
-			});2
+			});
 		},
 		
 		tag: function () {
@@ -289,21 +289,21 @@ define(['jmodel/opal'],function (opal) {
 			fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
 			return this.derive(function (method) {
 				return function () {
-					method.apply(this, each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]);
+					return method.apply(this, each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]);
 				};
 			});
 		},
 		
 		project: function () {
-			var derivedEventType = this.derive(),
-				indices = Set.fromArguments(arguments);
-			this.subscribe(function () {
-				var sourceArgs = arguments;
-				return derivedEventType.raise.apply(derivedEventType, indices.reduce(function (args,index) {
-					return push(args,sourceArgs[index]);
-				}, []));
+			var indices = Set.fromArguments(arguments);
+			return this.derive(function (method) {
+				return function () {
+					var sourceArgs = arguments;
+					return method.apply(this, indices.reduce(function (args,index) {
+						return push(args,sourceArgs[index]);
+					}, []));
+				};
 			});
-			return derivedEventType;
 		},
 		
 		partition: function (partition) {
@@ -945,7 +945,7 @@ define(['jmodel/opal'],function (opal) {
 			this.change 	= this.object.event('change');
 
 			this.instantiate();
-			this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : null)
+			this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : null);
 
 			if ( this.object.options.persist ) {
 				this.persist();	
