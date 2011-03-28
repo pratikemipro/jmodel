@@ -298,10 +298,10 @@ define(['jmodel/opal'],function (opal) {
 			var indices = Set.fromArguments(arguments);
 			return this.derive(function (method) {
 				return function () {
-					var sourceArgs = arguments;
-					return method.apply(this, indices.reduce(function (args,index) {
-						return push(args,sourceArgs[index]);
-					}, []));
+					var args = arguments;
+					return method.apply(this, indices.map(function (index) {
+						return args[index];
+					}).get());
 				};
 			});
 		},
