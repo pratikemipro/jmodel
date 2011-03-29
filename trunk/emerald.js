@@ -186,27 +186,34 @@ define(['jmodel/opal'],function (opal) {
 			});
 		},
 		
-		between: function (start,stop,initial) {
+		between: function (start,stop,options) {
 			
-			var active = initial = ( typeof initial === 'undefined' ) ? false : initial,
-				startEvent;
+			var options = ( typeof options === 'object' ) ? options : {initial: (typeof options === 'undefined') ? false : options },
+				active = options.initial,
+				startEvent,
+				last,
+				derived = this.derive(function (method) {
+					return function () {
+						last = Array.prototype.slice.call(arguments);
+						return active ? method.apply(this,Array.prototype.slice.call(arguments).concat(startEvent)) : true;
+					};
+				});
 			
 			start.subscribe(function () {
-				if ( active === initial ) {
+				if ( active === options.initial ) {
 					startEvent	= Array.prototype.slice.call(arguments);
-					active		= !initial;
+					active		= !options.initial;
 				}
 			});
 
 			stop.subscribe(function () {
-				active = initial;
+				if ( active !== options.initial && options.inclusive ) {
+					derived.raise.apply(derived,[].concat(last,startEvent,Array.prototype.slice.call(arguments)));
+				}
+				active = options.initial;
 			});
 			
-			return this.derive(function (method) {
-				return function () {
-					return active ? method.apply(this,Array.prototype.slice.call(arguments).concat(startEvent)) : true;
-				};
-			});
+			return derived;
 			
 		},
 		
