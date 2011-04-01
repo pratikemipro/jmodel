@@ -570,7 +570,7 @@ define(['jmodel/opal'],function (opal) {
 		this.settings.immediate = ( typeof this.settings.immediate === 'undefined' ) ? true : this.settings.immediate;
 		
 		EventType.call(this);
-		this.remember(1);
+		this.remember( typeof this.settings.remember == 'undefined' ? this.settings.remember : 1 );
 		var that = this;
 		
 		this.descriptor = copy(descriptor).addProperties({
