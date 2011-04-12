@@ -501,9 +501,7 @@ define(['jmodel/opal'],function (opal) {
 	
 	function match (predicate,eventtype) {
 		return function () {
-			if ( predicate.apply(null,arguments) ) {
-				return eventtype.raise.apply(eventtype,arguments);
-			}
+			return predicate.apply(null,arguments) ? eventtype.raise.apply(eventtype,arguments) : true;
 		};
 	}
 	
