@@ -401,13 +401,23 @@ define(function () {
 		},
 		
 		remove: function _remove (predicate) {
-			var partition = this.partition(predicate,'remove','keep');
-			this.__members = partition.keep.get();
-			this.length = this.__members.length;
-			if ( this.__index ) {
-				partition.remove.reduce(Method('remove'),this.__index);
+			if ( predicate === ':first' || predicate === ':last' ) {
+				var removed = this.__members[predicate === ':first' ? 'shift' : 'pop']();
+				this.length = this.__members.length;
+				if ( this.__index ) {
+					this.__index.remove(removed);
+				}
+				return new Set(removed);
 			}
-			return partition.remove; 
+			else {
+				var partition = this.partition(predicate,'remove','keep');
+				this.__members = partition.keep.get();
+				this.length = this.__members.length;
+				if ( this.__index ) {
+					partition.remove.reduce(Method('remove'),this.__index);
+				}
+				return partition.remove;
+			}
 		},
 		
 		count: function _count (predicate) {
