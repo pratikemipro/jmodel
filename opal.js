@@ -401,23 +401,13 @@ define(function () {
 		},
 		
 		remove: function _remove (predicate) {
-			if ( predicate === ':first' || predicate === ':last' ) {
-				var removed = this.__members[predicate === ':first' ? 'shift' : 'pop']();
-				this.length = this.__members.length;
-				if ( this.__index ) {
-					this.__index.remove(removed);
-				}
-				return Set.from(removed);
+			var partition = this.partition(predicate,'remove','keep');
+			this.__members = partition.keep.get();
+			this.length = this.__members.length;
+			if ( this.__index ) {
+				partition.remove.reduce(Method('remove'),this.__index);
 			}
-			else {
-				var partition = this.partition(predicate,'remove','keep');
-				this.__members = partition.keep.get();
-				this.length = this.__members.length;
-				if ( this.__index ) {
-					partition.remove.reduce(Method('remove'),this.__index);
-				}
-				return partition.remove;
-			}
+			return partition.remove;
 		},
 		
 		count: function _count (predicate) {
@@ -588,6 +578,7 @@ define(function () {
 				return parameter;
 			}
 			else if ( typeof parameter == 'object' || typeof parameter == 'string' || typeof parameter == 'number' ) {
+				parameter = parameter === ':first' ? this.first() : parameter === ':last' ? this.last() : parameter
 				return extend({unique:true},ObjectIdentityPredicate(parameter));
 			}
 			return AllPredicate;
