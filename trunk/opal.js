@@ -407,7 +407,7 @@ define(function () {
 				if ( this.__index ) {
 					this.__index.remove(removed);
 				}
-				return new Set(removed);
+				return Set.from(removed);
 			}
 			else {
 				var partition = this.partition(predicate,'remove','keep');
