@@ -379,25 +379,12 @@ define(function () {
 		},
 		
 		get: function _get (key) {
-			if ( arguments.length === 0 ) {
-				return this.__members;
-			}
-			else if ( key === ':first' ) {
-				return this.first();
-			}
-			else if ( key === ':last' ) {
-				return this.last();
-			}
-			else if (this.__index) {
-				return this.__index.get(key);
-			}
-			else if ( typeof key === 'number' ) {
-				return this.__members[key];
-			}
-			else {
-				var obj = this.filter(key);
-				return obj.each ? obj.first() : obj;
-			}
+			return    arguments.length === 0 ? this.__members
+					: key === ':first' ? this.first()
+					: key === ':last' ? this.last()
+					: this.__index ? this.__index.get(key)
+					: typeof key === 'number' ? this.__members[key]
+					: this.first(key);
 		},
 		
 		remove: function _remove (predicate) {
@@ -427,7 +414,7 @@ define(function () {
 		},
 		
 		member: function _member (object) {
-			return this.__index ? this.__index.member(object)
+			return    this.__index ? this.__index.member(object)
 					: this.__members.indexOf ? this.__members.indexOf(object) > -1
 					: this.reduce(contains(ObjectIdentityPredicate(object)));
 		},
@@ -442,15 +429,7 @@ define(function () {
 		},
 		
 		select : function _select (selector) {
-			if ( selector === ':first' ) {
-				return this.first();
-			}
-			else if ( selector === ':last' ) {
-				return this.last
-			}
-			else {
-				return this;
-			}
+			return selector ? this.get(selector) : this;
 		},
 		
 		when : function _when (predicate,callback) {
