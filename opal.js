@@ -562,16 +562,10 @@ define(function () {
 		},
 		
 		ordering: function _ordering () {
-			if ( arguments.length > 1 ) {
-				return CompositeOrdering.apply(null,arguments);
-			}
-			else if ( arguments[0] instanceof Array ) {
-				return CompositeOrdering(arguments[0]);
-			}
-			else if ( arguments.length === 0 ) {
-				return ValueOrdering;
-			}
-			return arguments[0];
+			return    arguments.length > 1 ? CompositeOrdering.apply(null,arguments)
+					: arguments[0] instanceof Array ? CompositeOrdering(arguments[0])
+					: arguments.length === 0 ? ValueOrdering
+					: arguments[0]
 		},
 		
 		aggregate: function _aggregate (combiner,acc) {
