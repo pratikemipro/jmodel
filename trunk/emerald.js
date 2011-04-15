@@ -1054,15 +1054,9 @@ define(['jmodel/opal'],function (opal) {
 		
 		set: function (value) {
 			
-			if ( typeof value === 'string' && value.toLowerCase() === 'true' ) {
-				value = true;
-			}
-			else if ( typeof value === 'string' && value.toLowerCase() === 'false' ) {
-				value = false;
-			}
-			else {
-				value = Boolean(value);
-			}
+			value =   typeof value === 'string' && value.toLowerCase() === 'true'  ? true
+					: typeof value === 'string' && value.toLowerCase() === 'false' ? false
+					: Boolean(value);
 			
 			ScalarField.prototype.set.call(this,value);
 			
