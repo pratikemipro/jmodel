@@ -1169,13 +1169,9 @@ define(function () {
 		return function _functionordering (a,b) {
 			var fna = fn(a),
 				fnb = fn(b);
-			if ( fna < fnb ) {
-				return -1;
-			}
-			else if ( fna > fnb ) {
-				return 1;
-			}
-			return 0;
+			return    fna < fnb ? -1
+					: fna > fnb ? 1
+					: 0
 		};
 	}
 
