@@ -402,13 +402,13 @@ define(function () {
 		},
 		
 		first: function _first (predicate) {
-			return this.__members.length === 0 ? false
+			return    this.__members.length === 0 ? false
 					: typeof predicate !== 'undefined' ? this.filter(predicate).first()
 					: this.__members[0];
 		},
 		
 		last: function _last (predicate) {
-			return this.__members.length === 0 ? false
+			return    this.__members.length === 0 ? false
 					: typeof predicate !== 'undefined' ? this.filter(predicate).last()
 					: this.__members[this.__members.length-1];
 		},
@@ -542,23 +542,12 @@ define(function () {
 		},
 		
 		predicate: function _predicate (parameter) {
-			if ( parameter === null || parameter === undefined ) {
-				return AllPredicate;
-			}
-			if ( parameter == ':empty' ) {
-				return EmptySetPredicate;
-			}
-			else if ( parameter instanceof RegExp ) {
-				return RegularExpressionPredicate(parameter);
-			}
-			else if ( typeof parameter == 'function' ) {
-				return parameter;
-			}
-			else if ( typeof parameter == 'object' || typeof parameter == 'string' || typeof parameter == 'number' ) {
-				parameter = parameter === ':first' ? this.first() : parameter === ':last' ? this.last() : parameter
-				return extend({unique:true},ObjectIdentityPredicate(parameter));
-			}
-			return AllPredicate;
+			return	  parameter === ':empty' ? EmptySetPredicate
+					: parameter instanceof RegExp ? RegularExpressionPredicate(parameter)
+					: typeof parameter === 'function' ? parameter
+					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},ObjectIdentityPredicate(this.get(parameter)))
+					: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? extend({unique:true},ObjectIdentityPredicate(parameter))
+					: AllPredicate
 		},
 		
 		ordering: function _ordering () {
@@ -657,18 +646,10 @@ define(function () {
 	};
 
 	function set () {
-		if ( arguments.length === 1 && arguments[0] && arguments[0].jquery ) {
-			return Set.fromJQuery(arguments[0]);
-		}
-		else if ( arguments.length === 1 && arguments[0] && arguments[0].callee ) {
-			return Set.fromArguments(arguments[0]);
-		}
-		else if ( arguments.length === 1 && arguments[0] instanceof Array ) {
-			return Set.fromArray(arguments[0]);
-		}
-		else {
-			return Set.fromArguments(arguments);
-		}
+		return    arguments.length === 1 && arguments[0] && arguments[0].jquery ? Set.fromJQuery(arguments[0])
+				: arguments.length === 1 && arguments[0] && arguments[0].callee ? Set.fromArguments(arguments[0])
+				: arguments.length === 1 && arguments[0] instanceof Array ? Set.fromArray(arguments[0])
+				: Set.fromArguments(arguments);
 	}
 	opal.set = set;
 
