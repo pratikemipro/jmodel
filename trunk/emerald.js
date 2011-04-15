@@ -67,12 +67,8 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		predicate: function _predicate (parameter) {
-			if ( ( typeof parameter == 'string' ) && parameter.charAt(0) != ':' ) {
-				return extend({unique:true},PropertyPredicate('name',parameter));
-			}
-			else {
-				return TypedSet.prototype.predicate.apply(this,arguments);
-			}
+			return    typeof parameter == 'string' && parameter.charAt(0) !== ':' ? extend({unique:true},PropertyPredicate('name',parameter))
+					: TypedSet.prototype.predicate.apply(this,arguments)
 		}
 		
 	}, new TypedSet(EventType) );
