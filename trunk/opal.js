@@ -414,24 +414,22 @@ define(function () {
 			return this.reduce(count(predicate));
 		},
 		
-		first: function _first () {
-			return this.__members.length > 0 ? this.__members[0] : false;
+		first: function _first (predicate) {
+			return this.__members.length === 0 ? false
+					: typeof predicate !== 'undefined' ? this.filter(predicate).first()
+					: this.__members[0];
 		},
 		
-		last: function _last () {
-			return this.__members.length > 0 ? this.__members[this.__members.length-1] : false;
+		last: function _last (predicate) {
+			return this.__members.length === 0 ? false
+					: typeof predicate !== 'undefined' ? this.filter(predicate).last()
+					: this.__members[this.__members.length-1];
 		},
 		
 		member: function _member (object) {
-			if ( this.__index ) {
-				return this.__index.member(object);
-			}
-			else if ( this.__members.indexOf ) {
-				return this.__members.indexOf(object) > -1;
-			} 
-			else {
-				return this.reduce(contains(ObjectIdentityPredicate(object)));
-			}
+			return this.__index ? this.__index.member(object)
+					: this.__members.indexOf ? this.__members.indexOf(object) > -1
+					: this.reduce(contains(ObjectIdentityPredicate(object)));
 		},
 		
 		sort: function _sort () {
