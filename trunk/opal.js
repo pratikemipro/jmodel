@@ -846,18 +846,10 @@ define(function () {
 	};
 	
 	function list () {
-		if ( arguments.length === 1 && arguments[0].jquery ) {
-			return List.fromJQuery(arguments[0]);
-		}
-		else if ( arguments.length === 1 && arguments[0].callee ) {
-			return List.fromArguments(arguments[0]);
-		}
-		else if ( arguments.length === 1 && arguments[0] instanceof Array ) {
-			return List.fromArray(arguments[0]);
-		}
-		else {
-			return List.fromArguments(arguments);
-		}
+		return arguments.length === 1 && arguments[0].jquery ? List.fromJQuery(arguments[0])
+				: arguments.length === 1 && arguments[0].callee ? List.fromArguments(arguments[0])
+				: arguments.length === 1 && arguments[0] instanceof Array ? List.fromArray(arguments[0])
+				: List.fromArguments(arguments);
 	}
 
 	opal.extend({
