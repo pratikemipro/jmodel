@@ -58,8 +58,7 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		filter: function _filter () {
-		    events = TypedSet.prototype.filter.apply(this,arguments);
-		    return events;
+		    return TypedSet.prototype.filter.apply(this,arguments);
 		},
 		
 		ensure: function _ensure (name) {
