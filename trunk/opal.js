@@ -821,6 +821,8 @@ define(function () {
 	}, new Set() );
 
 	opal.TypedSet = TypedSet;
+	
+	Set.of = TypedSet;
 
 
 	// ------------------------------------------------------------------------
