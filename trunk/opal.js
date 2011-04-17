@@ -519,7 +519,7 @@ define(function () {
 		},
 		
 		copy: function _copy () {
-			return set.apply(null,this.__members.slice(0));
+			return this.constructor.fromArray(this.__members.slice(0));
 		},
 		
 		index: function _index (key) {
