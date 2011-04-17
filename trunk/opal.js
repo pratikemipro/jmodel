@@ -11,6 +11,11 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
+var define = function (fn) {	
+	opal = fn();
+	_ = ( typeof _ === 'undefined' ) ? opal : _;
+} || define;
+
 define(function () {
 
 	var opal = {opal_version:'0.8.6'};
@@ -1292,6 +1297,3 @@ define(function () {
 	return opal;
 
 });
-
-//var opal = OPAL();
-//if ( typeof _ === 'undefined' ) { var _ = opal; }
