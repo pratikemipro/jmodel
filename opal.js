@@ -577,7 +577,7 @@ define(function () {
 		},
 		
 		of: function _of (cons) {
-			return this.reduce(Method('add'),new TypedSet(cons));
+			return this.reduce(Method('add'), new TypedSet(cons));
 		},
 		
 		jQuery: function _jQuery () {
