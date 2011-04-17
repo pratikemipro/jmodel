@@ -396,6 +396,10 @@ define(function () {
 			return this;
 		},
 		
+		concat : function _concat (second) {
+			return second && second.reduce ? second.reduce(Method('add'),this) : this;
+		},
+		
 		/* Pure methods */
 		
 		constraint: function constraint (obj) {
@@ -445,10 +449,6 @@ define(function () {
 			return    this.__index ? this.__index.member(object)
 					: this.__members.indexOf ? this.__members.indexOf(object) > -1
 					: typeof this.first(ObjectIdentityPredicate(object)) !== 'undefined'
-		},
-		
-		concat : function _concat (second) {
-			return second && second.reduce ? second.reduce(Method('add'),this) : this;
 		},
 		
 		select : function _select (selector) {
