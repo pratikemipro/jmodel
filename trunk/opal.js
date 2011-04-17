@@ -513,7 +513,7 @@ define(function () {
 			}
 
 			return this.__members.filter ? this.constructor.fromArray(this.__members.filter(predicate)).select(selector)
-					: this.reduce(add(predicate),new Set()).select(selector);		
+					: this.reduce(add(predicate),new this.constructor()).select(selector);		
 
 		},
 		
