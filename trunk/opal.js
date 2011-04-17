@@ -366,6 +366,38 @@ define(function () {
 		
 		constructor: Set,
 		
+		/* Mutators */
+		
+		add: function _add (object) {
+			this.added = undefined;
+			if ( object !== undefined && this.constraint(object) ) {	
+				this.__members.push(object);
+				this.length++;
+				if ( this.__index ) {
+					this.__index.add(object);
+				}
+				this.added = object;
+			}
+			return this;
+		},
+		
+		remove: function _remove (predicate) {
+			var partition = this.partition(predicate,'remove','keep');
+			this.__members = partition.keep.get();
+			this.length = this.__members.length;
+			if ( this.__index ) {
+				partition.remove.reduce(Method('remove'),this.__index);
+			}
+			return partition.remove;
+		},
+		
+		sort: function _sort () {
+			this.__members.sort(this.ordering.apply(null,arguments));
+			return this;
+		},
+		
+		/* Pure methods */
+		
 		constraint: function constraint (obj) {
 			return !this.member(obj);
 		},
@@ -382,19 +414,6 @@ define(function () {
 			return this.constructor.fromArray(this.__members.slice().reverse());
 		},
 		
-		add: function _add (object) {
-			this.added = undefined;
-			if ( object !== undefined && this.constraint(object) ) {	
-				this.__members.push(object);
-				this.length++;
-				if ( this.__index ) {
-					this.__index.add(object);
-				}
-				this.added = object;
-			}
-			return this;
-		},
-		
 		get: function _get (key) {
 			return    arguments.length === 0 ? this.__members
 					: key === ':first' ? this.first()
@@ -402,16 +421,6 @@ define(function () {
 					: this.__index ? this.__index.get(key)
 					: typeof key === 'number' ? this.__members[key]
 					: this.first(key);
-		},
-		
-		remove: function _remove (predicate) {
-			var partition = this.partition(predicate,'remove','keep');
-			this.__members = partition.keep.get();
-			this.length = this.__members.length;
-			if ( this.__index ) {
-				partition.remove.reduce(Method('remove'),this.__index);
-			}
-			return partition.remove;
 		},
 		
 		count: function _count (predicate) {
@@ -436,11 +445,6 @@ define(function () {
 			return    this.__index ? this.__index.member(object)
 					: this.__members.indexOf ? this.__members.indexOf(object) > -1
 					: typeof this.first(ObjectIdentityPredicate(object)) !== 'undefined'
-		},
-		
-		sort: function _sort () {
-			this.__members.sort(this.ordering.apply(null,arguments));
-			return this;
 		},
 		
 		concat : function _concat (second) {
