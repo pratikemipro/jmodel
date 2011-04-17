@@ -492,29 +492,10 @@ define(function () {
 
 		},
 		
-		filter: function _filter () {
-
-			var predicate, selector;
-
-			if ( arguments.length === 0 ) {
-				return this;
-			}
-			else if ( arguments.length == 1 && typeof arguments[0] == 'string' && arguments[0].charAt(0) == ':' ) {
-				predicate 	= AllPredicate;
-				selector	= arguments[0];
-			}
-			else {
-				predicate	= this.predicate(arguments[0]);
-				selector	= arguments[1];
-			}
-
-			if ( predicate && predicate.unique ) {
-			    selector = ':first';
-			}
-
-			return this.__members.filter ? this.constructor.fromArray(this.__members.filter(predicate)).select(selector)
-					: this.reduce(add(predicate),new this.constructor()).select(selector);		
-
+		filter: function _filter (predicate) {
+			return    typeof predicate === 'undefined' ? this
+					: this.__members.filter ? this.constructor.fromArray(this.__members.filter(this.predicate(predicate)))
+					: this.reduce(add(predicate), new this.constructor())
 		},
 		
 		map: function _map () {
