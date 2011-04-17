@@ -370,7 +370,7 @@ define(function () {
 		
 		add: function _add (object) {
 			this.added = undefined;
-			if ( object !== undefined && this.constraint(object) ) {	
+			if ( this.constraint(object) ) {	
 				this.__members.push(object);
 				this.length++;
 				if ( this.__index ) {
@@ -399,7 +399,7 @@ define(function () {
 		/* Pure methods */
 		
 		constraint: function constraint (obj) {
-			return !this.member(obj);
+			return typeof obj !== 'undefined' && !this.member(obj);
 		},
 		
 		head: function _head () {
