@@ -842,7 +842,7 @@ define(function () {
 	};
 	
 	function list () {
-		return arguments.length === 1 && arguments[0].jquery ? List.fromJQuery(arguments[0])
+		return    arguments.length === 1 && arguments[0].jquery ? List.fromJQuery(arguments[0])
 				: arguments.length === 1 && arguments[0].callee ? List.fromArguments(arguments[0])
 				: arguments.length === 1 && arguments[0] instanceof Array ? List.fromArray(arguments[0])
 				: List.fromArguments(arguments);
