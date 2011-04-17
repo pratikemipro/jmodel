@@ -506,7 +506,7 @@ define(function () {
 		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			return	  this.length === 0 ? acc
-				/*	: this.__members.reduce ? this.__members.reduce(fn,acc) */
+					: this.__members.reduce ? this.__members.reduce(fn,acc)
 					: this.tail().reduce(fn,fn(acc,this.head()))
 		},
 		
