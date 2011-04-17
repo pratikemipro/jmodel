@@ -375,11 +375,11 @@ define(function () {
 		},
 		
 		tail: function _tail () {
-			return Set.fromArray(this.__members.slice(1));
+			return this.constructor.fromArray(this.__members.slice(1));
 		},
 		
 		reverse: function _reverse () {
-			return Set.fromArray(this.__members.slice().reverse());
+			return this.constructor.fromArray(this.__members.slice().reverse());
 		},
 		
 		add: function _add (object) {
@@ -512,7 +512,7 @@ define(function () {
 			    selector = ':first';
 			}
 
-			return this.__members.filter ? Set.fromArray(this.__members.filter(predicate)).select(selector)
+			return this.__members.filter ? this.constructor.fromArray(this.__members.filter(predicate)).select(selector)
 					: this.reduce(add(predicate),new Set()).select(selector);		
 
 		},
@@ -608,7 +608,7 @@ define(function () {
 		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
-								.reduce(Method('concat'),new Set())
+								.reduce(Method('concat'), new this.constructor())
 									.get() );
 		},
 		
