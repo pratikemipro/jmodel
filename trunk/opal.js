@@ -378,6 +378,10 @@ define(function () {
 			return Set.fromArray(this.__members.slice(1));
 		},
 		
+		reverse: function _reverse () {
+			return Set.fromArray(this.__members.slice().reverse());
+		},
+		
 		add: function _add (object) {
 			this.added = undefined;
 			if ( object !== undefined && this.constraint(object) ) {	
@@ -424,7 +428,7 @@ define(function () {
 		
 		last: function _last (predicate) {
 			return    this.length === 0 ? false
-					: typeof predicate !== 'undefined' ? this.filter(predicate).last()
+					: typeof predicate !== 'undefined' ? this.reverse().first(predicate)
 					: this.get(this.length-1);
 		},
 		
