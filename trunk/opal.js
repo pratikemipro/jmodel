@@ -382,13 +382,13 @@ define(function () {
 		},
 		
 		remove: function _remove (predicate) {
-			var partition = this.partition(predicate,'remove','keep');
-			this.__members = partition.keep.get();
+			var partition = this.partition(predicate);
+			this.__members = partition[false].get();
 			this.length = this.__members.length;
 			if ( this.__index ) {
-				partition.remove.reduce(Method('remove'),this.__index);
+				partition[true].reduce(Method('remove'),this.__index);
 			}
-			return partition.remove;
+			return partition[true];
 		},
 		
 		sort: function _sort () {
@@ -424,7 +424,7 @@ define(function () {
 		},
 		
 		count: function _count (predicate) {
-			return this.reduce(count(predicate));
+			return arguments.length === 0 ? this.length : this.reduce(count(predicate));
 		},
 		
 		first: function _first (predicate) {
@@ -479,21 +479,13 @@ define(function () {
 			return this;
 		},
 		
-		partition: function _partition (predicate,passName,failName) {
-
-			predicate = this.predicate(predicate);
-
-			var pass		= [],
-				fail		= [];
-
-			this.each(function __partition (object) {
-				(predicate(object) ? pass : fail).push(object);
-			});
-			
-			return copy({})
-						.setProperty(passName||'pass',Set.fromArray(pass))
-						.setProperty(failName||'fail',Set.fromArray(fail));
-
+		partition: function _partition (fn) {
+			var constructor = this.constructor;
+			return this.reduce(function (acc,object) {
+				var key = fn(object);
+				acc[key] = ( acc[key] || new constructor() ).add(object);
+				return acc;
+			}, {});
 		},
 		
 		filter: function _filter (predicate) {
