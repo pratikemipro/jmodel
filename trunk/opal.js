@@ -528,15 +528,9 @@ define(function () {
 		
 		reduce: function _reduce (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
-/*			if ( this.__members.reduce ) {
-				return this.__members.reduce(fn,acc);
-			}
-			else { */
-				this.each(function __reduce (object) {
-					acc = fn(acc,object);
-				});
-				return acc;
-//			}
+			return	  this.length === 0 ? acc
+				/*	: this.__members.reduce ? this.__members.reduce(fn,acc) */
+					: this.tail().reduce(fn,fn(acc,this.head()))
 		},
 		
 		copy: function _copy () {
