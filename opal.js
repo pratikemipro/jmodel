@@ -419,7 +419,7 @@ define(function () {
 		},
 		
 		first: function _first (predicate) {
-			return    this.length === 0 ? false
+			return    this.length === 0 ? undefined
 					: typeof predicate !== 'undefined' ? (
 						this.predicate(predicate)(this.head()) ? this.head() : this.tail().first(predicate) 
 					)
@@ -435,7 +435,7 @@ define(function () {
 		member: function _member (object) {
 			return    this.__index ? this.__index.member(object)
 					: this.__members.indexOf ? this.__members.indexOf(object) > -1
-					: this.reduce(contains(ObjectIdentityPredicate(object)));
+					: typeof this.first(ObjectIdentityPredicate(object)) !== 'undefined'
 		},
 		
 		sort: function _sort () {
