@@ -370,6 +370,14 @@ define(function () {
 			return !this.member(obj);
 		},
 		
+		head: function _head () {
+			return this.__members[0];
+		},
+		
+		tail: function _tail () {
+			return Set.fromArray(this.__members.slice(1));
+		},
+		
 		add: function _add (object) {
 			this.added = undefined;
 			if ( object !== undefined && this.constraint(object) ) {	
@@ -407,15 +415,17 @@ define(function () {
 		},
 		
 		first: function _first (predicate) {
-			return    this.__members.length === 0 ? false
-					: typeof predicate !== 'undefined' ? this.filter(predicate).first()
-					: this.__members[0];
+			return    this.length === 0 ? false
+					: typeof predicate !== 'undefined' ? (
+						this.predicate(predicate)(this.head()) ? this.head() : this.tail().first(predicate) 
+					)
+					: this.head();
 		},
 		
 		last: function _last (predicate) {
-			return    this.__members.length === 0 ? false
+			return    this.length === 0 ? false
 					: typeof predicate !== 'undefined' ? this.filter(predicate).last()
-					: this.__members[this.__members.length-1];
+					: this.get(this.length-1);
 		},
 		
 		member: function _member (object) {
