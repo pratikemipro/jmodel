@@ -11,10 +11,12 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
+/*
 define = function (fn) {	
 	opal = fn();
 	_ = ( typeof _ === 'undefined' ) ? opal : _;
 } || define;
+*/
 
 define(function () {
 
@@ -382,13 +384,13 @@ define(function () {
 		},
 		
 		remove: function _remove (predicate) {
-			var partition = this.partition(predicate);
-			this.__members = partition[false].get();
+			var partition = this.partition(this.predicate(predicate));
+			this.__members = partition[false] ? partition[false].get() : [];
 			this.length = this.__members.length;
 			if ( this.__index ) {
 				partition[true].reduce(Method('remove'),this.__index);
 			}
-			return partition[true];
+			return partition[true] || new this.constructor();
 		},
 		
 		sort: function _sort () {
@@ -692,8 +694,6 @@ define(function () {
 	}
 	
 	TypedSet.prototype = extend({
-		
-		constructor: TypedSet,
 		
 		add: function () {
 			
