@@ -46,8 +46,6 @@ define(['jmodel/opal'],function (opal) {
 	
 	EventRegistry.prototype = extend({
 		
-		constructor: EventRegistry,
-		
 		register: function _register () {
 			return Set.fromArguments(arguments).reduce(Method('add',this),this);
 		},
@@ -85,7 +83,7 @@ define(['jmodel/opal'],function (opal) {
 	// 																  EventType
 	// ------------------------------------------------------------------------
 	
-	function EventType (registry,name/*,notifications*/) {
+	function EventType (registry,name) {
 		this.registry		= registry || em.registry;
 		this.name			= name;
 		this.subscribers	= delegateTo(new SubscriberSet(),'filter');
@@ -699,8 +697,6 @@ define(['jmodel/opal'],function (opal) {
 	
 	SubscriberSet.prototype = extend({
 		
-		constructor: SubscriberSet,
-		
 		add: function () { // To support debug plugin
 			return TypedSet.prototype.add.apply(this,arguments);
 		},
@@ -821,14 +817,16 @@ define(['jmodel/opal'],function (opal) {
 	function makeObservable () {
 		
 		this.events	= new EventRegistry('add','remove','initialise','sort','change');
-		this.event	= delegateTo(this.events,'filter');
+		this.event	= delegateTo(this.events,'get');
 		
-		var change = this.event('change');
 		this.event('add')
 			.where(has('event','change'))
-			.subscribe(function (object) {
-				object.event('change')
-				    .republish(change); 
+			.subscribe({
+				context: this.event('change'),
+				message: function (object) {
+					object.event('change')
+				    	.republish(this); 
+				}
 			});
 		
 		return this;
@@ -858,7 +856,7 @@ define(['jmodel/opal'],function (opal) {
 		this.fields			= [];
 	
 		this.events = new EventRegistry('change');
-		this.event	= delegateTo(this.events,'filter');
+		this.event	= delegateTo(this.events,'get');
 		
 		for ( var field in fields ) {
 			if ( fields.hasOwnProperty(field) ) {
