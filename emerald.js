@@ -24,7 +24,7 @@ define(['jmodel/opal'],function (opal) {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.12.1'},opal),
+	var em		= extend({emerald_version:'0.12.2'},opal),
 		_		= em;
  
  
@@ -804,7 +804,6 @@ define(['jmodel/opal'],function (opal) {
 	}
 	
 	ObservableSet.prototype				= observable(Set.prototype);
-	ObservableSet.prototype.constructor	= ObservableSet;
 	
 	function ObservableTypedSet (constructor) {
 		TypedSet.call(this,constructor);
@@ -812,7 +811,6 @@ define(['jmodel/opal'],function (opal) {
 	}
 	
 	ObservableTypedSet.prototype 				= observable(TypedSet.prototype);
-	ObservableTypedSet.prototype.constructor	= ObservableTypedSet;
 	
 	function makeObservable () {
 		
