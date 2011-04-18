@@ -13,7 +13,7 @@
 
 define(function () {
 
-	var opal = {opal_version:'0.8.6'};
+	var opal = {opal_version:'0.9.0'};
 	
 	function assert(condition,exception) {
 		if (!condition) {
