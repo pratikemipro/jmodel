@@ -15,7 +15,7 @@ var jModel = (function () {
 	var external	= _,
 		nextKey		= -1; // NOTE: make this nicer
 		
-	external.jmodel_version = '2.0.1';
+	external.jmodel_version = '2.0.2';
 	
 	
 	//
@@ -63,8 +63,6 @@ var jModel = (function () {
 	}
 	
 	Context.prototype = {
-		
-		constructor: Context,
 		
 /*		register: function _register (name,constructor,options) {
 			return this.entities.create(name,constructor,options)
@@ -133,8 +131,6 @@ var jModel = (function () {
 	
 	// Can’t inherit from ObservableTypedSet as EntityType isn’t a constructor
 	EntityTypeSet.prototype = extend({
-		
-		constructor: EntityTypeSet,
 		
 		add: function (fields,options) {
 			return ObservableSet.prototype.add.call(this, fields instanceof Function ? fields : EntityType(this.context,fields,options))
@@ -210,8 +206,6 @@ var jModel = (function () {
 	}
 	
 	EntitySet.prototype = extend({
-		
-		constructor: EntitySet,
 		
 		create: function (data) {
 			return this.__construct(data);
