@@ -24,7 +24,7 @@ define(['jmodel/opal'],function (opal) {
 		eval('var '+i+' = opal.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.11.1'},opal),
+	var em		= extend({emerald_version:'0.12.1'},opal),
 		_		= em;
  
  
@@ -1205,8 +1205,6 @@ define(['jmodel/opal'],function (opal) {
 	}
 	
 	CollectionField.prototype = extend({
-		
-		constructor: CollectionField,
 		
 		instantiate: function () {
 			this.object[this.field] = delegateTo(this,'filter');
