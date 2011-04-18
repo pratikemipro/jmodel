@@ -11,7 +11,7 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
-var define = function (fn) {	
+define = function (fn) {	
 	opal = fn();
 	_ = ( typeof _ === 'undefined' ) ? opal : _;
 } || define;
