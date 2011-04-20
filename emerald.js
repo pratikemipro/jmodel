@@ -870,8 +870,7 @@ define(['jmodel/opal'],function (opal) {
 		
 		instantiateField: function (field,value) {
 			value = typeof value === 'function' ? value : scalar({defaultValue:value});
-			this.fields.push(field);
-			value.call(this,this,field);
+			this.fields.push(value.call(this,this,field));
 		},
 		
 		set: function (properties) {
