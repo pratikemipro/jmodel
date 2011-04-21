@@ -337,6 +337,7 @@ define(function () {
 	//
 	
 	function eq  (a,b) { return a===b; }
+	function neq (a,b) { return a!==b; }
 	function lt  (a,b) { return a<b; }
 	function gt  (a,b) { return a>b; }
 	function lte (a,b) { return a<=b; }
@@ -999,6 +1000,7 @@ define(function () {
 	}
 	
 	var EqualityPredicate         = ComparisonPredicate(eq),
+		InequalityPredicate		  = ComparisonPredicate(neq),
 		LessThanPredicate         = ComparisonPredicate(lt),
 		GreaterThanPredicate      = ComparisonPredicate(gt),
 		LessThanEqualPredicate    = ComparisonPredicate(lte),
@@ -1036,6 +1038,7 @@ define(function () {
 		ComparisonPredicate: 			ComparisonPredicate,
 		compare: 						ComparisonPredicate,
 		EqualityPredicate: 				EqualityPredicate,
+		InequalityPredicate:			InequalityPredicate,
 		LessThanPredicate: 				LessThanPredicate,
 		GreaterThanPredicate: 			GreaterThanPredicate,
 		LessThanEqualPredicate: 		LessThanEqualPredicate,
@@ -1045,6 +1048,7 @@ define(function () {
 	});
 	
 	var Eq		= FieldOrValuePredicate(EqualityPredicate),
+		Neq		= FieldOrValuePredicate(InequalityPredicate),
 		Lt		= FieldOrValuePredicate(LessThanPredicate),
 		Gt		= FieldOrValuePredicate(GreaterThanPredicate),
 		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
@@ -1056,6 +1060,7 @@ define(function () {
 	opal.extend({
 		
 		eq: 		Eq,
+		neq:		Neq,
 		lt: 		Lt,
 		gt: 		Gt,
 		lte: 		LtE,
