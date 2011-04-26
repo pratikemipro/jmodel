@@ -241,8 +241,8 @@ define(function () {
 
 	// Tests: full
 	function transform (name,transformer,extractor) {
-		var resolve = Resolve(name);
-		extractor = extractor || resolve;
+		var resolver = Resolve(name);
+		extractor = extractor || resolver;
 		return function _transform (object) {
 			return resolve(object,transformer(extractor(object)));
 		};
