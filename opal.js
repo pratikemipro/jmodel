@@ -15,8 +15,11 @@ define(function () {
 
 	var opal = {opal_version:'0.9.0'};
 	
-	function assert(condition,exception) {
-		if (!condition) {
+	function assert (condition,message) {
+		if ( console && console.assert ) {
+			console.assert(condition,message);
+		}	
+		else if (!condition) {
 			throw 'Opal exception: '+exception;
 		}
 	}
