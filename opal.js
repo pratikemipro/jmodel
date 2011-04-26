@@ -380,18 +380,6 @@ define(function () {
 		max: max,
 		min: min
 	});
-	
-	
-	//
-	// Comparison functions
-	//
-	
-	function eq  (a,b) { return a===b; }
-	function neq (a,b) { return a!==b; }
-	function lt  (a,b) { return a<b; }
-	function gt  (a,b) { return a>b; }
-	function lte (a,b) { return a<=b; }
-	function gte (a,b) { return a>=b; }
 
 
 	// ------------------------------------------------------------------------
@@ -1042,12 +1030,12 @@ define(function () {
 		};
 	}
 	
-	var EqualityPredicate         = ComparisonPredicate(eq),
-		InequalityPredicate		  = ComparisonPredicate(neq),
-		LessThanPredicate         = ComparisonPredicate(lt),
-		GreaterThanPredicate      = ComparisonPredicate(gt),
-		LessThanEqualPredicate    = ComparisonPredicate(lte),
-		GreaterThanEqualPredicate = ComparisonPredicate(gte);
+	var EqualityPredicate         = ComparisonPredicate(function (a,b) { return a===b; }),
+		InequalityPredicate		  = ComparisonPredicate(function (a,b) { return a!==b; }),
+		LessThanPredicate         = ComparisonPredicate(function (a,b) { return a<b; }),
+		GreaterThanPredicate      = ComparisonPredicate(function (a,b) { return a>b; }),
+		LessThanEqualPredicate    = ComparisonPredicate(function (a,b) { return a<=b; }),
+		GreaterThanEqualPredicate = ComparisonPredicate(function (a,b) { return a>=b; });
 
 	function BetweenPredicate (lower,higher) {
 		return function _betweenpredicate (candidate) {
