@@ -1442,7 +1442,7 @@ var jModel = function () {
 		},
 		
 		keys: function _keys () {
-			return this.map(Property('accessor'));
+			return this.map(property('accessor'));
 		},
 		
 		predicate: function _predicate (parameter) {
