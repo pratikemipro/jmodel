@@ -670,9 +670,10 @@ define(function () {
 	};
 
 	function set () {
-		return    arguments.length === 1 && arguments[0] && arguments[0].jquery ? Set.fromJQuery(arguments[0])
+		return    arguments.length === 1 && arguments[0] instanceof Set ? arguments[0]
+				: arguments.length === 1 && arguments[0] && arguments[0].jquery ? Set.fromJQuery(arguments[0])
 				: arguments.length === 1 && arguments[0] && arguments[0].callee ? Set.fromArguments(arguments[0])
-				: arguments.length === 1 && arguments[0] instanceof Array ? Set.fromArray(arguments[0])
+				: arguments.length === 1 && arguments[0] instanceof Array ? Set.fromArray(arguments[0]) 
 				: Set.fromArguments(arguments);
 	}
 	opal.set = set;
@@ -1137,18 +1138,15 @@ define(function () {
 		};
 	}
 
-	var AllSetPredicate  = SetPredicate(and),
-		SomeSetPredicate = SetPredicate(or),
-		NoneSetPredicate = SetPredicate(nor);
+	var all  = SetPredicate(and),
+		some = SetPredicate(or),
+		none = SetPredicate(extend({unit:true}, function (a,b) { return a && !b; } ));
 
 	opal.extend({
 		empty: 					empty,
-		AllSetPredicate: 		AllSetPredicate,
-		all: 					AllSetPredicate,
-		SomeSetPredicate: 		SomeSetPredicate,
-		some: 					SomeSetPredicate,
-		NoneSetPredicate: 		NoneSetPredicate,
-		none: 					NoneSetPredicate,
+		all: 					all,
+		some: 					some,
+		none: 					none,
 		CardinalityPredicate: 	CardinalityPredicate
 	});
 
