@@ -165,6 +165,10 @@ define(function () {
 			return pipe(extractor,RegularExpressionPredicate(regex));
 		}
 		
+		extractor.isnull = function () {
+			return pipe(extractor,NullPredicate);
+		}
+		
 		return extractor;
 		
 	}
@@ -1070,52 +1074,27 @@ define(function () {
 		};
 	}
 	
-	function FieldOrValuePredicate (ValuePredicate,numberValueArguments) {
-		numberValueArguments = numberValueArguments || 1;
-		return function _fieldorvaluepredicate () {
-		    var value    = Array.prototype.slice.call(arguments),
-		        field   = ( value.length > numberValueArguments ) ? value.pop() : undefined;
-			return field ? FieldPredicate(field,ValuePredicate.apply(null,value))
-				            : ValuePredicate.apply(null,value);
-		};
-	}
-	
 	opal.extend({
 		ComparisonPredicate: 			ComparisonPredicate,
 		compare: 						ComparisonPredicate,
 		EqualityPredicate: 				EqualityPredicate,
+		eq:								EqualityPredicate,
 		InequalityPredicate:			InequalityPredicate,
+		neq:							InequalityPredicate,
 		LessThanPredicate: 				LessThanPredicate,
+		lt:								LessThanPredicate,
 		GreaterThanPredicate: 			GreaterThanPredicate,
+		gt:								GreaterThanPredicate,
 		LessThanEqualPredicate: 		LessThanEqualPredicate,
+		lte:							LessThanEqualPredicate,
 		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
+		gte:							GreaterThanEqualPredicate,
 		BetweenPredicate: 				BetweenPredicate,
-		RegularExpressionPredicate: 	RegularExpressionPredicate
+		between:						BetweenPredicate,
+		RegularExpressionPredicate: 	RegularExpressionPredicate,
+		regex:							RegularExpressionPredicate,
+		isnull:							NullPredicate
 	});
-	
-	var Eq		= FieldOrValuePredicate(EqualityPredicate),
-		Neq		= FieldOrValuePredicate(InequalityPredicate),
-		Lt		= FieldOrValuePredicate(LessThanPredicate),
-		Gt		= FieldOrValuePredicate(GreaterThanPredicate),
-		LtE		= FieldOrValuePredicate(LessThanEqualPredicate),
-		GtE		= FieldOrValuePredicate(GreaterThanPredicate),
-		Between	= FieldOrValuePredicate(BetweenPredicate,2),
-		RegEx	= FieldOrValuePredicate(RegularExpressionPredicate),
-		IsNull	= FieldOrValuePredicate(NullPredicate,0);
-	
-	opal.extend({
-		
-		eq: 		Eq,
-		neq:		Neq,
-		lt: 		Lt,
-		gt: 		Gt,
-		lte: 		LtE,
-		gte: 		GtE,
-		between: 	Between,
-		regex: 		RegEx,
-		isnull:     IsNull			
-	});
-
 
 	// Membership
 
