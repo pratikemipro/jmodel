@@ -125,11 +125,55 @@ define(function () {
 		return object !== null && typeof object;
 	}
 
+
+	// Function to add predicates to value extractors
+	function add_predicates (extractor) {
+		
+		extractor.is = function (predicate) {
+			return pipe(extractor,predicate);
+		};
+		
+		extractor.eq = function (value) {
+			return pipe(extractor,EqualityPredicate(value));
+		};
+		
+		extractor.neq = function (value) {
+			return pipe(extractor,InequalityPredicate(value));
+		};
+		
+		extractor.lt = function (value) {
+			return pipe(extractor,ComparisonPredicate(lt)(value));
+		};
+		
+		extractor.gt = function (value) {
+			return pipe(extractor,ComparisonPredicate(gt)(value));
+		};
+
+		extractor.lte = function (value) {
+			return pipe(extractor,ComparisonPredicate(lte)(value));
+		};
+		
+		extractor.gte = function (value) {
+			return pipe(extractor,ComparisonPredicate(gte)(value));
+		};
+		
+		extractor.between = function (lower,higher) {
+			return pipe(extractor,BetweenPredicate(lower,higher));
+		};
+		
+		extractor.matches = function (regex) {
+			return pipe(extractor,RegularExpressionPredicate(regex));
+		}
+		
+		return extractor;
+		
+	}
+
+
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
 	function Property (property,generic) {
-		
-		var _property = function (object,specific) {
+		var _property = function _property (object,specific) {
 			var value =   typeof specific !== 'undefined' ? specific
 						: typeof generic  !== 'undefined' ? generic
 						: undefined;
@@ -141,73 +185,37 @@ define(function () {
 				return object[property];
 			}
 		}
-		
-		_property.is = function (predicate) {
-			return pipe(_property,predicate);
-		};
-		
-		_property.eq = function (value) {
-			return pipe(_property,EqualityPredicate(value));
-		};
-		
-		_property.neq = function (value) {
-			return pipe(_property,InequalityPredicate(value));
-		};
-		
-		_property.lt = function (value) {
-			return pipe(_property,ComparisonPredicate(lt)(value));
-		};
-		
-		_property.gt = function (value) {
-			return pipe(_property,ComparisonPredicate(gt)(value));
-		};
-
-		_property.lte = function (value) {
-			return pipe(_property,ComparisonPredicate(lte)(value));
-		};
-		
-		_property.gte = function (value) {
-			return pipe(_property,ComparisonPredicate(gte)(value));
-		};
-		
-		_property.between = function (lower,higher) {
-			return pipe(_property,BetweenPredicate(lower,higher));
-		};
-		
-		_property.matches = function (regex) {
-			return pipe(_property,RegularExpressionPredicate(regex));
-		}
-		
-		return _property;
-	
+		return add_predicates(_property);
 	}
 	
     // Tests: full
 	function Method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
-		return function _method () {
+		var _method = function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
 				args2	= args.concat(args1);
 			return ( object[name] && typeof object[name] === 'function' ) ?
 						object[name].apply(object,args2) : false;
-		}; 
+		};
+		return add_predicates(_method);
 	}
 	
 	// Tests: full
 	function Resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
-		return function _resolve (object) {
+		var _resolve = function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
 			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : Property(name).apply(null,args2);
 		};
+		return add_predicates(_resolve);
 	}
 
     // Tests: full
 	function PropertyPath (path,separator) {
 		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
-		return function _propertypath (object) {
+		var _propertypath = function _propertypath (object) {
 			try {
 				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
 			}
@@ -215,6 +223,7 @@ define(function () {
 				return undefined;
 			}
 		};
+		return add_predicates(_propertypath);
 	}
 
 	// Tests: none
