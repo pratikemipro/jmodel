@@ -957,7 +957,7 @@ define(function () {
 	}
 
 	function FunctionValuePredicate (fn,value) {
-		return compose(EqualityPredicate(value),fn);
+		return pipe(fn,EqualityPredicate(value));
 	}
 
     function NullPredicate (candidate) {
@@ -1123,7 +1123,7 @@ define(function () {
 
 	function CardinalityPredicate (predicate) {
 		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
-		return compose(predicate,Method('count'));
+		return pipe(Method('count'),predicate);
 	}
 	
 	var EmptySetPredicate = CardinalityPredicate(0);
