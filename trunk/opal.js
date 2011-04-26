@@ -566,7 +566,7 @@ define(function () {
 		},
 		
 		predicate: function _predicate (parameter) {
-			return	  parameter === ':empty' ? EmptySetPredicate
+			return	  parameter === ':empty' ? empty
 					: parameter instanceof RegExp ? RegularExpressionPredicate(parameter)
 					: typeof parameter === 'function' ? parameter
 					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},ObjectIdentityPredicate(this.get(parameter)))
@@ -1126,7 +1126,7 @@ define(function () {
 		return pipe(Method('count'),predicate);
 	}
 	
-	var EmptySetPredicate = CardinalityPredicate(0);
+	var empty = CardinalityPredicate(0);
 
 	function SetPredicate (conjunction) {
 		return function _setpredicate () {
@@ -1142,8 +1142,7 @@ define(function () {
 		NoneSetPredicate = SetPredicate(nor);
 
 	opal.extend({
-		EmptySetPredicate: 		EmptySetPredicate,
-		empty: 					EmptySetPredicate,
+		empty: 					empty,
 		AllSetPredicate: 		AllSetPredicate,
 		all: 					AllSetPredicate,
 		SomeSetPredicate: 		SomeSetPredicate,
