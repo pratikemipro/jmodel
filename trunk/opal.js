@@ -126,9 +126,10 @@ define(function () {
 	}
 
     // Tests: partial
-	// NOTE: add test that it doesn't set properties that don't exist
+	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
 	function Property (property,generic) {
-		return function _property (object,specific) {
+		
+		var _property = function (object,specific) {
 			var value =   typeof specific !== 'undefined' ? specific
 						: typeof generic  !== 'undefined' ? generic
 						: undefined;
@@ -140,6 +141,44 @@ define(function () {
 				return object[property];
 			}
 		}
+		_property.is = function (predicate) {
+			return pipe(_property,predicate);
+		};
+		
+		_property.eq = function (value) {
+			return pipe(_property,EqualityPredicate(value));
+		};
+		
+		_property.neq = function (value) {
+			return pipe(_property,InequalityPredicate(value));
+		};
+		
+		_property.lt = function (value) {
+			return pipe(_property,ComparisonPredicate(lt)(value));
+		};
+		
+		_property.gt = function (value) {
+			return pipe(_property,ComparisonPredicate(gt)(value));
+		};
+
+		_property.lte = function (value) {
+			return pipe(_property,ComparisonPredicate(lte)(value));
+		};
+		
+		_property.gte = function (value) {
+			return pipe(_property,ComparisonPredicate(gte)(value));
+		};
+		
+		_property.between = function (lower,higher) {
+			return pipe(_property,BetweenPredicate(lower,higher));
+		};
+		
+		_property.matches = function (regex) {
+			return pipe(_property,RegularExpressionPredicate(regex));
+		}
+		
+		return _property;
+	
 	}
 	
     // Tests: full
@@ -898,7 +937,7 @@ define(function () {
 	// Generic
 
 	function AllPredicate (candidate) {
-			return true;
+		return true;
 	}
 
 	function NonePredicate (candidate) {
