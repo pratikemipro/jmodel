@@ -141,6 +141,7 @@ define(function () {
 				return object[property];
 			}
 		}
+		
 		_property.is = function (predicate) {
 			return pipe(_property,predicate);
 		};
