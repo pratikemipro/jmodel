@@ -127,24 +127,21 @@ define(function () {
 
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
-	function Property (property,value) {
-		return arguments.length === 1 ? function _property (object,value) {
-			if ( arguments.length === 1 ) {
-				return object[property];
-			}
-			else if ( typeof object[property] !== 'undefined' ) {
+	function Property (property,generic) {
+		return function _property (object,specific) {
+			var value =   typeof specific !== 'undefined' ? specific
+						: typeof generic  !== 'undefined' ? generic
+						: undefined;
+			if ( typeof value !== 'undefined' && typeof object[property] !== 'undefined' ) {
 				object[property] = value;
 				return object;
 			}
-		}
-		: function _property (object) {
-			if ( object[property] ) {
-				object[property] = value;
+			else {
+				return object[property];
 			}
-			return object;
-		};
+		}
 	}
-
+	
     // Tests: full
 	function Method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
