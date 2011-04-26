@@ -176,7 +176,7 @@ define(function () {
 
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
-	function Property (property,generic) {
+	function property (property,generic) {
 		var _property = function _property (object,specific) {
 			var value =   typeof specific !== 'undefined' ? specific
 						: typeof generic  !== 'undefined' ? generic
@@ -211,7 +211,7 @@ define(function () {
 		var _resolve = function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
-			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : Property(name).apply(null,args2);
+			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : property(name).apply(null,args2);
 		};
 		return add_predicates(_resolve);
 	}
@@ -281,7 +281,7 @@ define(function () {
 		second: second,
 		Identity: Identity,
 		type: type,
-		Property: Property,
+		property: property,
 		Method: Method,
 		Resolve: Resolve,
 		PropertyPath: PropertyPath,
@@ -1012,11 +1012,6 @@ define(function () {
 		};
 	}
 
-	function PropertyPredicate (path,predicate) {
-		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return pipe(PropertyPath(path),predicate);
-	}
-
 	function PropertySetPredicate (paths,predicate) {
 		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
 		return function _propertysetpredicate (candidate) {
@@ -1032,8 +1027,6 @@ define(function () {
 		InstancePredicate: 			InstancePredicate,
 		isa: 						InstancePredicate,
 		isan: 						InstancePredicate,
-		PropertyPredicate: 			PropertyPredicate,
-		property: 					PropertyPredicate,
 		PropertySetPredicate: 		PropertySetPredicate,
 		propset: 					PropertySetPredicate
 	});
