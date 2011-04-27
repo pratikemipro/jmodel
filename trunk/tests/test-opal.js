@@ -329,5 +329,50 @@ define(['../opal.js'], function (opal) {
 		equals( opal.set('red','green','blue').count(), 3, "creation from arguments" );
 		
 	});
+	
+	
+	//
+	// Set mutators
+	//
+	
+	module('Set mutators');
+	
+	test('add', function () {
+		
+		var testSet = opal.set();
+		testSet.add('red');
+		testSet.add('green');
+		
+		equals( testSet.count(), 2, "addition of non-duplicate objects" );
+		equals( testSet.add('blue').count(), 3, "addition of non-duplicate succeeds" );
+		equals( testSet.add('green').count(), 3, "addition of duplicate fails" );
+		
+		// NOTE: Test constraints here
+		// NOTE: Test that ".added" is set correctly
+		// NOTE: text that index is updated correctly
+		
+	});
+	
+	test('remove', function () {
+		var testSet = opal.set('red','green','blue');
+		var removed = testSet.remove(function (candidate) { return candidate === 'red' });
+		equals(testSet.first(), 'green', 'element removal works');
+		equals(removed.first(), 'red', 'correct removed element returned');
+		// NOTE: Test that length is managed correctly
+		// NOTE: text that index is updated correctly
+	});
+	
+	test('sort', function () {
+		
+		var testSet = opal.set('red','green','blue');
+		testSet.sort(function (a,b) {
+			return    a < b ? -1
+					: a > b ? 1
+					: 0;
+		});
+		
+		equals(testSet.first(),'blue','sorting works');
+		
+	});
 
 });

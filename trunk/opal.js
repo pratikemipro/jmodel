@@ -412,6 +412,7 @@ define(function () {
 		// Mutators
 		//
 		
+		// Tests: partial
 		add: function _add (object) {
 			this.added = undefined;
 			if ( this.constraint(object) ) {	
@@ -425,6 +426,7 @@ define(function () {
 			return this;
 		},
 		
+		// Tests: partial
 		remove: function _remove (predicate) {
 			var partition = this.partition(this.predicate(predicate));
 			this.__members = partition[false] ? partition[false].get() : [];
@@ -435,11 +437,13 @@ define(function () {
 			return partition[true] || new this.constructor();
 		},
 		
+		// Tests: full
 		sort: function _sort () {
 			this.__members.sort(this.ordering.apply(null,arguments));
 			return this;
 		},
 		
+		// Tests: none
 		concat : function _concat (second) {
 			return second && second.reduce ? second.reduce(method('add'),this) : this;
 		},
