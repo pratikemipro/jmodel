@@ -299,17 +299,17 @@ define(function () {
 	// Reduction functions
 	//
 
-	// Tests: none
+	// Tests: full
 	var plus = extend({unit:0,label:'sum'},function _plus (acc,value) {
 		return acc + value;
 	});
 
-	// Tests: none
+	// Tests: full
 	var times = extend({unit:1,label:'product'},function _times (acc,value) {
 		return acc * value;
 	});
 	
-	// Tests: none
+	// Tests: full
 	var count = function _count (predicate) {
 		predicate = predicate || AllPredicate;
 		return extend({unit:0,label:'count'}, function __count (acc,value) {
@@ -317,7 +317,7 @@ define(function () {
 		});
 	};
 	
-	// Tests: none
+	// Tests: full
 	var withmethod = function _withmethod (name) {
 		var fn = method(name);
 		return function __withmethod (acc,value) {
@@ -325,7 +325,7 @@ define(function () {
 		};
 	};
 	
-	// Tests: none
+	// Tests: full
 	var push = function (acc,value) {
 		acc.push(value);
 		return acc;
