@@ -331,6 +331,7 @@ define(function () {
 		return acc;
 	};
 	
+	// Tests: none
 	var add = function _add () {
 		switch (arguments.length) {
 			case 0:  return add0.apply(null,arguments);
@@ -358,16 +359,19 @@ define(function () {
 		};
 	};
 	
+	// Tests: none
 	var contains = function _contains (predicate) {
 		return extend({unit:false}, function __contains (acc,value) {
 			return acc || predicate(value);
 		});
 	};
 	
+	// Tests: none
 	var max = extend({label:'max'}, function _max (acc,value) {
 		return acc > value ? acc : value;
 	});
 	
+	// Tests: none
 	var min = extend({label:'min'}, function _min (acc,value) {
 		return ( acc < value && acc !== null ) ? acc : value;
 	});
@@ -389,6 +393,7 @@ define(function () {
 	//																		Set
 	// ------------------------------------------------------------------------
 
+	// Tests: full
 	function Set () {
 
 		this.__members = Array.prototype.slice.call(arguments);
@@ -641,6 +646,7 @@ define(function () {
 		return Set.fromArray(Array.prototype.slice.call(arguments));
 	};
 	
+	// Tests: full
 	Set.fromArray = function (arr) {
 		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var set = new Set();
@@ -648,16 +654,19 @@ define(function () {
 		return set;
 	};
 	
+	// Tests: full
 	Set.fromArguments = function (args) {
 		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
 		return Set.fromArray(Array.prototype.slice.call(args));
 	};
 	
+	// Tests: none
 	Set.fromJQuery = function (jq) {
 		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
 	};
 	
+	// Tests: none
 	Set.fromGenerator = function (fn) {
 		var next, items = [];
 		while ( typeof( next = fn() ) !== 'undefined' ) {
@@ -666,12 +675,14 @@ define(function () {
 		return Set.fromArray(items);
 	};
 	
+	// Tests: none
 	opal.range = function (lower, higher) {
 		return function () {
 			return lower <= higher ? lower++ : undefined;
 		};
 	};
 
+	// Tests: partial
 	function set () {
 		return    arguments.length === 1 && arguments[0] instanceof Set ? arguments[0]
 				: arguments.length === 1 && arguments[0] && arguments[0].jquery ? Set.fromJQuery(arguments[0])
