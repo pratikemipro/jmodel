@@ -145,19 +145,19 @@ define(function () {
 		};
 		
 		extractor.lt = function (value) {
-			return pipe(extractor,ComparisonPredicate(lt)(value));
+			return pipe(extractor,LessThanPredicate(value));
 		};
 		
 		extractor.gt = function (value) {
-			return pipe(extractor,ComparisonPredicate(gt)(value));
+			return pipe(extractor,GreaterThanPredicate(value));
 		};
 
 		extractor.lte = function (value) {
-			return pipe(extractor,ComparisonPredicate(lte)(value));
+			return pipe(extractor,LessThanEqualPredicate(value));
 		};
 		
 		extractor.gte = function (value) {
-			return pipe(extractor,ComparisonPredicate(gte)(value));
+			return pipe(extractor,GreaterThanEqualPredicate(value));
 		};
 		
 		extractor.between = function (lower,higher) {
