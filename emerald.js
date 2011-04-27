@@ -36,7 +36,7 @@ define(['jmodel/opal'],function (opal) {
 		
 		TypedSet.call(this,EventType);
 		
-		this.index(Resolve('name'));
+		this.index(resolve('name'));
 		
 		if ( arguments.length > 0 ) {
 			this.register.apply(this,arguments);
@@ -286,7 +286,7 @@ define(['jmodel/opal'],function (opal) {
 		},
 		
 		map: function (fn,each) {
-			fn = ( typeof fn === 'string' ) ? Resolve(fn) : fn;
+			fn = ( typeof fn === 'string' ) ? resolve(fn) : fn;
 			return this.derive(function (method) {
 				return function () {
 					return method.apply(this, each ? Set.fromArguments(arguments).map(fn).get() : [fn.apply(null,arguments)]);

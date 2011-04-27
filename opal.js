@@ -207,7 +207,7 @@ define(function () {
 	}
 	
 	// Tests: full
-	function Resolve (name) {
+	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
 		return add_predicates(function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
@@ -218,7 +218,7 @@ define(function () {
 
     // Tests: full
 	function PropertyPath (path,separator) {
-		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(Resolve);
+		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(resolve);
 		var _propertypath = function _propertypath (object) {
 			try {
 				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
@@ -241,10 +241,10 @@ define(function () {
 
 	// Tests: full
 	function transform (name,transformer,extractor) {
-		var resolver = Resolve(name);
+		var resolver = resolve(name);
 		extractor = extractor || resolver;
 		return function _transform (object) {
-			return resolve(object,transformer(extractor(object)));
+			return resolver(object,transformer(extractor(object)));
 		};
 	}
 	
@@ -280,7 +280,7 @@ define(function () {
 		type: type,
 		property: property,
 		Method: Method,
-		Resolve: Resolve,
+		resolve: resolve,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet,
 		transform: transform,
@@ -526,7 +526,7 @@ define(function () {
 		},
 		
 		map: function _map () {
-			function makeMapping (obj) { return ( typeof obj == 'string' ) ? Resolve(obj) : obj; }
+			function makeMapping (obj) { return ( typeof obj == 'string' ) ? resolve(obj) : obj; }
 			var args    = Array.prototype.slice.call(arguments),
 			    mapped  = ( typeof args[args.length-1] === 'object' ) ? args.pop() : new List(),
 			    mapping = ( args.length === 1 ) ? makeMapping(args[0])
@@ -887,7 +887,7 @@ define(function () {
 	function UniqueIndex (set,key) {
 
 		this.set		= set;
-		this.key		= typeof key === 'function' ? key : Resolve(key);
+		this.key		= typeof key === 'function' ? key : resolve(key);
 		this.__delegate	= copy({});
 		
 		this.build();
@@ -963,7 +963,7 @@ define(function () {
     }
 
 	function ExistentialPredicate () {
-		var resolver = Resolve.apply(null,arguments);
+		var resolver = resolve.apply(null,arguments);
 		return function (candidate) {
 			return Boolean(resolver(candidate));
 		};
@@ -1049,7 +1049,7 @@ define(function () {
 	
 	function FieldPredicate (field,predicate) {
 		return function _fieldpredicate (candidate) { 
-		    return predicate(Resolve(field)(candidate));
+		    return predicate(resolve(field)(candidate));
 		};
 	}
 	
