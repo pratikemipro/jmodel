@@ -408,7 +408,9 @@ define(function () {
 		
 		constructor: Set,
 		
-		/* Mutators */
+		//
+		// Mutators
+		//
 		
 		add: function _add (object) {
 			this.added = undefined;
@@ -442,7 +444,9 @@ define(function () {
 			return second && second.reduce ? second.reduce(method('add'),this) : this;
 		},
 		
-		/* Pure methods */
+		//
+		// Pure methods
+		//
 		
 		constraint: function constraint (obj) {
 			return typeof obj !== 'undefined' && !this.member(obj);
