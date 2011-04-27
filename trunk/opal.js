@@ -127,60 +127,55 @@ define(function () {
 	function type (object) {
 		return object !== null && typeof object;
 	}
+	
+	//
+	// Extend Function.prototype with predicate functions
+	//
 
+	Function.prototype.is = function (predicate) {
+		return pipe(this,predicate);
+	};
+	
+	Function.prototype.eq = function (value) {
+		return pipe(this,EqualityPredicate(value));
+	};
+	
+	Function.prototype.neq = function (value) {
+		return pipe(this,InequalityPredicate(value));
+	};
+	
+	Function.prototype.lt = function (value) {
+		return pipe(this,LessThanPredicate(value));
+	};
+	
+	Function.prototype.gt = function (value) {
+		return pipe(this,GreaterThanPredicate(value));
+	};
 
-	// Function to add predicates to value extractors
-	function add_predicates (extractor) {
-		
-		extractor.is = function (predicate) {
-			return pipe(extractor,predicate);
-		};
-		
-		extractor.eq = function (value) {
-			return pipe(extractor,EqualityPredicate(value));
-		};
-		
-		extractor.neq = function (value) {
-			return pipe(extractor,InequalityPredicate(value));
-		};
-		
-		extractor.lt = function (value) {
-			return pipe(extractor,LessThanPredicate(value));
-		};
-		
-		extractor.gt = function (value) {
-			return pipe(extractor,GreaterThanPredicate(value));
-		};
-
-		extractor.lte = function (value) {
-			return pipe(extractor,LessThanEqualPredicate(value));
-		};
-		
-		extractor.gte = function (value) {
-			return pipe(extractor,GreaterThanEqualPredicate(value));
-		};
-		
-		extractor.between = function (lower,higher) {
-			return pipe(extractor,BetweenPredicate(lower,higher));
-		};
-		
-		extractor.matches = function (regex) {
-			return pipe(extractor,RegularExpressionPredicate(regex));
-		}
-		
-		extractor.isnull = function () {
-			return pipe(extractor,NullPredicate);
-		}
-		
-		return extractor;
-		
+	Function.prototype.lte = function (value) {
+		return pipe(this,LessThanEqualPredicate(value));
+	};
+	
+	Function.prototype.gte = function (value) {
+		return pipe(this,GreaterThanEqualPredicate(value));
+	};
+	
+	Function.prototype.between = function (lower,higher) {
+		return pipe(this,BetweenPredicate(lower,higher));
+	};
+	
+	Function.prototype.matches = function (regex) {
+		return pipe(this,RegularExpressionPredicate(regex));
 	}
-
+	
+	Function.prototype.isnull = function () {
+		return pipe(this,NullPredicate);
+	}
 
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
 	function property (property,generic) {
-		return add_predicates(function _property (object,specific) {
+		return function _property (object,specific) {
 			var value =   typeof specific !== 'undefined' ? specific
 						: typeof generic  !== 'undefined' ? generic
 						: undefined;
@@ -191,35 +186,35 @@ define(function () {
 			else {
 				return object[property];
 			}
-		});
+		};
 	}
 	
     // Tests: full
 	function Method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
-		return add_predicates(function _method () {
+		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
 				args2	= args.concat(args1);
 			return ( object[name] && typeof object[name] === 'function' ) ?
 						object[name].apply(object,args2) : false;
-		});
+		};
 	}
 	
 	// Tests: full
 	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
-		return add_predicates(function _resolve (object) {
+		return function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
 			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : property(name).apply(null,args2);
-		});
+		};
 	}
 
     // Tests: full
 	function PropertyPath (path,separator) {
 		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(resolve);
-		var _propertypath = function _propertypath (object) {
+		return function _propertypath (object) {
 			try {
 				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
 			}
@@ -227,7 +222,6 @@ define(function () {
 				return undefined;
 			}
 		};
-		return add_predicates(_propertypath);
 	}
 
 	// Tests: none
