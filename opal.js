@@ -36,6 +36,11 @@ define(function () {
 	}
 	opal.extend = extend;
 
+
+	//
+	// Function composition
+	//
+
     // Tests: full
 	function pipe () {
 		var fns = Array.prototype.slice.call(arguments);
@@ -71,6 +76,11 @@ define(function () {
 			return result;
 		};
 	}
+	
+	
+	//
+	// Function application
+	//
 	
 	// Tests: full
 	function apply () {
