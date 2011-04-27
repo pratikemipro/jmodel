@@ -125,7 +125,7 @@ var jModel = (function () {
 		ObservableSet.call(this,EntityType);
 		
 		this.context = context;
-		this.index(Resolve('typeName'));
+		this.index(resolve('typeName'));
 		
 	}
 	

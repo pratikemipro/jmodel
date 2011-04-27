@@ -172,7 +172,7 @@ var jModel = function () {
 		this.__delegate = new ObservableTypedSet(Context);
 		
 		this.__delegate
-			.index(Resolve('name'))
+			.index(resolve('name'))
 			.delegateFor(this);
 			
 	}
@@ -304,7 +304,7 @@ var jModel = function () {
 		ObservableTypedSet.call(this,EntityType,context.notifications);
 		
 		this.context = context;
-		this.index(Resolve('name'));
+		this.index(resolve('name'));
 
 	}
 	
@@ -946,7 +946,7 @@ var jModel = function () {
 /*	function Grouping (parent,extractor) {
 		this.parent		= parent;
 		this.extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
-		this.__delegate	= set().index(Resolve('value')).delegateFor(this);
+		this.__delegate	= set().index(resolve('value')).delegateFor(this);
 		this.build();
 	}
 	
@@ -1412,7 +1412,7 @@ var jModel = function () {
 	
 	function FieldSet (object,events) {	
 		TypedSet.call(this,Field);
-		this.index(Resolve('accessor'));
+		this.index(resolve('accessor'));
 	}
 	
 	FieldSet.prototype = extend({
@@ -1508,7 +1508,7 @@ var jModel = function () {
 	
 	function RelationshipSet () {
 		TypedSet.call(this,Relationship);
-		this.index(Resolve('name'));
+		this.index(resolve('name'));
 	}
 	
 	RelationshipSet.prototype = extend({
