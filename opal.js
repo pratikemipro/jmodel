@@ -118,12 +118,12 @@ define(function () {
 	// Object functions
 	// 
 
-    // Tests: none
+    // Tests: full
 	function identity (object) {
 		return object;
 	}
 
-    // Tests: none
+    // Tests: full
 	function type (object) {
 		return object !== null && typeof object;
 	}
@@ -132,42 +132,52 @@ define(function () {
 	// Extend Function.prototype with predicate functions
 	//
 
+	// Tests: none
 	Function.prototype.is = function (predicate) {
 		return pipe(this,predicate);
 	};
 	
+	// Tests: none
 	Function.prototype.eq = function (value) {
 		return pipe(this,EqualityPredicate(value));
 	};
 	
+	// Tests: none
 	Function.prototype.neq = function (value) {
 		return pipe(this,InequalityPredicate(value));
 	};
 	
+	// Tests: none
 	Function.prototype.lt = function (value) {
 		return pipe(this,LessThanPredicate(value));
 	};
 	
+	// Tests: none
 	Function.prototype.gt = function (value) {
 		return pipe(this,GreaterThanPredicate(value));
 	};
 
+	// Tests: none
 	Function.prototype.lte = function (value) {
 		return pipe(this,LessThanEqualPredicate(value));
 	};
 	
+	// Tests: none
 	Function.prototype.gte = function (value) {
 		return pipe(this,GreaterThanEqualPredicate(value));
 	};
 	
+	// Tests: none
 	Function.prototype.between = function (lower,higher) {
 		return pipe(this,BetweenPredicate(lower,higher));
 	};
 	
+	// Tests: none
 	Function.prototype.matches = function (regex) {
 		return pipe(this,RegularExpressionPredicate(regex));
 	}
 	
+	// Tests: none
 	Function.prototype.isnull = function () {
 		return pipe(this,NullPredicate);
 	}
@@ -189,7 +199,8 @@ define(function () {
 		};
 	}
 	
-    // Tests: none
+    // Tests: partial
+	// NOTE: Add predicate tests
 	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
@@ -201,7 +212,8 @@ define(function () {
 		};
 	}
 	
-	// Tests: none
+	// Tests: partial
+	// NOTE: Add predicate tests
 	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
 		return function _resolve (object) {
@@ -211,10 +223,10 @@ define(function () {
 		};
 	}
 
-    // Tests: none
-	function PropertyPath (path,separator) {
+    // Tests: full
+	function path (path,separator) {
 		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(resolve);
-		return function _propertypath (object) {
+		return function _path (object) {
 			try {
 				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
 			}
@@ -227,13 +239,13 @@ define(function () {
 	// Tests: none
 	function PropertySet (paths,separator) {
 		paths = ( paths instanceof Set ) ? paths : Set.fromArray(paths);
-		paths = paths.map(function _propertyset (path) { return PropertyPath(path,separator); });
+		paths = paths.map(function _propertyset (path) { return path(path,separator); });
 		return function __propertyset (object) {
 			return paths.map(applyto(object));
 		};
 	}
 
-	// Tests: none
+	// Tests: full
 	function transform (name,transformer,extractor) {
 		var resolver = resolve(name);
 		extractor = extractor || resolver;
@@ -275,7 +287,7 @@ define(function () {
 		property: property,
 		method: method,
 		resolve: resolve,
-		PropertyPath: PropertyPath,
+		path: path,
 		PropertySet: PropertySet,
 		transform: transform,
 		aspect: aspect,
