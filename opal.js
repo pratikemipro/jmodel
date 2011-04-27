@@ -24,7 +24,7 @@ define(function () {
 		}
 	}
 
-    // Tests: full
+    // Tests: none
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
@@ -118,12 +118,12 @@ define(function () {
 	// Object functions
 	// 
 
-    // Tests: full
-	function Identity (object) {
+    // Tests: none
+	function identity (object) {
 		return object;
 	}
 
-    // Tests: full
+    // Tests: none
 	function type (object) {
 		return object !== null && typeof object;
 	}
@@ -189,7 +189,7 @@ define(function () {
 		};
 	}
 	
-    // Tests: full
+    // Tests: none
 	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
@@ -201,7 +201,7 @@ define(function () {
 		};
 	}
 	
-	// Tests: full
+	// Tests: none
 	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
 		return function _resolve (object) {
@@ -211,7 +211,7 @@ define(function () {
 		};
 	}
 
-    // Tests: full
+    // Tests: none
 	function PropertyPath (path,separator) {
 		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(resolve);
 		return function _propertypath (object) {
@@ -233,7 +233,7 @@ define(function () {
 		};
 	}
 
-	// Tests: full
+	// Tests: none
 	function transform (name,transformer,extractor) {
 		var resolver = resolve(name);
 		extractor = extractor || resolver;
@@ -270,7 +270,7 @@ define(function () {
 		parallel: parallel,
 		curry: curry,
 		suspend: suspend,
-		Identity: Identity,
+		identity: identity,
 		type: type,
 		property: property,
 		method: method,
@@ -287,17 +287,17 @@ define(function () {
 	// Reduction functions
 	//
 
-	// Tests: full
+	// Tests: none
 	var plus = extend({unit:0,label:'sum'},function _plus (acc,value) {
 		return acc + value;
 	});
 
-	// Tests: full
+	// Tests: none
 	var times = extend({unit:1,label:'product'},function _times (acc,value) {
 		return acc * value;
 	});
 	
-	// Tests: full
+	// Tests: none
 	var count = function _count (predicate) {
 		predicate = predicate || AllPredicate;
 		return extend({unit:0,label:'count'}, function __count (acc,value) {
@@ -305,7 +305,7 @@ define(function () {
 		});
 	};
 	
-	// Tests: full
+	// Tests: none
 	var withmethod = function _withmethod (name) {
 		var fn = method(name);
 		return function __withmethod (acc,value) {
@@ -313,7 +313,7 @@ define(function () {
 		};
 	};
 	
-	// Tests: full
+	// Tests: none
 	var push = function (acc,value) {
 		acc.push(value);
 		return acc;
@@ -576,7 +576,7 @@ define(function () {
 			acc = acc || null;
 			return function __aggregate () {
 				var extractor = ( arguments.length > 1 ) ? pipe.apply(null,arguments) : arguments[0];
-				return this.map(extractor || Identity).reduce(combiner,acc);
+				return this.map(extractor || identity).reduce(combiner,acc);
 			};
 		},
 		
@@ -977,7 +977,7 @@ define(function () {
 	// Object Predicates
 
 	function ObjectIdentityPredicate (object) {
-		return FunctionValuePredicate(Identity,object);
+		return FunctionValuePredicate(identity,object);
 	}
 
 	function TypePredicate (test) {
@@ -1159,7 +1159,7 @@ define(function () {
 		};
 	}
 
-	var ValueOrdering = FunctionOrdering(Identity);
+	var ValueOrdering = FunctionOrdering(identity);
 
 	function PredicateOrdering () {
 		var predicates = Set.fromArguments(arguments);
