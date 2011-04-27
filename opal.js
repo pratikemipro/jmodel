@@ -113,16 +113,6 @@ define(function () {
 	
 	var suspend = curry;
 
-	// Tests: full
-	function nth (index) {
-		return function () {
-			return arguments[index];
-		};
-	}
-	
-	var first	= nth(0),
-		second	= nth(1);
-
 
 	//
 	// Object functions
@@ -286,9 +276,6 @@ define(function () {
 		parallel: parallel,
 		curry: curry,
 		suspend: suspend,
-		nth: nth,
-		first: first,
-		second: second,
 		Identity: Identity,
 		type: type,
 		property: property,
