@@ -323,7 +323,7 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
-	test('Set creation', function () {
+	test('set', function () {
 		
 		equals( opal.set(['red','green','blue']).count(), 3, "creation from array" );
 		equals( opal.set('red','green','blue').count(), 3, "creation from arguments" );
