@@ -190,7 +190,7 @@ define(function () {
 	}
 	
     // Tests: full
-	function Method (name) {
+	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
@@ -207,7 +207,7 @@ define(function () {
 		return function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
-			return ( typeof object[name] === 'function' ) ? Method(name).apply(null,args2) : property(name).apply(null,args2);
+			return ( typeof object[name] === 'function' ) ? method(name).apply(null,args2) : property(name).apply(null,args2);
 		};
 	}
 
@@ -273,7 +273,7 @@ define(function () {
 		Identity: Identity,
 		type: type,
 		property: property,
-		Method: Method,
+		method: method,
 		resolve: resolve,
 		PropertyPath: PropertyPath,
 		PropertySet: PropertySet,
@@ -307,9 +307,9 @@ define(function () {
 	
 	// Tests: full
 	var withmethod = function _withmethod (name) {
-		var method = Method(name);
+		var fn = method(name);
 		return function __withmethod (acc,value) {
-			return method(acc,value);
+			return fn(acc,value);
 		};
 	};
 	
@@ -411,7 +411,7 @@ define(function () {
 			this.__members = partition[false] ? partition[false].get() : [];
 			this.length = this.__members.length;
 			if ( this.__index ) {
-				partition[true].reduce(Method('remove'),this.__index);
+				partition[true].reduce(method('remove'),this.__index);
 			}
 			return partition[true] || new this.constructor();
 		},
@@ -422,7 +422,7 @@ define(function () {
 		},
 		
 		concat : function _concat (second) {
-			return second && second.reduce ? second.reduce(Method('add'),this) : this;
+			return second && second.reduce ? second.reduce(method('add'),this) : this;
 		},
 		
 		/* Pure methods */
@@ -488,7 +488,7 @@ define(function () {
 		},
 		
 		each: function _each () {
-			function makeCallback (obj) { return ( typeof obj === 'string' ) ? Method(obj) : obj; }
+			function makeCallback (obj) { return ( typeof obj === 'string' ) ? method(obj) : obj; }
 			var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
 							: pipe.apply(null,Set.fromArguments(arguments).map(makeCallback).get());
 			if ( this.__members.forEach ) {
@@ -598,13 +598,13 @@ define(function () {
 		},
 		
 		of: function _of (cons) {
-			return this.reduce(Method('add'), new TypedSet(cons));
+			return this.reduce(method('add'), new TypedSet(cons));
 		},
 		
 		jQuery: function _jQuery () {
 			return jQuery( this
 							.map(function __jQuery (obj) { return obj.jquery ? obj.get() : obj; })
-								.reduce(Method('concat'), new this.constructor())
+								.reduce(method('concat'), new this.constructor())
 									.get() );
 		},
 		
@@ -676,18 +676,18 @@ define(function () {
 	function zip (first,second,zipper) {
 		first = ! (first instanceof Set || first instanceof List) ? list(first) : first;
 		second = second.shift ? second : second.get();
-		zipper = typeof zipper == 'string' ? Method(zipper) : zipper;
+		zipper = typeof zipper == 'string' ? method(zipper) : zipper;
 		return first.map(function _zip (obj) {
 			return zipper(obj,second.shift());
 		});
 	}
 
 	function union () {
-		return Set.fromArguments(arguments).reduce(Method('concat'),new Set());
+		return Set.fromArguments(arguments).reduce(method('concat'),new Set());
 	}
 
 	function intersection () {
-		return Set.fromArguments(arguments).map(MembershipPredicate).reduce(Method('filter'),arguments[0].copy());
+		return Set.fromArguments(arguments).map(MembershipPredicate).reduce(method('filter'),arguments[0].copy());
 	}
 
 	function difference (first,second) {
@@ -713,7 +713,7 @@ define(function () {
 	    }
 		this.__constructor = this.__constructor || constructor;
 		Set.apply(this,[]);
-		Set.fromArray(Array.prototype.slice.call(arguments,1)).reduce(Method('add'),this);
+		Set.fromArray(Array.prototype.slice.call(arguments,1)).reduce(method('add'),this);
 		return this;
 	}
 	
@@ -893,7 +893,7 @@ define(function () {
 		constructor: UniqueIndex,
 	
 		build: function _build () {
-			this.set.reduce(Method('add'),this);
+			this.set.reduce(method('add'),this);
 		},
 
 		add: function _add (object) {
@@ -1115,7 +1115,7 @@ define(function () {
 
 	function CardinalityPredicate (predicate) {
 		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
-		return pipe(Method('count'),predicate);
+		return pipe(method('count'),predicate);
 	}
 	
 	var empty = CardinalityPredicate(0);

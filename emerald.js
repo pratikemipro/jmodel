@@ -47,7 +47,7 @@ define(['jmodel/opal'],function (opal) {
 	EventRegistry.prototype = extend({
 		
 		register: function _register () {
-			return Set.fromArguments(arguments).reduce(Method('add',this),this);
+			return Set.fromArguments(arguments).reduce(method('add',this),this);
 		},
 		
 		create: function _create () {
@@ -835,11 +835,11 @@ define(['jmodel/opal'],function (opal) {
 	em.ObservableTypedSet = ObservableTypedSet;
 	
 	em.plugin.set.asObservable = function () {
-		return this.reduce(Method('add'),new ObservableSet());
+		return this.reduce(method('add'),new ObservableSet());
 	};
 	
 	em.plugin.typedset.asObservable = function () {
-		return this.reduce(Method('add'),new ObservableTypedSet(this.__constructor));
+		return this.reduce(method('add'),new ObservableTypedSet(this.__constructor));
 	};
 	
 	
