@@ -247,8 +247,8 @@ jQuery.fn.views = function (views) {
 
 jQuery.fn.domainSelect = function (binding) {
 
-	binding.value = (typeof binding.value == 'string') ? jModel.Method(binding.value) : binding.value;
-	binding.label = (typeof binding.label == 'string') ? jModel.Method(binding.label) : binding.label;
+	binding.value = (typeof binding.value == 'string') ? jModel.method(binding.value) : binding.value;
+	binding.label = (typeof binding.label == 'string') ? jModel.method(binding.label) : binding.label;
 
 	return this.each(function (index,element) {
 

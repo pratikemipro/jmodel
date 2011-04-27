@@ -402,7 +402,7 @@
 		        log().startGroup('DomainObjectCollection');
 		    }
 			if ( _.Not(_.EmptySetPredicate)(this) ) {
-				log().debug('Objects ('+this.count()+'):  '+this.format(_.listing(_.Method('name'))));
+				log().debug('Objects ('+this.count()+'):  '+this.format(_.listing(_.method('name'))));
 			}
 			if ( showSubscribers ) {
 			    log().startGroup('events');

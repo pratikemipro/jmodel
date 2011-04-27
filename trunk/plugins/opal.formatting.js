@@ -22,7 +22,7 @@
 	}
 	
 	function Join (separator) {
-		return opal.Method('join',separator);
+		return opal.method('join',separator);
 	}
 	
 	function Concatenate () {
@@ -40,7 +40,7 @@
 	function Replace (find,replace) {
 		replace = arguments.length == 2 ? replace
 					: opal.pipe.apply(null,Array.prototype.slice.call(arguments,1));
-		return opal.Method('replace',find,replace);
+		return opal.method('replace',find,replace);
 	}
 	
 	function Surround (affix) {
@@ -48,11 +48,11 @@
 	}
 	
 	function Decimal (places) {
-		return opal.Method('toFixed',places);
+		return opal.method('toFixed',places);
 	}
 	
 	function Locale () {
-		return opal.Method('toLocaleString');
+		return opal.method('toLocaleString');
 	}
 	
 	function Percentage () {

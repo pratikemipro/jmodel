@@ -110,7 +110,7 @@ var jModel = (function () {
 		    var context = this;
 		    this.entities.each(function (entitytype) {
 	            Set.fromArray(entitytype.constructor.prototype.hasMany)
-					.reduce(Method('add',context,entitytype),context.constraints);
+					.reduce(method('add',context,entitytype),context.constraints);
 		    });
 		} */
 		

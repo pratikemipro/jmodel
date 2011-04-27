@@ -56,7 +56,7 @@ var jModel = function () {
 	
 	external.extend({
 		
-		method: 	Method,
+		method: 	method,
 		plus: 		plus,
 		times: 		times,
 		
@@ -256,7 +256,7 @@ var jModel = function () {
 		    var context = this;
 		    this.entities.each(function (entitytype) {
 	            Set.fromArray(entitytype.constructor.prototype.hasMany)
-					.reduce(Method('add',context,entitytype),context.constraints);
+					.reduce(method('add',context,entitytype),context.constraints);
 		    });
 		}
 		
@@ -569,12 +569,12 @@ var jModel = function () {
 								
 		if ( specification.objects ) {
 		    specification.objects = specification.objects instanceof Array ? Set.fromArray(specification.objects) : specification.objects;
-		    specification.objects.reduce(Method('add'),this);
+		    specification.objects.reduce(method('add'),this);
 		}						
 								
 
 		if ( specification.primaryKey ) {
-			this.index(Method('primaryKeyValue'));
+			this.index(method('primaryKeyValue'));
 		} 
 		this.sorted = false;
 		
@@ -893,8 +893,8 @@ var jModel = function () {
 		
 		deleted.debug = function _debug () {
 			if ( Not(EmptySetPredicate)(deleted) ) {
-				console.log('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
-//				log().debug('Deleted:  '+deleted.format(listing(Method('primaryKeyValue'))));
+				console.log('Deleted:  '+deleted.format(listing(method('primaryKeyValue'))));
+//				log().debug('Deleted:  '+deleted.format(listing(method('primaryKeyValue'))));
 			}
 		};
 		
@@ -945,7 +945,7 @@ var jModel = function () {
 	
 /*	function Grouping (parent,extractor) {
 		this.parent		= parent;
-		this.extractor	= ( typeof extractor == 'string' ) ? Method(extractor) : extractor;
+		this.extractor	= ( typeof extractor == 'string' ) ? method(extractor) : extractor;
 		this.__delegate	= set().index(resolve('value')).delegateFor(this);
 		this.build();
 	}
@@ -955,7 +955,7 @@ var jModel = function () {
 		constructor: Grouping,
 		
 		build: function _build () {
-			return this.parent.reduce(Method('add'),this);
+			return this.parent.reduce(method('add'),this);
 		},
 		
 		add: function _add (object) {
@@ -1018,7 +1018,7 @@ var jModel = function () {
 	// Primary Key Identity
 	
 	var IdentityPredicate = external.id = function _id (id) {
-		return FunctionValuePredicate(Method('primaryKeyValue'),id);
+		return FunctionValuePredicate(method('primaryKeyValue'),id);
 	};
 
 	// Example
