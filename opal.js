@@ -53,7 +53,7 @@ define(function () {
 	
 	// Tests: none
 	Function.prototype.eq = function (value) {
-		return this.then(EqualityPredicate(value));
+		return this.then(eq(value));
 	};
 	
 	// Tests: none
@@ -458,7 +458,7 @@ define(function () {
 	}
 	
 	// Tests: none
-	var EqualityPredicate         = ComparisonPredicate(function (a,b) { return a===b; }),
+	var eq						  = ComparisonPredicate(function (a,b) { return a===b; }),
 		InequalityPredicate		  = ComparisonPredicate(function (a,b) { return a!==b; }),
 		LessThanPredicate         = ComparisonPredicate(function (a,b) { return a<b; }),
 		GreaterThanPredicate      = ComparisonPredicate(function (a,b) { return a>b; }),
@@ -489,8 +489,7 @@ define(function () {
 	opal.extend({
 		ComparisonPredicate: 			ComparisonPredicate,
 		compare: 						ComparisonPredicate,
-		EqualityPredicate: 				EqualityPredicate,
-		eq:								EqualityPredicate,
+		eq:								eq,
 		InequalityPredicate:			InequalityPredicate,
 		neq:							InequalityPredicate,
 		LessThanPredicate: 				LessThanPredicate,
