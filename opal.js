@@ -433,7 +433,7 @@ define(function () {
 	// Tests: none
 	function compare (operator) {
 		return function _compare (value) {
-			return function __compare2 (candidate) {
+			return function __compare (candidate) {
 				return operator(candidate,value);
 			};
 		};
