@@ -67,7 +67,7 @@ var jModel = function () {
 		predicate: 	predicate,
 		
 		is: 		is,
-		istrue: 	TruePredicate,
+		istrue: 	istrue,
 		
 		test: 		FunctionPredicate,
 		type: 		is_of_type,
