@@ -129,8 +129,16 @@ define(function () {
 	}
 	
 	//
-	// Extend Function.prototype with predicate functions
+	// Extend Function.prototype with composition and predicate functions
 	//
+	
+	// Tests: none
+	Function.prototype.then = function (fn2) {
+		var fn1 = this;
+		return function () {
+			return fn2(fn1.apply(null,arguments)); 
+		};
+	};
 
 	// Tests: none
 	Function.prototype.is = function (predicate) {
