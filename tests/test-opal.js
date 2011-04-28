@@ -301,6 +301,28 @@ define(['../opal.js'], function (opal) {
 	
 	});
 	
+	test('is_of_type', function () {
+	
+		equals( opal.is_of_type('number')(3), true, 'works for numbers when true');
+		equals( opal.is_of_type('number')('abc'), false, 'works for numbers when false');
+		
+		equals( opal.is_of_type('string')('abc'), true, 'works for strings when true');
+		equals( opal.is_of_type('string')(3), false, 'works for strings when false');
+		
+		equals( opal.is_of_type('boolean')(true), true, 'works for booleans when true');
+		equals( opal.is_of_type('boolean')('abc'), false, 'works for booleans when false');
+		
+		equals( opal.is_of_type('object')({a:1}), true, 'works for objects when true');
+		equals( opal.is_of_type('object')('abc'), false, 'works for objects when false');
+		
+		equals( opal.is_of_type('function')(function () {}), true, 'works for functions when true');
+		equals( opal.is_of_type('function')('abc'), false, 'works for functions when false');
+		
+		equals( opal.is_of_type('undefined')(), true, 'works for undefined when true');
+		equals( opal.is_of_type('undefined')('abc'), false, 'works for undefined when false');
+				
+	});
+	
 	test('isa', function () {
 		
 		var Mammal 	= function () {},
