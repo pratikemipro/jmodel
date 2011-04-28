@@ -374,13 +374,6 @@ define(function () {
 	}
 
 	// Tests: none
-	function FunctionPredicate (fn) {
-		return function _functionpredicate (candidate) {
-			return fn(candidate);
-		};
-	}
-
-	// Tests: none
 	function FunctionValuePredicate (fn,value) {
 		return fn.eq(value);
 	}
@@ -402,8 +395,6 @@ define(function () {
 		AllPredicate: 			AllPredicate,
 		NonePredicate: 			NonePredicate,
 		TruePredicate: 			TruePredicate,
-		FunctionPredicate: 		FunctionPredicate,
-		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
 		isnull:					isnull,
 		has: 					has
