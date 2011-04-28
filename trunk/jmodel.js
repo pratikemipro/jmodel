@@ -1017,7 +1017,7 @@ var jModel = function () {
 	// Primary Key Identity
 	
 	var IdentityPredicate = external.id = function _id (id) {
-		return FunctionValuePredicate(method('primaryKeyValue'),id);
+		return method('primaryKeyValue').eq(id);
 	};
 
 	// Example

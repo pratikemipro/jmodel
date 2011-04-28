@@ -374,11 +374,6 @@ define(function () {
 	}
 
 	// Tests: none
-	function FunctionValuePredicate (fn,value) {
-		return fn.eq(value);
-	}
-
-	// Tests: none
     function isnull (candidate) {
         return candidate === null;
     }
@@ -395,7 +390,6 @@ define(function () {
 		AllPredicate: 			AllPredicate,
 		NonePredicate: 			NonePredicate,
 		TruePredicate: 			TruePredicate,
-		FunctionValuePredicate: FunctionValuePredicate,
 		isnull:					isnull,
 		has: 					has
 	});
@@ -407,12 +401,12 @@ define(function () {
 
 	// Tests: none
 	function ObjectIdentityPredicate (object) {
-		return FunctionValuePredicate(identity,object);
+		return identity.eq(object);
 	}
 
 	// Tests: none
 	function TypePredicate (test) {
-		return FunctionValuePredicate(type,test);
+		return type.eq(test);
 	}
 
 	// Tests: none
