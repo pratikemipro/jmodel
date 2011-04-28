@@ -593,10 +593,9 @@ define(function () {
 		},
 		
 		removeProperties: function _remove () {
-			var that = this;
-			Set.fromArguments(arguments).each(function __remove (key) {
-				delete that[key];
-			});
+			for ( var i=0; i<arguments.length; i++ ) {
+				delete this[arguments[i]];
+			}
 			return this;
 		},
 		
