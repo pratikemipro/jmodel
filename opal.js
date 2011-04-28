@@ -31,7 +31,7 @@ define(function () {
 		};
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.curry = function () {
 		var args = Array.prototype.slice.call(arguments),
 			fn   = this;
