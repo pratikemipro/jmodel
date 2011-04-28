@@ -42,21 +42,14 @@ define(function () {
 	//
 
     // Tests: full
-	function pipe () {
-		var fns = Array.prototype.slice.call(arguments);
-		return fns.length == 1 ? fns[0] : function _pipe (x) {
-			for (var i in fns) {
-				if ( fns.hasOwnProperty(i) ) {
-					x = fns[i](x);
-				}	
-			}
-			return x;
-		};
+	function pipe (fn) {
+		return    arguments.length <= 1 ? ( fn || identity )
+				: fn.then(pipe.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
-	
+
 	// Tests: full
-	function compose () {
-		return arguments.length == 1 ? arguments[0]
+	function compose (fn) {
+		return	  arguments.length <= 1 ? ( fn || identity )
 				: pipe.apply(null,Array.prototype.slice.call(arguments).reverse());
 	}
 	
