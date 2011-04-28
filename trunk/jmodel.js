@@ -74,7 +74,6 @@ var jModel = function () {
 		isa: 		InstancePredicate,
 		isan: 		InstancePredicate,
 		property: 	PropertyPredicate,
-		propset: 	PropertySetPredicate,
 		
 		member: 	MembershipPredicate,
 		

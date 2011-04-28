@@ -223,15 +223,6 @@ define(function () {
 		};
 	}
 
-	// Tests: none
-	function PropertySet (paths,separator) {
-		paths = ( paths instanceof Set ) ? paths : Set.fromArray(paths);
-		paths = paths.map(function _propertyset (path) { return path(path,separator); });
-		return function __propertyset (object) {
-			return paths.map(applyto(object));
-		};
-	}
-
 	// Tests: full
 	function transform (name,transformer,extractor) {
 		var resolver = resolve(name);
@@ -268,7 +259,6 @@ define(function () {
 		method: method,
 		resolve: resolve,
 		path: path,
-		PropertySet: PropertySet,
 		transform: transform,
 		aspect: aspect
 	});
@@ -447,14 +437,6 @@ define(function () {
 		};
 	}
 
-	// Tests: none
-	function PropertySetPredicate (paths,predicate) {
-		predicate = ( typeof predicate != 'function' ) ? EqualityPredicate(predicate) : predicate;
-		return function _propertysetpredicate (candidate) {
-			return predicate(PropertySet(paths)(candidate));
-		};
-	}
-
 	opal.extend({
 		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
 		is: 						ObjectIdentityPredicate,
@@ -462,9 +444,7 @@ define(function () {
 		is_of_type: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,
 		isa: 						InstancePredicate,
-		isan: 						InstancePredicate,
-		PropertySetPredicate: 		PropertySetPredicate,
-		propset: 					PropertySetPredicate
+		isan: 						InstancePredicate
 	});
 	
 	
