@@ -958,7 +958,7 @@ define(function () {
 	}
 
 	function FunctionValuePredicate (fn,value) {
-		return pipe(fn,EqualityPredicate(value));
+		return fn.eq(value);
 	}
 
     function NullPredicate (candidate) {
