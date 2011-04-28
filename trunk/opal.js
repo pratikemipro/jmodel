@@ -400,7 +400,7 @@ define(function () {
 	//
 
 	// Tests: none
-	function ObjectIdentityPredicate (object) {
+	function is (object) {
 		return identity.eq(object);
 	}
 
@@ -419,8 +419,7 @@ define(function () {
 	}
 
 	opal.extend({
-		ObjectIdentityPredicate: 	ObjectIdentityPredicate,
-		is: 						ObjectIdentityPredicate,
+		is: 						is,
 		TypePredicate: 				TypePredicate,
 		is_of_type: 				TypePredicate,
 		InstancePredicate: 			InstancePredicate,

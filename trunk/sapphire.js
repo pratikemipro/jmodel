@@ -130,7 +130,7 @@ define(['jmodel/opal'], function (opal) {
 		member: function _member (object) {
 			return    this.__index ? this.__index.member(object)
 					: this.__members.indexOf ? this.__members.indexOf(object) > -1
-					: typeof this.first(ObjectIdentityPredicate(object)) !== 'undefined'
+					: typeof this.first(is(object)) !== 'undefined'
 		},
 		
 		select : function _select (selector) {
@@ -217,8 +217,8 @@ define(['jmodel/opal'], function (opal) {
 			return	  parameter === ':empty' ? empty
 					: parameter instanceof RegExp ? regex(parameter)
 					: typeof parameter === 'function' ? parameter
-					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},ObjectIdentityPredicate(this.get(parameter)))
-					: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? extend({unique:true},ObjectIdentityPredicate(parameter))
+					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},is(this.get(parameter)))
+					: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? extend({unique:true},is(parameter))
 					: AllPredicate
 		},
 		
