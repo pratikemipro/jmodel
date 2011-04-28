@@ -58,7 +58,7 @@ define(function () {
 	
 	// Tests: none
 	Function.prototype.neq = function (value) {
-		return this.then(InequalityPredicate(value));
+		return this.then(neq(value));
 	};
 	
 	// Tests: none
@@ -459,7 +459,7 @@ define(function () {
 	
 	// Tests: none
 	var eq						  = ComparisonPredicate(function (a,b) { return a===b; }),
-		InequalityPredicate		  = ComparisonPredicate(function (a,b) { return a!==b; }),
+		neq						  = ComparisonPredicate(function (a,b) { return a!==b; }),
 		LessThanPredicate         = ComparisonPredicate(function (a,b) { return a<b; }),
 		GreaterThanPredicate      = ComparisonPredicate(function (a,b) { return a>b; }),
 		LessThanEqualPredicate    = ComparisonPredicate(function (a,b) { return a<=b; }),
@@ -490,8 +490,7 @@ define(function () {
 		ComparisonPredicate: 			ComparisonPredicate,
 		compare: 						ComparisonPredicate,
 		eq:								eq,
-		InequalityPredicate:			InequalityPredicate,
-		neq:							InequalityPredicate,
+		neq:							neq,
 		LessThanPredicate: 				LessThanPredicate,
 		lt:								LessThanPredicate,
 		GreaterThanPredicate: 			GreaterThanPredicate,
