@@ -404,7 +404,7 @@ define(function () {
 		return identity.eq(object);
 	}
 
-	// Tests: none
+	// Tests: full
 	function is_of_type (test) {
 		return type.eq(test);
 	}
