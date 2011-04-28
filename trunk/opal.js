@@ -479,22 +479,22 @@ define(function (a,b,c,undefined) {
 	//
 	
 	// Tests: none
-	function or () {
-		var predicates = Array.prototype.slice.call(arguments);
+	function or (predicate) {
+		var predicates = arguments;
 		return function (candidate) {
 			return    predicates.length === 0 ? false
-					: predicates[0](candidate) ? true
-					: or.apply(null,predicates.slice(1))(candidate);
+					: predicate(candidate) ? true
+					: or.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
 		};
 	}
 	
 	// Tests: none
-	function and () {
-		var predicates = Array.prototype.slice.call(arguments);
+	function and (predicate) {
+		var predicates = arguments;
 		return function (candidate) {
 			return    predicates.length === 0 ? true
-					: !predicates[0](candidate) ? false
-					: and.apply(null,predicates.slice(1))(candidate);
+					: !predicate(candidate) ? false
+					: and.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
 		};
 	}
 	
