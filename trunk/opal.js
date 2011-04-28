@@ -447,7 +447,7 @@ define(function () {
 		lte	= compare(function (a,b) { return a<=b; }),
 		gte = compare(function (a,b) { return a>=b; });
 
-	// Tests: none
+	// Tests: full
 	function between (lower,higher) {
 		return function _between (candidate) {
 			return lower <= candidate && candidate <= higher;
