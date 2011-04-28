@@ -13,29 +13,10 @@
 
 define(function () {
 
-	var opal = {opal_version:'0.9.0'};
-	
-	function assert (condition,message) {
-		if ( console && console.assert ) {
-			console.assert(condition,message);
-		}	
-		else if (!condition) {
-			throw 'Opal exception: '+exception;
-		}
-	}
-
-    // Tests: none
-	function extend (object,target) {
-		target = target || this;
-		for ( var i in object ) {
-//			if ( object.hasOwnProperty(i) ) {
-				target[i] = object[i];     
-//			}
-		}
-		return target;
-	}
-	opal.extend = extend;
-
+	var opal = {
+		opal_version: '0.10.0',
+		extend: extend
+	};
 
 	//
 	// Function composition
@@ -1242,6 +1223,26 @@ define(function () {
 	// ------------------------------------------------------------------------
 	// 														  Utility functions
 	// ------------------------------------------------------------------------
+
+	function assert (condition,message) {
+		if ( console && console.assert ) {
+			console.assert(condition,message);
+		}	
+		else if (!condition) {
+			throw 'Opal exception: '+exception;
+		}
+	}
+
+    // Tests: none
+	function extend (object,target) {
+		target = target || this;
+		for ( var i in object ) {
+//			if ( object.hasOwnProperty(i) ) {
+				target[i] = object[i];     
+//			}
+		}
+		return target;
+	}
 	
 	function delegateTo (context,methodName) {
 		return function () {
