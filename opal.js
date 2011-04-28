@@ -180,8 +180,11 @@ define(function () {
 				object[property] = value;
 				return object;
 			}
-			else {
+			else if ( object[property] ) {
 				return object[property];
+			}
+			else {
+				return undefined
 			}
 		};
 	}
@@ -195,7 +198,7 @@ define(function () {
 				object  = args1.shift(),
 				args2	= args.concat(args1);
 			return ( object[name] && typeof object[name] === 'function' ) ?
-						object[name].apply(object,args2) : false;
+						object[name].apply(object,args2) : undefined;
 		};
 	}
 	
@@ -206,21 +209,21 @@ define(function () {
 		return function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
-			return ( typeof object[name] === 'function' ) ? method(name).apply(null,args2) : property(name).apply(null,args2);
+			return    typeof object[name] === 'undefined' ? undefined
+					: typeof object[name] === 'function' ? method(name).apply(null,args2)
+					: property(name).apply(null,args2);
 		};
 	}
 
     // Tests: full
-	function path (path,separator) {
-		var resolvers = Set.fromArray( typeof path == 'string' ? path.split(separator||'.') : path ).map(resolve);
+	function path (elements,separator) {
+		var elements = typeof elements === 'string' ? elements.split(separator||'.') : ( elements || [] );
 		return function _path (object) {
-			try {
-				return resolvers.reduce(function (object,resolver) { return resolver(object); },object);
-			}
-			catch (error) {
-				return undefined;
-			}
-		};
+			return    typeof object === 'undefined' ? undefined
+					: elements.length === 0 ? undefined
+					: elements.length === 1 ? resolve(elements[0])(object)
+					: path.apply(null,elements.slice(1))(resolve(elements[0])(object));
+		}
 	}
 
 	// Tests: full
