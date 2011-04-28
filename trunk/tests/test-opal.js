@@ -171,11 +171,11 @@ define(['../opal.js'], function (opal) {
 		
 		var adder = new Adder();
 		
-		equals( opal.method('unit')(adder),    0,     'Method works without any arguments');
-		equals( opal.method('test')(adder),    false, 'Method returns false if method does not exist.' )
-		equals( opal.method('add',2,3)(adder), 5,     'Method works with arguments at creation time');
-		equals( opal.method('add')(adder,2,3), 5,     'Method works with arguments at invocation time');
-		equals( opal.method('add',2)(adder,3), 5,     'Method works with mixed arguments');
+		equals( opal.method('unit')(adder),    0,     	  'Method works without any arguments');
+		equals( opal.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' )
+		equals( opal.method('add',2,3)(adder), 5,     	  'Method works with arguments at creation time');
+		equals( opal.method('add')(adder,2,3), 5,     	  'Method works with arguments at invocation time');
+		equals( opal.method('add',2)(adder,3), 5,     	  'Method works with mixed arguments');
 		
 	});
 	
