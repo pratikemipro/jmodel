@@ -71,8 +71,8 @@ var jModel = function () {
 		
 		test: 		FunctionPredicate,
 		type: 		is_of_type,
-		isa: 		InstancePredicate,
-		isan: 		InstancePredicate,
+		isa: 		isa,
+		isan: 		isa,
 		property: 	PropertyPredicate,
 		
 		member: 	MembershipPredicate,
@@ -339,7 +339,7 @@ var jModel = function () {
 
 		this.objects =	this.collection({
 		                    entitytype:     this,
-							predicate: 		InstancePredicate(this.constructor),
+							predicate: 		isa(this.constructor),
 							ordering: 		this.options.ordering,
 							description: 	this.name,
 							primaryKey: 	this.options.primaryKey

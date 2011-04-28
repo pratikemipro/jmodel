@@ -410,7 +410,7 @@ define(function () {
 	}
 
 	// Tests: none
-	function InstancePredicate (constructor) {
+	function isa (constructor) {
 		// NOTE: Put this next line into jModel
 		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
 		return function _instancepredicate (candidate) {
@@ -419,11 +419,10 @@ define(function () {
 	}
 
 	opal.extend({
-		is: 						is,
-		is_of_type: 				is_of_type,
-		InstancePredicate: 			InstancePredicate,
-		isa: 						InstancePredicate,
-		isan: 						InstancePredicate
+		is: 		is,
+		is_of_type: is_of_type,
+		isa: 		isa,
+		isan: 		isa
 	});
 	
 	
