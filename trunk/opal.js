@@ -172,20 +172,14 @@ define(function () {
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
 	function property (property,generic) {
+		function set (object,property,value) { object[property] = value; return object; }
 		return function _property (object,specific) {
 			var value =   typeof specific !== 'undefined' ? specific
 						: typeof generic  !== 'undefined' ? generic
 						: undefined;
-			if ( typeof value !== 'undefined' && typeof object[property] !== 'undefined' ) {
-				object[property] = value;
-				return object;
-			}
-			else if ( object[property] ) {
-				return object[property];
-			}
-			else {
-				return undefined
-			}
+			return    typeof object[property] === 'undefined' ? undefined
+					: typeof value !== 'undefined' ? set(object,property,value)
+					: object[property];
 		};
 	}
 	
