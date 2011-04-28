@@ -1124,7 +1124,7 @@ define(function () {
 
 	function CardinalityPredicate (predicate) {
 		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
-		return pipe(method('count'),predicate);
+		return method('count').then(predicate);
 	}
 	
 	var empty = CardinalityPredicate(0);
