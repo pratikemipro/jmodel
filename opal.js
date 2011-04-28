@@ -141,53 +141,51 @@ define(function () {
 	};
 
 	// Tests: none
-	Function.prototype.is = function (predicate) {
-		return pipe(this,predicate);
-	};
+	Function.prototype.is = Function.prototype.then;
 	
 	// Tests: none
 	Function.prototype.eq = function (value) {
-		return pipe(this,EqualityPredicate(value));
+		return this.then(EqualityPredicate(value));
 	};
 	
 	// Tests: none
 	Function.prototype.neq = function (value) {
-		return pipe(this,InequalityPredicate(value));
+		return this.then(InequalityPredicate(value));
 	};
 	
 	// Tests: none
 	Function.prototype.lt = function (value) {
-		return pipe(this,LessThanPredicate(value));
+		return this.then(LessThanPredicate(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gt = function (value) {
-		return pipe(this,GreaterThanPredicate(value));
+		return this.then(GreaterThanPredicate(value));
 	};
 
 	// Tests: none
 	Function.prototype.lte = function (value) {
-		return pipe(this,LessThanEqualPredicate(value));
+		return this.then(LessThanEqualPredicate(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gte = function (value) {
-		return pipe(this,GreaterThanEqualPredicate(value));
+		return this.then(GreaterThanEqualPredicate(value));
 	};
 	
 	// Tests: none
 	Function.prototype.between = function (lower,higher) {
-		return pipe(this,BetweenPredicate(lower,higher));
+		return this.then(BetweenPredicate(lower,higher));
 	};
 	
 	// Tests: none
 	Function.prototype.matches = function (regex) {
-		return pipe(this,RegularExpressionPredicate(regex));
+		return this.then(RegularExpressionPredicate(regex));
 	}
 	
 	// Tests: none
 	Function.prototype.isnull = function () {
-		return pipe(this,NullPredicate);
+		return this.then(NullPredicate);
 	}
 
     // Tests: partial
