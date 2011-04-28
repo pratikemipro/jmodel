@@ -14,7 +14,7 @@
 define(function () {
 
 	var opal = {
-		opal_version: '0.12.0',
+		opal_version: '0.13.0',
 		extend: extend
 	};
 	
@@ -456,7 +456,7 @@ define(function () {
 
 	// Tests: none
 	function regex (expression) {
-		return function _regularexpressionpredicate (candidate) {
+		return function _regex (candidate) {
 			return expression.test(candidate);
 		};
 	}
