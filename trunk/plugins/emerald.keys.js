@@ -33,7 +33,7 @@ define(['jmodel/emerald'], function (emerald) {
 		}
 		
 		if ( arguments.length > 1 ) {
-			return emerald.Or.apply(null,emerald.List.fromArguments(arguments).map(key).get());
+			return emerald.or.apply(null,emerald.List.fromArguments(arguments).map(key).get());
 		}
 		else if ( identifier.test ) { // Regex
 			return function (event) {

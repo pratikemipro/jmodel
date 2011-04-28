@@ -287,7 +287,7 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
-	
+/*	
 	//
 	// Set construction
 	//
@@ -378,5 +378,7 @@ define(['../opal.js'], function (opal) {
 		equals(testSet.first(),'blue','sorting works');
 		
 	});
+*/
+
 
 });

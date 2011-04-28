@@ -1,15 +1,15 @@
 // ============================================================================
-//															 Opal jQuery plugin
+//														 Sapphire jQuery plugin
 // ============================================================================
 
-define(['jquery','jmodel/opal'], function (jQuery,opal) {
+define(['jquery','jmodel/sapphire'], function (jQuery,sapphire) {
 
 	if ( typeof jQuery != 'undefined' ) {
-		jQuery.fn.opal = function () {
-			return opal.Set.fromJQuery(this);
+		jQuery.fn.set = function () {
+			return sapphire.Set.fromJQuery(this);
 		};
 		if ( typeof _$ == 'undefined') {
-			_$ = opal.pipe(jQuery,opal.Set.fromJQuery);
+			_$ = sapphire.pipe(jQuery,sapphire.Set.fromJQuery);
 		}
 	}
 	

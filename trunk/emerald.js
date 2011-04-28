@@ -1,11 +1,11 @@
 /*
- *	Emerald Javascript Library v0.12.1
+ *	Emerald Javascript Library
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
- *	Requires opal.js
+ *	Requires sapphire.js
  *
  */
  
@@ -14,17 +14,17 @@
 //														Emerald Event Framework
 // ============================================================================
  
-define(['jmodel/opal'],function (opal) {
+define(['jmodel/sapphire'],function (sapphire) {
  
 	//
-	// Import OPAL
+	// Import Sapphire
 	//
  
-	for ( var i in opal ) {
-		eval('var '+i+' = opal.'+i);
+	for ( var i in sapphire ) {
+		eval('var '+i+' = sapphire.'+i);
 	}
  
-	var em		= extend({emerald_version:'0.12.2'},opal),
+	var em		= extend({emerald_version:'0.12.2'},sapphire),
 		_		= em;
  
  
@@ -143,7 +143,7 @@ define(['jmodel/opal'],function (opal) {
 		
 		where: function () {
 		    var context		= arguments[0].context   || this,
-		        predicate	= arguments[0].predicate || ( arguments.length > 1 ? And.apply(this,arguments) : arguments[0] );
+		        predicate	= arguments[0].predicate || ( arguments.length > 1 ? and.apply(this,arguments) : arguments[0] );
 			return this.derive(function (method) {
 				return function () {
 					return predicate.apply(context,arguments) ? method.apply(this,arguments) : true;

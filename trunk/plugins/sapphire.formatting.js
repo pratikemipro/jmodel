@@ -1,5 +1,5 @@
 /*
- *	Opal Formatting Plugin v0.1.1
+ *	Sapphire Formatting Plugin v0.1.1
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010 Richard Baker
@@ -22,7 +22,7 @@
 	}
 	
 	function Join (separator) {
-		return opal.method('join',separator);
+		return sapphire.method('join',separator);
 	}
 	
 	function Concatenate () {
@@ -39,20 +39,20 @@
 	
 	function Replace (find,replace) {
 		replace = arguments.length == 2 ? replace
-					: opal.pipe.apply(null,Array.prototype.slice.call(arguments,1));
-		return opal.method('replace',find,replace);
+					: sapphire.pipe.apply(null,Array.prototype.slice.call(arguments,1));
+		return sapphire.method('replace',find,replace);
 	}
 	
 	function Surround (affix) {
-		return opal.compose(Prepend(affix),Append(affix));
+		return sapphire.compose(Prepend(affix),Append(affix));
 	}
 	
 	function Decimal (places) {
-		return opal.method('toFixed',places);
+		return sapphire.method('toFixed',places);
 	}
 	
 	function Locale () {
-		return opal.method('toLocaleString');
+		return sapphire.method('toLocaleString');
 	}
 	
 	function Percentage () {
@@ -61,10 +61,10 @@
 	
 	function Currency (symbol,decimals) {
 		return function _currency (number) {
-			return opal.compose(	Prepend(number < 0 ? '-' : ''),
-						        	Prepend(symbol),
-        							Locale(),
-        							Decimal(decimals===false ? 0 : 2) 		)(Math.abs(number));
+			return sapphire.compose(	Prepend(number < 0 ? '-' : ''),
+						        		Prepend(symbol),
+        								Locale(),
+        								Decimal(decimals===false ? 0 : 2) 	)(Math.abs(number));
 		};
 	}
 	
@@ -91,7 +91,7 @@
 		};
 	}
 	
-	opal.extend({
+	sapphire.extend({
 		prepend: 	Prepend,
 		append: 	Append,
 		join: 		Join,
