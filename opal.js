@@ -68,7 +68,7 @@ define(function () {
 	
 	// Tests: none
 	Function.prototype.gt = function (value) {
-		return this.then(GreaterThanPredicate(value));
+		return this.then(gt(value));
 	};
 
 	// Tests: none
@@ -461,7 +461,7 @@ define(function () {
 	var eq						  = ComparisonPredicate(function (a,b) { return a===b; }),
 		neq						  = ComparisonPredicate(function (a,b) { return a!==b; }),
 		lt						  = ComparisonPredicate(function (a,b) { return a<b; }),
-		GreaterThanPredicate      = ComparisonPredicate(function (a,b) { return a>b; }),
+		gt						  = ComparisonPredicate(function (a,b) { return a>b; }),
 		LessThanEqualPredicate    = ComparisonPredicate(function (a,b) { return a<=b; }),
 		GreaterThanEqualPredicate = ComparisonPredicate(function (a,b) { return a>=b; });
 
@@ -492,8 +492,7 @@ define(function () {
 		eq:								eq,
 		neq:							neq,
 		lt:								lt,
-		GreaterThanPredicate: 			GreaterThanPredicate,
-		gt:								GreaterThanPredicate,
+		gt:								gt,
 		LessThanEqualPredicate: 		LessThanEqualPredicate,
 		lte:							LessThanEqualPredicate,
 		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
