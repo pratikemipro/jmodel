@@ -405,7 +405,7 @@ define(function () {
 	}
 
 	// Tests: none
-	function TypePredicate (test) {
+	function is_of_type (test) {
 		return type.eq(test);
 	}
 
@@ -420,8 +420,7 @@ define(function () {
 
 	opal.extend({
 		is: 						is,
-		TypePredicate: 				TypePredicate,
-		is_of_type: 				TypePredicate,
+		is_of_type: 				is_of_type,
 		InstancePredicate: 			InstancePredicate,
 		isa: 						InstancePredicate,
 		isan: 						InstancePredicate
