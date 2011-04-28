@@ -399,7 +399,7 @@ define(function () {
 	// Predicates: object
 	//
 
-	// Tests: none
+	// Tests: full
 	function is (object) {
 		return identity.eq(object);
 	}
@@ -409,7 +409,7 @@ define(function () {
 		return type.eq(test);
 	}
 
-	// Tests: none
+	// Tests: full
 	function isa (constructor) {
 		// NOTE: Put this next line into jModel
 		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
@@ -439,7 +439,7 @@ define(function () {
 		};
 	}
 	
-	// Tests: none
+	// Tests: full
 	var eq	= compare(function (a,b) { return a===b; }),
 		neq	= compare(function (a,b) { return a!==b; }),
 		lt	= compare(function (a,b) { return a<b; }),
