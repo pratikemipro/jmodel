@@ -391,7 +391,7 @@ define(function () {
     }
 
 	// Tests: none
-	function ExistentialPredicate () {
+	function has () {
 		var resolver = resolve.apply(null,arguments);
 		return function (candidate) {
 			return Boolean(resolver(candidate));
@@ -406,7 +406,7 @@ define(function () {
 		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
 		isnull:					isnull,
-		has: 					ExistentialPredicate
+		has: 					has
 	});
 	
 	
