@@ -2,7 +2,7 @@
  *	jModel Javascript Library v2.0.0
  *	http://code.google.com/p/jmodel/
  *
- *	Copyright (c) 2009-2010 Richard Baker
+ *	Copyright (c) 2009-2011 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
  *	Requires opal.js and emerald.js
