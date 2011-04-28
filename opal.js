@@ -406,6 +406,7 @@ define(function () {
 		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
 		NullPredicate:          NullPredicate,
+		isnull:					NullPredicate,
 		has: 					ExistentialPredicate
 	});
 	
@@ -449,21 +450,21 @@ define(function () {
 	//
 
 	// Tests: none
-	function ComparisonPredicate (operator) {
-		return function _comparisonpredicate (value) {
-			return function __comparisonpredicate (candidate) {
+	function compare (operator) {
+		return function _compare (value) {
+			return function __compare2 (candidate) {
 				return operator(candidate,value);
 			};
 		};
 	}
 	
 	// Tests: none
-	var eq	= ComparisonPredicate(function (a,b) { return a===b; }),
-		neq	= ComparisonPredicate(function (a,b) { return a!==b; }),
-		lt	= ComparisonPredicate(function (a,b) { return a<b; }),
-		gt	= ComparisonPredicate(function (a,b) { return a>b; }),
-		lte	= ComparisonPredicate(function (a,b) { return a<=b; }),
-		gte = ComparisonPredicate(function (a,b) { return a>=b; });
+	var eq	= compare(function (a,b) { return a===b; }),
+		neq	= compare(function (a,b) { return a!==b; }),
+		lt	= compare(function (a,b) { return a<b; }),
+		gt	= compare(function (a,b) { return a>b; }),
+		lte	= compare(function (a,b) { return a<=b; }),
+		gte = compare(function (a,b) { return a>=b; });
 
 	// Tests: none
 	function between (lower,higher) {
@@ -479,25 +480,16 @@ define(function () {
 		};
 	}
 	
-	// Tests: none
-	function FieldPredicate (field,predicate) {
-		return function _fieldpredicate (candidate) { 
-		    return predicate(resolve(field)(candidate));
-		};
-	}
-	
 	opal.extend({
-		ComparisonPredicate: 			ComparisonPredicate,
-		compare: 						ComparisonPredicate,
-		eq:								eq,
-		neq:							neq,
-		lt:								lt,
-		gt:								gt,
-		lte:							lte,
-		gte:							gte,
-		between:						between,
-		regex:							regex,
-		isnull:							NullPredicate
+		compare:	compare,
+		eq:			eq,
+		neq:		neq,
+		lt:			lt,
+		gt:			gt,
+		lte:		lte,
+		gte:		gte,
+		between:	between,
+		regex:		regex
 	});
 	
 	
