@@ -369,7 +369,7 @@ define(function () {
 	}
 
 	// Tests: none
-	function TruePredicate (candidate) {
+	function istrue (candidate) {
 		return candidate === true;
 	}
 
@@ -389,7 +389,7 @@ define(function () {
 	opal.extend({
 		AllPredicate: 			AllPredicate,
 		NonePredicate: 			NonePredicate,
-		TruePredicate: 			TruePredicate,
+		istrue:					istrue,
 		isnull:					isnull,
 		has: 					has
 	});
