@@ -17,6 +17,67 @@ define(function () {
 		opal_version: '0.10.0',
 		extend: extend
 	};
+	
+	//
+	// Extend Function.prototype with composition and predicate functions
+	// A necessary evil in plain sight
+	//
+	
+	// Tests: none
+	Function.prototype.then = function (fn2) {
+		var fn1 = this;
+		return function () {
+			return fn2(fn1.apply(null,arguments)); 
+		};
+	};
+
+	// Tests: none
+	Function.prototype.is = Function.prototype.then;
+	
+	// Tests: none
+	Function.prototype.eq = function (value) {
+		return this.then(EqualityPredicate(value));
+	};
+	
+	// Tests: none
+	Function.prototype.neq = function (value) {
+		return this.then(InequalityPredicate(value));
+	};
+	
+	// Tests: none
+	Function.prototype.lt = function (value) {
+		return this.then(LessThanPredicate(value));
+	};
+	
+	// Tests: none
+	Function.prototype.gt = function (value) {
+		return this.then(GreaterThanPredicate(value));
+	};
+
+	// Tests: none
+	Function.prototype.lte = function (value) {
+		return this.then(LessThanEqualPredicate(value));
+	};
+	
+	// Tests: none
+	Function.prototype.gte = function (value) {
+		return this.then(GreaterThanEqualPredicate(value));
+	};
+	
+	// Tests: none
+	Function.prototype.between = function (lower,higher) {
+		return this.then(BetweenPredicate(lower,higher));
+	};
+	
+	// Tests: none
+	Function.prototype.matches = function (regex) {
+		return this.then(RegularExpressionPredicate(regex));
+	}
+	
+	// Tests: none
+	Function.prototype.isnull = function () {
+		return this.then(NullPredicate);
+	}
 
 	//
 	// Function composition
@@ -100,66 +161,6 @@ define(function () {
     // Tests: full
 	function type (object) {
 		return object !== null && typeof object;
-	}
-	
-	//
-	// Extend Function.prototype with composition and predicate functions
-	//
-	
-	// Tests: none
-	Function.prototype.then = function (fn2) {
-		var fn1 = this;
-		return function () {
-			return fn2(fn1.apply(null,arguments)); 
-		};
-	};
-
-	// Tests: none
-	Function.prototype.is = Function.prototype.then;
-	
-	// Tests: none
-	Function.prototype.eq = function (value) {
-		return this.then(EqualityPredicate(value));
-	};
-	
-	// Tests: none
-	Function.prototype.neq = function (value) {
-		return this.then(InequalityPredicate(value));
-	};
-	
-	// Tests: none
-	Function.prototype.lt = function (value) {
-		return this.then(LessThanPredicate(value));
-	};
-	
-	// Tests: none
-	Function.prototype.gt = function (value) {
-		return this.then(GreaterThanPredicate(value));
-	};
-
-	// Tests: none
-	Function.prototype.lte = function (value) {
-		return this.then(LessThanEqualPredicate(value));
-	};
-	
-	// Tests: none
-	Function.prototype.gte = function (value) {
-		return this.then(GreaterThanEqualPredicate(value));
-	};
-	
-	// Tests: none
-	Function.prototype.between = function (lower,higher) {
-		return this.then(BetweenPredicate(lower,higher));
-	};
-	
-	// Tests: none
-	Function.prototype.matches = function (regex) {
-		return this.then(RegularExpressionPredicate(regex));
-	}
-	
-	// Tests: none
-	Function.prototype.isnull = function () {
-		return this.then(NullPredicate);
 	}
 
     // Tests: partial
