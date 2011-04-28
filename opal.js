@@ -93,7 +93,7 @@ define(function () {
 	
 	// Tests: none
 	Function.prototype.isnull = function () {
-		return this.then(NullPredicate);
+		return this.then(isnull);
 	}
 	
 
@@ -386,7 +386,7 @@ define(function () {
 	}
 
 	// Tests: none
-    function NullPredicate (candidate) {
+    function isnull (candidate) {
         return candidate === null;
     }
 
@@ -405,8 +405,7 @@ define(function () {
 		FunctionPredicate: 		FunctionPredicate,
 		test: 					FunctionPredicate,
 		FunctionValuePredicate: FunctionValuePredicate,
-		NullPredicate:          NullPredicate,
-		isnull:					NullPredicate,
+		isnull:					isnull,
 		has: 					ExistentialPredicate
 	});
 	
