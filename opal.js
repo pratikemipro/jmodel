@@ -1107,9 +1107,29 @@ define(function () {
 		};
 	}
 	
-	var Or  = ConjunctionPredicate(or),
-		And = ConjunctionPredicate(and),
-		Not = ConjunctionPredicate(nor);
+	function Or () {
+		var predicates = Array.prototype.slice.call(arguments);
+		return function (candidate) {
+			return    predicates.length === 0 ? false
+					: predicates[0](candidate) ? true
+					: Or.apply(null,predicates.slice(1))(candidate);
+		};
+	}
+	
+	function And () {
+		var predicates = Array.prototype.slice.call(arguments);
+		return function (candidate) {
+			return    predicates.length === 0 ? true
+					: !predicates[0](candidate) ? false
+					: And.apply(null,predicates.slice(1))(candidate);
+		};
+	}
+	
+	function Not (predicate) {
+		return function (candidate) {
+			return !predicate(candidate);
+		}
+ 	}
 
 	opal.extend({
 		Or:  Or,
