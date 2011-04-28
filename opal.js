@@ -83,7 +83,7 @@ define(function () {
 	
 	// Tests: none
 	Function.prototype.between = function (lower,higher) {
-		return this.then(BetweenPredicate(lower,higher));
+		return this.then(between(lower,higher));
 	};
 	
 	// Tests: none
@@ -466,8 +466,8 @@ define(function () {
 		GreaterThanEqualPredicate = ComparisonPredicate(function (a,b) { return a>=b; });
 
 	// Tests: none
-	function BetweenPredicate (lower,higher) {
-		return function _betweenpredicate (candidate) {
+	function between (lower,higher) {
+		return function _between (candidate) {
 			return lower <= candidate && candidate <= higher;
 		};
 	}
@@ -501,8 +501,7 @@ define(function () {
 		lte:							LessThanEqualPredicate,
 		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
 		gte:							GreaterThanEqualPredicate,
-		BetweenPredicate: 				BetweenPredicate,
-		between:						BetweenPredicate,
+		between:						between,
 		RegularExpressionPredicate: 	RegularExpressionPredicate,
 		regex:							RegularExpressionPredicate,
 		isnull:							NullPredicate
