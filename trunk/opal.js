@@ -170,7 +170,7 @@ define(function () {
 	}
 
     // Tests: partial
-	// NOTE: add test that it doesn't set properties that don't exist and predicate tests
+	// NOTE: add test that it doesn't set properties that don't exist
 	function property (property,generic) {
 		function set (object,property,value) { object[property] = value; return object; }
 		return function _property (object,specific) {
@@ -183,21 +183,20 @@ define(function () {
 		};
 	}
 	
-    // Tests: partial
-	// NOTE: Add predicate tests
+    // Tests: full
 	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
 				args2	= args.concat(args1);
-			return ( object[name] && typeof object[name] === 'function' ) ?
-						object[name].apply(object,args2) : undefined;
+			return    typeof object[name] === 'undefined' ? undefined
+					: typeof object[name] === 'function' ? object[name].apply(object,args2)
+					: undefined;
 		};
 	}
 	
-	// Tests: partial
-	// NOTE: Add predicate tests
+	// Tests: full
 	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
 		return function _resolve (object) {
