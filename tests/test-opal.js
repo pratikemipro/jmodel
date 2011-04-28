@@ -1,6 +1,26 @@
 define(['../opal.js'], function (opal) {
 	
 	//
+	// Function.prototype methods
+	//
+	
+	module('Function.prototype');
+	
+	test('curry', function () {
+	    
+	   var add = function (a,b) { return a+b; };
+	   
+	   var Multiplier = function () {
+            this.multiply = function (a,b) { return a*b };
+	   };
+	   
+	   var multiplier = new Multiplier();
+	   
+	   equals( add.curry(3)(5), 8, 'curry works');
+	    
+	});
+	
+	//
 	// Function composition
 	//
 	
@@ -99,22 +119,6 @@ define(['../opal.js'], function (opal) {
 		equals( opal.applyto(3)(tripler,tripler.triple), 9, 'applyto works with context');
 		
 	});
-	
-	test('curry', function () {
-	    
-	   var add = function (a,b) { return a+b; };
-	   
-	   var Multiplier = function () {
-            this.multiply = function (a,b) { return a*b };
-	   };
-	   
-	   var multiplier = new Multiplier();
-	   
-	   equals( opal.curry(add,3)(5), 8, 'curry works without context');
-	   equals( opal.curry(multiplier,multiplier.multiply,4)(3), 12, 'curry works with context');
-	    
-	});
-	
 	
 	//
 	// Object functions
