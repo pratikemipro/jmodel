@@ -73,12 +73,12 @@ define(function () {
 
 	// Tests: none
 	Function.prototype.lte = function (value) {
-		return this.then(LessThanEqualPredicate(value));
+		return this.then(lte(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gte = function (value) {
-		return this.then(GreaterThanEqualPredicate(value));
+		return this.then(gte(value));
 	};
 	
 	// Tests: none
@@ -87,8 +87,8 @@ define(function () {
 	};
 	
 	// Tests: none
-	Function.prototype.matches = function (regex) {
-		return this.then(RegularExpressionPredicate(regex));
+	Function.prototype.matches = function (expression) {
+		return this.then(regex(expression));
 	}
 	
 	// Tests: none
@@ -458,12 +458,12 @@ define(function () {
 	}
 	
 	// Tests: none
-	var eq						  = ComparisonPredicate(function (a,b) { return a===b; }),
-		neq						  = ComparisonPredicate(function (a,b) { return a!==b; }),
-		lt						  = ComparisonPredicate(function (a,b) { return a<b; }),
-		gt						  = ComparisonPredicate(function (a,b) { return a>b; }),
-		LessThanEqualPredicate    = ComparisonPredicate(function (a,b) { return a<=b; }),
-		GreaterThanEqualPredicate = ComparisonPredicate(function (a,b) { return a>=b; });
+	var eq	= ComparisonPredicate(function (a,b) { return a===b; }),
+		neq	= ComparisonPredicate(function (a,b) { return a!==b; }),
+		lt	= ComparisonPredicate(function (a,b) { return a<b; }),
+		gt	= ComparisonPredicate(function (a,b) { return a>b; }),
+		lte	= ComparisonPredicate(function (a,b) { return a<=b; }),
+		gte = ComparisonPredicate(function (a,b) { return a>=b; });
 
 	// Tests: none
 	function between (lower,higher) {
@@ -473,9 +473,9 @@ define(function () {
 	}
 
 	// Tests: none
-	function RegularExpressionPredicate (regex) {
+	function regex (expression) {
 		return function _regularexpressionpredicate (candidate) {
-			return regex.test(candidate);
+			return expression.test(candidate);
 		};
 	}
 	
@@ -493,13 +493,10 @@ define(function () {
 		neq:							neq,
 		lt:								lt,
 		gt:								gt,
-		LessThanEqualPredicate: 		LessThanEqualPredicate,
-		lte:							LessThanEqualPredicate,
-		GreaterThanEqualPredicate: 		GreaterThanEqualPredicate,
-		gte:							GreaterThanEqualPredicate,
+		lte:							lte,
+		gte:							gte,
 		between:						between,
-		RegularExpressionPredicate: 	RegularExpressionPredicate,
-		regex:							RegularExpressionPredicate,
+		regex:							regex,
 		isnull:							NullPredicate
 	});
 	

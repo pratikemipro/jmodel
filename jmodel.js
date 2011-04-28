@@ -1028,7 +1028,7 @@ var jModel = function () {
 		
 		for( var key in example ) {
 			if ( example[key] instanceof RegExp ) {
-				predicates.push(FieldPredicate(key,RegularExpressionPredicate(example[key])));
+				predicates.push(FieldPredicate(key,regex(example[key])));
 			}
 			else if ( typeof example[key] == 'function' ) {
 				predicates.push(FieldPredicate(key,example[key]));

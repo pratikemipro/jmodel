@@ -215,7 +215,7 @@ define(['jmodel/opal'], function (opal) {
 		
 		predicate: function _predicate (parameter) {
 			return	  parameter === ':empty' ? empty
-					: parameter instanceof RegExp ? RegularExpressionPredicate(parameter)
+					: parameter instanceof RegExp ? regex(parameter)
 					: typeof parameter === 'function' ? parameter
 					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},ObjectIdentityPredicate(this.get(parameter)))
 					: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? extend({unique:true},ObjectIdentityPredicate(parameter))
