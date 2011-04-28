@@ -1,5 +1,5 @@
 /*
- *	jModel Javascript Library v0.6.12
+ *	jModel Javascript Library
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2009-2010 Richard Baker
@@ -78,12 +78,12 @@ var jModel = function () {
 		
 		member: 	MembershipPredicate,
 		
-		or: 		Or,
-		and: 		And,
-		not: 		Not,
+		or: 		or,
+		and: 		and,
+		not: 		not,
 		
 		empty: 		EmptySetPredicate,
-		nonempty: 	Not(EmptySetPredicate),
+		nonempty: 	not(EmptySetPredicate),
 		
 		all: 		function _all () {
 						return arguments.length === 0 ? AllPredicate : AllSetPredicate.apply(null,arguments);
@@ -634,7 +634,7 @@ var jModel = function () {
 		},
 		
 /*		remove: function _remove (predicate,fromHere,removeSubscribers) {
-			predicate = And(this.__predicate,this.predicate(predicate));
+			predicate = and(this.__predicate,this.predicate(predicate));
 			var that = this;
 			if ( fromHere ) {
 				this.__delegate.remove(predicate).each(function __remove (object) {
@@ -654,7 +654,7 @@ var jModel = function () {
 				this.length = this.__delegate.length;
 			}
 			else {
-				this.context.all.remove(And(MembershipPredicate(this.__delegate),predicate),true,true);
+				this.context.all.remove(and(MembershipPredicate(this.__delegate),predicate),true,true);
 			}
 
 		}, */
@@ -1042,7 +1042,7 @@ var jModel = function () {
 			}
 		}
 		
-		return And.apply(null,predicates);
+		return and.apply(null,predicates);
 
 	};
 	
@@ -1271,7 +1271,7 @@ var jModel = function () {
 		validate: function _validate () {
 			var obj = this;
 			return this.constraints()
-						.filter(function __validate (constraint) {return Not(constraint)(obj);})
+						.filter(function __validate (constraint) {return not(constraint)(obj);})
 							.map(function ___validate (constraint) {return constraint.message;})
 								.join('; ');
 		},
