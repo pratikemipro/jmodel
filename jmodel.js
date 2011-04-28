@@ -66,7 +66,7 @@ var jModel = function () {
 		/* Predicates */
 		predicate: 	predicate,
 		
-		is: 		ObjectIdentityPredicate,
+		is: 		is,
 		istrue: 	TruePredicate,
 		
 		test: 		FunctionPredicate,
@@ -830,7 +830,7 @@ var jModel = function () {
 				return parameter;
 			}
 			else if ( parameter && parameter.domain ) {
-				return ObjectIdentityPredicate(parameter);
+				return is(parameter);
 			}
 			else if ( typeof parameter == 'object' && parameter !== null ) {
 				return ExamplePredicate(parameter);
