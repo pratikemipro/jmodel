@@ -454,7 +454,7 @@ define(function () {
 		};
 	}
 
-	// Tests: none
+	// Tests: full
 	function regex (expression) {
 		return function _regex (candidate) {
 			return expression.test(candidate);
