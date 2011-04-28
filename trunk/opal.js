@@ -38,6 +38,14 @@ define(function () {
 		return function () {
 			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
 		};
+	};
+	
+	// Tests: none
+	Function.prototype.delay = function (duration) {
+		var fn = this;
+		return function () {
+			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
+		}
 	}
 
 	// Tests: none
