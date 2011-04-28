@@ -1,5 +1,6 @@
 define(['../opal.js'], function (opal) {
 	
+	
 	//
 	// Function.prototype methods
 	//
@@ -19,6 +20,7 @@ define(['../opal.js'], function (opal) {
 	   equals( add.curry(3)(5), 8, 'curry works');
 	    
 	});
+	
 	
 	//
 	// Function composition
@@ -119,6 +121,7 @@ define(['../opal.js'], function (opal) {
 		equals( opal.applyto(3)(tripler,tripler.triple), 9, 'applyto works with context');
 		
 	});
+	
 	
 	//
 	// Object functions
@@ -320,14 +323,12 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
-	
 	test('neq', function () {
 		
 		equals( opal.neq(3)(3), false, 'returns false if values equal');
 		equals( opal.neq(3)(2), true, 'returns true if values not equal')
 		
 	});
-	
 	
 	test('lt', function () {
 		
@@ -337,7 +338,6 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
-	
 	test('gt', function () {
 		
 		equals( opal.gt(3)(2), false, 'returns false if value less than target');
@@ -346,7 +346,6 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
-	
 	test('lte', function () {
 		
 		equals( opal.lte(3)(2), true, 'returns true if value less than target');
@@ -354,7 +353,6 @@ define(['../opal.js'], function (opal) {
 		equals( opal.lte(3)(4), false, 'returns false if value greater than target');
 		
 	});
-	
 	
 	test('gte', function () {
 		
