@@ -14,7 +14,7 @@
 define(function () {
 
 	var opal = {
-		opal_version: '0.10.0',
+		opal_version: '0.11.0',
 		extend: extend
 	};
 	
@@ -30,6 +30,15 @@ define(function () {
 			return fn2(fn1.apply(null,arguments)); 
 		};
 	};
+	
+	// Tests: none
+	Function.prototype.curry = function () {
+		var args = Array.prototype.slice.call(arguments),
+			fn   = this;
+		return function () {
+			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
+		};
+	}
 
 	// Tests: none
 	Function.prototype.is = Function.prototype.then;
@@ -136,18 +145,6 @@ define(function () {
 		};
 	}
 	
-	// Tests: full
-	function curry () {
-		var args	= Array.prototype.slice.call(arguments),
-			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
-			fn		= args.shift();
-		return function _curry () {
-			return fn.apply(context,args.concat(Array.prototype.slice.call(arguments)));
-		};
-	}
-	
-	var suspend = curry;
-
 
 	//
 	// Object functions
@@ -248,11 +245,6 @@ define(function () {
 			}) : returnValue;
 		};
 	}
-	
-	// Tests: none
-	function async () {
-		return setTimeout(opal.suspend.apply(this,arguments),1);
-	}
 
 	opal.extend({
 		apply: apply,
@@ -261,8 +253,6 @@ define(function () {
 		compose: compose,
 		pipe: pipe,
 		parallel: parallel,
-		curry: curry,
-		suspend: suspend,
 		identity: identity,
 		type: type,
 		property: property,
@@ -271,8 +261,7 @@ define(function () {
 		path: path,
 		PropertySet: PropertySet,
 		transform: transform,
-		aspect: aspect,
-		async: async
+		aspect: aspect
 	});
 
 
