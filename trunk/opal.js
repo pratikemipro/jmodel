@@ -11,7 +11,7 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
-define(function () {
+define(function (a,b,c,undefined) {
 
 	var opal = {
 		opal_version: '0.13.0',
@@ -174,11 +174,11 @@ define(function () {
 	function property (property,generic) {
 		function set (object,property,value) { object[property] = value; return object; }
 		return function _property (object,specific) {
-			var value =   typeof specific !== 'undefined' ? specific
-						: typeof generic  !== 'undefined' ? generic
+			var value =   specific !== undefined ? specific
+						: generic  !== undefined ? generic
 						: undefined;
-			return    typeof object[property] === 'undefined' ? undefined
-					: typeof value !== 'undefined' ? set(object,property,value)
+			return    object[property] === undefined ? undefined
+					: value !== undefined ? set(object,property,value)
 					: object[property];
 		};
 	}
@@ -190,7 +190,7 @@ define(function () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift(),
 				args2	= args.concat(args1);
-			return    typeof object[name] === 'undefined' ? undefined
+			return    object[name] === undefined ? undefined
 					: typeof object[name] === 'function' ? object[name].apply(object,args2)
 					: undefined;
 		};
@@ -202,7 +202,7 @@ define(function () {
 		return function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
-			return    typeof object[name] === 'undefined' ? undefined
+			return    object[name] === undefined ? undefined
 					: typeof object[name] === 'function' ? method(name).apply(null,args2)
 					: property(name).apply(null,args2);
 		};
@@ -212,7 +212,7 @@ define(function () {
 	function path (elements,separator) {
 		var elements = typeof elements === 'string' ? elements.split(separator||'.') : ( elements || [] );
 		return function _path (object) {
-			return    typeof object === 'undefined' ? undefined
+			return    object === undefined ? undefined
 					: elements.length === 0 ? undefined
 					: elements.length === 1 ? resolve(elements[0])(object)
 					: path.apply(null,elements.slice(1))(resolve(elements[0])(object));
