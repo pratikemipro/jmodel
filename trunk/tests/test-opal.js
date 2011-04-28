@@ -362,6 +362,13 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('regex', function () {
+		
+		equals( opal.regex(/re/)('fred'), true,  'returns true when candidate matches regular expression' );
+		equals( opal.regex(/re/)('john'), false, 'returns false when candidate does not match regular expression' );
+		
+	});
+	
 /*	
 	//
 	// Set construction
