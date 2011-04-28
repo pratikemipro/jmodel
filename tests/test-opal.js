@@ -362,6 +362,16 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('between', function () {
+		
+		equals( opal.between(3,5)(2), false, 'returns false if value below range');
+		equals( opal.between(3,5)(3), true, 'returns true if value equals lower boundary of range');
+		equals( opal.between(3,5)(4), true, 'returns true if value within range');
+		equals( opal.between(3,5)(5), true, 'returns true if value equals upper boundary of range');
+		equals( opal.between(3,5)(6), false, 'returns false if value above range');
+		
+	});
+	
 	test('regex', function () {
 		
 		equals( opal.regex(/re/)('fred'), true,  'returns true when candidate matches regular expression' );
