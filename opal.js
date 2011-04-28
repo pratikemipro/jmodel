@@ -14,7 +14,7 @@
 define(function () {
 
 	var opal = {
-		opal_version: '0.11.1',
+		opal_version: '0.12.0',
 		extend: extend
 	};
 	
