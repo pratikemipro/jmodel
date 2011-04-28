@@ -1037,7 +1037,7 @@ var jModel = function () {
 				predicates.push(FieldPredicate(key,SomeSetPredicate(ExamplePredicate(example[key]))));
 			}
 			else {
-				predicates.push(FieldPredicate(key,EqualityPredicate(example[key])));
+				predicates.push(FieldPredicate(key,eq(example[key])));
 			}
 		}
 		

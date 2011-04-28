@@ -605,7 +605,7 @@ define(['jmodel/opal'], function (opal) {
 	// Set predicates
 
 	function CardinalityPredicate (predicate) {
-		predicate = (typeof predicate == 'function') ? predicate : EqualityPredicate(predicate);
+		predicate = (typeof predicate == 'function') ? predicate : eq(predicate);
 		return method('count').is(predicate);
 	}
 	
