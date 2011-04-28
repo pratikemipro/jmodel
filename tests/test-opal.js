@@ -287,6 +287,83 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
+	module('Predicates (object)');
+	
+	test('is', function () {
+		
+		var object = {Forename:'Test1'};
+		var other = {Forename:'Test2'};
+		equals( opal.is(object)(object), true, "returns true on predicate's object" );
+		equals( opal.is(object)(other),  false, "returns false on other objects" );
+	
+	});
+	
+	test('isa', function () {
+		
+		var Mammal 	= function () {},
+			mammal  = new Mammal(),
+			Fish 	= function () {},
+			fish	= new Fish();
+			
+		equals( opal.isa(Mammal)(mammal), true,  "returns true on object with matching constructor");
+		equals( opal.isa(Mammal)(fish),   false, "returns false on object without matching constructor");
+		equals( opal.isa(Object)([]),	  true,	 "works with inheritance");
+		
+	});
+	
+	module('Predicates (value comparison)');
+	
+	test('eq', function () {
+		
+		equals( opal.eq(3)(3), true, 'returns true if values equal');
+		equals( opal.eq(3)(2), false, 'returns false if values not equal')
+		
+	});
+	
+	
+	test('neq', function () {
+		
+		equals( opal.neq(3)(3), false, 'returns false if values equal');
+		equals( opal.neq(3)(2), true, 'returns true if values not equal')
+		
+	});
+	
+	
+	test('lt', function () {
+		
+		equals( opal.lt(3)(2), true, 'returns true if value less than target');
+		equals( opal.lt(3)(3), false, 'returns false if value equal to target');
+		equals( opal.lt(3)(4), false, 'returns false if value greater than target');
+		
+	});
+	
+	
+	test('gt', function () {
+		
+		equals( opal.gt(3)(2), false, 'returns false if value less than target');
+		equals( opal.gt(3)(3), false, 'returns false if value equal to target');
+		equals( opal.gt(3)(4), true, 'returns true if value greater than target');
+		
+	});
+	
+	
+	test('lte', function () {
+		
+		equals( opal.lte(3)(2), true, 'returns true if value less than target');
+		equals( opal.lte(3)(3), true, 'returns true if value equal to target');
+		equals( opal.lte(3)(4), false, 'returns false if value greater than target');
+		
+	});
+	
+	
+	test('gte', function () {
+		
+		equals( opal.gte(3)(2), false, 'returns false if value less than target');
+		equals( opal.gte(3)(3), true, 'returns true if value equal to target');
+		equals( opal.gte(3)(4), true, 'returns true if value greater than target');
+		
+	});
+	
 /*	
 	//
 	// Set construction

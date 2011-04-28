@@ -366,34 +366,9 @@
 			
 			});
 			
-			
-			test('ObjectIdentityPredicate', function () {
-				
-				var object = {Forename:'Test1'};
-				var other = {Forename:'Test2'};
-				equals( opal.ObjectIdentityPredicate(object)(object), true, "returns true on predicate's object" );
-				equals( opal.ObjectIdentityPredicate(object)(other),  false, "returns false on other objects" );
-			
-			});
-		
-			
 			test('TypePredicate', function () {
 				// Need lots of assertions here
 			});
-			
-			
-			test('InstancePredicate', function () {
-				
-				var Mammal 	= function () {},
-					mammal  = new Mammal(),
-					Fish 	= function () {},
-					fish	= new Fish();
-					
-				equals( opal.InstancePredicate(Mammal)(mammal), true,  "returns true on object with matching constructor");
-				equals( opal.InstancePredicate(Mammal)(fish),   false, "returns false on object without matching constructor");
-				
-			});
-			
 			
 			test('PropertyPredicate', function () {
 			
@@ -416,50 +391,6 @@
 			
 			
 			test('ComparisonPredicate', function () {
-				
-			});
-			
-			
-			test('Eq', function () {
-				
-				equals( opal.EqualityPredicate(3)(3), true, 'returns true if values equal');
-				equals( opal.EqualityPredicate(3)(2), false, 'returns false if values not equal')
-				
-			});
-			
-			
-			test('Lt', function () {
-				
-				equals( opal.LessThanPredicate(3)(2), true, 'returns true if value less than target');
-				equals( opal.LessThanPredicate(3)(3), false, 'returns false if value equal to target');
-				equals( opal.LessThanPredicate(3)(4), false, 'returns false if value greater than target');
-				
-			});
-			
-			
-			test('Gt', function () {
-				
-				equals( opal.GreaterThanPredicate(3)(2), false, 'returns false if value less than target');
-				equals( opal.GreaterThanPredicate(3)(3), false, 'returns false if value equal to target');
-				equals( opal.GreaterThanPredicate(3)(4), true, 'returns true if value greater than target');
-				
-			});
-			
-			
-			test('LtE', function () {
-				
-				equals( opal.LessThanEqualPredicate(3)(2), true, 'returns true if value less than target');
-				equals( opal.LessThanEqualPredicate(3)(3), true, 'returns true if value equal to target');
-				equals( opal.LessThanEqualPredicate(3)(4), false, 'returns false if value greater than target');
-				
-			});
-			
-			
-			test('GtE', function () {
-				
-				equals( opal.GreaterThanEqualPredicate(3)(2), false, 'returns false if value less than target');
-				equals( opal.GreaterThanEqualPredicate(3)(3), true, 'returns true if value equal to target');
-				equals( opal.GreaterThanEqualPredicate(3)(4), true, 'returns true if value greater than target');
 				
 			});
 			
