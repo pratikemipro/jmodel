@@ -13,13 +13,9 @@
 
 define(function (a,b,c,undefined) {
 
-	var opal = {
-			opal_version: '0.13.0',
-			extend: extend
-		},
-		_slice = Array.prototype.slice;
-	
-	var assert =   ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
+	var opal   = { opal_version: '0.13.0', extend: extend },
+		_slice = Array.prototype.slice,
+		assert = ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
 				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } }
 
 	
