@@ -397,12 +397,9 @@ define(function (a,b,c,undefined) {
         return candidate === null;
     }
 
-	// Tests: none
+	// Tests: full
 	function has () {
-		var resolver = resolve.apply(null,arguments);
-		return function (candidate) {
-			return Boolean(resolver(candidate));
-		};
+		return resolve.apply(null,arguments).then(Boolean);
 	}
 
 	opal.extend({
