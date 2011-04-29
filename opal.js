@@ -529,14 +529,11 @@ define(function (a,b,c,undefined) {
 	// 														  Utility functions
 	// ------------------------------------------------------------------------
 
-	function assert (condition,message) {
-		if ( console && console.assert ) {
-			console.assert(condition,message);
-		}	
-		else if (!condition) {
-			throw 'Opal exception: '+exception;
+	var assert = ( console && console.assert ) ? console.assert.bind(console) : function (condition,message) {
+		if ( !condition ) {
+			throw 'Opal exception: '+message;
 		}
-	}
+	};
 
     // Tests: none
 	function extend (object,target) {
