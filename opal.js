@@ -481,11 +481,11 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	function or (predicate) {
 		var predicates = arguments;
-		return function (candidate) {
-			return    predicates.length === 0 ? false
-					: predicate(candidate) ? true
-					: or.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
-		};
+		return    predicates.length === 0 ? NonePredicate
+				: predicates.length === 1 ? predicate
+				: function (candidate) {
+					return predicate(candidate) || or.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
+				};
 	}
 	
 	// Tests: none
