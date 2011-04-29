@@ -38,6 +38,15 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	// Tests: full
+	Function.prototype.curry = function () {
+		var args = Array.prototype.slice.call(arguments),
+			fn   = this;
+		return function () {
+			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
+		};
+	};
+	
 	// Tests: none
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
@@ -52,15 +61,6 @@ define(function (a,b,c,undefined) {
 		return function () {
 			return fn1.apply(null,arguments) || fn2.apply(null,arguments);
 		}
-	};
-	
-	// Tests: full
-	Function.prototype.curry = function () {
-		var args = Array.prototype.slice.call(arguments),
-			fn   = this;
-		return function () {
-			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
-		};
 	};
 	
 	// Tests: none
