@@ -296,7 +296,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	var count = function _count (predicate) {
-		predicate = predicate || AllPredicate;
+		predicate = predicate || _true;
 		return extend({unit:0,label:'count'}, function __count (acc,value) {
 			return acc += (predicate(value) ? 1 : 0);
 		});
@@ -379,16 +379,6 @@ define(function (a,b,c,undefined) {
 	//
 
 	// Tests: none
-	function AllPredicate (candidate) {
-		return true;
-	}
-
-	// Tests: none
-	function NonePredicate (candidate) {
-		return false;
-	}
-
-	// Tests: none
 	function istrue (candidate) {
 		return candidate === true;
 	}
@@ -407,8 +397,8 @@ define(function (a,b,c,undefined) {
 	}
 
 	opal.extend({
-		AllPredicate: 			AllPredicate,
-		NonePredicate: 			NonePredicate,
+		AllPredicate: 			_true,
+		NonePredicate: 			_false,
 		istrue:					istrue,
 		isnull:					isnull,
 		has: 					has
