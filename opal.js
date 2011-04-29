@@ -491,11 +491,11 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	function and (predicate) {
 		var predicates = arguments;
-		return function (candidate) {
-			return    predicates.length === 0 ? true
-					: !predicate(candidate) ? false
-					: and.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
-		};
+		return    predicates.length === 0 ? AllPredicate
+				: predicates.length === 1 ? predicate
+				: function (candidate) {
+					return predicate(candidate) && and.apply(null,Array.prototype.slice.call(predicates,1))(candidate)
+				};
 	}
 	
 	// Tests: none
