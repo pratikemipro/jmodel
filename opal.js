@@ -424,9 +424,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function isa (constructor) {
-		// NOTE: Put this next line into jModel
-		constructor = constructor.entitytype ? constructor.entitytype.constructor : constructor;
-		return function _instancepredicate (candidate) {
+		return function (candidate) {
 			return candidate instanceof constructor;
 		};
 	}
@@ -468,9 +466,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function between (lower,higher) {
-		return function _between (candidate) {
-			return lower <= candidate && candidate <= higher;
-		};
+		return and( gte(lower), lte(higher) );
 	}
 
 	// Tests: full
