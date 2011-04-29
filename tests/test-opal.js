@@ -401,6 +401,20 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	module('Logical connectives');
+	
+	test('or', function () {
+	
+		equals( opal.or()(5), false, "or of zero arguments is false");
+		equals( opal.or(opal.eq(5))(5), true, "or with one argument returns true when predicate is true." );
+		equals( opal.or(opal.eq(5))(7), false, "or with one argument returns false when predicate is false." );
+		
+		equals( opal.or(opal.eq(5),opal.eq(6))(5), true, "or with two arguments returns true when first is true"  );
+		equals( opal.or(opal.eq(5),opal.eq(6))(6), true, "or with two arguments returns true when second is true"  );
+		equals( opal.or(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
+		
+	});
+	
 /*	
 	//
 	// Set construction
