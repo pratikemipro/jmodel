@@ -31,6 +31,20 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	Function.prototype.and = function (fn2) {
+		var fn1 = this;
+		return function () {
+			return fn1.apply(null,arguments) && fn2.apply(null,arguments);
+		}
+	};
+	
+	Function.prototype.or = function (fn2) {
+		var fn1 = this;
+		return function () {
+			return fn1.apply(null,arguments) || fn2.apply(null,arguments);
+		}
+	};
+	
 	// Tests: full
 	Function.prototype.curry = function () {
 		var args = Array.prototype.slice.call(arguments),
@@ -480,22 +494,16 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	function or (predicate) {
-		var predicates = arguments;
-		return    predicates.length === 0 ? NonePredicate
-				: predicates.length === 1 ? predicate
-				: function (candidate) {
-					return predicate(candidate) || or.apply(null,Array.prototype.slice.call(predicates,1))(candidate);
-				};
+		return    arguments.length === 0 ? NonePredicate
+				: arguments.length === 1 ? predicate
+				: predicate.or(or.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
 	
 	// Tests: none
 	function and (predicate) {
-		var predicates = arguments;
-		return    predicates.length === 0 ? AllPredicate
-				: predicates.length === 1 ? predicate
-				: function (candidate) {
-					return predicate(candidate) && and.apply(null,Array.prototype.slice.call(predicates,1))(candidate)
-				};
+		return    arguments.length === 0 ? AllPredicate
+				: arguments.length === 1 ? predicate
+				: predicate.and(and.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
 	
 	// Tests: none
