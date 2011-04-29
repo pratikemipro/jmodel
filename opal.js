@@ -14,9 +14,10 @@
 define(function (a,b,c,undefined) {
 
 	var opal = {
-		opal_version: '0.13.0',
-		extend: extend
-	};
+			opal_version: '0.13.0',
+			extend: extend
+		},
+		_slice = Array.prototype.slice;
 	
 	var assert =   ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
 				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } }
@@ -74,10 +75,10 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	Function.prototype.curry = function () {
-		var args = Array.prototype.slice.call(arguments),
+		var args = _slice.call(arguments),
 			fn   = this;
 		return function () {
-			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
+			return fn.apply(null,args.concat(_slice.call(arguments)));
 		};
 	};
 	
@@ -91,7 +92,7 @@ define(function (a,b,c,undefined) {
 		var fn = this;
 		return function () {
 			var ret = fn.apply(null,arguments);
-			after.call(null,ret,Array.prototype.slice.call(arguments));
+			after.call(null,ret,_slice.call(arguments));
 			return ret;
 		};
 	};
@@ -198,18 +199,18 @@ define(function (a,b,c,undefined) {
     // Tests: full
 	function pipe (fn) {
 		return    arguments.length <= 1 ? ( fn || identity )
-				: fn.then(pipe.apply(null,Array.prototype.slice.call(arguments,1)));
+				: fn.then(pipe.apply(null,_slice.call(arguments,1)));
 	}
 
 	// Tests: full
 	function compose (fn) {
 		return	  arguments.length <= 1 ? ( fn || identity )
-				: pipe.apply(null,Array.prototype.slice.call(arguments).reverse());
+				: pipe.apply(null,_slice.call(arguments).reverse());
 	}
 	
 	// Tests: full
 	function parallel () {
-		var fns = Array.prototype.slice.call(arguments);
+		var fns = _slice.call(arguments);
 		return function _parallel () {
 			var args0 = arguments[0],
 				result = {};
@@ -231,7 +232,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	function apply () {
-		var args	= Array.prototype.slice.call(arguments),
+		var args	= _slice.call(arguments),
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
 			fn		= args.shift();
 		return fn.apply(context,args);
@@ -241,7 +242,7 @@ define(function (a,b,c,undefined) {
 	function applyto () {
 		var args = arguments;
 		return function _applyto () {
-			var args1	= Array.prototype.slice.call(arguments),
+			var args1	= _slice.call(arguments),
 			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
 			return fn.apply(context,args);
@@ -274,19 +275,19 @@ define(function (a,b,c,undefined) {
 	
     // Tests: full
 	function method (name) {
-		var args = Array.prototype.slice.call(arguments,1);
+		var args = _slice.call(arguments,1);
 		return function _method (object) {
 			return	  typeof object[name] !== 'function' ? undefined
-					: object[name].apply(object,args.concat(Array.prototype.slice.call(arguments,1)));
+					: object[name].apply(object,args.concat(_slice.call(arguments,1)));
 		};
 	}
 	
 	// Tests: full
 	function resolve (name) {
-	    var args = Array.prototype.slice.call(arguments,1);
+	    var args = _slice.call(arguments,1);
 		return function _resolve (object) {
 			return ( typeof object[name] === 'function' ? method(name) : property(name) )
-					.apply(null,[object].concat(args,Array.prototype.slice.call(arguments,1)))
+					.apply(null,[object].concat(args,_slice.call(arguments,1)))
 		};
 	}
 	
@@ -515,14 +516,14 @@ define(function (a,b,c,undefined) {
 	function or (predicate) {
 		return    arguments.length === 0 ? _false
 				: arguments.length === 1 ? predicate
-				: predicate.or(or.apply(null,Array.prototype.slice.call(arguments,1)));
+				: predicate.or(or.apply(null,_slice.call(arguments,1)));
 	}
 	
 	// Tests: full
 	function and (predicate) {
 		return    arguments.length === 0 ? _true
 				: arguments.length === 1 ? predicate
-				: predicate.and(and.apply(null,Array.prototype.slice.call(arguments,1)));
+				: predicate.and(and.apply(null,_slice.call(arguments,1)));
 	}
 	
 	// Tests: full
