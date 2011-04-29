@@ -456,6 +456,14 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('not', function () {
+	
+		equals( opal.not(opal.eq(5))(6), true, 'not returns true when predicate returns false' );
+		equals( opal.not(opal.eq(5))(5), false, 'not returns false when predicate returns true' );
+		
+		
+	});
+	
 /*	
 	//
 	// Set construction
