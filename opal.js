@@ -255,19 +255,17 @@ define(function (a,b,c,undefined) {
 			var value =   specific !== undefined ? specific
 						: generic  !== undefined ? generic
 						: undefined;
-			return    value !== undefined ? set(object,property,value)
-					: object[property];
+			return value !== undefined ? set(object,property,value) : object[property];
 		};
 	}
 	
     // Tests: full
 	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
-		return function _method () {
-			var args1	= Array.prototype.slice.call(arguments),
-				object  = args1.shift();
-			return	  typeof object[name] === 'function' ? object[name].apply(object,args.concat(args1))
-					: undefined;
+		return function _method (object) {
+			var args1 = Array.prototype.slice.call(arguments,1);
+			return	  typeof object[name] !== 'function' ? undefined
+					: object[name].apply(object,args.concat(args1));
 		};
 	}
 	
