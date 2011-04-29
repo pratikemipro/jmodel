@@ -384,34 +384,6 @@ define(function (a,b,c,undefined) {
 	
 	
 	//
-	// Predicates: generic
-	//
-
-	// Tests: none
-	function istrue (candidate) {
-		return candidate === true;
-	}
-
-	// Tests: none
-    function isnull (candidate) {
-        return candidate === null;
-    }
-
-	// Tests: full
-	function has () {
-		return resolve.apply(null,arguments).then(Boolean);
-	}
-
-	opal.extend({
-		AllPredicate: 			_true,
-		NonePredicate: 			_false,
-		istrue:					istrue,
-		isnull:					isnull,
-		has: 					has
-	});
-	
-	
-	//
 	// Predicates: object
 	//
 
@@ -433,12 +405,18 @@ define(function (a,b,c,undefined) {
 			return candidate instanceof constructor;
 		};
 	}
+	
+	// Tests: full
+	function has () {
+		return resolve.apply(null,arguments).then(Boolean);
+	}
 
 	opal.extend({
 		is: 		is,
 		is_of_type: is_of_type,
 		isa: 		isa,
-		isan: 		isa
+		isan: 		isa,
+		has: 		has
 	});
 	
 	
@@ -485,6 +463,26 @@ define(function (a,b,c,undefined) {
 		gte:		gte,
 		between:	between,
 		regex:		regex
+	});
+	
+	
+	//
+	// Predicates: generic
+	//
+
+	// Tests: full
+	var istrue = eq(true);
+
+	// Tests: none
+    function isnull (candidate) {
+        return candidate === null;
+    }
+
+	opal.extend({
+		AllPredicate: 			_true,
+		NonePredicate: 			_false,
+		istrue:					istrue,
+		isnull:					isnull,
 	});
 	
 	
