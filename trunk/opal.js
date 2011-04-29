@@ -23,7 +23,8 @@ define(function (a,b,c,undefined) {
 	// A necessary evil in plain sight
 	//
 	
-	Function.prototype.bind = function (context) {
+	// Tests: none
+	Function.prototype.bind = Function.prototype.bind || function (context) {
 		var fn = this;
 		return function () {
 			return fn.apply(context,arguments);
@@ -136,6 +137,8 @@ define(function (a,b,c,undefined) {
 	function _undefined () { return undefined; }
 	function _true () { return true; }
 	function _false () { return false; }
+	
+	function _not (x) { return !x }
 	
 	function nth (n) {
 		return function () {
@@ -497,26 +500,24 @@ define(function (a,b,c,undefined) {
 	// Logical connectives
 	//
 	
-	// Tests: none
+	// Tests: full
 	function or (predicate) {
 		return    arguments.length === 0 ? _false
 				: arguments.length === 1 ? predicate
 				: predicate.or(or.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
 	
-	// Tests: none
+	// Tests: full
 	function and (predicate) {
 		return    arguments.length === 0 ? _true
 				: arguments.length === 1 ? predicate
 				: predicate.and(and.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
 	
-	// Tests: none
+	// Tests: full
 	function not (predicate) {
-		return function (candidate) {
-			return !predicate(candidate);
-		}
- 	}
+		return predicate.then(_not);
+	}
 
 	opal.extend({
 		or:  or,
