@@ -290,26 +290,6 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
-	module('Predicates (generic)');
-	
-	test('istrue', function () {
-	
-		equals( opal.istrue(true), true, 'returns true for true value');
-		equals( opal.istrue(false), false, 'returns false for false value');
-		equals( opal.istrue(7), false, 'returns false for non-booleans value');
-		
-	});
-	
-	test('has', function () {
-	
-		var person = {forename:'fred',age:function () { return 18; }};
-		
-		equals( opal.has('forename')(person), true, 'returns true when object has property');
-		equals( opal.has('age')(person), true, 'returns true when object has method');
-		equals( opal.has('surnane')(person), false, 'returns false when object does not have property');
-		
-	});
-	
 	module('Predicates (object)');
 	
 	test('is', function () {
@@ -353,6 +333,16 @@ define(['../opal.js'], function (opal) {
 		equals( opal.isa(Mammal)(mammal), true,  "returns true on object with matching constructor");
 		equals( opal.isa(Mammal)(fish),   false, "returns false on object without matching constructor");
 		equals( opal.isa(Object)([]),	  true,	 "works with inheritance");
+		
+	});
+	
+	test('has', function () {
+	
+		var person = {forename:'fred',age:function () { return 18; }};
+		
+		equals( opal.has('forename')(person), true, 'returns true when object has property');
+		equals( opal.has('age')(person), true, 'returns true when object has method');
+		equals( opal.has('surnane')(person), false, 'returns false when object does not have property');
 		
 	});
 	
@@ -418,6 +408,16 @@ define(['../opal.js'], function (opal) {
 		
 		equals( opal.regex(/re/)('fred'), true,  'returns true when candidate matches regular expression' );
 		equals( opal.regex(/re/)('john'), false, 'returns false when candidate does not match regular expression' );
+		
+	});
+	
+	module('Predicates (generic)');
+	
+	test('istrue', function () {
+	
+		equals( opal.istrue(true), true, 'returns true for true value');
+		equals( opal.istrue(false), false, 'returns false for false value');
+		equals( opal.istrue(7), false, 'returns false for non-booleans value');
 		
 	});
 	
