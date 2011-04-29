@@ -31,6 +31,8 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.then === undefined, '"then" method already defined');
 	assert(Function.prototype.but === undefined, '"but" method already defined');
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
+	assert(Function.prototype.before === undefined, '"before" method already defined');
+	assert(Function.prototype.after === undefined, '"after" method already defined');
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
@@ -76,6 +78,21 @@ define(function (a,b,c,undefined) {
 			fn   = this;
 		return function () {
 			return fn.apply(null,args.concat(Array.prototype.slice.call(arguments)));
+		};
+	};
+	
+	// Tests: none
+	Function.prototype.before = function (before) {
+		return before.but(this);
+	};
+	
+	// Tests: none
+	Function.prototype.after = function (after) {
+		var fn = this;
+		return function () {
+			var ret = fn.apply(null,arguments);
+			after.call(null,ret,Array.prototype.slice.call(arguments));
+			return ret;
 		};
 	};
 	
@@ -289,20 +306,6 @@ define(function (a,b,c,undefined) {
 			return resolver(object,transformer(extractor(object)));
 		};
 	}
-	
-	// Tests: none
-	function aspect (options) {
-		return function () {
-			if ( options.pre ) {
-				options.pre.apply(this,arguments);
-			}
-			var returnValue = options.target.apply(this,arguments);
-			return options.post ? options.post.call(this,{
-				args: arguments,
-				returnValue: returnValue
-			}) : returnValue;
-		};
-	}
 
 	opal.extend({
 		apply: apply,
@@ -317,8 +320,7 @@ define(function (a,b,c,undefined) {
 		method: method,
 		resolve: resolve,
 		path: path,
-		transform: transform,
-		aspect: aspect
+		transform: transform
 	});
 
 
