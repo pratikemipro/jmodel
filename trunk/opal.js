@@ -259,9 +259,8 @@ define(function (a,b,c,undefined) {
 	function method (name) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method (object) {
-			var args1 = Array.prototype.slice.call(arguments,1);
 			return	  typeof object[name] !== 'function' ? undefined
-					: object[name].apply(object,args.concat(args1));
+					: object[name].apply(object,args.concat(Array.prototype.slice.call(arguments,1)));
 		};
 	}
 	
