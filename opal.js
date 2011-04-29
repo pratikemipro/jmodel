@@ -38,6 +38,15 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	// Tests: none
+	Function.prototype.but = function (fn2) {
+		var fn1 = this;
+		return function () {
+			fn1.apply(null,arguments);
+			return fn2.apply(null,arguments);
+		};
+	}
+	
 	// Tests: full
 	Function.prototype.curry = function () {
 		var args = Array.prototype.slice.call(arguments),
@@ -127,6 +136,15 @@ define(function (a,b,c,undefined) {
 	function _undefined () { return undefined; }
 	function _true () { return true; }
 	function _false () { return false; }
+	
+	function nth (n) {
+		return function () {
+			return arguments[n];
+		}
+	};
+	
+	var first  = nth(0),
+		second = nth(1);
 
 
 	//
@@ -314,10 +332,7 @@ define(function (a,b,c,undefined) {
 	var withmethod = method;
 	
 	// Tests: full
-	var push = function (acc,value) {
-		acc.push(value);
-		return acc;
-	};
+	var push = method('push').but(first);
 	
 	// Tests: none
 	var add = function _add () {
