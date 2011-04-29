@@ -474,9 +474,7 @@ define(function (a,b,c,undefined) {
 	var istrue = eq(true);
 
 	// Tests: none
-    function isnull (candidate) {
-        return candidate === null;
-    }
+    var isnull = eq(null);
 
 	opal.extend({
 		AllPredicate: 			_true,
