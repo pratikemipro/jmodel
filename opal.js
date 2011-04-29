@@ -220,10 +220,9 @@ define(function (a,b,c,undefined) {
 		var args = Array.prototype.slice.call(arguments,1);
 		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
-				object  = args1.shift(),
-				args2	= args.concat(args1);
+				object  = args1.shift();
 			return    object[name] === undefined ? undefined
-					: typeof object[name] === 'function' ? object[name].apply(object,args2)
+					: typeof object[name] === 'function' ? object[name].apply(object,args.concat(args1))
 					: undefined;
 		};
 	}
