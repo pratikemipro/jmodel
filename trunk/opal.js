@@ -18,11 +18,8 @@ define(function (a,b,c,undefined) {
 		extend: extend
 	};
 	
-	var assert = ( console && console.assert ) ? console.assert.bind(console) : function (condition,message) {
-		if ( !condition ) {
-			throw 'Opal exception: '+message;
-		}
-	};
+	var assert =   ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
+				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } }
 
 	
 	//
@@ -165,6 +162,8 @@ define(function (a,b,c,undefined) {
 	
 	function _not (x) { return !x }
 	
+	function _set (object,property,value) { object[property] = value; return object; }
+	
 	function nth (n) {
 		return function () {
 			return arguments[n];
@@ -250,12 +249,9 @@ define(function (a,b,c,undefined) {
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
 	function property (property,generic) {
-		function set (object,property,value) { object[property] = value; return object; }
 		return function _property (object,specific) {
-			var value =   specific !== undefined ? specific
-						: generic  !== undefined ? generic
-						: undefined;
-			return value !== undefined ? set(object,property,value) : object[property];
+			var value = specific || generic;
+			return value !== undefined ? _set(object,property,value) : object[property];
 		};
 	}
 	
@@ -273,10 +269,8 @@ define(function (a,b,c,undefined) {
 	function resolve (name) {
 	    var args = Array.prototype.slice.call(arguments,1);
 		return function _resolve (object) {
-		    var args1   = Array.prototype.slice.call(arguments,1),
-		        args2   = [object].concat(args,args1);
-			return    typeof object[name] === 'function' ? method(name).apply(null,args2)
-					: property(name).apply(null,args2);
+			return ( typeof object[name] === 'function' ? method(name) : property(name) )
+					.apply(null,[object].concat(args,Array.prototype.slice.call(arguments,1)))
 		};
 	}
 	
