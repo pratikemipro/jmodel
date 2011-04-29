@@ -23,6 +23,13 @@ define(function (a,b,c,undefined) {
 	// A necessary evil in plain sight
 	//
 	
+	Function.prototype.bind = function (context) {
+		var fn = this;
+		return function () {
+			return fn.apply(context,arguments);
+		}
+	}
+	
 	// Tests: none
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
@@ -31,6 +38,7 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	// Tests: none
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
 		return function () {
@@ -38,6 +46,7 @@ define(function (a,b,c,undefined) {
 		}
 	};
 	
+	// Tests: none
 	Function.prototype.or = function (fn2) {
 		var fn1 = this;
 		return function () {
@@ -466,9 +475,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function regex (expression) {
-		return function _regex (candidate) {
-			return expression.test(candidate);
-		};
+		return expression.test.bind(expression);
 	}
 	
 	opal.extend({
