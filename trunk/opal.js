@@ -18,6 +18,13 @@ define(function (a,b,c,undefined) {
 		extend: extend
 	};
 	
+	var assert = ( console && console.assert ) ? console.assert.bind(console) : function (condition,message) {
+		if ( !condition ) {
+			throw 'Opal exception: '+message;
+		}
+	};
+
+	
 	//
 	// Extend Function.prototype with composition and predicate functions
 	// A necessary evil in plain sight
@@ -529,12 +536,6 @@ define(function (a,b,c,undefined) {
 	// ------------------------------------------------------------------------
 	// 														  Utility functions
 	// ------------------------------------------------------------------------
-
-	var assert = ( console && console.assert ) ? console.assert.bind(console) : function (condition,message) {
-		if ( !condition ) {
-			throw 'Opal exception: '+message;
-		}
-	};
 
     // Tests: none
 	function extend (object,target) {
