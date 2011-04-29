@@ -255,8 +255,7 @@ define(function (a,b,c,undefined) {
 			var value =   specific !== undefined ? specific
 						: generic  !== undefined ? generic
 						: undefined;
-			return    object[property] === undefined ? undefined
-					: value !== undefined ? set(object,property,value)
+			return    value !== undefined ? set(object,property,value)
 					: object[property];
 		};
 	}
@@ -267,8 +266,7 @@ define(function (a,b,c,undefined) {
 		return function _method () {
 			var args1	= Array.prototype.slice.call(arguments),
 				object  = args1.shift();
-			return    object[name] === undefined ? undefined
-					: typeof object[name] === 'function' ? object[name].apply(object,args.concat(args1))
+			return	  typeof object[name] === 'function' ? object[name].apply(object,args.concat(args1))
 					: undefined;
 		};
 	}
@@ -279,8 +277,7 @@ define(function (a,b,c,undefined) {
 		return function _resolve (object) {
 		    var args1   = Array.prototype.slice.call(arguments,1),
 		        args2   = [object].concat(args,args1);
-			return    object[name] === undefined ? undefined
-					: typeof object[name] === 'function' ? method(name).apply(null,args2)
+			return    typeof object[name] === 'function' ? method(name).apply(null,args2)
 					: property(name).apply(null,args2);
 		};
 	}
