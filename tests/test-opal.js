@@ -421,6 +421,14 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('istrue', function () {
+	
+		equals( opal.isnull(null), true, 'returns true for null value');
+		equals( opal.isnull(false), false, 'returns false for false value');
+		equals( opal.isnull(7), false, 'returns false for truthy non-null value');
+		
+	});
+	
 	module('Logical connectives');
 	
 	test('or', function () {
