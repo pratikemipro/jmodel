@@ -30,13 +30,31 @@ define(function (a,b,c,undefined) {
 	// A necessary evil in plain sight
 	//
 	
+	// Protect existing methods with assetions
+	assert(Function.prototype.then === undefined, '"then" method already defined');
+	assert(Function.prototype.but === undefined, '"but" method already defined');
+	assert(Function.prototype.curry === undefined, '"curry" method already defined');
+	assert(Function.prototype.and === undefined, '"and" method already defined');
+	assert(Function.prototype.or === undefined, '"or" method already defined');
+	assert(Function.prototype.delay === undefined, '"delay" method already defined');
+	assert(Function.prototype.is === undefined, '"is" method already defined');
+	assert(Function.prototype.eq === undefined, '"eq" method already defined');
+	assert(Function.prototype.neq === undefined, '"neq" method already defined');
+	assert(Function.prototype.lt === undefined, '"lt" method already defined');
+	assert(Function.prototype.gt === undefined, '"gt" method already defined');
+	assert(Function.prototype.lte === undefined, '"lte" method already defined');
+	assert(Function.prototype.gte === undefined, '"gte" method already defined');
+	assert(Function.prototype.between === undefined, '"between" method already defined');
+	assert(Function.prototype.matches === undefined, '"matches" method already defined');
+	assert(Function.prototype.isnull === undefined, '"isnull" method already defined');
+	
 	// Tests: none
 	Function.prototype.bind = Function.prototype.bind || function (context) {
 		var fn = this;
 		return function () {
 			return fn.apply(context,arguments);
-		}
-	}
+		};
+	};
 	
 	// Tests: none
 	Function.prototype.then = function (fn2) {
@@ -53,7 +71,7 @@ define(function (a,b,c,undefined) {
 			fn1.apply(null,arguments);
 			return fn2.apply(null,arguments);
 		};
-	}
+	};
 	
 	// Tests: full
 	Function.prototype.curry = function () {
@@ -69,7 +87,7 @@ define(function (a,b,c,undefined) {
 		var fn1 = this;
 		return function () {
 			return fn1.apply(null,arguments) && fn2.apply(null,arguments);
-		}
+		};
 	};
 	
 	// Tests: none
@@ -77,7 +95,7 @@ define(function (a,b,c,undefined) {
 		var fn1 = this;
 		return function () {
 			return fn1.apply(null,arguments) || fn2.apply(null,arguments);
-		}
+		};
 	};
 	
 	// Tests: none
@@ -85,8 +103,8 @@ define(function (a,b,c,undefined) {
 		var fn = this;
 		return function () {
 			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
-		}
-	}
+		};
+	};
 
 	// Tests: none
 	Function.prototype.is = Function.prototype.then;
@@ -129,12 +147,12 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.matches = function (expression) {
 		return this.then(regex(expression));
-	}
+	};
 	
 	// Tests: none
 	Function.prototype.isnull = function () {
 		return this.then(isnull);
-	}
+	};
 	
 
 	//
