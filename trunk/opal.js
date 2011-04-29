@@ -56,7 +56,7 @@ define(function (a,b,c,undefined) {
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
 		return function () {
-			return fn2(fn1.apply(null,arguments)); 
+			return fn2(fn1.apply(this,arguments)); 
 		};
 	};
 	
@@ -64,8 +64,8 @@ define(function (a,b,c,undefined) {
 	Function.prototype.but = function (fn2) {
 		var fn1 = this;
 		return function () {
-			fn1.apply(null,arguments);
-			return fn2.apply(null,arguments);
+			fn1.apply(this,arguments);
+			return fn2.apply(this,arguments);
 		};
 	};
 	
@@ -74,7 +74,7 @@ define(function (a,b,c,undefined) {
 		var args = _slice.call(arguments),
 			fn   = this;
 		return function () {
-			return fn.apply(null,args.concat(_slice.call(arguments)));
+			return fn.apply(this,args.concat(_slice.call(arguments)));
 		};
 	};
 	
@@ -87,8 +87,8 @@ define(function (a,b,c,undefined) {
 	Function.prototype.after = function (after) {
 		var fn = this;
 		return function () {
-			var ret = fn.apply(null,arguments);
-			after.call(null,ret,_slice.call(arguments));
+			var ret = fn.apply(this,arguments);
+			after.call(this,ret,_slice.call(arguments));
 			return ret;
 		};
 	};
@@ -97,7 +97,7 @@ define(function (a,b,c,undefined) {
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
 		return function () {
-			return fn1.apply(null,arguments) && fn2.apply(null,arguments);
+			return fn1.apply(this,arguments) && fn2.apply(this,arguments);
 		};
 	};
 	
@@ -105,7 +105,7 @@ define(function (a,b,c,undefined) {
 	Function.prototype.or = function (fn2) {
 		var fn1 = this;
 		return function () {
-			return fn1.apply(null,arguments) || fn2.apply(null,arguments);
+			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
 		};
 	};
 	
