@@ -406,12 +406,25 @@ define(['../opal.js'], function (opal) {
 	test('or', function () {
 	
 		equals( opal.or()(5), false, "or of zero arguments is false");
-		equals( opal.or(opal.eq(5))(5), true, "or with one argument returns true when predicate is true." );
-		equals( opal.or(opal.eq(5))(7), false, "or with one argument returns false when predicate is false." );
+		equals( opal.or(opal.eq(5))(5), true, "or with one argument returns true when predicate is true" );
+		equals( opal.or(opal.eq(5))(7), false, "or with one argument returns false when predicate is false" );
 		
 		equals( opal.or(opal.eq(5),opal.eq(6))(5), true, "or with two arguments returns true when first is true"  );
 		equals( opal.or(opal.eq(5),opal.eq(6))(6), true, "or with two arguments returns true when second is true"  );
 		equals( opal.or(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
+		
+	});
+	
+	test('and', function () {
+	
+		equals( opal.and()(5), true, "or of zero arguments is true");
+		equals( opal.and(opal.eq(5))(5), true, "and with one argument returns true when predicate is true" );
+		equals( opal.and(opal.eq(5))(7), false, "and with one argument returns false when predicate is false" );
+		
+		equals( opal.and(opal.lt(5),opal.lt(6))(3), true, "and with two arguments returns true when both are true"  );
+		equals( opal.and(opal.eq(5),opal.eq(6))(6), false, "and with two arguments returns false when first is false"  );
+		equals( opal.and(opal.eq(5),opal.eq(6))(5), false, "or with two arguments returns false when second is false"  );
+		equals( opal.and(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
 		
 	});
 	
