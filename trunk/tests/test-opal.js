@@ -292,6 +292,14 @@ define(['../opal.js'], function (opal) {
 	
 	module('Predicates (generic)');
 	
+	test('istrue', function () {
+	
+		equals( opal.istrue(true), true, 'returns true for true value');
+		equals( opal.istrue(false), false, 'returns false for false value');
+		equals( opal.istrue(7), false, 'returns false for non-booleans value');
+		
+	});
+	
 	test('has', function () {
 	
 		var person = {forename:'fred',age:function () { return 18; }};
