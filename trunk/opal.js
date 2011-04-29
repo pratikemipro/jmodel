@@ -311,12 +311,7 @@ define(function (a,b,c,undefined) {
 	};
 	
 	// Tests: full
-	var withmethod = function _withmethod (name) {
-		var fn = method(name);
-		return function __withmethod (acc,value) {
-			return fn(acc,value);
-		};
-	};
+	var withmethod = method;
 	
 	// Tests: full
 	var push = function (acc,value) {
