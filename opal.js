@@ -112,6 +112,15 @@ define(function (a,b,c,undefined) {
 	
 
 	//
+	// Utility functions
+	//
+
+	function _undefined () { return undefined; }
+	function _true () { return true; }
+	function _false () { return false; }
+
+
+	//
 	// Function composition
 	//
 
@@ -221,16 +230,13 @@ define(function (a,b,c,undefined) {
 					: property(name).apply(null,args2);
 		};
 	}
-
+	
     // Tests: full
 	function path (elements,separator) {
-		var elements = typeof elements === 'string' ? elements.split(separator||'.') : ( elements || [] );
-		return function _path (object) {
-			return    object === undefined ? undefined
-					: elements.length === 0 ? undefined
-					: elements.length === 1 ? resolve(elements[0])(object)
-					: path.apply(null,elements.slice(1))(resolve(elements[0])(object));
-		}
+		return    typeof elements === 'string' ? path.call(null,elements.split(separator||'.'))
+				: elements === undefined || elements.length === 0 ? _undefined
+				: elements.length === 1 ? resolve(elements[0])
+				: resolve(elements[0]).then(path.call(null,elements.slice(1)));		
 	}
 
 	// Tests: full
@@ -494,14 +500,14 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	function or (predicate) {
-		return    arguments.length === 0 ? NonePredicate
+		return    arguments.length === 0 ? _false
 				: arguments.length === 1 ? predicate
 				: predicate.or(or.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
 	
 	// Tests: none
 	function and (predicate) {
-		return    arguments.length === 0 ? AllPredicate
+		return    arguments.length === 0 ? _true
 				: arguments.length === 1 ? predicate
 				: predicate.and(and.apply(null,Array.prototype.slice.call(arguments,1)));
 	}
