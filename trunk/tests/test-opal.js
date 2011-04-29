@@ -290,6 +290,18 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
+	module('Predicates (generic)');
+	
+	test('has', function () {
+	
+		var person = {forename:'fred',age:function () { return 18; }};
+		
+		equals( opal.has('forename')(person), true, 'returns true when object has property');
+		equals( opal.has('age')(person), true, 'returns true when object has method');
+		equals( opal.has('surnane')(person), false, 'returns false when object does not have property');
+		
+	});
+	
 	module('Predicates (object)');
 	
 	test('is', function () {
