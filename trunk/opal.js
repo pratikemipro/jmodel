@@ -18,35 +18,69 @@ define(function (a,b,c,undefined) {
 		assert = ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
 				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
-	
 	//
-	// Extend Function.prototype with composition and predicate functions
+	// Utility functions
+	//
+
+	function _undefined () { return undefined; }
+	function _true () { return true; }
+	function _false () { return false; }
+
+	function _not (x) { return !x; }
+
+	function _set (object,property,value) { object[property] = value; return object; }
+
+	function arg (n) {
+		return function () {
+			return arguments[n];
+		};
+	};
+
+	var first  = arg(0),
+		second = arg(1),
+		third  = arg(2);
+
+    // Tests: none
+	function extend (object,target) {
+		target = target || this;
+		for ( var i in object ) {
+			target[i] = object[i];
+		}
+		return target;
+	}
+
+	// Tests: none
+	function delegateTo (context,methodName) {
+		return function () {
+			return context[methodName].apply(context,arguments);
+		};
+	}
+	
+	opal.extend({
+		arg: 		arg,
+		first: 		first,
+		second: 	second,
+		third: 		third,
+		assert:		assert,
+		delegateTo: delegateTo,
+		copy: 		copy
+	});
+
+
+
+	// ------------------------------------------------------------------------
+	//													     Function.prototype
+	// ------------------------------------------------------------------------
+
 	// A necessary evil in plain sight
+	
+	//
+	// Application methods
 	//
 	
-	// Protect existing methods with assetions
-	assert(Function.prototype.then === undefined, '"then" method already defined');
-	assert(Function.prototype.but === undefined, '"but" method already defined');
+	// Protect existing methods with assertions
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
-	assert(Function.prototype.pre === undefined, '"pre" method already defined');
-	assert(Function.prototype.post === undefined, '"post" method already defined');
-	assert(Function.prototype.require === undefined, '"require" method already defined');
-	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
-	assert(Function.prototype.and === undefined, '"and" method already defined');
-	assert(Function.prototype.or === undefined, '"or" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
-	assert(Function.prototype.is === undefined, '"is" method already defined');
-	assert(Function.prototype.eq === undefined, '"eq" method already defined');
-	assert(Function.prototype.neq === undefined, '"neq" method already defined');
-	assert(Function.prototype.lt === undefined, '"lt" method already defined');
-	assert(Function.prototype.gt === undefined, '"gt" method already defined');
-	assert(Function.prototype.lte === undefined, '"lte" method already defined');
-	assert(Function.prototype.gte === undefined, '"gte" method already defined');
-	assert(Function.prototype.between === undefined, '"between" method already defined');
-	assert(Function.prototype.matches === undefined, '"matches" method already defined');
-	assert(Function.prototype.isnull === undefined, '"isnull" method already defined');
-	assert(Function.prototype.isa === undefined, '"isa" method already defined');
-	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 	
 	// Tests: none
 	Function.prototype.bind = Function.prototype.bind || function (context) {
@@ -56,6 +90,31 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	// Tests: full
+	Function.prototype.curry = function () {
+		var args = _slice.call(arguments),
+			fn   = this;
+		return function () {
+			return fn.apply(this,args.concat(_slice.call(arguments)));
+		};
+	};
+	
+	// Tests: none
+	Function.prototype.delay = function (duration) {
+		var fn = this;
+		return function () {
+			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
+		};
+	};
+	
+	//
+	// Composition methods
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.then === undefined, '"then" method already defined');
+	assert(Function.prototype.but === undefined, '"but" method already defined');
+
 	// Tests: none
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
@@ -73,14 +132,13 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
-	// Tests: full
-	Function.prototype.curry = function () {
-		var args = _slice.call(arguments),
-			fn   = this;
-		return function () {
-			return fn.apply(this,args.concat(_slice.call(arguments)));
-		};
-	};
+	//
+	// Aspect-like methods
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.pre === undefined, '"pre" method already defined');
+	assert(Function.prototype.post === undefined, '"post" method already defined');
 	
 	// Tests: none
 	Function.prototype.pre = function (pre) {
@@ -97,6 +155,14 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	//
+	// Preconditions and postconditions
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.require === undefined, '"require" method already defined');
+	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
+	
 	// Tests: none
 	Function.prototype.require = function (predicate,message) {
 		return this.pre(function () {
@@ -110,6 +176,14 @@ define(function (a,b,c,undefined) {
 			assert(predicate.apply(this,arguments),message);
 		});
 	};
+	
+	//
+	// Logical connectives
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.and === undefined, '"and" method already defined');
+	assert(Function.prototype.or === undefined, '"or" method already defined');
 	
 	// Tests: none
 	Function.prototype.and = function (fn2) {
@@ -126,14 +200,24 @@ define(function (a,b,c,undefined) {
 			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
 		};
 	};
+
+	//
+	// Predicate methods
+	//
 	
-	// Tests: none
-	Function.prototype.delay = function (duration) {
-		var fn = this;
-		return function () {
-			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
-		};
-	};
+	// Protect existing methods with assertions
+	assert(Function.prototype.is === undefined, '"is" method already defined');
+	assert(Function.prototype.eq === undefined, '"eq" method already defined');
+	assert(Function.prototype.neq === undefined, '"neq" method already defined');
+	assert(Function.prototype.lt === undefined, '"lt" method already defined');
+	assert(Function.prototype.gt === undefined, '"gt" method already defined');
+	assert(Function.prototype.lte === undefined, '"lte" method already defined');
+	assert(Function.prototype.gte === undefined, '"gte" method already defined');
+	assert(Function.prototype.between === undefined, '"between" method already defined');
+	assert(Function.prototype.matches === undefined, '"matches" method already defined');
+	assert(Function.prototype.isnull === undefined, '"isnull" method already defined');
+	assert(Function.prototype.isa === undefined, '"isa" method already defined');
+	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 
 	// Tests: none
 	Function.prototype.is = Function.prototype.then;
@@ -194,35 +278,10 @@ define(function (a,b,c,undefined) {
 	};
 	
 
-	//
-	// Utility functions
-	//
 
-	function _undefined () { return undefined; }
-	function _true () { return true; }
-	function _false () { return false; }
-	
-	function _not (x) { return !x; }
-	
-	function _set (object,property,value) { object[property] = value; return object; }
-	
-	function nth (n) {
-		return function () {
-			return arguments[n];
-		};
-	};
-	
-	var first  = nth(0),
-		second = nth(1),
-		third  = nth(2);
-		
-	opal.extend({
-		nth: nth,
-		first: first,
-		second: second,
-		third: third
-	});
-
+	// ------------------------------------------------------------------------
+	//													     		  Functions
+	// ------------------------------------------------------------------------
 
 	//
 	// Function composition
@@ -443,6 +502,11 @@ define(function (a,b,c,undefined) {
 	});
 	
 	
+	
+	// ------------------------------------------------------------------------
+	//													     		 Predicates
+	// ------------------------------------------------------------------------
+	
 	//
 	// Predicates: object
 	//
@@ -571,25 +635,8 @@ define(function (a,b,c,undefined) {
 
 
 	// ------------------------------------------------------------------------
-	// 														  Utility functions
+	// 														     EnhancedObject
 	// ------------------------------------------------------------------------
-
-    // Tests: none
-	function extend (object,target) {
-		target = target || this;
-		for ( var i in object ) {
-//			if ( object.hasOwnProperty(i) ) {
-				target[i] = object[i];     
-//			}
-		}
-		return target;
-	}
-	
-	function delegateTo (context,methodName) {
-		return function () {
-			return context[methodName].apply(context,arguments);
-		};
-	}
 	
 	function copy (obj,exact) {
 		return extend(obj, exact ? {} : new EnhancedObject() );
@@ -633,11 +680,7 @@ define(function (a,b,c,undefined) {
 	EnhancedObject.prototype._defaults = EnhancedObject.prototype.defaults;
 	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
 
-	opal.extend({
-		assert:		assert,
-		delegateTo: delegateTo,
-		copy: 		copy
-	});
+	opal.copy = copy;
 
 	return opal;
 
