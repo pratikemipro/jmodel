@@ -201,7 +201,15 @@ define(function (a,b,c,undefined) {
 	};
 	
 	var first  = nth(0),
-		second = nth(1);
+		second = nth(1),
+		third  = nth(2);
+		
+	opal.extend({
+		nth: nth,
+		first: first,
+		second: second,
+		third: third
+	});
 
 
 	//
