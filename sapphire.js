@@ -19,7 +19,8 @@ define(['jmodel/opal'], function (opal) {
 		eval('var '+i+' = opal.'+i);
 	}
 
-	var _ = extend({sapphire_version:'0.11.1'},opal);
+	var _ 	   = extend({sapphire_version:'0.11.1'},opal),
+		_slice = Array.prototype.slice;
 	
 	// ------------------------------------------------------------------------
 	//																		Set
@@ -28,7 +29,7 @@ define(['jmodel/opal'], function (opal) {
 	// Tests: full
 	function Set () {
 
-		this.__members = Array.prototype.slice.call(arguments);
+		this.__members = _slice.call(arguments);
 
 		this.length		= this.__members.length;
 		this.__index	= false;
@@ -178,7 +179,7 @@ define(['jmodel/opal'], function (opal) {
 		
 		map: function _map () {
 			function makeMapping (obj) { return ( typeof obj == 'string' ) ? resolve(obj) : obj; }
-			var args    = Array.prototype.slice.call(arguments),
+			var args    = _slice.call(arguments),
 			    mapped  = ( typeof args[args.length-1] === 'object' ) ? args.pop() : new List(),
 			    mapping = ( args.length === 1 ) ? makeMapping(args[0])
 			                : pipe.apply(null, List.fromArray(args).map(makeMapping).get());
@@ -202,11 +203,11 @@ define(['jmodel/opal'], function (opal) {
 		},
 		
 		union: function _union () {
-			return union.apply(null,[this].concat(Array.prototype.slice.call(arguments)));
+			return union.apply(null,[this].concat(_slice.call(arguments)));
 		},
 		
 		intersection: function _intersection () {
-			return intersection.apply(null,[this].concat(Array.prototype.slice.call(arguments)));
+			return intersection.apply(null,[this].concat(_slice.call(arguments)));
 		},
 		
 		difference: function _difference (set) {
@@ -283,7 +284,7 @@ define(['jmodel/opal'], function (opal) {
 	_.Set = Set;
 	
 	Set.from = function () {
-		return Set.fromArray(Array.prototype.slice.call(arguments));
+		return Set.fromArray(_slice.call(arguments));
 	};
 	
 	// Tests: full
@@ -297,7 +298,7 @@ define(['jmodel/opal'], function (opal) {
 	// Tests: full
 	Set.fromArguments = function (args) {
 		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
-		return Set.fromArray(Array.prototype.slice.call(args));
+		return Set.fromArray(_slice.call(args));
 	};
 	
 	// Tests: none
@@ -376,7 +377,7 @@ define(['jmodel/opal'], function (opal) {
 	    }
 		this.__constructor = this.__constructor || constructor;
 		Set.apply(this,[]);
-		Set.fromArray(Array.prototype.slice.call(arguments,1)).reduce(method('add'),this);
+		Set.fromArray(_slice.call(arguments,1)).reduce(method('add'),this);
 		return this;
 	}
 	
@@ -496,7 +497,7 @@ define(['jmodel/opal'], function (opal) {
 	List.prototype.constructor	= List;
 	
 	List.from = function () {
-		return List.fromArray(Array.prototype.slice.call(arguments));
+		return List.fromArray(_slice.call(arguments));
 	};
 	
 	List.fromArray = function (arr) {
@@ -508,7 +509,7 @@ define(['jmodel/opal'], function (opal) {
 	
 	List.fromArguments = function (args) {
 		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
-		return List.fromArray(Array.prototype.slice.call(args));
+		return List.fromArray(_slice.call(args));
 	};
 	
 	List.fromJQuery = function (jq) {
