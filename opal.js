@@ -46,7 +46,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.matches === undefined, '"matches" method already defined');
 	assert(Function.prototype.isnull === undefined, '"isnull" method already defined');
 	assert(Function.prototype.isa === undefined, '"isa" method already defined');
-	assert(Function.prototype.is_of_type === undefined, '"is_of_type" method already defined');
+	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 	
 	// Tests: none
 	Function.prototype.bind = Function.prototype.bind || function (context) {
@@ -189,7 +189,7 @@ define(function (a,b,c,undefined) {
 	};
 	
 	// Tests: none
-	Function.prototype.is_of_type = function () {
+	Function.prototype.hastype = function () {
 		return this.then(is_of_type);
 	};
 	
