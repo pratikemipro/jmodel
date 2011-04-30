@@ -13,10 +13,10 @@
 
 define(function (a,b,c,undefined) {
 
-	var opal   = { opal_version: '0.13.0', extend: extend },
+	var opal   = { opal_version: '0.14.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
-				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } }
+				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
 	
 	//
@@ -28,8 +28,8 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.then === undefined, '"then" method already defined');
 	assert(Function.prototype.but === undefined, '"but" method already defined');
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
-	assert(Function.prototype.before === undefined, '"before" method already defined');
-	assert(Function.prototype.after === undefined, '"after" method already defined');
+	assert(Function.prototype.pre === undefined, '"pre" method already defined');
+	assert(Function.prototype.post === undefined, '"post" method already defined');
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
@@ -79,16 +79,16 @@ define(function (a,b,c,undefined) {
 	};
 	
 	// Tests: none
-	Function.prototype.before = function (before) {
-		return before.but(this);
+	Function.prototype.pre = function (pre) {
+		return pre.but(this);
 	};
 	
 	// Tests: none
-	Function.prototype.after = function (after) {
+	Function.prototype.post = function (post) {
 		var fn = this;
 		return function () {
 			var ret = fn.apply(this,arguments);
-			after.call(this,ret,_slice.call(arguments));
+			post.call(this,ret,_slice.call(arguments));
 			return ret;
 		};
 	};
@@ -174,14 +174,14 @@ define(function (a,b,c,undefined) {
 	function _true () { return true; }
 	function _false () { return false; }
 	
-	function _not (x) { return !x }
+	function _not (x) { return !x; }
 	
 	function _set (object,property,value) { object[property] = value; return object; }
 	
 	function nth (n) {
 		return function () {
 			return arguments[n];
-		}
+		};
 	};
 	
 	var first  = nth(0),
@@ -283,7 +283,7 @@ define(function (a,b,c,undefined) {
 	    var args = _slice.call(arguments,1);
 		return function _resolve (object) {
 			return ( typeof object[name] === 'function' ? method(name) : property(name) )
-					.apply(null,[object].concat(args,_slice.call(arguments,1)))
+					.apply(null,[object].concat(args,_slice.call(arguments,1)));
 		};
 	}
 	
@@ -500,7 +500,7 @@ define(function (a,b,c,undefined) {
 		AllPredicate: 			_true,
 		NonePredicate: 			_false,
 		istrue:					istrue,
-		isnull:					isnull,
+		isnull:					isnull
 	});
 	
 	
