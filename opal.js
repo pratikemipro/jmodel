@@ -82,7 +82,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.bind = Function.prototype.bind || function (context) {
 		var fn = this;
 		return function () {
