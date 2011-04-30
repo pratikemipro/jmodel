@@ -30,6 +30,17 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
+	test('then', function () {
+	
+		var red = function (arr) { arr.push('red'); return arr; },
+			green = function (arr) { arr.push('green'); return arr; },
+			blue = function (arr) { arr.push('blue'); return arr; };
+			
+		deepEqual( red.then(green)([]), ['red','green'], 'then works' );
+		deepEqual( red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative' );
+		
+	});
+	
 	
 	//
 	// Function composition

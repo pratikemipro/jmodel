@@ -115,7 +115,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.then === undefined, '"then" method already defined');
 	assert(Function.prototype.but === undefined, '"but" method already defined');
 
-	// Tests: none
+	// Tests: full
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
 		return function () {
