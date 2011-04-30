@@ -30,6 +30,8 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
 	assert(Function.prototype.pre === undefined, '"pre" method already defined');
 	assert(Function.prototype.post === undefined, '"post" method already defined');
+	assert(Function.prototype.require === undefined, '"require" method already defined');
+	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
@@ -91,6 +93,20 @@ define(function (a,b,c,undefined) {
 			post.call(this,ret,_slice.call(arguments));
 			return ret;
 		};
+	};
+	
+	// Tests: none
+	Function.prototype.require = function (predicate,message) {
+		return this.pre(function () {
+			assert(predicate.apply(this,arguments),message);
+		});
+	};
+	
+	// Tests: none
+	Function.prototype.ensure = function (predicate,message) {
+		return this.post(function (value) {
+			assert(predicate.call(this,value),message);
+		});
 	};
 	
 	// Tests: none
