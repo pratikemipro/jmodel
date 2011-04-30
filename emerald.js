@@ -25,7 +25,8 @@ define(['jmodel/sapphire'],function (sapphire) {
 	}
  
 	var em		= extend({emerald_version:'0.12.2'},sapphire),
-		_		= em;
+		_		= em,
+		_slice	= Array.prototype.slice;
  
  
 	// ------------------------------------------------------------------------
@@ -51,7 +52,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 		},
 		
 		create: function _create () {
-			var args = Array.prototype.slice.call(arguments);
+			var args = _slice.call(arguments);
 			return TypedSet.prototype.create.apply(this,[this].concat(args));
 		},
 		
@@ -187,21 +188,21 @@ define(['jmodel/sapphire'],function (sapphire) {
 				last,
 				derived = this.derive(function (method) {
 					return function () {
-						last = Array.prototype.slice.call(arguments);
-						return active ? method.apply(this,Array.prototype.slice.call(arguments).concat(startEvent)) : true;
+						last = _slice.call(arguments);
+						return active ? method.apply(this,_slice.call(arguments).concat(startEvent)) : true;
 					};
 				});
 			
 			start.subscribe(function () {
 				if ( active === options.initial ) {
-					startEvent	= Array.prototype.slice.call(arguments);
+					startEvent	= _slice.call(arguments);
 					active		= !options.initial;
 				}
 			});
 
 			stop.subscribe(function () {
 				if ( active !== options.initial && options.inclusive ) {
-					derived.raise.apply(derived,[].concat(last,startEvent,Array.prototype.slice.call(arguments)));
+					derived.raise.apply(derived,[].concat(last,startEvent,_slice.call(arguments)));
 				}
 				active = options.initial;
 			});
@@ -223,7 +224,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 					return derivedEventType.raise.apply(derivedEventType,arguments);
 				}
 				else {
-					events.add(Array.prototype.slice.call(arguments));
+					events.add(_slice.call(arguments));
 				}
 				return true;
 		    });
@@ -252,7 +253,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 		delay: function (interval) {
 			return this.derive(function (method) {
 				return function () {
-					var args = Array.prototype.slice.call(arguments),
+					var args = _slice.call(arguments),
 						that = this;
 					setTimeout(function () {
 						method.apply(that,args);
@@ -273,10 +274,10 @@ define(['jmodel/sapphire'],function (sapphire) {
 		},
 		
 		tag: function () {
-			var tags = Array.prototype.slice.call(arguments);
+			var tags = _slice.call(arguments);
 			return this.derive(function (method) {
 				return function () {
-					return method.apply(this,Array.prototype.slice.call(arguments).concat(tags));
+					return method.apply(this,_slice.call(arguments).concat(tags));
 				};
 			});
 		},
@@ -353,15 +354,15 @@ define(['jmodel/sapphire'],function (sapphire) {
 		},
 		
 		republish: function () {
-		    var args1 = Array.prototype.slice.call(arguments),
+		    var args1 = _slice.call(arguments),
 		        republishedEventType = args1.shift();
 		    this.subscribe({
 				message: function () {
-			        var args2 = Array.prototype.slice.call(arguments);
+			        var args2 = _slice.call(arguments);
 		            return republishedEventType.raise.apply(republishedEventType,args1.concat(args2));
 		        },
 				error: function () {
-					var args2 = Array.prototype.slice.call(arguments);
+					var args2 = _slice.call(arguments);
 		            return republishedEventType.fail.apply(republishedEventType,args1.concat(args2));
 				}
 			});
@@ -420,7 +421,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 		source.subscribe({
 			context: this,
 			message: function () {
-				var args = Array.prototype.slice.call(arguments);
+				var args = _slice.call(arguments);
 				acc = typeof acc === 'function' ? acc.apply(null,args) : acc;
 				acc = fn.apply(null,[acc].concat(args));
 				return this.raise.apply(this,[acc].concat(args));
@@ -443,7 +444,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 	
 	em.disjoin = function () {
 	    var derivedEventType	= new EventType(em.registry),
-			args				= Array.prototype.slice.call(arguments),
+			args				= _slice.call(arguments),
 			options				= args.length > 1 && !( args[args.length-1] instanceof EventType ) ? args.pop() : {},
 			eventTypes			= args[0] instanceof Set ? args[0] : Set.fromArray(args);
 		derivedEventType.remember(options.remember || 0);
@@ -464,7 +465,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 	    events.each(function (eventType) {
 	        var queue = buffer.add([]).added;
 	        eventType.subscribe(function () {
-    	        queue.push.call(queue,Array.prototype.slice.call(arguments));
+    	        queue.push.call(queue,_slice.call(arguments));
 				if ( bufferReady() ) {
 	                return sendMessage();
 	            }
@@ -530,7 +531,7 @@ define(['jmodel/sapphire'],function (sapphire) {
     	
     	fromAsync: function () {
     	    var eventType = new EventType(),
-    	        args = Array.prototype.slice.apply(arguments).concat(function () {
+    	        args = _slice.apply(arguments).concat(function () {
 					eventType.raise.apply(eventType,arguments);
 				}),
     	        fn = args.shift();
@@ -544,7 +545,7 @@ define(['jmodel/sapphire'],function (sapphire) {
     	},
     	
     	fromJSON: function () {
-    	    var args = [jQuery.getJSON].concat(Array.prototype.slice.apply(arguments));
+    	    var args = [jQuery.getJSON].concat(_slice.call(arguments));
     	    return em.event.fromAsync.apply(null,args);
     	}
 	    
@@ -566,10 +567,10 @@ define(['jmodel/sapphire'],function (sapphire) {
 		
 		this.descriptor = copy(descriptor).addProperties({
 			success: function () {
-		        that.raise.apply(that,Array.prototype.slice.apply(arguments).concat(that.descriptor));
+		        that.raise.apply(that,_slice.call(arguments).concat(that.descriptor));
 		    },
 			error: function () {
-				that.fail.apply(that,Array.prototype.slice.apply(arguments).concat(that.descriptor));
+				that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
 			}
 		});
 		
@@ -790,7 +791,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 			}),
 			
 			create: function () {
-				var args = Array.prototype.slice.apply(arguments);
+				var args = _slice.call(arguments);
 				return proto.create.apply(this,[this].concat(arguments));
 			}
 			
