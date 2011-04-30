@@ -421,7 +421,7 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
-	test('istrue', function () {
+	test('isnull', function () {
 	
 		equals( opal.isnull(null), true, 'returns true for null value');
 		equals( opal.isnull(false), false, 'returns false for false value');

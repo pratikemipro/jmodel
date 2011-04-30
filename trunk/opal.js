@@ -593,7 +593,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	var istrue = eq(true);
 
-	// Tests: none
+	// Tests: full
     var isnull = eq(null);
 
 	opal.extend({
