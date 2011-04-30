@@ -45,6 +45,8 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.between === undefined, '"between" method already defined');
 	assert(Function.prototype.matches === undefined, '"matches" method already defined');
 	assert(Function.prototype.isnull === undefined, '"isnull" method already defined');
+	assert(Function.prototype.isa === undefined, '"isa" method already defined');
+	assert(Function.prototype.is_of_type === undefined, '"is_of_type" method already defined');
 	
 	// Tests: none
 	Function.prototype.bind = Function.prototype.bind || function (context) {
@@ -104,8 +106,8 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	Function.prototype.ensure = function (predicate,message) {
-		return this.post(function (value) {
-			assert(predicate.call(this,value),message);
+		return this.post(function () {
+			assert(predicate.apply(this,arguments),message);
 		});
 	};
 	
@@ -179,6 +181,16 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.isnull = function () {
 		return this.then(isnull);
+	};
+	
+	// Tests: none
+	Function.prototype.isa = function () {
+		return this.then(isa);
+	};
+	
+	// Tests: none
+	Function.prototype.is_of_type = function () {
+		return this.then(is_of_type);
 	};
 	
 
