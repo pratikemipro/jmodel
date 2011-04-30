@@ -638,6 +638,7 @@ define(function (a,b,c,undefined) {
 	// 														     EnhancedObject
 	// ------------------------------------------------------------------------
 	
+	// Tests: none
 	function copy (obj,exact) {
 		return extend(obj, exact ? {} : new EnhancedObject() );
 	}
@@ -648,10 +649,12 @@ define(function (a,b,c,undefined) {
 		
 		constructor: EnhancedObject,
 		
+		// Tests: none
 		addProperties: function _add (attributes) {
 			return extend(attributes,this);
 		},
 		
+		// Tests: none
 		removeProperties: function _remove () {
 			for ( var i=0; i<arguments.length; i++ ) {
 				delete this[arguments[i]];
@@ -659,6 +662,7 @@ define(function (a,b,c,undefined) {
 			return this;
 		},
 		
+		// Tests: none
 		defaults: function _defaults (attributes) {
 			for ( var key in attributes ) {
 				if ( attributes.hasOwnProperty(key) ) {
@@ -668,6 +672,7 @@ define(function (a,b,c,undefined) {
 			return this;
 		},
 		
+		// Tests: none
 		setProperty: function _set (key,value) {
 			this[key] = value;
 			return this;
