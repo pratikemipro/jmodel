@@ -7,6 +7,15 @@ define(['../opal.js'], function (opal) {
 	
 	module('Function.prototype');
 	
+	test('bind', function () {
+	
+		var person = {name:'fred'},
+			getName = function () { return this.name; };
+			
+		equals( getName.bind(person)(), 'fred', 'bind works' );
+		
+	});
+	
 	test('curry', function () {
 	    
 	   var add = function (a,b) { return a+b; };
