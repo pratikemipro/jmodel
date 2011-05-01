@@ -136,7 +136,7 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.but = function (fn2) {
 		var fn1 = this;
 		return function () {

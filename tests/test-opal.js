@@ -36,7 +36,7 @@ define(['../opal.js'], function (opal) {
 	   var add = function (a,b) { return a+b; };
 	   
 	   var Multiplier = function () {
-            this.multiply = function (a,b) { return a*b };
+            this.multiply = function (a,b) { return a*b; };
 	   };
 	   
 	   var multiplier = new Multiplier();
@@ -56,6 +56,17 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('but', function () {
+	
+		var arr = [],
+			red = function (arr) { arr.push('red'); return arr; },
+			length = function (arr) { return arr.length; };
+		
+		equal( red.but(length)(arr), 1, 'return value of second returned' );
+		deepEqual( arr, ['red'], 'first function has been applied');
+		
+	});
+	
 	
 	//
 	// Function composition
@@ -65,34 +76,34 @@ define(['../opal.js'], function (opal) {
 	
 	test('pipe', function () {
 
-		var double = function (x) { return 2*x; },
+		var times2 = function (x) { return 2*x; },
 			addten = function (x) { return x+10; };
 
-		equals( opal.pipe(double,addten)(7), 24, 'piping of two functions works' );
-		equals( opal.pipe(addten,double)(7), 34, 'piping works in opposite direction' );
-		equals( opal.pipe(double)(7), 14, 'pipe of a single function is just that function' );	
+		equals( opal.pipe(times2,addten)(7), 24, 'piping of two functions works' );
+		equals( opal.pipe(addten,times2)(7), 34, 'piping works in opposite direction' );
+		equals( opal.pipe(times2)(7), 14, 'pipe of a single function is just that function' );	
 		equals( opal.pipe()(7), 7, 'pipe of no functions is identity' );
 
 	});
 	
 	test('compose', function () {
 	
-		var double = function (x) { return 2*x; },
+		var times2 = function (x) { return 2*x; },
 			addten = function (x) { return x+10; };
 			
-		equals( opal.compose(double,addten)(7), 34, 'composition of two functions works' );
-		equals( opal.compose(addten,double)(7), 24, 'composition works in opposite direction' );
-		equals( opal.compose(double)(7), 14, 'composition of a single function is just that function' );	
+		equals( opal.compose(times2,addten)(7), 34, 'composition of two functions works' );
+		equals( opal.compose(addten,times2)(7), 24, 'composition works in opposite direction' );
+		equals( opal.compose(times2)(7), 14, 'composition of a single function is just that function' );	
 		equals( opal.compose()(7), 7, 'composition of no functions is identity' );
 		
 	});
 	
 	test('parallel', function () {
 
-	    var double = function (x) { return 2*x; },
+	    var times2 = function (x) { return 2*x; },
 			addten = function (x) { return x+10; };
 
-		var result1 = opal.parallel(double,addten)(5);
+		var result1 = opal.parallel(times2,addten)(5);
 
 	    equals( result1[0], 10, 'parallel without labels returns correct first value');
 	    equals( result1[1], 15, 'parallel without labels returns correct second value');
@@ -105,15 +116,15 @@ define(['../opal.js'], function (opal) {
 	    equals( result2.doubled,  10, 'parallel with label in call returns correct first value');
 	    equals( result2.addedten, 15, 'parallel with label in call returns correct second value'); */
 
-	    double.label = 'doubled';
+	    times2.label = 'doubled';
 	    addten.label = 'addedten';
 
-	    var result3 = opal.parallel(double,addten)(5);
+	    var result3 = opal.parallel(times2,addten)(5);
 
 	    equals( result3.doubled,  10, 'parallel with label as function properties returns correct first value');
 	    equals( result3.addedten, 15, 'parallel with label as function properties returns correct second value');
 
-	    var result4 = opal.parallel(double,addten)({doubled:2,addedten:3});
+	    var result4 = opal.parallel(times2,addten)({doubled:2,addedten:3});
 
 	    equals( result4.doubled,  4,  'parallel with label as function properties and labelled parameters returns correct first value');
 	    equals( result4.addedten, 13, 'parallel with label as function properties and labelled parameters returns correct second value');
@@ -129,7 +140,7 @@ define(['../opal.js'], function (opal) {
 	
 	test('apply', function () {
 		
-		var double = function (x) { return 2*x; };
+		var times2 = function (x) { return 2*x; };
 		
 		var Tripler = function () {
 		    this.triple = function (x) { return 3*x; };
@@ -137,14 +148,14 @@ define(['../opal.js'], function (opal) {
 		
 		var tripler = new Tripler();
 		
-		equals( opal.apply(double,3), 6, 'apply works without context' );
+		equals( opal.apply(times2,3), 6, 'apply works without context' );
 		equals( opal.apply(tripler, tripler.triple, 3), 9, 'apply works with context' );
 		
 	});
 	
 	test('applyto', function () {
 		
-		var double = function (x) { return 2*x; };
+		var times2 = function (x) { return 2*x; };
 		
 		var Tripler = function () {
 		    this.triple = function (x) { return 3*x; };
@@ -152,7 +163,7 @@ define(['../opal.js'], function (opal) {
 		
 		var tripler = new Tripler();
 		
-		equals( opal.applyto(3)(double), 6, 'applyto works without context' );
+		equals( opal.applyto(3)(times2), 6, 'applyto works without context' );
 		equals( opal.applyto(3)(tripler,tripler.triple), 9, 'applyto works with context');
 		
 	});
@@ -205,12 +216,12 @@ define(['../opal.js'], function (opal) {
 		var Adder = function () {
 		    this.unit = function () { return 0; };
 		    this.add = function (a,b) { return a+b; };
-		}
+		};
 		
 		var adder = new Adder();
 		
 		equals( opal.method('unit')(adder),    0,     	  'Method works without any arguments');
-		equals( opal.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' )
+		equals( opal.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' );
 		equals( opal.method('add',2,3)(adder), 5,     	  'Method works with arguments at creation time');
 		equals( opal.method('add')(adder,2,3), 5,     	  'Method works with arguments at invocation time');
 		equals( opal.method('add',2)(adder,3), 5,     	  'Method works with mixed arguments');
@@ -228,7 +239,7 @@ define(['../opal.js'], function (opal) {
 	            this.forename = forename;
 	            return this;
 		    };
-		}
+		};
 		
 		var person = new Person('John','Smith',18);
 		
@@ -386,14 +397,14 @@ define(['../opal.js'], function (opal) {
 	test('eq', function () {
 		
 		equals( opal.eq(3)(3), true, 'returns true if values equal');
-		equals( opal.eq(3)(2), false, 'returns false if values not equal')
+		equals( opal.eq(3)(2), false, 'returns false if values not equal');
 		
 	});
 	
 	test('neq', function () {
 		
 		equals( opal.neq(3)(3), false, 'returns false if values equal');
-		equals( opal.neq(3)(2), true, 'returns true if values not equal')
+		equals( opal.neq(3)(2), true, 'returns true if values not equal');
 		
 	});
 	
