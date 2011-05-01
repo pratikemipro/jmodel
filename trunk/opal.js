@@ -30,6 +30,7 @@ define(function (a,b,c,undefined) {
 
 	function _set (object,property,value) { object[property] = value; return object; }
 
+	// Tests: none
 	function arg (n) {
 		return function () {
 			return arguments[n];
@@ -38,7 +39,13 @@ define(function (a,b,c,undefined) {
 
 	var first  = arg(0),
 		second = arg(1),
-		third  = arg(2);
+		third  = arg(2),
+		_0 = arg(0),
+		_1 = arg(1),
+		_2 = arg(2),
+		_3 = arg(3),
+		_4 = arg(4),
+		_5 = arg(5);
 
     // Tests: none
 	function extend (object,target) {
@@ -61,6 +68,12 @@ define(function (a,b,c,undefined) {
 		first: 		first,
 		second: 	second,
 		third: 		third,
+		_0: 		_0,
+		_1: 		_1,
+		_2: 		_2,
+		_3: 		_3,
+		_4: 		_4,
+		_5: 		_5,
 		assert:		assert,
 		delegateTo: delegateTo,
 		copy: 		copy
