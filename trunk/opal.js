@@ -30,7 +30,7 @@ define(function (a,b,c,undefined) {
 
 	function _set (object,property,value) { object[property] = value; return object; }
 
-	// Tests: none
+	// Tests: full
 	function arg (n) {
 		return function () {
 			return arguments[n];
