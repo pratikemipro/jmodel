@@ -2,6 +2,21 @@ define(['../opal.js'], function (opal) {
 	
 	
 	//
+	// Utility functions
+	//
+	
+	module('Utility functions');
+	
+	test('arg', function () {
+	
+		equals( opal.arg(0).call(this,'red','green','blue'), 'red', 'arg(0) works');
+		equals( opal.arg(1).call(this,'red','green','blue'), 'green', 'arg(1) works');
+		equals( opal.arg(2).call(this,'red','green','blue'), 'blue', 'arg(2) works');
+		equals( opal.arg(4).call(this,'red','green','blue'), undefined, 'arg(n) returns undefined if beyond bounds');
+		
+	});
+	
+	//
 	// Function.prototype methods
 	//
 	
