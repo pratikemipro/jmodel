@@ -163,7 +163,7 @@ define(function (a,b,c,undefined) {
 		var fn = this;
 		return function () {
 			var ret = fn.apply(this,arguments);
-			post.call(this,ret,_slice.call(arguments));
+			post.apply(this,[ret].concat(_slice.call(arguments)));
 			return ret;
 		};
 	};
