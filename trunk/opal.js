@@ -281,13 +281,13 @@ define(function (a,b,c,undefined) {
 	};
 	
 	// Tests: none
-	Function.prototype.isa = function () {
-		return this.then(isa);
+	Function.prototype.isa = function (constructor) {
+		return this.then(isa(constructor));
 	};
 	
 	// Tests: none
-	Function.prototype.hastype = function () {
-		return this.then(is_of_type);
+	Function.prototype.hastype = function (type) {
+		return this.then(is_of_type(type));
 	};
 	
 
