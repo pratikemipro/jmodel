@@ -373,7 +373,9 @@ define(function (a,b,c,undefined) {
 	function property (property,generic) {
 		return function _property (object,specific) {
 			var value = specific || generic;
-			return value !== undefined ? _set(object,property,value) : object[property];
+			return    value === undefined ? object[property]
+					: object[property] !== undefined ? _set(object,property,value)
+					: undefined;
 		};
 	}
 	
