@@ -14,6 +14,9 @@ define(['../opal.js'], function (opal) {
 		equals( opal.arg(2).call(this,'red','green','blue'), 'blue', 'arg(2) works');
 		equals( opal.arg(4).call(this,'red','green','blue'), undefined, 'arg(n) returns undefined if beyond bounds');
 		
+		equals( opal.arg(2).hastype('string').call(this,'red','green','blue'), true, 'arg(n).hastype returns false if type does not match' );
+		equals( opal.arg(2).hastype('number').call(this,'red','green','blue'), false, 'arg(n).hastype returns false if type does not match' );
+		
 	});
 	
 	//
