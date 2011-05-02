@@ -177,14 +177,20 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
 	
 	// Tests: none
-	Function.prototype.require = function (predicate,message) {
+	Function.prototype.require = function () {
+		var predicates = _slice.call(arguments),
+			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
+			predicate = and.apply(null,predicates);
 		return this.pre(function () {
 			assert(predicate.apply(this,arguments),message);
 		});
 	};
 	
 	// Tests: none
-	Function.prototype.ensure = function (predicate,message) {
+	Function.prototype.ensure = function () {
+		var predicates = _slice.call(arguments),
+			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
+			predicate = and.apply(null,predicates);
 		return this.post(function () {
 			assert(predicate.apply(this,arguments),message);
 		});
