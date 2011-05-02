@@ -639,7 +639,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	function not (predicate) {
-		return predicate.then(_not);
+		return typeof predicate === 'function' ? predicate.then(_not) : !predicate;
 	}
 
 	opal.extend({
