@@ -769,25 +769,17 @@ define(['jmodel/sapphire'],function (sapphire) {
 		
 		return extend({
 			
-			add: aspect({
-				target: proto.add,
-				post: function (state) {
-					if ( typeof this.added !== 'undefined' ) {
-						this.event('add').raise(this.added,this);
-					}
-					return state.returnValue;
+			add: proto.add.post(function () {
+				if ( typeof this.added !== 'undefined' ) {
+					this.event('add').raise(this.added,this);
 				}
 			}),
 			
-			remove: aspect({
-				target: proto.remove,
-				post: function (state) {
-					var that = this;
-					state.returnValue.each(function (item) {
-						that.event('remove').raise(item,that);
-					});
-					return state.returnValue;
-				}
+			remove: proto.remove.post(function (removed) {
+				var that = this;
+				removed.each(function (item) {
+					that.event('remove').raise(item,that);
+				});
 			}),
 			
 			create: function () {
@@ -795,7 +787,7 @@ define(['jmodel/sapphire'],function (sapphire) {
 				return proto.create.apply(this,[this].concat(arguments));
 			}
 			
-		},copy(proto,true));
+		}, copy(proto,true));
 		
 	}
 	
