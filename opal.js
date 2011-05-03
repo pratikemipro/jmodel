@@ -241,7 +241,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.is = Function.prototype.then;
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.eq = function (value) {
 		return this.then(eq(value));
 	};
