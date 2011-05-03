@@ -289,7 +289,6 @@ define(['jmodel/opal'], function (opal) {
 	
 	// Tests: full
 	Set.fromArray = function (arr) {
-		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var set = new Set();
 		Set.apply(set,arr);
 		return set;
@@ -297,13 +296,11 @@ define(['jmodel/opal'], function (opal) {
 	
 	// Tests: full
 	Set.fromArguments = function (args) {
-		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
 		return Set.fromArray(_slice.call(args));
 	};
 	
 	// Tests: none
 	Set.fromJQuery = function (jq) {
-		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
 	};
 	
@@ -501,19 +498,16 @@ define(['jmodel/opal'], function (opal) {
 	};
 	
 	List.fromArray = function (arr) {
-		assert(arr instanceof Array, 'List.fromArray parameter is not an array');
 		var list = new List();
 		List.apply(list,arr);
 		return list;
 	};
 	
 	List.fromArguments = function (args) {
-		assert(typeof args.callee !== 'undefined', 'List.fromArguments parameter is not an argument object');
 		return List.fromArray(_slice.call(args));
 	};
 	
 	List.fromJQuery = function (jq) {
-		assert(typeof jq.jquery !== 'undefined', 'List.fromJQuery parameter is not a jQuery object');
 		return List.fromArray(jq.get()).map(jQuery,new List());
 	};
 	
