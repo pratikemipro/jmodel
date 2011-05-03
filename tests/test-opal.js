@@ -88,6 +88,15 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('lt', function () {
+		
+		var add2 = function (x) { return x+2; };
+		
+		equal( add2.lt(5)(2), true, 'returns true when function applied to arguments is less than value supplied to predicate' );
+		equal( add2.lt(5)(3), false, 'returns false when function applied to arguments is not less than value supplied to predicate' );
+		
+	});
+	
 	test('isa', function () {
 	
 		function Mammal () {}

@@ -251,7 +251,7 @@ define(function (a,b,c,undefined) {
 		return this.then(neq(value));
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.lt = function (value) {
 		return this.then(lt(value));
 	};
