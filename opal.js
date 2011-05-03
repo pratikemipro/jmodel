@@ -631,15 +631,15 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	function or (predicate) {
-		return    arguments.length === 0 ? _false
-				: arguments.length === 1 ? predicate
+		return    arguments.length === 1 ? predicate
+				: arguments.length === 0 ? _false
 				: predicate.or(or.apply(null,_slice.call(arguments,1)));
 	}
 	
 	// Tests: full
 	function and (predicate) {
-		return    arguments.length === 0 ? _true
-				: arguments.length === 1 ? predicate
+		return    arguments.length === 1 ? predicate
+				: arguments.length === 0 ? _true
 				: predicate.and(and.apply(null,_slice.call(arguments,1)));
 	}
 	
