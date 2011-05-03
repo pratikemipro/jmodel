@@ -15,8 +15,8 @@ define(function (a,b,c,undefined) {
 
 	var opal   = { opal_version: '0.14.0', extend: extend },
 		_slice = Array.prototype.slice,
-		assert = ( console && console.assert ) ? function (condition, message) { console.assert(condition,message); }
-				 : function (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
+		assert = ( console && console.assert ) ? function _assert (condition, message) { console.assert(condition,message); }
+				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
 	//
 	// Utility functions
@@ -32,7 +32,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function arg (n) {
-		return function () {
+		return function _arg () {
 			return arguments[n];
 		};
 	};
@@ -58,7 +58,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: none
 	function delegateTo (context,methodName) {
-		return function () {
+		return function _delegateTo () {
 			return context[methodName].apply(context,arguments);
 		};
 	}
@@ -98,7 +98,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	Function.prototype.bind = Function.prototype.bind || function (context) {
 		var fn = this;
-		return function () {
+		return function _bind () {
 			return fn.apply(context,arguments);
 		};
 	};
@@ -107,7 +107,7 @@ define(function (a,b,c,undefined) {
 	Function.prototype.curry = function () {
 		var args = _slice.call(arguments),
 			fn   = this;
-		return function () {
+		return function _curry () {
 			return fn.apply(this,args.concat(_slice.call(arguments)));
 		};
 	};
@@ -115,7 +115,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.delay = function (duration) {
 		var fn = this;
-		return function () {
+		return function _delay () {
 			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
 		};
 	};
@@ -131,7 +131,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
-		return function () {
+		return function _then () {
 			return fn2(fn1.apply(this,arguments)); 
 		};
 	};
@@ -139,7 +139,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	Function.prototype.but = function (fn2) {
 		var fn1 = this;
-		return function () {
+		return function _but () {
 			fn1.apply(this,arguments);
 			return fn2.apply(this,arguments);
 		};
@@ -161,7 +161,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.post = function (post) {
 		var fn = this;
-		return function () {
+		return function _post () {
 			var ret = fn.apply(this,arguments);
 			post.apply(this,[ret].concat(_slice.call(arguments)));
 			return ret;
@@ -181,7 +181,7 @@ define(function (a,b,c,undefined) {
 		var predicates = _slice.call(arguments),
 			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 			predicate = and.apply(null,predicates);
-		return this.pre(function () {
+		return this.pre(function _require () {
 			assert(predicate.apply(this,arguments),message);
 		});
 	};
@@ -191,7 +191,7 @@ define(function (a,b,c,undefined) {
 		var predicates = _slice.call(arguments),
 			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 			predicate = and.apply(null,predicates);
-		return this.post(function () {
+		return this.post(function _ensure () {
 			assert(predicate.apply(this,arguments),message);
 		});
 	};
@@ -207,7 +207,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
-		return function () {
+		return function _and () {
 			return fn1.apply(this,arguments) && fn2.apply(this,arguments);
 		};
 	};
@@ -215,7 +215,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.or = function (fn2) {
 		var fn1 = this;
-		return function () {
+		return function _or () {
 			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
 		};
 	};
@@ -477,19 +477,19 @@ define(function (a,b,c,undefined) {
 	};
 	
 	function add0 () {
-		return function __add (acc,value) {
+		return function __add0 (acc,value) {
 			return acc.add(value);
 		};
 	}
 	
 	function add1 (predicate) {
-		return function __add (acc,value) {
+		return function _add1 (acc,value) {
 			return predicate(value) ? acc.add(value) : acc;
 		};
 	}
 	
 	function add2 (predicate,mapping,mapfirst) {
-		return function __add (acc,value) {
+		return function _add2 (acc,value) {
 			var mapped = mapping(value);
 			return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
 		};
@@ -546,7 +546,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function isa (constructor) {
-		return function (candidate) {
+		return function _isa (candidate) {
 			return candidate instanceof constructor;
 		};
 	}
@@ -572,19 +572,19 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	function compare (operator) {
 		return function _compare (value) {
-			return function __compare (candidate) {
+			return function _compare2 (candidate) {
 				return operator(candidate,value);
 			};
 		};
 	}
 	
 	// Tests: full
-	var eq	= compare(function (a,b) { return a===b; }),
-		neq	= compare(function (a,b) { return a!==b; }),
-		lt	= compare(function (a,b) { return a<b; }),
-		gt	= compare(function (a,b) { return a>b; }),
-		lte	= compare(function (a,b) { return a<=b; }),
-		gte = compare(function (a,b) { return a>=b; });
+	var eq	= compare(function _eq (a,b) { return a===b; }),
+		neq	= compare(function _neq (a,b) { return a!==b; }),
+		lt	= compare(function _lt (a,b) { return a<b; }),
+		gt	= compare(function _gt (a,b) { return a>b; }),
+		lte	= compare(function _lte (a,b) { return a<=b; }),
+		gte = compare(function _gte (a,b) { return a>=b; });
 
 	// Tests: full
 	function between (lower,higher) {
