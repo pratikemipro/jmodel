@@ -79,6 +79,15 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('neq', function () {
+		
+		var add2 = function (x) { return x+2; };
+		
+		equal( add2.neq(5)(3), false, 'returns false when function applied to arguments equals value supplied to predicate' );
+		equal( add2.neq(6)(3), true, 'returns true when function applied to arguments does not equal value supplied to predicate' );
+		
+	});
+	
 	
 	//
 	// Function composition

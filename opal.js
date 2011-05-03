@@ -246,7 +246,7 @@ define(function (a,b,c,undefined) {
 		return this.then(eq(value));
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.neq = function (value) {
 		return this.then(neq(value));
 	};
