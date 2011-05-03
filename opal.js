@@ -579,12 +579,12 @@ define(function (a,b,c,undefined) {
 	}
 	
 	// Tests: full
-	var eq	= compare(function _eq (a,b) { return a===b; }),
-		neq	= compare(function _neq (a,b) { return a!==b; }),
-		lt	= compare(function _lt (a,b) { return a<b; }),
-		gt	= compare(function _gt (a,b) { return a>b; }),
-		lte	= compare(function _lte (a,b) { return a<=b; }),
-		gte = compare(function _gte (a,b) { return a>=b; });
+	var eq  = function _eq  (a) { return function _eq2  (x) { return x===a; }; },
+		neq = function _neq (a) { return function _neq2 (x) { return x!==a; }; },
+		lt  = function _lt  (a) { return function _lt2  (x) { return x<a;   }; },
+		gt  = function _gt  (a) { return function _gt2  (x) { return x>a;   }; },
+		lte = function _lte (a) { return function _lte2 (x) { return x<=a;  }; },
+		gte = function _gte (a) { return function _gte2 (x) { return x>=a;  }; },
 
 	// Tests: full
 	function between (lower,higher) {
