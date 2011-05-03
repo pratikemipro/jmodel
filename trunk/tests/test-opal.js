@@ -88,6 +88,24 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('isa', function () {
+	
+		function Mammal () {}
+		
+		function Cat () {}
+		Cat.prototype = new Mammal();
+		
+		function Dog () {}
+		Dog.prototype = new Mammal();
+		
+		function get (type) { return type === 'cat' ? new Cat() : new Dog(); }
+		
+		equal( get.isa(Cat)('cat'), true, 'returns true when function applied to argument has constructor supplied to predicate'  );
+		equal( get.isa(Dog)('cat'), false, 'returns false when function applied to argument has constructor supplied to predicate'  );
+		equal( get.isa(Mammal)('cat'), true, 'respects inheritance'  );
+		
+	});
+	
 	
 	//
 	// Function composition

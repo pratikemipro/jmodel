@@ -286,7 +286,7 @@ define(function (a,b,c,undefined) {
 		return this.then(isnull);
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.isa = function (constructor) {
 		return this.then(isa(constructor));
 	};
