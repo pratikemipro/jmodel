@@ -115,6 +115,15 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('hastype', function () {
+	
+		function test () { return 'red'; }
+		
+		equal( test.hastype('string')(), true, 'returns true when function returns a string' );
+		equal( test.hastype('number')(), false, 'returns false when function returns a non-string' );
+		
+	});
+	
 	
 	//
 	// Function composition

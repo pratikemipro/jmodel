@@ -291,7 +291,7 @@ define(function (a,b,c,undefined) {
 		return this.then(isa(constructor));
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.hastype = function (type) {
 		return this.then(is_of_type(type));
 	};
@@ -584,7 +584,7 @@ define(function (a,b,c,undefined) {
 		lt  = function _lt  (a) { return function _lt2  (x) { return x<a;   }; },
 		gt  = function _gt  (a) { return function _gt2  (x) { return x>a;   }; },
 		lte = function _lte (a) { return function _lte2 (x) { return x<=a;  }; },
-		gte = function _gte (a) { return function _gte2 (x) { return x>=a;  }; },
+		gte = function _gte (a) { return function _gte2 (x) { return x>=a;  }; };
 
 	// Tests: full
 	function between (lower,higher) {
