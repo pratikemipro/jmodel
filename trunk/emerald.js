@@ -14,7 +14,7 @@
 //														Emerald Event Framework
 // ============================================================================
  
-define(['jmodel/sapphire'],function (sapphire) {
+define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
  
 	//
 	// Import Sapphire
@@ -707,13 +707,11 @@ define(['jmodel/sapphire'],function (sapphire) {
 		},
 		
 		notify: function _notify () {
-			var args = arguments,
-				returnVal = true;
-			this.each(function (subscriber) {
+			var args = arguments;
+			return this.reduce(function (ret,subscriber) {
 				var returned = subscriber.notify.apply(subscriber,args);
-				returnVal = ( typeof returned !== 'undefined' ? returned : true ) && returnVal;
-			});
-			return returnVal;
+				return ret && ( returned !== undefined ? returned : true );
+			},true);
 		},
 		
 		fail: function _error (event) {
