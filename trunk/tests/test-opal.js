@@ -48,6 +48,15 @@ define(['../opal.js'], function (opal) {
 	    
 	});
 	
+	test('memo', function () {
+	
+		var add = function (a,b) { return a+b; }.memo();
+		
+		equals( add(2,3), 5, 'memoized function works normally on first call');
+		equals( add(2,3), 5, 'memoized function works normally on subsequent calls');
+		
+	});
+	
 	test('then', function () {
 	
 		var red = function (arr) { arr.push('red'); return arr; },

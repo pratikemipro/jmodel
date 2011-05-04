@@ -112,6 +112,18 @@ define(function (a,b,c,undefined) {
 		};
 	};
 	
+	// Tests: full
+	Function.prototype.memo = function () {
+		var cache = {},
+			fn = this.post(function () {
+				cache[_slice.call(arguments,1)] = arguments[0];
+			});
+		return function _memo () {
+			var value = cache[_slice.call(arguments)];
+			return value !== undefined ? value : fn.apply(this,arguments);
+		};
+	};
+	
 	// Tests: none
 	Function.prototype.delay = function (duration) {
 		var fn = this;
