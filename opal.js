@@ -88,6 +88,7 @@ define(function (a,b,c,undefined) {
 	// A necessary evil in plain sight
 	
 	assert(Function.prototype.as === undefined, '"as" method already defined');
+	assert(Function.prototype.extend === undefined, '"as" method already defined');
 	
 	// Tests: none
 	Function.prototype.as = function (name) {
@@ -95,7 +96,13 @@ define(function (a,b,c,undefined) {
 		return this;
 	};
 	
-	Function.prototype.as.displayName = 'as';
+	// Tests: none
+	Function.prototype.extend = function (properties) {
+		return extend(properties,this);
+	};
+	
+	Function.prototype.as.displayName     = 'as';
+	Function.prototype.extend.displayName = 'extend';
 	
 	
 	//
