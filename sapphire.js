@@ -27,9 +27,9 @@ define(['jmodel/opal'], function (opal) {
 	// ------------------------------------------------------------------------
 
 	// Tests: full
-	function Set () {
+	function Set (members) {
 
-		this.__members = _slice.call(arguments);
+		this.__members = members || [];
 
 		this.length		= this.__members.length;
 		this.__index	= false;
@@ -289,9 +289,7 @@ define(['jmodel/opal'], function (opal) {
 	
 	// Tests: full
 	Set.fromArray = function (arr) {
-		var set = new Set();
-		Set.apply(set,arr);
-		return set;
+		return new Set(arr);
 	};
 	
 	// Tests: full
@@ -498,9 +496,7 @@ define(['jmodel/opal'], function (opal) {
 	};
 	
 	List.fromArray = function (arr) {
-		var list = new List();
-		List.apply(list,arr);
-		return list;
+		return new List(arr);
 	};
 	
 	List.fromArguments = function (args) {
