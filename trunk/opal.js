@@ -87,6 +87,17 @@ define(function (a,b,c,undefined) {
 
 	// A necessary evil in plain sight
 	
+	assert(Function.prototype.named === undefined, '"name" method already defined');
+	
+	// Tests: none
+	Function.prototype.as = function (name) {
+		this.displayName = name;
+		return this;
+	};
+	
+	Function.prototype.as.displayName = 'named';
+	
+	
 	//
 	// Application methods
 	//
@@ -99,18 +110,18 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	Function.prototype.bind = Function.prototype.bind || function (context) {
 		var fn = this;
-		return function _bind () {
+		return function () {
 			return fn.apply(context,arguments);
-		};
+		}.as('_bind');
 	};
 	
 	// Tests: full
 	Function.prototype.curry = function () {
 		var args = _slice.call(arguments),
 			fn   = this;
-		return function _curry () {
+		return function () {
 			return fn.apply(this,args.concat(_slice.call(arguments)));
-		};
+		}.as('_curry');
 	};
 	
 	// Tests: full
@@ -118,20 +129,27 @@ define(function (a,b,c,undefined) {
 		var cache = {},
 			fn = this.post(function () {
 				cache[_slice.call(arguments,1)] = arguments[0];
-			});
-		return function _memo () {
+			}.as('_setcache'));
+		return function () {
 			var value = cache[_slice.call(arguments)];
 			return value !== undefined ? value : fn.apply(this,arguments);
-		};
+		}.as('_memo');
 	};
+	
 	
 	// Tests: none
 	Function.prototype.delay = function (duration) {
 		var fn = this;
-		return function _delay () {
+		return function () {
 			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
-		};
+		}.as('_delay');
 	};
+	
+	Function.prototype.bind.displayName  = 'bind';
+	Function.prototype.curry.displayName = 'curry';
+	Function.prototype.memo.displayName  = 'memo';
+	Function.prototype.delay.displayName = 'delay';
+	
 	
 	//
 	// Composition methods
@@ -144,19 +162,23 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
-		return function _then () {
+		return function () {
 			return fn2(fn1.apply(this,arguments)); 
-		};
+		}.as('_then');
 	};
 	
 	// Tests: full
 	Function.prototype.but = function (fn2) {
 		var fn1 = this;
-		return function _but () {
+		return function () {
 			fn1.apply(this,arguments);
 			return fn2.apply(this,arguments);
-		};
+		}.as('_but');
 	};
+	
+	Function.prototype.then.displayName = 'then';
+	Function.prototype.but.displayName  = 'but';
+	
 	
 	//
 	// Aspect-like methods
@@ -174,12 +196,16 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.post = function (post) {
 		var fn = this;
-		return function _post () {
+		return function () {
 			var ret = fn.apply(this,arguments);
 			post.apply(this,[ret].concat(_slice.call(arguments)));
 			return ret;
-		};
+		}.as('_post');
 	};
+	
+	Function.prototype.pre.displayName  = 'pre';
+	Function.prototype.post.displayName = 'post';
+	
 	
 	//
 	// Preconditions and postconditions
@@ -194,9 +220,9 @@ define(function (a,b,c,undefined) {
 		var predicates = _slice.call(arguments),
 			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 			predicate = and.apply(null,predicates);
-		return this.pre(function _require () {
+		return this.pre(function () {
 			assert(predicate.apply(this,arguments),message);
-		});
+		}.as('_require'));
 	};
 	
 	// Tests: none
@@ -204,10 +230,14 @@ define(function (a,b,c,undefined) {
 		var predicates = _slice.call(arguments),
 			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 			predicate = and.apply(null,predicates);
-		return this.post(function _ensure () {
+		return this.post(function () {
 			assert(predicate.apply(this,arguments),message);
-		});
+		}.as('_ensure'));
 	};
+	
+	Function.prototype.require.displayName = 'require';
+	Function.prototype.ensure.displayName  = 'ensure';
+	
 	
 	//
 	// Logical connectives
@@ -220,18 +250,22 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
-		return function _and () {
+		return function () {
 			return fn1.apply(this,arguments) && fn2.apply(this,arguments);
-		};
+		}.as('_and');
 	};
 	
 	// Tests: none
 	Function.prototype.or = function (fn2) {
 		var fn1 = this;
-		return function _or () {
+		return function () {
 			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
-		};
+		}.as('_or');
 	};
+	
+	Function.prototype.and.displayName = 'and';
+	Function.prototype.or.displayName  = 'or';
+	
 
 	//
 	// Predicate methods
@@ -256,58 +290,71 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	Function.prototype.eq = function (value) {
-		return this.then(eq(value));
+		return this.then(eq(value)).as('_eq');
 	};
 	
 	// Tests: full
 	Function.prototype.neq = function (value) {
-		return this.then(neq(value));
+		return this.then(neq(value)).as('_neq');
 	};
 	
 	// Tests: full
 	Function.prototype.lt = function (value) {
-		return this.then(lt(value));
+		return this.then(lt(value)).as('_lt');
 	};
 	
 	// Tests: none
 	Function.prototype.gt = function (value) {
-		return this.then(gt(value));
+		return this.then(gt(value)).as('_gt');
 	};
 
 	// Tests: none
 	Function.prototype.lte = function (value) {
-		return this.then(lte(value));
+		return this.then(lte(value)).as('_lte');
 	};
 	
 	// Tests: none
 	Function.prototype.gte = function (value) {
-		return this.then(gte(value));
+		return this.then(gte(value)).as('_gte');
 	};
 	
 	// Tests: none
 	Function.prototype.between = function (lower,higher) {
-		return this.then(between(lower,higher));
+		return this.then(between(lower,higher)).as('_between');
 	};
 	
 	// Tests: none
 	Function.prototype.matches = function (expression) {
-		return this.then(regex(expression));
+		return this.then(regex(expression)).as('_regex');
 	};
 	
 	// Tests: none
 	Function.prototype.isnull = function () {
-		return this.then(isnull);
+		return this.then(isnull).as('_isnull');
 	};
 	
 	// Tests: full
 	Function.prototype.isa = function (constructor) {
-		return this.then(isa(constructor));
+		return this.then(isa(constructor)).as('_isa');
 	};
 	
 	// Tests: full
 	Function.prototype.hastype = function (type) {
-		return this.then(is_of_type(type));
+		return this.then(is_of_type(type)).as('_hastype');
 	};
+	
+	Function.prototype.is.displayName		= 'is';
+	Function.prototype.eq.displayName		= 'eq';
+	Function.prototype.neq.displayName		= 'neq';
+	Function.prototype.lt.displayName		= 'lt';
+	Function.prototype.gt.displayName		= 'gt';
+	Function.prototype.lte.displayName		= 'lte';
+	Function.prototype.gte.displayName		= 'gte';
+	Function.prototype.between.displayName	= 'between';
+	Function.prototype.matches.displayName	= 'matches';
+	Function.prototype.isnull.displayName	= 'isnull';
+	Function.prototype.isa.displayName	 	= 'isa';
+	Function.prototype.hastype.displayName	= 'hastype';
 	
 
 
@@ -336,7 +383,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	function parallel () {
 		var fns = _slice.call(arguments);
-		return function _parallel () {
+		return function () {
 			var args0 = arguments[0],
 				result = {};
 			for (var i in fns) {
@@ -347,7 +394,7 @@ define(function (a,b,c,undefined) {
 				}
 			}
 			return result;
-		};
+		}.as('_parallel');
 	}
 	
 	
@@ -366,12 +413,12 @@ define(function (a,b,c,undefined) {
     // Tests: full
 	function applyto () {
 		var args = arguments;
-		return function _applyto () {
+		return function () {
 			var args1	= _slice.call(arguments),
 			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
 			return fn.apply(context,args);
-		};
+		}.as('_applyto');
 	}
 	
 
@@ -392,30 +439,30 @@ define(function (a,b,c,undefined) {
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
 	function property (property,generic) {
-		return function _property (object,specific) {
+		return function (object,specific) {
 			var value = specific || generic;
 			return    value === undefined ? object[property]
 					: object[property] !== undefined ? _set(object,property,value)
 					: undefined;
-		};
+		}.as('_property');
 	}
 	
     // Tests: full
 	function method (name) {
 		var args = _slice.call(arguments,1);
-		return function _method (object) {
+		return function (object) {
 			return	  typeof object[name] !== 'function' ? undefined
 					: object[name].apply(object,args.concat(_slice.call(arguments,1)));
-		};
+		}.as('_method');
 	}
 	
 	// Tests: full
 	function resolve (name) {
 	    var args = _slice.call(arguments,1);
-		return function _resolve (object) {
+		return function (object) {
 			return ( typeof object[name] === 'function' ? method(name) : property(name) )
 					.apply(null,[object].concat(args,_slice.call(arguments,1)));
-		};
+		}.as('_resolve');
 	}
 	
     // Tests: full
@@ -430,9 +477,9 @@ define(function (a,b,c,undefined) {
 	function transform (name,transformer,extractor) {
 		var resolver = resolve(name);
 		extractor = extractor || resolver;
-		return function _transform (object) {
+		return function (object) {
 			return resolver(object,transformer(extractor(object)));
-		};
+		}.as('_transform');
 	}
 
 	opal.extend({
@@ -457,73 +504,73 @@ define(function (a,b,c,undefined) {
 	//
 
 	// Tests: full
-	var plus = extend({unit:0,label:'sum'},function _plus (acc,value) {
+	var plus = extend({unit:0,label:'sum'},function (acc,value) {
 		return acc + value;
-	});
+	}.as('_plus'));
 
 	// Tests: full
-	var times = extend({unit:1,label:'product'},function _times (acc,value) {
+	var times = extend({unit:1,label:'product'},function (acc,value) {
 		return acc * value;
-	});
+	}.as('_times'));
 	
 	// Tests: full
 	var count = function _count (predicate) {
 		predicate = predicate || _true;
-		return extend({unit:0,label:'count'}, function __count (acc,value) {
+		return extend({unit:0,label:'count'}, function (acc,value) {
 			return acc += (predicate(value) ? 1 : 0);
-		});
+		}.as('__count'));
 	};
 	
 	// Tests: full
 	var withmethod = method;
 	
 	// Tests: full
-	var push = method('push').but(first);
+	var push = method('push').but(first).as('_push');
 	
 	// Tests: none
-	var add = function _add () {
+	var add = function () {
 		switch (arguments.length) {
 			case 0:  return add0.apply(null,arguments);
 			case 1:  return add1.apply(null,arguments);
 			default: return add2.apply(null,arguments);
 		}
-	};
+	}.as('_add');
 	
 	function add0 () {
-		return function __add0 (acc,value) {
+		return function (acc,value) {
 			return acc.add(value);
-		};
+		}.as('__add0');
 	}
 	
 	function add1 (predicate) {
-		return function _add1 (acc,value) {
+		return function (acc,value) {
 			return predicate(value) ? acc.add(value) : acc;
-		};
+		}.as('_add1');
 	}
 	
 	function add2 (predicate,mapping,mapfirst) {
-		return function _add2 (acc,value) {
+		return function (acc,value) {
 			var mapped = mapping(value);
 			return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
-		};
+		}.as('_add2');
 	};
 	
 	// Tests: none
-	var contains = function _contains (predicate) {
-		return extend({unit:false}, function __contains (acc,value) {
+	var contains = function (predicate) {
+		return extend({unit:false}, function (acc,value) {
 			return acc || predicate(value);
-		});
-	};
+		}.as('__contains'));
+	}.as('_contains');
 	
 	// Tests: none
-	var max = extend({label:'max'}, function _max (acc,value) {
+	var max = extend({label:'max'}, function (acc,value) {
 		return acc > value ? acc : value;
-	});
+	}.as('max'));
 	
 	// Tests: none
-	var min = extend({label:'min'}, function _min (acc,value) {
+	var min = extend({label:'min'}, function (acc,value) {
 		return ( acc < value && acc !== null ) ? acc : value;
-	});
+	}.as('min'));
 
 	opal.extend({
 		plus: plus,
@@ -549,24 +596,24 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function is (object) {
-		return identity.eq(object);
+		return identity.eq(object).as('_is');
 	}
 
 	// Tests: full
 	function is_of_type (test) {
-		return type.eq(test);
+		return type.eq(test).as('_is_of_type');
 	}
 
 	// Tests: full
 	function isa (constructor) {
-		return function _isa (candidate) {
+		return function (candidate) {
 			return candidate instanceof constructor;
-		};
+		}.as('_isa');
 	}
 	
 	// Tests: full
 	function has () {
-		return resolve.apply(null,arguments).then(Boolean);
+		return resolve.apply(null,arguments).then(Boolean).as('_has');
 	}
 
 	opal.extend({
@@ -584,29 +631,29 @@ define(function (a,b,c,undefined) {
 
 	// Tests: none
 	function compare (operator) {
-		return function _compare (value) {
-			return function _compare2 (candidate) {
+		return function (value) {
+			return function (candidate) {
 				return operator(candidate,value);
-			};
-		};
+			}.as('_compare2');
+		}.as('_compare');
 	}
 	
 	// Tests: full
-	var eq  = function _eq  (a) { return function _eq2  (x) { return x===a; }; },
-		neq = function _neq (a) { return function _neq2 (x) { return x!==a; }; },
-		lt  = function _lt  (a) { return function _lt2  (x) { return x<a;   }; },
-		gt  = function _gt  (a) { return function _gt2  (x) { return x>a;   }; },
-		lte = function _lte (a) { return function _lte2 (x) { return x<=a;  }; },
-		gte = function _gte (a) { return function _gte2 (x) { return x>=a;  }; };
+	var eq  = function (a) { return function (x) { return x===a; }.as('_eq');  }.as('eq'),
+		neq = function (a) { return function (x) { return x!==a; }.as('_neq'); }.as('neq'),
+		lt  = function (a) { return function (x) { return x<a;   }.as('_lt');  }.as('lt'),
+		gt  = function (a) { return function (x) { return x>a;   }.as('_gt');  }.as('gt'),
+		lte = function (a) { return function (x) { return x<=a;  }.as('_lte'); }.as('lte'),
+		gte = function (a) { return function (x) { return x>=a;  }.as('_gte'); }.as('gte');
 
 	// Tests: full
 	function between (lower,higher) {
-		return and( gte(lower), lte(higher) );
+		return and( gte(lower), lte(higher) ).as('_between');
 	}
 
 	// Tests: full
 	function regex (expression) {
-		return expression.test.bind(expression);
+		return expression.test.bind(expression).as('_regex');
 	}
 	
 	opal.extend({
@@ -627,10 +674,10 @@ define(function (a,b,c,undefined) {
 	//
 
 	// Tests: full
-	var istrue = eq(true);
+	var istrue = eq(true).as('istrue');
 
 	// Tests: full
-    var isnull = eq(null);
+    var isnull = eq(null).as('isfalse');
 
 	opal.extend({
 		AllPredicate: 			_true,
@@ -686,33 +733,33 @@ define(function (a,b,c,undefined) {
 		constructor: EnhancedObject,
 		
 		// Tests: none
-		addProperties: function __add (attributes) {
+		addProperties: function (attributes) {
 			return extend(attributes,this);
-		},
+		}.as('_add'),
 		
 		// Tests: none
-		removeProperties: function __remove () {
+		removeProperties: function () {
 			for ( var i=0; i<arguments.length; i++ ) {
 				delete this[arguments[i]];
 			}
 			return this;
-		},
+		}.as('_remove'),
 		
 		// Tests: none
-		defaults: function __defaults (attributes) {
+		defaults: function (attributes) {
 			for ( var key in attributes ) {
 				if ( attributes.hasOwnProperty(key) ) {
 					this[key] = this[key] || attributes[key];
 				}	
 			}
 			return this;
-		},
+		}.as('_defaults'),
 		
 		// Tests: none
-		setProperty: function __set (key,value) {
+		setProperty: function (key,value) {
 			this[key] = value;
 			return this;
-		}
+		}.as('_set')
 		
 	};
 	
