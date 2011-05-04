@@ -112,7 +112,7 @@ define(function (a,b,c,undefined) {
 		var fn = this;
 		return function () {
 			return fn.apply(context,arguments);
-		}.as('_bind');
+		};
 	};
 	
 	// Tests: full
@@ -121,7 +121,7 @@ define(function (a,b,c,undefined) {
 			fn   = this;
 		return function () {
 			return fn.apply(this,args.concat(_slice.call(arguments)));
-		}.as('_curry');
+		};
 	};
 	
 	// Tests: full
@@ -129,11 +129,11 @@ define(function (a,b,c,undefined) {
 		var cache = {},
 			fn = this.post(function () {
 				cache[_slice.call(arguments,1)] = arguments[0];
-			}.as('_setcache'));
+			});
 		return function () {
 			var value = cache[_slice.call(arguments)];
 			return value !== undefined ? value : fn.apply(this,arguments);
-		}.as('_memo');
+		};
 	};
 	
 	
@@ -142,7 +142,7 @@ define(function (a,b,c,undefined) {
 		var fn = this;
 		return function () {
 			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
-		}.as('_delay');
+		};
 	};
 	
 	Function.prototype.bind.displayName  = 'bind';
@@ -164,7 +164,7 @@ define(function (a,b,c,undefined) {
 		var fn1 = this;
 		return function () {
 			return fn2(fn1.apply(this,arguments)); 
-		}.as('_then');
+		};
 	};
 	
 	// Tests: full
@@ -173,7 +173,7 @@ define(function (a,b,c,undefined) {
 		return function () {
 			fn1.apply(this,arguments);
 			return fn2.apply(this,arguments);
-		}.as('_but');
+		};
 	};
 	
 	Function.prototype.then.displayName = 'then';
@@ -200,7 +200,7 @@ define(function (a,b,c,undefined) {
 			var ret = fn.apply(this,arguments);
 			post.apply(this,[ret].concat(_slice.call(arguments)));
 			return ret;
-		}.as('_post');
+		};
 	};
 	
 	Function.prototype.pre.displayName  = 'pre';
@@ -222,7 +222,7 @@ define(function (a,b,c,undefined) {
 			predicate = and.apply(null,predicates);
 		return this.pre(function () {
 			assert(predicate.apply(this,arguments),message);
-		}.as('_require'));
+		});
 	};
 	
 	// Tests: none
@@ -232,7 +232,7 @@ define(function (a,b,c,undefined) {
 			predicate = and.apply(null,predicates);
 		return this.post(function () {
 			assert(predicate.apply(this,arguments),message);
-		}.as('_ensure'));
+		});
 	};
 	
 	Function.prototype.require.displayName = 'require';
@@ -252,7 +252,7 @@ define(function (a,b,c,undefined) {
 		var fn1 = this;
 		return function () {
 			return fn1.apply(this,arguments) && fn2.apply(this,arguments);
-		}.as('_and');
+		};
 	};
 	
 	// Tests: none
@@ -260,7 +260,7 @@ define(function (a,b,c,undefined) {
 		var fn1 = this;
 		return function () {
 			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
-		}.as('_or');
+		};
 	};
 	
 	Function.prototype.and.displayName = 'and';
@@ -290,57 +290,57 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	Function.prototype.eq = function (value) {
-		return this.then(eq(value)).as('_eq');
+		return this.then(eq(value));
 	};
 	
 	// Tests: full
 	Function.prototype.neq = function (value) {
-		return this.then(neq(value)).as('_neq');
+		return this.then(neq(value));
 	};
 	
 	// Tests: full
 	Function.prototype.lt = function (value) {
-		return this.then(lt(value)).as('_lt');
+		return this.then(lt(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gt = function (value) {
-		return this.then(gt(value)).as('_gt');
+		return this.then(gt(value));
 	};
 
 	// Tests: none
 	Function.prototype.lte = function (value) {
-		return this.then(lte(value)).as('_lte');
+		return this.then(lte(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gte = function (value) {
-		return this.then(gte(value)).as('_gte');
+		return this.then(gte(value));
 	};
 	
 	// Tests: none
 	Function.prototype.between = function (lower,higher) {
-		return this.then(between(lower,higher)).as('_between');
+		return this.then(between(lower,higher));
 	};
 	
 	// Tests: none
 	Function.prototype.matches = function (expression) {
-		return this.then(regex(expression)).as('_regex');
+		return this.then(regex(expression));
 	};
 	
 	// Tests: none
 	Function.prototype.isnull = function () {
-		return this.then(isnull).as('_isnull');
+		return this.then(isnull);
 	};
 	
 	// Tests: full
 	Function.prototype.isa = function (constructor) {
-		return this.then(isa(constructor)).as('_isa');
+		return this.then(isa(constructor));
 	};
 	
 	// Tests: full
 	Function.prototype.hastype = function (type) {
-		return this.then(is_of_type(type)).as('_hastype');
+		return this.then(is_of_type(type));
 	};
 	
 	Function.prototype.is.displayName		= 'is';
@@ -394,7 +394,7 @@ define(function (a,b,c,undefined) {
 				}
 			}
 			return result;
-		}.as('_parallel');
+		};
 	}
 	
 	
@@ -418,7 +418,7 @@ define(function (a,b,c,undefined) {
 			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
 			return fn.apply(context,args);
-		}.as('_applyto');
+		};
 	}
 	
 
@@ -444,7 +444,7 @@ define(function (a,b,c,undefined) {
 			return    value === undefined ? object[property]
 					: object[property] !== undefined ? _set(object,property,value)
 					: undefined;
-		}.as('_property');
+		};
 	}
 	
     // Tests: full
@@ -453,7 +453,7 @@ define(function (a,b,c,undefined) {
 		return function (object) {
 			return	  typeof object[name] !== 'function' ? undefined
 					: object[name].apply(object,args.concat(_slice.call(arguments,1)));
-		}.as('_method');
+		};
 	}
 	
 	// Tests: full
@@ -462,7 +462,7 @@ define(function (a,b,c,undefined) {
 		return function (object) {
 			return ( typeof object[name] === 'function' ? method(name) : property(name) )
 					.apply(null,[object].concat(args,_slice.call(arguments,1)));
-		}.as('_resolve');
+		};
 	}
 	
     // Tests: full
@@ -479,7 +479,7 @@ define(function (a,b,c,undefined) {
 		extractor = extractor || resolver;
 		return function (object) {
 			return resolver(object,transformer(extractor(object)));
-		}.as('_transform');
+		};
 	}
 
 	opal.extend({
@@ -506,26 +506,26 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	var plus = extend({unit:0,label:'sum'},function (acc,value) {
 		return acc + value;
-	}.as('_plus'));
+	});
 
 	// Tests: full
 	var times = extend({unit:1,label:'product'},function (acc,value) {
 		return acc * value;
-	}.as('_times'));
+	});
 	
 	// Tests: full
 	var count = function _count (predicate) {
 		predicate = predicate || _true;
 		return extend({unit:0,label:'count'}, function (acc,value) {
 			return acc += (predicate(value) ? 1 : 0);
-		}.as('__count'));
+		});
 	};
 	
 	// Tests: full
 	var withmethod = method;
 	
 	// Tests: full
-	var push = method('push').but(first).as('_push');
+	var push = method('push').but(first);
 	
 	// Tests: none
 	var add = function () {
@@ -534,43 +534,43 @@ define(function (a,b,c,undefined) {
 			case 1:  return add1.apply(null,arguments);
 			default: return add2.apply(null,arguments);
 		}
-	}.as('_add');
+	};
 	
 	function add0 () {
 		return function (acc,value) {
 			return acc.add(value);
-		}.as('__add0');
+		};
 	}
 	
 	function add1 (predicate) {
 		return function (acc,value) {
 			return predicate(value) ? acc.add(value) : acc;
-		}.as('_add1');
+		};
 	}
 	
 	function add2 (predicate,mapping,mapfirst) {
 		return function (acc,value) {
 			var mapped = mapping(value);
 			return predicate(mapfirst ? mapped : value) ? acc.add(mapped) : acc;
-		}.as('_add2');
+		};
 	};
 	
 	// Tests: none
 	var contains = function (predicate) {
 		return extend({unit:false}, function (acc,value) {
 			return acc || predicate(value);
-		}.as('__contains'));
-	}.as('_contains');
+		});
+	};
 	
 	// Tests: none
 	var max = extend({label:'max'}, function (acc,value) {
 		return acc > value ? acc : value;
-	}.as('max'));
+	});
 	
 	// Tests: none
 	var min = extend({label:'min'}, function (acc,value) {
 		return ( acc < value && acc !== null ) ? acc : value;
-	}.as('min'));
+	});
 
 	opal.extend({
 		plus: plus,
@@ -596,24 +596,24 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function is (object) {
-		return identity.eq(object).as('_is');
+		return identity.eq(object);
 	}
 
 	// Tests: full
 	function is_of_type (test) {
-		return type.eq(test).as('_is_of_type');
+		return type.eq(test);
 	}
 
 	// Tests: full
 	function isa (constructor) {
 		return function (candidate) {
 			return candidate instanceof constructor;
-		}.as('_isa');
+		};
 	}
 	
 	// Tests: full
 	function has () {
-		return resolve.apply(null,arguments).then(Boolean).as('_has');
+		return resolve.apply(null,arguments).then(Boolean);
 	}
 
 	opal.extend({
@@ -634,26 +634,26 @@ define(function (a,b,c,undefined) {
 		return function (value) {
 			return function (candidate) {
 				return operator(candidate,value);
-			}.as('_compare2');
-		}.as('_compare');
+			};
+		};
 	}
 	
 	// Tests: full
-	var eq  = function (a) { return function (x) { return x===a; }.as('_eq');  }.as('eq'),
-		neq = function (a) { return function (x) { return x!==a; }.as('_neq'); }.as('neq'),
-		lt  = function (a) { return function (x) { return x<a;   }.as('_lt');  }.as('lt'),
-		gt  = function (a) { return function (x) { return x>a;   }.as('_gt');  }.as('gt'),
-		lte = function (a) { return function (x) { return x<=a;  }.as('_lte'); }.as('lte'),
-		gte = function (a) { return function (x) { return x>=a;  }.as('_gte'); }.as('gte');
+	var eq  = function (a) { return function (x) { return x===a; }; },
+		neq = function (a) { return function (x) { return x!==a; }; },
+		lt  = function (a) { return function (x) { return x<a;   }; },
+		gt  = function (a) { return function (x) { return x>a;   }; },
+		lte = function (a) { return function (x) { return x<=a;  }; },
+		gte = function (a) { return function (x) { return x>=a;  }; };
 
 	// Tests: full
 	function between (lower,higher) {
-		return and( gte(lower), lte(higher) ).as('_between');
+		return and( gte(lower), lte(higher) );
 	}
 
 	// Tests: full
 	function regex (expression) {
-		return expression.test.bind(expression).as('_regex');
+		return expression.test.bind(expression);
 	}
 	
 	opal.extend({
@@ -674,10 +674,10 @@ define(function (a,b,c,undefined) {
 	//
 
 	// Tests: full
-	var istrue = eq(true).as('istrue');
+	var istrue = eq(true);
 
 	// Tests: full
-    var isnull = eq(null).as('isfalse');
+    var isnull = eq(null);
 
 	opal.extend({
 		AllPredicate: 			_true,
@@ -735,7 +735,7 @@ define(function (a,b,c,undefined) {
 		// Tests: none
 		addProperties: function (attributes) {
 			return extend(attributes,this);
-		}.as('_add'),
+		},
 		
 		// Tests: none
 		removeProperties: function () {
@@ -743,7 +743,7 @@ define(function (a,b,c,undefined) {
 				delete this[arguments[i]];
 			}
 			return this;
-		}.as('_remove'),
+		},
 		
 		// Tests: none
 		defaults: function (attributes) {
@@ -753,13 +753,13 @@ define(function (a,b,c,undefined) {
 				}	
 			}
 			return this;
-		}.as('_defaults'),
+		},
 		
 		// Tests: none
 		setProperty: function (key,value) {
 			this[key] = value;
 			return this;
-		}.as('_set')
+		}
 		
 	};
 	
