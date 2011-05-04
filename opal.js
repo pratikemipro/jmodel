@@ -87,7 +87,7 @@ define(function (a,b,c,undefined) {
 
 	// A necessary evil in plain sight
 	
-	assert(Function.prototype.named === undefined, '"name" method already defined');
+	assert(Function.prototype.as === undefined, '"as" method already defined');
 	
 	// Tests: none
 	Function.prototype.as = function (name) {
