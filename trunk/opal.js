@@ -95,7 +95,7 @@ define(function (a,b,c,undefined) {
 		return this;
 	};
 	
-	Function.prototype.as.displayName = 'named';
+	Function.prototype.as.displayName = 'as';
 	
 	
 	//
