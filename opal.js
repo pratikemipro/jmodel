@@ -13,7 +13,7 @@
 
 define(function (a,b,c,undefined) {
 
-	var opal   = { opal_version: '0.14.0', extend: extend },
+	var opal   = { opal_version: '0.15.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -86,6 +86,10 @@ define(function (a,b,c,undefined) {
 	// ------------------------------------------------------------------------
 
 	// A necessary evil in plain sight
+	
+	//
+	// Property methods
+	//
 	
 	assert(Function.prototype.as === undefined, '"as" method already defined');
 	assert(Function.prototype.extend === undefined, '"as" method already defined');
