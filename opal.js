@@ -686,12 +686,12 @@ define(function (a,b,c,undefined) {
 		constructor: EnhancedObject,
 		
 		// Tests: none
-		addProperties: function _add (attributes) {
+		addProperties: function __add (attributes) {
 			return extend(attributes,this);
 		},
 		
 		// Tests: none
-		removeProperties: function _remove () {
+		removeProperties: function __remove () {
 			for ( var i=0; i<arguments.length; i++ ) {
 				delete this[arguments[i]];
 			}
@@ -699,7 +699,7 @@ define(function (a,b,c,undefined) {
 		},
 		
 		// Tests: none
-		defaults: function _defaults (attributes) {
+		defaults: function __defaults (attributes) {
 			for ( var key in attributes ) {
 				if ( attributes.hasOwnProperty(key) ) {
 					this[key] = this[key] || attributes[key];
@@ -709,7 +709,7 @@ define(function (a,b,c,undefined) {
 		},
 		
 		// Tests: none
-		setProperty: function _set (key,value) {
+		setProperty: function __set (key,value) {
 			this[key] = value;
 			return this;
 		}
