@@ -728,7 +728,6 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 	function Subscriber (subscription) {
 		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
-		this.predicate		= subscription.predicate || AllPredicate;
 		this.message		= this.subscription.message;
 		this.error 			= this.subscription.error;
 		this.context		= ( subscription && subscription.context ) ? subscription.context : null;
@@ -739,16 +738,11 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		constructor: Subscriber,
 		
 		notify: function (event) {
-			if ( this.message && this.predicate(event) ) {
-				return this.message.apply(this.context,arguments);
-			}
-			return true;
+			return this.message.apply(this.context,arguments);
 		},
 		
 		fail: function (event) {
-			if ( this.error && this.predicate(event) ) {
-				this.error.apply(this.context,arguments);
-			}
+			this.error.apply(this.context,arguments);
 		}
 		
 	};
