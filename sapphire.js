@@ -85,7 +85,7 @@ define(['jmodel/opal'], function (opal) {
 		// Pure methods
 		//
 		
-		constraint: function constraint (obj) {
+		constraint: function _constraint (obj) {
 			return typeof obj !== 'undefined' && !this.member(obj);
 		},
 		
@@ -164,7 +164,7 @@ define(['jmodel/opal'], function (opal) {
 		
 		partition: function _partition (fn) {
 			var constructor = this.constructor;
-			return this.reduce(function (acc,object) {
+			return this.reduce(function __partition (acc,object) {
 				var key = fn(object);
 				acc[key] = ( acc[key] || new constructor() ).add(object);
 				return acc;
@@ -183,7 +183,7 @@ define(['jmodel/opal'], function (opal) {
 			    mapped  = ( typeof args[args.length-1] === 'object' ) ? args.pop() : new List(),
 			    mapping = ( args.length === 1 ) ? makeMapping(args[0])
 			                : pipe.apply(null, List.fromArray(args).map(makeMapping).get());
-			return this.reduce(add(function (obj) {return obj !== undefined;},mapping,true),mapped);
+			return this.reduce(add(function __map(obj) {return obj !== undefined;},mapping,true),mapped);
 		},
 		
 		reduce: function _reduce (fn,acc) {
@@ -283,27 +283,27 @@ define(['jmodel/opal'], function (opal) {
 
 	_.Set = Set;
 	
-	Set.from = function () {
+	Set.from = function _from () {
 		return Set.fromArray(_slice.call(arguments));
 	};
 	
 	// Tests: full
-	Set.fromArray = function (arr) {
+	Set.fromArray = function _fromArray (arr) {
 		return new Set(arr);
 	};
 	
 	// Tests: full
-	Set.fromArguments = function (args) {
+	Set.fromArguments = function _fromArguments (args) {
 		return Set.fromArray(_slice.call(args));
 	};
 	
 	// Tests: none
-	Set.fromJQuery = function (jq) {
+	Set.fromJQuery = function _fromJQuery (jq) {
 		return Set.fromArray(jq.get()).map(jQuery,new Set());
 	};
 	
 	// Tests: none
-	Set.fromGenerator = function (fn) {
+	Set.fromGenerator = function _fromGenerator (fn) {
 		var next, items = [];
 		while ( typeof( next = fn() ) !== 'undefined' ) {
 			items.push(next);
@@ -312,8 +312,8 @@ define(['jmodel/opal'], function (opal) {
 	};
 	
 	// Tests: none
-	_.range = function (lower, higher) {
-		return function () {
+	_.range = function _range (lower, higher) {
+		return function __range () {
 			return lower <= higher ? lower++ : undefined;
 		};
 	};
@@ -378,7 +378,7 @@ define(['jmodel/opal'], function (opal) {
 	
 	TypedSet.prototype = extend({
 		
-		add: function () {
+		add: function _add () {
 			
 			var object = arguments[0];
 			
@@ -418,7 +418,7 @@ define(['jmodel/opal'], function (opal) {
 
 		},
 		
-		__construct: function (value) {
+		__construct: function __construct (value) {
 			
 			if ( this.__constructor === Number ) {
 				return Number(value);
@@ -467,7 +467,7 @@ define(['jmodel/opal'], function (opal) {
 			
 		},
 		
-		create: function () {
+		create: function _create () {
 			this.add.apply(this,arguments);
 			return this.added;
 		}
@@ -491,23 +491,23 @@ define(['jmodel/opal'], function (opal) {
 	List.prototype.constraint	= AllPredicate;
 	List.prototype.constructor	= List;
 	
-	List.from = function () {
+	List.from = function _from () {
 		return List.fromArray(_slice.call(arguments));
 	};
 	
-	List.fromArray = function (arr) {
+	List.fromArray = function _fromArray (arr) {
 		return new List(arr);
 	};
 	
-	List.fromArguments = function (args) {
+	List.fromArguments = function _fromArguments (args) {
 		return List.fromArray(_slice.call(args));
 	};
 	
-	List.fromJQuery = function (jq) {
+	List.fromJQuery = function _fromJQuery (jq) {
 		return List.fromArray(jq.get()).map(jQuery,new List());
 	};
 	
-	List.fromGenerator = function (fn) {
+	List.fromGenerator = function _fromGenerator (fn) {
 		var next, items = [];
 		while ( typeof( next = fn() ) !== 'undefined' ) {
 			items.push(next);
@@ -613,7 +613,7 @@ define(['jmodel/opal'], function (opal) {
 
 	var all  = SetPredicate(and),
 		some = SetPredicate(or),
-		none = SetPredicate(extend({unit:true}, function (a,b) { return a && !b; } ));
+		none = SetPredicate(extend({unit:true}, function _none (a,b) { return a && !b; } ));
 
 	_.extend({
 		empty: 					empty,
@@ -659,7 +659,7 @@ define(['jmodel/opal'], function (opal) {
 	function CompositeOrdering () {
 	    var orderings = Set.fromArguments(arguments);
 	    return function _compositeordering (a,b) {
-	        return orderings.reduce(function (acc,ordering) {
+	        return orderings.reduce(function __compositeordering (acc,ordering) {
 	           return acc || ordering(a,b);
 	        },0);
 	    };
