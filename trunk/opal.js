@@ -15,7 +15,7 @@ define(function (a,b,c,undefined) {
 
 	var opal   = { opal_version: '0.14.0', extend: extend },
 		_slice = Array.prototype.slice,
-		assert = ( console && console.assert ) ? function _assert (condition, message) { console.assert(condition,message); }
+		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
 	//
@@ -93,6 +93,7 @@ define(function (a,b,c,undefined) {
 	
 	// Protect existing methods with assertions
 	assert(Function.prototype.curry === undefined, '"curry" method already defined');
+	assert(Function.prototype.memo === undefined, '"delay" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
 	
 	// Tests: full
