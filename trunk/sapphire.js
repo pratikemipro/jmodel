@@ -315,7 +315,7 @@ define(['jmodel/opal'], function (opal) {
 	_.range = function (lower, higher) {
 		return function () {
 			return lower <= higher ? lower++ : undefined;
-		}.as('_range');
+		};
 	};
 
 	// Tests: partial
