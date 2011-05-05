@@ -24,6 +24,15 @@ define(['../opal.js'], function (opal) {
 	//
 	
 	module('Function.prototype');
+
+	test('as', function () {
+	
+		var fn = function () { return 'red' };
+			
+		equals( fn.as('test').displayName, 'test', 'as sets displayName of function' );
+		equals( fn.as('test')(), 'red', 'function runs normally after use of "a"' );
+		
+	});
 	
 	test('bind', function () {
 	
