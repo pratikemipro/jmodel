@@ -94,7 +94,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.as === undefined, '"as" method already defined');
 	assert(Function.prototype.extend === undefined, '"as" method already defined');
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.as = function (name) {
 		this.displayName = name;
 		return this;

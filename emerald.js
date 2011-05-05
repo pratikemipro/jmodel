@@ -725,27 +725,11 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 	em.SubscriberSet = SubscriberSet;
 	
-	
 	function Subscriber (subscription) {
-		this.subscription	= typeof subscription === 'function' ? {message:subscription} : subscription;
-		this.message		= this.subscription.message;
-		this.error 			= this.subscription.error;
-		this.context		= ( subscription && subscription.context ) ? subscription.context : null;
+		this.subscription = typeof subscription === 'function' ? {message:subscription} : subscription;
+		this.notify		  = (this.subscription.message || identity).bind(subscription.context || null);
+		this.fail		  = (this.subscription.error   || identity).bind(subscription.context || null);
 	}
-	
-	Subscriber.prototype = {
-		
-		constructor: Subscriber,
-		
-		notify: function (event) {
-			return this.message.apply(this.context,arguments);
-		},
-		
-		fail: function (event) {
-			this.error.apply(this.context,arguments);
-		}
-		
-	};
 	
 	em.extend({
 		Subscriber: Subscriber
