@@ -1,0 +1,15 @@
+<pre>
+$(<span class="selector">'#test'</span>).event(<span class="string">'mousemove'</span>)
+&#160;&#160;.between(
+&#160;&#160;&#160;&#160;$(<span class="selector">'#test'</span>).event(<span class="string">'mousedown'</span>),
+&#160;&#160;&#160;&#160;$(<span class="selector">'#test'</span>).event(<span class="string">'mouseup'</span>)
+&#160;&#160;)
+&#160;&#160;.map({
+&#160;&#160;&#160;&#160;x: <span class="string">'PageX'</span>,
+&#160;&#160;&#160;&#160;y: <span class="string">'PageY'</span>
+&#160;&#160;})
+&#160;&#160;.where(overlaps(x,y))
+&#160;&#160;.subscribe(<span class="function">function</span> (x,y) {
+&#160;&#160;&#160;&#160;...
+&#160;&#160;});
+</pre>

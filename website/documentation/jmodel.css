@@ -1,0 +1,96 @@
+article,aside,details,figure,footer,header,hgroup,menu,nav,section {
+	display: block;
+}
+
+body {
+	font-family: Arial;
+	width: 800px;
+}
+
+article {
+	border: 1px solid darkgray;
+	-webkit-border-radius: 16px;
+	margin-bottom: 32px;
+	padding-left: 16px;
+	padding-right: 16px;
+}
+
+article > h2 {
+	border: 1px solid darkgray;
+	background: white;
+	display: inline-block;
+	-webkit-border-radius: 8px;
+	margin: 0px;
+	padding: 4px;
+	position: relative;
+	top: -18px;
+	left: 16px;
+}
+
+dt {
+	font-weight: bold;
+	margin-top: 24px;
+	margin-bottom: 2px;
+	background: #ddddff;
+	border: 1px solid #ccccee;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	padding-left: 6px;
+}
+
+span.name {
+	font-weight: bold;
+}
+
+span.arguments,
+span.return,
+span.type {
+	font-weight: normal;
+	font-style: italic;
+}
+
+span.return {
+	color: #4f4f4f;
+}
+
+span.type {
+	font-family: Serif;
+}
+
+dt span.type {
+	margin-left: 8px;
+}
+
+dd {
+	margin-left: 0px;
+	margin-bottom: 4px;
+}
+
+.example {
+	display: inline-block;
+	background: #eeeeee;
+	border: 1px solid #dddddd;
+	padding-left: 12px;
+	padding-right: 12px;
+	padding-top: 12px;
+	padding-bottom: 0px;
+	margin-bottom: 20px;
+}
+
+.example p {
+	margin-top: 0px;
+	margin-bottom: 12px;
+}
+
+code {
+	font-family: Courier New;
+}
+
+.optional {
+	color: #999999;
+}
+
+span.output {
+	color: #3030d0;
+	margin-left: 14px;
+}

@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>OPAL</title>
+		<link rel="stylesheet" href="../jmodel.css"/>
+	</head>
+	<body class="opal">
+	    
+	    <header>
+            <nav>
+                <ul>
+                    <li class="cross"><a href="">Introduction</a></li>
+                    <li class="opal"><a href="">Opal<span class="extension">.js</span></a></li>
+                    <li class="emerald"><a href="">Emerald<span class="extension">.js</span></a></li>
+                    <li class="jmodel"><a href="">jModel<span class="extension">.js</span></a></li>
+                    <li class="downloads"><a href="">Downloads</a></li>
+                    <li class="development"><a href="">Development</a></li>
+                </ul>
+                <!--div class="search">
+                    <input type="string" value="Search"></input>
+                </div-->
+            </nav>
+        </header>
+        
+        <div id="main">
+            
+            <nav>
+                <h1 class="before">Opal<span class="extension">.js</span></h1>
+                <ul>
+                    <li class="selected"><a href="">Overview</a></li>
+                    <li class="after"><a href="">Functions</a></li>
+                    <li><a href="">Set</a></li>
+                    <li><a href="">TypedSet</a></li>
+                    <li><a href="">List</a></li>
+                    <li><a href="">UniqueIndex</a></li>
+                    <li><a href="">Predicates</a></li>
+                    <li><a href="">Orderings</a></li>
+                    <li><a href="">Plugins</a></li>
+                    <li>&#160;</li>
+                </ul>
+                <!--ul-->
+                    <!--li class="first">jModel<span class="extension">.org</span></li>
+                    <ul>
+                        <li><a href="../index.xhtml">Introduction</a></li>
+                        <li><a href="">Getting Started</a></li>
+                    </ul-->
+                    
+                    
+                    <!--li class="emerald">Emerald</li>
+                    <ul>
+                        <li><a href="">Overview</a></li>
+                        <li><a href="">EventRegistry</a></li>
+                        <li><a href="">EventType</a></li>
+                        <li><a href="">Joins &amp; Generators</a></li>
+                    </ul>
+                    <li class="jmodel">jModel</li>
+                    <ul>
+                        <li><a href="">Overview</a></li>
+                        <li><a href="">Context</a></li>
+                        <li><a href="">EntityType</a></li>
+                        <li><a href="">Collection</a></li>
+                        <li><a href="">Orderings</a></li>
+                        <li><a href="">Plugins</a></li>
+                    </ul-->
+                    <!--li>&#160;</li>
+                </ul-->
+            </nav>
+            
+            <article>
+
+                <section class="introduction">
+		            <h1>OPAL<span class="extension">.js</span></h1>
+                </section>
+
+        		<section class="code">
+        			<h1>Function Composition and Application</h1>
+	
+        			<dl>
+		
+        				<dt>
+        					<code>
+        						<span class="name">compose</span>
+        						<span class="arguments">(f1,f2,f3...)</span>
+        					</code>
+        					<span class="return">→ <span class="type">function</span><span>
+        				</dt>
+        				<dd><code>compose</code> performs funtion composition in the traditional way, applying the rightmost function first so that <code>compose(f1,f2,f3)(x)</code> is the same as <code>f1(f2(f3(x))).</code></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">pipe</span>
+        						<span class="arguments">(f1,f2,f3...)</span>
+        					</code>
+        					<span class="return">→ <span class="type">function</span></span>
+        				</dt>
+        				<dd><code>pipe</code> composes functions as a pipeline, applying the leftmost function first so that <code>pipe(f1,f2,f3)(x)</code> is the same as <code>f3(f2(f1(x)))</code>.</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">parallel</span>
+        						<span class="arguments">(f1,f2,f3...)</span>
+        					</code>
+        					<span class="return">→ <span class="type">function</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">apply</span>
+        						<span class="arguments">(fn)</span>
+        					</code>
+        					<span class="return">→ <span class="type">value</span></span>
+        				</dt>
+        				<dd><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">applyto</span>
+        						<span class="arguments">(a,b,c...)</span>
+        					</code>
+        					<span class="return">→ <span class="type">function</span></span>
+        				</dt>
+        				<dd>Given arguments <code>a,b,c...</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</dd>
+        				<dd><span style="color:red">document immediate version</span></dd>
+			
+        				<dt>
+        					<code>
+        						<span class="name">curry</span>
+        						<span class="arguments">(fn,a,b,c...)</span>
+        					</code>
+        					<span class="return">→ <span class="type">function</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Concurrency Functions</h1>
+		
+        			<dl>
+        				<dt>
+        					<code>
+        						<span class="name">sequence</span>
+        						<span class="arguments">(suspension1,callback1,suspension2,callback2...)</span>
+        					</code>
+        				</dt>
+        				<dd class="example code">
+        					<section class="listing">
+        						<pre>
+        							sequence(																<br/>
+        							&#160;&#160;&#160;&#160;suspend($.getJSON,'a.js'), function (data) {	<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('A done');	<br/>
+        							&#160;&#160;&#160;&#160;},												<br/>
+        							&#160;&#160;&#160;&#160;suspend($.getJSON,'b.js'), function (data) {	<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('B done');	<br/>
+        							&#160;&#160;&#160;&#160;},												<br/>
+        							&#160;&#160;&#160;&#160;suspend($.getJSON,'c.js'), function (data) {	<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log(data);		<br/>
+        							&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;console.log('C done')	<br/>
+        							&#160;&#160;&#160;&#160;}												<br/>
+        							);
+        						</pre>
+        					</section>
+        				</dd>
+        				<dt>
+        					<code>
+        						<span class="name">synchronise</span>
+        						<span class="arguments">(suspension1,callback1,suspension2,callback2...,callback)</span>
+        					</code>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+        			</dl>
+		
+        		</section>
+	
+        		<section class="code">
+        			<h1>Object Functions</h1>
+	
+        			<dl>
+		
+        				<dt>
+        					<code>
+        						<span class="name">Identity</span>
+        						<span class="arguments">(value)</span>
+        					</code>
+        					<span class="return">→ <span class="type">value</span></span>
+        				</dt>
+        				<dd><p>The <code>Identity</code> function returns its argument.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>Identity('test');</code>
+        						<br/><span class="output">⇒ <code>'test'</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">Type</span>
+        						<span class="arguments">(value)</span>
+        					</code>
+        						<span class="return">→ <span class="type">string</span></span>
+        				</dt>
+        				<dd><p>The <code>Type</code> function is equivalent to <code>typeof obj</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>Type('test');</code>
+        						<br/><span class="output">⇒ <code>'string'</code></span>
+        					</p>
+        					<p>
+        						<code>Type({name:'john'});</code>
+        						<br/><span class="output">⇒ <code>'object'</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">Property</span>
+        						<span class="arguments">(property<span class="optional">,value</span>)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(object → value)</span>
+        					</span>
+        				</dt>
+        				<dd><p><code>Property(property)</code> returns a function that when called on an object returns the object's value for the property "property". In other words <code>Property(property)(object)</code> is equivalent to <code>object[property]</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>Property('forename')({forename:'john',surname:'smith'});</code>
+        						<br/><span class="output">⇒ <code>'john'</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">Method</span>
+        						<span class="arguments">(name<span class="optional">,a,b,c...</span>)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(object → value)</span></span>
+        				</dt>
+        				<dd><p>The <code>Method</code> function creates a "suspended method" function that when called on an object is equivalent to calling the named method on the object. Arguments can be provided either at the time of suspension or the time of invocation or both.</p> <p><code>Method('method',a,b,c)(object,d,e,f)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>Method('split','-')('john-smith');</code>
+        						<br/><span class="output">⇒ <code>['john','smith']</code></span>
+        					</p>
+        					<p>
+        						<code>Method('split')('john-smith','-');</code>
+        						<br/><span class="output">⇒ <code>['john','smith']</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">Resolve</span>
+        						<span class="arguments">(name<span class="optional">,value</span>)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(object → value)</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">PropertyPath</span>
+        						<span class="arguments">(path<span class="optional">,separator</span>)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(object → value)</span></span>
+        				</dt>
+        				<dd><p><code>PropertyPath</code> returns a function that dereferences a path on an object, so that <code>PropertyPath('a/b/c','/')(obj)</code> is equivalent to <code>obj.a.b.c</code>. The default value for the separator is the '.' character. If an elements of the path is a methods then the method will be invoked during dereferencing.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>PropertyPath('name.last')({name:{first:'john',last:'smith'},age:27});</code>
+        						<br/><span class="output">⇒ <code>'smith'</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">PropertySet</span>
+        						<span class="arguments">(paths<span class="optional">,separator</span>)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(object → list)</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">transform</span>
+        						<span class="arguments">(name,transformer)</span>
+        					</code>
+        					<span class="return">→ 
+        						<span class="type">(object → object)</span>
+        					</span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+		
+		
+        		<section class="code">
+        			<h1>Set</h1>
+	
+        			<dl>
+	
+        				<dt><code>Set <span class="arguments">(<span class="optional">objects</span>)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>set <span class="arguments">(<span class="optional">element1,element2...</span>)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        			</dl>
+	
+        			<h3>Element Methods</h3>
+	
+        			<dl>
+	
+        				<dt><code>add <span class="arguments">(object<span class="optional">,success,failure</span>)</span></code></dt>
+        				<dd><p><code>add</code> adds an object to a set. Note that a set can only contain one copy of an object so adding the same object more than once is equivalent to adding it once. The <code>success</code> and <code>failure</code> parameters are for callback functions that are invoked if the object is added or not added respectively. Within the callback function, <code>this</code> is the set. The object is passed through to the callback as a parameter.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set().add('red').get();</code>
+        						<br/><span class="output">⇒ <code>["red"]</code></span>
+        					</p>
+        					<p>
+        						<code>set().add('red').add('red').get();</code>
+        						<br/><span class="output">⇒ <code>["red"]</code></span>
+        					</p>
+        					<p>
+        						<code>set().add('red').add('green').get();</code>
+        						<br/><span class="output">⇒ <code>["red", "green"]</code></span>
+        					</p>
+        					<p>
+        						<code>set().add('red', function (obj) { console.log('Added "'+obj+'"'); });</code>
+        						<br/><span class="output">⇒ <code>Added "red"</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>remove <span class="arguments">(predicate)</span></code></dt>
+        				<dd><p><code>remove</code> removes objects that match a predicate and returns a set containing the objects that have been removed (NB not the set from which they've been removed!).</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>var test = set('red','green','blue');
+        						<br/>test.remove('green').get();</code>
+        						<br/><span class="output">⇒ <code>["green"]</code></span>
+        						<br/><code>test.get();</code>
+        						<br/><span class="output">⇒ <code>["red", "blue"]</code></span>
+        					</p>
+        					<p>
+        						<code>var test = set(7,2,8,3,9,1,6,5,4);
+        						<br/>test.remove(gt(5)).get();</code>
+        						<br/><span class="output">⇒ <code>[7, 8, 9, 6]</code></span>
+        						<br/><code>test.get();</code>
+        						<br/><span class="output">⇒ <code>[2, 3, 1, 5, 4]</code></span>
+        					</p>
+        					<p>
+        						<code>var test = set('red',1,3,'green',6,'blue');
+        						<br/>test.remove(type('string')).get();</code>
+        						<br/><span class="output">⇒ <code>["red", "green", "blue"]</code></span>
+        						<br/><code>test.get();</code>
+        						<br/><span class="output">⇒ <code>[1, 3, 6]</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>get <span class="arguments">(key)</span></code></dt>
+        				<dd><p><code>get</code> returns one or more elements of the set. If called with no arguments, an array containing all elements will be returned. If the special token <code>':first'</code> is passed, the first element will be returned. If the set is indexed then the key is used to perform a lookup in the index. Otherwise, the key is treated as a predicate and the first matching entry is returned.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').get();</code>
+        						<br/><span class="output">⇒ <code>["red", "green", "blue"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue').get(':first');</code>
+        						<br/><span class="output">⇒ <code>"red"</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{id:1,colour:'red'},
+        							<br/>&#160;&#160;&#160;&#160;{id:2,colour:'green'},
+        							<br/>&#160;&#160;&#160;&#160;{id:3,colour:'blue'}
+        							<br/>).index(Property('id')).get(2);</code>
+        						<br/><span class="output">⇒ <code>{id:2,colour:'green'}</code></span>
+        					</p>
+        					<p>
+        						<code>set(7,6,4,7,9,10).get(gt(5));</code>
+        						<br/><span class="output">⇒ <code>7</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>select <span class="arguments">(selector)</span></code></dt>
+        				<dd><p><code>select</code> returns the first element of the set if the special token <code>':first'</code> is passed. Future versions will introduce further selectors that can be used with this method.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').select(':first');</code>
+        						<br/><span class="output">⇒ <code>"red"</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>first <span class="arguments">()</span></code></dt>
+        				<dd><p><code>first</code> is equivalent to <code>select(':first')</code> </p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').first();</code>
+        						<br/><span class="output">⇒ <code>"red"</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>member <span class="arguments">(object)</span></code></dt>
+        				<dd><p><code>member</code> tests whether <code>object</code> is a member of the set.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').member('green');</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue').member('cyan');</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        				</dd>
+	
+        			</dl>
+	
+        			<h3>Set Methods</h3>
+	
+        			<dl>
+	
+        				<dt><code>index <span class="arguments">(key)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>sort <span class="arguments">(<span class="optional">ordering1,ordering2...</span>)</span></code></dt>
+        				<dd><p><code>sort</code> sorts the set according to the specified ordering. If called with multiple arguments an implicit composite ordering is generated. If called with no arguments an implicit value ordering is used.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').sort().get();</code>
+        						<br/><span class="output">⇒ <code>["blue", "green", "red"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red',5,'green',2,8,'blue',3).sort(score(type('string')),value).get();</code>
+        						<br/><span class="output">⇒ <code>["blue", "green", "red", 2, 3, 5, 8]</code></span>
+        					</p>
+        				</dd>
+			
+        				<dt><code>of <span class="arguments">(constructor)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        			</dl>
+	
+        			<h3>Predicate Methods</h3>
+	
+        			<dl>
+	
+        				<dt><code>when <span class="arguments">(predicate,callback)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>partition <span class="arguments">(predicate<span class="optional">,passname,failname</span>)</span></code></dt>
+        				<dd><p><code>partition</code> returns two sets, one of those elements that match the predicate and the other of those that don't match. By default these are called <code>pass</code> and <code>fail</code> but the names can be overridden using the <code>passname</code> and <code>failname</code> arguments.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red',5,'green',2,8,'blue',3)
+        							<br/>&#160;&#160;&#160;&#160;.partition(type('string'),'strings','others').strings.get();</code>
+        						<br/><span class="output">⇒ <code>["red", "green", "blue"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red',5,'green',2,8,'blue',3)
+        							<br/>&#160;&#160;&#160;&#160;.partition(type('string'),'strings','others').others.get();</code>
+        						<br/><span class="output">⇒ <code>[5, 2, 8, 3]</code></span>
+        					</p>
+        				</dd>
+
+
+        				<dt><code>filter <span class="arguments">(<span class="optional">predicate,selector</span>)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        			</dl>
+	
+        			<h3>Traversal Methods</h3>
+	
+        			<dl>
+	
+        				<dt><code>each <span class="arguments">(callback<span class="optional">, callback2...</span>)</span></code></dt>
+        				<dd><p><code>each</code> applies a callback function to each element of the set. Within the callback, <code>this</code> is set to be the element. The element and the position within the set are passed to the callback (note that the order of the element and index is the same as that for JavaScript 1.6's <code>forEach</code> but the opposite to that in jQuery's <code>each</code>). If multiple arguments are passed to <code>each</code> they are treated as an implicit pipe. Any strings passed are treated as methods.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set('red','green','blue').each(function (object,index) {
+        						<br/>&#160;&#160;&#160;&#160;console.log(index+': '+object);
+        						<br/>});</code>
+        						<br/><span class="output">⇒ <code>0: red</code></span>
+        						<br/><span class="output"><span style="color: #eeeeee;">⇒ </span><code>1: green</code></span>
+        						<br/><span class="output"><span style="color: #eeeeee;">⇒ </span><code>2: blue</code></span>
+        					</p>
+			
+        					<p>
+        						<code>set('red','green','blue')
+        							<br/>&#160;&#160;&#160;&#160;.each('toUpperCase',function (obj) { console.log(obj); });</code>
+        							<br/><span class="output">⇒ <code>RED</code></span>
+        							<br/><span class="output"><span style="color: #eeeeee;">⇒ </span><code>GREEN</code></span>
+        							<br/><span class="output"><span style="color: #eeeeee;">⇒ </span><code>BLUE</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>map <span class="arguments">(mapping<span class="optional">,mapping2...,mapped</span>)</span></code></dt>
+        				<dd><p><code>map</code> transforms each element of the set by a mapping function and adds the transformed value to an output collection. By default the output begins as an empty list but if a <code>mapped</code> parameter is included then this will be used as the output collection instead. Beware of using a set as the output object as the uniqueness constraint may result in unexpected behaviour. If a string is passed as the mapping it will be interpreted as the name of a method to be applied to each object. If multiple mappings are passed an implicit <code>pipe</code> will be generated.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(1,2,3).map(function (object) {
+        						<br/>&#160;&#160;&#160;&#160;return object*2;
+        						<br/>}).get();</code>
+        						<br/><span class="output">⇒ <code>[2, 4, 6]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue').map('toUpperCase').get();</code>
+        						<br/><span class="output">⇒ <code>["RED", "GREEN", "BLUE"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue')
+        							<br/>&#160;&#160;&#160;&#160;.map('toUpperCase',set('CYAN','MAGENTA','YELLOW')).get();</code>
+        						<br/><span class="output">⇒ <code>["CYAN", "MAGENTA", "YELLOW", "RED", "GREEN", "BLUE"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue')
+        							<br/>&#160;&#160;&#160;&#160;.map('toUpperCase',Method('substring',0,1)).get();</code>
+        						<br/><span class="output">⇒ <code>["R", "G", "B"]</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue')
+        							<br/>&#160;&#160;&#160;&#160;.map('toUpperCase',Method('substring',0,1),set('C','M','Y')).get();</code>
+        						<br/><span class="output">⇒ <code>["C", "M", "Y", "R", "G", "B"]</code></span>
+        					</p>
+			
+			
+        				</dd>
+	
+        				<dt><code>reduce <span class="arguments">(reduction<span class="optional">,accumulator</span>)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        			</dl>
+	
+        			<h3>Set Operation Methods</h3>
+	
+        			<dl>
+		
+        				<dt><code>concat <span class="arguments">(set)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>union <span class="arguments">(set1,set2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>intersection <span class="arguments">(set1,set2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>difference <span class="arguments">(set1,set2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+			
+        				<dt><code>zip <span class="arguments">(set2,zipper)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+
+        			</dl>
+
+        			<h3>Summary Methods</h3>
+
+        			<dl>
+		
+        				<dt><code>count <span class="arguments">(<span class="optional">predicate</span>)</span></code></dt>
+        					<dd><p><code>count</code> returns the number of elements of the set that match the predicate. If no predicate is specified it returns the number of elements in the set.</p></dd>
+        					<dd class="example">
+        						<p>
+        							<code>set('red','green','blue').count();</code>
+        							<br/><span class="output">⇒ <code>3</code></span>
+        						</p>
+        						<p>
+        							<code>set('red',5,'green',2,8,'blue',3).count(type('string'));</code>
+        							<br/><span class="output">⇒ <code>3</code></span>
+        						</p>
+        						<p>
+        							<code>set('red',5,'green',2,8,'blue',3).count(/re/);</code>
+        							<br/><span class="output">⇒ <code>2</code></span>
+        						</p>
+        					</dd>
+	
+        				<dt><code>aggregate <span class="arguments">(combiner<span class="optional">,accumulator</span>)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>max <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
+        				<dd><p><code>max</code> returns the maximum value in the set (with respect to the usual comparison operator). If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).max();</code>
+        						<br/><span class="output">⇒ <code>7</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{name:'john',age:16},
+        							<br/>&#160;&#160;&#160;&#160;{name:'jane',age:18},
+        							<br/>&#160;&#160;&#160;&#160;{name:'steve',age:17}
+        							<br/>).max(Property('age'));</code>
+        						<br/><span class="output">⇒ <code>18</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>min <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
+        				<dd><p><code>min</code> returns the minimum value in the set (with respect to the usual comparison operator). If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).min();</code>
+        						<br/><span class="output">⇒ <code>2</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{name:'john',age:16},
+        							<br/>&#160;&#160;&#160;&#160;{name:'jane',age:18},
+        							<br/>&#160;&#160;&#160;&#160;{name:'steve',age:17}
+        							<br/>).max(Property('age'));</code>
+        						<br/><span class="output">⇒ <code>16</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>sum <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
+        				<dd><p><code>sum</code> adds all the values in the set. If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).sum();</code>
+        						<br/><span class="output">⇒ <code>24</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{item:'widget',price:64},
+        							<br/>&#160;&#160;&#160;&#160;{item:'gadget',price:57},
+        							<br/>&#160;&#160;&#160;&#160;{item:'gizmo',price:92}
+        							<br/>).sum(Property('price'));</code>
+        						<br/><span class="output">⇒ <code>213</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>range <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
+        				<dd><p><code>range</code> returns the an object containing the minimum and maximum values in the set (with respect to the usual comparison operator). If an extractor is passed as an argument, that function is used to extract a value before the comparisons.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).range();</code>
+        						<br/><span class="output">⇒ <code>{max:7,min:2}</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{name:'john',age:16},
+        							<br/>&#160;&#160;&#160;&#160;{name:'jane',age:18},
+        							<br/>&#160;&#160;&#160;&#160;{name:'steve',age:17}
+        							<br/>).range(Property('age'));</code>
+        						<br/><span class="output">⇒ <code>{max:18,min:16}</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>mean <span class="arguments">(<span class="optional">extractor</span>)</span></code></dt>
+        				<dd><p><code>mean</code> calculates the mean ("average") of the values in the set. If an extractor is passed as an argument, that function is used to extract a value before the comparison.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).mean();</code>
+        						<br/><span class="output">⇒ <code>4.8</code></span>
+        					</p>
+        					<p>
+        						<code>set(
+        							<br/>&#160;&#160;&#160;&#160;{item:'widget',price:64},
+        							<br/>&#160;&#160;&#160;&#160;{item:'gadget',price:57},
+        							<br/>&#160;&#160;&#160;&#160;{item:'gizmo',price:92}
+        							<br/>).mean(Property('price'));</code>
+        						<br/><span class="output">⇒ <code>71</code></span>
+        					</p>
+        				</dd>
+        			</dl>
+	
+        			<h3>Formatting Methods</h3>
+	
+        			<dl>
+
+        				<dt><code>format <span class="arguments">(formatter)</span></code></dt>
+        				<dd><p><code>format</code> applies a formatter to the set.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).format(listing());</code>
+        						<br/><span class="output">⇒ <code>7, 2, 5, 6 and 4</code></span>
+        					</p>
+        					<p>
+        						<code>set(7,2,5,6,4).format(listing(currency('£')));</code>
+        						<br/><span class="output">⇒ <code>£7.00, £2.00, £5.00, £6.00 and £4.00</code></span>
+        					</p>
+        				</dd>
+	
+        				<dt><code>join <span class="arguments">(<span class="optional">separator</span>)</span></code></dt>
+        				<dd><p><code>join</code> concatenates string representations of values in the set, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>set(7,2,5,6,4).join();</code>
+        						<br/><span class="output">⇒ <code>7,2,5,6,4</code></span>
+        					</p>
+        					<p>
+        						<code>set(7,2,5,6,4).join('.');</code>
+        						<br/><span class="output">⇒ <code>7.2.5.6.4</code></span>
+        					</p>
+        					<p>
+        						<code>set('red','green','blue').join(', ');</code>
+        						<br/><span class="output">⇒ <code>red, green, blue</code></span>
+        					</p>
+        				</dd>
+	
+        			</dl>
+	
+        			<h3>Utility Methods</h3>
+	
+        			<dl>
+		
+        				<dt><code>predicate <span class="arguments">(specifier)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+	
+        				<dt><code>ordering <span class="arguments">(specifier)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>delegateFor <span class="arguments">(host)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>copy <span class="arguments">()</span></code></dt>
+        				<dd><p><code>copy</code> makes a fresh copy of a set.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>var test1 = set(7,2,5,6,4);
+        						<br/>var test2 = test1.copy();
+        						<br/>test1.add(9);
+        						<br/>test2.remove(2);
+        						<br/>test1.get();</code>
+        						<br/><span class="output">⇒ <code>[7, 2, 5, 6, 4, 9]</code></span>
+        						<br/><code>test2.get();</code>
+        						<br/><span class="output">⇒ <code>[7, 5, 6, 4]</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>jQuery <span class="arguments">()</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Set Operations</h1>
+	
+        			<dl>
+		
+        				<dt><code>union <span class="arguments">(a,b,c...)</span></code></dt>
+        				<dd><p>The <code>union</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of any of <code>a,b,c...</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>union(set(1,2,3),set(2,3,4)).get();</code>
+        						<br/><span class="output">⇒ <code>[1, 2, 3, 4]</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>intersection <span class="arguments">(a,b,c...)</span></code></dt>
+        				<dd><p>The <code>intersection</code> of a collection of sets <code>a,b,c...</code> is a set containing all objects that are members of all of <code>a,b,c...</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>intersection(set(1,2,3),set(2,3,4)).get();</code>
+        						<br/><span class="output">⇒ <code>[2, 3]</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>difference <span class="arguments">(first,second)</span></code></dt>
+        				<dd><p>The <code>difference</code> of two sets <code>first</code> and <code>second</code> is a set containing all elements of <code>first</code> that are not members of <code>second</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>difference(set(1,2,3),set(2,3,4)).get();</code>
+        						<br/><span class="output">⇒ <code>[1]</code></span>
+        					</p>
+        				</dd>
+			
+        				<dt><code>zip <span class="arguments">(set1,set2,zipper)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+			
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>List</h1>
+        			<span style="color:red">document this</span>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Unique Index</h1>
+        			<span style="color:red">document this</span>
+	
+        			<dl>
+		
+        				<dt><code>build <span class="arguments">()</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>add <span class="arguments">(object)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>remove <span class="arguments">(object)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>get <span class="arguments">(keyval)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Predicates</h1>
+	
+        			<dl>
+		
+        				<dt>
+        					<code>
+        						<span class="name">predicate</span>
+        						<span class="arguments">(specifier)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(value → boolean)</span></span>
+        				</dt>
+			
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">AllPredicate</span>
+        						<span class="arguments">(value)</span>
+        					</code>
+        					<span class="return">→ <span class="type">boolean</span></span>
+        				</dt>
+        				<dd><p><code>AllPredicate</code> matches all candidates.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>AllPredicate('test');</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>AllPredicate(7);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>AllPredicate(false);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>AllPredicate(null);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">NonePredicate</span>
+        						<span class="arguments">(value)</span>
+        					</code>
+        					<span class="return">→ <span class="type">boolean</span></span>
+        				</dt>
+        				<dd><p><code>NonePredicate</code> matches no candidates.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>NonePredicate('test');</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>NonePredicate(7);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>NonePredicate(true);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>NonePredicate(null);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">TruePredicate</span>
+        						<span class="arguments">(value)</span>
+        					</code>
+        					<span class="return">→ <span class="type">boolean</span></span>
+        				</dt>
+        				<dd><p><code>TruePredicate</code> matches the boolean value <code>true</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>TruePredicate('test');</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>TruePredicate(7);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>TruePredicate(true);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>TruePredicate(false);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>TruePredicate(null);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">FunctionPredicate</span>
+        						<span class="arguments">(fn)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(value → boolean)</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt>
+        					<code>
+        						<span class="name">FunctionValuePredicate</span>
+        						<span class="arguments">(fn,value)</span>
+        					</code>
+        					<span class="return">→ <span class="type">(value → boolean)</span></span>
+        				</dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>ObjectIdentityPredicate <span class="arguments">(object)</span></code></dt>
+        				<dd><p><code>ObjectIdentityPredicate(object)</code> matches the candidate if the candidate is the same object as <code>object</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>var person = {forename:'john',surname:'smith'};
+        						<br/>ObjectIdentityPredicate(person)(person);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        						<br/><code>ObjectIdentityPredicate(person)({forename:'john',surname:'smith'});</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>TypePredicate <span class="arguments">(type)</span></code></dt>
+        				<dd><p><code>TypePredicate(<var>type</var>)</code> matches candidates whose type is <code><var>type</var></code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>TypePredicate('string')('test');</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>TypePredicate('string')(4);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>TypePredicate('number')(4);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>InstancePredicate <span class="arguments">(constructor)</span></code></dt>
+        				<dd><p><code>InstancePredicate(constructor)</code> matches candidates whose constructor function is <code>constructor</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>InstancePredicate(Array)('test');</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>InstancePredicate(Array)([1,2,3]);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>InstancePredicate(Set)(set(1,2,3));</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>PropertyPredicate <span class="arguments">(path,predicate)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>PropertySetPredicate <span class="arguments">(paths,predicate)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>EqualityPredicate <span class="arguments">(value)</span></code></dt>
+        				<dd><p><code>EqualityPredicate(value)</code> matches candidates which are equal to <code>value</code>.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>EqualityPredicate(4)(4);</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        					<p>
+        						<code>EqualityPredicate(4)(5);</code>
+        						<br/><span class="output">⇒ <code>false</code></span>
+        					</p>
+        					<p>
+        						<code>EqualityPredicate('red')('red');</code>
+        						<br/><span class="output">⇒ <code>true</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>LessThanPredicate <span class="arguments">(value)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>GreaterThanPredicate <span class="arguments">(value)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>LessThanEqualPredicate <span class="arguments">(value)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>GreaterThanEqualPredicate <span class="arguments">(value)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>BetweenPredicate <span class="arguments">(lower,higher)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>RegularExpressionPredicate <span class="arguments">(regex)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>MembershipPredicate <span class="arguments">(set)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>Or <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>And <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>Not <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>CardinalityPredicate <span class="arguments">(predicate)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>AllSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>SomeSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>NoneSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+	
+        		<section class="code">
+        			<h1>Orderings</h1>
+	
+        			<dl>
+		
+        				<dt><code>FunctionOrdering <span class="arguments">(fn)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>ValueOrdering <span class="arguments">()</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>PredicateOrdering <span class="arguments">(predicate1,predicate2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>DescendingOrdering <span class="arguments">(ordering)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>CompositeOrdering <span class="arguments">(ordering1,ordering2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+	
+        		<section class="code">
+        			<h1>Reduction Functions</h1>
+	
+        			<dl>
+		
+        				<dt><code>plus <span class="arguments">(a,b)</span></code></dt>
+        				<dd><code>plus(a,b)</code> is equivalent to <code>a+b</code>.</dd>
+		
+        				<dt><code>times <span class="arguments">(a,b)</span></code></dt>
+        				<dd><code>times(a,b)</code> is equivalent to <code>a*b</code>.</dd>
+	
+        				<dt><code>count <span class="arguments">(predicate)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>push <span class="arguments">(a,b)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>add <span class="arguments">(predicate,mapping)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>contains <span class="arguments">(predicate)</span></code></dt>
+        				<span style="color:red">document this</span>
+	
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Formatters</h1>
+	
+        			<div class="example">
+        				<p>
+        					<code>set({forename:'John',surname:'Connor'},{forename:'Sarah',surname:'Connor'})
+        					<br/>&#160;&#160;&#160;&#160;.format(listing(concat(Property('forename'),Property('surname'),' ')));</code>
+        					<br/><span class="output">⇒ <code>John Connor and Sarah Connor</code></span>
+        				</p>
+        				<p>
+        					<code>formatter = listing(concat(Property('forename'),Property('surname'),' '));
+        					<br/><br/>set({forename:'John',surname:'Connor'},{forename:'Sarah',surname:'Connor'})
+        					<br/>&#160;&#160;&#160;&#160;.format(formatter);</code>
+        					<br/><span class="output">⇒ <code>John Connor and Sarah Connor</code></span>
+        				</p>
+        			</div>
+
+        			<dl>
+		
+        				<dt><code>NoFormat</code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>prepend <span class="arguments">(prefix)</span></code></dt>
+        				<dd><p><code>prepend(prefix)</code> concatenates the prefix and a string.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>prepend('the ')('cat');</code>
+        						<br/><span class="output">⇒ <code>the cat</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>append <span class="arguments">(suffix)</span></code></dt>
+        				<dd><p><code>append(suffix)</code> concatenates the string and a suffix.</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>append('-san')('Cat');</code>
+        						<br/><span class="output">⇒ <code>Cat-san</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>join <span class="arguments">(<span class="optional">separator</span>)</span></code></dt>
+        				<dd><p><code>join</code> concatenates string representations of values in a set or list, with the strings separated by the string <code>separator</code> (or by a comma if not separator is given).</p></dd>
+        				<dd class="example">
+        					<p>
+        						<code>join(';')(set('red','green','blue'));</code>
+        						<br/><span class="output">⇒ <code>red;green;blue</code></span>
+        					</p>
+        				</dd>
+		
+        				<dt><code>concat <span class="arguments">(formatter1,formatter 2... separator)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>surround <span class="arguments">(affix)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>decimal <span class="arguments">(places)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>locale <span class="arguments">()</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>percent <span class="arguments">()</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>currency <span class="arguments">(symbol,places)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        				<dt><code>listing <span class="arguments">(formatter,terminal)</span></code></dt>
+        				<span style="color:red">document this</span>
+		
+        			</dl>
+        		</section>
+
+        		<section class="code">
+        			<h1>Utility Functions</h1>
+	
+        			<dl>
+		
+        				<dt><code>extend <span class="arguments">(object,target)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>arrayFromArguments <span class="arguments">(arguments)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>copy <span class="arguments">(object,exact)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>Enhanced Object</h1>
+	
+        			<dl>
+		
+        				<dt><code>EnhancedObject <span class="arguments">()</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>add <span class="arguments">(attributes)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>remove <span class="arguments">(key1,key2...)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        				<dt><code>set <span class="arguments">(key,value)</span></code></dt>
+        				<dd><span style="color:red">document this</span></dd>
+		
+        			</dl>
+        		</section>
+	
+        		<section class="code">
+        			<h1>jQuery Plugin</h1>
+        			<p><span style="color:red">document this</span></p>
+        		</section>
+        		
+        	</article>
+    		
+    	</div>
+    	
+    	<footer>
+            <ul>
+                <li>© 2009-2010 <a href="http://theculture.org/rich/">Richard Baker</a></li>
+                <li>Dual licensed under the MIT and GPL licenses</li>
+                <li><a href="http://validator.w3.org/check/referer">valid HTML5</a></li>
+            </ul>
+        </footer>
+
+	</body>
+</html>
