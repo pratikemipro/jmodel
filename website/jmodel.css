@@ -118,8 +118,8 @@ html {
 }
 
 body {
-	background: rgb(39,39,39);
-	color: rgb(221,221,221);
+	background: hsl(0,0%,15%);
+	color: hsl(0,0%,87%);
 	font-family: Helvetica, Arial;
 	padding: 0px;
 	font-size: 13px;
@@ -130,7 +130,7 @@ body {
 header,
 footer {
 	display: table-row;
-	color: rgb(136,136,136);
+	color: hsl(0,0%,53%);
 	text-align: right;
 }
 
@@ -231,6 +231,7 @@ nav.side li {
 	padding: 4px 16px 4px 32px;
 	white-space: nowrap;
 	background: rgb(51,51,51);
+	color: hsla(0,0%,95%,0.7);
 	background: -webkit-gradient(
 		linear, 
 		left top, 
@@ -243,6 +244,7 @@ nav.side li {
 
 ul.outside li {
 	background: none;
+	color
 }
 
 nav.side li.first {
@@ -254,7 +256,6 @@ nav.side li.first {
 		to(rgb(52,52,52))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: rgb(221,221,221);
 	font-weight: bold;
 }
 
@@ -267,7 +268,6 @@ nav.side li.opal {
 		to(hsl(350,30%,20%))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: hsl(350,80%,86%);
 	font-weight: bold;
 }
 
@@ -280,7 +280,6 @@ nav.side li.sapphire {
 		to(hsl(220,30%,20%))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: hsl(220,80%,86%);
 	font-weight: bold;
 }
 
@@ -293,7 +292,6 @@ nav.side li.emerald {
 		to(hsl(80,30%,20%))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: hsl(80,80%,86%);
 	font-weight: bold;
 }
 
@@ -306,7 +304,6 @@ nav.side li.topaz {
 		to(hsl(50,40%,20%))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: hsl(50,80%,86%);
 	font-weight: bold;
 }
 
@@ -319,7 +316,6 @@ nav.side li.diamond {
 		to(hsl(220,20%,30%))
 	);
 	-ms-filter: 'progid:DXImageTransform.Microsoft.gradient (GradientType=1,startColorstr=#515151,endColorstr=#343434)';
-	color: hsl(220,20%,96%);
 	font-weight: bold;
 }
 
@@ -713,6 +709,10 @@ h2 strong {
 	display: inline-block;
 	-webkit-transform: rotate(-90deg);
 	color: #777777;
+}
+
+#libraries label.events span {
+	right: -15px;
 }
 
 #libraries > section {
