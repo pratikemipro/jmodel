@@ -199,7 +199,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.pre === undefined, '"pre" method already defined');
 	assert(Function.prototype.post === undefined, '"post" method already defined');
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.pre = function (pre) {
 		return pre.but(this);
 	};
