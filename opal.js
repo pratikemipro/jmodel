@@ -100,7 +100,7 @@ define(function (a,b,c,undefined) {
 		return this;
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.extend = function (properties) {
 		return extend(properties,this);
 	};

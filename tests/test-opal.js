@@ -30,7 +30,16 @@ define(['../opal.js'], function (opal) {
 		var fn = function () { return 'red' };
 			
 		equals( fn.as('test').displayName, 'test', 'as sets displayName of function' );
-		equals( fn.as('test')(), 'red', 'function runs normally after use of "a"' );
+		equals( fn.as('test')(), 'red', 'function runs normally after use of "as"' );
+		
+	});
+	
+	test('extend', function () {
+	
+		var fn = function () { return 'red' };
+			
+		equals( fn.extend({type:'accessor'}).type, 'accessor', 'extend sets properties of function' );
+		equals( fn.extend({type:'accessor'})(), 'red', 'function runs normally after use of "extend"' );
 		
 	});
 	
