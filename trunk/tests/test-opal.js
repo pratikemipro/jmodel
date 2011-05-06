@@ -97,6 +97,19 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('pre', function () {
+	
+		var a = 0,
+			red = function () { return 'red'; },
+			inc = function () { a++; },
+			getA = function () { return a; };
+		
+		equal( red.pre(inc)(), 'red', 'pre does not interfere with function' );
+		equal( a, 1, 'pre function runs first');
+		equal( getA.pre(inc)(), 2, 'pre function runs first');
+		
+	});
+	
 	test('eq', function () {
 		
 		var add2 = function (x) { return x+2; };
