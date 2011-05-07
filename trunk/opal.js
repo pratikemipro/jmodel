@@ -12,6 +12,9 @@
 // ============================================================================
 
 define(function (a,b,c,undefined) {
+	
+	// Turn on strict mode in modern browsers
+	'use strict';
 
 	var opal   = { opal_version: '0.15.0', extend: extend },
 		_slice = Array.prototype.slice,
