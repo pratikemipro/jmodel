@@ -499,7 +499,6 @@ define(function (a,b,c,undefined) {
 	opal.extend({
 		apply: apply,
 		applyto: applyto,
-		applyto: applyto,
 		compose: compose,
 		pipe: pipe,
 		parallel: parallel,
