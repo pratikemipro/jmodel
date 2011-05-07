@@ -19,6 +19,35 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('extend', function () {
+		
+		var fred = {forename:'fred'},
+			test = {};
+		
+		opal.extend(fred,test)
+			
+		equals(test.forename, 'fred', 'extend copies properties' );
+		
+	});
+	
+	test('delegateTo', function () {
+	
+		var fred = {
+			forename: 'fred',
+			surname: 'smith',
+			name: function () { return this.forename+' '+this.surname;  }
+		},
+			test = {
+				forename: 'jane',
+				surname: 'jones'
+			};
+			
+		test.name = opal.delegateTo(fred,'name');
+		
+		equals( test.name(), 'fred smith', 'delegate runs method on another object' );
+		
+	});
+	
 	//
 	// Function.prototype methods
 	//
