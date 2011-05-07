@@ -47,7 +47,7 @@ define(function (a,b,c,undefined) {
 		_4 = arg(4),
 		_5 = arg(5);
 
-    // Tests: none
+    // Tests: full
 	function extend (object,target) {
 		target = target || this;
 		for ( var i in object ) {
@@ -56,7 +56,7 @@ define(function (a,b,c,undefined) {
 		return target;
 	}
 
-	// Tests: none
+	// Tests: full
 	function delegateTo (context,methodName) {
 		return function _delegateTo () {
 			return context[methodName].apply(context,arguments);
