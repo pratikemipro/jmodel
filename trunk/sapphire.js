@@ -171,9 +171,11 @@ define(['jmodel/opal'], function (opal) {
 			}, {});
 		},
 		
-		filter: function (predicate) {
+		filter: Array.prototype.filter ? function (predicate) {
 			return    typeof predicate === 'undefined' ? this
-					: this.__members.filter ? this.constructor.fromArray(this.__members.filter(this.predicate(predicate)))
+					: this.constructor.fromArray(this.__members.filter(this.predicate(predicate)));
+		} : function (predicate) {
+			return    typeof predicate === 'undefined' ? this
 					: this.reduce(add(predicate), new this.constructor())
 		},
 		
