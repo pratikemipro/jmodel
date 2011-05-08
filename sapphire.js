@@ -151,19 +151,13 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 		
-			each: function () {
-				function makeCallback (obj) { return ( typeof obj === 'string' ) ? method(obj) : obj; }
-				var callback = ( arguments.length == 1 ) ? makeCallback(arguments[0])
-								: pipe.apply(null,Set.fromArguments(arguments).map(makeCallback).get());
-				if ( this.__members.forEach ) {
-					this.__members.forEach(callback,this);
-				}
-				else {
-					for ( var index in this.__members ) {
-						if ( this.__members.hasOwnProperty(index) ) {
-							callback.call(this,this.__members[index],index);
-						}	
-					}
+			each: Array.prototype.forEach ? function () {
+				this.__members.forEach(pipe.apply(null,arguments),this);
+				return this;
+			} : function () {
+				var callback = pipe.apply(null,arguments);
+				for ( var i=0; i<this.__members.length; i++) {
+					callback.call(this,this.__members[i],i);
 				}
 				return this;
 			},
