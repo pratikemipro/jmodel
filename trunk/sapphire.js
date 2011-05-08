@@ -188,10 +188,11 @@ define(['jmodel/opal'], function (opal) {
 			return this.reduce(add(function __map(obj) {return obj !== undefined;},mapping,true),mapped);
 		},
 		
-		reduce: function (fn,acc) {
+		reduce: Array.prototype.reduce ? function (fn,acc) {
+			return this.__members.reduce(fn,arguments.length > 1 ? acc : fn.unit);
+		} : function (fn,acc) {
 			acc = arguments.length > 1 ? acc : fn.unit;
 			return	  this.length === 0 ? acc
-					: this.__members.reduce ? this.__members.reduce(fn,acc)
 					: this.tail().reduce(fn,fn(acc,this.head()))
 		},
 		
