@@ -6,40 +6,21 @@
 
 		<script>
 
-			QUnit.config.autostart = false;
-			
-			require({
+            require({
 			    paths: {
 			        'jmodel': '../'
 			    }
 			});
 
-			require(['test-opal.js'], function (tests) {
+			QUnit.config.autostart = false;
+
+			require(['test-sapphire.js'], function (tests) {
 				QUnit.start();
 		    });
 			
 		</script>
 
 		<!--script>
-		
-			// ------------------------------------------------------------------------
-			//														  Object-functional
-			// ------------------------------------------------------------------------
-			
-			module('Functions');
-			
-			test('Extend', function () {
-			    
-			    var source = {forename:'John',surname:'Smith'},
-			        target = {};
-			        
-			    equals( opal.extend(source,target).forename, 'John', 'extension works');
-				
-			});
-			
-			test('Aspect', function () {
-				
-			});
 		
 			// ------------------------------------------------------------------------
 			//																		Set
@@ -511,10 +492,10 @@
 			});
 
 
- 		</scrip-->
+ 		</script-->
 	</head>
 	<body>
-		<h1>Opal JavaScript Tests</h1>
+		<h1>Sapphire JavaScript Tests</h1>
 		<h2 id="qunit-banner"></h2>
 		<div id="qunit-testrunner-toolbar"></div>
 		<h2 id="qunit-userAgent"></h2>
