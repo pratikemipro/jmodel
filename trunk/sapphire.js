@@ -286,6 +286,7 @@ define(['jmodel/opal'], function (opal) {
 
 		_.Set = Set;
 	
+		// Tests: full
 		Set.from = function () {
 			return Set.fromArray(_slice.call(arguments));
 		};
@@ -301,7 +302,6 @@ define(['jmodel/opal'], function (opal) {
 		};
 	
 		// Tests: none
-		// NOTE: Fix this
 		Set.fromJQuery = function (jq) {
 			return Set.fromArray(jq.get()).map(jQuery).reduce(add(),new Set());
 		};
