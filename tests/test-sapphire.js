@@ -68,13 +68,20 @@ define(['../sapphire.js'], function (sapphire) {
 		testSet.add('red');
 		testSet.add('green');
 		
-		equals( testSet.count(), 2, "addition of non-duplicate objects" );
-		equals( testSet.add('blue').count(), 3, "addition of non-duplicate succeeds" );
-		equals( testSet.add('green').count(), 3, "addition of duplicate fails" );
+		deepEqual( testSet.get(), ['red','green'], "addition of non-duplicate objects" );
+		deepEqual( testSet.add('blue').get(), ['red','green','blue'], "addition of non-duplicate succeeds" );
+		deepEqual( testSet.add('green').get(), ['red','green','blue'], "addition of duplicate fails" );
 		
-		// NOTE: Test constraints here
-		// NOTE: Test that ".added" is set correctly
-		// NOTE: text that index is updated correctly
+		equal( testSet.length, 3, "addition manages length correct");
+		
+		testSet.add('purple');
+		equal( testSet.added, 'purple', "'added' property set corrrectly");
+		
+		testSet.index(sapphire.identity);
+		
+		deepEqual(testSet.__index.__delegate, {red:'red',green:'green',blue:'blue',purple:'purple'}, "index correctly updated");
+		
+		equal( testSet.add('cyan'), testSet, "'add' method returns set");
 		
 	});
 	
@@ -83,8 +90,10 @@ define(['../sapphire.js'], function (sapphire) {
 		var removed = testSet.remove(function (candidate) { return candidate === 'red'; });
 		equals(testSet.first(), 'green', 'element removal works');
 		equals(removed.first(), 'red', 'correct removed element returned');
+		
 		// NOTE: Test that length is managed correctly
 		// NOTE: text that index is updated correctly
+	
 	});
 	
 	test('sort', function () {
