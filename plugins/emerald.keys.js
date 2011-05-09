@@ -9,54 +9,49 @@
 
 define(['jmodel/emerald'], function (emerald) {
 	
-	var codes = {
-		':backspace': 	8,
-		':tab': 		9,
-		':return': 		13,
-		':shift': 		16,
-		':ctrl': 		17,
-		':alt': 		18,
-		':escape': 		27,
-		':left': 		37,
-		':up': 			38,
-		':right': 		39,
-		':down': 		40,
-		':delete': 		46,
-		':leftcmd': 	91,
-		':rightcmd': 	93
-	};
+	var _slice = Array.prototype.slice,
+		codes = {
+			':backspace': 	8,
+			':tab': 		9,
+			':return': 		13,
+			':shift': 		16,
+			':ctrl': 		17,
+			':alt': 		18,
+			':escape': 		27,
+			':left': 		37,
+			':up': 			38,
+			':right': 		39,
+			':down': 		40,
+			':delete': 		46,
+			':leftcmd': 	91,
+			':rightcmd': 	93
+		};
+	
+	function _regex (identifer) {
+		return function (event) {
+			return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
+		};
+	}
+	
+	function _number (identifier) {
+		return function (event) {
+			return event.which === identifier;
+		};
+	}
+	
+	function _char (identifier) {
+		var identifier = identifier.toUpperCase();
+		return function (event) {
+			return String.fromCharCode(event.which).toUpperCase() === identifier;
+		}
+	}
 	
 	function key (identifier) {
-		
-		function matchRegex (event) {
-			return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
-		}
-		
-		if ( arguments.length > 1 ) {
-			return emerald.or.apply(null,emerald.List.fromArguments(arguments).map(key).get());
-		}
-		else if ( identifier.test ) { // Regex
-			return function (event) {
-				return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
-			}
-		}
-		
-		switch (typeof identifier) {
-			
-			case 'string':
-				return identifier.length === 1 ? function (event) {
-					return String.fromCharCode(event.which).toUpperCase() === identifier.toUpperCase();
-				} : function (event) {
-					return event.which === codes[identifier];
-				};
-				
-			case 'number':
-				return function (event) {
-					return event.which === identifier;
-				};
-			
-		}
-		
+		return 	  arguments.length > 1 ? key(identifier).or(key.apply(null,_slice.call(arguments,1)))
+				: identifier.test ? _regex(identifier)
+				: typeof identifier === 'number' ? _number(identifier)
+				: typeof identifier === 'string' && identifier.length > 1 ? _number(codes[identifier])
+				: _char(identifier);
 	}
 	
 	emerald.extend({
