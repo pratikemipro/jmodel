@@ -70,7 +70,7 @@ define(['jmodel/opal'], function (opal) {
 				var partition = this.partition(this.predicate(predicate));
 				this.__members = partition[false] ? partition[false].get() : [];
 				this.length = this.__members.length;
-				if ( this.__index ) {
+				if ( this.__index && partition[true]) {
 					partition[true].reduce(method('remove'),this.__index);
 				}
 				return partition[true] || new this.constructor();
