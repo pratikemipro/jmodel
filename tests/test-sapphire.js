@@ -128,5 +128,7 @@ define(['../sapphire.js'], function (sapphire) {
 		deepEqual(test1.concat().get(), ['red','green','blue','cyan','magenta','yellow'], "non-Set arguments not concatenated");
 		
 	});
+	
+	module('Pure methods');
 
 });
