@@ -179,13 +179,13 @@ define(['jmodel/opal'], function (opal) {
 						: this.reduce(add(predicate), new this.constructor());
 			},
 		
-			map: function () {
-				function makeMapping (obj) { return ( typeof obj == 'string' ) ? resolve(obj) : obj; }
-				var args    = _slice.call(arguments),
-				    mapped  = ( typeof args[args.length-1] === 'object' ) ? args.pop() : new List(),
-				    mapping = ( args.length === 1 ) ? makeMapping(args[0])
-				                : pipe.apply(null, List.fromArray(args).map(makeMapping).get());
-				return this.reduce(add(function __map(obj) {return obj !== undefined;},mapping,true),mapped);
+			map: Array.prototype.map ? function () {
+				return List.fromArray(this.__members.map(pipe.apply(null,arguments)));
+			} : function () {
+				var mapping = pipe.call(null,arguments);
+				return this.reduce(function (list,item) {
+					return list.add(mapping.call(null,item));
+				}, new List());
 			},
 		
 			reduce: Array.prototype.reduce ? function (fn,acc) {
@@ -301,8 +301,9 @@ define(['jmodel/opal'], function (opal) {
 		};
 	
 		// Tests: none
+		// NOTE: Fix this
 		Set.fromJQuery = function (jq) {
-			return Set.fromArray(jq.get()).map(jQuery,new Set());
+			return Set.fromArray(jq.get()).map(jQuery).reduce(add(),new Set());
 		};
 	
 		// Tests: none
