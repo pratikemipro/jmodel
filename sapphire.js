@@ -65,7 +65,7 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 		
-			// Tests: partial
+			// Tests: full
 			remove: function (predicate) {
 				var partition = this.partition(this.predicate(predicate));
 				this.__members = partition[false] ? partition[false].get() : [];

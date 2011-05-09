@@ -86,13 +86,18 @@ define(['../sapphire.js'], function (sapphire) {
 	});
 	
 	test('remove', function () {
-		var testSet = sapphire.set('red','green','blue');
-		var removed = testSet.remove(function (candidate) { return candidate === 'red'; });
-		equals(testSet.first(), 'green', 'element removal works');
-		equals(removed.first(), 'red', 'correct removed element returned');
 		
-		// NOTE: Test that length is managed correctly
-		// NOTE: text that index is updated correctly
+		var testSet = sapphire.set('red','green','blue').index(sapphire.identity);
+		var removed = testSet.remove(function (candidate) { return candidate === 'red'; });
+		
+		deepEqual(testSet.get(), ['green','blue'], 'element removal works');
+		deepEqual(removed.get(), ['red'], 'correct removed element returned');
+		equal(testSet.length, 2, "element removal updates length correctly");
+		deepEqual(testSet.__index.__delegate, {green:'green',blue:'blue'}, "index correctly updated");
+		
+		var removed2 = testSet.remove(function (candidate) { return candidate === 'purple'; });
+	
+		equal( removed2 instanceof sapphire.Set, true, "Set returned even when no elements removed");
 	
 	});
 	
