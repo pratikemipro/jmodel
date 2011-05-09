@@ -116,5 +116,17 @@ define(['../sapphire.js'], function (sapphire) {
 		equal(testSet.sort(ordering) instanceof sapphire.Set, true, "sort returns a set");
 		
 	});
+	
+	test('concat', function () {
+	
+		var test1 = sapphire.Set.from('red','green','blue'),
+			test2 = sapphire.Set.from('cyan','magenta','yellow');
+			
+		deepEqual(test1.concat(test2).get(), ['red','green','blue','cyan','magenta','yellow'], "concat returns concatenation of sets");
+		deepEqual(test1.get(), ['red','green','blue','cyan','magenta','yellow'], "concat updates first argument");
+		
+		deepEqual(test1.concat().get(), ['red','green','blue','cyan','magenta','yellow'], "non-Set arguments not concatenated");
+		
+	});
 
 });
