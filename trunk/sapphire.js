@@ -225,17 +225,17 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			union: function () {
-				return union.apply(null,[this].concat(_slice.call(arguments)));
+				return Set.union.apply(null,[this].concat(_slice.call(arguments)));
 			},
 		
 			// Tests: none
 			intersection: function () {
-				return intersection.apply(null,[this].concat(_slice.call(arguments)));
+				return Set.intersection.apply(null,[this].concat(_slice.call(arguments)));
 			},
 		
 			// Tests: none
 			difference: function (set) {
-				return difference(this,set);
+				return Set.difference(this,set);
 			},
 		
 			// Tests: none
@@ -380,25 +380,22 @@ define(['jmodel/opal'], function (opal) {
 		}
 
 		// Tests: none
-		function union () {
-			return Set.fromArguments(arguments).reduce(method('concat'),new Set());
+		Set.union = function () {
+			return Set.fromArguments(arguments).reduce(method('concat'), new Set());
 		}
 		
 		// Tests: none
-		function intersection () {
+		Set.intersection = function () {
 			return Set.fromArguments(arguments).map(MembershipPredicate).reduce(method('filter'),arguments[0].copy());
 		}
 
 		// Tests: none
-		function difference (first,second) {
+		Set.difference = function (first,second) {
 			return first.filter( Not(MembershipPredicate(second)) );
 		}
 
 		_.extend({
-			zip: 			zip,
-			union: 			union,
-			intersection: 	intersection,
-			difference: 	difference
+			zip: zip
 		});
 
 
