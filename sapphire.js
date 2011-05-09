@@ -121,7 +121,7 @@ define(['jmodel/opal'], function (opal) {
 						: this.first(key);
 			},
 		
-			// Tests: none
+			// Tests: full
 			count: function (predicate) {
 				return arguments.length === 0 ? this.length : this.reduce(count(predicate));
 			},
@@ -382,17 +382,17 @@ define(['jmodel/opal'], function (opal) {
 		// Tests: none
 		Set.union = function () {
 			return Set.fromArguments(arguments).reduce(method('concat'), new Set());
-		}
+		};
 		
 		// Tests: none
 		Set.intersection = function () {
 			return Set.fromArguments(arguments).map(MembershipPredicate).reduce(method('filter'),arguments[0].copy());
-		}
+		};
 
 		// Tests: none
 		Set.difference = function (first,second) {
 			return first.filter( Not(MembershipPredicate(second)) );
-		}
+		};
 
 		_.extend({
 			zip: zip
