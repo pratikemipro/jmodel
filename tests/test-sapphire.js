@@ -103,14 +103,17 @@ define(['../sapphire.js'], function (sapphire) {
 	
 	test('sort', function () {
 		
-		var testSet = sapphire.set('red','green','blue');
-		testSet.sort(function (a,b) {
-			return    a < b ? -1
-					: a > b ? 1
-					: 0;
-		});
+		var testSet = sapphire.set('red','green','blue'),
+			ordering = function (a,b) {
+				return    a < b ? -1
+						: a > b ? 1
+						: 0;
+			};
+			
+		testSet.sort(ordering);
 		
-		equals(testSet.first(),'blue','sorting works');
+		deepEqual(testSet.get(),['blue','green','red'],'sorting works');
+		equal(testSet.sort(ordering) instanceof sapphire.Set, true, "sort returns a set");
 		
 	});
 
