@@ -51,7 +51,7 @@ define(['jmodel/opal'], function (opal) {
 			// Mutators
 			//
 		
-			// Tests: partial
+			// Tests: full
 			add: function (object) {
 				this.added = undefined;
 				if ( this.constraint(object) ) {	
