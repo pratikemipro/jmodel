@@ -27,7 +27,7 @@ define(['jmodel/emerald'], function (emerald) {
 			':rightcmd': 	93
 		};
 	
-	function _regex (identifer) {
+	function _regex (identifier) {
 		return function (event) {
 			return String.fromCharCode(event.which).toUpperCase().match(identifier) || false; 
 		};
