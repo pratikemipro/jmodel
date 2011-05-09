@@ -1,5 +1,5 @@
 /*
- *	Emerald Keyboard Plugin v0.1.1
+ *	Emerald Keyboard Plugin v0.2.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010-2011 Richard Baker
