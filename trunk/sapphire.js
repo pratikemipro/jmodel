@@ -540,7 +540,7 @@ define(['jmodel/opal'], function (opal) {
 
 			this.set		= set;
 			this.key		= typeof key === 'function' ? key : resolve(key);
-			this.__delegate	= copy({});
+			this.__delegate	= copy({},true);
 		
 			this.build();
 
