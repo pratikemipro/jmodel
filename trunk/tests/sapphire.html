@@ -31,20 +31,6 @@
 			test('Getting elements', function () {
 				
 			});
-			
-			test('Counting elements', function () {
-			
-				var testSet = opal.set();
-				equals( testSet.count(), 0, 'new sets are empty');
-				
-				testSet.add('red');
-				testSet.add('green');
-				equals( testSet.count(), 2, 'adding elements increments count');
-				
-				testSet.remove(opal.ObjectIdentityPredicate('green'));
-				equals( testSet.count(), 1, 'removing element decrements count');
-				
-			});
 		
 			test('First element', function () {
 				

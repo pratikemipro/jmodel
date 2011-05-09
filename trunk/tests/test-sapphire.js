@@ -130,5 +130,21 @@ define(['../sapphire.js'], function (sapphire) {
 	});
 	
 	module('Pure methods');
+	
+	test('count', function () {
+	
+		var testSet = sapphire.set();
+		equals(testSet.count(), 0, 'new sets are empty');
+		
+		testSet.add('red').add('green');
+		equals(testSet.count(), 2, 'adding elements increments count');
+		
+		testSet.remove(sapphire.is('green'));
+		equals(testSet.count(), 1, 'removing element decrements count');
+		
+		testSet.add(2).add('green').add(7).add('blue');
+		equals(testSet.count(function (item) {return typeof item === 'number';}), 2, 'count works with predicates');
+		
+	});
 
 });
