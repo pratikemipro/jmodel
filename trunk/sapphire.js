@@ -82,7 +82,7 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 		
-			// Tests: none
+			// Tests: full
 			concat: function (second) {
 				return second && second.reduce ? second.reduce(method('add'),this) : this;
 			},
