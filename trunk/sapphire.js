@@ -162,7 +162,10 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 		
-			// Tests: none
+			// Tests: partial
+			// NOTE: Test setting of this
+			// NOTE: Test passing of index
+			// NOTE: Test explicit definition
 			each: Array.prototype.forEach ? function () {
 				this.__members.forEach(pipe.apply(null,arguments),this);
 				return this;

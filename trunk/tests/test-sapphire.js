@@ -146,5 +146,22 @@ define(['../sapphire.js'], function (sapphire) {
 		equals(testSet.count(function (item) {return typeof item === 'number';}), 2, 'count works with predicates');
 		
 	});
+	
+	test('each', function () {
+	
+		var testSet = sapphire.set('red','green','blue');
+		
+		var val = '',
+			concat = function (item) {val+=item},
+			length = function (item) {return item.length;};
+			
+		testSet.each(concat);
+		equals( val, 'redgreenblue', 'each works with single function');
+		
+		val = 0;
+		testSet.each(length,concat);
+		equals(val,12,'each works with implict pipe of functions');
+		
+	});
 
 });
