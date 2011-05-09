@@ -16,13 +16,21 @@ define(['../sapphire.js'], function (sapphire) {
 	    
 	});
 	
+	test('Set.from', function () {
+	
+		var set = sapphire.Set.from('red','green','blue');
+		
+		equals( set instanceof sapphire.Set, true, 'Set.from returns a set');
+		deepEqual( set.get(), ['red','green','blue'], 'Set.from produces set with correct elements');
+		
+	});
+	
 	test('Set.fromArray', function () {
 	    
 	    var set = sapphire.Set.fromArray(['red','green','blue']);
 	    
 	    equals( set instanceof sapphire.Set, true, 'Set.fromArray returns a set');
-	    equals( set.count(), 3, 'Set.fromArray returns a set with correct cardinality');
-	    equals( set.first(), 'red', 'Set.fromArray has correct first element');
+	    deepEqual( set.get(), ['red','green','blue'], 'Set.fromArray produces set with correct elements');
 	    
 	});
 	
