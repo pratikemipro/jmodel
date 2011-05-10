@@ -24,7 +24,7 @@ define(['../opal.js'], function (opal) {
 		var fred = {forename:'fred'},
 			test = {};
 		
-		opal.extend(fred,test)
+		opal.extend(fred,test);
 			
 		equals(test.forename, 'fred', 'extend copies properties' );
 		
@@ -56,7 +56,7 @@ define(['../opal.js'], function (opal) {
 
 	test('as', function () {
 	
-		var fn = function () { return 'red' };
+		var fn = function () { return 'red'; };
 			
 		equals( fn.as('test').displayName, 'test', 'as sets displayName of function' );
 		equals( fn.as('test')(), 'red', 'function runs normally after use of "as"' );
@@ -65,7 +65,7 @@ define(['../opal.js'], function (opal) {
 	
 	test('extend', function () {
 	
-		var fn = function () { return 'red' };
+		var fn = function () { return 'red'; };
 			
 		equals( fn.extend({type:'accessor'}).type, 'accessor', 'extend sets properties of function' );
 		equals( fn.extend({type:'accessor'})(), 'red', 'function runs normally after use of "extend"' );
@@ -148,6 +148,18 @@ define(['../opal.js'], function (opal) {
 		equal(comp(4), true, 'true if both conditions true');
 		equal(comp(1), false, 'false if first condition false');
 		equal(comp(7), false, 'false if second condition false');
+		
+	});
+	
+	test('or', function () {
+	
+		var gt = function (x) {return x>2; },
+			lt = function (x) {return x<2; },
+			comp = gt.or(lt);
+			
+		equal(comp(3), true, 'true if first condition true');
+		equal(comp(1), true, 'true if second condition true');
+		equal(comp(2), false, 'false if both conditions false');
 		
 	});
 	
