@@ -314,6 +314,8 @@ define(['jmodel/opal'], function (opal) {
 		
 		};
 		
+		Set.prototype.where = Set.prototype.filter;
+		
 		// Tests: none
 		Set.prototype.max = Set.prototype.aggregate(max);
 		Set.prototype.min = Set.prototype.aggregate(min);
