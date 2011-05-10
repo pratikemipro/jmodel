@@ -139,6 +139,18 @@ define(['../opal.js'], function (opal) {
 		
 	});
 	
+	test('and', function () {
+	
+		var gt = function (x) {return x>2; },
+			lt = function (x) {return x<6; },
+			comp = gt.and(lt);
+			
+		equal(comp(4), true, 'true if both conditions true');
+		equal(comp(1), false, 'false if first condition false');
+		equal(comp(7), false, 'false if second condition false');
+		
+	});
+	
 	test('eq', function () {
 		
 		var add2 = function (x) { return x+2; };

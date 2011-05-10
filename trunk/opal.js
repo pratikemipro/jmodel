@@ -261,7 +261,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.and = function (fn2) {
 		var fn1 = this;
 		return function () {
