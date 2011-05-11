@@ -31,6 +31,7 @@ define(function (a,b,c,undefined) {
 
 	function _not (x) { return !x; }
 
+	function _get (object,property) {}
 	function _set (object,property,value) { object[property] = value; return object; }
 
 	// Tests: full
@@ -452,13 +453,9 @@ define(function (a,b,c,undefined) {
 
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
-	function property (property,generic) {
-		return function (object,specific) {
-			var value = specific || generic;
-			return    value === undefined ? object[property]
-					: object[property] !== undefined ? _set(object,property,value)
-					: undefined;
-		};
+	function property (property,value) {
+		return    value === undefined ? function (object) { return object[property]; }
+				: function (object) { object[property] = value; return object; };
 	}
 	
     // Tests: full
@@ -474,8 +471,8 @@ define(function (a,b,c,undefined) {
 	function resolve (name) {
 	    var args = _slice.call(arguments,1);
 		return function (object) {
-			return ( typeof object[name] === 'function' ? method(name) : property(name) )
-					.apply(null,[object].concat(args,_slice.call(arguments,1)));
+			return    typeof object[name] === 'function' ? method(name).apply(null,[object].concat(args,_slice.call(arguments,1)))
+					: property.apply(null,[name].concat(args,_slice.call(arguments,1)))(object);
 		};
 	}
 	
