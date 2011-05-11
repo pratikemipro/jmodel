@@ -31,7 +31,7 @@ define(function (a,b,c,undefined) {
 
 	function _not (x) { return !x; }
 
-	function _get (object,property) {}
+	function _get (object,property) { return object[property]; }
 	function _set (object,property,value) { object[property] = value; return object; }
 
 	// Tests: full
