@@ -79,21 +79,17 @@ define(['jmodel/sapphire'], function (sapphire) {
 		
 			project: function () {
 				var keys = _slice.call(arguments);
-					projector = project.apply(null,keys);
-				return Relation.create(keys,this.__members.map(projector));
+				return Relation.create(keys,this.__members.map(project.apply(null,keys)));
 			},
 			
 			where: function (predicate) {
-				return    typeof predicate === 'undefined' ? this
-						: Relation.create(this.keys,this.__members.filter(this.predicate(predicate)));
+				return Relation.create(this.keys,this.__members.filter(this.predicate(predicate)));
 			}
 			
 		}, new TypedSet(Object));
 		
 		function match (field) {
-			return function (a,b) {
-				return a[field] === b[field];
-			};
+			return function (a,b) { return a[field] === b[field]; };
 		}
 		
 		function join (field) {
