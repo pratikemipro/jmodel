@@ -455,7 +455,7 @@ define(function (a,b,c,undefined) {
 	// NOTE: add test that it doesn't set properties that don't exist
 	function property (property,value) {
 		return    value === undefined ? function (object) { return object[property]; }
-				: function (object) { object[property] = value; return object; };
+				: function (object) { return object[property] !== undefined ? _set(object,property,value) : undefined; }	
 	}
 	
     // Tests: full
