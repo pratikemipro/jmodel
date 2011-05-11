@@ -435,6 +435,11 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('project', function () {
+		var person = {forename:'john',surname:'smith',department:'IT',age:18};
+		deepEqual( opal.project('forename','surname')(person), {forename:'john',surname:'smith'}, 'projection works');
+	});
+	
 	test('transform', function () {
 		
 		person = {

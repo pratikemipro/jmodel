@@ -482,6 +482,19 @@ define(function (a,b,c,undefined) {
 				: resolve(elements[0]).then(path.call(null,elements.slice(1)));		
 	}
 
+	// Tests: none
+	function project () {
+		var fields = _slice.call(arguments);
+		return function (object) {
+			var projection = {};
+			for (var i=0; i<fields.length; i++) {
+				var field = fields[i];
+				projection[field] = object[field];
+			}
+			return projection;
+		};
+	};
+
 	// Tests: full
 	function transform (name,transformer,extractor) {
 		var resolver = resolve(name);
@@ -503,6 +516,7 @@ define(function (a,b,c,undefined) {
 		method: method,
 		resolve: resolve,
 		path: path,
+		project: project,
 		transform: transform
 	});
 
