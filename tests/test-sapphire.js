@@ -1,4 +1,4 @@
-define(['../sapphire.js'], function (sapphire) {
+define(['../library/sapphire.js'], function (sapphire) {
 
 	//
 	// Set construction
