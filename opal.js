@@ -32,7 +32,7 @@ define(function (a,b,c,undefined) {
 	function _not (x) { return !x; }
 
 	function _get (property,object) { return object[property]; }
-	function _set (property,value,object) { if ( object[property] !== undefined ) { object[property] = value; return value; } return undefined; }
+	function _set (property,value,object) { if ( object[property] !== undefined ) { object[property] = value; return object; } return undefined; }
 
 	// Tests: full
 	function arg (n) {
