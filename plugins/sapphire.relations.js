@@ -29,8 +29,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 			TypedSet.call(this,Object);
 			this.keys = keys instanceof Array ? keys : _slice.call(null,arguments);
 			this.constraint = function (object) {
-				return typeof object !== 'undefined' && !this.member(object)
-						&& Object.keys(object).toString() === this.keys.toString();
+				return Object.keys(object).toString() === this.keys.toString() && !this.member(object);
 			};
 		};
 		
