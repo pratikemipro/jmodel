@@ -396,7 +396,7 @@ define(['jmodel/opal'], function (opal) {
 
 		// Tests: none
 		Set.difference = function (first,second) {
-			return first.filter( Not(MembershipPredicate(second)) );
+			return first.filter( not(MembershipPredicate(second)) );
 		};
 
 		_.extend({
