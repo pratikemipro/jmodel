@@ -31,8 +31,8 @@ define(function (a,b,c,undefined) {
 
 	function _not (x) { return !x; }
 
-	function _get (object,property) { return object[property]; }
-	function _set (object,property,value) { object[property] = value; return object; }
+	function _get (property,object) { return object[property]; }
+	function _set (property,value,object) { if ( object[property] !== undefined ) { object[property] = value; } return object; }
 
 	// Tests: full
 	function arg (n) {
@@ -454,8 +454,7 @@ define(function (a,b,c,undefined) {
     // Tests: partial
 	// NOTE: add test that it doesn't set properties that don't exist
 	function property (property,value) {
-		return    value === undefined ? function (object) { return object[property]; }
-				: function (object) { return object[property] !== undefined ? _set(object,property,value) : undefined; }	
+		return value === undefined ? _get.curry(property) : _set.curry(property,value);
 	}
 	
     // Tests: full
