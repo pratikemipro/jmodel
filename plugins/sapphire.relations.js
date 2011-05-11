@@ -48,6 +48,11 @@ define(['jmodel/sapphire'], function (sapphire) {
 					: Relation.create(first.keys,Set.intersection(first,second));
 		};
 		
+		Relation.difference = function (first,second) {
+			return first.keys.toString() !== second.keys.toString() ? undefined
+					: Relation.create(first.keys,Set.difference(first,second));
+		};
+		
 		Relation.join = function (field) {
 			var predicate = join.apply(null,arguments); 
 			return function (first,second) {
