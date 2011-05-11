@@ -451,8 +451,7 @@ define(function (a,b,c,undefined) {
 		return object !== null && typeof object;
 	}
 
-    // Tests: partial
-	// NOTE: add test that it doesn't set properties that don't exist
+    // Tests: full
 	function property (property,value) {
 		return value === undefined ? _get.curry(property) : _set.curry(property,value);
 	}

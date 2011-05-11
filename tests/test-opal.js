@@ -359,6 +359,10 @@ define(['../opal.js'], function (opal) {
 		opal.property('surname','Jones')(fred)
 		equals( fred.surname, 'Jones', 'property allows setting of values at creation time' );
 		
+		equals( opal.property('age',17)(fred), false, 'returns false on attempting to set property that does not exist')
+		
+		equals(fred.age, undefined, 'property is not set if it does not exist')
+		
 	});
 	
 	test('method', function () {
