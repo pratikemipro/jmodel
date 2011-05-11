@@ -1,4 +1,4 @@
-define(['../opal.js'], function (opal) {
+define(['../library/opal.js'], function (opal) {
 	
 	
 	//
