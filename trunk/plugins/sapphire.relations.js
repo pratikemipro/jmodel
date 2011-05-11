@@ -28,29 +28,26 @@ define(['jmodel/sapphire'], function (sapphire) {
 		function Relation (keys) {
 			TypedSet.call(this,Object);
 			this.keys = keys instanceof Array ? keys : _slice.call(null,arguments);
+			var signature = this.keys.toString();
 			this.constraint = function (object) {
-				return Object.keys(object).toString() === this.keys.toString() && !this.member(object);
+				return Object.keys(object).toString() === signature && !this.member(object);
 			};
 		};
 		
 		Relation.create = function (keys,members) {
-			return set(members).reduce(_.add(), new Relation(keys));
+			return set(members).reduce(add(), new Relation(keys));
 		};
 
-		Relation.union = function (first,second) {
-			return    first.keys.toString() !== second.keys.toString() ? undefined
-					: Relation.create(first.keys,Set.union(first,second));
-		};
+		function raise (operation) {
+			return function (first,second) {
+				return    first.keys.toString() !== second.keys.toString() ? undefined
+						: Relation.create(first.keys,operation(first,second));
+			};
+		}
 
-		Relation.intersection = function (first,second) {
-			return 	  first.keys.toString() !== second.keys.toString() ? undefined
-					: Relation.create(first.keys,Set.intersection(first,second));
-		};
-		
-		Relation.difference = function (first,second) {
-			return first.keys.toString() !== second.keys.toString() ? undefined
-					: Relation.create(first.keys,Set.difference(first,second));
-		};
+		Relation.union			= raise(Set.union);
+		Relation.intersection	= raise(Set.intersection);
+		Relation.difference		= raise(Set.difference);
 		
 		Relation.join = function (field) {
 			var predicate = join.apply(null,arguments); 
@@ -71,10 +68,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 		Relation.prototype = extend({
 		
 			member: function (object) {
-				var json = JSON.stringify(object);
-				return this.first(function (candidate) {
-					return JSON.stringify(candidate) === json; }
-				) !== undefined;
+				return this.map(JSON.stringify).first(eq(JSON.stringify(object))) !== undefined;
 			},
 		
 			project: function () {
