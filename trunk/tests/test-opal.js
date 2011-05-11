@@ -356,7 +356,8 @@ define(['../opal.js'], function (opal) {
 		equals( opal.property('surname')(fred), 'Smith', 'property works on properties that exist' );
 		equals( opal.property('age')(fred), undefined, 'property returns "undefined" for properties that do not exist');
 		
-		equals( opal.property('surname','Jones')(fred).surname, 'Jones', 'property allows setting of values at creation time' );
+		opal.property('surname','Jones')(fred)
+		equals( fred.surname, 'Jones', 'property allows setting of values at creation time' );
 		
 	});
 	
@@ -395,10 +396,14 @@ define(['../opal.js'], function (opal) {
 		equals( opal.resolve('age')(person),  18,           'Resolve works with properties');
 		equals( opal.resolve('name')(person), 'John Smith', 'Resolve works with methods');
 		
-		equals( opal.resolve('age',17)(person).age, 17, 'Resolve updates properties with values given at creation time');
+		opal.resolve('age',17)(person)
+		equals( person.age, 17, 'Resolve updates properties with values given at creation time');
 	    
-	    equals( opal.resolve('Forename','Adam')(person).forename, 'Adam', 'Resolve updates methods with values given at creation time');
-	    equals( opal.resolve('Forename')(person,'Bob').forename, 'Bob', 'Resolve updates methods with values given at invocation time');
+		opal.resolve('Forename','Adam')(person)
+	    equals( person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
+	
+		opal.resolve('Forename')(person,'Bob')
+	    equals( person.forename, 'Bob', 'Resolve updates methods with values given at invocation time');
 	    
 	});
 	
@@ -434,8 +439,11 @@ define(['../opal.js'], function (opal) {
 		    fullname: ''
 		};
 		
-		equals( (opal.transform('forename',opal.method('toUpperCase'))(person)).forename, 'JOHN', 'transform works correctly without extractor');
-		equals( (opal.transform('fullname',opal.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person)).fullname, 'JOHN SMITH', 'transform works correctly with extractor');
+		opal.transform('forename',opal.method('toUpperCase'))(person)
+		equals( person.forename, 'JOHN', 'transform works correctly without extractor');
+		
+		opal.transform('fullname',opal.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person)
+		equals( person.fullname, 'JOHN SMITH', 'transform works correctly with extractor');
 		
 	});
 	
