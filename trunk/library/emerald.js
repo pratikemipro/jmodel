@@ -54,7 +54,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		EventRegistry.prototype = extend({
 		
 			register: function _register () {
-				return Set.fromArguments(arguments).reduce(method('add',this),this);
+				return Set.fromArguments(arguments).reduce(bymethod('add',this),this);
 			},
 		
 			create: function _create () {

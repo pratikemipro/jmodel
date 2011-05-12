@@ -460,17 +460,15 @@ define(function (a,b,c,undefined) {
 	function method (name) {
 		var args = _slice.call(arguments,1);
 		return function (object) {
-			return	  typeof object[name] !== 'function' ? undefined
-					: object[name].apply(object,args.concat(_slice.call(arguments,1)));
+			return typeof object[name] === 'function' ? object[name].apply(object,args) : undefined;
 		};
 	}
 	
 	// Tests: full
 	function resolve (name) {
-	    var args = _slice.call(arguments,1);
+	    var args = _slice.call(arguments);
 		return function (object) {
-			return    typeof object[name] === 'function' ? method(name).apply(null,[object].concat(args,_slice.call(arguments,1)))
-					: property.apply(null,[name].concat(args,_slice.call(arguments,1)))(object);
+			return typeof object[name] === 'function' ? method.apply(null,args)(object) : property.apply(null,args)(object);
 		};
 	}
 	
@@ -497,10 +495,10 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function transform (name,transformer,extractor) {
-		var resolver = resolve(name);
-		extractor = extractor || resolver;
+		var transformation = typeof extractor === 'function' ? extractor.then(transformer) : resolve(name).then(transformer);
 		return function (object) {
-			return resolver(object,transformer(extractor(object)));
+			var value = transformation(object);
+			return typeof object[name] === 'function' ? object[name].call(object,value) : _set(name,value,object);
 		};
 	}
 
@@ -544,10 +542,17 @@ define(function (a,b,c,undefined) {
 	};
 	
 	// Tests: full
-	var withmethod = method;
+	var withmethod = function method (name) {
+		var args = _slice.call(arguments,1);
+		return function (object) {
+			return typeof object[name] === 'function' ? object[name].apply(object,args.concat(_slice.call(arguments,1))) : undefined;
+		};
+	};
+	
+	var bymethod = withmethod;
 	
 	// Tests: full
-	var push = method('push').but(first);
+	var push = withmethod('push').but(first);
 	
 	// Tests: none
 	var add = function () {
@@ -599,6 +604,7 @@ define(function (a,b,c,undefined) {
 		times: times,
 		count: count,
 		withmethod: withmethod,
+		bymethod: bymethod,
 		push: push,
 		add: add,
 		contains: contains,
