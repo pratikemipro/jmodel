@@ -377,8 +377,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.method('unit')(adder),    0,     	  'Method works without any arguments');
 		equals( opal.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' );
 		equals( opal.method('add',2,3)(adder), 5,     	  'Method works with arguments at creation time');
-		equals( opal.method('add')(adder,2,3), 5,     	  'Method works with arguments at invocation time');
-		equals( opal.method('add',2)(adder,3), 5,     	  'Method works with mixed arguments');
 		
 	});
 	
@@ -405,9 +403,6 @@ define(['../library/opal.js'], function (opal) {
 	    
 		opal.resolve('Forename','Adam')(person)
 	    equals( person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
-	
-		opal.resolve('Forename')(person,'Bob')
-	    equals( person.forename, 'Bob', 'Resolve updates methods with values given at invocation time');
 	    
 	});
 	
@@ -497,7 +492,7 @@ define(['../library/opal.js'], function (opal) {
 	
 	test('push', function () {
 	   
-	   equals( (opal.push(['red','green','blue'],'cyan'))[3], 'cyan', 'Push words');
+	   deepEqual( opal.push(['red','green','blue'],'cyan'), ['red','green','blue','cyan'], 'Push words');
 	    
 	});
 	

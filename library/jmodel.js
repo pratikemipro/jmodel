@@ -255,7 +255,7 @@ var jModel = function () {
 		    var context = this;
 		    this.entities.each(function (entitytype) {
 	            Set.fromArray(entitytype.constructor.prototype.hasMany)
-					.reduce(method('add',context,entitytype),context.constraints);
+					.reduce(bymethod('add',context,entitytype),context.constraints);
 		    });
 		}
 		
@@ -568,7 +568,7 @@ var jModel = function () {
 								
 		if ( specification.objects ) {
 		    specification.objects = specification.objects instanceof Array ? Set.fromArray(specification.objects) : specification.objects;
-		    specification.objects.reduce(method('add'),this);
+		    specification.objects.reduce(bymethod('add'),this);
 		}						
 								
 
@@ -954,7 +954,7 @@ var jModel = function () {
 		constructor: Grouping,
 		
 		build: function _build () {
-			return this.parent.reduce(method('add'),this);
+			return this.parent.reduce(bymethod('add'),this);
 		},
 		
 		add: function _add (object) {

@@ -71,7 +71,7 @@ define(['jmodel/opal'], function (opal) {
 				this.__members = partition[false] ? partition[false].get() : [];
 				this.length = this.__members.length;
 				if ( this.__index && partition[true]) {
-					partition[true].reduce(method('remove'),this.__index);
+					partition[true].reduce(bymethod('remove'),this.__index);
 				}
 				return partition[true] || new this.constructor();
 			},
@@ -84,7 +84,7 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: full
 			concat: function (second) {
-				return second && second.reduce ? second.reduce(method('add'),this) : this;
+				return second && second.reduce ? second.reduce(bymethod('add'),this) : this;
 			},
 		
 			//
@@ -291,14 +291,14 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			of: function (cons) {
-				return this.reduce(method('add'), new TypedSet(cons));
+				return this.reduce(bymethod('add'), new TypedSet(cons));
 			},
 		
 			// Tests: none
 			jQuery: function () {
 				return jQuery( this
 								.map(function (obj) { return obj.jquery ? obj.get() : obj; })
-									.reduce(method('concat'), new this.constructor())
+									.reduce(bymethod('concat'), new this.constructor())
 										.get() );
 			},
 		
@@ -386,12 +386,12 @@ define(['jmodel/opal'], function (opal) {
 
 		// Tests: none
 		Set.union = function () {
-			return Set.fromArguments(arguments).reduce(method('concat'), new Set());
+			return Set.fromArguments(arguments).reduce(bymethod('concat'), new Set());
 		};
 		
 		// Tests: none
 		Set.intersection = function () {
-			return Set.fromArguments(arguments).map(MembershipPredicate).reduce(method('filter'),arguments[0].copy());
+			return Set.fromArguments(arguments).map(MembershipPredicate).reduce(bymethod('filter'),arguments[0].copy());
 		};
 
 		// Tests: none
@@ -416,7 +416,7 @@ define(['jmodel/opal'], function (opal) {
 		    }
 			this.__constructor = this.__constructor || constructor;
 			Set.apply(this,[]);
-			Set.fromArray(_slice.call(arguments,1)).reduce(method('add'),this);
+			Set.fromArray(_slice.call(arguments,1)).reduce(bymethod('add'),this);
 			return this;
 		}
 	
@@ -603,7 +603,7 @@ define(['jmodel/opal'], function (opal) {
 	
 			// Tests: none
 			build: function () {
-				this.set.reduce(method('add'),this);
+				this.set.reduce(bymethod('add'),this);
 			},
 
 			// Tests: none

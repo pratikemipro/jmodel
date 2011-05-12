@@ -102,11 +102,11 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		topaz.ObservableTypedSet = ObservableTypedSet;
 
 		topaz.plugin.set.asObservable = function () {
-			return this.reduce(method('add'),new ObservableSet());
+			return this.reduce(bymethod('add'),new ObservableSet());
 		};
 
 		topaz.plugin.typedset.asObservable = function () {
-			return this.reduce(method('add'),new ObservableTypedSet(this.__constructor));
+			return this.reduce(bymethod('add'),new ObservableTypedSet(this.__constructor));
 		};
 
 
