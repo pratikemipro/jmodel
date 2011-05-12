@@ -1,5 +1,5 @@
 /*
- *	Sapphire Relatins Plugin v0.2.0
+ *	Sapphire Relations Plugin v0.3.0
  *	http://code.google.com/p/jmodel/
  *
  *	Copyright (c) 2010-2011 Richard Baker
@@ -28,20 +28,24 @@ define(['jmodel/sapphire'], function (sapphire) {
 		function Relation (keys) {
 			TypedSet.call(this,Object);
 			this.keys = keys instanceof Array ? keys : _slice.call(null,arguments);
-			var signature = this.keys.toString();
+			this.signature = this.keys.toString();
+			var that = this;
 			this.constraint = function (object) {
-				return Object.keys(object).toString() === signature && !this.member(object);
+				return Object.keys(object).toString() === that.signature && !this.member(object);
 			};
 		};
 		
 		Relation.create = function (keys,members) {
 			return set(members).reduce(add(), new Relation(keys));
 		};
+		
+		Relation.compatible = function () {
+			return Set.fromArguments(arguments).map(property('signature')).reduce(add(),new Set()).length <= 1;
+		};
 
 		function raise (operation) {
-			return function (first,second) {
-				return    first.keys.toString() !== second.keys.toString() ? undefined
-						: Relation.create(first.keys,operation(first,second));
+			return function () {
+				return Relation.compatible.apply(null,arguments) ? Relation.create(first.keys,operation.apply(null,arguments)) : undefined;
 			};
 		}
 
@@ -49,7 +53,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 		Relation.intersection	= raise(Set.intersection);
 		Relation.difference		= raise(Set.difference);
 		
-		Relation.join = function (field) {
+		Relation.join = function () {
 			var predicate = join.apply(null,arguments); 
 			return function (first,second) {
 				var keys = Set.union(Set.fromArray(first.keys),Set.fromArray(second.keys)).get(),
@@ -78,7 +82,15 @@ define(['jmodel/sapphire'], function (sapphire) {
 			
 			where: function (predicate) {
 				return Relation.create(this.keys,this.__members.filter(this.predicate(predicate)));
-			}
+			},
+			
+			join: function (field,relation) { return Relation.join(field)(this,relation); },
+			
+			union: function (relation) { return Relation.union(this,relation); },
+			
+			intersection: function (relation) { return Relation.intersection(this,relation); },
+			
+			difference: function (relation) { return Relation.difference(this,relation); }
 			
 		}, new TypedSet(Object));
 		
