@@ -42,6 +42,54 @@ define(['jmodel/opal'], function (opal) {
 			this.added		= null;
 
 		}
+		
+		Set.extend({
+			
+			// Tests: full
+			from: function () {
+				return Set.fromArray(_slice.call(arguments));
+			},
+
+			// Tests: full
+			fromArray: function (arr) {
+				return new Set(arr);
+			},
+
+			// Tests: full
+			fromArguments: function (args) {
+				return Set.fromArray(_slice.call(args));
+			},
+
+			// Tests: none
+			fromJQuery: function (jq) {
+				return Set.fromArray(jq.get()).map(jQuery).reduce(add(),new Set());
+			},
+
+			// Tests: none
+			fromGenerator: function (fn) {
+				var next, items = [];
+				while ( typeof( next = fn() ) !== 'undefined' ) {
+					items.push(next);
+				}
+				return Set.fromArray(items);
+			},
+			
+			// Tests: none
+			union: function () {
+				return Set.fromArguments(arguments).reduce(bymethod('concat'), new Set());
+			},
+
+			// Tests: none
+			intersection: function () {
+				return Set.fromArguments(arguments).map(MembershipPredicate).reduce(bymethod('filter'),arguments[0].copy());
+			},
+
+			// Tests: none
+			difference: function (first,second) {
+				return first.filter( not(MembershipPredicate(second)) );
+			}
+			
+		});
 	
 		Set.prototype = {
 		
@@ -324,35 +372,6 @@ define(['jmodel/opal'], function (opal) {
 
 		_.Set = Set;
 	
-		// Tests: full
-		Set.from = function () {
-			return Set.fromArray(_slice.call(arguments));
-		};
-	
-		// Tests: full
-		Set.fromArray = function (arr) {
-			return new Set(arr);
-		};
-	
-		// Tests: full
-		Set.fromArguments = function (args) {
-			return Set.fromArray(_slice.call(args));
-		};
-	
-		// Tests: none
-		Set.fromJQuery = function (jq) {
-			return Set.fromArray(jq.get()).map(jQuery).reduce(add(),new Set());
-		};
-	
-		// Tests: none
-		Set.fromGenerator = function (fn) {
-			var next, items = [];
-			while ( typeof( next = fn() ) !== 'undefined' ) {
-				items.push(next);
-			}
-			return Set.fromArray(items);
-		};
-	
 		// Tests: none
 		_.range = function (lower, higher) {
 			return function () {
@@ -383,21 +402,6 @@ define(['jmodel/opal'], function (opal) {
 				return zipper(obj,second.shift());
 			});
 		}
-
-		// Tests: none
-		Set.union = function () {
-			return Set.fromArguments(arguments).reduce(bymethod('concat'), new Set());
-		};
-		
-		// Tests: none
-		Set.intersection = function () {
-			return Set.fromArguments(arguments).map(MembershipPredicate).reduce(bymethod('filter'),arguments[0].copy());
-		};
-
-		// Tests: none
-		Set.difference = function (first,second) {
-			return first.filter( not(MembershipPredicate(second)) );
-		};
 
 		_.extend({
 			zip: zip
