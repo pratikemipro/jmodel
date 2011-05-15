@@ -441,11 +441,13 @@ define(function (a,b,c,undefined) {
 	// Object functions
 	// 
 
-	// Tests: none
+	// Tests: full
 	function construct (constructor) {
-		return constructor === String ? String : function (_0,_1,_2,_3,_4,_5,_6,_7,_8,_9) {
-			return new constructor(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9);
-		};
+		return 	  constructor === String ? String 
+				: constructor === Date ? Date
+				: function (_0,_1,_2,_3,_4,_5,_6,_7,_8,_9) {
+					return new constructor(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9);
+				};
 	}
 
     // Tests: full
@@ -629,6 +631,13 @@ define(function (a,b,c,undefined) {
 	//
 	// Predicates: object
 	//
+	
+	// Tests: none
+	function valid (constructor) {
+		return	  constructor === Number ? isNaN.then(_not)
+				: constructor === Date ? function (date) { return date.toString() !== 'Invalid Date'; }
+				: isa(constructor);
+	}
 
 	// Tests: full
 	function is (object) {
@@ -653,6 +662,7 @@ define(function (a,b,c,undefined) {
 	}
 
 	opal.extend({
+		valid: 		valid,
 		is: 		is,
 		is_of_type: is_of_type,
 		isa: 		isa,
