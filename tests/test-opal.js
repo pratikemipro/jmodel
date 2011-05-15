@@ -325,6 +325,19 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Object functions');
 	
+	test('construct', function () {
+	
+		function Person (name, age) {
+			this.name = name;
+			this.age = age;
+		}
+		
+		equals( opal.construct(Person)('fred',16) instanceof Person, true, 'Creates object of correct type');
+		equals( opal.construct(Person)('fred',16).name, 'fred', 'First argument passed correctly');
+		equals( opal.construct(Person)('fred',16).age, 16, 'Second argument passed correctly');
+		
+	});
+	
 	test('identity', function () {
 	
 		var fred = 'fred';
@@ -356,12 +369,12 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.property('surname')(fred), 'Smith', 'property works on properties that exist' );
 		equals( opal.property('age')(fred), undefined, 'property returns "undefined" for properties that do not exist');
 		
-		opal.property('surname','Jones')(fred)
+		opal.property('surname','Jones')(fred);
 		equals( fred.surname, 'Jones', 'property allows setting of values at creation time' );
 		
-		equals( opal.property('age',17)(fred), false, 'returns false on attempting to set property that does not exist')
+		equals( opal.property('age',17)(fred), false, 'returns false on attempting to set property that does not exist');
 		
-		equals(fred.age, undefined, 'property is not set if it does not exist')
+		equals(fred.age, undefined, 'property is not set if it does not exist');
 		
 	});
 	
@@ -398,10 +411,10 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.resolve('age')(person),  18,           'Resolve works with properties');
 		equals( opal.resolve('name')(person), 'John Smith', 'Resolve works with methods');
 		
-		opal.resolve('age',17)(person)
+		opal.resolve('age',17)(person);
 		equals( person.age, 17, 'Resolve updates properties with values given at creation time');
 	    
-		opal.resolve('Forename','Adam')(person)
+		opal.resolve('Forename','Adam')(person);
 	    equals( person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
 	    
 	});
@@ -443,10 +456,10 @@ define(['../library/opal.js'], function (opal) {
 		    fullname: ''
 		};
 		
-		opal.transform('forename',opal.method('toUpperCase'))(person)
+		opal.transform('forename',opal.method('toUpperCase'))(person);
 		equals( person.forename, 'JOHN', 'transform works correctly without extractor');
 		
-		opal.transform('fullname',opal.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person)
+		opal.transform('fullname',opal.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person);
 		equals( person.fullname, 'JOHN SMITH', 'transform works correctly with extractor');
 		
 	});

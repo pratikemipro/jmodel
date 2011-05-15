@@ -441,6 +441,13 @@ define(function (a,b,c,undefined) {
 	// Object functions
 	// 
 
+	// Tests: none
+	function construct (constructor) {
+		return constructor === String ? String : function (_0,_1,_2,_3,_4,_5,_6,_7,_8,_9) {
+			return new constructor(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9);
+		};
+	}
+
     // Tests: full
 	function identity (object) {
 		return object;
@@ -508,6 +515,7 @@ define(function (a,b,c,undefined) {
 		compose: compose,
 		pipe: pipe,
 		parallel: parallel,
+		construct: construct,
 		identity: identity,
 		type: type,
 		property: property,
