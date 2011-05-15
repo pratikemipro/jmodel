@@ -27,7 +27,65 @@ define(['jmodel/opal'], function (opal) {
 
 		var _ 	   = extend({sapphire_version:'0.12.0'},opal),
 			_slice = Array.prototype.slice;
-	
+			
+		function _replace  (a,b) { return b; };
+
+
+		// ------------------------------------------------------------------------
+		//																		Map
+		// ------------------------------------------------------------------------
+
+		function Map (rep,combine) {
+			this.__rep__ = rep || {};
+			this.combine = combine || _replace;
+		}
+
+		Map.to = TypedMap;
+
+		Map.prototype = {
+
+			get: function (key) {
+				return this.__rep__[key];
+			},
+
+			add: function () {
+				return    arguments.length === 1 ? this.add1.apply(this,arguments)
+						: this.add2.apply(this,arguments);
+			},
+
+			add1: function (mappings) {
+				for ( var key in mappings ) {
+					this.add2(key,mappings[key]);
+				}
+				return this;
+			},
+
+			add2: function (key,value) {
+				var current =  this.__rep__[key];
+				this.__rep__[key] = current ? this.combine(current,value) : value;
+			},
+
+			remove: function (key) {
+				delete this.__rep__[key];
+				return this;
+			}
+
+		};
+
+
+		function TypedMap (constructor,rep,combine) {
+			this.__constructor__ = constructor;
+			Map.call(this,rep,combine);
+		}
+
+		TypedMap.prototype = new Map();
+
+		TypedMap.prototype.add2 = function (key,value) {
+			value = value instanceof this.__constructor__ ? value : new this.__constructor__(value);
+			return Map.prototype.add2.call(this,key,value);
+		};
+
+		
 		// ------------------------------------------------------------------------
 		//																		Set
 		// ------------------------------------------------------------------------
