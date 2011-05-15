@@ -432,7 +432,7 @@ define(['jmodel/opal'], function (opal) {
     				object = this.__construct.apply(this,arguments);
     			}
 
-				assert(valid(object), 'Invalid type in TypedSet');
+				assert(this.__valid(object), 'Invalid type in TypedSet');
 
 				return Set.prototype.add.call(this,object);
 
