@@ -433,25 +433,8 @@ define(['jmodel/opal'], function (opal) {
 						 || ! ( object instanceof Object) ) {
 	    				object = this.__construct ? this.__construct.apply(this,arguments) : object;
 	    			}
-
-	    			var failed;
-	    			switch (this.__constructor) {
-
-	    				case Number:
-	    					failed = isNaN(object);
-	    					break;
-
-	    				case Date:
-	    					failed = object.toString() === 'Invalid Date';
-	    					break;
-
-	    				default:
-	    					failed = ! (object instanceof this.__constructor);
-	    					break;
-
-	    			}
     			
-	    			if ( failed ) {
+	    			if ( !valid(object) ) {
 	    				throw "Opal: Invalid type in TypedSet.";
 	    			}
 			    
