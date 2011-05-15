@@ -411,8 +411,8 @@ define(['jmodel/opal'], function (opal) {
 	
 		// Tests: none
 		function TypedSet (constructor) {
-			this.__constructor = constructor;
-			this.__construct   = construct(constructor);
+			this.__construct = construct(constructor);
+			this.__valid	 = valid(constructor);
 			Set.apply(this,[]);
 			Set.fromArray(_slice.call(arguments,1)).reduce(bymethod('add'),this);
 			return this;
@@ -425,13 +425,13 @@ define(['jmodel/opal'], function (opal) {
 			
 				var object = arguments[0];
 			
-				if ( this.__constructor ) {
+				if ( this.__construct ) {
 			    
 				    if ( arguments.length > 1
 						 || typeof object === 'function'
 						 || object.constructor === Object
 						 || ! ( object instanceof Object) ) {
-	    				object = this.__construct ? this.__construct.apply(this,arguments) : object;
+	    				object = this.__construct.apply(this,arguments);
 	    			}
 	
 					assert(valid(object), 'Invalid type in TypedSet');
