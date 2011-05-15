@@ -433,10 +433,8 @@ define(['jmodel/opal'], function (opal) {
 						 || ! ( object instanceof Object) ) {
 	    				object = this.__construct ? this.__construct.apply(this,arguments) : object;
 	    			}
-    			
-	    			if ( !valid(object) ) {
-	    				throw "Opal: Invalid type in TypedSet.";
-	    			}
+	
+					assert(valid(object), 'Invalid type in TypedSet');
 			    
 				}
 
