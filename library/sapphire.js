@@ -424,19 +424,15 @@ define(['jmodel/opal'], function (opal) {
 			add: function () {
 			
 				var object = arguments[0];
-			
-				if ( this.__construct ) {
 			    
-				    if ( arguments.length > 1
-						 || typeof object === 'function'
-						 || object.constructor === Object
-						 || ! ( object instanceof Object) ) {
-	    				object = this.__construct.apply(this,arguments);
-	    			}
-	
-					assert(valid(object), 'Invalid type in TypedSet');
-			    
-				}
+			    if ( arguments.length > 1
+					 || typeof object === 'function'
+					 || object.constructor === Object
+					 || ! ( object instanceof Object) ) {
+    				object = this.__construct.apply(this,arguments);
+    			}
+
+				assert(valid(object), 'Invalid type in TypedSet');
 
 				return Set.prototype.add.call(this,object);
 
