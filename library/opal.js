@@ -208,7 +208,7 @@ define(function (a,b,c,undefined) {
 		return pre.but(this);
 	};
 	
-	// Tests: none
+	// Tests: full
 	Function.prototype.post = function (post) {
 		var fn = this;
 		return function () {
