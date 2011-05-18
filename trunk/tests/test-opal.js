@@ -139,6 +139,17 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('post', function () {
+	
+		var log = function (c,a,b) { logged = a+'+'+b+'='+c; },
+			add = (function (a,b) { return a+b; }).post(log),
+			logged = '';
+			
+		equal( add(2,3), 5, 'Post-function does not affect operation of function');
+		equal( logged, '2+3=5', 'Post-function is run and has access to arguments and return value');
+		
+	});
+	
 	test('and', function () {
 	
 		var gt = function (x) {return x>2; },
