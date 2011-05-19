@@ -300,47 +300,47 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.isa === undefined, '"isa" method already defined');
 	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 
-	// Tests: none
+	// Tests: full
 	Function.prototype.is = Function.prototype.then;
 	
 	// Tests: full
 	Function.prototype.eq = function (value) {
-		return this.then(eq(value));
+		return this.is(eq(value));
 	};
 	
 	// Tests: full
 	Function.prototype.neq = function (value) {
-		return this.then(neq(value));
+		return this.is(neq(value));
 	};
 	
 	// Tests: full
 	Function.prototype.lt = function (value) {
-		return this.then(lt(value));
+		return this.is(lt(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gt = function (value) {
-		return this.then(gt(value));
+		return this.is(gt(value));
 	};
 
 	// Tests: none
 	Function.prototype.lte = function (value) {
-		return this.then(lte(value));
+		return this.is(lte(value));
 	};
 	
 	// Tests: none
 	Function.prototype.gte = function (value) {
-		return this.then(gte(value));
+		return this.is(gte(value));
 	};
 	
 	// Tests: none
 	Function.prototype.between = function (lower,higher) {
-		return this.then(between(lower,higher));
+		return this.is(between(lower,higher));
 	};
 	
 	// Tests: none
 	Function.prototype.matches = function (expression) {
-		return this.then(regex(expression));
+		return this.is(regex(expression));
 	};
 	
 	// Tests: none
