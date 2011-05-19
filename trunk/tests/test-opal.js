@@ -174,6 +174,16 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('is', function () {
+	
+		var sum = function (a,b) { return a+b; },
+			odd  = function (a) { return a % 2 === 1; }; 
+			
+		equal( sum.is(odd)(2,3), true, 'is works when predicate true'  );
+		equal( sum.is(odd)(3,3), false, 'is works when predicate false'  );
+		
+	});
+	
 	test('eq', function () {
 		
 		var add2 = function (x) { return x+2; };
