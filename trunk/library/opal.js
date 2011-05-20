@@ -178,7 +178,7 @@ define(function (a,b,c,undefined) {
 	Function.prototype.then = function (fn2) {
 		var fn1 = this;
 		return function () {
-			return fn2(fn1.apply(this,arguments)); 
+			return fn2.call(this,fn1.apply(this,arguments)); 
 		};
 	};
 	
