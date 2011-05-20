@@ -489,7 +489,7 @@ define(function (a,b,c,undefined) {
 				: resolve(elements[0]).then(path.call(null,elements.slice(1)));		
 	}
 
-	// Tests: none
+	// Tests: full
 	function project () {
 		var fields = _slice.call(arguments);
 		return function (object) {
