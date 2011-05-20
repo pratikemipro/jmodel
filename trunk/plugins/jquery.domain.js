@@ -231,13 +231,6 @@ jQuery.fn.pubsub = function (pubsub) {
 			.publish(opal.copy(pubsub).addProperties({target:pubsub.object}).removeProperties('object'));
 };
 
-jQuery.fn.view = function (options) {
-	this.each(function (index,element) {
-		var view = new options.constructor(element,options);
-	});
-	return this;
-};
-
 jQuery.fn.views = function (views) {
 	for (var selector in views) {
 		jQuery(selector,this).view(views[selector]);
