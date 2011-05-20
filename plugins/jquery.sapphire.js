@@ -5,12 +5,19 @@
 define(['jquery','jmodel/sapphire'], function (jQuery,sapphire) {
 
 	if ( typeof jQuery != 'undefined' ) {
-		jQuery.fn.set = function () {
+		
+		jQuery.fn.toSet = function () {
 			return sapphire.Set.fromJQuery(this);
 		};
+		
+		jQuery.fn.view = function (constructor) {
+			return sapphire.Set.fromArray(this.map(sapphire._1.then(sapphire.construct(constructor))).get());
+		};
+		
 		if ( typeof _$ == 'undefined') {
 			_$ = sapphire.pipe(jQuery,sapphire.Set.fromJQuery);
 		}
+		
 	}
 	
 })
