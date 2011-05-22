@@ -74,17 +74,20 @@ define(['jmodel/opal'], function (opal) {
 
 
 		function TypedMap (constructor,rep,combine) {
-			this.construct = construct(constructor);
-			this.__constructor__ = constructor;
+			this.ensure = ensure(constructor);
 			Map.call(this,rep,combine);
 		}
 
 		TypedMap.prototype = new Map();
 
 		TypedMap.prototype.add2 = function (key,value) {
-			value = value instanceof this.__constructor__ ? value : this.construct.apply(this,_slice.call(arguments,1));
-			return Map.prototype.add2.call(this,key,value);
+			return Map.prototype.add2.call(this,key,this.ensure.call(this,_slice.call(arguments,1)));
 		};
+
+		_.extend({
+			Map: Map,
+			TypedMap: TypedMap
+		});
 
 		
 		// ------------------------------------------------------------------------
@@ -474,8 +477,8 @@ define(['jmodel/opal'], function (opal) {
 	
 		// Tests: none
 		function TypedSet (constructor) {
-			this.__construct = construct(constructor);
-			this.__valid	 = valid(constructor);
+			this.ensure = ensure(constructor);
+			this.valid  = valid(constructor);
 			Set.apply(this,[]);
 			Set.fromArray(_slice.call(arguments,1)).reduce(bymethod('add'),this);
 			return this;
@@ -485,20 +488,7 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			add: function () {
-			
-				var object = arguments[0];
-			    
-			    if ( arguments.length > 1
-					 || typeof object === 'function'
-					 || object.constructor === Object
-					 || ! ( object instanceof Object) ) {
-    				object = this.__construct.apply(this,arguments);
-    			}
-
-				assert(this.__valid(object), 'Invalid type in TypedSet');
-
-				return Set.prototype.add.call(this,object);
-
+				return Set.prototype.add.call(this,this.ensure.apply(this,arguments));
 			},
 		
 			// Tests: none
