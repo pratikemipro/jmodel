@@ -359,6 +359,20 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('ensure', function () {
+	
+		function Person (name, age) {
+			this.name = name;
+			this.age = age;
+		}
+		
+		var fred = new Person('fred',30);
+		
+		equals( opal.ensure(Person)(fred), fred, 'Acts as identity when object is already of type');
+		equals( opal.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type');
+		
+	});
+	
 	test('identity', function () {
 	
 		var fred = 'fred';

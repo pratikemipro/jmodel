@@ -449,6 +449,14 @@ define(function (a,b,c,undefined) {
 					return new constructor(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9);
 				};
 	}
+	
+	// Tests: full
+	function ensure (constructor) {
+		var _construct = construct(constructor);
+		return function (object) {
+			return object instanceof constructor ? object : _construct.apply(null,arguments);
+		};
+	}
 
     // Tests: full
 	function identity (object) {
@@ -518,6 +526,7 @@ define(function (a,b,c,undefined) {
 		pipe: pipe,
 		parallel: parallel,
 		construct: construct,
+		ensure: ensure,
 		identity: identity,
 		type: type,
 		property: property,
