@@ -74,6 +74,7 @@ define(['jmodel/opal'], function (opal) {
 
 
 		function TypedMap (constructor,rep,combine) {
+			this.construct = construct(constructor);
 			this.__constructor__ = constructor;
 			Map.call(this,rep,combine);
 		}
@@ -81,7 +82,7 @@ define(['jmodel/opal'], function (opal) {
 		TypedMap.prototype = new Map();
 
 		TypedMap.prototype.add2 = function (key,value) {
-			value = value instanceof this.__constructor__ ? value : new this.__constructor__(value);
+			value = value instanceof this.__constructor__ ? value : this.construct.apply(this,_slice.call(arguments,1));
 			return Map.prototype.add2.call(this,key,value);
 		};
 
