@@ -400,11 +400,6 @@ define(['jmodel/opal'], function (opal) {
 			},
 		
 			// Tests: none
-			of: function (cons) {
-				return this.reduce(bymethod('add'), new TypedSet(cons));
-			},
-		
-			// Tests: none
 			jQuery: function () {
 				return jQuery( this
 								.map(function (obj) { return obj.jquery ? obj.get() : obj; })
