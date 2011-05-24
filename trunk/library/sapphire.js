@@ -40,7 +40,16 @@ define(['jmodel/opal'], function (opal) {
 			this.combine = combine || _replace;
 		}
 
-		Map.to = TypedMap;
+		Map.extend({
+			
+			To: function (constructor) {
+				var _construct = construct(TypedMap,constructor);
+				return function () {
+					return _construct.apply(null,arguments);
+				};
+			}
+			
+		});
 
 		Map.prototype = {
 
@@ -81,12 +90,12 @@ define(['jmodel/opal'], function (opal) {
 		TypedMap.prototype = new Map();
 
 		TypedMap.prototype.add2 = function (key,value) {
-			return Map.prototype.add2.call(this,key,this.ensure.call(this,_slice.call(arguments,1)));
+			return Map.prototype.add2.call(this,key,this.ensure.apply(this,_slice.call(arguments,1)));
 		};
-
+		
+		
 		_.extend({
-			Map: Map,
-			TypedMap: TypedMap
+			Map: Map
 		});
 
 		
