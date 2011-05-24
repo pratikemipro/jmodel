@@ -446,6 +446,7 @@ define(function (a,b,c,undefined) {
 		var args1 = _slice.call(arguments,1)
 		return 	  constructor === String ? String 
 				: constructor === Date ? Date
+				: constructor === Number ? Number
 				: function () {
 					var args = args1.concat(_slice.call(arguments));
 					return new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
