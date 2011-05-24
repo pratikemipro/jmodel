@@ -43,11 +43,10 @@ define(['jmodel/opal'], function (opal) {
 		Map.extend({
 			
 			To: function (constructor) {
-				var _construct = construct(TypedMap,constructor);
-				return function () {
-					return _construct.apply(null,arguments);
-				};
-			}
+				return TypedMap.curry(constructor).extend({
+					prototype: TypedMap.prototype
+				});
+			}.memo()
 			
 		});
 
@@ -125,11 +124,10 @@ define(['jmodel/opal'], function (opal) {
 		Set.extend({
 			
 			Of: function (constructor) {
-				var _construct = construct(TypedSet,constructor);
-				return function () {
-					return _construct.apply(null,arguments);
-				};
-			},
+				return TypedSet.curry(constructor).extend({
+					prototype: TypedSet.prototype
+				})
+			}.memo(),
 			
 			// Tests: full
 			from: function () {
