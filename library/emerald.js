@@ -40,42 +40,23 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		// ------------------------------------------------------------------------
  
 		function EventRegistry () {
-		
-			TypedSet.call(this,EventType);
-		
-			this.index(resolve('name'));
-		
-			if ( arguments.length > 0 ) {
-				this.register.apply(this,arguments);
-			}
-		
+			// Need to set up representation as Map.To(EventType) isn't a real constructor
+			this.__rep__ = {};
+			this.addArray.call(this,_slice.call(arguments));
 		}
-	
+		
 		EventRegistry.prototype = extend({
-		
-			register: function _register () {
-				return Set.fromArguments(arguments).reduce(bymethod('add',this),this);
+			
+			register: function () {
+				return this.add(_slice.call(arguments));
 			},
-		
-			create: function _create () {
-				var args = _slice.call(arguments);
-				return TypedSet.prototype.create.apply(this,[this].concat(args));
-			},
-		
-			filter: function _filter () {
-			    return TypedSet.prototype.filter.apply(this,arguments);
-			},
-		
-			ensure: function _ensure (name) {
-				return this.filter(name) || this.register(name).filter(name);
-			},
-		
-			predicate: function _predicate (parameter) {
-				return    typeof parameter == 'string' && parameter.charAt(0) !== ':' ? extend({unique:true},PropertyPredicate('name',parameter))
-						: TypedSet.prototype.predicate.apply(this,arguments)
+			
+			create: function (key) {
+				this.add.apply(this,arguments);
+				return this.get(key);
 			}
-		
-		}, new TypedSet(EventType) );
+			
+		}, new Map.To(EventType)() );
 	
 		em.EventRegistry = EventRegistry;
 	
@@ -90,9 +71,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		// 																  EventType
 		// ------------------------------------------------------------------------
 	
-		function EventType (registry,name) {
-			this.registry		= registry || em.registry;
-			this.name			= name;
+		function EventType () {
 			this.subscribers	= delegateTo(new SubscriberSet(),'filter');
 			this.events			= [];
 			this.__remember		= 0;
@@ -333,13 +312,12 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 						privateEvent	= privateEvents.filter(group);
 					if ( !privateEvent ) {
 						var sourceEvent = sourceEvents.event(group);
-						privateEvent = privateEvents.add(
+						privateEvent = privateEvents.add('group',
 							sourceEvent
 								.tag(group)
 								.accumulate(fn,acc)
-								.as(group)
-								.republish(targetEvents.ensure(group))
 						).added;
+						privateEvent.republish(targetEvents.ensure(group))
 						return sourceEvent.raise.apply(sourceEvent,arguments);
 					}
 					return true;
@@ -449,7 +427,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		//
 	
 		em.disjoin = function () {
-		    var derivedEventType	= new EventType(em.registry),
+		    var derivedEventType	= new EventType(),
 				args				= _slice.call(arguments),
 				options				= args.length > 1 && !( args[args.length-1] instanceof EventType ) ? args.pop() : {},
 				eventTypes			= args[0] instanceof Set ? args[0] : Set.fromArray(args);
@@ -464,7 +442,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 		em.conjoin = function () {
 	    
-		    var derivedEventType = new EventType(em.registry),
+		    var derivedEventType = new EventType(),
 		        buffer = list(),
 				events = arguments[0] instanceof Set ? arguments[0] : Set.fromArguments(arguments);    
 	    
