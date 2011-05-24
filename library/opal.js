@@ -443,10 +443,12 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function construct (constructor) {
+		var args1 = _slice.call(arguments,1)
 		return 	  constructor === String ? String 
 				: constructor === Date ? Date
-				: function (_0,_1,_2,_3,_4,_5,_6,_7,_8,_9) {
-					return new constructor(_0,_1,_2,_3,_4,_5,_6,_7,_8,_9);
+				: function () {
+					var args = args1.concat(_slice.call(arguments));
+					return new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
 				};
 	}
 	

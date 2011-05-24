@@ -357,6 +357,9 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.construct(Person)('fred',16).name, 'fred', 'First argument passed correctly');
 		equals( opal.construct(Person)('fred',16).age, 16, 'Second argument passed correctly');
 		
+		equals( opal.construct(Person,'fred')(16).name, 'fred', 'Arguments can be passed in at definition time' );
+		equals( opal.construct(Person,'fred')(16).age, 16, 'Arguments at call time passed in correctly when there are definition time arguments' );
+		
 	});
 	
 	test('ensure', function () {
