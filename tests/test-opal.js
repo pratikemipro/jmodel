@@ -360,6 +360,9 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.construct(Person,'fred')(16).name, 'fred', 'Arguments can be passed in at definition time' );
 		equals( opal.construct(Person,'fred')(16).age, 16, 'Arguments at call time passed in correctly when there are definition time arguments' );
 		
+		equals( typeof opal.construct(String)('fred'), 'string', 'Construct handles strings correctly' );
+		equals( typeof opal.construct(Number)(7), 'number', 'Construct handles numbers correctly' );
+		
 	});
 	
 	test('ensure', function () {
