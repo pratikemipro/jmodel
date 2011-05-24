@@ -111,7 +111,8 @@ define(['jmodel/opal'], function (opal) {
 		
 		
 		_.extend({
-			Map: Map
+			Map: Map,
+			TypedMap: TypedMap
 		});
 
 		
