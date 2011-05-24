@@ -40,8 +40,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		// ------------------------------------------------------------------------
  
 		function EventRegistry () {
-			// Need to set up representation as Map.To(EventType) isn't a real constructor
-			this.__rep__ = {};
+			Map.To(EventType).apply(this);
 			this.addArray.call(this,_slice.call(arguments));
 		}
 		
