@@ -56,7 +56,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return this.get(key);
 			}
 			
-		}, new Map.To(EventType)() );
+		}, new (Map.To(EventType))() );
 	
 		em.EventRegistry = EventRegistry;
 	
