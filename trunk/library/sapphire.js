@@ -35,6 +35,7 @@ define(['jmodel/opal'], function (opal) {
 		//																		Map
 		// ------------------------------------------------------------------------
 
+		// Tests: none
 		function Map (rep,combine) {
 			this.__rep__ = rep || {};
 			this.combine = combine || _replace;
@@ -42,6 +43,7 @@ define(['jmodel/opal'], function (opal) {
 
 		Map.extend({
 			
+			// Tests: none
 			To: function (constructor) {
 				return TypedMap.curry(constructor).extend({
 					prototype: TypedMap.prototype
@@ -52,16 +54,19 @@ define(['jmodel/opal'], function (opal) {
 
 		Map.prototype = {
 
+			// Tests: none
 			get: function (key) {
 				return this.__rep__[key];
 			},
 
+			// Tests: none
 			add: function (x) {
 				return    arguments.length === 1 && x instanceof Array ? this.addArray(x)
 						: arguments.length === 1 && x instanceof Object ? this.addMappings(x)
 						: this.add2.apply(this,arguments);
 			},
 
+			// Tests: none
 			addMappings: function (mappings) {
 				for ( var key in mappings ) {
 					this.add2(key,mappings[key]);
@@ -69,6 +74,7 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 			
+			// Tests: none
 			addArray: function (keys) {
 				for (var i=0; i<keys.length; i++) {
 					this.add2(keys[i]);
@@ -76,11 +82,13 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 
+			// Tests: none
 			add2: function (key,value) {
 				var current =  this.__rep__[key];
 				this.__rep__[key] = current ? this.combine(current,value) : value;
 			},
 
+			// Tests: none
 			remove: function (key) {
 				delete this.__rep__[key];
 				return this;
@@ -88,7 +96,7 @@ define(['jmodel/opal'], function (opal) {
 
 		};
 
-
+		// Tests: none
 		function TypedMap (constructor,rep,combine) {
 			this.ensure = ensure(constructor);
 			Map.call(this,rep,combine);
@@ -96,6 +104,7 @@ define(['jmodel/opal'], function (opal) {
 
 		TypedMap.prototype = new Map();
 
+		// Tests: none
 		TypedMap.prototype.add2 = function (key,value) {
 			return Map.prototype.add2.call(this,key,this.ensure.apply(this,_slice.call(arguments,1)));
 		};
@@ -123,6 +132,7 @@ define(['jmodel/opal'], function (opal) {
 		
 		Set.extend({
 			
+			// Tests: none
 			Of: function (constructor) {
 				return TypedSet.curry(constructor).extend({
 					prototype: TypedSet.prototype
