@@ -124,6 +124,13 @@ define(['jmodel/opal'], function (opal) {
 		
 		Set.extend({
 			
+			Of: function (constructor) {
+				var _construct = construct(TypedSet,constructor);
+				return function () {
+					return _construct.apply(null,arguments);
+				};
+			},
+			
 			// Tests: full
 			from: function () {
 				return Set.fromArray(_slice.call(arguments));
@@ -512,8 +519,6 @@ define(['jmodel/opal'], function (opal) {
 		}, new Set() );
 
 		_.TypedSet = TypedSet;
-	
-		Set.of = TypedSet;
 
 
 		// ------------------------------------------------------------------------
