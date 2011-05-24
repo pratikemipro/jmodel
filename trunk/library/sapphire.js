@@ -57,14 +57,22 @@ define(['jmodel/opal'], function (opal) {
 				return this.__rep__[key];
 			},
 
-			add: function () {
-				return    arguments.length === 1 ? this.add1.apply(this,arguments)
+			add: function (x) {
+				return    arguments.length === 1 && x instanceof Array ? this.addArray(x)
+						: arguments.length === 1 && x instanceof Object ? this.addMappings(x)
 						: this.add2.apply(this,arguments);
 			},
 
-			add1: function (mappings) {
+			addMappings: function (mappings) {
 				for ( var key in mappings ) {
 					this.add2(key,mappings[key]);
+				}
+				return this;
+			},
+			
+			addArray: function (keys) {
+				for (var i=0; i<keys.length; i++) {
+					this.add2(keys[i]);
 				}
 				return this;
 			},
