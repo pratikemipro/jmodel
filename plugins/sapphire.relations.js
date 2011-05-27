@@ -77,11 +77,11 @@ define(['jmodel/sapphire'], function (sapphire) {
 		
 			project: function () {
 				var keys = _slice.call(arguments);
-				return Relation.create(keys,this.__members.map(project.apply(null,keys)));
+				return Relation.create(keys,this.__rep__.map(project.apply(null,keys)));
 			},
 			
 			where: function (predicate) {
-				return Relation.create(this.keys,this.__members.filter(this.predicate(predicate)));
+				return Relation.create(this.keys,this.__rep__.filter(this.predicate(predicate)));
 			},
 			
 			join: function (field,relation) { return Relation.join(field)(this,relation); },
