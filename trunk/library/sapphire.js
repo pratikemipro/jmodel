@@ -137,7 +137,7 @@ define(['jmodel/opal'], function (opal) {
 			Of: function (constructor) {
 				return TypedSet.curry(constructor).extend({
 					prototype: TypedSet.prototype
-				})
+				});
 			}.memo(),
 			
 			// Tests: full
@@ -286,9 +286,11 @@ define(['jmodel/opal'], function (opal) {
 			},
 		
 			// Tests: none
-			member: function (object) {
+			member: Array.prototype.indexOf ? function (object) {
 				return    this.__index ? this.__index.member(object)
-						: this.__rep__.indexOf ? this.__rep__.indexOf(object) > -1
+						: this.__rep__.indexOf(object) > -1;
+			} : function (object) {
+				return    this.__index ? this.__index.member(object)
 						: typeof this.first(is(object)) !== 'undefined';
 			},
 		
