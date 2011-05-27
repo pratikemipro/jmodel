@@ -11,7 +11,7 @@ define(['jquery','jmodel/sapphire'], function (jQuery,sapphire) {
 		};
 		
 		jQuery.fn.view = function (constructor) {
-			return sapphire.Set.fromArray(this.map(sapphire._1.then(sapphire.construct(constructor))).get());
+			return sapphire.Set.fromArray(this.map(sapphire._1.then(sapphire.construct.apply(null,arguments))).get());
 		};
 		
 		if ( typeof _$ == 'undefined') {
@@ -20,4 +20,4 @@ define(['jquery','jmodel/sapphire'], function (jQuery,sapphire) {
 		
 	}
 	
-})
+});
