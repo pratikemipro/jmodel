@@ -417,6 +417,11 @@ define(function (a,b,c,undefined) {
 	// Function application
 	//
 	
+	// Tests: none
+	function bind (context,fn) {
+		return fn.bind(context);
+	}
+	
 	// Tests: full
 	function apply () {
 		var args	= _slice.call(arguments),
@@ -443,7 +448,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	function construct (constructor) {
-		var args1 = _slice.call(arguments,1)
+		var args1 = _slice.call(arguments,1);
 		return 	  constructor === String ? String 
 				: constructor === Date ? Date
 				: constructor === Number ? Number
@@ -523,6 +528,7 @@ define(function (a,b,c,undefined) {
 	}
 
 	opal.extend({
+		bind: bind,
 		apply: apply,
 		applyto: applyto,
 		compose: compose,
