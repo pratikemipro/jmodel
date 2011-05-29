@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.16.0', extend: extend },
+	var opal   = { opal_version: '0.17.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -95,6 +95,7 @@ define(function (a,b,c,undefined) {
 	// Function composition
 	//
 	
+	// Protect existing methods with assertions
 	assert(Function.pipe === undefined, '"pipe" already defined');
 	assert(Function.compose === undefined, '"compose" already defined');
 
@@ -131,6 +132,7 @@ define(function (a,b,c,undefined) {
 	// Logical connectives
 	//
 	
+	// Protect existing methods with assertions
 	assert(Function.or === undefined, '"or" already defined');
 	assert(Function.and === undefined, '"and" already defined');
 	assert(Function.not === undefined, '"not" already defined');
@@ -180,6 +182,7 @@ define(function (a,b,c,undefined) {
 	// Property methods
 	//
 	
+	// Protect existing methods with assertions
 	assert(Function.prototype.as === undefined, '"as" method already defined');
 	assert(Function.prototype.extend === undefined, '"as" method already defined');
 	
@@ -514,6 +517,7 @@ define(function (a,b,c,undefined) {
 	//													     		     Object
 	// ------------------------------------------------------------------------
 	
+	// Protect existing methods with assertions
 	assert(Function.prototype.construct === undefined, '"construct" method already defined');
 	
 	extend({
