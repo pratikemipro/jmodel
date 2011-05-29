@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.15.0', extend: extend },
+	var opal   = { opal_version: '0.16.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -119,6 +119,9 @@ define(function (a,b,c,undefined) {
 		
 	}, Function);
 	
+	Function.pipe.displayName    = 'pipe';
+	Function.compose.displayName = 'compose';
+	
 	opal.extend({
 		pipe: 	 Function.pipe,
 		compose: Function.compose
@@ -157,6 +160,10 @@ define(function (a,b,c,undefined) {
 		}
 		
 	}, Function);
+
+	Function.or.displayName  = 'or';
+	Function.and.displayName = 'and';
+	Function.not.displayName = 'not';
 
 	opal.extend({
 		or:  Function.or,
