@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.19.0', extend: extend },
+	var opal   = { opal_version: '0.19.1', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -522,9 +522,9 @@ define(function (a,b,c,undefined) {
 	//
 	
 	// Protect existing methods with assertions
-	assert(Function.prototype.construct === undefined, '"construct" method already defined');
-	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
-	assert(Function.prototype.project === undefined, '"project" method already defined');
+	assert(Object.construct === undefined, '"construct" method already defined');
+	assert(Object.ensure === undefined, '"ensure" method already defined');
+	assert(Object.project === undefined, '"project" method already defined');
 	
 	extend({
 		
