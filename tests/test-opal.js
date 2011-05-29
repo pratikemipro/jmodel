@@ -49,6 +49,69 @@ define(['../library/opal.js'], function (opal) {
 	});
 	
 	//
+	// Function methods
+	//
+	
+	module('Function');
+	
+	test('pipe', function () {
+
+		var times2 = function (x) { return 2*x; },
+			addten = function (x) { return x+10; };
+
+		equals( Function.pipe(times2,addten)(7), 24, 'piping of two functions works' );
+		equals( Function.pipe(addten,times2)(7), 34, 'piping works in opposite direction' );
+		equals( Function.pipe(times2)(7), 14, 'pipe of a single function is just that function' );	
+		equals( Function.pipe()(7), 7, 'pipe of no functions is identity' );
+
+	});
+	
+	test('compose', function () {
+	
+		var times2 = function (x) { return 2*x; },
+			addten = function (x) { return x+10; };
+			
+		equals( Function.compose(times2,addten)(7), 34, 'composition of two functions works' );
+		equals( Function.compose(addten,times2)(7), 24, 'composition works in opposite direction' );
+		equals( Function.compose(times2)(7), 14, 'composition of a single function is just that function' );	
+		equals( Function.compose()(7), 7, 'composition of no functions is identity' );
+		
+	});
+	
+	test('or', function () {
+	
+		equals( Function.or()(5), false, "or of zero arguments is false");
+		equals( Function.or(opal.eq(5))(5), true, "or with one argument returns true when predicate is true" );
+		equals( Function.or(opal.eq(5))(7), false, "or with one argument returns false when predicate is false" );
+		
+		equals( Function.or(opal.eq(5),opal.eq(6))(5), true, "or with two arguments returns true when first is true"  );
+		equals( Function.or(opal.eq(5),opal.eq(6))(6), true, "or with two arguments returns true when second is true"  );
+		equals( Function.or(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
+		
+	});
+	
+	test('and', function () {
+	
+		equals( Function.and()(5), true, "or of zero arguments is true");
+		equals( Function.and(opal.eq(5))(5), true, "and with one argument returns true when predicate is true" );
+		equals( Function.and(opal.eq(5))(7), false, "and with one argument returns false when predicate is false" );
+		
+		equals( Function.and(opal.lt(5),opal.lt(6))(3), true, "and with two arguments returns true when both are true"  );
+		equals( Function.and(opal.eq(5),opal.eq(6))(6), false, "and with two arguments returns false when first is false"  );
+		equals( Function.and(opal.eq(5),opal.eq(6))(5), false, "or with two arguments returns false when second is false"  );
+		equals( Function.and(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
+		
+	});
+	
+	test('not', function () {
+	
+		equals( opal.not(opal.eq(5))(6), true, 'not returns true when predicate returns false' );
+		equals( opal.not(opal.eq(5))(5), false, 'not returns false when predicate returns true' );
+		
+		
+	});
+	
+	//
 	// Function.prototype methods
 	//
 	
@@ -240,34 +303,86 @@ define(['../library/opal.js'], function (opal) {
 	
 	
 	//
+	// Object
+	//
+	
+	module('Object');
+	
+	test('construct', function () {
+	
+		function Person (name, age) {
+			this.name = name;
+			this.age = age;
+		}
+		
+		equals( Object.construct(Person)('fred',16) instanceof Person, true, 'Creates object of correct type');
+		equals( Object.construct(Person)('fred',16).name, 'fred', 'First argument passed correctly');
+		equals( Object.construct(Person)('fred',16).age, 16, 'Second argument passed correctly');
+		
+		equals( Object.construct(Person,'fred')(16).name, 'fred', 'Arguments can be passed in at definition time' );
+		equals( Object.construct(Person,'fred')(16).age, 16, 'Arguments at call time passed in correctly when there are definition time arguments' );
+		
+		equals( typeof Object.construct(String)('fred'), 'string', 'Construct handles strings correctly' );
+		equals( typeof Object.construct(Number)(7), 'number', 'Construct handles numbers correctly' );
+		
+	});
+	
+	test('ensure', function () {
+	
+		function Person (name, age) {
+			this.name = name;
+			this.age = age;
+		}
+		
+		var fred = new Person('fred',30);
+		
+		equals( Object.ensure(Person)(fred), fred, 'Acts as identity when object is already of type');
+		equals( Object.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type');
+		
+	});
+	
+	test('project', function () {
+		var person = {forename:'john',surname:'smith',department:'IT',age:18};
+		deepEqual( Object.project('forename','surname')(person), {forename:'john',surname:'smith'}, 'projection works');
+	});
+	
+	test('property', function () {
+	
+		var fred = {forename:'Fred',surname:'Smith'};
+		
+		equals( Object.property('surname')(fred), 'Smith', 'property works on properties that exist' );
+		equals( Object.property('age')(fred), undefined, 'property returns "undefined" for properties that do not exist');
+		
+		Object.property('surname','Jones')(fred);
+		equals( fred.surname, 'Jones', 'property allows setting of values at creation time' );
+		
+		equals( Object.property('age',17)(fred), false, 'returns false on attempting to set property that does not exist');
+		
+		equals(fred.age, undefined, 'property is not set if it does not exist');
+		
+	});
+	
+	test('method', function () {
+	
+		var Adder = function () {
+		    this.unit = function () { return 0; };
+		    this.add = function (a,b) { return a+b; };
+		};
+		
+		var adder = new Adder();
+		
+		equals( Object.method('unit')(adder),    0,     	'Method works without any arguments');
+		equals( Object.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' );
+		equals( Object.method('add',2,3)(adder), 5,     	'Method works with arguments at creation time');
+		
+	});
+	
+	
+	//
 	// Function composition
 	//
 	
 	module('Function composition');
-	
-	test('pipe', function () {
-
-		var times2 = function (x) { return 2*x; },
-			addten = function (x) { return x+10; };
-
-		equals( opal.pipe(times2,addten)(7), 24, 'piping of two functions works' );
-		equals( opal.pipe(addten,times2)(7), 34, 'piping works in opposite direction' );
-		equals( opal.pipe(times2)(7), 14, 'pipe of a single function is just that function' );	
-		equals( opal.pipe()(7), 7, 'pipe of no functions is identity' );
-
-	});
-	
-	test('compose', function () {
-	
-		var times2 = function (x) { return 2*x; },
-			addten = function (x) { return x+10; };
-			
-		equals( opal.compose(times2,addten)(7), 34, 'composition of two functions works' );
-		equals( opal.compose(addten,times2)(7), 24, 'composition works in opposite direction' );
-		equals( opal.compose(times2)(7), 14, 'composition of a single function is just that function' );	
-		equals( opal.compose()(7), 7, 'composition of no functions is identity' );
-		
-	});
 	
 	test('parallel', function () {
 
@@ -346,39 +461,6 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Object functions');
 	
-	test('construct', function () {
-	
-		function Person (name, age) {
-			this.name = name;
-			this.age = age;
-		}
-		
-		equals( opal.construct(Person)('fred',16) instanceof Person, true, 'Creates object of correct type');
-		equals( opal.construct(Person)('fred',16).name, 'fred', 'First argument passed correctly');
-		equals( opal.construct(Person)('fred',16).age, 16, 'Second argument passed correctly');
-		
-		equals( opal.construct(Person,'fred')(16).name, 'fred', 'Arguments can be passed in at definition time' );
-		equals( opal.construct(Person,'fred')(16).age, 16, 'Arguments at call time passed in correctly when there are definition time arguments' );
-		
-		equals( typeof opal.construct(String)('fred'), 'string', 'Construct handles strings correctly' );
-		equals( typeof opal.construct(Number)(7), 'number', 'Construct handles numbers correctly' );
-		
-	});
-	
-	test('ensure', function () {
-	
-		function Person (name, age) {
-			this.name = name;
-			this.age = age;
-		}
-		
-		var fred = new Person('fred',30);
-		
-		equals( opal.ensure(Person)(fred), fred, 'Acts as identity when object is already of type');
-		equals( opal.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type');
-		
-	});
-	
 	test('identity', function () {
 	
 		var fred = 'fred';
@@ -400,37 +482,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.type(hello),	'function', 'type works on functions' );
 		equals( opal.type(obj),		'object',	'type works on objects' );
 		equals( opal.type(no),		false,		'type works on nulls' );
-		
-	});
-	
-	test('property', function () {
-	
-		var fred = {forename:'Fred',surname:'Smith'};
-		
-		equals( opal.property('surname')(fred), 'Smith', 'property works on properties that exist' );
-		equals( opal.property('age')(fred), undefined, 'property returns "undefined" for properties that do not exist');
-		
-		opal.property('surname','Jones')(fred);
-		equals( fred.surname, 'Jones', 'property allows setting of values at creation time' );
-		
-		equals( opal.property('age',17)(fred), false, 'returns false on attempting to set property that does not exist');
-		
-		equals(fred.age, undefined, 'property is not set if it does not exist');
-		
-	});
-	
-	test('method', function () {
-	
-		var Adder = function () {
-		    this.unit = function () { return 0; };
-		    this.add = function (a,b) { return a+b; };
-		};
-		
-		var adder = new Adder();
-		
-		equals( opal.method('unit')(adder),    0,     	  'Method works without any arguments');
-		equals( opal.method('test')(adder),    undefined, 'Method returns "undefined" if method does not exist.' );
-		equals( opal.method('add',2,3)(adder), 5,     	  'Method works with arguments at creation time');
 		
 	});
 	
@@ -482,11 +533,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.path(['job','title'])(person), 'Developer', 'path works for paths containing methods specified as arrays');
 		equals( opal.path('job.salary')(person), undefined, 'path returns undefined for paths that do not exist.');
 		
-	});
-	
-	test('project', function () {
-		var person = {forename:'john',surname:'smith',department:'IT',age:18};
-		deepEqual( opal.project('forename','surname')(person), {forename:'john',surname:'smith'}, 'projection works');
 	});
 	
 	test('transform', function () {
@@ -686,41 +732,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.isnull(null), true, 'returns true for null value');
 		equals( opal.isnull(false), false, 'returns false for false value');
 		equals( opal.isnull(7), false, 'returns false for truthy non-null value');
-		
-	});
-	
-	module('Logical connectives');
-	
-	test('or', function () {
-	
-		equals( opal.or()(5), false, "or of zero arguments is false");
-		equals( opal.or(opal.eq(5))(5), true, "or with one argument returns true when predicate is true" );
-		equals( opal.or(opal.eq(5))(7), false, "or with one argument returns false when predicate is false" );
-		
-		equals( opal.or(opal.eq(5),opal.eq(6))(5), true, "or with two arguments returns true when first is true"  );
-		equals( opal.or(opal.eq(5),opal.eq(6))(6), true, "or with two arguments returns true when second is true"  );
-		equals( opal.or(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
-		
-	});
-	
-	test('and', function () {
-	
-		equals( opal.and()(5), true, "or of zero arguments is true");
-		equals( opal.and(opal.eq(5))(5), true, "and with one argument returns true when predicate is true" );
-		equals( opal.and(opal.eq(5))(7), false, "and with one argument returns false when predicate is false" );
-		
-		equals( opal.and(opal.lt(5),opal.lt(6))(3), true, "and with two arguments returns true when both are true"  );
-		equals( opal.and(opal.eq(5),opal.eq(6))(6), false, "and with two arguments returns false when first is false"  );
-		equals( opal.and(opal.eq(5),opal.eq(6))(5), false, "or with two arguments returns false when second is false"  );
-		equals( opal.and(opal.eq(5),opal.eq(6))(7), false, "or with two arguments returns false when neither is true"  );
-		
-	});
-	
-	test('not', function () {
-	
-		equals( opal.not(opal.eq(5))(6), true, 'not returns true when predicate returns false' );
-		equals( opal.not(opal.eq(5))(5), false, 'not returns false when predicate returns true' );
-		
 		
 	});
 	
