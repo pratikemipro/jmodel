@@ -517,6 +517,10 @@ define(function (a,b,c,undefined) {
 	//													     		     Object
 	// ------------------------------------------------------------------------
 	
+	//
+	// Construction
+	//
+	
 	// Protect existing methods with assertions
 	assert(Function.prototype.construct === undefined, '"construct" method already defined');
 	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
