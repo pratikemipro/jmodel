@@ -101,19 +101,23 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.as === undefined, '"as" method already defined');
 	assert(Function.prototype.extend === undefined, '"as" method already defined');
 	
-	// Tests: full
-	// Docs: none
-	Function.prototype.as = function (name) {
-		this.displayName = name;
-		return this;
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.extend = function (properties) {
-		return extend(properties,this);
-	};
-	
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		as: function (name) {
+			this.displayName = name;
+			return this;
+		},
+		
+		// Tests: full
+		// Docs: none
+		extend: function (properties) {
+			return extend(properties,this);
+		}
+		
+	}, Function.prototype );
+		
 	Function.prototype.as.displayName     = 'as';
 	Function.prototype.extend.displayName = 'extend';
 	
@@ -127,47 +131,50 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.memo === undefined, '"delay" method already defined');
 	assert(Function.prototype.delay === undefined, '"delay" method already defined');
 	
-	// Tests: full
-	// Docs: none
-	Function.prototype.bind = Function.prototype.bind || function (context) {
-		var fn = this;
-		return function () {
-			return fn.apply(context,arguments);
-		};
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.curry = function () {
-		var args = _slice.call(arguments),
-			fn   = this;
-		return function () {
-			return fn.apply(this,args.concat(_slice.call(arguments)));
-		};
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.memo = function () {
-		var cache = {},
-			fn = this.post(function () {
-				cache[_slice.call(arguments,1)] = arguments[0];
-			});
-		return function () {
-			var value = cache[_slice.call(arguments)];
-			return value !== undefined ? value : fn.apply(this,arguments);
-		};
-	};
-	
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.delay = function (duration) {
-		var fn = this;
-		return function () {
-			return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
-		};
-	};
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		bind: Function.prototype.bind || function (context) {
+			var fn = this;
+			return function () {
+				return fn.apply(context,arguments);
+			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		curry: function () {
+			var args = _slice.call(arguments),
+				fn   = this;
+			return function () {
+				return fn.apply(this,args.concat(_slice.call(arguments)));
+			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		memo: function () {
+			var cache = {},
+				fn = this.post(function () {
+					cache[_slice.call(arguments,1)] = arguments[0];
+				});
+			return function () {
+				var value = cache[_slice.call(arguments)];
+				return value !== undefined ? value : fn.apply(this,arguments);
+			};
+		},
+		
+		// Tests: none
+		// Docs: none
+		delay: function (duration) {
+			var fn = this;
+			return function () {
+				return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
+			};
+		}
+		
+	}, Function.prototype);
 	
 	Function.prototype.bind.displayName  = 'bind';
 	Function.prototype.curry.displayName = 'curry';
@@ -183,24 +190,28 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.then === undefined, '"then" method already defined');
 	assert(Function.prototype.but === undefined, '"but" method already defined');
 
-	// Tests: full
-	// Docs: none
-	Function.prototype.then = function (fn2) {
-		var fn1 = this;
-		return function () {
-			return fn2.call(this,fn1.apply(this,arguments)); 
-		};
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.but = function (fn2) {
-		var fn1 = this;
-		return function () {
-			fn1.apply(this,arguments);
-			return fn2.apply(this,arguments);
-		};
-	};
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		then: function (fn2) {
+			var fn1 = this;
+			return function () {
+				return fn2.call(this,fn1.apply(this,arguments)); 
+			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		but: function (fn2) {
+			var fn1 = this;
+			return function () {
+				fn1.apply(this,arguments);
+				return fn2.apply(this,arguments);
+			};
+		}
+		
+	}, Function.prototype);
 	
 	Function.prototype.then.displayName = 'then';
 	Function.prototype.but.displayName  = 'but';
@@ -214,22 +225,26 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.pre === undefined, '"pre" method already defined');
 	assert(Function.prototype.post === undefined, '"post" method already defined');
 	
-	// Tests: full
-	// Docs: none
-	Function.prototype.pre = function (pre) {
-		return pre.but(this);
-	};
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		pre: function (pre) {
+			return pre.but(this);
+		},
+		
+		// Tests: full
+		// Docs: none
+		post: function (post) {
+			var fn = this;
+			return function () {
+				var ret = fn.apply(this,arguments);
+				post.apply(this,[ret].concat(_slice.call(arguments)));
+				return ret;
+			};
+		}
 	
-	// Tests: full
-	// Docs: none
-	Function.prototype.post = function (post) {
-		var fn = this;
-		return function () {
-			var ret = fn.apply(this,arguments);
-			post.apply(this,[ret].concat(_slice.call(arguments)));
-			return ret;
-		};
-	};
+	}, Function.prototype);
 	
 	Function.prototype.pre.displayName  = 'pre';
 	Function.prototype.post.displayName = 'post';
@@ -243,27 +258,31 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.require === undefined, '"require" method already defined');
 	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
 	
-	// Tests: none
-	// Docs: none
-	Function.prototype.require = function () {
-		var predicates = _slice.call(arguments),
-			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
-			predicate = and.apply(null,predicates);
-		return this.pre(function () {
-			assert(predicate.apply(this,arguments),message);
-		});
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.ensure = function () {
-		var predicates = _slice.call(arguments),
-			message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
-			predicate = and.apply(null,predicates);
-		return this.post(function () {
-			assert(predicate.apply(this,arguments),message);
-		});
-	};
+	extend({
+		
+		// Tests: none
+		// Docs: none
+		require: function () {
+			var predicates = _slice.call(arguments),
+				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
+				predicate = and.apply(null,predicates);
+			return this.pre(function () {
+				assert(predicate.apply(this,arguments),message);
+			});
+		},
+		
+		// Tests: none
+		// Docs: none
+		ensure: function () {
+			var predicates = _slice.call(arguments),
+				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
+				predicate = and.apply(null,predicates);
+			return this.post(function () {
+				assert(predicate.apply(this,arguments),message);
+			});
+		}
+		
+	}, Function.prototype);
 	
 	Function.prototype.require.displayName = 'require';
 	Function.prototype.ensure.displayName  = 'ensure';
@@ -277,23 +296,27 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	
-	// Tests: full
-	// Docs: none
-	Function.prototype.and = function (fn2) {
-		var fn1 = this;
-		return function () {
-			return fn1.apply(this,arguments) && fn2.apply(this,arguments);
-		};
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.or = function (fn2) {
-		var fn1 = this;
-		return function () {
-			return fn1.apply(this,arguments) || fn2.apply(this,arguments);
-		};
-	};
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		and: function (fn2) {
+			var fn1 = this;
+			return function () {
+				return fn1.apply(this,arguments) && fn2.apply(this,arguments);
+			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		or: function (fn2) {
+			var fn1 = this;
+			return function () {
+				return fn1.apply(this,arguments) || fn2.apply(this,arguments);
+			};
+		}
+		
+	}, Function.prototype);
 	
 	Function.prototype.and.displayName = 'and';
 	Function.prototype.or.displayName  = 'or';
@@ -317,76 +340,80 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.isa === undefined, '"isa" method already defined');
 	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 
-	// Tests: full
-	// Docs: none
-	Function.prototype.is = Function.prototype.then;
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.eq = function (value) {
-		return this.is(eq(value));
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.neq = function (value) {
-		return this.is(neq(value));
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.lt = function (value) {
-		return this.is(lt(value));
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.gt = function (value) {
-		return this.is(gt(value));
-	};
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		is: Function.prototype.then,
+		
+		// Tests: full
+		// Docs: none
+		eq: function (value) {
+			return this.is(eq(value));
+		},
+		
+		// Tests: full
+		// Docs: none
+		neq: function (value) {
+			return this.is(neq(value));
+		},
+		
+		// Tests: full
+		// Docs: none
+		lt: function (value) {
+			return this.is(lt(value));
+		},
+		
+		// Tests: none
+		// Docs: none
+		gt: function (value) {
+			return this.is(gt(value));
+		},
+		
+		// Tests: none
+		// Docs: none
+		lte: function (value) {
+			return this.is(lte(value));
+		},
+		
+		// Tests: none
+		// Docs: none
+		gte: function (value) {
+			return this.is(gte(value));
+		},
+		
+		// Tests: none
+		// Docs: none
+		between: function (lower,higher) {
+			return this.is(between(lower,higher));
+		},
+		
+		// Tests: none
+		// Docs: none
+		matches: function (expression) {
+			return this.is(regex(expression));
+		},
+		
+		// Tests: none
+		// Docs: none
+		isnull: function () {
+			return this.then(isnull);
+		},
+		
+		// Tests: full
+		// Docs: none
+		isa: function (constructor) {
+			return this.then(isa(constructor));
+		},
+		
+		// Tests: full
+		// Docs: none
+		hastype: function (type) {
+			return this.then(is_of_type(type));
+		}
+		
+	}, Function.prototype);
 
-	// Tests: none
-	// Docs: none
-	Function.prototype.lte = function (value) {
-		return this.is(lte(value));
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.gte = function (value) {
-		return this.is(gte(value));
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.between = function (lower,higher) {
-		return this.is(between(lower,higher));
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.matches = function (expression) {
-		return this.is(regex(expression));
-	};
-	
-	// Tests: none
-	// Docs: none
-	Function.prototype.isnull = function () {
-		return this.then(isnull);
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.isa = function (constructor) {
-		return this.then(isa(constructor));
-	};
-	
-	// Tests: full
-	// Docs: none
-	Function.prototype.hastype = function (type) {
-		return this.then(is_of_type(type));
-	};
-	
 	Function.prototype.is.displayName		= 'is';
 	Function.prototype.eq.displayName		= 'eq';
 	Function.prototype.neq.displayName		= 'neq';
