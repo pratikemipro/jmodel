@@ -87,13 +87,43 @@ define(function (a,b,c,undefined) {
 	});
 
 
+	// ------------------------------------------------------------------------
+	//													     		   Function
+	// ------------------------------------------------------------------------
+
+	extend({
+		
+		//
+		// Function composition
+		//
+
+	    // Tests: full
+		// Docs: none
+		pipe: function (fn) {
+			return    arguments.length === 1 ? fn
+			  		: arguments.length === 0 ? identity
+					: fn.then(Function.pipe.apply(null,_slice.call(arguments,1)));
+		},
+
+		// Tests: full
+		// Docs: none
+		compose: function (fn) {
+			return	  arguments.length === 1 ? fn
+					: arguments.length === 0 ? identity
+					: Function.pipe.apply(null,_slice.call(arguments).reverse());
+		}
+		
+		
+	}, Function );
+	
+	opal.pipe	 = Function.pipe;
+	opal.compose = Function.compose;
+
 
 	// ------------------------------------------------------------------------
 	//													     Function.prototype
 	// ------------------------------------------------------------------------
 
-	// A necessary evil in plain sight
-	
 	//
 	// Property methods
 	//
@@ -432,26 +462,6 @@ define(function (a,b,c,undefined) {
 	// ------------------------------------------------------------------------
 	//													     		  Functions
 	// ------------------------------------------------------------------------
-
-	//
-	// Function composition
-	//
-
-    // Tests: full
-	// Docs: none
-	function pipe (fn) {
-		return    arguments.length === 1 ? fn
-		  		: arguments.length === 0 ? identity
-				: fn.then(pipe.apply(null,_slice.call(arguments,1)));
-	}
-
-	// Tests: full
-	// Docs: none
-	function compose (fn) {
-		return	  arguments.length === 1 ? fn
-				: arguments.length === 0 ? identity
-				: pipe.apply(null,_slice.call(arguments).reverse());
-	}
 	
 	// Tests: full
 	// Docs: none
@@ -603,8 +613,6 @@ define(function (a,b,c,undefined) {
 		bind: bind,
 		apply: apply,
 		applyto: applyto,
-		compose: compose,
-		pipe: pipe,
 		parallel: parallel,
 		construct: construct,
 		ensure: ensure,
