@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.19.1', extend: extend },
+	var opal   = { opal_version: '0.20.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -575,6 +575,30 @@ define(function (a,b,c,undefined) {
 		ensure:    Object.ensure,
 		project:   Object.project
 	});
+	
+	
+	//
+	// Accessors
+	//
+	
+	// Protect existing methods with assertions
+	assert(Object.property === undefined, '"property" method already defined');
+	
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		property: function (property,value) {
+			return value === undefined ? _get.curry(property) : _set.curry(property,value);
+		}
+		
+	}, Object);
+	
+	Object.property.displayName = 'property';
+	
+	opal.extend({
+		property: Object.property
+	});
 
 
 	// ------------------------------------------------------------------------
@@ -647,12 +671,6 @@ define(function (a,b,c,undefined) {
 	function type (object) {
 		return object !== null && typeof object;
 	}
-
-    // Tests: full
-	// Docs: none
-	function property (property,value) {
-		return value === undefined ? _get.curry(property) : _set.curry(property,value);
-	}
 	
     // Tests: full
 	// Docs: none
@@ -668,7 +686,7 @@ define(function (a,b,c,undefined) {
 	function resolve (name) {
 	    var args = _slice.call(arguments);
 		return function (object) {
-			return typeof object[name] === 'function' ? method.apply(null,args)(object) : property.apply(null,args)(object);
+			return typeof object[name] === 'function' ? method.apply(null,args)(object) : Object.property.apply(null,args)(object);
 		};
 	}
 	
@@ -698,7 +716,6 @@ define(function (a,b,c,undefined) {
 		parallel: parallel,
 		identity: identity,
 		type: type,
-		property: property,
 		method: method,
 		resolve: resolve,
 		path: path,
