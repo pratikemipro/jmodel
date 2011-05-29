@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.20.0', extend: extend },
+	var opal   = { opal_version: '0.21.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -583,6 +583,7 @@ define(function (a,b,c,undefined) {
 	
 	// Protect existing methods with assertions
 	assert(Object.property === undefined, '"property" method already defined');
+	assert(Object.method === undefined, '"method" method already defined');
 	
 	extend({
 		
@@ -590,14 +591,25 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		property: function (property,value) {
 			return value === undefined ? _get.curry(property) : _set.curry(property,value);
+		},
+		
+		// Tests: full
+		// Docs: none
+		method: function (name) {
+			var args = _slice.call(arguments,1);
+			return function (object) {
+				return typeof object[name] === 'function' ? object[name].apply(object,args) : undefined;
+			};
 		}
 		
 	}, Object);
 	
 	Object.property.displayName = 'property';
+	Object.method.displayName   = 'method';
 	
 	opal.extend({
-		property: Object.property
+		property: Object.property,
+		method:   Object.method
 	});
 
 
@@ -672,21 +684,13 @@ define(function (a,b,c,undefined) {
 		return object !== null && typeof object;
 	}
 	
-    // Tests: full
-	// Docs: none
-	function method (name) {
-		var args = _slice.call(arguments,1);
-		return function (object) {
-			return typeof object[name] === 'function' ? object[name].apply(object,args) : undefined;
-		};
-	}
-	
 	// Tests: full
 	// Docs: none
 	function resolve (name) {
 	    var args = _slice.call(arguments);
 		return function (object) {
-			return typeof object[name] === 'function' ? method.apply(null,args)(object) : Object.property.apply(null,args)(object);
+			return    typeof object[name] === 'function' ? Object.method.apply(null,args)(object)
+					: Object.property.apply(null,args)(object);
 		};
 	}
 	
@@ -716,7 +720,6 @@ define(function (a,b,c,undefined) {
 		parallel: parallel,
 		identity: identity,
 		type: type,
-		method: method,
 		resolve: resolve,
 		path: path,
 		transform: transform
