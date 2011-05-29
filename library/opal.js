@@ -509,6 +509,35 @@ define(function (a,b,c,undefined) {
 	Function.prototype.isa.displayName	 	= 'isa';
 	Function.prototype.hastype.displayName	= 'hastype';
 	
+	
+	// ------------------------------------------------------------------------
+	//													     		     Object
+	// ------------------------------------------------------------------------
+	
+	assert(Function.prototype.construct === undefined, '"construct" method already defined');
+	
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		construct: function (constructor) {
+			var args1 = _slice.call(arguments,1);
+			return 	  constructor === String ? String 
+					: constructor === Date ? Date
+					: constructor === Number ? Number
+					: function () {
+						var args = args1.concat(_slice.call(arguments));
+						return new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
+					};
+		}
+		
+	}, Object);
+	
+	Object.construct.displayName = 'construct';
+	
+	opal.extend({
+		construct: Object.construct
+	});
 
 
 	// ------------------------------------------------------------------------
@@ -572,21 +601,8 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
-	function construct (constructor) {
-		var args1 = _slice.call(arguments,1);
-		return 	  constructor === String ? String 
-				: constructor === Date ? Date
-				: constructor === Number ? Number
-				: function () {
-					var args = args1.concat(_slice.call(arguments));
-					return new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
-				};
-	}
-	
-	// Tests: full
-	// Docs: none
 	function ensure (constructor) {
-		var _construct = construct(constructor);
+		var _construct = Object.construct(constructor);
 		return function (object) {
 			return object instanceof constructor ? object : _construct.apply(null,arguments);
 		};
@@ -666,7 +682,6 @@ define(function (a,b,c,undefined) {
 		apply: apply,
 		applyto: applyto,
 		parallel: parallel,
-		construct: construct,
 		ensure: ensure,
 		identity: identity,
 		type: type,
