@@ -117,10 +117,52 @@ define(function (a,b,c,undefined) {
 		}
 		
 		
-	}, Function );
+	}, Function);
 	
-	opal.pipe	 = Function.pipe;
-	opal.compose = Function.compose;
+	opal.extend({
+		pipe: 	 Function.pipe,
+		compose: Function.compose
+	});
+	
+	//
+	// Logical connectives
+	//
+	
+	assert(Function.or === undefined, '"or" already defined');
+	assert(Function.and === undefined, '"and" already defined');
+	assert(Function.not === undefined, '"not" already defined');
+	
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		or: function (predicate) {
+			return    arguments.length === 1 ? predicate
+					: arguments.length === 0 ? _false
+					: predicate.or(Function.or.apply(null,_slice.call(arguments,1)));
+		},
+		
+		// Tests: full
+		// Docs: none
+		and: function (predicate) {
+			return    arguments.length === 1 ? predicate
+					: arguments.length === 0 ? _true
+					: predicate.and(Function.and.apply(null,_slice.call(arguments,1)));
+		},
+		
+		// Tests: full
+		// Docs: none
+		not: function (predicate) {
+			return typeof predicate === 'function' ? predicate.then(_not) : !predicate;
+		}
+		
+	}, Function);
+
+	opal.extend({
+		or:  Function.or,
+		and: Function.and,
+		not: Function.not
+	});
 
 
 	// ------------------------------------------------------------------------
@@ -149,7 +191,7 @@ define(function (a,b,c,undefined) {
 			return extend(properties,this);
 		}
 		
-	}, Function.prototype );
+	}, Function.prototype);
 		
 	Function.prototype.as.displayName     = 'as';
 	Function.prototype.extend.displayName = 'extend';
@@ -298,7 +340,7 @@ define(function (a,b,c,undefined) {
 		require: function () {
 			var predicates = _slice.call(arguments),
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
-				predicate = and.apply(null,predicates);
+				predicate = Function.and.apply(null,predicates);
 			return this.pre(function () {
 				assert(predicate.apply(this,arguments),message);
 			});
@@ -309,7 +351,7 @@ define(function (a,b,c,undefined) {
 		ensure: function () {
 			var predicates = _slice.call(arguments),
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
-				predicate = and.apply(null,predicates);
+				predicate = Function.and.apply(null,predicates);
 			return this.post(function () {
 				assert(predicate.apply(this,arguments),message);
 			});
@@ -508,7 +550,7 @@ define(function (a,b,c,undefined) {
 	// Docs: none
 	function applyto () {
 		var args = arguments;
-		return function (fn) {
+		return function () {
 			var args1	= _slice.call(arguments),
 			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
@@ -812,7 +854,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: none
 	function between (lower,higher) {
-		return and( gte(lower), lte(higher) );
+		return Function.and( gte(lower), lte(higher) );
 	}
 
 	// Tests: full
@@ -851,39 +893,6 @@ define(function (a,b,c,undefined) {
 		NonePredicate: 			_false,
 		istrue:					istrue,
 		isnull:					isnull
-	});
-	
-	
-	//
-	// Logical connectives
-	//
-	
-	// Tests: full
-	// Docs: none
-	function or (predicate) {
-		return    arguments.length === 1 ? predicate
-				: arguments.length === 0 ? _false
-				: predicate.or(or.apply(null,_slice.call(arguments,1)));
-	}
-	
-	// Tests: full
-	// Docs: none
-	function and (predicate) {
-		return    arguments.length === 1 ? predicate
-				: arguments.length === 0 ? _true
-				: predicate.and(and.apply(null,_slice.call(arguments,1)));
-	}
-	
-	// Tests: full
-	// Docs: none
-	function not (predicate) {
-		return typeof predicate === 'function' ? predicate.then(_not) : !predicate;
-	}
-
-	opal.extend({
-		or:  or,
-		and: and,
-		not: not
 	});
 
 
