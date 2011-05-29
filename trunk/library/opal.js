@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.18.0', extend: extend },
+	var opal   = { opal_version: '0.19.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -524,6 +524,7 @@ define(function (a,b,c,undefined) {
 	// Protect existing methods with assertions
 	assert(Function.prototype.construct === undefined, '"construct" method already defined');
 	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
+	assert(Function.prototype.project === undefined, '"project" method already defined');
 	
 	extend({
 		
@@ -547,16 +548,32 @@ define(function (a,b,c,undefined) {
 			return function (object) {
 				return object instanceof constructor ? object : _construct.apply(null,arguments);
 			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		project: function () {
+			var fields = _slice.call(arguments);
+			return function (object) {
+				var projection = {};
+				for (var i=0; i<fields.length; i++) {
+					var field = fields[i];
+					projection[field] = object[field];
+				}
+				return projection;
+			};
 		}
 		
 	}, Object);
 	
 	Object.construct.displayName = 'construct';
 	Object.ensure.displayName	 = 'ensure';
+	Object.project.displayName	 = 'project';
 	
 	opal.extend({
 		construct: Object.construct,
-		ensure:    Object.ensure
+		ensure:    Object.ensure,
+		project:   Object.project
 	});
 
 
@@ -666,20 +683,6 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
-	function project () {
-		var fields = _slice.call(arguments);
-		return function (object) {
-			var projection = {};
-			for (var i=0; i<fields.length; i++) {
-				var field = fields[i];
-				projection[field] = object[field];
-			}
-			return projection;
-		};
-	};
-
-	// Tests: full
-	// Docs: none
 	function transform (name,transformer,extractor) {
 		var transformation = typeof extractor === 'function' ? extractor.then(transformer) : resolve(name).then(transformer);
 		return function (object) {
@@ -699,7 +702,6 @@ define(function (a,b,c,undefined) {
 		method: method,
 		resolve: resolve,
 		path: path,
-		project: project,
 		transform: transform
 	});
 
