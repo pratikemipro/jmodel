@@ -377,6 +377,32 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('resolve', function () {
+	    
+	    var Person = function (forename,surname,age) {
+		    this.forename = forename;
+		    this.surname = surname;
+		    this.age = age;
+		    this.name = function () { return this.forename + ' ' + this.surname; };
+		    this.Forename = function (forename) {
+	            this.forename = forename;
+	            return this;
+		    };
+		};
+		
+		var person = new Person('John','Smith',18);
+		
+		equals( Object.resolve('age')(person),  18,           'Resolve works with properties');
+		equals( Object.resolve('name')(person), 'John Smith', 'Resolve works with methods');
+		
+		Object.resolve('age',17)(person);
+		equals( person.age, 17, 'Resolve updates properties with values given at creation time');
+	    
+		Object.resolve('Forename','Adam')(person);
+	    equals( person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
+	    
+	});
+	
 	
 	//
 	// Function composition
@@ -483,32 +509,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.type(obj),		'object',	'type works on objects' );
 		equals( opal.type(no),		false,		'type works on nulls' );
 		
-	});
-	
-	test('resolve', function () {
-	    
-	    var Person = function (forename,surname,age) {
-		    this.forename = forename;
-		    this.surname = surname;
-		    this.age = age;
-		    this.name = function () { return this.forename + ' ' + this.surname; };
-		    this.Forename = function (forename) {
-	            this.forename = forename;
-	            return this;
-		    };
-		};
-		
-		var person = new Person('John','Smith',18);
-		
-		equals( opal.resolve('age')(person),  18,           'Resolve works with properties');
-		equals( opal.resolve('name')(person), 'John Smith', 'Resolve works with methods');
-		
-		opal.resolve('age',17)(person);
-		equals( person.age, 17, 'Resolve updates properties with values given at creation time');
-	    
-		opal.resolve('Forename','Adam')(person);
-	    equals( person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
-	    
 	});
 	
 	test('path', function () {

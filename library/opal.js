@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.21.0', extend: extend },
+	var opal   = { opal_version: '0.22.0', extend: extend },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -584,6 +584,7 @@ define(function (a,b,c,undefined) {
 	// Protect existing methods with assertions
 	assert(Object.property === undefined, '"property" method already defined');
 	assert(Object.method === undefined, '"method" method already defined');
+	assert(Object.resolve === undefined, '"resolve" method already defined');
 	
 	extend({
 		
@@ -600,16 +601,28 @@ define(function (a,b,c,undefined) {
 			return function (object) {
 				return typeof object[name] === 'function' ? object[name].apply(object,args) : undefined;
 			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		resolve: function (name) {
+		    var args = _slice.call(arguments);
+			return function (object) {
+				return    typeof object[name] === 'function' ? Object.method.apply(null,args)(object)
+						: Object.property.apply(null,args)(object);
+			};
 		}
 		
 	}, Object);
 	
 	Object.property.displayName = 'property';
 	Object.method.displayName   = 'method';
+	Object.resolve.displayName	= 'resolve';
 	
 	opal.extend({
 		property: Object.property,
-		method:   Object.method
+		method:   Object.method,
+		resolve:  Object.resolve
 	});
 
 
@@ -684,29 +697,19 @@ define(function (a,b,c,undefined) {
 		return object !== null && typeof object;
 	}
 	
-	// Tests: full
-	// Docs: none
-	function resolve (name) {
-	    var args = _slice.call(arguments);
-		return function (object) {
-			return    typeof object[name] === 'function' ? Object.method.apply(null,args)(object)
-					: Object.property.apply(null,args)(object);
-		};
-	}
-	
     // Tests: full
 	// Docs: none
 	function path (elements,separator) {
 		return    typeof elements === 'string' ? path.call(null,elements.split(separator||'.'))
 				: elements === undefined || elements.length === 0 ? _undefined
-				: elements.length === 1 ? resolve(elements[0])
-				: resolve(elements[0]).then(path.call(null,elements.slice(1)));		
+				: elements.length === 1 ? Object.resolve(elements[0])
+				: Object.resolve(elements[0]).then(path.call(null,elements.slice(1)));		
 	}
 
 	// Tests: full
 	// Docs: none
 	function transform (name,transformer,extractor) {
-		var transformation = typeof extractor === 'function' ? extractor.then(transformer) : resolve(name).then(transformer);
+		var transformation = typeof extractor === 'function' ? extractor.then(transformer) : Object.resolve(name).then(transformer);
 		return function (object) {
 			var value = transformation(object);
 			return typeof object[name] === 'function' ? object[name].call(object,value) : _set(name,value,object);
@@ -720,7 +723,6 @@ define(function (a,b,c,undefined) {
 		parallel: parallel,
 		identity: identity,
 		type: type,
-		resolve: resolve,
 		path: path,
 		transform: transform
 	});
@@ -869,7 +871,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: none
 	function has () {
-		return resolve.apply(null,arguments).then(Boolean);
+		return Object.resolve.apply(null,arguments).then(Boolean);
 	}
 
 	opal.extend({
