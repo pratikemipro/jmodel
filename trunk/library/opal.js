@@ -91,11 +91,14 @@ define(function (a,b,c,undefined) {
 	//													     		   Function
 	// ------------------------------------------------------------------------
 
+	//
+	// Function composition
+	//
+	
+	assert(Function.pipe === undefined, '"pipe" already defined');
+	assert(Function.compose === undefined, '"compose" already defined');
+
 	extend({
-		
-		//
-		// Function composition
-		//
 
 	    // Tests: full
 		// Docs: none
@@ -505,7 +508,7 @@ define(function (a,b,c,undefined) {
 	// Docs: none
 	function applyto () {
 		var args = arguments;
-		return function () {
+		return function (fn) {
 			var args1	= _slice.call(arguments),
 			    context	= ( typeof args1[0] === 'object' ) ? args1.shift() : null,
 				fn		= args1.shift();
