@@ -585,6 +585,7 @@ define(function (a,b,c,undefined) {
 	assert(Object.property === undefined, '"property" method already defined');
 	assert(Object.method === undefined, '"method" method already defined');
 	assert(Object.resolve === undefined, '"resolve" method already defined');
+	assert(Object.path === undefined, '"path" method already defined');
 	
 	extend({
 		
@@ -611,6 +612,15 @@ define(function (a,b,c,undefined) {
 				return    typeof object[name] === 'function' ? Object.method.apply(null,args)(object)
 						: Object.property.apply(null,args)(object);
 			};
+		},
+		
+		// Tests: full
+		// Docs: none
+		path: function (elements,separator) {
+			return    typeof elements === 'string' ? Object.path.call(null,elements.split(separator||'.'))
+					: elements === undefined || elements.length === 0 ? _undefined
+					: elements.length === 1 ? Object.resolve(elements[0])
+					: Object.resolve(elements[0]).then(Object.path.call(null,elements.slice(1)));		
 		}
 		
 	}, Object);
@@ -622,7 +632,8 @@ define(function (a,b,c,undefined) {
 	opal.extend({
 		property: Object.property,
 		method:   Object.method,
-		resolve:  Object.resolve
+		resolve:  Object.resolve,
+		path:     Object.path
 	});
 
 
@@ -696,15 +707,6 @@ define(function (a,b,c,undefined) {
 	function type (object) {
 		return object !== null && typeof object;
 	}
-	
-    // Tests: full
-	// Docs: none
-	function path (elements,separator) {
-		return    typeof elements === 'string' ? path.call(null,elements.split(separator||'.'))
-				: elements === undefined || elements.length === 0 ? _undefined
-				: elements.length === 1 ? Object.resolve(elements[0])
-				: Object.resolve(elements[0]).then(path.call(null,elements.slice(1)));		
-	}
 
 	// Tests: full
 	// Docs: none
@@ -723,7 +725,6 @@ define(function (a,b,c,undefined) {
 		parallel: parallel,
 		identity: identity,
 		type: type,
-		path: path,
 		transform: transform
 	});
 

@@ -403,6 +403,30 @@ define(['../library/opal.js'], function (opal) {
 	    
 	});
 	
+	test('path', function () {
+		
+		var person = {
+		    name: {
+		        first: 'John',
+		        last: 'Smith'
+		    },
+		    job: function () {
+		        return {
+		            company: 'Cyberdyne',
+		            title: 'Developer'
+		        };
+		    }
+		};
+		
+		equals( Object.path('name.last')(person), 'Smith', 'path works for paths specified in a string');
+		equals( Object.path('name/last','/')(person), 'Smith', 'path works for paths specified in a string with alternative separator');
+		equals( Object.path(['name','first'])(person), 'John', 'path works for paths specified in an array');
+		equals( Object.path('job.title')(person), 'Developer', 'path works for containing methods');
+		equals( Object.path(['job','title'])(person), 'Developer', 'path works for paths containing methods specified as arrays');
+		equals( Object.path('job.salary')(person), undefined, 'path returns undefined for paths that do not exist.');
+		
+	});
+	
 	
 	//
 	// Function composition
@@ -508,30 +532,6 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.type(hello),	'function', 'type works on functions' );
 		equals( opal.type(obj),		'object',	'type works on objects' );
 		equals( opal.type(no),		false,		'type works on nulls' );
-		
-	});
-	
-	test('path', function () {
-		
-		var person = {
-		    name: {
-		        first: 'John',
-		        last: 'Smith'
-		    },
-		    job: function () {
-		        return {
-		            company: 'Cyberdyne',
-		            title: 'Developer'
-		        };
-		    }
-		};
-		
-		equals( opal.path('name.last')(person), 'Smith', 'path works for paths specified in a string');
-		equals( opal.path('name/last','/')(person), 'Smith', 'path works for paths specified in a string with alternative separator');
-		equals( opal.path(['name','first'])(person), 'John', 'path works for paths specified in an array');
-		equals( opal.path('job.title')(person), 'Developer', 'path works for containing methods');
-		equals( opal.path(['job','title'])(person), 'Developer', 'path works for paths containing methods specified as arrays');
-		equals( opal.path('job.salary')(person), undefined, 'path returns undefined for paths that do not exist.');
 		
 	});
 	
