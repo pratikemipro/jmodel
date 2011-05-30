@@ -1,21 +1,98 @@
 body {
 	font-family: Arial;
 	width: 800px;
+	padding: 16px;
+}
+
+h1 {
+	padding: 4px 16px 4px 16px;
+	margin: 16px 0px 8px 0px;
+}
+
+article > h1 {
+	background: #dddddd;
+	border: 1px solid #cccccc;
+}
+
+article > section {
+	margin-left: 16px;
+}
+
+article > section > h1 {
+	background: #eeeeee;
+	border: 1px solid #dddddd;
+}
+
+dl {
+	margin-left: 16px;
 }
 
 dt {
+    font-family: Courier New;
 	font-weight: bold;
-	margin-top: 24px;
-	margin-bottom: 2px;
+	margin: 24px 0px 2px 0px;
+	padding: 4px 0px 4px 6px;
 	background: #ddddff;
 	border: 1px solid #ccccee;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	padding-left: 6px;
 }
 
-span.arguments {
-	font-weight: normal;
+dt > ul,
+dt > ul::before,
+dt > ul::after,
+dt > ul li,
+dt > ul li::before,
+dt > ul li::after {
+    display: inline;
+    font-weight: normal;
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.arguments {
+    list-style-type: none;
+}
+
+ul.arguments::before {
+    content: '(';
+}
+
+ul.arguments::after {
+    content: ')';
+}
+
+ul.arguments li {
+    font-style: italic;
+}
+
+ul.arguments li::after {
+    content: ',';
+}
+
+ul.arguments li:only-child::after {
+	display: none;
+}
+
+ul.unbounded li:last-child::after {
+    content: '...';
+}
+
+span.return {
+    font-weight: normal;
+    font-style: italic;
+}
+
+span.return::before {
+    content: '→ ';
+}
+
+dt > ul.aliases {
+    display: none;
+    margin-top: 8px;
+}
+
+dt > ul.aliases::before {
+    font-family: Arial;
+    content: 'Aliases: ';
 }
 
 dd {
@@ -27,10 +104,7 @@ dd.example {
 	display: inline-block;
 	background: #eeeeee;
 	border: 1px solid #dddddd;
-	padding-left: 12px;
-	padding-right: 12px;
-	padding-top: 12px;
-	padding-bottom: 0px;
+	padding: 12px 12px 0px 12px;
 	margin-bottom: 20px;
 }
 
@@ -38,6 +112,7 @@ dd.example p {
 	margin-top: 0px;
 	margin-bottom: 12px;
 }
+
 
 code {
 	font-family: Courier New;
