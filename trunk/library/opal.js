@@ -102,7 +102,7 @@ define(function (a,b,c,undefined) {
 	extend({
 
 	    // Tests: full
-		// Docs: none
+		// Docs: full
 		pipe: function (fn) {
 			return    arguments.length === 1 ? fn
 			  		: arguments.length === 0 ? identity
@@ -110,7 +110,7 @@ define(function (a,b,c,undefined) {
 		},
 
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		compose: function (fn) {
 			return	  arguments.length === 1 ? fn
 					: arguments.length === 0 ? identity
