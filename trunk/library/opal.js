@@ -25,10 +25,6 @@ define(function (a,b,c,undefined) {
 	// Utility functions
 	//
 
-	function _undefined () { return undefined; }
-	function _true () { return true; }
-	function _false () { return false; }
-
 	function _not (x) { return !x; }
 
 	function _get (property,object) { return object[property]; }
@@ -92,6 +88,20 @@ define(function (a,b,c,undefined) {
 	// ------------------------------------------------------------------------
 
 	//
+	// Constant function
+	//
+	
+	assert(Function.constant === undefined, '"constant" alread defined');
+	
+	// Tests: none
+	// Docs: none
+	Function.constant = function (constant) {
+		return function () { return constant; };
+	};
+	
+	Function.constant.displayName = 'constant';
+
+	//
 	// Function composition
 	//
 	
@@ -143,7 +153,7 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		or: function (predicate) {
 			return    arguments.length === 1 ? predicate
-					: arguments.length === 0 ? _false
+					: arguments.length === 0 ? Function.constant(false)
 					: predicate.or(Function.or.apply(null,_slice.call(arguments,1)));
 		},
 		
@@ -151,7 +161,7 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		and: function (predicate) {
 			return    arguments.length === 1 ? predicate
-					: arguments.length === 0 ? _true
+					: arguments.length === 0 ? Function.constant(true)
 					: predicate.and(Function.and.apply(null,_slice.call(arguments,1)));
 		},
 		
@@ -618,7 +628,7 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		path: function (elements,separator) {
 			return    typeof elements === 'string' ? Object.path.call(null,elements.split(separator||'.'))
-					: elements === undefined || elements.length === 0 ? _undefined
+					: elements === undefined || elements.length === 0 ? Function.constant(undefined)
 					: elements.length === 1 ? Object.resolve(elements[0])
 					: Object.resolve(elements[0]).then(Object.path.call(null,elements.slice(1)));		
 		}
@@ -748,7 +758,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: none
 	var count = function _count (predicate) {
-		predicate = predicate || _true;
+		predicate = predicate || Function.constant(true);
 		return extend({unit:0,label:'count'}, function (acc,value) {
 			return acc += (predicate(value) ? 1 : 0);
 		});
@@ -946,8 +956,8 @@ define(function (a,b,c,undefined) {
     var isnull = eq(null);
 
 	opal.extend({
-		AllPredicate: 			_true,
-		NonePredicate: 			_false,
+		AllPredicate: 			Function.constant(true),
+		NonePredicate: 			Function.constant(false),
 		istrue:					istrue,
 		isnull:					isnull
 	});
