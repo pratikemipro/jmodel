@@ -100,6 +100,8 @@ define(function (a,b,c,undefined) {
 	};
 	
 	Function.constant.displayName = 'constant';
+	
+	opal.constant = Function.constant;
 
 	//
 	// Function composition
