@@ -710,6 +710,14 @@
 		    <dl>
 		        
 		        <dt>
+		            <span class="keyword">new</span>
+		            EnhancedObject
+		            <ul class="arguments">
+				        <li/>
+				    </ul>
+		        </dt>
+		        
+		        <dt>
 		            EnhancedObject.from
 		            <ul class="arguments">
 				        <li>object</li>
@@ -719,18 +727,37 @@
 		        
 		        <dt>
 	                <span class="object">obj</span>.addProperties
+	                <ul class="arguments">
+				        <li>properties</li>
+				    </ul>
+				    <span class="return">obj</span>
 	            </dt>
 	            
 	            <dt>
 	                <span class="object">obj</span>.removeProperties
+	                <ul class="arguments unbounded">
+				        <li>name1</li>
+				        <li>name2</li>
+				        <li>name3</li>
+				    </ul>
+				    <span class="return">obj</span>
 	            </dt>
 	            
 	            <dt>
 	                <span class="object">obj</span>.defaults
+	                <ul class="arguments">
+				        <li>properties</li>
+				    </ul>
+				    <span class="return">obj</span>
 	            </dt>
 	            
 	            <dt>
 	                <span class="object">obj</span>.setProperty
+	                <ul class="arguments">
+				        <li>name</li>
+				        <li>value</li>
+				    </ul>
+				    <span class="return">obj</span>
 	            </dt>
 		        
 		    </dl>
@@ -892,14 +919,6 @@
 			<h2>Predicates</h2>
 		
 			<dl>
-			
-				<dt>
-					<code>
-						<span class="name">predicate</span>
-						<span class="arguments">(specifier)</span>
-					</code>
-					<span class="return">→ <span class="type">(value → boolean)</span></span>
-				</dt>
 				
 				<dd><span style="color:red">document this</span></dd>
 			
@@ -1062,27 +1081,6 @@
 				<dt><code>MembershipPredicate <span class="arguments">(set)</span></code></dt>
 				<dd><span style="color:red">document this</span></dd>
 			
-				<dt><code>Or <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>And <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>Not <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>CardinalityPredicate <span class="arguments">(predicate)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>AllSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>SomeSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>NoneSetPredicate <span class="arguments">(predicate1, predicate2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
 			</dl>
 		</article>
 		
@@ -1148,26 +1146,6 @@
 				<dd><span style="color:red">document this</span></dd>
 			
 				<dt><code>copy <span class="arguments">(object,exact)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-			</dl>
-		</article>
-		
-		<article>
-			<h2>Enhanced Object</h2>
-		
-			<dl>
-			
-				<dt><code>EnhancedObject <span class="arguments">()</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>add <span class="arguments">(attributes)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>remove <span class="arguments">(key1,key2...)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>set <span class="arguments">(key,value)</span></code></dt>
 				<dd><span style="color:red">document this</span></dd>
 			
 			</dl>
