@@ -28,6 +28,11 @@
     				        <li>opal.constant</li>
     				    </ul>
 		            </dt>
+		            <dd><code>Function.identity</code> returns its argument.</dd>
+    				<dd class="example">
+    					<code>Function.identity('test');</code>
+    					<br/><span class="output">⇒ <code>'test'</code></span>
+    				</dd>
 		            
 		            <dt>
 		                Function.constant
@@ -39,6 +44,14 @@
     				        <li>opal.constant</li>
     				    </ul>
 		            </dt>
+		            <dd>Calling <code>Function.constant</code> with an argument returns a function that always returns that argument.</dd>
+		            <dd class="example">
+		                <code>var test = Function.constant('test');</code>
+		                <br/><code>test(5)</code>
+    					<br/><span class="output">⇒ <code>'test'</code></span>
+    					<br/><code>test('fred')</code>
+    					<br/><span class="output">⇒ <code>'test'</code></span>
+		            </dd>
 		            
 		        </dl>
 		    </section>
@@ -347,11 +360,23 @@
 	            
 	            <dt>
 	                apply
+	                <ul class="arguments">
+				        <li>fn</li>
+				    </ul>
+				    <span class="return">value</span>
 	            </dt>
+	            <dd><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</dd>
 	            
 	            <dt>
 	                applyto
+	                <ul class="arguments unbounded">
+				        <li>a</li>
+				        <li>b</li>
+				        <li>c</li>
+				    </ul>
+				    <span class="return">(function <span class="return">value</span>)</span>
 	            </dt>
+	            <dd>Given arguments <code>a,b,c...</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</dd>
 	            
 		    </dl>
 		    
@@ -579,25 +604,6 @@
 					<span class="return">→ <span class="type">function</span></span>
 				</dt>
 				<dd><span style="color:red">document this</span></dd>
-			
-				<dt>
-					<code>
-						<span class="name">apply</span>
-						<span class="arguments">(fn)</span>
-					</code>
-					<span class="return">→ <span class="type">value</span></span>
-				</dt>
-				<dd><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</dd>
-			
-				<dt>
-					<code>
-						<span class="name">applyto</span>
-						<span class="arguments">(a,b,c...)</span>
-					</code>
-					<span class="return">→ <span class="type">function</span></span>
-				</dt>
-				<dd>Given arguments <code>a,b,c...</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</dd>
-				<dd><span style="color:red">document immediate version</span></dd>
 				
 				<dt>
 					<code>
@@ -615,21 +621,6 @@
 			<h2>Object Functions</h2>
 		
 			<dl>
-			
-				<dt>
-					<code>
-						<span class="name">Identity</span>
-						<span class="arguments">(value)</span>
-					</code>
-					<span class="return">→ <span class="type">value</span></span>
-				</dt>
-				<dd><p>The <code>Identity</code> function returns its argument.</p></dd>
-				<dd class="example">
-					<p>
-						<code>Identity('test');</code>
-						<br/><span class="output">⇒ <code>'test'</code></span>
-					</p>
-				</dd>
 			
 				<dt>
 					<code>
