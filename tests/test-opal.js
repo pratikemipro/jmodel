@@ -347,6 +347,8 @@ define(['../library/opal.js'], function (opal) {
 		equals( typeof Object.construct(String)('fred'), 'string', 'Construct handles strings correctly' );
 		equals( typeof Object.construct(Number)(7), 'number', 'Construct handles numbers correctly' );
 		
+		equals( Object.construct(Date)('1997-8-29') instanceof Date, true, 'Construct handles dates correctly' );
+		
 	});
 	
 	test('ensure', function () {

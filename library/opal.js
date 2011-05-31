@@ -566,8 +566,7 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
-			return 	  constructor === String ? String 
-					: constructor === Date ? Date
+			return 	  constructor === String ? String
 					: constructor === Number ? Number
 					: function () {
 						var args = args1.concat(_slice.call(arguments));
