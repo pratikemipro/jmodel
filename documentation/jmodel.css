@@ -64,6 +64,14 @@ ul.arguments li {
     font-style: italic;
 }
 
+ul.arguments li.optional {
+	color: #999999;
+}
+
+ul.arguments li.optional::after {
+	color: #999999;
+}
+
 ul.arguments li::after {
     content: ',';
 }
@@ -73,6 +81,7 @@ ul.arguments li:last-child::after {
 }
 
 ul.unbounded li:last-child::after {
+	display: inline;
     content: '...';
 }
 
@@ -112,10 +121,6 @@ dd.example p {
 
 code {
 	font-family: Courier New;
-}
-
-.optional {
-	color: #999999;
 }
 
 span.output {
