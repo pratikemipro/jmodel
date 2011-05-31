@@ -154,11 +154,19 @@
 		        <dl>
 		            
 		            <dt>
-		                .as
+		                <span class="object">fn</span>.as
+		                <ul class="arguments">
+    				        <li>name</li>
+    				    </ul>
+    				    <span class="return">fn</span>
 		            </dt>
 		            
 		            <dt>
-		                .extend
+		                <span class="object">fn</span>.extend
+		                <ul class="arguments">
+    				        <li>properties</li>
+    				    </ul>
+    				    <span class="return">fn</span>
 		            </dt>
 		            
     		    </dl>
@@ -169,19 +177,37 @@
 		        <dl>
 		            
 		            <dt>
-		                .bind
+		                <span class="object">fn</span>.bind
+		                <ul class="arguments">
+    				        <li>context</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .curry
+		                <span class="object">fn</span>.curry
+		                <ul class="arguments unbounded">
+    				        <li>a</li>
+    				        <li>b</li>
+    				        <li>c</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .memo
+		                <span class="object">fn</span>.memo
+		                <ul class="arguments">
+		                    <li/>
+		                </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .delay
+		                <span class="object">fn</span>.delay
+		                <ul class="arguments">
+    				        <li>duration</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
     		    </dl>
@@ -192,11 +218,19 @@
 		        <dl>
 		            
 		            <dt>
-		                .then
+		                <span class="object">fn</span>.then
+		                <ul class="arguments">
+    				        <li>fn2</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .but
+		                <span class="object">fn</span>.but
+		                <ul class="arguments">
+    				        <li>fn2</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
     		    </dl>
@@ -207,11 +241,19 @@
 		        <dl>
 		            
 		            <dt>
-		                .pre
+		                <span class="object">fn</span>.pre
+		                <ul class="arguments">
+    				        <li>fn2</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .post
+		                <span class="object">fn</span>.post
+		                <ul class="arguments">
+    				        <li>fn2</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
     		    </dl>
@@ -222,11 +264,27 @@
 		        <dl>
 		            
 		            <dt>
-		                .require
+		                <span class="object">fn</span>.require
+		                <ul class="arguments">
+    				        <li>pr1</li>
+    				        <li>pr2</li>
+    				        <li>pr3</li>
+    				        <li class="more">...</li>
+    				        <li class="optional">message</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
 		            <dt>
-		                .ensure
+		                <span class="object">fn</span>.ensure
+		                <ul class="arguments">
+    				        <li>pr1</li>
+    				        <li>pr2</li>
+    				        <li>pr3</li>
+    				        <li class="more">...</li>
+    				        <li class="optional">message</li>
+    				    </ul>
+    				    <span class="return">function</span>
 		            </dt>
 		            
     		    </dl>
@@ -237,11 +295,19 @@
 		        <dl>
 		            
 		            <dt>
-		                .and
+		                <span class="object">pr</span>.and
+		                <ul class="arguments">
+    				        <li>pr2</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .or
+		                <span class="object">pr</span>.or
+		                <ul class="arguments">
+    				        <li>pr2</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
     		    </dl>
@@ -252,51 +318,100 @@
 		        <dl>
 		            
 		            <dt>
-		                .is
+		                <span class="object">fn</span>.is
+		                <ul class="arguments">
+    				        <li>pr</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .eq
+		                <span class="object">fn</span>.eq
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .neq
+		                <span class="object">fn</span>.neq
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .lt
+		                <span class="object">fn</span>.lt
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .gt
+		                <span class="object">fn</span>.gt
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .lte
+		                <span class="object">fn</span>.lte
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .gte
+		                <span class="object">fn</span>.gte
+		                <ul class="arguments">
+    				        <li>value</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .between
+		                <span class="object">fn</span>.between
+		                <ul class="arguments">
+    				        <li>lower</li>
+    				        <li>higher</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .matches
+		                <span class="object">fn</span>.matches
+		                <ul class="arguments">
+    				        <li>regex</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .isnull
+		                <span class="object">fn</span>.isnull
+		                <ul class="arguments">
+    				        <li/>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .isa
+		                <span class="object">fn</span>.isa
+		                <ul class="arguments">
+    				        <li>constructor</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
 		            <dt>
-		                .hastype
+		                <span class="object">fn</span>.hastype
+		                <ul class="arguments">
+    				        <li>type</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
 		            </dt>
 		            
     		    </dl>
