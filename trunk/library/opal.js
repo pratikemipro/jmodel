@@ -876,9 +876,9 @@ define(function (a,b,c,undefined) {
 	}
 
 	// Tests: full
-	// Docs: none
-	function is_of_type (test) {
-		return type.eq(test);
+	// Docs: full
+	function is_of_type (type) {
+		return type.eq(type);
 	}
 
 	// Tests: full
