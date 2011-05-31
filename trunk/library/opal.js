@@ -620,6 +620,7 @@ define(function (a,b,c,undefined) {
 	assert(Object.method === undefined, '"method" method already defined');
 	assert(Object.resolve === undefined, '"resolve" method already defined');
 	assert(Object.path === undefined, '"path" method already defined');
+	assert(Object.transform === undefined, '"transform" method already defined');
 	
 	extend({
 		
@@ -655,19 +656,31 @@ define(function (a,b,c,undefined) {
 					: elements === undefined || elements.length === 0 ? Function.constant(undefined)
 					: elements.length === 1 ? Object.resolve(elements[0])
 					: Object.resolve(elements[0]).then(Object.path.call(null,elements.slice(1)));		
+		},
+		
+		// Tests: full
+		// Docs: none
+		transform: function (name,transformer,extractor) {
+			var transformation = typeof extractor === 'function' ? extractor.then(transformer) : Object.resolve(name).then(transformer);
+			return function (object) {
+				var value = transformation(object);
+				return typeof object[name] === 'function' ? object[name].call(object,value) : _set(name,value,object);
+			};
 		}
 		
 	}, Object);
 	
-	Object.property.displayName = 'property';
-	Object.method.displayName   = 'method';
-	Object.resolve.displayName	= 'resolve';
+	Object.property.displayName  = 'property';
+	Object.method.displayName    = 'method';
+	Object.resolve.displayName	 = 'resolve';
+	Object.transform.displayName = 'transform';
 	
 	opal.extend({
-		property: Object.property,
-		method:   Object.method,
-		resolve:  Object.resolve,
-		path:     Object.path
+		property:  Object.property,
+		method:    Object.method,
+		resolve:   Object.resolve,
+		path:      Object.path,
+		transform: Object.transform
 	});
 
 
@@ -724,28 +737,12 @@ define(function (a,b,c,undefined) {
 			return fn.apply(context,args);
 		};
 	}
-	
-
-	//
-	// Object functions
-	// 
-
-	// Tests: full
-	// Docs: none
-	function transform (name,transformer,extractor) {
-		var transformation = typeof extractor === 'function' ? extractor.then(transformer) : Object.resolve(name).then(transformer);
-		return function (object) {
-			var value = transformation(object);
-			return typeof object[name] === 'function' ? object[name].call(object,value) : _set(name,value,object);
-		};
-	}
 
 	opal.extend({
 		bind: bind,
 		apply: apply,
 		applyto: applyto,
-		parallel: parallel,
-		transform: transform
+		parallel: parallel
 	});
 
 
