@@ -88,20 +88,35 @@ define(function (a,b,c,undefined) {
 	// ------------------------------------------------------------------------
 
 	//
-	// Constant function
+	// Basic functions
 	//
 	
-	assert(Function.constant === undefined, '"constant" alread defined');
+	assert(Function.identity === undefined, '"identity" already defined');
+	assert(Function.constant === undefined, '"constant" already defined');
 	
-	// Tests: none
-	// Docs: none
-	Function.constant = function (constant) {
-		return function () { return constant; };
-	};
-	
+	extend({
+		
+		// Tests: full
+		// Docs: none
+		identity: function (value) {
+			return value;
+		},
+		
+		// Tests: none
+		// Docs: none
+		constant: function (constant) {
+			return function () { return constant; };
+		}
+		
+	}, Function);
+
+	Function.identity.displayName = 'identity';
 	Function.constant.displayName = 'constant';
 	
-	opal.constant = Function.constant;
+	opal.extend({
+		identity: Function.identity,
+		constant: Function.constant
+	});
 
 	//
 	// Function composition
@@ -117,7 +132,7 @@ define(function (a,b,c,undefined) {
 		// Docs: full
 		pipe: function (fn) {
 			return    arguments.length === 1 ? fn
-			  		: arguments.length === 0 ? identity
+			  		: arguments.length === 0 ? Function.identity
 					: fn.then(Function.pipe.apply(null,_slice.call(arguments,1)));
 		},
 
@@ -125,7 +140,7 @@ define(function (a,b,c,undefined) {
 		// Docs: full
 		compose: function (fn) {
 			return	  arguments.length === 1 ? fn
-					: arguments.length === 0 ? identity
+					: arguments.length === 0 ? Function.identity
 					: Function.pipe.apply(null,_slice.call(arguments).reverse());
 		}
 		
@@ -710,12 +725,6 @@ define(function (a,b,c,undefined) {
 
     // Tests: full
 	// Docs: none
-	function identity (object) {
-		return object;
-	}
-
-    // Tests: full
-	// Docs: none
 	function type (object) {
 		return object !== null && typeof object;
 	}
@@ -735,7 +744,6 @@ define(function (a,b,c,undefined) {
 		apply: apply,
 		applyto: applyto,
 		parallel: parallel,
-		identity: identity,
 		type: type,
 		transform: transform
 	});
@@ -864,7 +872,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: none
 	function is (object) {
-		return identity.eq(object);
+		return eq(object);
 	}
 
 	// Tests: full
