@@ -97,13 +97,13 @@ define(function (a,b,c,undefined) {
 	extend({
 		
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		identity: function (value) {
 			return value;
 		},
 		
 		// Tests: none
-		// Docs: none
+		// Docs: full
 		constant: function (constant) {
 			return function () { return constant; };
 		}
@@ -129,7 +129,7 @@ define(function (a,b,c,undefined) {
 	extend({
 
 	    // Tests: full
-		// Docs: full
+		// Docs: partial
 		pipe: function (fn) {
 			return    arguments.length === 1 ? fn
 			  		: arguments.length === 0 ? Function.identity
@@ -137,7 +137,7 @@ define(function (a,b,c,undefined) {
 		},
 
 		// Tests: full
-		// Docs: full
+		// Docs: partial
 		compose: function (fn) {
 			return	  arguments.length === 1 ? fn
 					: arguments.length === 0 ? Function.identity
@@ -698,7 +698,7 @@ define(function (a,b,c,undefined) {
 	}
 	
 	// Tests: full
-	// Docs: none
+	// Docs: partial
 	function apply () {
 		var args	= _slice.call(arguments),
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
@@ -707,7 +707,7 @@ define(function (a,b,c,undefined) {
 	}
 
     // Tests: full
-	// Docs: none
+	// Docs: partial
 	function applyto () {
 		var args = arguments;
 		return function () {
@@ -882,7 +882,7 @@ define(function (a,b,c,undefined) {
 	}
 
 	// Tests: full
-	// Docs: none
+	// Docs: full
 	function isa (constructor) {
 		return function (candidate) {
 			return candidate instanceof constructor;

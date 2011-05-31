@@ -47,9 +47,9 @@
 		            <dd>Calling <code>Function.constant</code> with an argument returns a function that always returns that argument.</dd>
 		            <dd class="example">
 		                <code>var test = Function.constant('test');</code>
-		                <br/><code>test(5)</code>
+		                <br/><code>test(5);</code>
     					<br/><span class="output">⇒ <code>'test'</code></span>
-    					<br/><code>test('fred')</code>
+    					<br/><code>test('fred');</code>
     					<br/><span class="output">⇒ <code>'test'</code></span>
 		            </dd>
 		            
@@ -463,7 +463,25 @@
 	            
 	            <dt>
 	                isa
+	                 <ul class="arguments">
+    				        <li>constructor</li>
+    				    </ul>
+    				    <span class="return">predicate</span>
+    				    <ul class="aliases">
+    				        <li>opal.isan</li>
+    				    </ul>
 	            </dt>
+	            <dd><p><code>isa(constructor)</code> matches candidates whose constructor function is <code>constructor</code>.</p></dd>
+				<dd class="example">
+					<p>
+						<code>isa(Array)('test');</code>
+						<br/><span class="output">⇒ <code>false</code></span>
+					</p>
+					<p>
+						<code>isa(Array)([1,2,3]);</code>
+						<br/><span class="output">⇒ <code>true</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                has
@@ -866,23 +884,6 @@
 					</p>
 					<p>
 						<code>TypePredicate('number')(4);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
-					</p>
-				</dd>
-			
-				<dt><code>InstancePredicate <span class="arguments">(constructor)</span></code></dt>
-				<dd><p><code>InstancePredicate(constructor)</code> matches candidates whose constructor function is <code>constructor</code>.</p></dd>
-				<dd class="example">
-					<p>
-						<code>InstancePredicate(Array)('test');</code>
-						<br/><span class="output">⇒ <code>false</code></span>
-					</p>
-					<p>
-						<code>InstancePredicate(Array)([1,2,3]);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
-					</p>
-					<p>
-						<code>InstancePredicate(Set)(set(1,2,3));</code>
 						<br/><span class="output">⇒ <code>true</code></span>
 					</p>
 				</dd>
