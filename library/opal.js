@@ -982,6 +982,12 @@ define(function (a,b,c,undefined) {
 	
 	function EnhancedObject () {}
 	
+	// Tests: none
+	// Docs: none
+	EnhancedObject.from = function (obj) {
+		return copy(obj);
+	};
+	
 	EnhancedObject.prototype = {
 		
 		constructor: EnhancedObject,
