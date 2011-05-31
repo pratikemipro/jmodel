@@ -28,10 +28,12 @@
     				        <li>opal.constant</li>
     				    </ul>
 		            </dt>
-		            <dd><code>Function.identity</code> returns its argument.</dd>
+		            <dd><p><code>Function.identity</code> returns its argument.</p></dd>
     				<dd class="example">
-    					<code>Function.identity('test');</code>
-    					<br/><span class="output">⇒ <code>'test'</code></span>
+    				    <p>
+    					    <code>Function.identity('test');</code>
+    					    <br/><span class="output">⇒ <code>'test'</code></span>
+    				    </p>
     				</dd>
 		            
 		            <dt>
@@ -44,13 +46,19 @@
     				        <li>opal.constant</li>
     				    </ul>
 		            </dt>
-		            <dd>Calling <code>Function.constant</code> with an argument returns a function that always returns that argument.</dd>
+		            <dd><p>Calling <code>Function.constant</code> with an argument returns a function that always returns that argument.</p></dd>
 		            <dd class="example">
-		                <code>var test = Function.constant('test');</code>
-		                <br/><code>test(5);</code>
-    					<br/><span class="output">⇒ <code>'test'</code></span>
-    					<br/><code>test('fred');</code>
-    					<br/><span class="output">⇒ <code>'test'</code></span>
+		                <p>
+		                    <code>var test = Function.constant('test');</code>
+		                </p>
+		                <p>
+		                    <code>test(5);</code>
+    					    <br/><span class="output">⇒ <code>'test'</code></span>
+    					</p>
+    					<p>
+    					    <code>test('fred');</code>
+    					    <br/><span class="output">⇒ <code>'test'</code></span>
+		                </p>
 		            </dd>
 		            
 		        </dl>
@@ -72,7 +80,7 @@
     				        <li>opal.pipe</li>
     				    </ul>
     				</dt>
-    				<dd><code>Function.pipe</code> composes functions as a pipeline in a “point-free” manner. Applying the pipelined function applies the leftmost function first so that <code>Function.pipe(fn1,fn2,fn3)(x)</code> is the same as <code>fn3(fn2(fn1(x)))</code>.</dd>
+    				<dd><p><code>Function.pipe</code> composes functions as a pipeline in a “point-free” manner. Applying the pipelined function applies the leftmost function first so that <code>Function.pipe(fn1,fn2,fn3)(x)</code> is the same as <code>fn3(fn2(fn1(x)))</code>.</p></dd>
 		            
 		            <dt>
     				    Function.compose
@@ -86,7 +94,7 @@
     				        <li>opal.compose</li>
     				    </ul>
     				</dt>
-    				<dd><code>Function.compose</code> performs “point-free” function composition in the traditional order. When the composition is applied, the rightmost function is applied first so that <code>Function.compose(fn1,fn2,fn3)(x)</code> is the same as <code>fn1(fn2(fn3(x))).</code></dd>
+    				<dd><p><code>Function.compose</code> performs “point-free” function composition in the traditional order. When the composition is applied, the rightmost function is applied first so that <code>Function.compose(fn1,fn2,fn3)(x)</code> is the same as <code>fn1(fn2(fn3(x))).</code></p></dd>
     				
     		    </dl>
 		    </section>
@@ -365,7 +373,7 @@
 				    </ul>
 				    <span class="return">value</span>
 	            </dt>
-	            <dd><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</dd>
+	            <dd><p><code>apply</code> applies a function, so that <code>apply(fn)</code> is equivalent to <code>fn()</code>.</p></dd>
 	            
 	            <dt>
 	                applyto
@@ -376,7 +384,7 @@
 				    </ul>
 				    <span class="return">(function <span class="return">value</span>)</span>
 	            </dt>
-	            <dd>Given arguments <code>a,b,c...</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</dd>
+	            <dd><p>Given arguments <code>a,b,c...</code>, <code>applyto</code> creates a function that when called on a second function applies the second function to the provided arguments, so that <code>applyto(a,b,c...)(fn)</code> is equivalent to <code>fn(a,b,c...)</code>.</p></dd>
 	            
 		    </dl>
 		    
@@ -459,17 +467,36 @@
 	            
 	            <dt>
 	                is_of_type
+	                <ul class="arguments">
+    			         <li>type</li>
+    			     </ul>
+    				<span class="return">predicate</span>
 	            </dt>
+	            <dd><p><code>is_of_type(<var>type</var>)</code> matches candidates whose type is <code><var>type</var></code>.</p></dd>
+				<dd class="example">
+					<p>
+						<code>is_of_type('string')('test');</code>
+						<br/><span class="output">⇒ <code>true</code></span>
+					</p>
+					<p>
+						<code>is_of_type('string')(4);</code>
+						<br/><span class="output">⇒ <code>false</code></span>
+					</p>
+					<p>
+						<code>if_of_type('number')(4);</code>
+						<br/><span class="output">⇒ <code>true</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                isa
 	                 <ul class="arguments">
-    				        <li>constructor</li>
-    				    </ul>
-    				    <span class="return">predicate</span>
-    				    <ul class="aliases">
-    				        <li>opal.isan</li>
-    				    </ul>
+    			         <li>constructor</li>
+    			     </ul>
+    				<span class="return">predicate</span>
+    				<ul class="aliases">
+    				    <li>opal.isan</li>
+    				</ul>
 	            </dt>
 	            <dd><p><code>isa(constructor)</code> matches candidates whose constructor function is <code>constructor</code>.</p></dd>
 				<dd class="example">
@@ -868,23 +895,6 @@
 						<br/><span class="output">⇒ <code>true</code></span>
 						<br/><code>ObjectIdentityPredicate(person)({forename:'john',surname:'smith'});</code>
 						<br/><span class="output">⇒ <code>false</code></span>
-					</p>
-				</dd>
-			
-				<dt><code>TypePredicate <span class="arguments">(type)</span></code></dt>
-				<dd><p><code>TypePredicate(<var>type</var>)</code> matches candidates whose type is <code><var>type</var></code>.</p></dd>
-				<dd class="example">
-					<p>
-						<code>TypePredicate('string')('test');</code>
-						<br/><span class="output">⇒ <code>true</code></span>
-					</p>
-					<p>
-						<code>TypePredicate('string')(4);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
-					</p>
-					<p>
-						<code>TypePredicate('number')(4);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
 					</p>
 				</dd>
 			
