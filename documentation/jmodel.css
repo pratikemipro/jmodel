@@ -97,7 +97,7 @@ dt > ul.aliases::before {
 
 dd.example {
 	display: inline-block;
-	background: #eeeeee;
+	background: #f7f7f7;
 	border: 1px solid #dddddd;
 	padding: 12px 12px 0px 12px;
 	margin-bottom: 20px;
