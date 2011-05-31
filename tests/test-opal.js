@@ -449,6 +449,22 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('transform', function () {
+		
+		person = {
+		    forename: 'John',
+		    surname: 'Smith',
+		    fullname: ''
+		};
+		
+		Object.transform('forename',Object.method('toUpperCase'))(person);
+		equals( person.forename, 'JOHN', 'transform works correctly without extractor');
+		
+		Object.transform('fullname',Object.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person);
+		equals( person.fullname, 'JOHN SMITH', 'transform works correctly with extractor');
+		
+	});
+	
 	
 	//
 	// Function composition
@@ -524,31 +540,7 @@ define(['../library/opal.js'], function (opal) {
 		equals( opal.applyto(3)(times2), 6, 'applyto works without context' );
 		equals( opal.applyto(3)(tripler,tripler.triple), 9, 'applyto works with context');
 		
-	});
-	
-	
-	//
-	// Object functions
-	//
-	
-	module('Object functions');
-	
-	test('transform', function () {
-		
-		person = {
-		    forename: 'John',
-		    surname: 'Smith',
-		    fullname: ''
-		};
-		
-		opal.transform('forename',opal.method('toUpperCase'))(person);
-		equals( person.forename, 'JOHN', 'transform works correctly without extractor');
-		
-		opal.transform('fullname',opal.method('toUpperCase'),function (obj) {return obj.forename+' '+obj.surname;})(person);
-		equals( person.fullname, 'JOHN SMITH', 'transform works correctly with extractor');
-		
-	});
-	
+	});	
 	
 	//
 	// Reduction functions
