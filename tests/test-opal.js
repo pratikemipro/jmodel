@@ -7,6 +7,20 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Utility functions');
 	
+	test('type', function () {
+	
+		var fred = 'fred',
+			age = 12,
+			hello = function () { alert('hello'); },
+			obj = {};
+	
+		equals( opal.type(fred),	'string',	'type works on strings' );
+		equals( opal.type(age),		'number',	'type works on numbers' );
+		equals( opal.type(hello),	'function', 'type works on functions' );
+		equals( opal.type(obj),		'object',	'type works on objects' );
+		
+	});
+	
 	test('arg', function () {
 	
 		equals( opal.arg(0).call(this,'red','green','blue'), 'red', 'arg(0) works');
@@ -54,6 +68,14 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Function');
 	
+	test('identity', function () {
+	
+		var fred = 'fred';
+	
+		equals( Function.identity(fred), fred, 'identity function returns object unchanged' );
+		
+	});
+
 	test('pipe', function () {
 
 		var times2 = function (x) { return 2*x; },
@@ -510,30 +532,6 @@ define(['../library/opal.js'], function (opal) {
 	//
 	
 	module('Object functions');
-	
-	test('identity', function () {
-	
-		var fred = 'fred';
-	
-		equals( opal.identity(fred), fred, 'identity function returns object unchanged' );
-		
-	});
-	
-	test('type', function () {
-	
-		var fred = 'fred',
-			age = 12,
-			hello = function () { alert('hello'); },
-			obj = {},
-			no = null;
-	
-		equals( opal.type(fred),	'string',	'type works on strings' );
-		equals( opal.type(age),		'number',	'type works on numbers' );
-		equals( opal.type(hello),	'function', 'type works on functions' );
-		equals( opal.type(obj),		'object',	'type works on objects' );
-		equals( opal.type(no),		false,		'type works on nulls' );
-		
-	});
 	
 	test('transform', function () {
 		
