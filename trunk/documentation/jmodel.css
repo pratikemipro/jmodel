@@ -85,6 +85,10 @@ ul.unbounded li:last-child::after {
     content: '...';
 }
 
+span.keyword {
+	font-weight: normal;
+}
+
 span.object,
 span.return {
     font-weight: normal;
