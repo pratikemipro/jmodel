@@ -25,6 +25,12 @@ define(function (a,b,c,undefined) {
 	// Utility functions
 	//
 
+	// Tests: full
+	// Docs: full
+	function type (object) {
+		return typeof object;
+	}
+
 	function _not (x) { return !x; }
 
 	function _get (property,object) { return object[property]; }
@@ -67,6 +73,7 @@ define(function (a,b,c,undefined) {
 	}
 	
 	opal.extend({
+		type: 		type,
 		arg: 		arg,
 		first: 		first,
 		second: 	second,
@@ -723,12 +730,6 @@ define(function (a,b,c,undefined) {
 	// Object functions
 	// 
 
-    // Tests: full
-	// Docs: none
-	function type (object) {
-		return object !== null && typeof object;
-	}
-
 	// Tests: full
 	// Docs: none
 	function transform (name,transformer,extractor) {
@@ -744,7 +745,6 @@ define(function (a,b,c,undefined) {
 		apply: apply,
 		applyto: applyto,
 		parallel: parallel,
-		type: type,
 		transform: transform
 	});
 
@@ -878,7 +878,7 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: full
 	function is_of_type (type) {
-		return type.eq(type);
+		return opal.type.eq(type);
 	}
 
 	// Tests: full

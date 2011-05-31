@@ -745,7 +745,22 @@
 		        
 		        <dt>
 	                type
+	                <ul class="arguments">
+    			         <li>value</li>
+    			     </ul>
+    				<span class="return">string</span>
 	            </dt>
+	            <dd><p><code>type</code> encapsulates the <code>typeof</code> operator in a function.</p></dd>
+				<dd class="example">
+					<p>
+						<code>type('test');</code>
+						<br/><span class="output">⇒ <code>'string'</code></span>
+					</p>
+					<p>
+						<code>type({name:'john'});</code>
+						<br/><span class="output">⇒ <code>'object'</code></span>
+					</p>
+				</dd>
 		        
 		        <dt>
 	                copy
