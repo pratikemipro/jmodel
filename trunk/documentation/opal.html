@@ -472,6 +472,21 @@
     				    <span class="return">function</span>
     	            </dt>
     	            
+    	            <dd><p><code>Object.property(property)</code> is a function that returns an object's value for the property “property”.</p></dd>
+    				<dd class="example">
+    					<p>
+    						<code>Object.property('forename')({forename:'john',surname:'smith'});</code>
+    						<br/><span class="output">⇒ <code>'john'</code></span>
+    					</p>
+    				</dd>
+    				<dd><p><code>Object.property(property,value)</code> is a function that sets an object's property “property” to “value”.</p></dd>
+    				<dd class="example">
+    				    <p>
+    						<code>Object.property('forename','jack')({forename:'john',surname:'smith'});</code>
+    						<br/><span class="output">⇒ <code>{forename:'jack',surname:'smith'}</code></span>
+    					</p>
+    				</dd>
+    	            
     	            <dt>
     	                Object.method
     	                <ul class="arguments unbounded">
@@ -838,22 +853,6 @@
 			<h2>Object Functions</h2>
 		
 			<dl>
-			
-				<dt>
-					<code>
-						<span class="name">Property</span>
-						<span class="arguments">(property<span class="optional">,value</span>)</span>
-					</code>
-					<span class="return">→ <span class="type">(object → value)</span>
-					</span>
-				</dt>
-				<dd><p><code>Property(property)</code> returns a function that when called on an object returns the object's value for the property "property". In other words <code>Property(property)(object)</code> is equivalent to <code>object[property]</code>.</p></dd>
-				<dd class="example">
-					<p>
-						<code>Property('forename')({forename:'john',surname:'smith'});</code>
-						<br/><span class="output">⇒ <code>'john'</code></span>
-					</p>
-				</dd>
 			
 				<dt>
 					<code>
