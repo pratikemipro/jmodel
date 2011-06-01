@@ -630,7 +630,7 @@ define(function (a,b,c,undefined) {
 		},
 		
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		method: function (name) {
 			var args = _slice.call(arguments,1);
 			return function (object) {

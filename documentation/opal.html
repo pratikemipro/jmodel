@@ -466,20 +466,20 @@
 		            <dt>
     	                Object.property
     	                <ul class="arguments">
-        				    <li>property</li>
+        				    <li>name</li>
     				        <li class="optional">value</li>
     				    </ul>
     				    <span class="return">function</span>
     	            </dt>
     	            
-    	            <dd><p><code>Object.property(property)</code> is a function that returns an object's value for the property “property”.</p></dd>
+    	            <dd><p><code>Object.property(name)</code> is a function that returns an object's value for the named property.</p></dd>
     				<dd class="example">
     					<p>
     						<code>Object.property('forename')({forename:'john',surname:'smith'});</code>
     						<br/><span class="output">⇒ <code>"john"</code></span>
     					</p>
     				</dd>
-    				<dd><p><code>Object.property(property,value)</code> is a function that sets an object's property “property” to “value”.</p></dd>
+    				<dd><p><code>Object.property(name,value)</code> is a function that sets the named property to <code>value</code>.</p></dd>
     				<dd class="example">
     				    <p>
     						<code>
@@ -495,13 +495,20 @@
     	            <dt>
     	                Object.method
     	                <ul class="arguments unbounded">
-        				    <li>method</li>
+        				    <li>name</li>
     				        <li class="optional">a</li>
     				        <li class="optional">b</li>
     				        <li class="optional">c</li>
     				    </ul>
     				    <span class="return">function</span>
     	            </dt>
+    	            <dd><p><code>Object.method(name)</code> is a "suspended method" function that when called on an object is equivalent to calling the named method on the object. Additional arguments can be provided at suspension time but not at invocation time.</p> <p><code>Object.method('method',a,b,c)(object)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
+    				<dd class="example">
+    					<p>
+    						<code>Object.method('split','-')('john-smith');</code>
+    						<br/><span class="output">⇒ <code>["john","smith"]</code></span>
+    					</p>
+    				</dd>
     	            
     	            <dt>
     	                Object.resolve
@@ -857,26 +864,7 @@
 		<article>
 			<h2>Object Functions</h2>
 		
-			<dl>
-			
-				<dt>
-					<code>
-						<span class="name">Method</span>
-						<span class="arguments">(name<span class="optional">,a,b,c...</span>)</span>
-					</code>
-					<span class="return">→ <span class="type">(object → value)</span></span>
-				</dt>
-				<dd><p>The <code>Method</code> function creates a "suspended method" function that when called on an object is equivalent to calling the named method on the object. Arguments can be provided either at the time of suspension or the time of invocation or both.</p> <p><code>Method('method',a,b,c)(object,d,e,f)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
-				<dd class="example">
-					<p>
-						<code>Method('split','-')('john-smith');</code>
-						<br/><span class="output">⇒ <code>['john','smith']</code></span>
-					</p>
-					<p>
-						<code>Method('split')('john-smith','-');</code>
-						<br/><span class="output">⇒ <code>['john','smith']</code></span>
-					</p>
-				</dd>
+			<dl>		
 			
 				<dt>
 					<code>
