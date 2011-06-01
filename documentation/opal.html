@@ -502,7 +502,7 @@
     				    </ul>
     				    <span class="return">function</span>
     	            </dt>
-    	            <dd><p><code>Object.method(name)</code> is a "suspended method" function that when called on an object is equivalent to calling the named method on the object. Additional arguments can be provided at suspension time but not at invocation time.</p> <p><code>Object.method('method',a,b,c)(object)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
+    	            <dd><p><code>Object.method(name)</code> is function that invokes the named method on an object. Additional arguments can be provided at suspension time but not at invocation time.</p> <p><code>Object.method('method',a,b,c)(object)</code> is equivalent to <code>object.method(a,b,c,d,e,f)</code>.</p></dd>
     				<dd class="example">
     					<p>
     						<code>Object.method('split','-')('john-smith');</code>
