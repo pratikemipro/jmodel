@@ -32,7 +32,7 @@
     				<dd class="example">
     				    <p>
     					    <code>Function.identity('test');</code>
-    					    <br/><span class="output">⇒ <code>'test'</code></span>
+    					    <br/><span class="output">⇒ <code>"test"</code></span>
     				    </p>
     				</dd>
 		            
@@ -53,11 +53,11 @@
 		                </p>
 		                <p>
 		                    <code>test(5);</code>
-    					    <br/><span class="output">⇒ <code>'test'</code></span>
+    					    <br/><span class="output">⇒ <code>"test"</code></span>
     					</p>
     					<p>
     					    <code>test('fred');</code>
-    					    <br/><span class="output">⇒ <code>'test'</code></span>
+    					    <br/><span class="output">⇒ <code>"test"</code></span>
 		                </p>
 		            </dd>
 		            
@@ -476,14 +476,19 @@
     				<dd class="example">
     					<p>
     						<code>Object.property('forename')({forename:'john',surname:'smith'});</code>
-    						<br/><span class="output">⇒ <code>'john'</code></span>
+    						<br/><span class="output">⇒ <code>"john"</code></span>
     					</p>
     				</dd>
     				<dd><p><code>Object.property(property,value)</code> is a function that sets an object's property “property” to “value”.</p></dd>
     				<dd class="example">
     				    <p>
-    						<code>Object.property('forename','jack')({forename:'john',surname:'smith'});</code>
-    						<br/><span class="output">⇒ <code>{forename:'jack',surname:'smith'}</code></span>
+    						<code>
+    						    var person = {forename:'john',surname:'smith'};
+    						    <br/>Object.property('forename','jack')(person);
+    						</code>
+    						<br/><span class="output">⇒ <code>person</code></span>
+    						<br/><code>person.forename</code>
+    						<br/><span class="output">⇒ <code>"jack"</code></span>
     					</p>
     				</dd>
     	            
@@ -809,11 +814,11 @@
 				<dd class="example">
 					<p>
 						<code>type('test');</code>
-						<br/><span class="output">⇒ <code>'string'</code></span>
+						<br/><span class="output">⇒ <code>"string"</code></span>
 					</p>
 					<p>
 						<code>type({name:'john'});</code>
-						<br/><span class="output">⇒ <code>'object'</code></span>
+						<br/><span class="output">⇒ <code>"object"</code></span>
 					</p>
 				</dd>
 		        
