@@ -624,7 +624,7 @@ define(function (a,b,c,undefined) {
 	extend({
 		
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		property: function (property,value) {
 			return value === undefined ? _get.curry(property) : _set.curry(property,value);
 		},
