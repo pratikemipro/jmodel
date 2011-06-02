@@ -608,8 +608,8 @@
 	            <dd><code>plus(acc,x)</code> is equivalent to <code>acc+x</code>.</dd>
 	            <dd class="example">
 					<p>
-						<code>[1,2,3,4].reduce(plus);</code>
-						<br/><span class="output"><code>10</code></span>
+						<code>[1,2,3,4,5].reduce(plus);</code>
+						<br/><span class="output"><code>15</code></span>
 					</p>
 				</dd>
 	            
@@ -624,8 +624,8 @@
 	            <dd><code>times(acc,x)</code> is equivalent to <code>acc*x</code>.</dd>
 	            <dd class="example">
 					<p>
-						<code>[1,2,3,4].reduce(times);</code>
-						<br/><span class="output"><code>24</code></span>
+						<code>[1,2,3,4,5].reduce(times);</code>
+						<br/><span class="output"><code>120</code></span>
 					</p>
 				</dd>
 	            
@@ -636,6 +636,23 @@
 				    </ul>
 				     <span class="return">function</span>
 	            </dt>
+	            <dd><p><code>count()</code> is a reduction function that counts the number of elements in the reduced collection.</p></dd>
+	            <dd class="example">
+					<p>
+						<code>[1,2,3,4,5].reduce(count());</code>
+						<br/><span class="output"><code>5</code></span>
+					</p>
+				</dd>
+				<dd><p><code>count(predicate)</code> is a reduction function that counts the number of elements in the reduced collection that match the predicate. When reducing an Array, the value <code>0</code> should be passed as the initial value.</p></dd>
+	            <dd class="example">
+					<p>
+						<code>
+						    function even (x) { return x % 2 === 0; }
+						    <br/>[1,2,3,4,5].reduce(count(even),0);
+						</code>
+						<br/><span class="output"><code>2</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                withmethod
