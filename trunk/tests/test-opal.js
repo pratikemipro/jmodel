@@ -584,7 +584,7 @@ define(['../library/opal.js'], function (opal) {
 	
 	test('push', function () {
 	   
-	   deepEqual( opal.push(['red','green','blue'],'cyan'), ['red','green','blue','cyan'], 'Push words');
+	   deepEqual( opal.push(['red','green','blue'],'cyan'), ['red','green','blue','cyan'], 'Push works');
 	    
 	});
 	
