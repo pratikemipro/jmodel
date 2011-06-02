@@ -636,14 +636,14 @@
 				    </ul>
 				     <span class="return">function</span>
 	            </dt>
-	            <dd><p><code>count()</code> is a reduction function that counts the number of elements in the reduced collection.</p></dd>
+	            <dd><p><code>count()</code> is a reduction function that counts the number of elements in the reduced collection. When reducing an Array, the value <code>0</code> should be passed as the initial value.</p></dd>
 	            <dd class="example">
 					<p>
-						<code>[1,2,3,4,5].reduce(count());</code>
+						<code>[1,2,3,4,5].reduce(count(),0);</code>
 						<br/><span class="output"><code>5</code></span>
 					</p>
 				</dd>
-				<dd><p><code>count(predicate)</code> is a reduction function that counts the number of elements in the reduced collection that match the predicate. When reducing an Array, the value <code>0</code> should be passed as the initial value.</p></dd>
+				<dd><p><code>count(predicate)</code> is a reduction function that counts the number of elements in the reduced collection that match the predicate.</p></dd>
 	            <dd class="example">
 					<p>
 						<code>
