@@ -32,7 +32,7 @@
     				<dd class="example">
     				    <p>
     					    <code>Function.identity('test');</code>
-    					    <br/><span class="output">⇒ <code>"test"</code></span>
+    					    <br/><span class="output"><code>"test"</code></span>
     				    </p>
     				</dd>
 		            
@@ -53,11 +53,11 @@
 		                </p>
 		                <p>
 		                    <code>test(5);</code>
-    					    <br/><span class="output">⇒ <code>"test"</code></span>
+    					    <br/><span class="output"><code>"test"</code></span>
     					</p>
     					<p>
     					    <code>test('fred');</code>
-    					    <br/><span class="output">⇒ <code>"test"</code></span>
+    					    <br/><span class="output"><code>"test"</code></span>
 		                </p>
 		            </dd>
 		            
@@ -476,7 +476,7 @@
     				<dd class="example">
     					<p>
     						<code>Object.property('forename')({forename:'john',surname:'smith'});</code>
-    						<br/><span class="output">⇒ <code>"john"</code></span>
+    						<br/><span class="output"><code>"john"</code></span>
     					</p>
     				</dd>
     				<dd><p><code>Object.property(name,value)</code> is a function that sets the named property to <code>value</code>.</p></dd>
@@ -486,9 +486,9 @@
     						    var person = {forename:'john',surname:'smith'};
     						    <br/>Object.property('forename','jack')(person);
     						</code>
-    						<br/><span class="output">⇒ <code>person</code></span>
+    						<br/><span class="output"><code>person</code></span>
     						<br/><code>person.forename</code>
-    						<br/><span class="output">⇒ <code>"jack"</code></span>
+    						<br/><span class="output"><code>"jack"</code></span>
     					</p>
     				</dd>
     	            
@@ -506,7 +506,7 @@
     				<dd class="example">
     					<p>
     						<code>Object.method('split','-')('john-smith');</code>
-    						<br/><span class="output">⇒ <code>["john","smith"]</code></span>
+    						<br/><span class="output"><code>["john","smith"]</code></span>
     					</p>
     				</dd>
     	            
@@ -523,7 +523,27 @@
     	            
     	            <dt>
     	                Object.path
+    	                <ul class="arguments">
+        				    <li>elements</li>
+    				        <li class="optional">separator</li>
+    				    </ul>
+    				    <span class="return">function</span>
     	            </dt>
+    	            <dd><p><code>Object.path</code> returns a function that dereferences a path on an object. The path can be specified as either an array of elements or a string specifying the elements. In the latter case, an optional separator can also be passed (the default is the ‘.’ character). If any element of the path is a method then the method will be invoked during dereferencing.</p></dd>
+    				<dd class="example">
+    				    <p>
+    						<code>Object.path(['name','last'])({name:{first:'john',last:'smith'},age:27});</code>
+    						<br/><span class="output"><code>"smith"</code></span>
+    					</p>
+    					<p>
+    						<code>Object.path('name.last')({name:{first:'john',last:'smith'},age:27});</code>
+    						<br/><span class="output"><code>"smith"</code></span>
+    					</p>
+    					<p>
+    						<code>Object.path('name/last','/')({name:{first:'john',last:'smith'},age:27});</code>
+    						<br/><span class="output"><code>"smith"</code></span>
+    					</p>
+    				</dd>
     	            
     	            <dt>
     	                Object.transform
@@ -655,15 +675,15 @@
 				<dd class="example">
 					<p>
 						<code>is_of_type('string')('test');</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>is_of_type('string')(4);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>if_of_type('number')(4);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 				</dd>
 	            
@@ -681,11 +701,11 @@
 				<dd class="example">
 					<p>
 						<code>isa(Array)('test');</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>isa(Array)([1,2,3]);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 				</dd>
 	            
@@ -821,11 +841,11 @@
 				<dd class="example">
 					<p>
 						<code>type('test');</code>
-						<br/><span class="output">⇒ <code>"string"</code></span>
+						<br/><span class="output"><code>"string"</code></span>
 					</p>
 					<p>
 						<code>type({name:'john'});</code>
-						<br/><span class="output">⇒ <code>"object"</code></span>
+						<br/><span class="output"><code>"object"</code></span>
 					</p>
 				</dd>
 		        
@@ -877,21 +897,6 @@
 			
 				<dt>
 					<code>
-						<span class="name">PropertyPath</span>
-						<span class="arguments">(path<span class="optional">,separator</span>)</span>
-					</code>
-					<span class="return">→ <span class="type">(object → value)</span></span>
-				</dt>
-				<dd><p><code>PropertyPath</code> returns a function that dereferences a path on an object, so that <code>PropertyPath('a/b/c','/')(obj)</code> is equivalent to <code>obj.a.b.c</code>. The default value for the separator is the '.' character. If an elements of the path is a methods then the method will be invoked during dereferencing.</p></dd>
-				<dd class="example">
-					<p>
-						<code>PropertyPath('name.last')({name:{first:'john',last:'smith'},age:27});</code>
-						<br/><span class="output">⇒ <code>'smith'</code></span>
-					</p>
-				</dd>
-			
-				<dt>
-					<code>
 						<span class="name">PropertySet</span>
 						<span class="arguments">(paths<span class="optional">,separator</span>)</span>
 					</code>
@@ -931,19 +936,19 @@
 				<dd class="example">
 					<p>
 						<code>AllPredicate('test');</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>AllPredicate(7);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>AllPredicate(false);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>AllPredicate(null);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 				</dd>
 			
@@ -958,19 +963,19 @@
 				<dd class="example">
 					<p>
 						<code>NonePredicate('test');</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>NonePredicate(7);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>NonePredicate(true);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>NonePredicate(null);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 				</dd>
 			
@@ -985,23 +990,23 @@
 				<dd class="example">
 					<p>
 						<code>TruePredicate('test');</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>TruePredicate(7);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>TruePredicate(true);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>TruePredicate(false);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>TruePredicate(null);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 				</dd>
 			
@@ -1029,9 +1034,9 @@
 					<p>
 						<code>var person = {forename:'john',surname:'smith'};
 						<br/>ObjectIdentityPredicate(person)(person);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 						<br/><code>ObjectIdentityPredicate(person)({forename:'john',surname:'smith'});</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 				</dd>
 			
@@ -1046,15 +1051,15 @@
 				<dd class="example">
 					<p>
 						<code>EqualityPredicate(4)(4);</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 					<p>
 						<code>EqualityPredicate(4)(5);</code>
-						<br/><span class="output">⇒ <code>false</code></span>
+						<br/><span class="output"><code>false</code></span>
 					</p>
 					<p>
 						<code>EqualityPredicate('red')('red');</code>
-						<br/><span class="output">⇒ <code>true</code></span>
+						<br/><span class="output"><code>true</code></span>
 					</p>
 				</dd>
 			

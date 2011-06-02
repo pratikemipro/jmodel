@@ -131,3 +131,7 @@ span.output {
 	color: #3030d0;
 	margin-left: 14px;
 }
+
+span.output::before {
+	content: '⇒ ';
+}
