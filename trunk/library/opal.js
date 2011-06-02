@@ -762,7 +762,7 @@ define(function (a,b,c,undefined) {
 	});
 	
 	// Tests: full
-	// Docs: none
+	// Docs: full
 	var count = function _count (predicate) {
 		predicate = predicate || Function.constant(true);
 		return extend({unit:0,label:'count'}, function (acc,value) {
