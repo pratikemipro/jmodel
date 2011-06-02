@@ -649,7 +649,7 @@ define(function (a,b,c,undefined) {
 		},
 		
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		path: function (elements,separator) {
 			return    typeof elements === 'string' ? Object.path.call(null,elements.split(separator||'.'))
 					: elements === undefined || elements.length === 0 ? Function.constant(undefined)
