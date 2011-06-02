@@ -773,8 +773,9 @@ define(function (a,b,c,undefined) {
 	// Tests: full
 	// Docs: none
 	var withmethod = function method (name) {
+		var args = _slice.call(arguments,1);
 		return function (object,value) {
-			return typeof object[name] === 'function' ? object[name].call(object,value) : undefined;
+			return typeof object[name] === 'function' ? object[name].call(object,args.concat(value)) : undefined;
 		};
 	};
 	
