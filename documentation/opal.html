@@ -600,20 +600,34 @@
 		        <dt>
 	                plus
 	                <ul class="arguments">
-				        <li>a</li>
-				        <li>b</li>
+				        <li>acc</li>
+				        <li>x</li>
 				    </ul>
 				     <span class="return">value</span>
 	            </dt>
+	            <dd><code>plus(acc,x)</code> is equivalent to <code>acc+x</code>.</dd>
+	            <dd class="example">
+					<p>
+						<code>[1,2,3,4].reduce(plus);</code>
+						<br/><span class="output"><code>10</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                times
 	                <ul class="arguments">
-				        <li>a</li>
-				        <li>b</li>
+				        <li>acc</li>
+				        <li>x</li>
 				    </ul>
 				     <span class="return">number</span>
 	            </dt>
+	            <dd><code>times(acc,x)</code> is equivalent to <code>acc*x</code>.</dd>
+	            <dd class="example">
+					<p>
+						<code>[1,2,3,4].reduce(times);</code>
+						<br/><span class="output"><code>24</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                count
@@ -1103,12 +1117,6 @@
 			<h2>Reduction Functions</h2>
 		
 			<dl>
-			
-				<dt><code>plus <span class="arguments">(a,b)</span></code></dt>
-				<dd><code>plus(a,b)</code> is equivalent to <code>a+b</code>.</dd>
-			
-				<dt><code>times <span class="arguments">(a,b)</span></code></dt>
-				<dd><code>times(a,b)</code> is equivalent to <code>a*b</code>.</dd>
 		
 				<dt><code>count <span class="arguments">(predicate)</span></code></dt>
 				<span style="color:red">document this</span>
