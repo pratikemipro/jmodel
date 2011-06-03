@@ -804,11 +804,53 @@
 	            
 	            <dt>
 	                eq
+					<ul class="arguments">
+    			         <li>value</li>
+    			     </ul>
+    				<span class="return">predicate</span>
 	            </dt>
+				<dd><p><code>eq(value)</code> matches candidates which are equal to <code>value</code> (including type).</p></dd>
+				<dd class="example">
+					<p>
+						<code>eq(4)(4);</code>
+						<br/><span class="output"><code>true</code></span>
+					</p>
+					<p>
+						<code>eq(4)(5);</code>
+						<br/><span class="output"><code>false</code></span>
+					</p>
+					<p>
+						<code>eq('red')('red');</code>
+						<br/><span class="output"><code>true</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                neq
+					<ul class="arguments">
+    			         <li>value</li>
+    			     </ul>
+    				<span class="return">predicate</span>
 	            </dt>
+				<dd><p><code>neq(value)</code> matches candidates which are not equal to <code>value</code> (including type).</p></dd>
+				<dd class="example">
+					<p>
+						<code>neq(4)(4);</code>
+						<br/><span class="output"><code>false</code></span>
+					</p>
+					<p>
+						<code>neq(4)(5);</code>
+						<br/><span class="output"><code>true</code></span>
+					</p>
+					<p>
+						<code>neq('red')('red');</code>
+						<br/><span class="output"><code>false</code></span>
+					</p>
+					<p>
+						<code>neq('red')('green');</code>
+						<br/><span class="output"><code>true</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                lt
@@ -1111,50 +1153,6 @@
 						<br/><span class="output"><code>false</code></span>
 					</p>
 				</dd>
-			
-				<dt><code>PropertyPredicate <span class="arguments">(path,predicate)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>PropertySetPredicate <span class="arguments">(paths,predicate)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>EqualityPredicate <span class="arguments">(value)</span></code></dt>
-				<dd><p><code>EqualityPredicate(value)</code> matches candidates which are equal to <code>value</code>.</p></dd>
-				<dd class="example">
-					<p>
-						<code>EqualityPredicate(4)(4);</code>
-						<br/><span class="output"><code>true</code></span>
-					</p>
-					<p>
-						<code>EqualityPredicate(4)(5);</code>
-						<br/><span class="output"><code>false</code></span>
-					</p>
-					<p>
-						<code>EqualityPredicate('red')('red');</code>
-						<br/><span class="output"><code>true</code></span>
-					</p>
-				</dd>
-			
-				<dt><code>LessThanPredicate <span class="arguments">(value)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>GreaterThanPredicate <span class="arguments">(value)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>LessThanEqualPredicate <span class="arguments">(value)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>GreaterThanEqualPredicate <span class="arguments">(value)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>BetweenPredicate <span class="arguments">(lower,higher)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>RegularExpressionPredicate <span class="arguments">(regex)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
-			
-				<dt><code>MembershipPredicate <span class="arguments">(set)</span></code></dt>
-				<dd><span style="color:red">document this</span></dd>
 			
 			</dl>
 		</article>
