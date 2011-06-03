@@ -570,7 +570,18 @@ define(function (a,b,c,undefined) {
 					: constructor === Number ? Number
 					: function () {
 						var args = args1.concat(_slice.call(arguments));
-						return new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
+						// Need this ugliness to work correctly with Date and other constructors that count arguments.
+						return    args.length === 0  ? new constructor()
+								: args.length === 1  ? new constructor(args[0])
+								: args.length === 2  ? new constructor(args[0],args[1])
+								: args.length === 3  ? new constructor(args[0],args[1],args[2])
+								: args.length === 4  ? new constructor(args[0],args[1],args[2],args[3])
+								: args.length === 5  ? new constructor(args[0],args[1],args[2],args[3],args[4])
+								: args.length === 6  ? new constructor(args[0],args[1],args[2],args[3],args[4],args[5])
+								: args.length === 7  ? new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6])
+								: args.length === 8  ? new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7])
+								: args.length === 9  ? new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8])
+								: 					   new constructor(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7],args[8],args[9]);
 					};
 		},
 		
