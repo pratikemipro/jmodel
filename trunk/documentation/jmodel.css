@@ -89,6 +89,10 @@ span.keyword {
 	font-weight: normal;
 }
 
+span.multiple {
+	text-decoration: underline;
+}
+
 span.object,
 span.return {
     font-weight: normal;
