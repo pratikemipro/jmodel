@@ -563,7 +563,7 @@ define(function (a,b,c,undefined) {
 	extend({
 		
 		// Tests: full
-		// Docs: none
+		// Docs: full
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
 			return 	  constructor === String ? String
