@@ -332,6 +332,23 @@
     				    </ul>
     				    <span class="return">predicate</span>
 		            </dt>
+					<dd><p><code>fn.eq(value)</code> is a predicate that is true when <code>fn</code> returns a value equal to <code>value</code> (including type).</p></dd>
+					<dd class="example">
+						<p>
+							<code>
+								var buffy = {forename:'Buffy',surname:'Summers'};
+								<br/>Object.property('surname').eq('Summers')(buffy);
+							</code>
+							<br/><span class="output"><code>true</code></span>
+						</p>
+						<p>
+							<code>
+								var willow = {forename:'Willow',surname:'Rosenberg'};
+								<br/>Object.property('surname').eq('Summers')(willow);
+							</code>
+							<br/><span class="output"><code>false</code></span>
+						</p>
+					</dd>
 		            
 		            <dt>
 		                <span class="object">fn</span>.neq
