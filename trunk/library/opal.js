@@ -916,13 +916,12 @@ define(function (a,b,c,undefined) {
 	}
 	
 	// Tests: full
-	// Docs: none
-	var eq  = function (a) { return function (x) { return x===a; }; },
-		neq = function (a) { return function (x) { return x!==a; }; },
-		lt  = function (a) { return function (x) { return x<a;   }; },
-		gt  = function (a) { return function (x) { return x>a;   }; },
-		lte = function (a) { return function (x) { return x<=a;  }; },
-		gte = function (a) { return function (x) { return x>=a;  }; };
+	var eq  = function (a) { return function (x) { return x===a; }; },	// Docs: full
+		neq = function (a) { return function (x) { return x!==a; }; },	// Docs: full
+		lt  = function (a) { return function (x) { return x<a;   }; },	// Docs: none
+		gt  = function (a) { return function (x) { return x>a;   }; },	// Docs: none
+		lte = function (a) { return function (x) { return x<=a;  }; },	// Docs: none
+		gte = function (a) { return function (x) { return x>=a;  }; };	// Docs: none
 
 	// Tests: full
 	// Docs: none
