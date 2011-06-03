@@ -683,15 +683,54 @@
 	            
 	            <dt>
 	                contains
+					<ul class="arguments">
+				        <li>predicate</li>
+				    </ul>
+				     <span class="return">function</span>
 	            </dt>
+				<dd class="example">
+					<p>
+						<code>
+						    function even (x) { return x % 2 === 0; }
+						    <br/>[1,2,3,4,5].reduce(contains(even),false);
+						</code>
+						<br/><span class="output"><code>true</code></span>
+						<br/><code>[1,3,5].reduce(contains(even),false);</code>
+						<br/><span class="output"><code>false</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                max
 	            </dt>
+				<dd class="example">
+					<p>
+						<code>[3,4,5,1,2].reduce(max);
+						</code>
+						<br/><span class="output"><code>5</code></span>
+					</p>
+					<p>
+						<code>['red','green','blue'].reduce(max);
+						</code>
+						<br/><span class="output"><code>"red"</code></span>
+					</p>
+				</dd>
 	            
 	            <dt>
 	                min
 	            </dt>
+				<dd class="example">
+					<p>
+						<code>[3,4,5,1,2].reduce(min);
+						</code>
+						<br/><span class="output"><code>1</code></span>
+					</p>
+					<p>
+						<code>['red','green','blue'].reduce(min);
+						</code>
+						<br/><span class="output"><code>"blue"</code></span>
+					</p>
+				</dd>
 		        
 		    </dl>
 		    
