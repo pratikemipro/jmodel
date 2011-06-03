@@ -454,6 +454,40 @@
     				    </ul>
     				    <span class="return">function</span>
     	            </dt>
+					<dd><p><code>Object.construct</code> wraps the <code>new</code> operator in a function. Arguments to the constructor can be passed at definition-time or application-time, but no more than ten arguments in total.</p></dd>
+					<dd class="example">
+						<p>
+							<code>
+								Object.construct(Date)('1997-8-29');
+							</code>
+							<br/><span class="output"><code>"Fri Aug 29 1997 00:00:00 GMT+0100 (BST)"</code></span>
+						</p>
+						<p>
+							<code>
+								Object.construct(Date)('1997-8-29') instanceof Date;
+							</code>
+							<br/><span class="output"><code>true</code></span>
+						</p>
+						<p>
+							<code>
+								function Employee (department, forename, surname) {			<br/>
+									&#160;&#160;&#160;&#160;this.department = department;	<br/>
+									&#160;&#160;&#160;&#160;this.forename = forename;		<br/>
+									&#160;&#160;&#160;&#160;this.surname = surname			<br/>
+								}
+								<br/>
+								var makeITstaff = Object.construct(Employee,'IT');
+						</p>
+						<p>
+							<code>
+								var john = makeITstaff('John','Smith'); <br/>
+								john.department;
+							</code>
+							<br/><span class="output"><code>"IT"</code></span>
+							<br/><code>john.surname;</code>
+							<br/><span class="output"><code>"Smith"</code></span>
+						</p>
+					</dd>
 
     	            <dt>
     	                Object.ensure
