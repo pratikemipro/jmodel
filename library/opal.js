@@ -283,12 +283,12 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		memo: function () {
 			var cache = {},
-				fn = this.post(function (r,x) {
-					cache[x] = r;
+				fn = this.post(function () {
+					cache[_slice.call(arguments,1)] = arguments[0];
 				});
-			return function (x) {
-				var value = cache[x];
-				return value !== undefined ? value : fn.call(this,x);
+			return function () {
+				var value = cache[_slice.call(arguments)];
+				return value !== undefined ? value : fn.apply(this,arguments);
 			};
 		},
 		
