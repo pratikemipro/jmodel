@@ -559,7 +559,7 @@ define(function (a,b,c,undefined) {
 		// Tests: none
 		// Docs: none
 		asc: function () {
-			var fn = this.memo();
+			var fn = this;
 			return function (a,b) {
 				var fna = fn(a),
 					fnb = fn(b);
