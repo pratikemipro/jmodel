@@ -96,8 +96,7 @@ var jModel = function () {
 		func: 		FunctionOrdering,
 		value: 		ValueOrdering,
 		score: 		PredicateOrdering,
-		desc: 		DescendingOrdering,
-		composite: 	CompositeOrdering
+		desc: 		DescendingOrdering
 		
 	});
 	
@@ -847,13 +846,13 @@ var jModel = function () {
 				for ( i in arguments ) {
 					arguments[i] = _ordering(arguments[i]);
 				}
-				return CompositeOrdering.apply(null,arguments);
+				return Function.ordering.apply(null,arguments);
 			}
 			else if ( arguments[0] instanceof Array ) {
 				for ( i in arguments ) {
 					arguments[0][i] = _ordering(arguments[0][i]);
 				}
-				return CompositeOrdering(arguments[0]);
+				return Function.ordering.apply(null,arguments[0]);
 			}
 			else if ( typeof arguments[0] == 'function' ) {
 				return arguments[0];
