@@ -577,6 +577,8 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
+		// Tests: none
+		// Docs: none
 		desc: function () {
 			return this.asc().then(function (x) { return -x; } );
 		}
