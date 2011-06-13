@@ -191,10 +191,10 @@ define(['../library/opal.js'], function (opal) {
 	
 	test('memo', function () {
 	
-		var add2 = function (a) { return a+2; }.memo();
+		var add = function (a,b) { return a+b; }.memo();
 		
-		equals( add2(3), 5, 'memoized function works normally on first call');
-		equals( add2(3), 5, 'memoized function works normally on subsequent calls');
+		equals( add(2,3), 5, 'memoized function works normally on first call');
+		equals( add(2,3), 5, 'memoized function works normally on subsequent calls');
 		
 	});
 	
