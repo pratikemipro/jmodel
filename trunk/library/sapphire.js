@@ -716,9 +716,9 @@ define(['jmodel/opal'], function (opal) {
 		// Tests: none
 		function PredicateOrdering () {
 			var predicates = Set.fromArguments(arguments);
-			return FunctionOrdering( function (obj) {
+			return function (obj) {
 				return -predicates.count(applyto(obj));
-			});
+			}.asc();
 		}
 
 		_.extend({
