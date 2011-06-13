@@ -547,6 +547,39 @@ define(function (a,b,c,undefined) {
 	Function.prototype.hastype.displayName	= 'hastype';
 	
 	
+	//
+	// Ordering methods
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.asc === undefined, '"asc" method already defined');
+	
+	extend({
+		
+		// Tests: none
+		// Docs: none
+		asc: function () {
+			var fn = this;
+			return function (a,b) {
+				var fna = fn(a),
+					fnb = fn(b);
+				return    fna < fnb ? -1
+						: fna > fnb ? 1
+						: 0;
+			};
+		},
+		
+		desc: function () {
+			return this.asc().then(function (x) { return -x; } );
+		}
+		
+	}, Function.prototype);
+	
+	Function.prototype.asc.displayName = 'asc';
+	
+	
+	
+	
 	// ------------------------------------------------------------------------
 	//													     		     Object
 	// ------------------------------------------------------------------------

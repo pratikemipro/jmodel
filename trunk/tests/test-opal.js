@@ -1,5 +1,6 @@
 define(['../library/opal.js'], function (opal) {
 	
+	window.opal = opal;
 	
 	//
 	// Utility functions
@@ -320,6 +321,22 @@ define(['../library/opal.js'], function (opal) {
 		
 		equal( test.hastype('string')(), true, 'returns true when function returns a value of specified type' );
 		equal( test.hastype('number')(), false, 'returns false when function returns a value not of specified type' );
+		
+	});
+	
+	test('asc', function () {
+	
+		people = [{forename:'john'},{forename:'emily'},{forename:'chris'},{forename:'rich'}];
+		
+		deepEqual(people.sort(Object.property('forename').asc()), [{forename:'chris'},{forename:'emily'},{forename:'john'},{forename:'rich'}], 'asc produces ordering that sorts into ascending order');
+		
+	});
+	
+	test('desc', function () {
+	
+		people = [{forename:'john'},{forename:'emily'},{forename:'chris'},{forename:'rich'}];
+		
+		deepEqual(people.sort(Object.property('forename').desc()), [{forename:'rich'},{forename:'john'},{forename:'emily'},{forename:'chris'}], 'asc produces ordering that sorts into ascending order');
 		
 	});
 	

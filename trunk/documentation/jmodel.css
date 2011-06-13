@@ -99,6 +99,10 @@ span.return {
     font-style: italic;
 }
 
+span.multiple {
+	text-decoration: underline;
+}
+
 span.return::before {
     content: '→ ';
 }
