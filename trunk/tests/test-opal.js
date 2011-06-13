@@ -326,17 +326,17 @@ define(['../library/opal.js'], function (opal) {
 	
 	test('asc', function () {
 	
-		people = [{forename:'john'},{forename:'emily'},{forename:'chris'},{forename:'rich'}];
+		var people = [{forename:'john',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'chris',surname:'smith'},{forename:'rich',surname:'jones'}];
 		
-		deepEqual(people.sort(Object.property('forename').asc()), [{forename:'chris'},{forename:'emily'},{forename:'john'},{forename:'rich'}], 'asc produces ordering that sorts into ascending order');
+		deepEqual(people.sort(Object.property('forename').asc()), [{forename:'chris',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'john',surname:'smith'},{forename:'rich',surname:'jones'}], 'asc produces ordering that sorts into ascending order');
 		
 	});
 	
 	test('desc', function () {
 	
-		people = [{forename:'john'},{forename:'emily'},{forename:'chris'},{forename:'rich'}];
+		var people = [{forename:'john',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'chris',surname:'smith'},{forename:'rich',surname:'jones'}];
 		
-		deepEqual(people.sort(Object.property('forename').desc()), [{forename:'rich'},{forename:'john'},{forename:'emily'},{forename:'chris'}], 'asc produces ordering that sorts into ascending order');
+		deepEqual(people.sort(Object.property('forename').desc()), [{forename:'rich',surname:'jones'},{forename:'john',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'chris',surname:'smith'}], 'asc produces ordering that sorts into ascending order');
 		
 	});
 	
