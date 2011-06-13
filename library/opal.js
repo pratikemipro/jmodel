@@ -213,6 +213,7 @@ define(function (a,b,c,undefined) {
 	//
 	
 	Function.ordering = Function.or;
+	opal.ordering	  = Function.ordering;
 
 
 	// ------------------------------------------------------------------------
