@@ -206,6 +206,13 @@ define(function (a,b,c,undefined) {
 		and: Function.and,
 		not: Function.not
 	});
+	
+	
+	//
+	// Composite ordering
+	//
+	
+	Function.ordering = Function.or;
 
 
 	// ------------------------------------------------------------------------

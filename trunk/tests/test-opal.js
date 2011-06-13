@@ -134,6 +134,14 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('ordering', function () {
+	
+		var people = [{forename:'john',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'chris',surname:'smith'},{forename:'rich',surname:'jones'}];
+		
+		deepEqual(people.sort(Function.ordering(Object.property('surname').asc(),Object.property('forename').asc())), [{forename:'emily',surname:'jones'},{forename:'rich',surname:'jones'},{forename:'chris',surname:'smith'},{forename:'john',surname:'smith'}], 'composite orderings work');
+		
+	});
+	
 	//
 	// Function.prototype methods
 	//
