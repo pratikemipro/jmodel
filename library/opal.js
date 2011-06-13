@@ -569,8 +569,8 @@ define(function (a,b,c,undefined) {
 		asc: function () {
 			var fn = this;
 			return function (a,b) {
-				var fna = fn(a),
-					fnb = fn(b);
+				var fna = fn.call(this,a),
+					fnb = fn.call(this,b);
 				return    fna < fnb ? -1
 						: fna > fnb ? 1
 						: 0;
