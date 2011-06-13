@@ -724,22 +724,13 @@ define(['jmodel/opal'], function (opal) {
 			});
 		}
 
-		// Tests: none
-		function DescendingOrdering (ordering) {
-			return function (a,b) {
-				return -ordering(a,b);
-			};
-		}
-
 		_.extend({
 			FunctionOrdering: 	FunctionOrdering,
 			func: 				FunctionOrdering,
 			ValueOrdering: 		ValueOrdering,
 			value: 				ValueOrdering,
 			PredicateOrdering: 	PredicateOrdering,
-			score: 				PredicateOrdering,
-			DescendingOrdering: DescendingOrdering,
-			desc: 				DescendingOrdering
+			score: 				PredicateOrdering
 		});
 	
 	
