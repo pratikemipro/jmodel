@@ -400,7 +400,7 @@ define(['jmodel/opal'], function (opal) {
 			ordering: function () {
 				return    arguments.length > 1 ? Function.ordering.apply(null,arguments)
 						: arguments[0] instanceof Array ? Function.ordering.apply(null,arguments[0])
-						: arguments.length === 0 ? ValueOrdering
+						: arguments.length === 0 ? Function.identity.asc()
 						: arguments[0];
 			},
 		
@@ -714,9 +714,6 @@ define(['jmodel/opal'], function (opal) {
 		}
 
 		// Tests: none
-		var ValueOrdering = FunctionOrdering(identity);
-
-		// Tests: none
 		function PredicateOrdering () {
 			var predicates = Set.fromArguments(arguments);
 			return FunctionOrdering( function (obj) {
@@ -727,8 +724,6 @@ define(['jmodel/opal'], function (opal) {
 		_.extend({
 			FunctionOrdering: 	FunctionOrdering,
 			func: 				FunctionOrdering,
-			ValueOrdering: 		ValueOrdering,
-			value: 				ValueOrdering,
 			PredicateOrdering: 	PredicateOrdering,
 			score: 				PredicateOrdering
 		});

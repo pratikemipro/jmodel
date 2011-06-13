@@ -333,6 +333,14 @@ define(['../library/opal.js'], function (opal) {
 	});
 	
 	test('asc', function () {
+			
+		equals( Function.identity.asc()(3,7), -1, 'first argument less returns -1 (integers)' );
+		equals( Function.identity.asc()(7,7), 0, 'arguments equal return 0 (integers)' );
+		equals( Function.identity.asc()(7,3), 1, 'first argument greater returns 1 (integers)' );
+		
+		equals( Function.identity.asc()('alice','fred'), -1, 'first argument less returns -1 (strings)' );
+		equals( Function.identity.asc()('fred','fred'), 0, 'arguments equal return 0 (strings)' );
+		equals( Function.identity.asc()('fred','alice'), 1, 'first argument greater returns 1 (strings)' );
 	
 		var people = [{forename:'john',surname:'smith'},{forename:'emily',surname:'jones'},{forename:'chris',surname:'smith'},{forename:'rich',surname:'jones'}];
 		

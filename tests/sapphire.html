@@ -443,23 +443,10 @@
 			test('Orderings generator', function () {
 				// Need lots of assertions here
 			});
-			
-			
+				
 			test('FunctionOrdering', function () {
 				// Need lots of assertions here
-			});
-			
-			test('ValueOrdering', function () {
-				
-				equals( opal.ValueOrdering(3,7), -1, 'First argument less returns -1 (integers)' );
-				equals( opal.ValueOrdering(7,7), 0, 'Arguments equal return 0 (integers)' );
-				equals( opal.ValueOrdering(7,3), 1, 'First argument greater returns 1 (integers)' );
-				
-				equals( opal.ValueOrdering('alice','fred'), -1, 'First argument less returns -1 (strings)' );
-				equals( opal.ValueOrdering('fred','fred'), 0, 'Arguments equal return 0 (strings)' );
-				equals( opal.ValueOrdering('fred','alice'), 1, 'First argument greater returns 1 (strings)' );
-				
-			});			
+			});		
 			
 			test('PredicateOrdering', function () {
 				// Need lots of assertions here

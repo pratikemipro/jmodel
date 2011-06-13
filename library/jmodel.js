@@ -94,7 +94,6 @@ var jModel = function () {
 		/* Orderings */
 		
 		func: 		FunctionOrdering,
-		value: 		ValueOrdering,
 		score: 		PredicateOrdering
 		
 	});
@@ -857,7 +856,7 @@ var jModel = function () {
 				return arguments[0];
 			}
 			else if ( typeof arguments[0] == 'undefined' ) {
-				return ValueOrdering;
+				return Function.identity.asc();
 			}
 			else {
 				var pieces = arguments[0].split(' ');
@@ -868,7 +867,7 @@ var jModel = function () {
 					return DescendingOrdering(FieldOrdering(pieces[0]));
 				}
 				else {
-					return ValueOrdering;
+					return Function.identity.asc();
 				}
 			}
 		}
