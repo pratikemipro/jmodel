@@ -398,8 +398,8 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			ordering: function () {
-				return    arguments.length > 1 ? CompositeOrdering.apply(null,arguments)
-						: arguments[0] instanceof Array ? CompositeOrdering(arguments[0])
+				return    arguments.length > 1 ? Function.ordering.apply(null,arguments)
+						: arguments[0] instanceof Array ? Function.ordering.apply(null,arguments[0])
 						: arguments.length === 0 ? ValueOrdering
 						: arguments[0];
 			},
@@ -730,17 +730,6 @@ define(['jmodel/opal'], function (opal) {
 				return -ordering(a,b);
 			};
 		}
-	
-		// Tests: none
-		function CompositeOrdering () {
-		    var orderings = Set.fromArguments(arguments);
-		    return function (a,b) {
-		        return orderings.reduce(function (acc,ordering) {
-		           return acc || ordering(a,b);
-		        },0);
-		    };
-		}
-	
 
 		_.extend({
 			FunctionOrdering: 	FunctionOrdering,
@@ -750,9 +739,7 @@ define(['jmodel/opal'], function (opal) {
 			PredicateOrdering: 	PredicateOrdering,
 			score: 				PredicateOrdering,
 			DescendingOrdering: DescendingOrdering,
-			desc: 				DescendingOrdering,
-			CompositeOrdering: 	CompositeOrdering,
-			composite: 			CompositeOrdering
+			desc: 				DescendingOrdering
 		});
 	
 	
