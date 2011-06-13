@@ -92,8 +92,7 @@ var jModel = function () {
 		none: 		NoneSetPredicate,
 		
 		/* Orderings */
-		
-		func: 		FunctionOrdering,
+
 		score: 		PredicateOrdering
 		
 	});
