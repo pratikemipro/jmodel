@@ -703,17 +703,6 @@ define(['jmodel/opal'], function (opal) {
 		var makeOrdering = (new Set()).ordering;
 
 		// Tests: none
-		function FunctionOrdering (fn) {
-			return function (a,b) {
-				var fna = fn(a),
-					fnb = fn(b);
-				return    fna < fnb ? -1
-						: fna > fnb ? 1
-						: 0;
-			};
-		}
-
-		// Tests: none
 		function PredicateOrdering () {
 			var predicates = Set.fromArguments(arguments);
 			return function (obj) {
@@ -722,8 +711,6 @@ define(['jmodel/opal'], function (opal) {
 		}
 
 		_.extend({
-			FunctionOrdering: 	FunctionOrdering,
-			func: 				FunctionOrdering,
 			PredicateOrdering: 	PredicateOrdering,
 			score: 				PredicateOrdering
 		});
