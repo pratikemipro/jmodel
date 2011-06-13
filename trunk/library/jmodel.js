@@ -95,8 +95,7 @@ var jModel = function () {
 		
 		func: 		FunctionOrdering,
 		value: 		ValueOrdering,
-		score: 		PredicateOrdering,
-		desc: 		DescendingOrdering
+		score: 		PredicateOrdering
 		
 	});
 	
