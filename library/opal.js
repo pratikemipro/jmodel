@@ -100,6 +100,7 @@ define(function (a,b,c,undefined) {
 	
 	assert(Function.identity === undefined, '"identity" already defined');
 	assert(Function.constant === undefined, '"constant" already defined');
+	assert(Function.map === undefined,      '"map" already defined');
 	
 	extend({
 		
@@ -113,16 +114,26 @@ define(function (a,b,c,undefined) {
 		// Docs: full
 		constant: function (constant) {
 			return function () { return constant; };
+		},
+		
+		// Tests: none
+		// Docs: none
+		map: function (mapping) {
+			return function (key) {
+				return mapping[key];
+			};
 		}
 		
 	}, Function);
 
 	Function.identity.displayName = 'identity';
 	Function.constant.displayName = 'constant';
+	Function.map.displayName	  = 'map';
 	
 	opal.extend({
 		identity: Function.identity,
-		constant: Function.constant
+		constant: Function.constant,
+		map: 	  Function.map
 	});
 
 	//
@@ -307,6 +318,25 @@ define(function (a,b,c,undefined) {
 	Function.prototype.curry.displayName = 'curry';
 	Function.prototype.memo.displayName  = 'memo';
 	Function.prototype.delay.displayName = 'delay';
+	
+	
+	//
+	// Mapping methods
+	//
+	
+	assert(Function.prototype.map === undefined, '"map" method already defined');
+	
+	extend({
+		
+		// Tests: none
+		// Docs: none
+		map: function (mapping) {
+			return this.then(Function.map(mapping));
+		}
+		
+	}, Function.prototype);
+	
+	Function.prototype.map.displayName = 'map';
 	
 	
 	//
@@ -587,8 +617,7 @@ define(function (a,b,c,undefined) {
 	
 	Function.prototype.asc.displayName = 'asc';
 	
-	
-	
+
 	
 	// ------------------------------------------------------------------------
 	//													     		     Object
