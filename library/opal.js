@@ -24,6 +24,16 @@ define(function (a,b,c,undefined) {
 	//
 	// Utility functions
 	//
+	
+	// Tests: none
+	// Docs: none
+	Object.extend = Object.extend || function (target,source) {
+		for ( var i in source ) {
+			target[i] = source[i];
+		}
+		return target;
+	};
+	
 
 	// Tests: full
 	// Docs: full
@@ -70,7 +80,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.argument === undefined, '"argument" already defined');
 	assert(Function.map === undefined,      '"map" already defined');
 	
-	extend({
+	Object.extend(Function, {
 		
 		// Tests: full
 		// Docs: full
@@ -100,7 +110,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Function);
+	});
 
 	Function.identity.displayName = 'identity';
 	Function.constant.displayName = 'constant';
@@ -141,7 +151,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.pipe === undefined, '"pipe" already defined');
 	assert(Function.compose === undefined, '"compose" already defined');
 
-	extend({
+	Object.extend(Function, {
 
 	    // Tests: full
 		// Docs: partial
@@ -160,7 +170,7 @@ define(function (a,b,c,undefined) {
 		}
 		
 		
-	}, Function);
+	});
 	
 	Function.pipe.displayName    = 'pipe';
 	Function.compose.displayName = 'compose';
@@ -179,7 +189,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.and === undefined, '"and" already defined');
 	assert(Function.not === undefined, '"not" already defined');
 	
-	extend({
+	Object.extend(Function, {
 		
 		// Tests: full
 		// Docs: none
@@ -203,7 +213,7 @@ define(function (a,b,c,undefined) {
 			return typeof predicate === 'function' ? predicate.not() : !predicate;
 		}
 		
-	}, Function);
+	});
 
 	Function.or.displayName  = 'or';
 	Function.and.displayName = 'and';
@@ -236,7 +246,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.as === undefined, '"as" method already defined');
 	assert(Function.prototype.extend === undefined, '"as" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: full
 		// Docs: none
@@ -251,7 +261,7 @@ define(function (a,b,c,undefined) {
 			return extend(properties,this);
 		}
 		
-	}, Function.prototype);
+	});
 		
 	Function.prototype.as.displayName     = 'as';
 	Function.prototype.extend.displayName = 'extend';
@@ -264,7 +274,7 @@ define(function (a,b,c,undefined) {
 	// Protect existing methods with assertions
 	assert(Function.prototype.memo === undefined, '"delay" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: partial
 		// Docs: none
@@ -309,7 +319,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.bind.displayName  = 'bind';
 	Function.prototype.curry.displayName = 'curry';
@@ -323,7 +333,7 @@ define(function (a,b,c,undefined) {
 	
 	assert(Function.prototype.map === undefined, '"map" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: none
 		// Docs: none
@@ -331,7 +341,7 @@ define(function (a,b,c,undefined) {
 			return this.then(Function.map(mapping));
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.map.displayName = 'map';
 	
@@ -344,7 +354,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.then === undefined, '"then" method already defined');
 	assert(Function.prototype.but === undefined, '"but" method already defined');
 
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: full
 		// Docs: none
@@ -365,7 +375,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.then.displayName = 'then';
 	Function.prototype.but.displayName  = 'but';
@@ -379,7 +389,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.pre === undefined, '"pre" method already defined');
 	assert(Function.prototype.post === undefined, '"post" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: full
 		// Docs: none
@@ -398,7 +408,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 	
-	}, Function.prototype);
+	});
 	
 	Function.prototype.pre.displayName  = 'pre';
 	Function.prototype.post.displayName = 'post';
@@ -412,7 +422,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.require === undefined, '"require" method already defined');
 	assert(Function.prototype.ensure === undefined, '"ensure" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: none
 		// Docs: none
@@ -436,7 +446,7 @@ define(function (a,b,c,undefined) {
 			});
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.require.displayName = 'require';
 	Function.prototype.ensure.displayName  = 'ensure';
@@ -451,7 +461,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.or === undefined, '"or" method already defined');
 	assert(Function.prototype.not === undefined, '"not" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: full
 		// Docs: none
@@ -480,7 +490,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.and.displayName = 'and';
 	Function.prototype.or.displayName  = 'or';
@@ -505,7 +515,7 @@ define(function (a,b,c,undefined) {
 	assert(Function.prototype.isa === undefined, '"isa" method already defined');
 	assert(Function.prototype.hastype === undefined, '"hastype" method already defined');
 
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: full
 		// Docs: none
@@ -577,7 +587,7 @@ define(function (a,b,c,undefined) {
 			return this.then(is_of_type(type));
 		}
 		
-	}, Function.prototype);
+	});
 
 	Function.prototype.is.displayName		= 'is';
 	Function.prototype.eq.displayName		= 'eq';
@@ -600,7 +610,7 @@ define(function (a,b,c,undefined) {
 	// Protect existing methods with assertions
 	assert(Function.prototype.asc === undefined, '"asc" method already defined');
 	
-	extend({
+	Object.extend(Function.prototype, {
 		
 		// Tests: none
 		// Docs: none
@@ -621,7 +631,7 @@ define(function (a,b,c,undefined) {
 			return this.asc().then(function (x) { return -x; } );
 		}
 		
-	}, Function.prototype);
+	});
 	
 	Function.prototype.asc.displayName = 'asc';
 	
@@ -639,7 +649,7 @@ define(function (a,b,c,undefined) {
 	assert(Object.construct === undefined, '"construct" method already defined');
 	assert(Object.ensure === undefined || Object.ensure === Function.prototype.ensure, '"ensure" method already defined');
 	
-	extend({
+	Object.extend(Object, {
 		
 		// Tests: full
 		// Docs: full
@@ -673,7 +683,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Object);
+	});
 	
 	Object.construct.displayName = 'construct';
 	Object.ensure.displayName	 = 'ensure';
@@ -692,7 +702,7 @@ define(function (a,b,c,undefined) {
 	// Protect existing methods with assertions
 	assert(Object.project === undefined, '"project" method already defined');
 	
-	extend({
+	Object.extend(Object, {
 		
 		// Tests: full
 		// Docs: none
@@ -708,7 +718,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Object);
+	});
 	
 	Object.project.displayName	 = 'project';
 	
@@ -730,7 +740,7 @@ define(function (a,b,c,undefined) {
 	assert(Object.path === undefined, '"path" method already defined');
 	assert(Object.transform === undefined, '"transform" method already defined');
 	
-	extend({
+	Object.extend(Object, {
 		
 		// Tests: none
 		// Docs: none
@@ -792,7 +802,7 @@ define(function (a,b,c,undefined) {
 			};
 		}
 		
-	}, Object);
+	});
 	
 	Object.get.displayName  	 = 'get';
 	Object.set.displayName  	 = 'set';
