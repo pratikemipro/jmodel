@@ -704,6 +704,25 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Object, {
 		
+		// Tests: none
+		// Docs: none
+		copy: function (obj) {
+			return Object.extend({},obj);
+		},
+		
+		// Tests: none
+		// Docs: none
+		remove: function () {
+			var fields = _slice.call(arguments);
+			return function (obj) {
+				var removed = Object.copy(obj);
+				for (var i=0; i<fields.length; i++) {
+					delete removed[fields[i]];
+				}
+				return removed;
+			};
+		},
+		
 		// Tests: full
 		// Docs: none
 		project: function () {
@@ -733,9 +752,15 @@ define(function (a,b,c,undefined) {
 		// Tests: none
 		// Docs: none
 		union: function (x) {
-			return    arguments.length === 1 ? Object.extend({},x)
+			return    arguments.length === 1 ? Object.copy(x)
 					: arguments.length === 0 ? undefined
 					: Object.extend(x, Object.union.apply(null,_slice.call(arguments,1)));
+		},
+		
+		// Tests: none
+		// Docs: none
+		difference: function (x,y) {
+			return Object.remove.apply(null,Object.keys(y))(x);
 		},
 		
 		// Tests: none
@@ -770,6 +795,16 @@ define(function (a,b,c,undefined) {
 	assert(Object.transform === undefined, '"transform" method already defined');
 	
 	Object.extend(Object, {
+		
+		// Tests: none
+		// Docs: none
+		keys: Object.keys || function (object) {
+			var keys = [];
+			for( var i in object ) {
+				keys.push(i);
+			}
+			return keys;
+		},
 		
 		// Tests: none
 		// Docs: none
