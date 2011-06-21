@@ -31,9 +31,6 @@ define(function (a,b,c,undefined) {
 		return typeof object;
 	}
 
-	function _get (property,object) { return object[property]; }
-	function _set (property,value,object) { if ( object[property] !== undefined ) { object[property] = value; return true; } return false; }
-
 	// Tests: full
 	// Docs: none
 	function arg (n) {
@@ -723,6 +720,8 @@ define(function (a,b,c,undefined) {
 	//
 	
 	// Protect existing methods with assertions
+	assert(Object.get === undefined, '"get" method already defined');
+	assert(Object.set === undefined, '"set" method already defined');
 	assert(Object.property === undefined, '"property" method already defined');
 	assert(Object.method === undefined, '"method" method already defined');
 	assert(Object.resolve === undefined, '"resolve" method already defined');
@@ -731,10 +730,26 @@ define(function (a,b,c,undefined) {
 	
 	extend({
 		
+		// Tests: none
+		// Docs: none
+		get: function (property,object) {
+			return object[property];
+		},
+		
+		// Tests: none
+		// Docs: none
+		set: function (property,value,object) {
+			if ( object[property] !== undefined ) {
+				object[property] = value;
+				return true;
+			}
+			return false;
+		},
+		
 		// Tests: full
 		// Docs: full
 		property: function (property,value) {
-			return value === undefined ? _get.curry(property) : _set.curry(property,value);
+			return value === undefined ? Object.get.curry(property) : Object.set.curry(property,value);
 		},
 		
 		// Tests: full
@@ -771,18 +786,22 @@ define(function (a,b,c,undefined) {
 			var transformation = typeof extractor === 'function' ? extractor.then(transformer) : Object.resolve(name).then(transformer);
 			return function (object) {
 				var value = transformation(object);
-				return typeof object[name] === 'function' ? object[name].call(object,value) : _set(name,value,object);
+				return typeof object[name] === 'function' ? object[name].call(object,value) : Object.set(name,value,object);
 			};
 		}
 		
 	}, Object);
 	
+	Object.get.displayName  	 = 'get';
+	Object.set.displayName  	 = 'set';
 	Object.property.displayName  = 'property';
 	Object.method.displayName    = 'method';
 	Object.resolve.displayName	 = 'resolve';
 	Object.transform.displayName = 'transform';
 	
 	opal.extend({
+		get: 	   Object.get,
+		set: 	   Object.set,
 		property:  Object.property,
 		method:    Object.method,
 		resolve:   Object.resolve,
