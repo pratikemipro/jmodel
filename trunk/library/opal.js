@@ -268,12 +268,13 @@ define(function (a,b,c,undefined) {
 	
 	extend({
 		
-		// Tests: full
+		// Tests: partial
 		// Docs: none
 		bind: Function.prototype.bind || function (context) {
-			var fn = this;
+			var args = _slice.call(arguments,1),
+				fn	 = this;
 			return function () {
-				return fn.apply(context,arguments);
+				return fn.apply(context,args.concat(_slice.call(arguments)));
 			};
 		},
 		
