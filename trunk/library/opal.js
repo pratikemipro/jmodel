@@ -716,6 +716,18 @@ define(function (a,b,c,undefined) {
 				}
 				return projection;
 			};
+		},
+		
+		// Tests: none
+		// Docs: none
+		rename: function (renaming) {
+			return function (object) {
+				var renamed = {};
+				for (var i in object) {
+					renamed[ renaming[i] || i ] = object[i];
+				}
+				return renamed;
+			};
 		}
 		
 	});
