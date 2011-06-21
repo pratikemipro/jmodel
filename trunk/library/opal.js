@@ -181,7 +181,7 @@ define(function (a,b,c,undefined) {
 	});
 	
 	//
-	// Logical connectives
+	// Logical functions
 	//
 	
 	// Protect existing methods with assertions
