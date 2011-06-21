@@ -31,8 +31,6 @@ define(function (a,b,c,undefined) {
 		return typeof object;
 	}
 
-	function _not (x) { return !x; }
-
 	function _get (property,object) { return object[property]; }
 	function _set (property,value,object) { if ( object[property] !== undefined ) { object[property] = value; return true; } return false; }
 
@@ -203,7 +201,7 @@ define(function (a,b,c,undefined) {
 		// Tests: full
 		// Docs: none
 		not: function (predicate) {
-			return typeof predicate === 'function' ? predicate.then(_not) : !predicate;
+			return typeof predicate === 'function' ? predicate.not() : !predicate;
 		}
 		
 	}, Function);
@@ -970,7 +968,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	// Docs: none
 	function valid (constructor) {
-		return	  constructor === Number ? isNaN.then(_not)
+		return	  constructor === Number ? isNaN.not()
 				: constructor === Date ? function (date) { return date.toString() !== 'Invalid Date'; }
 				: isa(constructor);
 	}
