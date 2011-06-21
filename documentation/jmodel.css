@@ -85,11 +85,11 @@ ul.unbounded li:last-child::after {
     content: '...';
 }
 
-span.keyword {
+.keyword {
 	font-weight: normal;
 }
 
-span.multiple {
+.multiple {
 	text-decoration: underline;
 }
 

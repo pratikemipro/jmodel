@@ -31,24 +31,6 @@ define(function (a,b,c,undefined) {
 		return typeof object;
 	}
 
-	// Tests: full
-	// Docs: none
-	function arg (n) {
-		return function _arg () {
-			return arguments[n];
-		};
-	};
-
-	var first  = arg(0),
-		second = arg(1),
-		third  = arg(2),
-		_0 = arg(0),
-		_1 = arg(1),
-		_2 = arg(2),
-		_3 = arg(3),
-		_4 = arg(4),
-		_5 = arg(5);
-
     // Tests: full
 	// Docs: none
 	function extend (object,target) {
@@ -69,16 +51,6 @@ define(function (a,b,c,undefined) {
 	
 	opal.extend({
 		type: 		type,
-		arg: 		arg,
-		first: 		first,
-		second: 	second,
-		third: 		third,
-		_0: 		_0,
-		_1: 		_1,
-		_2: 		_2,
-		_3: 		_3,
-		_4: 		_4,
-		_5: 		_5,
 		assert:		assert,
 		delegateTo: delegateTo,
 		copy: 		copy
@@ -95,6 +67,7 @@ define(function (a,b,c,undefined) {
 	
 	assert(Function.identity === undefined, '"identity" already defined');
 	assert(Function.constant === undefined, '"constant" already defined');
+	assert(Function.argument === undefined, '"argument" already defined');
 	assert(Function.map === undefined,      '"map" already defined');
 	
 	extend({
@@ -113,6 +86,14 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		argument: function (n) {
+			return function () {
+				return arguments[n];
+			};
+		},
+		
+		// Tests: none
+		// Docs: none
 		map: function (mapping) {
 			return function (key) {
 				return mapping[key];
@@ -123,12 +104,33 @@ define(function (a,b,c,undefined) {
 
 	Function.identity.displayName = 'identity';
 	Function.constant.displayName = 'constant';
+	Function.argument.displayName = 'argument';
 	Function.map.displayName	  = 'map';
 	
+	var first	= Function.argument(0),
+		second	= Function.argument(1),
+		third	= Function.argument(2),
+		_0		= Function.argument(0),
+		_1		= Function.argument(1),
+		_2		= Function.argument(2),
+		_3		= Function.argument(3),
+		_4		= Function.argument(4),
+		_5		= Function.argument(5);
+	
 	opal.extend({
-		identity: Function.identity,
-		constant: Function.constant,
-		map: 	  Function.map
+		identity: 	Function.identity,
+		constant: 	Function.constant,
+		argument: 	Function.argument,
+		first: 		first,
+		second: 	second,
+		third: 		third,
+		_0: 		_0,
+		_1: 		_1,
+		_2: 		_2,
+		_3: 		_3,
+		_4: 		_4,
+		_5: 		_5,
+		map: 	  	Function.map
 	});
 
 	//

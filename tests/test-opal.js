@@ -22,18 +22,6 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
-	test('arg', function () {
-	
-		equals( opal.arg(0).call(this,'red','green','blue'), 'red', 'arg(0) works');
-		equals( opal.arg(1).call(this,'red','green','blue'), 'green', 'arg(1) works');
-		equals( opal.arg(2).call(this,'red','green','blue'), 'blue', 'arg(2) works');
-		equals( opal.arg(4).call(this,'red','green','blue'), undefined, 'arg(n) returns undefined if beyond bounds');
-		
-		equals( opal.arg(2).hastype('string').call(this,'red','green','blue'), true, 'arg(n).hastype returns false if type does not match' );
-		equals( opal.arg(2).hastype('number').call(this,'red','green','blue'), false, 'arg(n).hastype returns false if type does not match' );
-		
-	});
-	
 	test('extend', function () {
 		
 		var fred = {forename:'fred'},
@@ -68,6 +56,18 @@ define(['../library/opal.js'], function (opal) {
 	//
 	
 	module('Function');
+	
+	test('argument', function () {
+	
+		equals( Function.argument(0).call(this,'red','green','blue'), 'red', 'Function.argument(0) works');
+		equals( Function.argument(1).call(this,'red','green','blue'), 'green', 'Function.argument(1) works');
+		equals( Function.argument(2).call(this,'red','green','blue'), 'blue', 'Function.argument(2) works');
+		equals( Function.argument(4).call(this,'red','green','blue'), undefined, 'Function.argument(4) returns undefined if beyond bounds');
+		
+		equals( Function.argument(2).hastype('string').call(this,'red','green','blue'), true, 'Function.argument(4).hastype returns false if type does not match' );
+		equals( Function.argument(2).hastype('number').call(this,'red','green','blue'), false, 'Function.argument(4).hastype returns false if type does not match' );
+		
+	});
 	
 	test('identity', function () {
 	
