@@ -262,9 +262,7 @@ define(function (a,b,c,undefined) {
 	//
 	
 	// Protect existing methods with assertions
-	assert(Function.prototype.curry === undefined, '"curry" method already defined');
 	assert(Function.prototype.memo === undefined, '"delay" method already defined');
-	assert(Function.prototype.delay === undefined, '"delay" method already defined');
 	
 	extend({
 		
@@ -280,7 +278,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
-		curry: function () {
+		curry: Function.prototype.curry || function () {
 			var args = _slice.call(arguments),
 				fn   = this;
 			return function () {
@@ -303,10 +301,11 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
-		delay: function (duration) {
-			var fn = this;
+		delay: Function.prototype.delay || function (duration) {
+			var fn	 = this,
+				args = _slice.call(arguments,1);
 			return function () {
-				return setTimeout(fn.curry.apply(fn,arguments),duration || 1);
+				return setTimeout(fn.curry.apply(fn,args.concat(_slice.call(arguments))),duration || 1);
 			};
 		}
 		
