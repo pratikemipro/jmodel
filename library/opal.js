@@ -731,7 +731,9 @@ define(function (a,b,c,undefined) {
 				var projection = {};
 				for (var i=0; i<fields.length; i++) {
 					var field = fields[i];
-					projection[field] = object[field];
+					if ( object[field] ) {
+						projection[field] = object[field];
+					}
 				}
 				return projection;
 			};
@@ -755,6 +757,14 @@ define(function (a,b,c,undefined) {
 			return    arguments.length === 1 ? Object.copy(x)
 					: arguments.length === 0 ? undefined
 					: Object.extend(x, Object.union.apply(null,_slice.call(arguments,1)));
+		},
+		
+		// Test: none
+		// Docs: none
+		intersection: function (x,y) {
+			return    arguments.length === 1 ? Object.copy(x)
+					: arguments.length === 0 ? undefined
+					: Object.project.apply(null,Object.keys(Object.intersection.apply(null,_slice.call(arguments,1))))(x);
 		},
 		
 		// Tests: none
