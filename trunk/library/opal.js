@@ -728,7 +728,24 @@ define(function (a,b,c,undefined) {
 				}
 				return renamed;
 			};
+		},
+		
+		// Tests: none
+		// Docs: none
+		union: function (x) {
+			return    arguments.length === 1 ? Object.extend({},x)
+					: arguments.length === 0 ? undefined
+					: Object.extend(x, Object.union.apply(null,_slice.call(arguments,1)));
+		},
+		
+		// Tests: none
+		// Docs: none
+		join: function (predicate) {
+			return function () {
+				return predicate.apply(null,arguments) ? Object.union.apply(null,arguments) : undefined;
+			};
 		}
+		
 		
 	});
 	
