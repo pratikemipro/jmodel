@@ -446,12 +446,13 @@ define(function (a,b,c,undefined) {
 	
 	
 	//
-	// Logical connectives
+	// Logical methods
 	//
 	
 	// Protect existing methods with assertions
 	assert(Function.prototype.and === undefined, '"and" method already defined');
 	assert(Function.prototype.or === undefined, '"or" method already defined');
+	assert(Function.prototype.not === undefined, '"not" method already defined');
 	
 	extend({
 		
@@ -471,12 +472,22 @@ define(function (a,b,c,undefined) {
 			return function () {
 				return fn1.apply(this,arguments) || fn2.apply(this,arguments);
 			};
+		},
+		
+		// Tests: none
+		// Docs: none
+		not: function () {
+			var fn = this;
+			return function () {
+				return !fn.apply(this,arguments);
+			};
 		}
 		
 	}, Function.prototype);
 	
 	Function.prototype.and.displayName = 'and';
 	Function.prototype.or.displayName  = 'or';
+	Function.prototype.not.displayName  = 'or';
 	
 
 	//
