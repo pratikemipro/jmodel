@@ -677,7 +677,7 @@ define(function (a,b,c,undefined) {
 		// Tests: full
 		// Docs: none
 		ensure: function (constructor) {
-			var _construct = Object.construct(constructor);
+			var _construct = Object.construct.apply(null,arguments);
 			return function (object) {
 				return object instanceof constructor ? object : _construct.apply(null,arguments);
 			};
