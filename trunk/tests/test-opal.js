@@ -396,6 +396,8 @@ define(['../library/opal.js'], function (opal) {
 		equals( Object.ensure(Person)(fred), fred, 'Acts as identity when object is already of type');
 		equals( Object.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type');
 		
+		equals( Object.ensure(Person,'fred')(28).name, 'fred', 'Allows passing at definition time' );
+		
 	});
 	
 	test('project', function () {
