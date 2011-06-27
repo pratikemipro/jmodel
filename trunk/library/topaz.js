@@ -136,7 +136,10 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			constructor: ObservableObject,
 
 			instantiateField: function (field,value) {
-				value = typeof value === 'function' ? value : scalar({defaultValue:value});
+
+				value =	  typeof value === 'function' && value.decorator ? value
+						: typeof value === 'function' ? scalar({type:value})
+						: scalar({defaultValue:value});
 				this.fields.push(value.call(this,this,field));
 			},
 
@@ -185,10 +188,13 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		//
 
 		function scalar (options) {
-			options = typeof options === 'object' ? options : {defaultValue:options};
+			options = typeof options === 'object' ? options : { defaultValue:options };
+			options.type = options.type || options.defaultValue.constructor;
 			return function (object,field) {
 				return new ScalarField(object,field,options);
-			};
+			}.extend({
+				decorator: true
+			});
 		}
 
 		topaz.scalar = scalar;
@@ -196,6 +202,14 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		function ScalarField (object,field,options) {
 
 			if ( object && field && options ) {
+				
+				if ( ! options.type ) {
+					console.log(field);
+					console.log(options);
+					console.log(options.type);
+				}
+				
+				this.ensure		= Object.ensure(options.type);
 
 				this.object		= object;
 				this.field		= field;
@@ -235,9 +249,9 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 			persist: function () {
 
-				var fromStore = this.object.options.persist[this.object.options.prefix+'_'+this.field] || undefined;
-				if ( fromStore ) {
-					this.set(fromStore);
+				var value = this.fromStore();
+				if ( value ) {
+					this.set(value);
 				}
 
 				this.event
@@ -252,17 +266,22 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 					});
 
 			},
+			
+			fromStore: function () {
+				return this.object.options.persist[this.object.options.prefix+'_'+this.field] || undefined;
+			},
 
 			get: function () {
 				return this.value;
 			},
 
 			set: function (value) {
-
+				
 				var oldValue = this.value;
-				value = typeof value === 'function' ? value.call(this,oldValue) : value;
+				
+				value = typeof value === 'function' ? value.call(this,oldValue) : this.ensure.apply(null,arguments);
 
-				if ( this.options.repeat || ( typeof value !== 'undefined' && !this.equals(value,oldValue) ) ) {
+				if ( this.options.repeat || this.object.options.repeat || ( typeof value !== 'undefined' && !this.equals(value,oldValue) ) ) {
 
 					if ( this.constraint(value) ) {
 
@@ -294,121 +313,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		};
 
 		topaz.ScalarField = ScalarField;
-
-		//
-		// BooleanField
-		//
-
-		function boolean (options) {
-			options = typeof options === 'object' ? options : {defaultValue:options};
-			return function (object,field) {
-				return new BooleanField(object,field,options);
-			};
-		}
-
-		topaz.boolean = boolean;
-
-		function BooleanField (object,field,options) {
-			ScalarField.call(this,object,field,options);
-		}
-
-		BooleanField.prototype = extend({
-
-			set: function (value) {
-
-				value =   typeof value === 'string' && value.toLowerCase() === 'true'  ? true
-						: typeof value === 'string' && value.toLowerCase() === 'false' ? false
-						: Boolean(value);
-
-				ScalarField.prototype.set.call(this,value);
-
-			}
-
-		}, new ScalarField() );
-
-		topaz.BooleanField = BooleanField;
-
-		//
-		// IntegerField
-		//
-
-		function integer (options) {
-			options = typeof options === 'object' ? options : {defaultValue:options};
-			return function (object,field) {
-				return new IntegerField(object,field,options);
-			};
-		}
-
-		topaz.integer = integer;
-
-		function IntegerField (object,field,options) {
-			ScalarField.call(this,object,field,options);
-		}
-
-		IntegerField.prototype = extend({
-
-			set: function (value) {
-				value = typeof value === 'string' ? parseInt(value,10) : value;
-				ScalarField.prototype.set.call(this,value);
-			}
-
-		}, new ScalarField() );
-
-		topaz.IntegerField = IntegerField;
-
-		//
-		// StringField
-		//
-
-		function string (options) {
-			options = typeof options === 'object' ? options : {defaultValue:options};
-			return function (object,field) {
-				return new StringField(object,field,options);
-			};
-		}
-
-		topaz.string = string;
-
-		function StringField (object,field,options) {
-			ScalarField.call(this,object,field,options);
-		}
-
-		StringField.prototype = extend({
-
-			set: function (value) {
-				ScalarField.prototype.set.call(this,String(value));
-			}
-
-		}, new ScalarField() );
-
-		topaz.StringField = StringField;
-
-		//
-		// DateField
-		//
-
-		function date (options) {
-			options = typeof options === 'object' ? options : {defaultValue:options};
-			return function (object,field) {
-				return new DateField(object,field,options);
-			};
-		}
-
-		topaz.date = date;
-
-		function DateField (object,field,options) {
-			ScalarField.call(this,object,field,options);
-		}
-
-		DateField.prototype = extend({
-
-			set: function (value) {
-				ScalarField.prototype.set.call(this,typeof value === 'date' ? value : new Date(value))
-			}
-
-		}, new ScalarField() );
-
-		topaz.DateField = DateField;
+		
 
 		//
 		// ObjectField
@@ -418,7 +323,9 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			options = typeof options === 'object' ? options : {defaultValue:options};
 			return function (object,field) {
 				return new ObjectField(object,field,options);
-			};
+			}.extend({
+				decorator: true
+			});
 		}
 
 		topaz.object = object;
@@ -451,7 +358,9 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		function many (type) {
 			return function (object,field) {
 				return new CollectionField(object,field,type);
-			};
+			}.extend({
+				decorator: true
+			});
 		}
 
 		topaz.many = many;
