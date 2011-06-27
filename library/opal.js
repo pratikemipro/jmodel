@@ -657,6 +657,7 @@ define(function (a,b,c,undefined) {
 			var args1 = _slice.call(arguments,1);
 			return 	  constructor === String ? String
 					: constructor === Number ? Number
+					: constructor === Boolean ? Boolean
 					: function () {
 						var args = args1.concat(_slice.call(arguments));
 						// Need this ugliness to work correctly with Date and other constructors that count arguments.
@@ -678,9 +679,10 @@ define(function (a,b,c,undefined) {
 		// Docs: none
 		ensure: function (constructor) {
 			var _construct = Object.construct.apply(null,arguments);
-			return function (object) {
-				return object instanceof constructor ? object : _construct.apply(null,arguments);
-			};
+			return    constructor === String  ? function (value) { return typeof value === 'string' ? value : String(value); }
+					: constructor === Number  ? function (value) { return typeof value === 'number' ? value : Number(value); }
+					: constructor === Boolean ? function (value) { return typeof value === 'boolean' ? value : Boolean(value); }
+					: function (object) { return object instanceof constructor ? object : _construct.apply(null,arguments); };
 		}
 		
 	});
