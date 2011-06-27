@@ -102,13 +102,21 @@ define(['jmodel/opal'], function (opal) {
 			Map.call(this,rep,combine);
 		}
 
-		TypedMap.prototype = new Map();
+		TypedMap.prototype = Object.extend(new Map(), {
+			
+			// Tests: none
+			add2: function (key,value) {
+				return Map.prototype.add2.call(this,key,this.ensure.apply(this,_slice.call(arguments,1)));
+			},
+			
+			// Tests: none
+			create: function (key,value) {
+				Map.prototype.add2.call(this,key,this.ensure.apply(this,_slice.call(arguments,1)));
+				return this.get(key);
+			}
+			
+		});
 
-		// Tests: none
-		TypedMap.prototype.add2 = function (key,value) {
-			return Map.prototype.add2.call(this,key,this.ensure.apply(this,_slice.call(arguments,1)));
-		};
-		
 		
 		_.extend({
 			Map: Map,
