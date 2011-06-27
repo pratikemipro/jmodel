@@ -714,6 +714,26 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		equal: function (a,b) {
+			if ( a === undefined || b === undefined ) {
+				return false;
+			}
+			var equal = true;
+			for ( var prop in a ) {
+				if ( a.hasOwnProperty(prop) ) {
+					equal = equal && ( a[prop] === b[prop] );
+				}
+			}
+			for ( var prop in b ) {
+				if ( b.hasOwnProperty(prop) ) {
+					equal = equal && ( a[prop] === b[prop] );
+				}
+			}
+			return equal;
+		},
+		
+		// Tests: none
+		// Docs: none
 		remove: function () {
 			var fields = _slice.call(arguments);
 			return function (obj) {
