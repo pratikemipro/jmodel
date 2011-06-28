@@ -1276,9 +1276,9 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	// Docs: none
 	function Nullable (constructor) {
-		var ensure = Object.ensure(constructor);
+		var construct = Object.construct(constructor);
 		return function (x) {
-			return arguments.length === 0 || ( arguments.length === 1 && x === null ) ? null : ensure.apply(null,arguments);
+			return arguments.length === 0 || ( arguments.length === 1 && x === null ) ? null : construct.apply(null,arguments);
 		}.extend({
 			nullable: true
 		});
