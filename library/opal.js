@@ -651,13 +651,14 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Object, {
 		
-		// Tests: full
+		// Tests: partial (add testing for Nullable)
 		// Docs: full
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
 			return 	  constructor === String ? String
 					: constructor === Number ? Number
 					: constructor === Boolean ? Boolean
+					: constructor && constructor.nullable ? constructor
 					: function () {
 						var args = args1.concat(_slice.call(arguments));
 						// Need this ugliness to work correctly with Date and other constructors that count arguments.
@@ -675,13 +676,14 @@ define(function (a,b,c,undefined) {
 					};
 		},
 		
-		// Tests: full
+		// Tests: partial (add testing for Nullable)
 		// Docs: none
 		ensure: function (constructor) {
 			var _construct = Object.construct.apply(null,arguments);
 			return    constructor === String  ? function (value) { return typeof value === 'string' ? value : String(value); }
 					: constructor === Number  ? function (value) { return typeof value === 'number' ? value : Number(value); }
 					: constructor === Boolean ? function (value) { return typeof value === 'boolean' ? value : Boolean(value); }
+					: constructor && constructor.nullable ? function (value) { return value === null || value === undefined ? null : _construct.apply(null,arguments) }
 					: function (object) { return object instanceof constructor ? object : _construct.apply(null,arguments); };
 		}
 		
@@ -1266,6 +1268,25 @@ define(function (a,b,c,undefined) {
 	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
 
 	opal.copy = copy;
+	
+	// ------------------------------------------------------------------------
+	// 														 		   Nullable
+	// ------------------------------------------------------------------------
+
+	// Tests: none
+	// Docs: none
+	function Nullable (constructor) {
+		var ensure = Object.ensure(constructor);
+		return function (x) {
+			return arguments.length === 0 || ( arguments.length === 1 && x === null ) ? null : ensure.apply(null,arguments);
+		}.extend({
+			nullable: true
+		});
+	}
+	
+	opal.extend({
+		Nullable: Nullable
+	});
 
 	return opal;
 
