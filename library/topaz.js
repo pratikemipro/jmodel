@@ -203,12 +203,6 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 			if ( object && field && options ) {
 				
-				if ( ! options.type ) {
-					console.log(field);
-					console.log(options);
-					console.log(options.type);
-				}
-				
 				this.ensure		= Object.ensure(options.type);
 
 				this.object		= object;
@@ -221,7 +215,8 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 				this.change 	= this.object.event('change');
 
 				this.instantiate();
-				this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : null);
+
+				this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : undefined);
 
 				if ( this.object.options.persist ) {
 					this.persist();	
@@ -281,7 +276,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 				
 				value = typeof value === 'function' ? value.call(this,oldValue) : this.ensure.apply(null,arguments);
 
-				if ( this.options.repeat || this.object.options.repeat || ( typeof value !== 'undefined' && !this.equals(value,oldValue) ) ) {
+				if ( this.options.repeat || this.object.options.repeat || ( typeof value !== 'undefined' && !this.equal(value,oldValue) ) ) {
 
 					if ( this.constraint(value) ) {
 
@@ -306,7 +301,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 			},
 
-			equals: function (a,b) {
+			equal: function (a,b) {
 				return a === b;
 			}
 
@@ -336,15 +331,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		ObjectField.prototype = extend({
 
-			equals: function (a,b) {
-				var equal = true;
-				for ( var prop in a ) {
-					if ( a.hasOwnProperty(prop) ) {
-						equal = equal && ( typeof b !== 'undefined' ) && ( a[prop] === b[prop] );
-					}
-				}
-				return equal;
-			}
+			equal: Object.equal
 
 		}, new ScalarField() );
 
