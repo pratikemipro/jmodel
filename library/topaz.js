@@ -155,6 +155,11 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 							}
 						}
 						else { // Field
+							if ( !this[property] ) {
+								console.log(arguments);
+								console.log(this);
+								console.log(property);
+							}
 							this[property].call(this,properties[property]);
 						}
 					}	
