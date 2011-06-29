@@ -92,6 +92,17 @@ define(['jmodel/opal'], function (opal) {
 			remove: function (key) {
 				delete this.__rep__[key];
 				return this;
+			},
+			
+			// Tests: none
+			each: function () {
+				var callback = pipe.apply(null,arguments);
+				for ( var i in this.__rep__ ) {
+					if ( this.__rep__.hasOwnProperty(i) ) {
+						callback.call(this,i,this.__rep__[i]);
+					}
+				}
+				return this;
 			}
 
 		};
