@@ -103,6 +103,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			};
 			
 			entityType.displayName = options.name;
+			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 
 			return Object.extend(entityType, {
 
@@ -111,7 +112,6 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				superType:		options.superType,
 				prototype:		options.proto instanceof ObservableObject ? options.proto : Object.extend(new ObservableObject(), fields.methods),
 
-				objects: 		new Entities(entityType,options.superType ? options.superType.objects : undefined),
 				get:			delegateTo(entityType.objects,'get'),
 				create: 		delegateTo(entityType.objects,'create'),
 
