@@ -356,6 +356,13 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('create', function () {
+	
+		equals(Date.create(1997,8,29) instanceof Date, true, 'creates an instance of the right constructor');
+		equals(Date.create(1997,8,29).getFullYear(), 1997, 'object is initialised with correct arguments'  );
+		
+	});
+	
 	
 	//
 	// Object
