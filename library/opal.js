@@ -635,6 +635,26 @@ define(function (a,b,c,undefined) {
 	
 	Function.prototype.asc.displayName = 'asc';
 	
+	
+	//
+	// Constructor methods
+	//
+	
+	// Protect existing methods with assertions
+	assert(Function.prototype.create === undefined, '"create" method already defined');
+	
+	Object.extend(Function.prototype, {
+		
+		// Tests: none
+		// Docs: full
+		create: function () {
+			return Object.construct(this).apply(null,arguments);
+		}
+		
+	});
+	
+	Function.prototype.create.displayName = 'create';
+	
 
 	
 	// ------------------------------------------------------------------------
@@ -683,7 +703,7 @@ define(function (a,b,c,undefined) {
 			return    constructor === String  ? function (value) { return typeof value === 'string' ? value : String(value); }
 					: constructor === Number  ? function (value) { return typeof value === 'number' ? value : Number(value); }
 					: constructor === Boolean ? function (value) { return typeof value === 'boolean' ? value : Boolean(value); }
-					: constructor && constructor.nullable ? function (value) { return value === null || value === undefined ? null : _construct.apply(null,arguments) }
+					: constructor && constructor.nullable ? function (value) { return value === null || value === undefined ? null : _construct.apply(null,arguments); }
 					: function (object) { return object instanceof constructor ? object : _construct.apply(null,arguments); };
 		}
 		
@@ -720,13 +740,14 @@ define(function (a,b,c,undefined) {
 			if ( a === undefined || b === undefined ) {
 				return false;
 			}
-			var equal = true;
-			for ( var prop in a ) {
+			var equal = true,
+				prop;
+			for ( prop in a ) {
 				if ( a.hasOwnProperty(prop) ) {
-					equal = equal && ( a[prop] === b[prop] );
+					equal = equal && ( a[propa] === b[prop] );
 				}
 			}
-			for ( var prop in b ) {
+			for ( prop in b ) {
 				if ( b.hasOwnProperty(prop) ) {
 					equal = equal && ( a[prop] === b[prop] );
 				}
