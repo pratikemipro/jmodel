@@ -114,6 +114,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 				get:			delegateTo(entityType.objects,'get'),
 				create: 		delegateTo(entityType.objects,'create'),
+				remove: 		delegateTo(entityType.objects,'remove'),
 
 				subtype:		function (subfields,suboptions) {
 									return context.types.create(
@@ -149,6 +150,18 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 			create: function (data) {
 				return this.ensure.apply(null,arguments);
+			},
+			
+			// NOTE: temporary hack
+			remove: function (example) {
+				function predicate (obj) {
+					var matched = true;
+					for ( var i in example ) {
+						matched = matched && obj[i]() == example[i];
+					}
+					return matched;
+				}
+				return ObservableTypedSet.prototype.remove.call(this,predicate);
 			}
 			
 		});
