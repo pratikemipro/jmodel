@@ -297,6 +297,20 @@ define(function (a,b,c,undefined) {
 		},
 		
 		// Tests: full
+		// Docs: full
+		except: function (handler) {
+			var fn = this;
+			return function () {
+				try {
+					return fn.apply(this,arguments);
+				}
+				catch (err) {
+					return handler.call(this,err);
+				}
+			};
+		},
+		
+		// Tests: full
 		// Docs: none
 		memo: function () {
 			var cache = {},

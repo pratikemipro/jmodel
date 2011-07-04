@@ -220,6 +220,27 @@
     				    </ul>
     				    <span class="return">function</span>
 		            </dt>
+		
+					<dt>
+		                <span class="object">fn</span>.except
+		                <ul class="arguments">
+    				        <li>handler</li>
+    				    </ul>
+    				    <span class="return">function</span>
+		            </dt>
+					<dd><p><code>fn.except</code> abstracts exception handling. If <code>fn</code> throws an exception, the function <code>handler</code> will be invoked with the error object.</dd>
+					<dd class="example">
+						<p>
+							<code>
+								var faulty = function () { throw 'bang!'; };
+								<br/>
+								var handled = faulty.except(function (err) { return 'Error: '+err; });
+								<br/>
+								handled();
+							</code>
+							<br/><span class="output"><code>"Error: bang!"</code></span>
+						</p>
+					</dd>
 		            
 		            <dt>
 		                <span class="object">fn</span>.memo

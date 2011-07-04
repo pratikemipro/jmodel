@@ -189,6 +189,15 @@ define(['../library/opal.js'], function (opal) {
 	    
 	});
 	
+	test('except', function () {
+	
+		var faulty = function () {throw 'bang!';},
+			handled = faulty.except(function (err) { return 'Error: '+err;});
+			
+		equal(handled(), 'Error: bang!', 'except works correctly in simplest case');
+		
+	});
+	
 	test('memo', function () {
 	
 		var add = function (a,b) { return a+b; }.memo();
