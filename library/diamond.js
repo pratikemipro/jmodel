@@ -136,6 +136,17 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		
 		//
+		// PrimaryKey
+		//
+		
+		function PrimaryKey (constructor) {
+			return constructor;
+		}
+		
+		di.PrimaryKey = PrimaryKey;
+		
+		
+		//
 		// Entities
 		//
 		
