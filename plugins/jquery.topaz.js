@@ -20,7 +20,9 @@ define(['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald'], function (jQue
 			}
 		}
 		else { // Single binding
-			this.each(function (index,element) {
+			
+			// Bind from DOM to model
+			this.filter(':input').each(function (index,element) {
 				var eventName = jQuery(element).is('select') ? 'change' : 'keyup';
 				jQuery(this).event(eventName)
 					.map(Object.path('target.value'))
@@ -31,6 +33,18 @@ define(['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald'], function (jQue
 						}
 					});
 			});
+			
+			// Bind from model to non-input DOM element
+			this.filter(':not(:input)').each(function (index,element) {
+				object.event(binding)
+					.subscribe({
+						context: jQuery(this),
+						message: function (value) {
+							this.html(value);
+						}
+					});
+			});
+			
 		}
 
 		return this;
