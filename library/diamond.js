@@ -101,7 +101,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 					entityType.objects.add(this);
 				}
 			};
-			
+		
 			entityType.displayName = options.name;
 			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 
@@ -110,7 +110,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				constructor:	entityType,
 				typeName:		options.name,
 				superType:		options.superType,
-				prototype:		options.proto instanceof ObservableObject ? options.proto : Object.extend(new ObservableObject(), fields.methods),
+				prototype:		options.proto instanceof Entity ? options.proto : Object.extend(new Entity(), fields.methods),
 
 				get:			delegateTo(entityType.objects,'get'),
 				create: 		delegateTo(entityType.objects,'create'),
@@ -178,6 +178,13 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		});
 
 		di.Entities = Entities;
+		
+		
+		function Entity () {}
+
+		Entity.prototype = new ObservableObject();
+		
+		di.Entity = Entity;
 
 
 /*		
