@@ -1302,6 +1302,7 @@ define(function (a,b,c,undefined) {
 	EnhancedObject.prototype._defaults = EnhancedObject.prototype.defaults;
 	EnhancedObject.prototype._set = EnhancedObject.prototype.setProperty;
 
+	opal.EnhancedObject = EnhancedObject;
 	opal.copy = copy;
 	
 	// ------------------------------------------------------------------------
