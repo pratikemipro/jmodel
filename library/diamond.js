@@ -94,12 +94,23 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 		function EntityType (context,fields,options) {
 
+			var primaryKeyField;
+			for ( var field in fields ) {
+				if ( fields[field].primaryKey ) {
+					primaryKeyField = field;
+					fields[field] = fields[field]();
+				}
+			}
+
 			var entityType = function (data) {
 				ObservableObject.call(this,fields,options);
 				if ( data ) {
 					this.set(data);
 					entityType.objects.add(this);
 				}
+				this.context = context;
+				this.entityType = entityType;
+				this.primaryKeyField = primaryKeyField;
 			};
 		
 			entityType.displayName = options.name;
@@ -140,7 +151,11 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		//
 		
 		function PrimaryKey (constructor) {
-			return constructor;
+			return function () {
+				return constructor;
+			}.extend({
+				primaryKey: true
+			});
 		}
 		
 		di.PrimaryKey = PrimaryKey;
