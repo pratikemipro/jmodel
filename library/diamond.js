@@ -80,6 +80,9 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		EntityTypes.prototype = Object.extend(new (Map.To(EventType))(), {
 
+			create: TypedMap.prototype.create.pre(function (key,field,options) {
+				options.name = options.name || key;
+			})
 			
 		});
 	
@@ -119,7 +122,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			return Object.extend(entityType, {
 
 				constructor:	entityType,
-				typeName:		options.name,
+				options: 		options,
+				typeName:		entityType.displayName,
 				superType:		options.superType,
 				prototype:		options.proto instanceof Entity ? options.proto : Object.extend(new Entity(), fields.methods),
 
