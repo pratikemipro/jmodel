@@ -95,15 +95,21 @@ define([
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
 						
 			diamond.event.fromAjax({
-				url: this.context.serviceLocation+'/'+(this.entityType.plural ? this.entityType.plural : this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
+				url: this.context.serviceLocation+'/'+(this.entityType.options.plural ? this.entityType.options.plural : this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
 				type: id > 0 ? 'MERGE' : 'POST',
 				data: JSON.stringify(this.toBareObject().removeProperties(this.key)),
 				contentType: 'application/json',
 				dataType: 'json'
 			})
 			.where(diamond.not(diamond.eq(undefined)))
-			.subscribe(function (json) {
-				console.log(Object.fromOData(json));
+			.subscribe({
+				context: this,
+				message: function (json) {
+					if ( json ) {
+						var object = Object.fromOData(json);
+						this[this.primaryKeyField](object[this.primaryKeyField]);
+					}
+				}
 			});
 			
 			return this;
