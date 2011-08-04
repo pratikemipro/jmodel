@@ -118,6 +118,17 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 			entityType.displayName = options.name;
 			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
+			entityType.deleted	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
+			
+			// Remember deleted objects that might exist in persistent storage
+			entityType.objects.event('remove')
+				.where(method(primaryKeyField).gt(0))
+				.subscribe({
+					context: entityType.deleted,
+					message: function (entity) {
+						this.add(entity);
+					}
+				});
 
 			return Object.extend(entityType, {
 
