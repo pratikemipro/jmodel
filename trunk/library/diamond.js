@@ -177,6 +177,15 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		
 		//
+		// ForeignKey
+		//
+		
+		function ForeignKey (constructor) {
+			return constructor;
+		}
+		
+		
+		//
 		// Entities
 		//
 		
