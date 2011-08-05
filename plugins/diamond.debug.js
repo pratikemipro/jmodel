@@ -17,7 +17,7 @@ define(['jmodel/diamond'], function (diamond) {
 			console.group('Context: '+this.name);
 			this.types.each(function (name,type) {
 				console.group(name);
-				type.objects.debug()
+				type.objects.debug();
 				console.groupEnd();
 			});
 			console.groupEnd();
@@ -28,7 +28,10 @@ define(['jmodel/diamond'], function (diamond) {
 	Object.extend(diamond.Entities.prototype,{
 	
 		debug: function () {
-			console.log(this.count());
+			var ids = this.map(function (entity) {
+				return entity[entity.primaryKeyField]();
+			}).join(', ');
+			console.log(ids);
 		}
 		
 	});
