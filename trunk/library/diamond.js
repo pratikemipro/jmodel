@@ -108,14 +108,21 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			}
 
 			var entityType = function (data) {
+				
 				ObservableObject.call(this,fields,options);
+				
 				if ( data ) {
 					this.set(data);
 					entityType.objects.add(this);
 				}
+				
 				this.context = context;
 				this.entityType = entityType;
 				this.primaryKeyField = primaryKeyField;
+				
+				var primaryKeyValue = this[this.primaryKeyField]()
+				this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
+				
 			};
 			
 			Object.extend(entityType,di.plugin.type);
