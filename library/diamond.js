@@ -131,6 +131,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 					context: entityType.deleted,
 					message: function (entity) {
 						entity.deleted = true;
+						entity.dirty   = true;
 						this.add(entity);
 					}
 				});
