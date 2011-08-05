@@ -94,6 +94,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		//
 		// Note that this is a higher-order type.
 		//
+		
+		di.plugin.type = {};
 
 		function EntityType (context,fields,options) {
 
@@ -115,6 +117,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				this.entityType = entityType;
 				this.primaryKeyField = primaryKeyField;
 			};
+			
+			Object.extend(entityType,di.plugin.type);
 		
 			entityType.displayName = options.name;
 			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
@@ -126,6 +130,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				.subscribe({
 					context: entityType.deleted,
 					message: function (entity) {
+						entity.deleted = true;
 						this.add(entity);
 					}
 				});
