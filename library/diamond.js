@@ -184,6 +184,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			return constructor;
 		}
 		
+		di.ForeignKey = ForeignKey;
+		
 		
 		//
 		// Entities
