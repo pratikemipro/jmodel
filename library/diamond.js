@@ -120,8 +120,16 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				this.entityType = entityType;
 				this.primaryKeyField = primaryKeyField;
 				
-				var primaryKeyValue = this[this.primaryKeyField]()
+				var primaryKeyValue = this[this.primaryKeyField]();
 				this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
+				
+				this.event('change')
+					.subscribe({
+						context: this,
+						message: function () {
+							this.dirty = true;
+						}
+					});
 				
 			};
 			
