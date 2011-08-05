@@ -88,15 +88,28 @@ define([
 		serviceLocation: ''
 	});
 	
-	Object.extend(diamond.Entity.prototype,{
+	Object.extend(diamond.plugin.type, {
+	
+		persist: function () {
+			this.objects.persist();
+			this.deleted.persist();
+		}
+		
+	});
+	
+	Object.extend(diamond.Entity.prototype, {
 		
 		persist: function () {
+			
+			if ( !this.dirty ) { return this; }
 			
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
 						
 			diamond.event.fromAjax({
 				url: this.context.serviceLocation+'/'+(this.entityType.options.plural ? this.entityType.options.plural : this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
-				type: id > 0 ? 'MERGE' : 'POST',
+				type: 	id > 0 && !this.deleted ? 'MERGE'
+					  : id > 0 && this.deleted ? 'DELETE'
+					  : 'POST',
 				data: JSON.stringify(this.toBareObject().removeProperties(this.key)),
 				contentType: 'application/json',
 				dataType: 'json'
@@ -105,6 +118,7 @@ define([
 			.subscribe({
 				context: this,
 				message: function (json) {
+					this.dirty = false;
 					if ( json ) {
 						var object = Object.fromOData(json);
 						this[this.primaryKeyField](object[this.primaryKeyField]);
@@ -114,6 +128,14 @@ define([
 			
 			return this;
 			
+		}
+		
+	});
+	
+	Object.extend(diamond.Entities.prototype, {
+	
+		persist: function () {
+			this.each(Object.method('persist'));
 		}
 		
 	});
