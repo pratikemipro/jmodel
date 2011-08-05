@@ -225,15 +225,16 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				return this.ensure.apply(null,arguments);
 			},
 			
-			// NOTE: temporary hack
-			remove: function (example) {
-				function predicate (obj) {
-					var matched = true;
-					for ( var i in example ) {
-						matched = matched && obj[i]() == example[i];
-					}
-					return matched;
-				}
+			remove: function (pr) {
+				var predicate =	  pr instanceof Function ? pr
+								: pr instanceof Entity ? identity.eq(pr)
+								: function predicate (obj) {
+									var matched = true;
+									for ( var i in pr ) {
+										matched = matched && obj[i]() == pr[i];
+									}
+									return matched;
+								};
 				return ObservableTypedSet.prototype.remove.call(this,predicate);
 			}
 			
