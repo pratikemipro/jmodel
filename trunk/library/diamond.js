@@ -99,6 +99,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 		function EntityType (context,fields,options) {
 
+			var nextKey = -1;
+
 			var primaryKeyField;
 			for ( var field in fields ) {
 				if ( fields[field].primaryKey ) {
@@ -108,6 +110,8 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			}
 
 			var entityType = function (data) {
+				
+				data[primaryKeyField] = data[primaryKeyField] || nextKey--;
 				
 				ObservableObject.call(this,fields,options);
 				
