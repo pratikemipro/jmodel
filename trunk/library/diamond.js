@@ -43,10 +43,10 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			this.types			= new EntityTypes(this);
 			this.type			= delegateTo(this.types,'get');
 
-/*			this.events			= new EventRegistry(this.notifications,'checkpoint');
-			this.event			= delegateTo(this.events,'filter');
+			this.events			= new EventRegistry('beginInitialisation','endInitialisation');
+			this.event			= delegateTo(this.events,'get');
 
-	//		this.all			= new ObservableTypedSet(ObservableObject);
+/*	//		this.all			= new ObservableTypedSet(ObservableObject);
 
 	//		this.constraints    = new TypedSet(GlobalReferentialConstraint);
 
@@ -130,8 +130,14 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 							this.dirty = true;
 						}
 					});
+					
+				this.init();
 				
 			};
+			
+			entityType.prototype = options.proto instanceof Entity ? options.proto : Object.extend(new Entity(), fields.methods);
+			
+			Object.extend(entityType.prototype,options.instance || {});
 			
 			Object.extend(entityType,di.plugin.type);
 		
@@ -157,7 +163,6 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				options: 		options,
 				typeName:		entityType.displayName,
 				superType:		options.superType,
-				prototype:		options.proto instanceof Entity ? options.proto : Object.extend(new Entity(), fields.methods),
 
 				get:			delegateTo(entityType.objects,'get'),
 				create: 		delegateTo(entityType.objects,'create'),
@@ -245,7 +250,11 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		function Entity () {}
 
-		Entity.prototype = new ObservableObject();
+		Entity.prototype = Object.extend(new ObservableObject(),{
+			
+			init: Function.identity
+			
+		});
 		
 		di.Entity = Entity;
 
