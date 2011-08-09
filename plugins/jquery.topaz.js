@@ -9,7 +9,9 @@
 
 define(['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald'], function (jQuery,topaz) {
 	
-	jQuery.fn.bindTo = function (object,binding) {
+	jQuery.fn.bindTo = function (object,binding,formatter) {
+		
+		formatter = formatter || Function.identity;
 		
 		if ( typeof binding === 'object' ) { // Multiple bindings
 			for (var selector in binding) {
@@ -40,7 +42,7 @@ define(['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald'], function (jQue
 					.subscribe({
 						context: jQuery(this),
 						message: function (value) {
-							this.html(value);
+							this.html(formatter(value));
 						}
 					});
 			});
