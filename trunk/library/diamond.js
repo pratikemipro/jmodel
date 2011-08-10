@@ -224,6 +224,17 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		
 		//
+		// Decimal
+		//
+		
+		function Decimal (amount) {
+			return amount || 0;
+		}
+		
+		di.Decimal = Decimal;
+		
+		
+		//
 		// Entities
 		//
 		
