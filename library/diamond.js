@@ -228,7 +228,13 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		//
 		
 		function Decimal (amount) {
-			return amount || 0;
+			return {
+				defaultValue: amount || 0,
+				type: Number,
+				toJSON: function () {
+					return this.value.toFixed(3);
+				}
+			};
 		}
 		
 		di.Decimal = Decimal;
