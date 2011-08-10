@@ -15,7 +15,12 @@ define(['jmodel/topaz'], function (topaz) {
 		
 		toBareObject: function () {
 			return topaz.Set.fromArray(this.fields).reduce(function (object,field) {
-				return object.setProperty(field.field,field.value.toJSON ? field.value.toJSON() : field.value);
+				return object.setProperty(
+					field.field,
+					  field.toJSON ? field.toJSON()
+					: field.value.toJSON ? field.value.toJSON()
+					: field.value
+				);
 			}, new topaz.EnhancedObject() );
 		},
 		
