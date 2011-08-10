@@ -140,6 +140,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 				value =	  typeof value === 'function' && value.decorator ? value
 						: typeof value === 'function' ? scalar({type:value})
+						: typeof value.defaultValue !== 'undefined' ? scalar(value)
 						: scalar({defaultValue:value});
 				this.fields.push(value.call(this,this,field));
 			},
@@ -223,6 +224,8 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 				this.instantiate();
 
 				this.set(typeof this.options.defaultValue !== 'undefined' ? this.options.defaultValue : undefined);
+
+				this.toJSON = options.toJSON || undefined;
 
 				if ( this.object.options.persist ) {
 					this.persist();	
