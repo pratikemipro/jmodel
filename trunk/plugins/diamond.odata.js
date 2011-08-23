@@ -99,7 +99,7 @@ define([
 	
 	Object.extend(diamond.Entity.prototype, {
 		
-		persist: function () {
+		persist: function (event) {
 			
 			if ( !this.dirty ) { return this; }
 			
@@ -122,6 +122,9 @@ define([
 					if ( json ) {
 						var object = Object.fromOData(json);
 						this[this.primaryKeyField](object[this.primaryKeyField]);
+					}
+					if ( event ) {
+						event.raise();
 					}
 				}
 			});
