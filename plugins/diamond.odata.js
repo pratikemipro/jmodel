@@ -99,7 +99,7 @@ define([
 	
 	Object.extend(diamond.Entity.prototype, {
 		
-		persist: function (event) {
+		persist: function (completionEvent) {
 			
 			if ( !this.dirty ) { return this; }
 			
@@ -123,8 +123,8 @@ define([
 						var object = Object.fromOData(json);
 						this[this.primaryKeyField](object[this.primaryKeyField]);
 					}
-					if ( event ) {
-						event.raise();
+					if ( completionEvent && completionEvent.raise ) {
+						completionEvent.raise();
 					}
 				}
 			});
