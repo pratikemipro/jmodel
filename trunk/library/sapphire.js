@@ -642,6 +642,12 @@ define(['jmodel/opal'], function (opal) {
 				delete this.__delegate[this.key(object)];
 				return this; 
 			},
+			
+			// Tests: none
+			removeKey: function (key) {
+				delete this.__delegate[key];
+				return this;
+			},
 
 			// Tests: none
 			get: function (keyval) {
