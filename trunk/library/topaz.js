@@ -294,6 +294,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 						this.event.raise.apply(this.event,[value,oldValue]);
 
 						this.change.raise({
+							object: this.object,
 							field: this.field,
 							value: value,
 							old: oldValue
