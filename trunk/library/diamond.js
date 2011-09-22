@@ -151,8 +151,22 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			entityType.deleted	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 			
 			if ( primaryKeyField ) {
+				
 				entityType.objects.index(method(primaryKeyField));
 				entityType.deleted.index(method(primaryKeyField));
+				
+				// Update index when primary key changes
+				entityType.objects.event('change')
+					.where(property('field').eq(primaryKeyField))
+					.subscribe({
+						context: entityType.objects,
+						message: function (event) {
+							this.__index
+								.removeKey(event.old)
+								.add(event.object);
+						}
+					});
+				
 			}
 			
 			// Remember deleted objects that might exist in persistent storage
