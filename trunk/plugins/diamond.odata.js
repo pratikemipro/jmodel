@@ -104,9 +104,9 @@ define([
 			if ( !this.dirty ) { return this; }
 			
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
-						
+			
 			diamond.event.fromAjax({
-				url: this.context.serviceLocation+'/'+(this.entityType.options.plural ? this.entityType.options.plural : this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
+				url: this.context.serviceLocation+'/'+(this.entityType.options.entitySet || this.entityType.options.plural || this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
 				type: 	id > 0 && !this.deleted ? 'MERGE'
 					  : id > 0 && this.deleted ? 'DELETE'
 					  : 'POST',
