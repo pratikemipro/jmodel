@@ -111,7 +111,9 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 			var entityType = function (data) {
 				
-				data[primaryKeyField] = data[primaryKeyField] || nextKey--;
+				if ( primaryKeyField ) {
+					data[primaryKeyField] = data[primaryKeyField] || nextKey--;
+				}
 				
 				ObservableObject.call(this,fields,options);
 				
@@ -124,8 +126,10 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				this.entityType = entityType;
 				this.primaryKeyField = primaryKeyField;
 				
-				var primaryKeyValue = this[this.primaryKeyField]();
-				this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
+				if ( primaryKeyField ) {
+					var primaryKeyValue = this[this.primaryKeyField]();
+					this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
+				}
 				
 				this.event('change')
 					.subscribe({
