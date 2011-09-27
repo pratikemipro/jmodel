@@ -432,9 +432,14 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				eventTypes			= args[0] instanceof Set ? args[0] : Set.fromArray(args);
 			derivedEventType.remember(options.remember || 0);
 		    eventTypes.each(function (eventType) {
-		        eventType.subscribe(function () {
-		            return derivedEventType.raise.apply(derivedEventType,arguments);
-		        });
+		        eventType.subscribe({
+					message: function () {
+		            	return derivedEventType.raise.apply(derivedEventType,arguments);
+					},
+					error: function () {
+						return derivedEventType.fail.apply(derivedEventType,arguments);
+					}
+				});
 		    });
 		    return derivedEventType;
 		};
@@ -443,7 +448,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	    
 		    var derivedEventType = new EventType(),
 		        buffer = list(),
-				events = arguments[0] instanceof Set ? arguments[0] : Set.fromArguments(arguments);    
+				events = arguments[0] instanceof Set || arguments[0] instanceof List ? arguments[0] : Set.fromArguments(arguments);    
 	    
 		    events.each(function (eventType) {
 		        var queue = buffer.add([]).added;
