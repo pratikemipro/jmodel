@@ -123,8 +123,13 @@ define([
 						var object = Object.fromOData(json);
 						this[this.primaryKeyField](object[this.primaryKeyField]);
 					}
-					if ( completionEvent && completionEvent.raise ) {
+					if ( completionEvent instanceof diamond.EventType ) {
 						completionEvent.raise();
+					}
+				},
+				error: function () {
+					if ( completionEvent instanceof diamond.EventType ) {
+						completionEvent.fail.apply(completionEvent,arguments);
 					}
 				}
 			});
