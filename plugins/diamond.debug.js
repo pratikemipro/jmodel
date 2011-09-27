@@ -29,7 +29,7 @@ define(['jmodel/diamond'], function (diamond) {
 	
 		debug: function () {
 			var ids = this.map(function (entity) {
-				return entity[entity.primaryKeyField]();
+				return entity.primaryKeyField ? entity[entity.primaryKeyField]() : '-';
 			}).join(', ');
 			console.log(ids);
 		}
