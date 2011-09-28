@@ -61,7 +61,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 				first.each(function (a) {
 					second.each(function (b) {
 						if ( predicate(a,b) ) {
-							members.push(extend(b,copy(a,true)));
+							members.push(Object.extend(copy(a,true),b));
 						}
 					});
 				});
@@ -69,7 +69,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 			};
 		};
 
-		Relation.prototype = extend({
+		Relation.prototype = Object.extend(new TypedSet(Object), {
 		
 			member: function (object) {
 				return this.map(JSON.stringify).first(eq(JSON.stringify(object))) !== undefined;
@@ -92,7 +92,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 			
 			difference: function (relation) { return Relation.difference(this,relation); }
 			
-		}, new TypedSet(Object));
+		});
 		
 		function match (field) {
 			return function (a,b) { return a[field] === b[field]; };
@@ -103,7 +103,7 @@ define(['jmodel/sapphire'], function (sapphire) {
 					: match(field).and(join.apply(null,_slice(arguments,1)));
 		}
 		
-		sapphire.extend({
+		Object.extend(sapphire,{
 			Relation: Relation
 		});
 		

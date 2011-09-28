@@ -49,7 +49,7 @@
 		}
 	}
 	
-	opal.extend({
+	Object.extend(opal,{
 		sequence: sequence,
 		synchronise: synchronise,
 		synchronize: synchronise

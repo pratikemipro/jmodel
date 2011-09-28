@@ -30,7 +30,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		// Turn on strict mode for main section of library
 		'use strict';
  
-		var em		= extend({emerald_version:'0.13.0'},sapphire),
+		var em		= Object.extend(sapphire,{emerald_version:'0.13.0'}),
 			_		= em,
 			_slice	= Array.prototype.slice;
  
@@ -44,7 +44,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			this.addArray.call(this,_slice.call(arguments));
 		}
 		
-		EventRegistry.prototype = extend({
+		EventRegistry.prototype = Object.extend(new (Map.To(EventType))(), {
 			
 			register: function () {
 				return this.add(_slice.call(arguments));
@@ -55,7 +55,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return this.get(key);
 			}
 			
-		}, new (Map.To(EventType))() );
+		});
 	
 		em.EventRegistry = EventRegistry;
 	
@@ -166,8 +166,8 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		
 			between: function (start,stop,options) {
 			
-				var options = ( typeof options === 'object' ) ? options : {initial: (typeof options === 'undefined') ? false : options },
-					active = options.initial,
+				options = ( typeof options === 'object' ) ? options : {initial: (typeof options === 'undefined') ? false : options };
+				var	active = options.initial,
 					startEvent,
 					last,
 					derived = this.derive(function (method) {
@@ -247,8 +247,8 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			},
 		
 			effect: function (fn) {
-				var context	= fn.context || this,
-					fn		= fn.fn		 || fn;
+				var context	= fn.context || this;
+				fn	= fn.fn || fn;
 				return this.derive(function (method) {
 					return function () {
 						fn.apply(context,arguments);
@@ -316,7 +316,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 								.tag(group)
 								.accumulate(fn,acc)
 						).added;
-						privateEvent.republish(targetEvents.ensure(group))
+						privateEvent.republish(targetEvents.ensure(group));
 						return sourceEvent.raise.apply(sourceEvent,arguments);
 					}
 					return true;
@@ -568,13 +568,13 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 		}
 	
-		AjaxEventType.prototype = extend({
+		AjaxEventType.prototype = Object.extend(new EventType(), {
 		
 			start: function (data) {
 				if ( this.settings.singleton ) {
 					this.stop();
 				}
-				this.descriptor.data = typeof data === 'object' ? extend(data,this.descriptor.data) : this.descriptor.data;
+				this.descriptor.data = typeof data === 'object' ? Object.extend(this.descriptor.data,data) : this.descriptor.data;
 				this.__ajax = jQuery.ajax.call(null,this.descriptor);
 				return this;
 			},
@@ -586,7 +586,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return this;
 			}
 		
-		}, new EventType() );
+		});
 	
 	
 		//
@@ -600,7 +600,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			this.start();
 		}
 	
-		PeriodicEventType.prototype = extend({
+		PeriodicEventType.prototype = Object.extend(new EventType(), {
 	
 			start: function () {
 				var that = this;
@@ -619,7 +619,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return this;
 			}
 		
-		}, new EventType() );
+		});
 	
 	
 		//
@@ -632,7 +632,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			this.start();
 		}
 	
-		TimerEventType.prototype = extend({
+		TimerEventType.prototype = Object.extend(new EventType(), {
 		
 			start: function () {
 				var that = this;
@@ -647,7 +647,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return this;
 			}
 		
-		}, new EventType() );
+		});
 	
 	
 		//
@@ -684,7 +684,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			TypedSet.call(this,Subscriber);
 		}
 	
-		SubscriberSet.prototype = extend({
+		SubscriberSet.prototype = Object.extend(new TypedSet(Subscriber), {
 		
 			add: function () { // To support debug plugin
 				return TypedSet.prototype.add.apply(this,arguments);
@@ -709,7 +709,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				});
 			}
 		
-		}, new TypedSet(Subscriber) );
+		});
 	
 		em.SubscriberSet = SubscriberSet;
 	
@@ -719,7 +719,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			this.fail		  = (this.subscription.error   || identity).bind(subscription.context || null);
 		}
 	
-		em.extend({
+		Object.extend(em, {
 			Subscriber: Subscriber
 		});
 	

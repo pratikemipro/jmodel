@@ -25,7 +25,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		// Turn on strict mode for main section of library
 		'use strict';
  
-		var di		= extend({diamond_version:'0.1.0'},topaz),
+		var di		= Object.extend(topaz,{diamond_version:'0.1.0'}),
 			_		= di,
 			_slice	= Array.prototype.slice,
 			nextKey	= -1; // NOTE: make this nicer
