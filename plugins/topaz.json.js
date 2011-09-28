@@ -11,18 +11,6 @@ define(['jmodel/topaz'], function (topaz) {
 	
 	'use strict';
 	
-	Object.extend(topaz.Set.prototype, {
-	
-		toBareObject: function () {
-			return this.map(Object.method('toBareObject')).get();
-		},
-		
-		toJSON: function () {
-			return JSON.stringify(this.toBareObject());
-		}
-		
-	});
-	
 	Object.extend(topaz.ObservableObject.prototype, {
 		
 		toBareObject: function () {
@@ -30,7 +18,8 @@ define(['jmodel/topaz'], function (topaz) {
 				return object.setProperty(
 					field.field,
 					  field.toJSON ? field.toJSON()
-					: field.value.toJSON ? field.value.toJSON()
+					: field.value && field.value.toJSON ? field.value.toJSON()
+					: field.map ? field.map(Object.method('toBareObject')).get()
 					: field.value
 				);
 			}, new topaz.EnhancedObject() );
