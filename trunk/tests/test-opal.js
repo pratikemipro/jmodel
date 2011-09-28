@@ -22,17 +22,6 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
-	test('extend', function () {
-		
-		var fred = {forename:'fred'},
-			test = {};
-		
-		opal.extend(fred,test);
-			
-		equals(test.forename, 'fred', 'extend copies properties' );
-		
-	});
-	
 	test('delegateTo', function () {
 	
 		var fred = {

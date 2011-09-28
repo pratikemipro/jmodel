@@ -91,7 +91,7 @@
 		};
 	}
 	
-	sapphire.extend({
+	Object.extend(sapphire,{
 		prepend: 	Prepend,
 		append: 	Append,
 		join: 		Join,

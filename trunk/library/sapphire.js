@@ -25,7 +25,7 @@ define(['jmodel/opal'], function (opal) {
 		// Turn on strict mode for main section of library
 		'use strict';
 
-		var _ 	   = extend({sapphire_version:'0.12.0'},opal),
+		var _ 	   = Object.extend(opal,{sapphire_version:'0.12.0'}),
 			_slice = Array.prototype.slice;
 			
 		function _replace  (a,b) { return b; };
@@ -129,7 +129,7 @@ define(['jmodel/opal'], function (opal) {
 		});
 
 		
-		_.extend({
+		Object.extend(_, {
 			Map: Map,
 			TypedMap: TypedMap
 		});
@@ -411,7 +411,7 @@ define(['jmodel/opal'], function (opal) {
 						: parameter instanceof RegExp ? regex(parameter)
 						: typeof parameter === 'function' ? parameter
 						: typeof parameter === 'string' && parameter.charAt(0) === ':' ? extend({unique:true},is(this.get(parameter)))
-						: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? extend({unique:true},is(parameter))
+						: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? is(parameter).extend({unique:true})
 						: AllPredicate;
 			},
 		
@@ -514,7 +514,7 @@ define(['jmodel/opal'], function (opal) {
 			});
 		}
 
-		_.extend({
+		Object.extend(_,{
 			zip: zip
 		});
 
@@ -533,7 +533,7 @@ define(['jmodel/opal'], function (opal) {
 			return this;
 		}
 	
-		TypedSet.prototype = extend({
+		TypedSet.prototype = Object.extend(new Set(), {
 		
 			// Tests: none
 			add: function () {
@@ -546,7 +546,7 @@ define(['jmodel/opal'], function (opal) {
 				return this.added;
 			}
 		
-		}, new Set() );
+		} );
 
 		_.TypedSet = TypedSet;
 
@@ -601,7 +601,7 @@ define(['jmodel/opal'], function (opal) {
 					: List.fromArguments(arguments);
 		}
 
-		_.extend({
+		Object.extend(_,{
 			List: List,
 			list: list
 		});
@@ -622,7 +622,7 @@ define(['jmodel/opal'], function (opal) {
 
 		}
 	
-		UniqueIndex.prototype = extend({
+		UniqueIndex.prototype = Object.extend(copy({}),{
 		
 			constructor: UniqueIndex,
 	
@@ -659,9 +659,9 @@ define(['jmodel/opal'], function (opal) {
 				return this.__delegate.hasOwnProperty(this.key(object));
 			}
 		
-		}, copy({}) );
+		} );
 
-		_.extend({
+		Object.extend(_,{
 			UniqueIndex: UniqueIndex
 		});
 
@@ -709,9 +709,9 @@ define(['jmodel/opal'], function (opal) {
 		// Tests: none
 		var all  = SetPredicate(and),
 			some = SetPredicate(or),
-			none = SetPredicate(extend({unit:true}, function (a,b) { return a && !b; } ));
+			none = SetPredicate(Object.extend(function (a,b) { return a && !b; },{unit:true}));
 
-		_.extend({
+		Object.extend(_,{
 			empty: 					empty,
 			all: 					all,
 			some: 					some,
@@ -735,7 +735,7 @@ define(['jmodel/opal'], function (opal) {
 			}.asc();
 		}
 
-		_.extend({
+		Object.extend(_,{
 			PredicateOrdering: 	PredicateOrdering,
 			score: 				PredicateOrdering
 		});
@@ -748,7 +748,7 @@ define(['jmodel/opal'], function (opal) {
 		// Tests: none
 		function NoFormat (object) { return object; }
 	
-		_.extend({
+		Object.extend({
 			noformat: 	NoFormat
 		});
 	

@@ -54,7 +54,7 @@ define(['jmodel/emerald'], function (emerald) {
 				: _char(identifier);
 	}
 	
-	emerald.extend({
+	Object.extend(emerald, {
 		key: key
 	});
 	

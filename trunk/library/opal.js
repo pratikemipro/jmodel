@@ -16,7 +16,7 @@ define(function (a,b,c,undefined) {
 	// Turn on strict mode in modern browsers
 	'use strict';
 
-	var opal   = { opal_version: '0.22.0', extend: extend },
+	var opal   = { opal_version: '0.22.0' },
 		_slice = Array.prototype.slice,
 		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
 				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
@@ -41,15 +41,6 @@ define(function (a,b,c,undefined) {
 		return typeof object;
 	}
 
-    // Tests: full
-	// Docs: none
-	function extend (object,target) {
-		target = target || this;
-		for ( var i in object ) {
-			target[i] = object[i];
-		}
-		return target;
-	}
 
 	// Tests: full
 	// Docs: none
@@ -59,7 +50,7 @@ define(function (a,b,c,undefined) {
 		};
 	}
 	
-	opal.extend({
+	Object.extend(opal, {
 		type: 		type,
 		assert:		assert,
 		delegateTo: delegateTo,
@@ -127,7 +118,7 @@ define(function (a,b,c,undefined) {
 		_4		= Function.argument(4),
 		_5		= Function.argument(5);
 	
-	opal.extend({
+	Object.extend(opal,{
 		identity: 	Function.identity,
 		constant: 	Function.constant,
 		argument: 	Function.argument,
@@ -175,7 +166,7 @@ define(function (a,b,c,undefined) {
 	Function.pipe.displayName    = 'pipe';
 	Function.compose.displayName = 'compose';
 	
-	opal.extend({
+	Object.extend(opal,{
 		pipe: 	 Function.pipe,
 		compose: Function.compose
 	});
@@ -219,7 +210,7 @@ define(function (a,b,c,undefined) {
 	Function.and.displayName = 'and';
 	Function.not.displayName = 'not';
 
-	opal.extend({
+	Object.extend(opal,{
 		or:  Function.or,
 		and: Function.and,
 		not: Function.not
@@ -258,7 +249,7 @@ define(function (a,b,c,undefined) {
 		// Tests: full
 		// Docs: none
 		extend: function (properties) {
-			return extend(properties,this);
+			return Object.extend(this,properties);
 		}
 		
 	});
@@ -726,7 +717,7 @@ define(function (a,b,c,undefined) {
 	Object.construct.displayName = 'construct';
 	Object.ensure.displayName	 = 'ensure';
 	
-	opal.extend({
+	Object.extend(opal, {
 		construct: Object.construct,
 		ensure:    Object.ensure,
 		project:   Object.project
@@ -845,7 +836,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.project.displayName	 = 'project';
 	
-	opal.extend({
+	Object.extend(opal,{
 		project:   Object.project
 	});
 	
@@ -944,7 +935,7 @@ define(function (a,b,c,undefined) {
 	Object.resolve.displayName	 = 'resolve';
 	Object.transform.displayName = 'transform';
 	
-	opal.extend({
+	Object.extend(opal, {
 		get: 	   Object.get,
 		set: 	   Object.set,
 		property:  Object.property,
@@ -1009,7 +1000,7 @@ define(function (a,b,c,undefined) {
 		};
 	}
 
-	opal.extend({
+	Object.extend(opal, {
 		bind: bind,
 		apply: apply,
 		applyto: applyto,
@@ -1023,23 +1014,17 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
-	var plus = extend({unit:0,label:'sum'},function (acc,value) {
-		return acc + value;
-	});
+	var plus = function (acc,value) { return acc + value; } .extend({unit:0,label:'sum'});
 
 	// Tests: full
 	// Docs: none
-	var times = extend({unit:1,label:'product'},function (acc,value) {
-		return acc * value;
-	});
+	var times = function (acc,value) { return acc * value; } .extend({unit:1,label:'product'});
 	
 	// Tests: full
 	// Docs: full
 	var count = function _count (predicate) {
 		predicate = predicate || Function.constant(true);
-		return extend({unit:0,label:'count'}, function (acc,value) {
-			return acc += (predicate(value) ? 1 : 0);
-		});
+		return function (acc,value) { return acc += (predicate(value) ? 1 : 0); } .extend({unit:0,label:'count'});
 	};
 	
 	// Tests: full
@@ -1089,24 +1074,18 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	// Docs: none
 	var contains = function (predicate) {
-		return extend({unit:false}, function (acc,value) {
-			return acc || predicate(value);
-		});
+		return function (acc,value) { return acc || predicate(value); } .extend({unit:false});
 	};
 	
 	// Tests: none
 	// Docs: none
-	var max = extend({label:'max'}, function (acc,value) {
-		return acc > value ? acc : value;
-	});
+	var max = function (acc,value) { return acc > value ? acc : value; } .extend({label:'max'});
 	
 	// Tests: none
 	// Docs: none
-	var min = extend({label:'min'}, function (acc,value) {
-		return ( acc < value && acc !== null ) ? acc : value;
-	});
+	var min = function (acc,value) { return ( acc < value && acc !== null ) ? acc : value; } .extend({label:'min'});
 
-	opal.extend({
+	Object.extend(opal, {
 		plus: plus,
 		times: times,
 		count: count,
@@ -1163,7 +1142,7 @@ define(function (a,b,c,undefined) {
 		return Object.resolve.apply(null,arguments).then(Boolean);
 	}
 
-	opal.extend({
+	Object.extend(opal, {
 		valid: 		valid,
 		is: 		is,
 		is_of_type: is_of_type,
@@ -1207,7 +1186,7 @@ define(function (a,b,c,undefined) {
 		return expression.test.bind(expression);
 	}
 	
-	opal.extend({
+	Object.extend(opal, {
 		compare:	compare,
 		eq:			eq,
 		neq:		neq,
@@ -1232,7 +1211,7 @@ define(function (a,b,c,undefined) {
 	// Docs: none
     var isnull = eq(null);
 
-	opal.extend({
+	Object.extend(opal, {
 		AllPredicate: 			Function.constant(true),
 		NonePredicate: 			Function.constant(false),
 		istrue:					istrue,
@@ -1247,7 +1226,7 @@ define(function (a,b,c,undefined) {
 	// Tests: none
 	// Docs: none
 	function copy (obj,exact) {
-		return extend(obj, exact ? {} : new EnhancedObject() );
+		return Object.extend(exact ? {} : new EnhancedObject(), obj);
 	}
 	
 	function EnhancedObject () {}
@@ -1265,7 +1244,7 @@ define(function (a,b,c,undefined) {
 		// Tests: none
 		// Docs: none
 		addProperties: function (attributes) {
-			return extend(attributes,this);
+			return Object.extend(this,attributes);
 		},
 		
 		// Tests: none
@@ -1320,7 +1299,7 @@ define(function (a,b,c,undefined) {
 		});
 	}
 	
-	opal.extend({
+	Object.extend(opal, {
 		Nullable: Nullable
 	});
 

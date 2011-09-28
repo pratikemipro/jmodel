@@ -30,7 +30,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		// Turn on strict mode for main section of library
 		'use strict';
 		
-		var topaz	= extend({topaz_version:'0.13.0'},emerald),
+		var topaz	= Object.extend(emerald,{topaz_version:'0.13.0'}),
 			_		= topaz,
 			_slice	= Array.prototype.slice;
 		
@@ -41,7 +41,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		function observable (proto) {
 
-			return extend({
+			return Object.extend(copy(proto,true), {
 
 				add: proto.add.post(function () {
 					if ( typeof this.added !== 'undefined' ) {
@@ -61,7 +61,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 					return proto.create.apply(this,[this].concat(arguments));
 				}
 
-			}, copy(proto,true));
+			});
 
 		}
 
@@ -179,11 +179,11 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		//
 
 		function Type (fields,options) {
-			return extend({
-				prototype: new ObservableObject()
-			}, function (data) {
+			return function (data) {
 				ObservableObject.call(this,fields,options);
 				this.set(data);
+			}.extend({
+				prototype: new ObservableObject()
 			});
 		}
 
@@ -339,11 +339,11 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			ScalarField.call(this,object,field,options);
 		}
 
-		ObjectField.prototype = extend({
+		ObjectField.prototype = Object.extend(new ScalarField(), {
 
 			equal: Object.equal
 
-		}, new ScalarField() );
+		});
 
 		topaz.ObjectField = ObjectField;
 
@@ -374,13 +374,13 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		}
 
-		CollectionField.prototype = extend({
+		CollectionField.prototype = Object.extend(new ObservableTypedSet(), {
 
 			instantiate: function () {
 				this.object[this.field] = delegateTo(this,'filter');
 			}
 
-		}, new ObservableTypedSet() );
+		});
 
 		topaz.CollectionField = CollectionField;
 		
