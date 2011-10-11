@@ -59,7 +59,7 @@ define(['jmodel/opal'], function (opal) {
 				return this.__rep__[key];
 			},
 
-			// Tests: none
+			// Tests: full
 			add: function (x) {
 				return    arguments.length === 1 && x instanceof Array ? this.addArray(x)
 						: arguments.length === 1 && x instanceof Object ? this.addMappings(x)

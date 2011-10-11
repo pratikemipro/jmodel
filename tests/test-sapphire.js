@@ -36,6 +36,21 @@ define(['../library/sapphire.js'], function (sapphire) {
 		
 		
 	});
+	
+	test('add', function () {
+	
+		var map = new sapphire.Map();
+		
+		map.add('green',2);
+		equals( map.get('green'), 2, 'add works for key/value pairs' );
+		
+		map.add({'red': 1,'blue': 3});
+		deepEqual( [map.get('red'),map.get('green'),map.get('blue')], [1,2,3], 'add works for mapping object' );
+		
+		map.add(['purple','pink']);
+		deepEqual( map.__rep__, {'red':1,'green':2,'blue':3,'purple':undefined,'pink':undefined}, 'add works for array of keys');
+		
+	});
 
 
 	//
