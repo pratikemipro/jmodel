@@ -54,7 +54,7 @@ define(['jmodel/opal'], function (opal) {
 
 		Map.prototype = {
 
-			// Tests: none
+			// Tests: full
 			get: function (key) {
 				return this.__rep__[key];
 			},
