@@ -82,7 +82,7 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 
-			// Tests: none
+			// Tests: full
 			add2: function (key,value) {
 				var current =  this.__rep__[key];
 				this.__rep__[key] = current ? this.combine(current,value) : value;

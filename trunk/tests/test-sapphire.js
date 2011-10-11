@@ -70,6 +70,20 @@ define(['../library/sapphire.js'], function (sapphire) {
 		deepEqual(Object.keys(map.__rep__),['red','green','blue'],'addArray adds correct keys');
 		
 	});
+	
+	test('add2', function () {
+	
+		var map = new sapphire.Map();
+		
+		map.add('green',2);
+		map.add('blue','planet')
+		map.add(3,'red');
+		
+		equal(map.get('green'),2,'add2 adds key/value pairs when key is string and value number');
+		equal(map.get('blue'),'planet','add2 adds key/value pairs when key is string and value string');
+		equal(map.get(3),'red','add2 adds key/value pairs when key is number and value string');
+		
+	});
 
 
 	//
