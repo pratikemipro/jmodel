@@ -6,13 +6,13 @@
 
 		<script>
 
+			QUnit.config.autostart = false;
+
             require({
 			    paths: {
 			        'jmodel': '../library/'
 			    }
 			});
-
-			QUnit.config.autostart = false;
 
 			require(['test-sapphire.js'], function (tests) {
 				QUnit.start();
