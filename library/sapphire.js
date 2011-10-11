@@ -35,7 +35,7 @@ define(['jmodel/opal'], function (opal) {
 		//																		Map
 		// ------------------------------------------------------------------------
 
-		// Tests: none
+		// Tests: full
 		function Map (rep,combine) {
 			this.__rep__ = rep || {};
 			this.combine = combine || _replace;
@@ -43,7 +43,7 @@ define(['jmodel/opal'], function (opal) {
 
 		Map.extend({
 			
-			// Tests: none
+			// Tests: full
 			To: function (constructor) {
 				return TypedMap.curry(constructor).extend({
 					prototype: TypedMap.prototype
