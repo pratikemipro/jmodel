@@ -1,5 +1,30 @@
 define(['../library/sapphire.js'], function (sapphire) {
 
+
+	//
+	// Map construction
+	//
+	
+	module('Map construction');
+	
+	test('Map constructor', function () {
+	
+		var map = new sapphire.Map({'red':1,'green':2,'blue':3});
+		
+		equals( map.get('green'), 2, 'Map constructor returns a functional Map');
+		
+	});
+	
+	test('Map.To', function () {
+	
+		var map = new (sapphire.Map.To(Date))({'rich':'1974-11-20'});
+		
+		equals( map instanceof sapphire.TypedMap, true, 'Map.To is constructor for TypedMap');
+		equals( map.get('rich') instanceof Date, true, 'Elements have correct type');
+		
+	});
+
+
 	//
 	// Set construction
 	//
