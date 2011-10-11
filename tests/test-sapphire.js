@@ -56,8 +56,18 @@ define(['../library/sapphire.js'], function (sapphire) {
 	
 		var map = new sapphire.Map({'green':1,'red':2});
 		
-		map.add({'green': 2,'blue': 3});
+		map.addMappings({'green': 2,'blue': 3});
 		deepEqual( [map.get('red'),map.get('green'),map.get('blue')], [2,2,3], 'addMapping adds key/value mappings' );
+		
+	});
+	
+	test('addArray', function () {
+		
+		var map = new sapphire.Map();
+		
+		map.addArray(['red','green','blue']);
+		
+		deepEqual(Object.keys(map.__rep__),['red','green','blue'],'addArray adds correct keys');
 		
 	});
 

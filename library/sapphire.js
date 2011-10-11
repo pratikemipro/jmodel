@@ -74,7 +74,7 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			},
 			
-			// Tests: none
+			// Tests: full
 			addArray: function (keys) {
 				for (var i=0; i<keys.length; i++) {
 					this.add2(keys[i]);
