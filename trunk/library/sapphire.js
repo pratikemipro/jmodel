@@ -66,7 +66,7 @@ define(['jmodel/opal'], function (opal) {
 						: this.add2.apply(this,arguments);
 			},
 
-			// Tests: none
+			// Tests: full
 			addMappings: function (mappings) {
 				for ( var key in mappings ) {
 					this.add2(key,mappings[key]);
