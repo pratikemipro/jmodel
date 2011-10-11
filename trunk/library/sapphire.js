@@ -207,7 +207,7 @@ define(['jmodel/opal'], function (opal) {
 	
 		Set.prototype = {
 		
-			constructor: Set,
+			__constructor: Set,
 		
 			//
 			// Mutators
@@ -235,7 +235,7 @@ define(['jmodel/opal'], function (opal) {
 				if ( this.__index && partition[true]) {
 					partition[true].reduce(bymethod('remove'),this.__index);
 				}
-				return partition[true] || new this.constructor();
+				return partition[true] || new this.__constructor();
 			},
 		
 			// Tests: full
@@ -265,12 +265,12 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			tail: function () {
-				return this.constructor.fromArray(this.__rep__.slice(1));
+				return this.__constructor.fromArray(this.__rep__.slice(1));
 			},
 		
 			// Tests: none
 			reverse: function () {
-				return this.constructor.fromArray(this.__rep__.slice().reverse());
+				return this.__constructor.fromArray(this.__rep__.slice().reverse());
 			},
 		
 			// Tests: none
@@ -343,7 +343,7 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			partition: function (fn) {
-				var constructor = this.constructor;
+				var constructor = this.__constructor;
 				return this.reduce(function (acc,object) {
 					var key = fn(object);
 					acc[key] = ( acc[key] || new constructor() ).add(object);
@@ -354,10 +354,10 @@ define(['jmodel/opal'], function (opal) {
 			// Tests: none
 			filter: Array.prototype.filter ? function (predicate) {
 				return    typeof predicate === 'undefined' ? this
-						: this.constructor.fromArray(this.__rep__.filter(this.predicate(predicate)));
+						: this.__constructor.fromArray(this.__rep__.filter(this.predicate(predicate)));
 			} : function (predicate) {
 				return    typeof predicate === 'undefined' ? this
-						: this.reduce(add(predicate), new this.constructor());
+						: this.reduce(add(predicate), new this.__constructor());
 			},
 		
 			// Tests: none
@@ -381,7 +381,7 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			copy: function () {
-				return this.constructor.fromArray(this.__rep__.slice(0));
+				return this.__constructor.fromArray(this.__rep__.slice(0));
 			},
 		
 			// Tests: none
@@ -457,7 +457,7 @@ define(['jmodel/opal'], function (opal) {
 			jQuery: function () {
 				return jQuery( this
 								.map(function (obj) { return obj.jquery ? obj.get() : obj; })
-									.reduce(bymethod('concat'), new this.constructor())
+									.reduce(bymethod('concat'), new this.__constructor())
 										.get() );
 			},
 		
@@ -560,9 +560,9 @@ define(['jmodel/opal'], function (opal) {
 			Set.apply(this,arguments);
 		}
 	
-		List.prototype				= new Set();
-		List.prototype.constraint	= AllPredicate;
-		List.prototype.constructor	= List;
+		List.prototype					= new Set();
+		List.prototype.constraint		= AllPredicate;
+		List.prototype.__constructor	= List;
 	
 		// Tests: none
 		List.from = function () {
@@ -624,7 +624,7 @@ define(['jmodel/opal'], function (opal) {
 	
 		UniqueIndex.prototype = Object.extend(copy({}),{
 		
-			constructor: UniqueIndex,
+			__constructor: UniqueIndex,
 	
 			// Tests: none
 			build: function () {

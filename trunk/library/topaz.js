@@ -134,7 +134,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		ObservableObject.prototype = {
 
-			constructor: ObservableObject,
+			__constructor: ObservableObject,
 
 			instantiateField: function (field,value) {
 
@@ -237,7 +237,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		ScalarField.prototype = {
 
-			constructor: ScalarField,
+			__constructor: ScalarField,
 
 			instantiate: function () {
 

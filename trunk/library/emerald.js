@@ -78,7 +78,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 		EventType.prototype = {
 		
-			constructor: EventType,
+			__constructor: EventType,
 	
 			subscribe: function _subscribe (subscriber) {
 				var subs = this.subscribers().add(subscriber).added;
@@ -114,7 +114,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			},
 		
 			derive: function (handle_with) {
-				var derived = new this.constructor();
+				var derived = new this.__constructor();
 				derived.remember(this.__remember);
 				if ( typeof handle_with === 'function' ) {
 					this.subscribe({
