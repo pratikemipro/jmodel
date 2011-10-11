@@ -187,7 +187,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 			return Object.extend(entityType, {
 
-				constructor:	entityType,
+				__constructor:	entityType,
 				options: 		options,
 				typeName:		entityType.displayName,
 				superType:		options.superType,
