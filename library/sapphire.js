@@ -110,7 +110,12 @@ define(['jmodel/opal'], function (opal) {
 		// Tests: none
 		function TypedMap (constructor,rep,combine) {
 			this.ensure = ensure(constructor);
-			Map.call(this,rep,combine);
+			Map.call(this,null,combine);
+			var repMap = new Map(rep),
+				that = this;
+			repMap.each(function (key,value) {
+				that.add2(key,value);
+			});
 		}
 
 		TypedMap.prototype = Object.extend(new Map(), {
