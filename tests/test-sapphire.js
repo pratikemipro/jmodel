@@ -23,6 +23,19 @@ define(['../library/sapphire.js'], function (sapphire) {
 		equals( map.get('rich') instanceof Date, true, 'Elements have correct type');
 		
 	});
+	
+	module('Map.prototype');
+	
+	test('get', function () {
+	
+		var map = new sapphire.Map({'red':1,'green':2,'blue':3});
+		
+		equals( map.get('red'),  1, 'get works for first key');
+		equals( map.get('blue'), 3, 'get works for last key');
+		equals( map.get('pink'), undefined, 'get returns undefined for non-existent key');
+		
+		
+	});
 
 
 	//
