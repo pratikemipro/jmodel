@@ -84,6 +84,10 @@ define(['../library/sapphire.js'], function (sapphire) {
 		equal(map.get(3),'red','add2 adds key/value pairs when key is number and value string');
 		
 	});
+	
+	test('remove', function () {
+		
+	});
 
 
 	//
@@ -247,6 +251,16 @@ define(['../library/sapphire.js'], function (sapphire) {
 		val = 0;
 		testSet.each(length,concat);
 		equals(val,12,'each works with implict pipe of functions');
+		
+	});
+	
+	test('map', function () {
+		
+		var testSet = sapphire.set(1,2,3);
+		
+		deepEqual( testSet.map(function (x) {return 2*x;}).get(), [2,4,6], 'Mapping produces correct elements' );
+		deepEqual( testSet.map(function (x) {return 2*x;}, function (x) {return x+1;}).get(), [3,5,7], 'Maping supports implicit piping' );
+		equal( testSet.map(function (x) {return 2*x;}) instanceof sapphire.List, true, 'Mapping a set produces a List' );
 		
 	});
 
