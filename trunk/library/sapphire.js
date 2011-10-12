@@ -375,7 +375,7 @@ define(['jmodel/opal'], function (opal) {
 				}, new List());
 			},
 		
-			// Tests: none
+			// Tests: full
 			reduce: Array.prototype.reduce ? function (fn,acc) {
 				return this.__rep__.reduce(fn,arguments.length > 1 ? acc : fn.unit);
 			} : function (fn,acc) {
