@@ -369,7 +369,7 @@ define(['jmodel/opal'], function (opal) {
 			map: Array.prototype.map ? function () {
 				return List.fromArray(this.__rep__.map(pipe.apply(null,arguments)));
 			} : function () {
-				var mapping = pipe.call(null,arguments);
+				var mapping = pipe.apply(null,arguments);
 				return this.reduce(function (list,item) {
 					return list.add(mapping.call(null,item));
 				}, new List());
