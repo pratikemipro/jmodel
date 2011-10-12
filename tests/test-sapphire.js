@@ -263,5 +263,14 @@ define(['../library/sapphire.js'], function (sapphire) {
 		equal( testSet.map(function (x) {return 2*x;}) instanceof sapphire.List, true, 'Mapping a set produces a List' );
 		
 	});
+	
+	test('reduce', function () {
+		
+		var testSet = sapphire.set(1,2,3);
+		
+		equal( testSet.reduce(sapphire.plus),   6, 'Reduction works when function has unit');
+		equal( testSet.reduce(sapphire.plus,2), 8, 'Reduction works when initial accumulator provided explicitly');
+		
+	})
 
 });
