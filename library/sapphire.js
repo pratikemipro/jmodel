@@ -365,7 +365,7 @@ define(['jmodel/opal'], function (opal) {
 						: this.reduce(add(predicate), new this.__constructor());
 			},
 		
-			// Tests: none
+			// Tests: full
 			map: Array.prototype.map ? function () {
 				return List.fromArray(this.__rep__.map(pipe.apply(null,arguments)));
 			} : function () {
