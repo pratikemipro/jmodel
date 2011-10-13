@@ -19,6 +19,18 @@ define(['../library/diamond.js'], function (diamond) {
 		equals( context.event('endInitialisation') instanceof diamond.EventType, true, 'Constructor creates endInitialisation event type');
 		
 	});
+	
+	module('EntityTypes');
+	
+	test('EntityTypes creation', function () {
+		
+		var context = new diamond.Context('test'),
+			entityTypes = new diamond.EntityTypes(context);
+			
+		equals( entityTypes.context instanceof diamond.Context, true, 'Constructor sets context');
+		equals( entityTypes instanceof diamond.TypedMap, true, 'EntityTypes is a TypedMap');
+		
+	});
 
 
 });
