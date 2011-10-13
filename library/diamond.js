@@ -35,6 +35,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		// Context
 		//
 		
+		// Tests: full
 		function Context (name) {
 
 			this.isDefault		= false;
@@ -111,13 +112,12 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 			var entityType = function (data) {
 				
-				if ( primaryKeyField ) {
-					data[primaryKeyField] = data[primaryKeyField] || nextKey--;
-				}
-				
 				ObservableObject.call(this,fields,options);
 				
 				if ( data ) {
+					if ( primaryKeyField ) {
+						data[primaryKeyField] = data[primaryKeyField] || nextKey--;
+					}
 					this.set(data);
 					entityType.objects.add(this);
 				}
