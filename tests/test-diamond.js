@@ -29,6 +29,7 @@ define(['../library/diamond.js'], function (diamond) {
 			
 		equals( entityTypes.context instanceof diamond.Context, true, 'Constructor sets context');
 		equals( entityTypes instanceof diamond.TypedMap, true, 'EntityTypes is a TypedMap');
+		equals( entityTypes.ensure({forename:String},{}) instanceof Function, true, 'ensure method returns a constructor' )
 		
 	});
 
