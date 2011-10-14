@@ -366,7 +366,7 @@ define(['jmodel/opal'], function (opal) {
 					var item = rep[i];
 					if ( predicate(item) ) { set.push(item); }
 				}
-				return Set.fromArray(set);
+				return this.__constructor.fromArray(set);
 			},
 		
 			// Tests: full
