@@ -340,8 +340,8 @@ define(['jmodel/opal'], function (opal) {
 				return this;
 			} : function () {
 				var callback = pipe.apply(null,arguments);
-				for ( var i=0; i<this.__rep__.length; i++) {
-					callback.call(this,this.__rep__[i],i);
+				for ( var i=0, rep=this.__rep__; i<rep.length; i++) {
+					callback.call(this,rep[i],i);
 				}
 				return this;
 			},
@@ -361,8 +361,12 @@ define(['jmodel/opal'], function (opal) {
 				return    typeof predicate === 'undefined' ? this
 						: this.__constructor.fromArray(this.__rep__.filter(this.predicate(predicate)));
 			} : function (predicate) {
-				return    typeof predicate === 'undefined' ? this
-						: this.reduce(add(predicate), new this.__constructor());
+				var set = [];
+				for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
+					var item = rep[i];
+					if ( predicate(item) ) { set.push(item); }
+				}
+				return Set.fromArray(set);
 			},
 		
 			// Tests: full
@@ -370,9 +374,11 @@ define(['jmodel/opal'], function (opal) {
 				return List.fromArray(this.__rep__.map(pipe.apply(null,arguments)));
 			} : function () {
 				var mapping = pipe.apply(null,arguments);
-				return this.reduce(function (list,item) {
-					return list.add(mapping.call(null,item));
-				}, new List());
+				var list = [];
+				for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
+					list.push(mapping.call(null,rep[i]));
+				}
+				return List.fromArray(list);
 			},
 		
 			// Tests: full
@@ -380,8 +386,10 @@ define(['jmodel/opal'], function (opal) {
 				return this.__rep__.reduce(fn,arguments.length > 1 ? acc : fn.unit);
 			} : function (fn,acc) {
 				acc = arguments.length > 1 ? acc : fn.unit;
-				return	  this.length === 0 ? acc
-						: this.tail().reduce(fn,fn(acc,this.head()));
+				for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
+					acc = fn(acc,rep[i]);
+				}
+				return acc;
 			},
 		
 			// Tests: none
