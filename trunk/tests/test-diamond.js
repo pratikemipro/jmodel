@@ -94,6 +94,9 @@ define(['../library/diamond.js'], function (diamond) {
 		equals(Person.objects.length, 3, 'Count of entities is correct');
 		equals(Person.objects.get(-2).forename(), 'jane', 'Entities can be retrieved from objects collection');
 		
+		entity.person_id(5);
+		equals(Person.objects.get(5).forename(),'fred','Index updated when primary key value changes');
+		
 	});
 
 

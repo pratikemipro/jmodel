@@ -158,7 +158,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 			entityType.deleted	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 			
-			// Tests: none
+			// Tests: full
 			if ( primaryKeyField ) {
 				
 				entityType.objects.index(method(primaryKeyField));
