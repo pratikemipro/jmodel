@@ -100,6 +100,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		
 		di.plugin.type = {};
 
+		// Tests: partial
 		function EntityType (context,fields,options) {
 
 			var nextKey = -1;
@@ -112,6 +113,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				}
 			}
 
+			// Tests: full
 			var entityType = function (data) {
 				
 				ObservableObject.call(this,fields,options);
@@ -156,6 +158,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			entityType.objects 	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 			entityType.deleted	   = new Entities(entityType,options.superType ? options.superType.objects : undefined);
 			
+			// Tests: none
 			if ( primaryKeyField ) {
 				
 				entityType.objects.index(method(primaryKeyField));
@@ -176,6 +179,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			}
 			
 			// Remember deleted objects that might exist in persistent storage
+			// Tests: none
 			entityType.objects.event('remove')
 				.where(method(primaryKeyField).gt(0))
 				.subscribe({
@@ -198,6 +202,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				create: 		delegateTo(entityType.objects,'create'),
 				remove: 		delegateTo(entityType.objects,'remove'),
 
+				// Tests: none
 				subtype:		function (subfields,suboptions) {
 									return context.types.create(
 										EnhancedObject.from(fields).addProperties(subfields).removeProperties('methods'),
