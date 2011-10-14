@@ -14,13 +14,13 @@ define(['jmodel/diamond'], function (diamond) {
 	Object.extend(diamond.Context.prototype,{
 		
 		debug: function () {
-			console.group('Context: '+this.name);
+			console[console.group ? 'group' : 'log']('Context: '+this.name);
 			this.types.each(function (name,type) {
-				console.group(name);
+				console[console.group ? 'group' : 'log']('Context: '+name);
 				type.objects.debug();
-				console.groupEnd();
+				if ( console.groupEnd ) { console.groupEnd(); }
 			});
-			console.groupEnd();
+			if ( console.groupEnd ) { console.groupEnd(); }
 		}
 		
 	});
