@@ -104,7 +104,7 @@ define([
 			if ( !this.dirty ) { return this; }
 			
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
-			
+
 			diamond.event.fromAjax({
 				url: this.context.serviceLocation+'/'+(this.entityType.options.entitySet || this.entityType.options.plural || this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
 				type: 	id > 0 && !this.deleted ? 'MERGE'
@@ -114,7 +114,6 @@ define([
 				contentType: 'application/json',
 				dataType: 'json'
 			})
-			.where(diamond.not(diamond.eq(undefined)))
 			.subscribe({
 				context: this,
 				message: function (json) {
