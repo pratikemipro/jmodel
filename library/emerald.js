@@ -559,6 +559,12 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			    },
 				error: function () {
 					that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
+				},
+				beforeSend: function (xhr,settings) {
+					if ( settings.type != 'GET' && settings.type != 'POST' ) {
+						xhr.setRequestHeader('X-HTTP-Method',settings.type);
+						settings.type = 'POST';
+					}
 				}
 			});
 		
