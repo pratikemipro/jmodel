@@ -40,7 +40,6 @@ define([
 			dataType: 'json',
 			async: false,
 			success: function (data) {
-				console.log(arguments);
 				obj = Object.fromOData(data,false);
 			}
 		});
@@ -100,7 +99,7 @@ define([
 	Object.extend(diamond.Entity.prototype, {
 		
 		persist: function (completionEvent) {
-			
+	
 			if ( !this.dirty ) { return this; }
 			
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
