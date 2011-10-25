@@ -201,6 +201,11 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				get:			delegateTo(entityType.objects,'get'),
 				create: 		delegateTo(entityType.objects,'create'),
 				remove: 		delegateTo(entityType.objects,'remove'),
+				
+				object: 		function (data) {
+									return    primaryKeyField ? ( entityType.objects.get(data[primaryKeyField]) || entityType.create(data) ).set(data)
+											: entityType.create(data);
+								},
 
 				// Tests: none
 				subtype:		function (subfields,suboptions) {
