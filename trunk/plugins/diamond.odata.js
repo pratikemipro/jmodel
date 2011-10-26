@@ -109,7 +109,7 @@ define([
 				type: 	id > 0 && !this.deleted ? 'MERGE'
 					  : id > 0 && this.deleted ? 'DELETE'
 					  : 'POST',
-				data: JSON.stringify(this.toBareObject().removeProperties(this.key)),
+				data: JSON.stringify(this.toBareObject().removeProperties(this.primaryKeyField)),
 				contentType: 'application/json',
 				dataType: 'json'
 			})
