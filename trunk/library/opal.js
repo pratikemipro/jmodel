@@ -683,6 +683,32 @@ define(function (a,b,c,undefined) {
 			return 	  constructor === String ? String
 					: constructor === Number ? Number
 					: constructor === Boolean ? Boolean
+					: constructor === Date ? function () { // Special handling for dates
+						var args = args1.concat(_slice.call(arguments));
+						if ( args.length === 1 && typeof args[0] === 'string' ) {
+							var pieces = args[0].split('T'),
+								date = pieces[0].split('-'),
+								time = pieces[1] !== undefined ? pieces[1].split(':') : [];
+							return    time.length === 0 ? new Date(
+																parseInt(date[0],10),
+																parseInt(date[1],10)-1,
+																parseInt(date[2],10)
+															)
+									: new Date(
+										parseInt(date[0],10),
+										parseInt(date[1],10)-1,
+										parseInt(date[2],10),
+										parseInt(time[0],10),
+										parseInt(time[1],10),
+										parseInt(time[2],10)
+									);
+						}
+						else {
+							return    args.length === 1 ? new Date(args[0])
+									: args.length === 3 ? new Date(args[0],args[1],args[2])
+									: new Date(args[0],args[1],args[2],args[3],args[4],args[5]);
+						}
+					}
 					: constructor && constructor.nullable ? constructor
 					: function () {
 						var args = args1.concat(_slice.call(arguments));
