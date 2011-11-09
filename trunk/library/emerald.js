@@ -508,6 +508,20 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	    	    });
 	    	    return eventType;
 	    	},
+	
+			fromDelegate: function (element,selector,name,options) {
+				var eventType = new EventType();
+				jQuery(element).delegate(selector,name,function (event) {
+					if ( options && options.preventDefault ) {
+						event.preventDefault();
+					}
+					if ( options && options.stopPropagation ) {
+						event.stopPropagation();
+					}
+	    	        return eventType.raise(event);
+				});
+				return eventType;
+			},
 
 			after: function (interval) {
 				return new TimerEventType(interval);
