@@ -9,22 +9,21 @@
 
 define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
 
-	jQuery.fn.event = function (name,options) {
-	    var events = [];
-	    this.each(function (index,element) {
-	        events.push(emerald.event.from(this,name,options));
-	    });
-		return emerald.disjoin.apply(this,events);
-	};
+	var disjoin = emerald.disjoin, Set = emerald.Set, event = emerald.event;
 
+	jQuery.fn.event = function (name,options) {
+		return disjoin(Set.fromArray(this.map(function (index,element) {
+			return event.from(this,name,options);
+		}).get()));
+	};
 
 	jQuery.fn.subscribe = function (descriptor) {
 	    this.each(function (index,element) {
 	        descriptor.event.subscribe(function () {
 	            descriptor.message.apply(element,arguments);
-	        })
+	        });
 	    });
 	    return this;
-	}
+	};
 	
 });
