@@ -496,6 +496,14 @@ define(['jmodel/opal'], function (opal) {
 		Set.prototype.range = Set.prototype.aggregate(parallel(min,max),{min:null,max:null});
 
 		_.Set = Set;
+		
+		// Tests: none
+		_.sequence = function (seed,step) {
+			seed -= step;
+			return function () {
+				return seed += step;
+			};
+		};
 	
 		// Tests: none
 		_.range = function (lower, higher) {
