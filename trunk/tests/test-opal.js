@@ -278,6 +278,21 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('require', function () {
+		
+		var add2 = function (x) { return x+2; },
+			safeAdd2 = add2.require( opal.first.hastype('number') ),
+			restrictedAdd2 = add2.require( opal.first.hastype('number'), opal.first.between(0,5) );
+		
+		equal( safeAdd2(2), 4, 'Works as normal if requirements satisfied');
+		raises( function () { return safeAdd2('fred'); }, 'Throws exception if requirements not satisfied' );
+		
+		equals( restrictedAdd2(2), 4, 'Works as normal if requirments satisfied' );
+		raises( function () { restrictedAdd2('fred') }, 'Throws exception if first requirment unsatisfied' );
+		raises( function () { restrictedAdd2(6) }, 'Throws exception if second requirment unsatisfied' );
+		
+	});
+	
 	test('and', function () {
 	
 		var gt = function (x) {return x>2; },
