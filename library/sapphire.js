@@ -240,7 +240,7 @@ define(['jmodel/opal'], function (opal) {
 				if ( this.__index && partition[true]) {
 					partition[true].reduce(bymethod('remove'),this.__index);
 				}
-				return partition[true] || new this.__constructor();
+				return partition[true] || this instanceof List ? new List() : new Set();
 			},
 		
 			// Tests: full
@@ -348,7 +348,7 @@ define(['jmodel/opal'], function (opal) {
 		
 			// Tests: none
 			partition: function (fn) {
-				var constructor = this.__constructor;
+				var constructor = this instanceof List ? List : Set;
 				return this.reduce(function (acc,object) {
 					var key = fn(object);
 					acc[key] = ( acc[key] || new constructor() ).add(object);
