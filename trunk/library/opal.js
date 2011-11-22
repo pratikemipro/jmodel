@@ -79,7 +79,7 @@ define(function (a,b,c,undefined) {
 			return value;
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: full
 		constant: function (constant) {
 			return function () { return constant; };

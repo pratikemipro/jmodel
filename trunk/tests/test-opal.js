@@ -46,6 +46,24 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Function');
 	
+	test('identity', function () {
+	
+		var obj = {name:'test'};
+		
+		equals( Function.identity(obj), obj, 'Works for objects');
+		equals( Function.identity(17), 17, 'Works for non-objects');
+		
+	});
+	
+	test('constant', function () {
+		
+		var fred = Function.constant('fred');
+		
+		equals( fred(), 'fred', 'Works with no arguments');
+		equals( fred(1,2,3), 'fred', 'Works with arguments');
+		
+	});
+	
 	test('argument', function () {
 	
 		equals( Function.argument(0).call(this,'red','green','blue'), 'red', 'Function.argument(0) works');
@@ -55,14 +73,6 @@ define(['../library/opal.js'], function (opal) {
 		
 		equals( Function.argument(2).hastype('string').call(this,'red','green','blue'), true, 'Function.argument(4).hastype returns false if type does not match' );
 		equals( Function.argument(2).hastype('number').call(this,'red','green','blue'), false, 'Function.argument(4).hastype returns false if type does not match' );
-		
-	});
-	
-	test('identity', function () {
-	
-		var fred = 'fred';
-	
-		equals( Function.identity(fred), fred, 'identity function returns object unchanged' );
 		
 	});
 
