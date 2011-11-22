@@ -621,7 +621,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Function.prototype, {
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		asc: function () {
 			var fn = this;
@@ -634,7 +634,7 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		desc: function () {
 			return this.asc().then(function (x) { return -x; } );
@@ -654,7 +654,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Function.prototype, {
 		
-		// Tests: none
+		// Tests: full
 		// Docs: full
 		create: function () {
 			return Object.construct(this).apply(null,arguments);
@@ -680,7 +680,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Object, {
 		
-		// Tests: partial (add testing for Nullable)
+		// Tests: partial (add testing for Nullable and variant Date constructors)
 		// Docs: full
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
