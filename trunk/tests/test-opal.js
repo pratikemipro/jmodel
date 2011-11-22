@@ -427,6 +427,13 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('isnull', function () {
+	
+		equals( Function.identity.isnull()(null), true, 'Returns true when function returns null');
+		equals( Function.identity.isnull()(17), false, 'Returns true when function returns a non-null value');
+		
+	});
+	
 	test('isa', function () {
 	
 		function Mammal () {}

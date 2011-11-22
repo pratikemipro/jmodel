@@ -578,7 +578,7 @@ define(function (a,b,c,undefined) {
 			return this.is(regex(expression));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		isnull: function () {
 			return this.then(isnull);
