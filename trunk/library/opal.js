@@ -93,7 +93,7 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		map: function (mapping) {
 			return function (key) {

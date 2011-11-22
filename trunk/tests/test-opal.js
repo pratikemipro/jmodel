@@ -75,6 +75,19 @@ define(['../library/opal.js'], function (opal) {
 		equals( Function.argument(2).hastype('number').call(this,'red','green','blue'), false, 'Function.argument(4).hastype returns false if type does not match' );
 		
 	});
+	
+	test('map', function () {
+	
+		var counts = Function.map({
+			quarks: 6,
+			chargedLeptons: 3,
+			neutrinos: 3
+		});
+		
+		equals( counts('quarks'), 6, 'Works for first mapping entry' );
+		equals( counts('chargedLeptons'), 3, 'Works for other mapping entries');
+		
+	});
 
 	test('pipe', function () {
 
