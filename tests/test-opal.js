@@ -368,6 +368,18 @@ define(['../library/opal.js'], function (opal) {
 	
 	module('Object');
 	
+	test('extend', function () {
+	
+		var source = {forename:'john',surname:'smith'},
+			target = {};
+			
+		Object.extend(target,source);
+		
+		equals( target.forename, 'john','Copies first property correctly');
+		equals( target.surname, 'smith','Copies second property correctly');
+		
+	});
+	
 	test('construct', function () {
 	
 		function Person (name, age) {

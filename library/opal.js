@@ -25,7 +25,7 @@ define(function (a,b,c,undefined) {
 	// Utility functions
 	//
 	
-	// Tests: none
+	// Tests: full
 	// Docs: none
 	Object.extend = Object.extend || function (target,source) {
 		for ( var i in source ) {
