@@ -572,7 +572,7 @@ define(function (a,b,c,undefined) {
 			return this.is(between(lower,higher));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		matches: function (expression) {
 			return this.is(regex(expression));
