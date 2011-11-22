@@ -417,6 +417,16 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('matches', function () {
+	
+		var wrap = function (x) { return 'a'+x+'a'; },
+			regex = /^ab+a$/;
+			
+		equal( wrap.matches(regex)('bb'), true, 'Returns true when function returns string matching regular expression');
+		equal( wrap.matches(regex)('cc'), false, 'Returns false when function returns string not matching expression');
+		
+	});
+	
 	test('isa', function () {
 	
 		function Mammal () {}
