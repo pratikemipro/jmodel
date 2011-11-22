@@ -548,7 +548,7 @@ define(function (a,b,c,undefined) {
 			return this.is(lt(value));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		gt: function (value) {
 			return this.is(gt(value));

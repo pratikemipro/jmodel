@@ -376,6 +376,25 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('gt', function () {
+		
+		var add2 = function (x) { return x+2; };
+		
+		equal( add2.gt(5)(2), false, 'returns false when function applied to arguments is greater than value supplied to predicate' );
+		equal( add2.gt(5)(4), true, 'returns true when function applied to arguments is not greater than value supplied to predicate' );
+		
+	});
+	
+	test('lte', function () {
+		
+		var add2 = function (x) { return x+2; };
+		
+		equal( add2.lte(5)(2), true, 'returns true when function applied to arguments is less than value supplied to predicate' );
+		equal( add2.lte(5)(3), true, 'returns true when function applied to arguments is equal to value supplied to predicate' );
+		equal( add2.lte(5)(4), false, 'returns false when function applied to arguments is greater than value supplied to predicate' );
+		
+	});
+	
 	test('isa', function () {
 	
 		function Mammal () {}
