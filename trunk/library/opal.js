@@ -18,8 +18,8 @@ define(function (a,b,c,undefined) {
 
 	var opal   = { opal_version: '0.22.0' },
 		_slice = Array.prototype.slice,
-		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
-				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
+		assert = /* ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
+				 : */ function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
 	//
 	// Utility functions
