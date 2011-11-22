@@ -680,7 +680,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Object, {
 		
-		// Tests: partial (add testing for Nullable and variant Date constructors)
+		// Tests: partial (add testing for Nullable)
 		// Docs: full
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
