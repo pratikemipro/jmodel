@@ -18,8 +18,8 @@ define(function (a,b,c,undefined) {
 
 	var opal   = { opal_version: '0.22.0' },
 		_slice = Array.prototype.slice,
-		assert = /* ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
-				 : */ function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
+		assert = ( window.console && window.console.assert ) ? function _assert (condition, message) { window.console.assert(condition,message); }
+				 : function _assert (condition, message) { if ( !condition ) { throw 'Opal exception: '+message; } };
 
 	//
 	// Utility functions
@@ -436,7 +436,9 @@ define(function (a,b,c,undefined) {
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 				predicate = Function.and.apply(null,predicates);
 			return this.pre(function () {
-				assert(predicate.apply(this,arguments),message);
+				if ( !predicate.apply(this,arguments) ) {
+					throw 'Precondition failure'+(message ? ': '+message : '');
+				}
 			});
 		},
 		
@@ -447,7 +449,9 @@ define(function (a,b,c,undefined) {
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
 				predicate = Function.and.apply(null,predicates);
 			return this.post(function () {
-				assert(predicate.apply(this,arguments),message);
+				if ( !predicate.apply(this,arguments) ) {
+					throw 'Postcondition failure'+(message ? ': '+message : '');
+				}
 			});
 		}
 		
