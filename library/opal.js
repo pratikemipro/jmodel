@@ -429,7 +429,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Function.prototype, {
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		require: function () {
 			var predicates = _slice.call(arguments),
