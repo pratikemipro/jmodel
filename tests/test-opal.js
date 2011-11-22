@@ -219,6 +219,19 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('map', function () {
+	
+		var mod2 = function (x) { return x % 2; },
+			oddEven = mod2.map({
+				0: 'even',
+				1: 'odd'
+			});
+			
+		equal( oddEven(6), 'even', 'Works for first mapping entry' );
+		equal( oddEven(7), 'odd', 'Works for second mapping entry' );
+		
+	});
+	
 	test('then', function () {
 	
 		var red = function (arr) { arr.push('red'); return arr; },
