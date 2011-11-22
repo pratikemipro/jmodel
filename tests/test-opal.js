@@ -405,6 +405,18 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('between', function () {
+		
+		var add2 = function (x) { return x+2; };
+		
+		equal( add2.between(5,7)(2), false, 'returns false when function applied to arguments is less than lower value supplied to predicate' );
+		equal( add2.between(5,7)(3), true, 'returns true when function applied to arguments is equal to lower value supplied to predicate' );
+		equal( add2.between(5,7)(4), true, 'returns true when function applied to arguments is strictly between boundaries supplied to predicate' );
+		equal( add2.between(5,7)(5), true, 'returns true when function applied to arguments is equal to higher value supplied to predicate' );
+		equal( add2.between(5,7)(6), false, 'returns true when function applied to arguments is greater than higher value supplied to predicate' );
+		
+	});
+	
 	test('isa', function () {
 	
 		function Mammal () {}

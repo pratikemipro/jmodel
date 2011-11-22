@@ -566,7 +566,7 @@ define(function (a,b,c,undefined) {
 			return this.is(gte(value));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		between: function (lower,higher) {
 			return this.is(between(lower,higher));
