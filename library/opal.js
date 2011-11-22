@@ -710,7 +710,7 @@ define(function (a,b,c,undefined) {
 						else {
 							return    args.length === 1 ? new Date(args[0])
 									: args.length === 3 ? new Date(args[0],args[1],args[2])
-									: new Date(args[0],args[1],args[2],args[3],args[4],args[5]);
+									: new Date(args[0],args[1],args[2],args[3],args[4],args[5],args[6]);
 						}
 					}
 					: constructor && constructor.nullable ? constructor
