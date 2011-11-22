@@ -293,6 +293,18 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('ensure', function () {
+	
+		var add = function (a,b) { return a+b; },
+			faultyAdd = function (a,b) { return a+b+1; },
+			safeAdd = add.ensure(function (c,a,b) { return c === a+b; } ),
+			safeFaultyAdd = faultyAdd.ensure(function (c,a,b) { return c === a+b; } );
+			
+		equals( safeAdd(2,3), 5, 'Works as expected when postcondition satisfied' );
+		raises( function () { safeFaultyAdd(2,3) }, 'Throws exception if postcondition unsatisfied' );
+		
+	});
+	
 	test('and', function () {
 	
 		var gt = function (x) {return x>2; },

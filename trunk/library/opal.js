@@ -442,7 +442,7 @@ define(function (a,b,c,undefined) {
 			});
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		ensure: function () {
 			var predicates = _slice.call(arguments),
