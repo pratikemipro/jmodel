@@ -340,7 +340,7 @@ define(function (a,b,c,undefined) {
 	
 	Object.extend(Function.prototype, {
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		map: function (mapping) {
 			return this.then(Function.map(mapping));
