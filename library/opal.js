@@ -554,13 +554,13 @@ define(function (a,b,c,undefined) {
 			return this.is(gt(value));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		lte: function (value) {
 			return this.is(lte(value));
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		gte: function (value) {
 			return this.is(gte(value));
