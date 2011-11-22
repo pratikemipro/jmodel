@@ -288,8 +288,8 @@ define(['../library/opal.js'], function (opal) {
 		raises( function () { return safeAdd2('fred'); }, 'Throws exception if requirements not satisfied' );
 		
 		equals( restrictedAdd2(2), 4, 'Works as normal if requirments satisfied' );
-		raises( function () { restrictedAdd2('fred') }, 'Throws exception if first requirment unsatisfied' );
-		raises( function () { restrictedAdd2(6) }, 'Throws exception if second requirment unsatisfied' );
+		raises( function () { restrictedAdd2('fred'); }, 'Throws exception if first requirment unsatisfied' );
+		raises( function () { restrictedAdd2(6); }, 'Throws exception if second requirment unsatisfied' );
 		
 	});
 	
@@ -301,7 +301,7 @@ define(['../library/opal.js'], function (opal) {
 			safeFaultyAdd = faultyAdd.ensure(function (c,a,b) { return c === a+b; } );
 			
 		equals( safeAdd(2,3), 5, 'Works as expected when postcondition satisfied' );
-		raises( function () { safeFaultyAdd(2,3) }, 'Throws exception if postcondition unsatisfied' );
+		raises( function () { safeFaultyAdd(2,3); }, 'Throws exception if postcondition unsatisfied' );
 		
 	});
 	
@@ -326,6 +326,16 @@ define(['../library/opal.js'], function (opal) {
 		equal(comp(3), true, 'true if first condition true');
 		equal(comp(1), true, 'true if second condition true');
 		equal(comp(2), false, 'false if both conditions false');
+		
+	});
+	
+	test('not', function () {
+	
+		var isOdd = function (x) { return x % 2 === 1; };
+	
+		equals( isOdd(5), true, 'Base function works');
+		equals( isOdd.not()(5), false, 'Works as expected when base returns true');
+		equals( isOdd.not()(6), true, 'Works as expected when base returns false');
 		
 	});
 	
