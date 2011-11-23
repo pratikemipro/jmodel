@@ -240,7 +240,7 @@ define(['jmodel/opal'], function (opal) {
 				if ( this.__index && partition[true]) {
 					partition[true].reduce(bymethod('remove'),this.__index);
 				}
-				return partition[true] || this instanceof List ? new List() : new Set();
+				return partition[true] || ( this instanceof List ? new List() : new Set() );
 			},
 		
 			// Tests: full
