@@ -65,8 +65,8 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		}
 
-		function ObservableSet () {
-			Set.apply(this);
+		function ObservableSet (members) {
+			Set.call(this,members);
 			makeObservable.call(this);
 		}
 
