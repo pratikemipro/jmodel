@@ -51,10 +51,6 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 				remove: proto.remove.post(function (removed) {
 					var that = this;
-					if ( !removed.each ) {
-						console.log(this);
-						console.log(removed);
-					}
 					removed.each(function (item) {
 						that.event('remove').raise(item,that);
 					});
