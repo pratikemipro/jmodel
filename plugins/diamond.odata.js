@@ -104,12 +104,23 @@ define([
 			
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
 
+			var data = this.toBareObject().removeProperties(this.primaryKeyField),
+				type =   id > 0 && !this._deleted ? 'MERGE'
+					   : id > 0 && this._deleted ? 'DELETE'
+					   : 'POST';
+					
+			if ( type != 'POST' ) {
+				for (var key in data ) {
+					if ( typeof data[key] === 'object' ) {
+						delete data[key];
+					}
+				}
+			}
+
 			diamond.event.fromAjax({
 				url: this.context.serviceLocation+'/'+(this.entityType.options.entitySet || this.entityType.options.plural || this.entityType.typeName+'s')+(id > 0 ? '('+id+')' : ''),
-				type: 	id > 0 && !this.deleted ? 'MERGE'
-					  : id > 0 && this.deleted ? 'DELETE'
-					  : 'POST',
-				data: JSON.stringify(this.toBareObject().removeProperties(this.primaryKeyField)),
+				type: type,
+				data: JSON.stringify(data),
 				contentType: 'application/json',
 				dataType: 'json'
 			})
