@@ -254,6 +254,19 @@ define(['../library/sapphire.js'], function (sapphire) {
 		
 	});
 	
+	test('partition', function () {
+	
+		var testSet = sapphire.set(1,2,3,4,5,6),
+			partition = testSet.partition(function (item) { return item % 2 === 0; });
+		
+		equal(partition[true] instanceof sapphire.Set, true, 'True items contained in Set');
+		equal(partition[false] instanceof sapphire.Set, true, 'False items contained in Set');
+		
+		deepEqual(partition[true].get(),[2,4,6],'True set contains correct items');
+		deepEqual(partition[false].get(),[1,3,5],'False set contains correct items');
+		
+	});
+	
 	test('map', function () {
 		
 		var testSet = sapphire.set(1,2,3);
