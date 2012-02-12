@@ -50,8 +50,9 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@cards	 = cards
 			@element = $ element
 			
-			@cards.event('add').subscribe (card) => @add card
-			@cards.event('insert').subscribe (card,index) => @insert card, index
+			@cards.events.subscribe
+				add: (card) => @add card
+				insert: (card,index) => @insert card, index
 				
 		add: (card) ->
 			@element.append card.li
