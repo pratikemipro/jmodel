@@ -54,7 +54,9 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 				remove: (args...) => @remove args...
 				
 		add: (card) ->
+			card.li.children().addClass 'adding'
 			@element.append card.li
+			after(1) -> card.li.children().removeClass 'adding'
 		
 		insert: (card,index) ->
 			li = card.li.addClass 'adding'
