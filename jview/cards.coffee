@@ -1,7 +1,7 @@
-define ['jquery','jmodel/topaz'], ($,topaz) ->
+define ['jquery','jmodel/topaz'], ($,jm) ->
 
-	## Utility functions
-	after = (period) -> (fn) -> topaz.event.after(period).subscribe fn
+	# Utility functions
+	after = (period) -> (fn) -> jm.event.after(period).subscribe fn
 
 
 	##
@@ -21,8 +21,8 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 	
 		constructor: ->
 			
-			@cards  = new topaz.ObservableTypedList(Card)
-			@events = new topaz.EventRegistry 'add', 'insert', 'remove'
+			@cards  = new jm.ObservableTypedList(Card)
+			@events = new jm.EventRegistry 'add', 'insert', 'remove'
 			
 			@cards.events.republish
 				add: @event 'add'
@@ -31,7 +31,7 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 		
 		event: (name) -> @events.get name
 		
-		## Delegation
+		# Delegation
 		add:    (args...) -> @cards.add args...
 		insert: (args...) -> @cards.insert args...
 		remove: (args...) -> @cards.remove args...
@@ -43,10 +43,11 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 	
 	class CardListView
 		
-		constructor: (cards,element) ->
+		constructor: (cards,element,duration=750) ->
 			
-			@cards	 = cards
-			@element = $ element
+			@cards	  = cards
+			@element  = $ element
+			@duration = duration
 			
 			@cards.events.subscribe
 				add:    (args...) => @add args...
@@ -62,14 +63,14 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			li = card.li.addClass 'adding'
 			@element.children('li').eq(index).before li
 			li.css 'width', li.children('section').outerWidth(true)
-			after(750) -> li.removeClass 'adding'
+			after(@duration) -> li.removeClass 'adding'
 			
 		remove: (card) ->
 			li = card.li
 			li.children().addClass 'removing'
-			after(750) ->
+			after(@duration) ->
 				li.addClass 'removing'
-				after(750) -> li.remove()
+				after(@duration) -> li.remove()
 	
 	
 	##
