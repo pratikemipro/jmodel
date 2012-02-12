@@ -53,6 +53,13 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			create: function (key) {
 				this.add.apply(this,arguments);
 				return this.get(key);
+			},
+			
+			subscribe: function (map) {
+				for ( var eventName in map ) {
+					this.get(eventName).subscribe(map[eventName]);
+				}
+				return this;
 			}
 			
 		});
