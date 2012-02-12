@@ -582,7 +582,17 @@ define(['jmodel/opal'], function (opal) {
 			Set.apply(this,arguments);
 		}
 	
-		List.prototype					= new Set();
+		List.prototype = Object.extend(new Set(), {
+			
+			// Tests: none
+			insert: function (index,object) {
+				this.__rep__.splice(index+1,0,object);
+				return this;
+			}
+			
+		});
+		
+		
 		List.prototype.constraint		= AllPredicate;
 		List.prototype.__constructor	= List;
 		
@@ -591,7 +601,17 @@ define(['jmodel/opal'], function (opal) {
 			TypedSet.apply(this,arguments);
 		}
 		
-		TypedList.prototype					= new TypedSet();
+		TypedList.prototype	= Object.extend(new TypedSet(), {
+			
+			// Tests: none
+			insert: function (index,object) {
+				this.__rep__.splice(index+1,0,this.ensure.apply(this,_slice.call(arguments,1)));
+				return this;
+			}
+			
+		});
+		
+		
 		TypedList.prototype.constraint		= AllPredicate;
 		TypedList.prototype.__constructor	= TypedList;
 	
