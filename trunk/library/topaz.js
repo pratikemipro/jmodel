@@ -36,7 +36,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		
 		
 		// ------------------------------------------------------------------------
-		//														  Observable Sets
+		//												  Observable Sets and Lists
 		// ------------------------------------------------------------------------
 
 		function observable (proto) {
@@ -70,29 +70,46 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			makeObservable.call(this);
 		}
 
-		ObservableSet.prototype				= observable(Set.prototype);
+		ObservableSet.prototype = observable(Set.prototype);
 
 		function ObservableTypedSet (constructor) {
 			TypedSet.call(this,constructor);
 			makeObservable.call(this);
 		}
 
-		ObservableTypedSet.prototype 				= observable(TypedSet.prototype);
+		ObservableTypedSet.prototype = observable(TypedSet.prototype);
+
+		function ObservableList (members) {
+			List.call(this,members);
+			makeObservable.call(this);
+		}
+		
+		ObservableList.prototype = observable(List.prototype);
+
+		function ObservableTypedList (constructor) {
+			TypedList.call(this,constructor);
+			makeObservable.call(this);
+		}
+		
+		ObservableTypedList.prototype = observable(TypedList.prototype);
 
 		function makeObservable () {
 
-			this.events	= new EventRegistry('add','remove','initialise','sort','change');
+			this.events	= new EventRegistry('add','remove','insert','initialise','sort','change');
 			this.event	= delegateTo(this.events,'get');
 
-			this.event('add')
-				.where(has('event','change'))
-				.subscribe({
-					context: this.event('change'),
-					message: function (object) {
-						object.event('change')
-					    	.republish(this); 
-					}
-				});
+			disjoin(
+				this.event('add'),
+				this.event('insert')
+			)			
+			.where(has('event','change'))
+			.subscribe({
+				context: this.event('change'),
+				message: function (object) {
+					object.event('change')
+				    	.republish(this); 
+				}
+			});
 
 			return this;
 
@@ -100,6 +117,8 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		topaz.ObservableSet = ObservableSet;
 		topaz.ObservableTypedSet = ObservableTypedSet;
+		topaz.ObservableList = ObservableList;
+		topaz.ObservableTypedList = ObservableTypedList;
 
 		topaz.plugin.set.asObservable = function () {
 			return this.reduce(bymethod('add'),new ObservableSet());

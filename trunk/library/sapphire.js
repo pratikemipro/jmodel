@@ -574,7 +574,7 @@ define(['jmodel/opal'], function (opal) {
 
 
 		// ------------------------------------------------------------------------
-		//															           List
+		//														 List and TypedList
 		// ------------------------------------------------------------------------
 
 		// Tests: none
@@ -585,6 +585,15 @@ define(['jmodel/opal'], function (opal) {
 		List.prototype					= new Set();
 		List.prototype.constraint		= AllPredicate;
 		List.prototype.__constructor	= List;
+		
+		// Tests: none
+		function TypedList () {
+			TypedSet.apply(this,arguments);
+		}
+		
+		TypedList.prototype					= new TypedSet();
+		TypedList.prototype.constraint		= AllPredicate;
+		TypedList.prototype.__constructor	= TypedList;
 	
 		// Tests: none
 		List.from = function () {
@@ -625,7 +634,8 @@ define(['jmodel/opal'], function (opal) {
 
 		Object.extend(_,{
 			List: List,
-			list: list
+			list: list,
+			TypedList: TypedList
 		});
 
 
