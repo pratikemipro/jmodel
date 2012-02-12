@@ -57,14 +57,18 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			
 			subscribe: function (map) {
 				for ( var eventName in map ) {
-					this.get(eventName).subscribe(map[eventName]);
+					if ( map.hasOwnProperty(eventName) ) {
+						this.get(eventName).subscribe(map[eventName]);
+					}
 				}
 				return this;
 			},
 			
 			republish: function (map) {
 				for ( var eventName in map ) {
-					this.get(eventName).republish(map[eventName]);
+					if ( map.hasOwnProperty(eventName) ) {
+						this.get(eventName).republish(map[eventName]);
+					}
 				}
 				return this;
 			}
