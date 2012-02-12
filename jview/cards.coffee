@@ -31,15 +31,10 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 		
 		event: (name) -> @events.get name
 		
-		add: (args...) -> @cards.add args...
-			
-		insert: (index,card) ->
-			## Temporary hack
-			@cards.__rep__.splice index+1, 0, card
-			@cards.event('insert').raise(card,index)
-			
+		## Delegation
+		add:    (args...) -> @cards.add args...
+		insert: (args...) -> @cards.insert args...
 		remove: (args...) -> @cards.remove args...
-			
 			
 			
 	##

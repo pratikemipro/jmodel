@@ -84,14 +84,33 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			makeObservable.call(this);
 		}
 		
-		ObservableList.prototype = observable(List.prototype);
+		ObservableList.prototype = Object.extend(observable(List.prototype), {
+		
+			// Tests: none
+			insert: function (index,object) {
+				this.__rep__.splice(index+1,0,object);
+				this.event('insert').raise(object,index,this);
+				return this;
+			}
+			
+		});
 
 		function ObservableTypedList (constructor) {
 			TypedList.call(this,constructor);
 			makeObservable.call(this);
 		}
 		
-		ObservableTypedList.prototype = observable(TypedList.prototype);
+		ObservableTypedList.prototype = Object.extend(observable(TypedList.prototype), {
+		
+			// Tests: none
+			insert: function (index,object) {
+				var obj = this.ensure.apply(this,_slice.call(arguments,1))
+				this.__rep__.splice(index+1,0,obj);
+				this.event('insert').raise(object,index,this);
+				return this;
+			}
+			
+		});
 
 		function makeObservable () {
 
