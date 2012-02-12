@@ -1,0 +1,42 @@
+ul.cards {
+	position: relative;
+	white-space: nowrap;
+	padding: 0px;
+	margin: 0px;
+}
+			
+ul.cards > li {
+	display: inline-block;
+	padding: 0px;
+	margin: 0px;
+	-webkit-transition: width 0.75s ease-in-out;
+}
+			
+ul.cards > li > * {
+	width: 300px;
+	margin: 0px 16px;
+	background: red;
+	-webkit-transition: opacity 0.75s ease-in-out;
+}
+			
+ul.cards > li:first-child { width: 100%; }
+ul.cards > li:first-child section { width: auto; }
+			
+ul.cards > li.adding {
+	width: 0px;
+	overflow: hidden;
+}
+			
+ul.cards > li.adding > *,
+ul.cards > li > .adding {
+	visibility: hidden;
+	opacity: 0;
+}
+			
+ul.cards > li.removing {
+	width: 0px !important;
+}
+			
+ul.cards > li > .removing {
+	opacity: 0;
+}
