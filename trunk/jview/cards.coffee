@@ -22,11 +22,12 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 		constructor: ->
 			
 			@cards  = new topaz.ObservableTypedList(Card)
-			@events = new topaz.EventRegistry 'add', 'insert'
+			@events = new topaz.EventRegistry 'add', 'insert', 'remove'
 			
 			@cards.events.republish
 				add: @event 'add'
 				insert: @event 'insert'
+				remove: @event 'remove'
 		
 		event: (name) -> @events.get name
 		
@@ -36,6 +37,8 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			## Temporary hack
 			@cards.__rep__.splice index+1, 0, card
 			@cards.event('insert').raise(card,index)
+			
+		remove: (args...) -> @cards.remove args...
 			
 			
 			
@@ -53,6 +56,7 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@cards.events.subscribe
 				add: (args...) => @add args...
 				insert: (args...) => @insert args...
+				remove: (args...) => @remove args...
 				
 		add: (card) ->
 			@element.append card.li
@@ -62,6 +66,13 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@element.children('li').eq(index).before li
 			li.css 'width', li.children('section').outerWidth(true)
 			after(750) -> li.removeClass 'adding'
+			
+		remove: (card) ->
+			li = card.li
+			li.children().addClass 'removing'
+			after(750) ->
+				li.addClass 'removing'
+				after(750) -> li.remove()
 	
 	
 	##
