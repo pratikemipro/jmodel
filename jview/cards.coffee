@@ -13,7 +13,6 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@li = $ '<li/>'
 	
 
-
 	##
 	## CardList
 	##
@@ -25,8 +24,9 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@cards  = new topaz.ObservableTypedList(Card)
 			@events = new topaz.EventRegistry 'add', 'insert'
 			
-			@cards.event('add').republish @event('add')
-			@cards.event('insert').republish @event('insert')
+			@cards.events.republish
+				add: @event 'add'
+				insert: @event 'insert'
 		
 		event: (name) -> @events.get name
 		
@@ -51,8 +51,8 @@ define ['jquery','jmodel/topaz'], ($,topaz) ->
 			@element = $ element
 			
 			@cards.events.subscribe
-				add: (card) => @add card
-				insert: (card,index) => @insert card, index
+				add: (args...) => @add args...
+				insert: (args...) => @insert args...
 				
 		add: (card) ->
 			@element.append card.li

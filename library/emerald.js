@@ -60,6 +60,13 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 					this.get(eventName).subscribe(map[eventName]);
 				}
 				return this;
+			},
+			
+			republish: function (map) {
+				for ( var eventName in map ) {
+					this.get(eventName).republish(map[eventName]);
+				}
+				return this;
 			}
 			
 		});
