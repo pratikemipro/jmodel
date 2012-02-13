@@ -587,6 +587,9 @@ define(['jmodel/opal'], function (opal) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,object);
+				if ( this.__index ) {
+					this.__index.add(object);
+				}
 				return this;
 			}
 			
@@ -606,6 +609,9 @@ define(['jmodel/opal'], function (opal) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,this.ensure.apply(this,_slice.call(arguments,1)));
+				if ( this.__index ) {
+					this.__index.add(object);
+				}
 				return this;
 			}
 			

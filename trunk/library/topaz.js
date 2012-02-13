@@ -89,6 +89,9 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,object);
+				if ( this.__index ) {
+					this.__index.add(object);
+				}
 				this.event('insert').raise(object,index,this);
 				return this;
 			}
@@ -106,6 +109,9 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			insert: function (index,object) {
 				var obj = this.ensure.apply(this,_slice.call(arguments,1))
 				this.__rep__.splice(index+1,0,obj);
+				if ( this.__index ) {
+					this.__index.add(object);
+				}
 				this.event('insert').raise(object,index,this);
 				return this;
 			}
