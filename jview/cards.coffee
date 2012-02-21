@@ -9,8 +9,13 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	##	
 	
 	class Card
-		constructor: () ->
-			@li = $ '<li/>'
+		
+		constructor: ->
+		
+			@li = $ '<li class="card"/>'
+			
+			@li.on 'click', 'button.close', =>
+				@list.remove this
 	
 
 	##
@@ -22,19 +27,23 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		constructor: ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
-			@events = new jm.EventRegistry 'add', 'insert', 'remove'
+			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count'
 			
 			@cards.events.republish
-				add: @event 'add'
-				insert: @event 'insert'
-				remove: @event 'remove'
+				add:     @event 'add'
+				insert:  @event 'insert'
+				replace: @event 'replace'
+				remove:  @event 'remove'
 		
 		event: (name) -> @events.get name
 		
 		# Delegation
-		add:    (args...) -> @cards.add args...
-		insert: (args...) -> @cards.insert args...
-		remove: (args...) -> @cards.remove args...
+		add:     (args...) -> @cards.add args...
+		insert:  (args...) -> @cards.insert args...
+		replace: (args...) -> @cards.replace args...
+		remove:  (args...) -> @cards.remove args...
+		get:	 (args...) -> @cards.get args...
+		count:	 (args...) -> @cards.count args...
 			
 			
 	##
@@ -50,27 +59,53 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			@duration = duration
 			
 			@cards.events.subscribe
-				add:    (args...) => @add args...
-				insert: (args...) => @insert args...
-				remove: (args...) => @remove args...
+				add:     (args...) => @add args...
+				insert:  (args...) => @insert args...
+				replace: (args...) => @replace args...
+				remove:  (args...) => @remove args...
 				
 		add: (card) ->
+			@element.children().removeClass 'zoomed'
 			card.li.children().addClass 'adding'
-			@element.append card.li
-			after(1) -> card.li.children().removeClass 'adding'
+			after(350) =>
+				@element.append card.li
+				after(1) -> card.li.children().removeClass 'adding'
 		
 		insert: (card,index) ->
-			li = card.li.addClass 'adding'
-			@element.children('li').eq(index).before li
-			li.css 'width', li.children('section').outerWidth(true)
-			after(@duration) -> li.removeClass 'adding'
+			@element.children().removeClass 'zoomed'
+			li = card.li
+			li.addClass 'adding'
+			after(350) =>
+				@element.children('li').eq(index-1).after li
+				li.css 'width', li.children('section').outerWidth(true)
+				after(@duration) -> li.removeClass 'adding'
+			
+		replace: (before,card) ->
+			before.li
+				.removeClass('zoomed')
+				.after(card.li)
+			card.li.removeClass 'zoomed'
+			after(@duration) ->
+				$('body').animate { scrollLeft: $('body').width() }, 1000, () ->
+					before.li.remove()
+					card.li.addClass 'zoomed'
 			
 		remove: (card) ->
 			li = card.li
 			li.children().addClass 'removing'
-			after(@duration) ->
+			after(@duration) =>
 				li.addClass 'removing'
-				after(@duration) -> li.remove()
+				after(@duration) =>
+					li.remove().removeClass 'removing'
+					if @cards.count() == 1
+						after(350) => @element.children().addClass 'zoomed'
+	
+
+	# Bounce
+	# 	em.event.after(300).subscribe ->
+	# 		$('body').animate { scrollLeft: scrollLeft+200 }, 400, () ->
+	# 			$('body').animate { scrollLeft: scrollLeft }, 400
+	
 	
 	
 	##
