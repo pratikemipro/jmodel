@@ -231,6 +231,20 @@ define(['jmodel/opal'], function (opal) {
 				}
 				return this;
 			},
+			
+			// Tests: none
+			replace: function (before,after) {
+				this.added = undefined;
+				if ( this.member(before) && this.constraint(after) ) {
+					var index = this.__rep__.indexOf(before)
+					this.__rep__[index] = after;
+					if ( this.__index ) {
+						this.__index.add(after);
+					}
+					this.added = after;
+				}
+				return this;
+			},
 		
 			// Tests: full
 			remove: function (predicate) {
@@ -561,6 +575,11 @@ define(['jmodel/opal'], function (opal) {
 			add: function () {
 				return Set.prototype.add.call(this,this.ensure.apply(this,arguments));
 			},
+			
+			// Tests: none
+			replace: function (before) {
+				return Set.prototype.replace.call(this,before,this.ensure.apply(this,_slice.call(arguments,1)));
+			},
 		
 			// Tests: none
 			create: function () {
@@ -587,6 +606,7 @@ define(['jmodel/opal'], function (opal) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,object);
+				this.length++;
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
@@ -609,6 +629,7 @@ define(['jmodel/opal'], function (opal) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,this.ensure.apply(this,_slice.call(arguments,1)));
+				this.length++;
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
