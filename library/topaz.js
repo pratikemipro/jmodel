@@ -48,6 +48,12 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 						this.event('add').raise(this.added,this);
 					}
 				}),
+				
+				replace: proto.replace.post(function (collection,before,after) {
+					if ( typeof this.added !== 'undefined' ) {
+						this.event('replace').raise(before,after,this);
+					}
+				}),
 
 				remove: proto.remove.post(function (removed) {
 					var that = this;
@@ -89,6 +95,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			// Tests: none
 			insert: function (index,object) {
 				this.__rep__.splice(index+1,0,object);
+				this.length++;
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
@@ -109,6 +116,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			insert: function (index,object) {
 				var obj = this.ensure.apply(this,_slice.call(arguments,1))
 				this.__rep__.splice(index+1,0,obj);
+				this.length++;
 				if ( this.__index ) {
 					this.__index.add(object);
 				}
@@ -120,11 +128,12 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 		function makeObservable () {
 
-			this.events	= new EventRegistry('add','remove','insert','initialise','sort','change');
+			this.events	= new EventRegistry('add','replace','remove','insert','initialise','sort','change');
 			this.event	= delegateTo(this.events,'get');
 
 			disjoin(
 				this.event('add'),
+				this.event('replace'),
 				this.event('insert')
 			)			
 			.where(has('event','change'))
