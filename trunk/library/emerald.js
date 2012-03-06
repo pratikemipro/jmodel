@@ -527,9 +527,9 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	    	    return eventType;
 	    	},
 	
-			fromDelegate: function (element,selector,name,options) {
+			fromDelegate: function (element,name,selector,options) {
 				var eventType = new EventType();
-				jQuery(element).delegate(selector,name,function (event) {
+				jQuery(element).on(name,selector,function (event) {
 					if ( options && options.preventDefault ) {
 						event.preventDefault();
 					}
