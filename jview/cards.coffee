@@ -10,14 +10,15 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 	class Card
 		
-		loadEvent: null
+		class: ''
+		load: null
 		
 		constructor: ->
 		
 			@events = new jm.EventRegistry 'ready'
-			@events.add 'load', @loadEvent
+			@events.add 'load', jm.event.fromAjax @load
 		
-			@li = $ '<li class="card"/>'
+			@li = $('<li class="card"/>').addClass(@class)
 			
 			@li.on 'click', 'button.close', =>
 				@list.remove this
