@@ -578,29 +578,31 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 
 		function AjaxEventType (descriptor,settings) {
 		
-			this.settings = ( typeof settings === 'object' ) ? settings : {};
-			this.settings.immediate = ( typeof this.settings.immediate === 'undefined' ) ? true : this.settings.immediate;
+			EventType.call(this)
+
+			this.descriptor = copy(descriptor)
+				.addProperties( ( typeof settings === 'object' ) ? settings : {})
+				.addProperties({
+					success: function () {
+				        that.raise.apply(that,_slice.call(arguments).concat(that.descriptor));
+				    },
+					error: function () {
+						that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
+					},
+					beforeSend: function (xhr,settings) {
+						if ( settings.type != 'GET' && settings.type != 'POST' ) {
+							xhr.setRequestHeader('X-HTTP-Method',settings.type);
+							settings.type = 'POST';
+						}
+					}
+				});
+			
+			this.descriptor.immediate = ( typeof this.descriptor.immediate === 'undefined' ) ? true : this.descriptor.immediate;
 		
-			EventType.call(this);
-			this.remember( typeof this.settings.remember !== 'undefined' ? this.settings.remember : 1 );
+			this.remember( typeof this.descriptor.remember !== 'undefined' ? this.descriptor.remember : 1 );
 			var that = this;
 		
-			this.descriptor = copy(descriptor).addProperties({
-				success: function () {
-			        that.raise.apply(that,_slice.call(arguments).concat(that.descriptor));
-			    },
-				error: function () {
-					that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
-				},
-				beforeSend: function (xhr,settings) {
-					if ( settings.type != 'GET' && settings.type != 'POST' ) {
-						xhr.setRequestHeader('X-HTTP-Method',settings.type);
-						settings.type = 'POST';
-					}
-				}
-			});
-		
-			if ( this.settings.immediate ) {
+			if ( this.descriptor.immediate ) {
 				this.start();
 			}
 	
@@ -609,7 +611,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		AjaxEventType.prototype = Object.extend(new EventType(), {
 		
 			start: function (data) {
-				if ( this.settings.singleton ) {
+				if ( this.descriptor.singleton ) {
 					this.stop();
 				}
 				this.descriptor.data = typeof data === 'object' ? Object.extend(this.descriptor.data,data) : this.descriptor.data;
