@@ -10,16 +10,23 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 	class Card
 		
+		loadEvent: null
+		
 		constructor: ->
 		
 			@events = new jm.EventRegistry 'ready'
+			@events.add 'load', @loadEvent
 		
 			@li = $ '<li class="card"/>'
 			
 			@li.on 'click', 'button.close', =>
 				@list.remove this
+			
+			if @event('load')
+				@event('load').subscribe (html) => @init html
 				
 		event: (name) -> @events.get name
+		init: ->
 	
 
 	##
