@@ -172,6 +172,15 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 			# Unzoom
 			@cardListView.element.event('click','li.card').subscribe (event) => @unzoom event
+			
+			# Count
+			jm.disjoin(
+				@cardListView.event('ready'),
+				@cardListView.event('removed')
+			)
+			.subscribe =>
+				count =  @cardListView.cards.count()
+				@element.children('nav').find('.count').text( count + ' cards' )
 				
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.children('li').eq(index)
