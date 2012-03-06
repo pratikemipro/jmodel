@@ -173,6 +173,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			# Unzoom
 			@cardListView.element.event('click','li.card').subscribe (event) => @unzoom event
 			
+			# Clear
+			@element.children('nav').find('button.close').event('click').subscribe => 
+				@cardListView.cards.remove (card) -> card.li.index() > 0
+			
 			# Count
 			jm.disjoin(
 				@cardListView.event('ready'),
