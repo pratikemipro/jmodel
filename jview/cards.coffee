@@ -119,6 +119,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				li.addClass 'removing'
 				after(@duration) =>
 					li.remove().removeClass 'removing'
+					li.children().removeClass 'removing'
 					@event('removed').raise card
 					if @cards.count() == 1
 						after(350) => @element.children().addClass 'zoomed'
