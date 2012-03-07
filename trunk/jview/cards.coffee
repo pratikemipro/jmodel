@@ -145,8 +145,12 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			# New cards become current card
 			@cardListView.event('ready').subscribe (card) => @state.index card.li.index()
 			
+			# Clicing on a card makes it the current card
+			@cardListView.element.event('click','li.card').subscribe (event) => 
+				@state.index $(event.target).closest('li.card').index() 
+			
 			# Removing a card decrements current index
-			@cardListView.event('removed').subscribe => @state.index @state.index()-1
+#			@cardListView.event('removed').subscribe => @state.index @state.index()-1
 
 			# Keyboard control
 			keyEvent = @element.event('keydown').where (event) ->
@@ -189,7 +193,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.children('li').eq(index)
 			@element.animate
-				scrollLeft: Math.max(li.offset().left,li.offset().left+li.width()-@element.width())+'px'
+				scrollLeft: Math.max(li.offset().left - 96 ,li.offset().left+li.width()-@element.width() - 96)+'px'
 				scrollTop: '0px',
 				duration
 			
