@@ -22,13 +22,12 @@ define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
 		
 	};
 
-	jQuery.fn.subscribe = function (descriptor) {
-	    this.each(function (index,element) {
-	        descriptor.event.subscribe(function () {
-	            descriptor.message.apply(element,arguments);
-	        });
-	    });
-	    return this;
-	};
+	jQuery.fn.subscribe = function (subscriptions) {
+		for ( var event in subscriptions ) {
+			if ( subscriptions.hasOwnProperty(event) ) {
+				this.event(event).subscribe(subscriptions[event]);
+			}
+		}
+	}
 	
 });
