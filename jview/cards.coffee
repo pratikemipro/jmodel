@@ -85,7 +85,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 					@element.append card.li
 					after(1) =>
 						card.li.children().removeClass 'adding'
-						after(350) => @event('ready').raise card
+						@event('ready').raise card
 					
 		
 		insert: (card,index) ->
@@ -98,7 +98,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 					li.css 'width', li.children('section').outerWidth(true)
 					after(@duration) =>
 						li.removeClass 'adding'
-						after(350) => @event('ready').raise card
+						@event('ready').raise card
 			
 		replace: (before,card) ->
 			card.event('ready').subscribe =>
