@@ -147,7 +147,9 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			@cardListView.event('ready').subscribe (card) => @state.index card.li.index()
 			
 			# Clicing on a card makes it the current card
-			@cardListView.element.event('click','li.card').subscribe (event) => 
+			@cardListView.element.event('click','li.card')
+			.where( (event) -> $(event.target).closest('a').length == 0 )
+			.subscribe (event) => 
 				@state.index $(event.target).closest('li.card').index() 
 			
 			# Removing a card decrements current index
