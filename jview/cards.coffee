@@ -78,8 +78,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		event: (name) -> @events.get name
 		
 		add: (card) ->
+			@element.children().removeClass 'zoomed'
 			card.event('ready').subscribe =>
-				@element.children().removeClass 'zoomed'
 				card.li.children().addClass 'adding'
 				after(350) =>
 					@element.append card.li
@@ -89,8 +89,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 					
 		
 		insert: (card,index) ->
+			@element.children().removeClass 'zoomed'
 			card.event('ready').subscribe =>
-				@element.children().removeClass 'zoomed'
 				li = card.li
 				li.addClass 'adding'
 				after(350) =>
