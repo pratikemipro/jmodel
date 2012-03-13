@@ -10,24 +10,38 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 	class Card
 		
-		class: ''
-		load: null
-		
 		constructor: ->
 		
 			@events = new jm.EventRegistry 'ready'
-			@events.add 'load', jm.event.fromAjax @load
 		
 			@li = $('<li class="card"/>').addClass(@class)
 			
 			@li.on 'click', 'button.close', =>
 				@list.remove this
-			
-			if @event('load')
-				@event('load').subscribe (html) => @init html
 				
 		event: (name) -> @events.get name
-		init: ->
+	
+	
+	##
+	## AjaxCard
+	##
+	
+	class AjaxCard extends Card
+		
+		class: ''
+		load: null
+	
+		constructor: ->
+			
+			super()
+			
+			@events.add 'load', jm.event.fromAjax @load
+			
+			@event('load').subscribe (html) => @init html
+			
+		init: (html) ->
+			@li.html html
+			@event('ready').raise()
 	
 
 	##
@@ -251,6 +265,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 	return {
 		Card: Card
+		AjaxCard: AjaxCard
 		CardList: CardList
 		CardListView: CardListView
 		CardListViewPort: CardListViewPort
