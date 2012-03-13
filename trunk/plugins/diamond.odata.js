@@ -108,10 +108,14 @@ define([
 				type =   id > 0 && !this._deleted ? 'MERGE'
 					   : id > 0 && this._deleted ? 'DELETE'
 					   : 'POST';
+					   
+		   if (this.entityType.options.type) {
+			   data.__metadata = { type: this.entityType.options.type };
+		   }
 					
 			if ( type != 'POST' ) {
 				for (var key in data ) {
-					if ( typeof data[key] === 'object' ) {
+					if ( typeof data[key] === 'object' && key !== '__metadata' ) {
 						delete data[key];
 					}
 				}
