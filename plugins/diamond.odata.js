@@ -134,7 +134,9 @@ define([
 					this.dirty = false;
 					if ( json ) {
 						var object = Object.fromOData(json);
-						this[this.primaryKeyField](object[this.primaryKeyField]);
+						if ( this.primaryKeyField ) {
+							this[this.primaryKeyField](object[this.primaryKeyField]);
+						}
 					}
 					if ( completionEvent instanceof diamond.EventType ) {
 						completionEvent.raise();
