@@ -134,6 +134,9 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 					var primaryKeyValue = this[this.primaryKeyField]();
 					this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
 				}
+				else {
+					this.dirty = true;
+				}
 				
 				this.event('change')
 					.subscribe({
