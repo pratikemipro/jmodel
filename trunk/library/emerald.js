@@ -469,14 +469,16 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				events = arguments[0] instanceof Set || arguments[0] instanceof List ? arguments[0] : Set.fromArguments(arguments);    
 	    
 		    events.each(function (eventType) {
-		        var queue = buffer.add([]).added;
-		        eventType.subscribe(function () {
-	    	        queue.push.call(queue,_slice.call(arguments));
-					if ( bufferReady() ) {
-		                return sendMessage();
-		            }
-					return true;
-		        });
+				if ( eventType instanceof EventType ) {
+			        var queue = buffer.add([]).added;
+			        eventType.subscribe(function () {
+		    	        queue.push.call(queue,_slice.call(arguments));
+						if ( bufferReady() ) {
+			                return sendMessage();
+			            }
+						return true;
+			        });	
+				}
 		    });
 	    
 		    function bufferReady () {
