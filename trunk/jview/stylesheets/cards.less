@@ -5,7 +5,16 @@
 
 ul.cards {
 	white-space: nowrap;
-	> li {
+	li.extent {
+		display: inline-block;
+		white-space: nowrap;
+		> ul {
+			display: inline-block;
+			white-space: nowrap;
+			list-style-type: none;
+		}
+	}
+	li.card {
 		display: inline-block;
 		white-space: normal;
 		vertical-align: top;

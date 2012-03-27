@@ -91,24 +91,29 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		
 		event: (name) -> @events.get name
 		
+		## Adding a card creates a new extent
 		add: (card) ->
-			@element.children().removeClass 'zoomed'
+			@element.find('li.card').removeClass 'zoomed'
+			@element.append '<li class="extent"><ul><li class="label hidden"></li></ul></li>'
 			card.event('ready').subscribe =>
 				card.li.children().addClass 'adding'
 				after(350) =>
-					@element.append card.li
+					@element.children('li.extent:last').children('ul').append card.li
 					after(1) =>
 						card.li.children().removeClass 'adding'
 						@event('ready').raise card
+						after(350) => @element.find('li.extent > ul > li.label').removeClass 'hidden'
 					
-		
+		## Inserting a card uses an existing extent
 		insert: (card,index) ->
-			@element.children().removeClass 'zoomed'
+			cards = @element.find 'li.card'
+			cards.removeClass 'zoomed'
+			@element.find('li.extent > ul > li.label').removeClass 'hidden'
 			card.event('ready').subscribe =>
 				li = card.li
 				li.addClass 'adding'
 				after(350) =>
-					@element.children('li').eq(index-1).after li
+					@element.find('li.card').eq(index-1).after li
 					li.css 'width', li.children('section').outerWidth(true)
 					after(@duration) =>
 						li.removeClass 'adding'
@@ -132,11 +137,16 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			after(@duration) =>
 				li.addClass 'removing'
 				after(@duration) =>
+					extent = li.closest 'li.extent'
 					li.remove().removeClass 'removing'
 					li.children().removeClass 'removing'
 					@event('removed').raise card
+					if extent.find('li.card').length == 0
+						extent.remove()
 					if @cards.count() == 1
-						after(350) => @element.children().addClass 'zoomed'
+						after(350) =>
+							@element.find('li.card').addClass 'zoomed'
+							@element.find('li.extent > ul > li.label').addClass 'hidden'
 	
 
 	##
@@ -158,16 +168,14 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			@state.event('index').subscribe (index) => @scrollTo index
 			
 			# New cards become current card
-			@cardListView.event('ready').subscribe (card) => @state.index card.li.index()
+			@cardListView.event('ready').subscribe (card) => 
+				@state.index card.li.index('li.card')
 			
 			# Clicing on a card makes it the current card
 			@cardListView.element.event('click','li.card')
 			.where( (event) -> $(event.target).closest('a').length == 0 )
 			.subscribe (event) => 
-				@state.index $(event.target).closest('li.card').index() 
-			
-			# Removing a card decrements current index
-#			@cardListView.event('removed').subscribe => @state.index @state.index()-1
+				@state.index $(event.target).closest('li.card').index('li.card') 
 
 			# Keyboard control
 			keyEvent = @element.event('keydown').where (event) ->
@@ -186,7 +194,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				@cardListView.event('ready'),
 				@cardListView.event('removed')
 			)
-			.subscribe => @element.children('nav').toggleClass 'hidden', @cardListView.element.children('li').length == 1
+			.subscribe => @element.children('nav').toggleClass 'hidden', @cardListView.cards.count() == 1
 			
 			# Zoom
 			@element.children('nav').find('button.zoom').event('click').subscribe (event) => @zoom event
@@ -196,7 +204,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 			# Clear
 			@element.children('nav').find('button.close').event('click').subscribe => 
-				@cardListView.cards.remove (card) -> card.li.index() > 0
+				@cardListView.cards.remove (card) -> card.li.index('li.card') > 0
 			
 			# Count
 			jm.disjoin(
@@ -208,9 +216,9 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				@element.children('nav').find('.count').text( count + ' cards' )
 				
 		scrollTo: (index,duration=1000) ->
-			li = @cardListView.element.children('li').eq(index)
+			li = @cardListView.element.find('li.card').eq(index)
 			@element.animate
-				scrollLeft: Math.max(li.offset().left - 96 ,li.offset().left+li.width()-@element.width() - 96)+'px'
+				scrollLeft: Math.max(li.offset().left - 64 ,li.offset().left+li.width()-@element.width() - 64)+'px'
 				scrollTop: '0px',
 				duration
 			
