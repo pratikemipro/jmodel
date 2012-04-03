@@ -14,7 +14,9 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		
 			@events = new jm.EventRegistry 'ready'
 		
-			@li = $('<li class="card"/>').addClass(@class)
+			@li ?= $ '<li class="card"/>'
+		
+			@li.addClass(@class)
 			
 			@li.on 'click', 'button.close', =>
 				@list.remove this
