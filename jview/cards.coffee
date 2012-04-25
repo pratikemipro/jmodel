@@ -13,6 +13,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		constructor: ->
 		
 			@events = new jm.EventRegistry 'ready'
+			@event('ready').remember 1
 		
 			@li ?= $ '<li class="card"/>'
 		
@@ -72,7 +73,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		remove:  (args...) -> @cards.remove args...
 		get:	 (args...) -> @cards.get args...
 		count:	 (args...) -> @cards.count args...
-			
+		
 			
 	##
 	## CardListView
@@ -92,6 +93,12 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				remove:  (args...) => @remove args...
 		
 		event: (name) -> @events.get name
+		
+		fold: ->
+			@element.find('li.card').each (index,li) ->
+				$(li).css
+					'-webkit-transform': 'rotate('+(4*(index % 2) - 2)+'deg)'
+					'left': (-1*$(li).offset().left+100*index)+'px'
 		
 		## Adding a card creates a new extent
 		add: (card) ->
@@ -265,6 +272,43 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				return false;
 			
 			
+	##
+	## CardListController
+	##
+	
+	class CardListController
+		
+		constructor: (@cardList,@element,@cardTypes) ->
+			
+			@element.event('click','a[href]').subscribe (event) =>	
+		
+				open = (href) -> window.open href, (Date()).split(' ').join('')
+			
+				a    = $(event.target).closest 'a'
+				href = a.attr 'href'
+				li   = a.closest 'li.card'
+
+				[_,type,id,query] = href.match /([^\/]+)\/([^\?]+)\??(.*)/
+			
+				parameters = {}
+				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
+			
+				currentIndex = li.index('li.card') + 1
+			
+				if a.hasClass 'permalink'
+					open href
+				else if @cardTypes[type]
+					card = new @cardTypes[type] @cardList, id, undefined, parameters
+					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+					else
+						@cardList.insert currentIndex, card
+				else 
+					open href
+				
+				return false
+			
+			
 			
 			
 			
@@ -279,4 +323,5 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		CardList: CardList
 		CardListView: CardListView
 		CardListViewPort: CardListViewPort
+		CardListController: CardListController
 	}
