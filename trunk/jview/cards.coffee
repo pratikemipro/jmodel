@@ -168,9 +168,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		@width: 0
 		@scrollLeft: 0
 		
-		constructor: (@cardListView,element) ->
+		constructor: (@cardListView,element,controls) ->
 			
-			@element = $ element
+			@element  = $ element
+			@controls = $ controls
 			@state   = new jm.ObservableObject index: Number(0)
 			
 			# Changing state scrolls to card
@@ -203,16 +204,16 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 				@cardListView.event('ready'),
 				@cardListView.event('removed')
 			)
-			.subscribe => @element.children('nav').toggleClass 'hidden', @cardListView.cards.count() == 1
+			.subscribe => @controls.toggleClass 'hidden', @cardListView.cards.count() == 1
 			
 			# Zoom
-			@element.children('nav').find('button.zoom').event('click').subscribe (event) => @zoom event
+			@controls.find('button.zoom').event('click').subscribe (event) => @zoom event
 			
 			# Unzoom
 			@cardListView.element.event('click','li.card').subscribe (event) => @unzoom event
 			
 			# Clear
-			@element.children('nav').find('button.close').event('click').subscribe => 
+			@controls.find('button.close').event('click').subscribe => 
 				@cardListView.cards.remove (card) -> card.li.index('li.card') > 0
 			
 			# Count
@@ -222,7 +223,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			)
 			.subscribe =>
 				count =  @cardListView.cards.count()
-				@element.children('nav').find('.count').text( count + ' cards' )
+				@controls.find('.count').text( count + ' cards' )
 				
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.find('li.card').eq(index)
