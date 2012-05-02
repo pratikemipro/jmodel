@@ -616,7 +616,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				if ( this.descriptor.singleton ) {
 					this.stop();
 				}
-				this.descriptor.data = typeof data === 'object' ? Object.extend(this.descriptor.data,data) : this.descriptor.data;
+				this.descriptor.data = typeof data === 'object' ? Object.extend(this.descriptor.data || {},data) : ( this.descriptor.data || {} );
 				this.__ajax = jQuery.ajax.call(null,this.descriptor);
 				return this;
 			},
