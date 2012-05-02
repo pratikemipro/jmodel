@@ -53,7 +53,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 
 	class CardList
 	
-		constructor: ->
+		constructor: (@external) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
 			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count'
@@ -104,7 +104,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		add: (card) ->
 			@element.find('li.card').removeClass 'zoomed'
 			@element.append '<li class="extent"><ul><li class="label hidden"></li></ul></li>'
-			card.event('ready').subscribe =>
+			card.event('ready').take(1).subscribe =>
 				card.li.children().addClass 'adding'
 				after(350) =>
 					@element.children('li.extent:last').children('ul').append card.li
@@ -118,7 +118,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			cards = @element.find 'li.card'
 			cards.removeClass 'zoomed'
 			@element.find('li.extent > ul > li.label').removeClass 'hidden'
-			card.event('ready').subscribe =>
+			card.event('ready').take(1).subscribe =>
 				li = card.li
 				li.addClass 'adding'
 				after(350) =>
@@ -129,7 +129,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 						@event('ready').raise card
 			
 		replace: (before,card) ->
-			card.event('ready').subscribe =>
+			card.event('ready').take(1).subscribe =>
 				before.li
 					.removeClass('zoomed')
 					.after(card.li)
@@ -308,11 +308,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 					open href
 				
 				return false
-			
-			
-			
-			
-			
+		
 	
 	##
 	## Return constructors
