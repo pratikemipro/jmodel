@@ -264,6 +264,25 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				});
 			},
 		
+			throttle: function (interval) {
+				
+				var pending,
+					timer = new TimerEventType(interval),
+					derivedEventType = this.derive();
+				
+				this.subscribe(function () {
+					pending = _slice.call(arguments);
+					timer.stop().start();	
+				});
+				
+				timer.subscribe(function () {
+					derivedEventType.raise.apply(derivedEventType,pending);
+				});
+					
+				return derivedEventType;
+			
+			},
+			
 			effect: function (fn) {
 				var context	= fn.context || this;
 				fn	= fn.fn || fn;
