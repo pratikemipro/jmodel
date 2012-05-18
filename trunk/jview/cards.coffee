@@ -48,10 +48,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 
 	##
-	## CardList
+	## List
 	##
 
-	class CardList
+	class List
 	
 		constructor: (@external) ->
 			
@@ -76,10 +76,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		
 			
 	##
-	## CardListView
+	## ListView
 	##
 	
-	class CardListView
+	class ListView
 		
 		constructor: (@cards,element,@duration=750) ->
 			
@@ -159,10 +159,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 
 	##
-	## CardListViewPort
+	## ViewPort
 	##
 	
-	class CardListViewPort
+	class ViewPort
 		
 		@offsets: []
 		@width: 0
@@ -274,10 +274,10 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 			
 	##
-	## CardListController
+	## Controller
 	##
 	
-	class CardListController
+	class Controller
 		
 		constructor: (@cardList,@element,@cardTypes) ->
 			
@@ -308,7 +308,46 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 					open href
 				
 				return false
+				
+				
+	##
+	## CardApplication
+	##
+	
+	class Application
 		
+		constructor: (element,menuElement,@external,@root,@types) ->
+			
+			@element     = $ element
+			@menuElement = $ menuElement
+			
+			@events = new jm.EventRegistry 'ready'
+			@event('ready').remember 1
+			
+			@cards = new List @external
+			
+			@event('ready').subscribe => @element.removeClass 'loading'
+			
+			rootCardElement = @element.find 'ul.cards li.card'
+			
+			# Card already exists
+			if rootCardElement.length > 0
+				[cardType] = ( cardConstructor for className, cardConstructor of @types when rootCardElement.hasClass(className) )
+				@cards.add( rootCard = new cardType @cards, undefined, rootCardElement )
+				rootCard.event('ready').republish @event 'ready'
+
+			@view       = new ListView @cards, @element.find('ul.cards')
+			@viewport   = new ViewPort @view, @element, @menuElement
+			@controller = new Controller @cards, @element, @types
+		
+			# No card exists
+			if rootCardElement.length == 0
+				@cards.add( rootCard = new @root @cards, undefined, undefined, zoomed: true )
+				rootCard.event('ready').republish event 'ready'
+			
+		event: (name) -> @events.get name
+			
+
 	
 	##
 	## Return constructors
@@ -317,8 +356,9 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	return {
 		Card: Card
 		AjaxCard: AjaxCard
-		CardList: CardList
-		CardListView: CardListView
-		CardListViewPort: CardListViewPort
-		CardListController: CardListController
+		List: List
+		ListView: ListView
+		ViewPort: ViewPort
+		Controller: Controller
+		Application: Application
 	}
