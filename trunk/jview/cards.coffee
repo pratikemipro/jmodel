@@ -316,7 +316,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 	class Application
 		
-		constructor: (element,menuElement,@external,@root,@types) ->
+		constructor: (element,menuElement,@external,@types) ->
 			
 			@element     = $ element
 			@menuElement = $ menuElement
@@ -342,7 +342,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		
 			# No card exists
 			if rootCardElement.length == 0
-				@cards.add( rootCard = new @root @cards, undefined, undefined, zoomed: true )
+				[cardType] = ( cardConstructor for className, cardConstructor of @types )
+				@cards.add( rootCard = new cardType @cards, undefined, undefined, zoomed: true )
 				rootCard.event('ready').republish event 'ready'
 			
 		event: (name) -> @events.get name
