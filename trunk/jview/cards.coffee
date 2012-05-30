@@ -1,4 +1,4 @@
-define ['jquery','jmodel/topaz'], ($,jm) ->
+define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/emerald.keys'], ($,jm) ->
 
 	# Utility functions
 	after = (period) -> (fn) -> jm.event.after(period).subscribe fn
@@ -44,9 +44,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 		init: (html) ->
 			@li.html html
-			console.log $(html).find('section')
 			@li.toggleClass 'error', $(html).hasClass('error')
-			@event('ready').raise()
+			@event('ready').raise(this)
 	
 
 	##
@@ -174,16 +173,16 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 			@element  = $ element
 			@controls = $ controls
-			@state   = new jm.ObservableObject index: Number(0)
+			@state = new jm.ObservableObject
+				index:
+					type: Number
+					defaultValue: 0
+					repeat: true
 			
 			# Changing state scrolls to card
 			@state.event('index').subscribe (index) => @scrollTo index
 			
-			# New cards become current card
-			@cardListView.event('ready').subscribe (card) => 
-				@state.index card.li.index('li.card')
-			
-			# Clicing on a card makes it the current card
+			# Clicking on a card makes it the current card
 			@cardListView.element.event('click','li.card')
 			.where( (event) -> $(event.target).closest('a').length == 0 )
 			.subscribe (event) => 
@@ -281,35 +280,56 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 	
 	class Controller
 		
-		constructor: (@cardList,@element,@cardTypes) ->
+		constructor: (@cardList,@view,@viewport,@element,@cardTypes) ->
 			
-			@element.event('click','a[href]').subscribe (event) =>	
-		
-				open = (href) -> window.open href, (Date()).split(' ').join('')
-			
-				a    = $(event.target).closest 'a'
-				href = a.attr 'href'
-				li   = a.closest 'li.card'
-
-				[_,type,id,query] = href.match /([^\/]+)\/([^\?]+)\??(.*)/
-			
-				parameters = {}
-				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
-			
-				currentIndex = li.index('li.card') + 1
-			
-				if a.hasClass 'permalink'
-					open href
-				else if @cardTypes[type]
-					card = new @cardTypes[type] @cardList, id, undefined, parameters
-					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
-					else
-						@cardList.insert currentIndex, card
-				else 
-					open href
+			@element.event('click','a[href]')
+				.notBetween(
+					$(document).event('keydown').where(jm.key(':leftcmd')),
+					$(document).event('keyup').where(jm.key(':leftcmd'))
+				)
+				.subscribe (event) => @handle event, true
 				
-				return false
+			@element.event('click','a[href]')
+				.between(
+					$(document).event('keydown').where(jm.key(':leftcmd')),
+					$(document).event('keyup').where(jm.key(':leftcmd'))
+				)
+				.subscribe (event) => @handle event, false
+				
+		handle: (event,animate) ->
+				
+			open = (href) -> window.open href, (Date()).split(' ').join('')
+			
+			a    = $(event.target).closest 'a'
+			href = a.attr 'href'
+			li   = a.closest 'li.card'
+
+			[_,type,id,query] = href.match /([^\/]+)\/([^\?]+)\??(.*)/
+			
+			parameters = {}
+			parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
+			
+			currentIndex = li.index('li.card') + 1
+			
+			if a.hasClass 'permalink'
+				open href
+			else if @cardTypes[type]
+				card = new @cardTypes[type] @cardList, id, undefined, parameters
+				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+				else
+					@cardList.insert currentIndex, card
+			else 
+				open href
+				
+			if animate
+				@view.event('ready')
+					.where( (inserted) -> inserted == card )
+					.take(1)
+					.subscribe =>
+						@viewport.state.index card.li.index('li.card')
+				
+			return false
 				
 				
 	##
@@ -340,7 +360,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 
 			@view       = new ListView @cards, @element.find('ul.cards')
 			@viewport   = new ViewPort @view, @element, @menuElement
-			@controller = new Controller @cards, @element, @types
+			@controller = new Controller @cards, @view, @viewport, @element, @types
 		
 			# No card exists
 			if rootCardElement.length == 0
