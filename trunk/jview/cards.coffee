@@ -44,6 +44,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			
 		init: (html) ->
 			@li.html html
+			console.log $(html).find('section')
+			@li.toggleClass 'error', $(html).hasClass('error')
 			@event('ready').raise()
 	
 
