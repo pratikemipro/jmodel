@@ -325,7 +325,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			if animate
 				@view.event('ready')
 					.where( (inserted) -> inserted == card )
-					.take(1)
 					.subscribe =>
 						@viewport.state.index card.li.index('li.card')
 				
