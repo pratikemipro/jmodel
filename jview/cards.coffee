@@ -284,15 +284,15 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 			@element.event('click','a[href]')
 				.notBetween(
-					$(document).event('keydown').where(jm.key(':leftcmd')),
-					$(document).event('keyup').where(jm.key(':leftcmd'))
+					$(document).event('keydown').where(jm.key(':leftcmd',':ctrl')),
+					$(document).event('keyup').where(jm.key(':leftcmd',':ctrl'))
 				)
 				.subscribe (event) => @handle event, true
 				
 			@element.event('click','a[href]')
 				.between(
-					$(document).event('keydown').where(jm.key(':leftcmd')),
-					$(document).event('keyup').where(jm.key(':leftcmd'))
+					$(document).event('keydown').where(jm.key(':leftcmd',':ctrl')),
+					$(document).event('keyup').where(jm.key(':leftcmd',':ctrl'))
 				)
 				.subscribe (event) => @handle event, false
 				
