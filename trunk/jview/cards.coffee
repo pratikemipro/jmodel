@@ -193,8 +193,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				@state.index target.closest('li.card').index('li.card') 
 
 			# Keyboard control
-			keyEvent = @element.event('keydown').where ({target}) ->
-				$(target).closest('input,select,textarea,[contentEditable=true]').length == 0
+			keyEvent = @element.event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0
 			
 			jm.disjoin(
 				keyEvent.where(jm.key(':left')).map(->-1)
