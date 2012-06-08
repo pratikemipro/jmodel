@@ -266,11 +266,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				# $('ul.cards > li > h2 > span').css
 				# 				 	'-webkit-transform': 'scale('+(1/scale)+')'
 				
-		unzoom: (event) ->
+		unzoom: ({target}) ->
 			
 			if @element.hasClass 'zoomed'
 				
-				targetIndex = $(event.target).closest('ul.cards > li').index()
+				targetIndex = $(target).closest('ul.cards > li').index()
 				
 				@cardListView.element.css
 					'-webkit-transform': 'none'
@@ -308,11 +308,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				)
 				.subscribe (event) => @handle event, false
 				
-		handle: (event,animate) ->
+		handle: ({target},animate) ->
 				
 			open = (href) -> window.open href, (Date()).split(' ').join('')
 			
-			a    = $(event.target).closest 'a'
+			a    = $(target).closest 'a'
 			href = a.attr 'href'
 			li   = a.closest 'li.card'
 
