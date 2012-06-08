@@ -183,14 +183,18 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@state.event('index').subscribe (index) => @scrollTo index
 			
 			# Clicking on a card makes it the current card
-			@cardListView.element.event('click','li.card')
-			.where( (event) -> $(event.target).closest('a').length == 0 )
-			.subscribe (event) => 
-				@state.index $(event.target).closest('li.card').index('li.card') 
+			jm.conjoin(
+				@cardListView.element.event('mousedown','li.card'),
+				@cardListView.element.event('mouseup','li.card')
+			)
+			.map( (down,up) -> [ $(down.target), up.screenX - down.screenX, up.screenY - down.screenY ] )
+			.where( ([target,deltaX,deltaY]) -> ( -3 < deltaX < 3 ) && ( -3 < deltaY < 3 ) && target.closest('a').length == 0 )
+			.subscribe ([target]) => 
+				@state.index target.closest('li.card').index('li.card') 
 
 			# Keyboard control
-			keyEvent = @element.event('keydown').where (event) ->
-				$(event.target).closest('input,select,textarea,[contentEditable=true]').length == 0
+			keyEvent = @element.event('keydown').where ({target}) ->
+				$(target).closest('input,select,textarea,[contentEditable=true]').length == 0
 			
 			jm.disjoin(
 				keyEvent.where(jm.key(':left')).map(->-1)
@@ -225,6 +229,15 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			.subscribe =>
 				count =  @cardListView.cards.count()
 				@controls.find('.count').text( count + ' cards' )
+				
+			# Drag
+			@element.event('mousemove').map( (event) -> event.screenX )
+				.between(
+					@element.event('mousedown').map( (event) -> [event.screenX,$(window).scrollLeft()] ),
+					$(document).event('mouseup')
+				)
+				.subscribe (currentScreenX,[startScreenX,startScroll]) =>
+					$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
 				
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.find('li.card').eq(index)
