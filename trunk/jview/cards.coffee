@@ -187,9 +187,17 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				@cardListView.element.event('mousedown','li.card'),
 				@cardListView.element.event('mouseup','li.card')
 			)
-			.map( (down,up) -> [ $(down.target), up.screenX - down.screenX, up.screenY - down.screenY ] )
-			.where( ([target,deltaX,deltaY]) -> ( -3 < deltaX < 3 ) && ( -3 < deltaY < 3 ) && target.closest('a').length == 0 )
-			.subscribe ([target]) => 
+			.map( (down,up) ->
+				target: $(down.target)
+				deltaX: up.screenX - down.screenX
+				deltaY: up.screenY - down.screenY
+			)
+			.where( Function.and \
+				({target}) -> target.closest('a').length == 0,
+				({deltaX}) -> -3 < deltaX < 3,
+				({deltaY}) -> -3 < deltaY < 3
+			)
+			.subscribe ({target}) => 
 				@state.index target.closest('li.card').index('li.card') 
 
 			# Keyboard control
