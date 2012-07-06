@@ -574,11 +574,6 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
-	test('project', function () {
-		var person = {forename:'john',surname:'smith',department:'IT',age:18};
-		deepEqual( Object.project('forename','surname')(person), {forename:'john',surname:'smith'}, 'projection works');
-	});
-	
 	test('equal', function () {
 	
 		equals( Object.equal(undefined,{name:'fred'}), false, 'Returns false if first argument undefined' );
@@ -599,6 +594,16 @@ define(['../library/opal.js'], function (opal) {
 		equals( removeProperties({forename:'fred',surname:'smith',age:20}).age, undefined, 'Removes first listed property');
 		equals( removeProperties({forename:'fred',surname:'smith',age:20}).surname, undefined, 'Removes second listed property');
 		equals( removeProperties({forename:'fred',surname:'smith',age:20}).forename, 'fred', 'Leaves other properties unchanged');
+		
+	});
+	
+	test('project', function () {
+	
+		var projectProperties = Object.project('age','surname');
+		
+		equals( projectProperties({forename:'fred',surname:'smith',age:20}).age, 20, 'Preserves first listed property');
+		equals( projectProperties({forename:'fred',surname:'smith',age:20}).surname, 'smith', 'Preserves other listed properties');
+		equals( projectProperties({forename:'fred',surname:'smith',age:20}).forename, undefined, 'Removes other listed properties');
 		
 	});
 	
