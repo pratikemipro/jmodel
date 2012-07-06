@@ -779,7 +779,7 @@ define(function (a,b,c,undefined) {
 				prop;
 			for ( prop in a ) {
 				if ( a.hasOwnProperty(prop) ) {
-					equal = equal && ( a[propa] === b[prop] );
+					equal = equal && ( a[prop] === b[prop] );
 				}
 			}
 			for ( prop in b ) {
