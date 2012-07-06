@@ -579,6 +579,19 @@ define(['../library/opal.js'], function (opal) {
 		deepEqual( Object.project('forename','surname')(person), {forename:'john',surname:'smith'}, 'projection works');
 	});
 	
+	test('equal', function () {
+	
+		equals( Object.equal(undefined,{name:'fred'}), false, 'Returns false if first argument undefined' );
+		equals( Object.equal({name:'fred'},undefined), false, 'Returns false if second argument undefined' );
+		
+		equals( Object.equal({name:'fred',age:20},{name:'fred',age:20}), true, 'Returns true if objects have same properties and property valeus' );
+		
+		equals( Object.equal({name:'fred',age:20},{name:'fred'}), false, 'Returns false if first object has a property that second does not have' );
+		equals( Object.equal({name:'fred'},{name:'fred',age:20}), false, 'Returns false if second object has a property that second does not have' );
+		equals( Object.equal({name:'fred',age:20},{name:'fred',age:25}), false, 'Returns false if objects have same properties but different property valeus' );
+		
+	});
+	
 	test('property', function () {
 	
 		var fred = {forename:'Fred',surname:'Smith'};

@@ -769,7 +769,7 @@ define(function (a,b,c,undefined) {
 			return Object.extend({},obj);
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		equal: function (a,b) {
 			if ( a === undefined || b === undefined ) {
