@@ -790,7 +790,7 @@ define(function (a,b,c,undefined) {
 			return equal;
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		remove: function () {
 			var fields = _slice.call(arguments);

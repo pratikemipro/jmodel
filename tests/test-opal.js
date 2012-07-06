@@ -592,6 +592,16 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('remove', function () {
+	
+		var removeProperties = Object.remove('age','surname');
+		
+		equals( removeProperties({forename:'fred',surname:'smith',age:20}).age, undefined, 'Removes first listed property');
+		equals( removeProperties({forename:'fred',surname:'smith',age:20}).surname, undefined, 'Removes second listed property');
+		equals( removeProperties({forename:'fred',surname:'smith',age:20}).forename, 'fred', 'Leaves other properties unchanged');
+		
+	});
+	
 	test('property', function () {
 	
 		var fred = {forename:'Fred',surname:'Smith'};
