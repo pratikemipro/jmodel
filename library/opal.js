@@ -85,7 +85,7 @@ define(function (a,b,c,undefined) {
 			return function () { return constant; };
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		argument: function (n) {
 			return function () {
