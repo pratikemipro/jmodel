@@ -819,7 +819,7 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		rename: function (renaming) {
 			return function (object) {
