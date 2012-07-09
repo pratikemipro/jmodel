@@ -647,7 +647,44 @@ define(['../library/opal.js'], function (opal) {
 		equals( d.surname, 'jones', 'Later objects supercede earlier ones for shared property values');
 		
 		deepEqual( Object.union(a), a, 'Union of single object is a copy of that object');
-		equal( Object.union(), undefined, 'Union of no objects is undefined');
+		deepEqual( Object.union(), {}, 'Union of no objects is undefined');
+		
+	});
+	
+	test('intersection', function () {
+	
+		var a = {
+			forename: 'fred',
+			surname: 'smith',
+			age: 20,
+			title: 'Mr'
+		},
+		b = {
+			forename: 'fred',
+			surname: 'jones',
+			age: 20,
+			status: 'Employee'
+		},
+		c = {
+			forename: 'fred',
+			surname: 'jones',
+			department: 'IT'
+		};
+		
+		d = Object.intersection(a,b,c);
+		
+		equal(d.age, undefined, 'Properties not shared by all objects are undefined');
+		equal(d.department, undefined, 'Properties not shared by all objects are undefined');
+		
+		notEqual(d.forename, undefined, 'Properties shared by all objects exist in intersection');
+		notEqual(d.surname, undefined, 'Properties shared by all objects exist in intersection');
+		
+		equal(d.forename, 'fred', 'Property has same value in intersection if all objects have same value');
+		equal(d.surname, 'smith', 'Earlier objects supercede earlier ones for shared property values');
+		
+		deepEqual( Object.intersection(a), a, 'Intersection of single object is a copy of that object');
+		deepEqual( Object.intersection(), {}, 'Intersection of no objects is undefined');
+		
 		
 	});
 	
