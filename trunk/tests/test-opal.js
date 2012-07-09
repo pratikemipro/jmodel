@@ -624,6 +624,33 @@ define(['../library/opal.js'], function (opal) {
 		
 	});
 	
+	test('union', function () {
+	
+		var a = {
+			forename: 'fred',
+			surname: 'smith'
+		},
+		b = {
+			surname: 'jones',
+			age: 20
+		},
+		c = {
+			department: 'IT'
+		};
+		
+		d = Object.union(a,b,c);
+		
+		equals( d.forename, 'fred', 'Union has property possed only by first object');
+		equals( d.age, 20, 'Union has property possed only by second object');
+		equals( d.department, 'IT', 'Union has property possed only by third object');
+		notEqual( d.surname, undefined, 'Union has shared property');
+		equals( d.surname, 'jones', 'Later objects supercede earlier ones for shared property values');
+		
+		deepEqual( Object.union(a), a, 'Union of single object is a copy of that object');
+		equal( Object.union(), undefined, 'Union of no objects is undefined');
+		
+	});
+	
 	test('property', function () {
 	
 		var fred = {forename:'Fred',surname:'Smith'};
