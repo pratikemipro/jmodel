@@ -831,7 +831,7 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-		// Tests: none
+		// Tests: full
 		// Docs: none
 		union: function (x) {
 			return    arguments.length === 1 ? Object.copy(x)
