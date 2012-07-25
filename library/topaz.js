@@ -120,7 +120,6 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 				if ( this.__index ) {
 					this.__index.remove(function () {return true;}).build();
 				}
-				console.log(this.__rep__);
 				this.event('insert').raise(object,index,this);
 				return this;
 			}
