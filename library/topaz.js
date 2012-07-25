@@ -94,10 +94,10 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		
 			// Tests: none
 			insert: function (index,object) {
-				this.__rep__.splice(index+1,0,object);
+				this.__rep__.splice(index,0,object);
 				this.length++;
 				if ( this.__index ) {
-					this.__index.add(object);
+					this.__index.remove(function () {return true;}).build();
 				}
 				this.event('insert').raise(object,index,this);
 				return this;
@@ -115,11 +115,12 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			// Tests: none
 			insert: function (index,object) {
 				var obj = this.ensure.apply(this,_slice.call(arguments,1))
-				this.__rep__.splice(index+1,0,obj);
+				this.__rep__.splice(index,0,obj);
 				this.length++;
 				if ( this.__index ) {
-					this.__index.add(object);
+					this.__index.remove(function () {return true;}).build();
 				}
+				console.log(this.__rep__);
 				this.event('insert').raise(object,index,this);
 				return this;
 			}
