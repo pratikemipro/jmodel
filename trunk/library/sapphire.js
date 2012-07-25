@@ -605,10 +605,10 @@ define(['jmodel/opal'], function (opal) {
 			
 			// Tests: none
 			insert: function (index,object) {
-				this.__rep__.splice(index+1,0,object);
+				this.__rep__.splice(index,0,object);
 				this.length++;
 				if ( this.__index ) {
-					this.__index.add(object);
+					this.__index.remove(function () {return true;}).build();
 				}
 				return this;
 			}
@@ -628,10 +628,10 @@ define(['jmodel/opal'], function (opal) {
 			
 			// Tests: none
 			insert: function (index,object) {
-				this.__rep__.splice(index+1,0,this.ensure.apply(this,_slice.call(arguments,1)));
+				this.__rep__.splice(index,0,this.ensure.apply(this,_slice.call(arguments,1)));
 				this.length++;
 				if ( this.__index ) {
-					this.__index.add(object);
+					this.__index.remove(function () {return true;}).build();
 				}
 				return this;
 			}
