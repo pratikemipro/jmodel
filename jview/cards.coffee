@@ -177,6 +177,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				index:
 					type: Number
 					defaultValue: 0
+					remember: 1
 					repeat: true
 			
 			# Changing state scrolls to card
@@ -349,7 +350,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 						@viewport.state.index card.li.index('li.card')
 				
 			return false
-				
+		
 				
 	##
 	## CardApplication
