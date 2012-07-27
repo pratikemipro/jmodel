@@ -17,8 +17,8 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 		constructor: (element) ->
 			@element = $ element
 			
-		renderNodes: (node) ->
-			@element.children('li:gt(2)').remove()
+		renderNodes: (node,preserve) ->
+			@element.children('li').filter((index) -> index >= preserve).remove()
 			@renderNode node
 			
 		renderNode: (node) ->
