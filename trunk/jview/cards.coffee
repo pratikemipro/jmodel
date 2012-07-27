@@ -249,10 +249,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.find('li.card').eq(index)
-			@element.animate
-				scrollLeft: Math.max(li.offset().left - 64 ,li.offset().left+li.width()-@element.width() - 64)+'px'
-				scrollTop: '0px',
-				duration
+			if li.length > 0
+				@element.animate
+					scrollLeft: Math.max(li.offset().left - 64 ,li.offset().left+li.width()-@element.width() - 64)+'px'
+					scrollTop: '0px',
+					duration
 			
 		zoom: (event) ->
 			
@@ -386,7 +387,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			if rootCardElement.length == 0
 				[cardType] = ( cardConstructor for className, cardConstructor of @types )
 				@cards.add( rootCard = new cardType @cards, undefined, undefined, zoomed: true )
-				rootCard.event('ready').republish event 'ready'
+				rootCard.event('ready').republish @event 'ready'
 			
 		event: (name) -> @events.get name
 			
