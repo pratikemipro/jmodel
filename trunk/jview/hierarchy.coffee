@@ -22,10 +22,11 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			@renderNode node
 			
 		renderNode: (node) ->
-			@element.append \
-				$('<li/>').append \
-					$('<a/>').attr('href',node.href).text(node.title)
-			if node.tail then @renderNode node.tail 
+			if node?.length > 0
+				@element.append \
+					$('<li/>').append \
+						$('<a/>').attr('href',node.href).text(node.title)
+				if node.tail then @renderNode node.tail 
 	
 
 	##
