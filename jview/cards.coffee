@@ -219,6 +219,10 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			)
 			.subscribe => @controls.toggleClass 'hidden', @cardListView.cards.count() == 1
 			
+			# Change current card on removal
+			@cardListView.event('removed').subscribe =>
+				@state.index Math.min @cardListView.cards.count()-1, @state.index()+1
+			
 			# Zoom
 			@controls.find('button.zoom').event('click').subscribe (event) => @zoom event
 			
