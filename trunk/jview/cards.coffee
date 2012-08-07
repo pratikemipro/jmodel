@@ -404,20 +404,24 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@menuElement = $ menuElement
 			
 			@events = new jm.EventRegistry 'ready'
-			@event('ready').remember 1
-			
+			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
 			@cards		= new List @external
+			
+			rootCardElement = @element.find 'ul.cards li.card'
+			[cardType] = @router.resolve window.location.pathname.substring 1
+			
+			rootCard = new cardType @cards, undefined, rootCardElement, zoomed: !rootCardElement?
+			rootCard.event('ready').republish @event 'ready'
+			
+			if rootCardElement then @cards.add rootCard
+			
 			@view       = new ListView @cards, @element.find('ul.cards')
 			@viewport   = new ViewPort @view, @element, @menuElement
 			@controller = new Controller @cards, @view, @viewport, @element, @router
 			
-			rootCardElement = @element.find 'ul.cards li.card'
-			[cardType] = @router.resolve window.location.pathname.substring 1
-		
-			@cards.add( rootCard = new cardType @cards, undefined, rootCardElement, zoomed: !rootCardElement? )
-			rootCard.event('ready').republish @event 'ready'
+			if !rootCardElement then @cards.add rootCard
 			
 		event: (name) -> @events.get name
 			
