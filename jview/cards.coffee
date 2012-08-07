@@ -411,10 +411,10 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
 			rootCardElement = @element.find 'ul.cards li.card'
+			[cardType] = @router.resolve window.location.pathname.substring 1
 			
 			# Card already exists
 			if rootCardElement.length > 0
-				[cardType] = @router.resolve window.location.pathname.substring 1
 				@cards.add( rootCard = new cardType @cards, undefined, rootCardElement )
 				rootCard.event('ready').republish @event 'ready'
 
@@ -424,7 +424,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		
 			# No card exists
 			if rootCardElement.length == 0
-				[cardType] = ( cardType for cardType of @router.routes )
 				@cards.add( rootCard = new cardType @cards, undefined, undefined, zoomed: true )
 				rootCard.event('ready').republish @event 'ready'
 			
