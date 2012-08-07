@@ -407,7 +407,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
-			@cards		= new List @external
+			@cards = new List @external
 			
 			rootCardElement = @element.find 'ul.cards li.card'
 			[cardType] = @router.resolve window.location.pathname.substring 1
