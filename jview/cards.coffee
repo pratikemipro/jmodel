@@ -298,7 +298,45 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 						@element.removeClass 'no_animation'
 						
 				return false;
+	
+	
+	##
+	## Route
+	##
+	
+	class Route
+		
+		constructor: (pattern,@cardType) ->
+			@pattern = if pattern instanceof RegExp then pattern else @compile pattern
 			
+		compile: (pattern) ->
+			new RegExp '^'+pattern.replace('/','\/').replace('{number}','(\\d+)')+'$'
+	
+	##
+	## Router
+	##
+	
+	class Router
+		
+		constructor: (@routes) ->
+			@routes.sort ( (route) -> route.pattern.toString().length ).desc()
+			
+		resolve: (url) ->
+			
+			[_,path,query] = url.match /([^\?]*)\??(.*)/
+			
+			# Find first matching route
+			[route] = ( route for route in @routes when route.pattern.test path )
+			
+			# Find keys from route
+			[_,keys...] = route.pattern.exec path 
+			
+			# Convert URL parameters to object
+			parameters = {}
+			parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
+						
+			return [ route.cardType, keys, parameters ]
+	
 			
 	##
 	## Controller
@@ -306,7 +344,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	
 	class Controller
 		
-		constructor: (@cardList,@view,@viewport,@element,@cardTypes) ->
+		constructor: (@cardList,@view,@viewport,@element,@router) ->
 			
 			@element.event('click','a[href]')
 				.notBetween(
@@ -329,25 +367,22 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			a    = $(target).closest 'a'
 			href = a.attr 'href'
 			li   = a.closest 'li.card'
+			
+			[cardType,[id],parameters] = @router.resolve href
 
-			[_,type,id,query] = href.match /([^\/]+)\/([^\?]+)\??(.*)/
-			
-			parameters = {}
-			parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
-			
 			currentIndex = li.index('li.card') + 1
-			
+						
 			if a.hasClass 'permalink'
 				open href
-			else if @cardTypes[type]
-				card = new @cardTypes[type] @cardList, id, undefined, parameters
+			else if cardType
+				card = new cardType @cardList, id, undefined, parameters
 				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
 					@cardList.insert currentIndex, card
 			else 
 				open href
-				
+							
 			if animate
 				@view.event('ready')
 					.where( (inserted) -> inserted == card )
@@ -363,7 +398,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	
 	class Application
 		
-		constructor: (element,menuElement,@external,@types) ->
+		constructor: (element,menuElement,@external,@router) ->
 			
 			@element     = $ element
 			@menuElement = $ menuElement
@@ -379,17 +414,17 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 			# Card already exists
 			if rootCardElement.length > 0
-				[cardType] = ( cardConstructor for className, cardConstructor of @types when rootCardElement.hasClass(className) )
+				[cardType] = @router.resolve window.location.pathname.substring 1
 				@cards.add( rootCard = new cardType @cards, undefined, rootCardElement )
 				rootCard.event('ready').republish @event 'ready'
 
 			@view       = new ListView @cards, @element.find('ul.cards')
 			@viewport   = new ViewPort @view, @element, @menuElement
-			@controller = new Controller @cards, @view, @viewport, @element, @types
+			@controller = new Controller @cards, @view, @viewport, @element, @router
 		
 			# No card exists
 			if rootCardElement.length == 0
-				[cardType] = ( cardConstructor for className, cardConstructor of @types )
+				[cardType] = ( cardType for cardType of @router.routes )
 				@cards.add( rootCard = new cardType @cards, undefined, undefined, zoomed: true )
 				rootCard.event('ready').republish @event 'ready'
 			
@@ -407,6 +442,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		List: List
 		ListView: ListView
 		ViewPort: ViewPort
+		Route: Route
+		Router: Router
 		Controller: Controller
 		Application: Application
 	}
