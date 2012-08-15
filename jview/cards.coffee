@@ -313,7 +313,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@pattern = if pattern instanceof RegExp then pattern else @compile pattern
 			
 		compile: (pattern) ->
-			new RegExp '^'+pattern.replace('/','\/').replace('{number}','(\\d+)')+'$'
+			new RegExp '^'+pattern.replace('/','\/').replace('{number}','(\\d+)')+'/?$'
 	
 	##
 	## Router
