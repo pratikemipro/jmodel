@@ -41,6 +41,9 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@events.add 'load', jm.event.fromAjax @load
 			
 			@event('load').subscribe (html) => @init html
+		
+		get: (params) ->
+			@event('load').start params
 			
 		init: (html) ->
 			@li.html html
