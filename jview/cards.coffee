@@ -322,7 +322,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	class Router
 		
 		constructor: (@routes) ->
-			console.log @routes
 			@routes.sort ( (route) -> route.pattern.toString().length ).desc()
 			
 		resolve: (url) ->
