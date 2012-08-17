@@ -313,7 +313,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@pattern = if pattern instanceof RegExp then pattern else @compile pattern
 			
 		compile: (pattern) ->
-			new RegExp '^'+pattern.replace('/','\/').replace('{number}','(\\d+)')+'/?$'
+			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/,'(\\d+)')+'/?$'
 	
 	##
 	## Router
@@ -322,6 +322,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	class Router
 		
 		constructor: (@routes) ->
+			console.log @routes
 			@routes.sort ( (route) -> route.pattern.toString().length ).desc()
 			
 		resolve: (url) ->
@@ -401,7 +402,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	
 	class Application
 		
-		constructor: (element,menuElement,@external,@router) ->
+		constructor: (element,menuElement,@external,@constructors) ->
 			
 			@element     = $ element
 			@menuElement = $ menuElement
@@ -410,7 +411,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
-			@cards = new List @external
+			@cards  = new List @external
+			@router = new Router ( new Route(card::route,card) for card in @constructors )
 			
 			rootCardElement = @element.find 'ul.cards li.card'
 			[cardType] = @router.resolve window.location.pathname.substring 1
