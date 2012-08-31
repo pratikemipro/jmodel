@@ -370,14 +370,15 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			a    = $(target).closest 'a'
 			href = a.attr 'href'
 			li   = a.closest 'li.card'
-			
-			[cardType,[id],parameters] = @router.resolve href
 
 			currentIndex = li.index('li.card') + 1
 						
 			if a.hasClass 'permalink'
 				open href
-			else if cardType
+				return false
+			
+			[cardType,[id],parameters] = @router.resolve href
+			if cardType
 				card = new cardType @cardList, id, undefined, parameters
 				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
