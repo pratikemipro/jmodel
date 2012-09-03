@@ -331,14 +331,16 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			# Find first matching route
 			[route] = ( route for route in @routes when route.pattern.test path )
 			
-			# Find keys from route
-			[_,keys...] = route.pattern.exec path 
+			if route
 			
-			# Convert URL parameters to object
-			parameters = {}
-			parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
+				# Find keys from route
+				[_,keys...] = route.pattern.exec path 
+			
+				# Convert URL parameters to object
+				parameters = {}
+				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
 						
-			return [ route.cardType, keys, parameters ]
+			return [ route?.cardType, keys || [], parameters || {} ]
 	
 			
 	##
@@ -372,13 +374,13 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			li   = a.closest 'li.card'
 
 			currentIndex = li.index('li.card') + 1
-						
+			
+			[cardType,[id],parameters] = @router.resolve href
+			
 			if a.hasClass 'permalink'
 				open href
 				return false
-			
-			[cardType,[id],parameters] = @router.resolve href
-			if cardType
+			else if cardType
 				card = new cardType @cardList, id, undefined, parameters
 				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
