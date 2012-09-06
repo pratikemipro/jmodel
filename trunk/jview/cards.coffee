@@ -127,7 +127,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				li.addClass 'adding'
 				after(350) =>
 					@element.find('li.card').eq(index-1).after li
-					li.css 'width', li.children('section').outerWidth(true)
+					li.css 'width', li.children('article').outerWidth(true)
 					after(@duration) =>
 						li.removeClass 'adding'
 						@event('ready').raise card
