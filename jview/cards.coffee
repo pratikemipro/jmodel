@@ -60,13 +60,21 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		constructor: (@external) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
-			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count'
+			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready'
 			
 			@cards.events.republish
 				add:     @event 'add'
 				insert:  @event 'insert'
 				replace: @event 'replace'
 				remove:  @event 'remove'
+			
+			jm.disjoin(
+				@cards.event('add'),
+				@cards.event('insert'),
+				@cards.event('replace')
+			)
+			.subscribe (card) =>
+				card.event('ready').subscribe => @event('ready').raise card
 		
 		event: (name) -> @events.get name
 		
