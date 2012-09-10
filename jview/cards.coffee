@@ -48,7 +48,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		init: (html) ->
 			@li.html html
 			@li.toggleClass 'error', $(html).hasClass('error')
-			@event('ready').raise(this)
+			@event('ready').raise this
 	
 
 	##
@@ -75,9 +75,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				@cards.event('replace')
 			)
 			.subscribe (card) =>
-				
-				card.event('ready').subscribe => @event('ready').raise card
-					
+				card.event('ready').subscribe   (card) => @event('ready').raise card
 				card.event('dispose').subscribe (card) => @cards.remove card
 		
 		event: (name) -> @events.get name
