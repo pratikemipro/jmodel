@@ -78,7 +78,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				
 				card.event('ready').subscribe => @event('ready').raise card
 					
-				card.event('dispose').subscribe => @cards.remove card
+				card.event('dispose').subscribe (card) => @cards.remove card
 		
 		event: (name) -> @events.get name
 		

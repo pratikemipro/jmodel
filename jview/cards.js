@@ -81,7 +81,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         card.event('ready').subscribe(function() {
           return _this.event('ready').raise(card);
         });
-        return card.event('dispose').subscribe(function() {
+        return card.event('dispose').subscribe(function(card) {
           return _this.cards.remove(card);
         });
       });
