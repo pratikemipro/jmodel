@@ -12,7 +12,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		
 		constructor: ->
 		
-			@events = new jm.EventRegistry 'ready'
+			@events = new jm.EventRegistry 'ready', 'dispose'
 			@event('ready').remember 1
 		
 			@li ?= $ '<li class="card"/>'
@@ -20,7 +20,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@li.addClass(@class)
 			
 			@li.on 'click', 'button.close', =>
-				@list.remove this
+				@event('dispose').raise this
 				
 		event: (name) -> @events.get name
 	
@@ -75,8 +75,10 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				@cards.event('replace')
 			)
 			.subscribe (card) =>
-				card.event('ready').subscribe =>
-					@event('ready').raise card
+				
+				card.event('ready').subscribe => @event('ready').raise card
+					
+				card.event('dispose').subscribe => @cards.remove card
 		
 		event: (name) -> @events.get name
 		
