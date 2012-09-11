@@ -77,7 +77,9 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         replace: this.event('replace'),
         remove: this.event('remove')
       });
-      jm.disjoin(this.cards.event('add'), this.cards.event('insert'), this.cards.event('replace')).subscribe(function(card) {
+      jm.disjoin(this.cards.event('add'), this.cards.event('insert'), this.cards.event('replace').map(function(_, card) {
+        return card;
+      })).subscribe(function(card) {
         card.event('ready').subscribe(function(card) {
           return _this.event('ready').raise(card);
         });
