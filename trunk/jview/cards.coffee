@@ -72,7 +72,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			jm.disjoin(
 				@cards.event('add'),
 				@cards.event('insert'),
-				@cards.event('replace')
+				@cards.event('replace').map( (_,card) -> card )
 			)
 			.subscribe (card) =>
 				card.event('ready').subscribe   (card) => @event('ready').raise card
