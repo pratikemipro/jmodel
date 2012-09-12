@@ -256,13 +256,13 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				@controls.find('.count').text( count + ' cards' )
 				
 			# Drag
-			@element.event('mousemove').map( (event) -> event.screenX )
-				.between(
-					@element.event('mousedown').map( (event) -> [event.screenX,$(window).scrollLeft()] ),
-					$(document).event('mouseup')
-				)
-				.subscribe (currentScreenX,[startScreenX,startScroll]) =>
-					$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
+			# @element.event('mousemove').map( (event) -> event.screenX )
+			# 	.between(
+			# 		@element.event('mousedown').map( (event) -> [event.screenX,$(window).scrollLeft()] ),
+			# 		$(document).event('mouseup')
+			# 	)
+			# 	.subscribe (currentScreenX,[startScreenX,startScroll]) =>
+			# 		$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
 				
 		scrollTo: (index,duration=1000) ->
 			li = @cardListView.element.find('li.card').eq(index)

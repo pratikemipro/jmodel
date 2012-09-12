@@ -348,15 +348,6 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         count = _this.cardListView.cards.count();
         return _this.controls.find('.count').text(count + ' cards');
       });
-      this.element.event('mousemove').map(function(event) {
-        return event.screenX;
-      }).between(this.element.event('mousedown').map(function(event) {
-        return [event.screenX, $(window).scrollLeft()];
-      }), $(document).event('mouseup')).subscribe(function(currentScreenX, _arg) {
-        var startScreenX, startScroll;
-        startScreenX = _arg[0], startScroll = _arg[1];
-        return $(window).scrollLeft(startScroll + startScreenX - currentScreenX);
-      });
     }
 
     ViewPort.prototype.scrollTo = function(index, duration) {
