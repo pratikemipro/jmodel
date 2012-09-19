@@ -755,6 +755,17 @@ define(function (a,b,c,undefined) {
 	
 	
 	//
+	// Identity
+	//
+	
+	Object.eq = function (value) {
+		return function (object) {
+			return object === value;
+		};
+	};
+	
+	
+	//
 	// Bare objects
 	//
 	
