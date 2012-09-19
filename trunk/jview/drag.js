@@ -81,9 +81,7 @@ define(['jquery', 'jmodel/emerald', 'jmodel-plugins/jquery.emerald'], function($
     Target.prototype.accept = function(_arg) {
       var type;
       type = _arg.originalEvent.dataTransfer.types[0];
-      return this.types.count(function(t) {
-        return t === type;
-      }) !== 0;
+      return this.types.first(Object.eq(type));
     };
 
     return Target;
