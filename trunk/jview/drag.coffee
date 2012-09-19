@@ -36,6 +36,7 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 			jm.disjoin(
 				@element.event('dragenter',preventDefault:true).where(@accept).map(-> 1)
 			 	@element.event('dragleave',preventDefault:true).where(@accept).map(-> -1)
+				@element.event('drop',preventDefault:true).map(-> -1)
 			)
 			.accumulate(jm.plus,0)
 			.subscribe (count) => @element.toggleClass 'over', count > 0
