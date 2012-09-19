@@ -61,7 +61,7 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 		
 		event: (name) -> @events.get name
 		
-		accept: ({originalEvent:{dataTransfer:{types:[type]}}}) => @types.count( (t) -> t == type ) != 0
+		accept: ({originalEvent:{dataTransfer:{types:[type]}}}) => @types.first Object.eq type
 		
 	
 	##
