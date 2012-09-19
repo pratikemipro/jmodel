@@ -1,15 +1,29 @@
-define [ 'jquery', 'jmodel/emerald' ], ($,jm) ->
+define [ 'jquery', 'jmodel/topaz' ], ($,jm) ->
 	
 	class Palettes
 	
 		constructor: (dl,@parameters,@constructors) ->
 			
 			@dl = $ dl
+			@dt = @dl.children 'dt'
 			
-			@palettes = ( new constructor @dl.children('dd').filter(className), this ) for className, constructor of @constructors
+			@state = new jm.ObservableObject
+				current: Number,
+				{repeat: true}
 			
-			@dl.children('dt').event('click').subscribe ({target}) =>
-				$(target).closest('dt').toggleClass 'open'
+			@palettes = for className, constructor of @constructors
+				dd = @dl.children('dd').filter(className)
+				dt = dd.prev('dt')
+				new constructor dt, dd, this
+			
+			@dt.event('click')
+				.map( ({target}) => Math.floor $(target).index()/2 )
+				.subscribe (index) =>
+					@state.current index
+				
+			@state.event('current').subscribe (current) =>
+				@dt.toggleClass (index) -> if index == current then 'open' else ''
+				
 				
 	return {
 		Palettes: Palettes
