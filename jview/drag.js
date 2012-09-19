@@ -43,6 +43,10 @@ define(['jquery', 'jmodel/emerald', 'jmodel-plugins/jquery.emerald'], function($
         preventDefault: true
       }).where(this.accept).map(function() {
         return -1;
+      }), this.element.event('drop', {
+        preventDefault: true
+      }).map(function() {
+        return -1;
       })).accumulate(jm.plus, 0).subscribe(function(count) {
         return _this.element.toggleClass('over', count > 0);
       });
