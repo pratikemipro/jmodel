@@ -48,7 +48,7 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 					dataTransfer.dropEffect = @effect
 					false
 			
-			# Raise drop event		
+			# Raise drop event
 			@element.event('drop',stopPropagation:true)
 				.where(@accept)
 				.subscribe ({originalEvent:{dataTransfer}}) =>
