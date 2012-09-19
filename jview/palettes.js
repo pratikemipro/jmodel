@@ -13,7 +13,7 @@ define(['jquery', 'jmodel/emerald'], function($, jm) {
       _ref = this.constructors;
       for (className in _ref) {
         constructor = _ref[className];
-        this.palettes = new constructor(this, className);
+        this.palettes = new constructor(this.dl.children('dd').filter(className), this);
       }
       this.dl.children('dt').event('click').subscribe(function(_arg) {
         var target;

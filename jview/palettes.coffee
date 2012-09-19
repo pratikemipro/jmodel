@@ -6,7 +6,7 @@ define [ 'jquery', 'jmodel/emerald' ], ($,jm) ->
 			
 			@dl = $ dl
 			
-			@palettes = ( new constructor this, className ) for className, constructor of @constructors
+			@palettes = ( new constructor @dl.children('dd').filter(className), this ) for className, constructor of @constructors
 			
 			@dl.children('dt').event('click').subscribe ({target}) =>
 				$(target).closest('dt').toggleClass 'open'
