@@ -12,7 +12,8 @@ define(['jquery', 'jmodel/topaz'], function($, jm) {
       this.dl = $(dl);
       this.dt = this.dl.children('dt');
       this.state = new jm.ObservableObject({
-        current: Number
+        current: Number,
+        open: Boolean(false)
       }, {
         repeat: true
       });
@@ -33,14 +34,17 @@ define(['jquery', 'jmodel/topaz'], function($, jm) {
         target = _arg.target;
         return Math.floor($(target).index() / 2);
       }).subscribe(function(index) {
-        return _this.state.current(index);
+        _this.state.current(index);
+        return _this.state.open(function(x) {
+          return !x;
+        });
       });
-      this.state.event('current').subscribe(function(current) {
-        return _this.dt.toggleClass(function(index) {
-          if (index === current) {
-            return 'open';
+      this.state.event('open').subscribe(function(open) {
+        return _this.dt.each(function(index, element) {
+          if (index !== _this.state.current()) {
+            return $(element).removeClass('open');
           } else {
-            return '';
+            return $(element).toggleClass('open', open);
           }
         });
       });

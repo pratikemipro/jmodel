@@ -9,6 +9,7 @@ define [ 'jquery', 'jmodel/topaz' ], ($,jm) ->
 			
 			@state = new jm.ObservableObject
 				current: Number,
+				open: Boolean(false)
 				{repeat: true}
 			
 			@palettes = for className, constructor of @constructors
@@ -20,9 +21,11 @@ define [ 'jquery', 'jmodel/topaz' ], ($,jm) ->
 				.map( ({target}) => Math.floor $(target).index()/2 )
 				.subscribe (index) =>
 					@state.current index
+					@state.open (x) -> !x
 				
-			@state.event('current').subscribe (current) =>
-				@dt.toggleClass (index) -> if index == current then 'open' else ''
+			@state.event('open').subscribe (open) =>
+				@dt.each (index,element) =>
+					if index != @state.current() then $(element).removeClass 'open' else $(element).toggleClass 'open', open
 				
 				
 	return {
