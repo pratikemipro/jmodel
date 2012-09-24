@@ -1,4 +1,4 @@
-define [ 'jquery', 'jmodel/topaz' ], ($,jm) ->
+define [ 'jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald' ], ($,jm) ->
 	
 	class Palettes
 	
