@@ -20,9 +20,6 @@ define(['jmodel/sapphire'], function (sapphire) {
 	
 	return (function () {
 		
-		// Turn on strict mode for main section
-		'use strict';
-		
 		var _slice = Array.prototype.slice;
 		
 		function Relation (keys) {

@@ -8,9 +8,7 @@
  */
 
 define(['jmodel/topaz'], function (topaz) {
-	
-	'use strict';
-	
+
 	Object.extend(topaz.ObservableObject.prototype, {
 		
 		toBareObject: function () {
