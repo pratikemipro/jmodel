@@ -21,9 +21,6 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 	}
 	
 	return (function () {
-		
-		// Turn on strict mode for main section of library
-		'use strict';
  
 		var di		= Object.extend(topaz,{diamond_version:'0.1.0'}),
 			_		= di,

@@ -9,8 +9,6 @@
 
 define(['jmodel/diamond'], function (diamond) {
 	
-	'use strict';
-	
 	Object.extend(diamond.Context.prototype,{
 		
 		debug: function () {

@@ -21,9 +21,6 @@ define(['jmodel/opal'], function (opal) {
 	}
 	
 	return (function () {
-		
-		// Turn on strict mode for main section of library
-		'use strict';
 
 		var _ 	   = Object.extend(opal,{sapphire_version:'0.12.0'}),
 			_slice = Array.prototype.slice;

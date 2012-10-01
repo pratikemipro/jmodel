@@ -15,8 +15,6 @@ define([
 
 ], function (diamond,$) {
 	
-	'use strict';
-	
 	Array.fromOData = function (odata,expand) {
 		expand = typeof expand !== 'undefined' ? expand : false;
 		var entity = odata.d ? odata.d : odata,

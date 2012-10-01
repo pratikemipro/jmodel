@@ -27,9 +27,6 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 	
 	return (function () {
 		
-		// Turn on strict mode for main section of library
-		'use strict';
-		
 		var topaz	= Object.extend(emerald,{topaz_version:'0.13.0'}),
 			_		= topaz,
 			_slice	= Array.prototype.slice;

@@ -26,9 +26,6 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	}
 	
 	return (function () {
-		
-		// Turn on strict mode for main section of library
-		'use strict';
  
 		var em		= Object.extend(sapphire,{emerald_version:'0.13.0'}),
 			_		= em,
