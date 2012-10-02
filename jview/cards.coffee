@@ -426,7 +426,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@cards  = new List @external
 			@router = new Router ( new Route(card::route,card) for card in @constructors )
 			
-			rootCardElement = @element.find 'ul.cards li.card'
+			[rootCardElement] = @element.find 'ul.cards li.card'
 			[cardType] = @router.resolve window.location.pathname.substring 1
 			
 			rootCard = new cardType @cards, undefined, rootCardElement, zoomed: !rootCardElement?

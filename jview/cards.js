@@ -559,7 +559,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         }
         return _results;
       }).call(this));
-      rootCardElement = this.element.find('ul.cards li.card');
+      rootCardElement = this.element.find('ul.cards li.card')[0];
       cardType = this.router.resolve(window.location.pathname.substring(1))[0];
       rootCard = new cardType(this.cards, void 0, rootCardElement, {
         zoomed: !(rootCardElement != null)
