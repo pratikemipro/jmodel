@@ -182,7 +182,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		@width: 0
 		@scrollLeft: 0
 		
-		constructor: (@cardListView,element,controls) ->
+		constructor: (@cardListView,element,controls,@offset=64) ->
 			
 			@element  = $ element
 			@controls = $ controls
@@ -268,7 +268,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			li = @cardListView.element.find('li.card').eq(index)
 			if li.length > 0
 				@element.animate
-					scrollLeft: Math.max(li.offset().left - 64 ,li.offset().left+li.width()-@element.width() - 64)+'px'
+					scrollLeft: Math.max(li.offset().left - @offset ,li.offset().left+li.width()-@element.width() - @offset)+'px'
 					scrollTop: '0px',
 					duration
 			
@@ -435,7 +435,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			if rootCardElement then @cards.add rootCard
 			
 			@view       = new ListView @cards, @element.find('ul.cards')
-			@viewport   = new ViewPort @view, @element, @menuElement
+			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
 			@controller = new Controller @cards, @view, @viewport, @element, @router
 			
 			if !rootCardElement then @cards.add rootCard
