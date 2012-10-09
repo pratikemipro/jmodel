@@ -273,10 +273,11 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
 
     ViewPort.scrollLeft = 0;
 
-    function ViewPort(cardListView, element, controls) {
+    function ViewPort(cardListView, element, controls, offset) {
       var keyEvent,
         _this = this;
       this.cardListView = cardListView;
+      this.offset = offset != null ? offset : 64;
       this.element = $(element);
       this.controls = $(controls);
       this.state = new jm.ObservableObject({
@@ -358,7 +359,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       li = this.cardListView.element.find('li.card').eq(index);
       if (li.length > 0) {
         return this.element.animate({
-          scrollLeft: Math.max(li.offset().left - 64, li.offset().left + li.width() - this.element.width() - 64) + 'px',
+          scrollLeft: Math.max(li.offset().left - this.offset, li.offset().left + li.width() - this.element.width() - this.offset) + 'px',
           scrollTop: '0px'
         }, duration);
       }
@@ -569,7 +570,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         this.cards.add(rootCard);
       }
       this.view = new ListView(this.cards, this.element.find('ul.cards'));
-      this.viewport = new ViewPort(this.view, this.element, this.menuElement);
+      this.viewport = new ViewPort(this.view, this.element, this.menuElement, this.external.offset != null);
       this.controller = new Controller(this.cards, this.view, this.viewport, this.element, this.router);
       if (!rootCardElement) {
         this.cards.add(rootCard);
