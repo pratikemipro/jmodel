@@ -269,7 +269,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			li = @cardListView.element.find('li.card').eq(index)
 			if li.length > 0
 				@element.animate
-					scrollLeft: Math.max(li.offset().left - @offset ,li.offset().left+li.width()-@element.width() - @offset)+'px'
+					scrollLeft: Math.min(li.offset().left - @offset ,li.offset().left+li.width()-@element.width() - @offset)+1+'px'
 					scrollTop: '0px',
 					duration
 			

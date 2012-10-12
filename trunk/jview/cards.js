@@ -361,7 +361,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       li = this.cardListView.element.find('li.card').eq(index);
       if (li.length > 0) {
         return this.element.animate({
-          scrollLeft: Math.max(li.offset().left - this.offset, li.offset().left + li.width() - this.element.width() - this.offset) + 'px',
+          scrollLeft: Math.min(li.offset().left - this.offset, li.offset().left + li.width() - this.element.width() - this.offset) + 1 + 'px',
           scrollTop: '0px'
         }, duration);
       }
