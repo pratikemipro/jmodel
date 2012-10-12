@@ -207,8 +207,10 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         li = card.li;
         li.addClass('adding');
         return after(350)(function() {
+          var width;
           _this.element.find('li.card').eq(index - 1).after(li);
-          li.css('width', li.children('article').outerWidth(true));
+          width = Math.min(window.innerWidth, li.children('article').outerWidth(true));
+          li.css('width', width);
           return after(_this.duration)(function() {
             li.removeClass('adding');
             return _this.event('ready').raise(card);
