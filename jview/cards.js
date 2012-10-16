@@ -496,7 +496,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, card, cardType, currentIndex, href, id, li, open, parameters, target, _ref, _ref1,
+      var a, card, cardType, currentIndex, href, id, li, open, parameters, protocol, target, _ref, _ref1,
         _this = this;
       target = _arg.target;
       open = function(href) {
@@ -504,6 +504,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       };
       a = $(target).closest('a');
       href = a.attr('href');
+      protocol = href.split(':')[0];
       li = a.closest('li.card');
       currentIndex = li.index('li.card') + 1;
       _ref = this.router.resolve(href), cardType = _ref[0], (_ref1 = _ref[1], id = _ref1[0]), parameters = _ref[2];
@@ -521,7 +522,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         } else {
           this.cardList.insert(currentIndex, card);
         }
-      } else {
+      } else if (protocol !== 'mailto') {
         open(href);
       }
       if (animate) {
@@ -531,7 +532,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
           return _this.viewport.state.index(card.li.index('li.card'));
         });
       }
-      return false;
+      return protocol === 'mailto';
     };
 
     return Controller;

@@ -380,9 +380,10 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				
 			open = (href) -> window.open href, (Date()).split(' ').join('')
 			
-			a    = $(target).closest 'a'
-			href = a.attr 'href'
-			li   = a.closest 'li.card'
+			a    	   = $(target).closest 'a'
+			href	   = a.attr 'href'
+			[protocol] = href.split(':')
+			li         = a.closest 'li.card'
 
 			currentIndex = li.index('li.card') + 1
 			
@@ -397,7 +398,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
 					@cardList.insert currentIndex, card
-			else 
+			else if protocol != 'mailto'
 				open href
 							
 			if animate
@@ -406,7 +407,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 					.subscribe =>
 						@viewport.state.index card.li.index('li.card')
 				
-			return false
+			return protocol == 'mailto'
 		
 				
 	##
