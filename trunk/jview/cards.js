@@ -565,7 +565,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
       cardType = this.router.resolve(window.location.pathname.substring(1))[0];
-      rootCard = new cardType(this.cards, void 0, rootCardElement, {
+      rootCard = new cardType(this.cards, void 0, $(rootCardElement), {
         zoomed: !(rootCardElement != null)
       });
       rootCard.event('ready').republish(this.event('ready'));
