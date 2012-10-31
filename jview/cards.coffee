@@ -17,7 +17,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		
 			@li ?= $ '<li class="card"/>'
 		
-			@li.addClass(@class)
+			@li.addClass @class
 			
 			@li.on 'click', 'button.close', =>
 				@event('dispose').raise this
@@ -431,7 +431,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			[rootCardElement] = @element.find 'ul.cards li.card'
 			[cardType] = @router.resolve window.location.pathname.substring 1
 			
-			rootCard = new cardType @cards, undefined, rootCardElement, zoomed: !rootCardElement?
+			rootCard = new cardType @cards, undefined, $(rootCardElement), zoomed: !rootCardElement?
 			rootCard.event('ready').republish @event 'ready'
 			
 			if rootCardElement then @cards.add rootCard
