@@ -25,7 +25,7 @@ define ['jquery','jmodel/topaz'], ($,jm) ->
 			if node
 				@element.append \
 					$('<li/>').append \
-						$('<a/>').attr('href',node.href).text(node.title)
+						$('<a class="singleton"/>').attr('href',node.href).text(node.title)
 				if node.tail then @renderNode node.tail 
 	
 

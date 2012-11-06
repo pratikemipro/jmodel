@@ -26,7 +26,7 @@ define(['jquery', 'jmodel/topaz'], function($, jm) {
 
     View.prototype.renderNode = function(node) {
       if (node) {
-        this.element.append($('<li/>').append($('<a/>').attr('href', node.href).text(node.title)));
+        this.element.append($('<li/>').append($('<a class="singleton"/>').attr('href', node.href).text(node.title)));
         if (node.tail) {
           return this.renderNode(node.tail);
         }
