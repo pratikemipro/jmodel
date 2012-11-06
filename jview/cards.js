@@ -516,24 +516,15 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         open(href);
         return false;
       } else if (cardType) {
-        console.log(this.cardList.first(function(card) {
-          return card instanceof cardType && (card.id = id);
-        }));
-        if (a.hasClass('singleton') && (card = this.cardList.first(function(card) {
-          return card instanceof cardType && (card.id = id);
-        }))) {
-          this.viewPort.scrollTo(card.li.index('li.card'));
+        card = new cardType(this.cardList, id, void 0, parameters);
+        if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
+          this.element.animate({
+            scrollLeft: 0
+          }, 500, function() {
+            return _this.cardList.replace(_this.cardList.get(0), card);
+          });
         } else {
-          card = new cardType(this.cardList, id, void 0, parameters);
-          if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
-            this.element.animate({
-              scrollLeft: 0
-            }, 500, function() {
-              return _this.cardList.replace(_this.cardList.get(0), card);
-            });
-          } else {
-            this.cardList.insert(currentIndex, card);
-          }
+          this.cardList.insert(currentIndex, card);
         }
       } else if (protocol !== 'mailto') {
         open(href);
