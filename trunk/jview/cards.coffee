@@ -396,15 +396,14 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				open href
 				return false
 			else if cardType
-				console.log @cardList.first( (card) -> card instanceof cardType and card.id = id )
-				if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
-					@viewPort.scrollTo card.li.index 'li.card'
+				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
+				# 					@viewPort.scrollTo card.li.index 'li.card'
+				# 				else
+				card = new cardType @cardList, id, undefined, parameters
+				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
-					card = new cardType @cardList, id, undefined, parameters
-					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
-					else
-						@cardList.insert currentIndex, card
+					@cardList.insert currentIndex, card
 			else if protocol != 'mailto'
 				open href
 							
