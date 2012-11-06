@@ -13,13 +13,10 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
   Card = (function() {
 
     function Card() {
-      var _ref,
-        _this = this;
+      var _this = this;
       this.events = new jm.EventRegistry('ready', 'dispose');
       this.event('ready').remember(1);
-      if ((_ref = this.li) == null) {
-        this.li = $('<li class="card"/>');
-      }
+      this.li = this.li ? $(this.li) : $('<li class="card"/>');
       this.li.addClass(this["class"]);
       this.li.on('click', 'button.close', function() {
         return _this.event('dispose').raise(_this);
@@ -127,6 +124,12 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       var args, _ref;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return (_ref = this.cards).count.apply(_ref, args);
+    };
+
+    List.prototype.first = function() {
+      var args, _ref;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return (_ref = this.cards).first.apply(_ref, args);
     };
 
     return List;
@@ -508,19 +511,29 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       li = a.closest('li.card');
       currentIndex = li.index('li.card') + 1;
       _ref = this.router.resolve(href), cardType = _ref[0], (_ref1 = _ref[1], id = _ref1[0]), parameters = _ref[2];
+      console.log(cardType);
       if (a.hasClass('permalink')) {
         open(href);
         return false;
       } else if (cardType) {
-        card = new cardType(this.cardList, id, void 0, parameters);
-        if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
-          this.element.animate({
-            scrollLeft: 0
-          }, 500, function() {
-            return _this.cardList.replace(_this.cardList.get(0), card);
-          });
+        console.log(this.cardList.first(function(card) {
+          return card instanceof cardType && (card.id = id);
+        }));
+        if (a.hasClass('singleton') && (card = this.cardList.first(function(card) {
+          return card instanceof cardType && (card.id = id);
+        }))) {
+          this.viewPort.scrollTo(card.li.index('li.card'));
         } else {
-          this.cardList.insert(currentIndex, card);
+          card = new cardType(this.cardList, id, void 0, parameters);
+          if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
+            this.element.animate({
+              scrollLeft: 0
+            }, 500, function() {
+              return _this.cardList.replace(_this.cardList.get(0), card);
+            });
+          } else {
+            this.cardList.insert(currentIndex, card);
+          }
         }
       } else if (protocol !== 'mailto') {
         open(href);
