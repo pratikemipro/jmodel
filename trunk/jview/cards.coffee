@@ -15,7 +15,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@events = new jm.EventRegistry 'ready', 'dispose'
 			@event('ready').remember 1
 		
-			@li ?= $ '<li class="card"/>'
+			@li = if @li then $ @li else $ '<li class="card"/>'
 		
 			@li.addClass @class
 			
@@ -87,6 +87,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		remove:  (args...) -> @cards.remove args...
 		get:	 (args...) -> @cards.get args...
 		count:	 (args...) -> @cards.count args...
+		first:	 (args...) -> @cards.first args...
 		
 			
 	##
@@ -389,15 +390,21 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 			[cardType,[id],parameters] = @router.resolve href
 			
+			console.log cardType
+			
 			if a.hasClass 'permalink'
 				open href
 				return false
 			else if cardType
-				card = new cardType @cardList, id, undefined, parameters
-				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+				console.log @cardList.first( (card) -> card instanceof cardType and card.id = id )
+				if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
+					@viewPort.scrollTo card.li.index 'li.card'
 				else
-					@cardList.insert currentIndex, card
+					card = new cardType @cardList, id, undefined, parameters
+					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+					else
+						@cardList.insert currentIndex, card
 			else if protocol != 'mailto'
 				open href
 							
