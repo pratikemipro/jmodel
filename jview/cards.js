@@ -511,7 +511,6 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       li = a.closest('li.card');
       currentIndex = li.index('li.card') + 1;
       _ref = this.router.resolve(href), cardType = _ref[0], (_ref1 = _ref[1], id = _ref1[0]), parameters = _ref[2];
-      console.log(cardType);
       if (a.hasClass('permalink')) {
         open(href);
         return false;

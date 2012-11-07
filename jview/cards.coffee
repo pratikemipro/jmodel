@@ -390,8 +390,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 			[cardType,[id],parameters] = @router.resolve href
 			
-			console.log cardType
-			
 			if a.hasClass 'permalink'
 				open href
 				return false
