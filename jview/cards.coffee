@@ -327,7 +327,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		compile: (pattern) ->
 			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
 			
-		test: (string) -> @pattern.test string
+		test: (path) -> @pattern.test path
+		
+		match: (path) ->
+			[_,id] = @pattern.exec path
+			id: id
 	
 	##
 	## Router
@@ -348,13 +352,13 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			if route
 			
 				# Find keys from route
-				[_,keys...] = route.pattern.exec path
+				keys = route.match path
 			
 				# Convert URL parameters to object
 				parameters = {}
 				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
 						
-			return [ route?.cardType, keys || [], parameters || {} ]
+			return [ route?.cardType, keys || {}, parameters || {} ]
 	
 			
 	##
@@ -390,7 +394,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 
 			currentIndex = li.index('li.card') + 1
 			
-			[cardType,[id],parameters] = @router.resolve href
+			[cardType,keys,parameters] = @router.resolve href
 			
 			if a.hasClass 'permalink'
 				open href
@@ -399,7 +403,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
 				# 					@viewPort.scrollTo card.li.index 'li.card'
 				# 				else
-				card = new cardType @cardList, {id:id}, undefined, parameters
+				card = new cardType @cardList, keys, undefined, parameters
 				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
