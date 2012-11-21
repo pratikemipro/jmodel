@@ -430,8 +430,16 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       return new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
     };
 
-    Route.prototype.test = function(string) {
-      return this.pattern.test(string);
+    Route.prototype.test = function(path) {
+      return this.pattern.test(path);
+    };
+
+    Route.prototype.match = function(path) {
+      var id, _, _ref;
+      _ref = this.pattern.exec(path), _ = _ref[0], id = _ref[1];
+      return {
+        id: id
+      };
     };
 
     return Route;
@@ -447,7 +455,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Router.prototype.resolve = function(url) {
-      var keys, name, param, parameters, path, query, route, value, _, _i, _len, _ref, _ref1, _ref2, _ref3;
+      var keys, name, param, parameters, path, query, route, value, _, _i, _len, _ref, _ref1, _ref2;
       _ref = url.match(/([^\?]*)\??(.*)/), _ = _ref[0], path = _ref[1], query = _ref[2];
       route = ((function() {
         var _i, _len, _ref1, _results;
@@ -462,24 +470,24 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         return _results;
       }).call(this))[0];
       if (route) {
-        _ref1 = route.pattern.exec(path), _ = _ref1[0], keys = 2 <= _ref1.length ? __slice.call(_ref1, 1) : [];
+        keys = route.match(path);
         parameters = {};
-        _ref2 = (function() {
-          var _j, _len, _ref2, _results;
-          _ref2 = query.split('&');
+        _ref1 = (function() {
+          var _j, _len, _ref1, _results;
+          _ref1 = query.split('&');
           _results = [];
-          for (_j = 0, _len = _ref2.length; _j < _len; _j++) {
-            param = _ref2[_j];
+          for (_j = 0, _len = _ref1.length; _j < _len; _j++) {
+            param = _ref1[_j];
             _results.push(param.split('='));
           }
           return _results;
         })();
-        for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-          _ref3 = _ref2[_i], name = _ref3[0], value = _ref3[1];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          _ref2 = _ref1[_i], name = _ref2[0], value = _ref2[1];
           parameters[name] = value;
         }
       }
-      return [route != null ? route.cardType : void 0, keys || [], parameters || {}];
+      return [route != null ? route.cardType : void 0, keys || {}, parameters || {}];
     };
 
     return Router;
@@ -503,7 +511,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, card, cardType, currentIndex, href, id, li, open, parameters, protocol, target, _ref, _ref1,
+      var a, card, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref,
         _this = this;
       target = _arg.target;
       open = function(href) {
@@ -514,14 +522,12 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       protocol = href.split(':')[0];
       li = a.closest('li.card');
       currentIndex = li.index('li.card') + 1;
-      _ref = this.router.resolve(href), cardType = _ref[0], (_ref1 = _ref[1], id = _ref1[0]), parameters = _ref[2];
+      _ref = this.router.resolve(href), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (a.hasClass('permalink')) {
         open(href);
         return false;
       } else if (cardType) {
-        card = new cardType(this.cardList, {
-          id: id
-        }, void 0, parameters);
+        card = new cardType(this.cardList, keys, void 0, parameters);
         if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
           this.element.animate({
             scrollLeft: 0
