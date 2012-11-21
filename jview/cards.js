@@ -422,24 +422,35 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
   Route = (function() {
 
     function Route(pattern, cardType) {
+      var key;
       this.cardType = cardType;
-      this.pattern = pattern instanceof RegExp ? pattern : this.compile(pattern);
+      this.keys = (function() {
+        var _i, _len, _ref, _results;
+        _ref = pattern.match(/\{[^\}]+\}/g) || ['id'];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          key = _ref[_i];
+          _results.push(key.replace('{', '').replace('}', ''));
+        }
+        return _results;
+      })();
+      this.pattern = new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
     }
-
-    Route.prototype.compile = function(pattern) {
-      return new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
-    };
 
     Route.prototype.test = function(path) {
       return this.pattern.test(path);
     };
 
     Route.prototype.match = function(path) {
-      var id, _, _ref;
-      _ref = this.pattern.exec(path), _ = _ref[0], id = _ref[1];
-      return {
-        id: id
-      };
+      var index, key, keys, values, _, _i, _len, _ref, _ref1;
+      _ref = this.pattern.exec(path), _ = _ref[0], values = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
+      keys = {};
+      _ref1 = this.keys;
+      for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
+        key = _ref1[index];
+        keys[key] = values != null ? values[index] : void 0;
+      }
+      return keys;
     };
 
     return Route;

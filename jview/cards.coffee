@@ -322,16 +322,16 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	class Route
 		
 		constructor: (pattern,@cardType) ->
-			@pattern = if pattern instanceof RegExp then pattern else @compile pattern
-			
-		compile: (pattern) ->
-			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
+			@keys    = ( key.replace('{','').replace('}','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
+			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
 			
 		test: (path) -> @pattern.test path
 		
 		match: (path) ->
-			[_,id] = @pattern.exec path
-			id: id
+			[_,values...] = @pattern.exec path
+			keys = {}
+			keys[key] = values?[index] for key, index in @keys
+			keys
 	
 	##
 	## Router
