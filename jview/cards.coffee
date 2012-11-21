@@ -326,6 +326,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 		compile: (pattern) ->
 			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
+			
+		test: (string) -> @pattern.test string
 	
 	##
 	## Router
@@ -341,7 +343,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			[_,path,query] = url.match /([^\?]*)\??(.*)/
 			
 			# Find first matching route
-			[route] = ( route for route in @routes when route.pattern.test path )
+			[route] = ( route for route in @routes when route.test path )
 			
 			if route
 			
