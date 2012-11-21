@@ -430,6 +430,10 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       return new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
     };
 
+    Route.prototype.test = function(string) {
+      return this.pattern.test(string);
+    };
+
     return Route;
 
   })();
@@ -451,7 +455,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         _results = [];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           route = _ref1[_i];
-          if (route.pattern.test(path)) {
+          if (route.test(path)) {
             _results.push(route);
           }
         }
