@@ -325,7 +325,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@pattern = if pattern instanceof RegExp then pattern else @compile pattern
 			
 		compile: (pattern) ->
-			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/,'(\\d+)')+'/?$'
+			new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
 	
 	##
 	## Router
@@ -346,7 +346,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			if route
 			
 				# Find keys from route
-				[_,keys...] = route.pattern.exec path 
+				[_,keys...] = route.pattern.exec path
 			
 				# Convert URL parameters to object
 				parameters = {}
@@ -397,7 +397,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
 				# 					@viewPort.scrollTo card.li.index 'li.card'
 				# 				else
-				card = new cardType @cardList, id, undefined, parameters
+				card = new cardType @cardList, {id:id}, undefined, parameters
 				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
@@ -435,7 +435,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			[rootCardElement] = @element.find 'ul.cards li.card'
 			[cardType] = @router.resolve window.location.pathname.substring 1
 			
-			rootCard = new cardType @cards, undefined, $(rootCardElement), zoomed: !rootCardElement?
+			rootCard = new cardType @cards, {id:undefined}, $(rootCardElement), zoomed: !rootCardElement?
 			rootCard.event('ready').republish @event 'ready'
 			
 			if rootCardElement then @cards.add rootCard

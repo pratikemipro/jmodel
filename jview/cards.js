@@ -427,7 +427,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Route.prototype.compile = function(pattern) {
-      return new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/, '(\\d+)') + '/?$');
+      return new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
     };
 
     return Route;
@@ -515,7 +515,9 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         open(href);
         return false;
       } else if (cardType) {
-        card = new cardType(this.cardList, id, void 0, parameters);
+        card = new cardType(this.cardList, {
+          id: id
+        }, void 0, parameters);
         if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
           this.element.animate({
             scrollLeft: 0
@@ -568,7 +570,9 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
       cardType = this.router.resolve(window.location.pathname.substring(1))[0];
-      rootCard = new cardType(this.cards, void 0, $(rootCardElement), {
+      rootCard = new cardType(this.cards, {
+        id: void 0
+      }, $(rootCardElement), {
         zoomed: !(rootCardElement != null)
       });
       rootCard.event('ready').republish(this.event('ready'));
