@@ -54,6 +54,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     AjaxCard.prototype.init = function(html) {
       this.li.html(html);
       this.li.toggleClass('error', $(html).hasClass('error'));
+      this.url = this.li.children('article').data('url');
       return this.event('ready').raise(this);
     };
 
