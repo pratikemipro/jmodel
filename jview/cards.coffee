@@ -48,6 +48,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		init: (html) ->
 			@li.html html
 			@li.toggleClass 'error', $(html).hasClass('error')
+			@url = @li.children('article').data 'url'
 			@event('ready').raise this
 	
 
