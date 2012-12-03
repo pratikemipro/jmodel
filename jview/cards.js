@@ -316,9 +316,12 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         deltaY = _arg.deltaY;
         return (-3 < deltaY && deltaY < 3);
       })).subscribe(function(_arg) {
-        var target;
+        var target, targetIndex;
         target = _arg.target;
-        return _this.state.index(target.closest('li.card').index('li.card'));
+        targetIndex = target.closest('li.card').index('li.card');
+        if (targetIndex !== _this.state.index()) {
+          return _this.state.index(target.closest('li.card').index('li.card'));
+        }
       });
       keyEvent = this.element.event('keydown').where(function(_arg) {
         var target;
