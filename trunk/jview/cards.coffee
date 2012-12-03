@@ -214,8 +214,10 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				({deltaX}) -> -3 < deltaX < 3,
 				({deltaY}) -> -3 < deltaY < 3
 			)
-			.subscribe ({target}) => 
-				@state.index target.closest('li.card').index('li.card') 
+			.subscribe ({target}) =>
+				targetIndex = target.closest('li.card').index('li.card')
+				if targetIndex != @state.index()
+					@state.index target.closest('li.card').index('li.card') 
 
 			# Keyboard control
 			keyEvent = @element.event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0
