@@ -134,11 +134,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			cards = @element.find 'li.card'
 			cards.removeClass 'zoomed'
 			@element.find('li.extent > ul > li.label').removeClass 'hidden'
+			li = card.li
+			li.addClass 'adding'
+			@element.find('li.card').eq(index-1).after li
 			card.event('ready').take(1).subscribe =>
-				li = card.li
-				li.addClass 'adding'
 				after(350) =>
-					@element.find('li.card').eq(index-1).after li
 					width = Math.min window.innerWidth, li.children('article').outerWidth(true)
 					li.css 'width', width
 					after(@duration) =>
