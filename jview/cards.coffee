@@ -442,9 +442,11 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@router = new Router ( new Route(card::route,card) for card in @constructors )
 			
 			[rootCardElement] = @element.find 'ul.cards li.card'
-			[cardType] = @router.resolve window.location.pathname.substring 1
+			[cardType,keys,parameters] = @router.resolve window.location.pathname.substring 1
 			
-			rootCard = new cardType @cards, {id:undefined}, $(rootCardElement), zoomed: !rootCardElement?
+			parameters.zoomed = !rootCardElement?
+			
+			rootCard = new cardType @cards, keys, $(rootCardElement), parameters
 			rootCard.event('ready').republish @event 'ready'
 			
 			if rootCardElement then @cards.add rootCard
