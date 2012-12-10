@@ -570,7 +570,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
   Application = (function() {
 
     function Application(element, menuElement, external, constructors) {
-      var card, cardType, rootCard, rootCardElement,
+      var card, cardType, keys, parameters, rootCard, rootCardElement, _ref,
         _this = this;
       this.external = external;
       this.constructors = constructors;
@@ -593,12 +593,9 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         return _results;
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
-      cardType = this.router.resolve(window.location.pathname.substring(1))[0];
-      rootCard = new cardType(this.cards, {
-        id: void 0
-      }, $(rootCardElement), {
-        zoomed: !(rootCardElement != null)
-      });
+      _ref = this.router.resolve(window.location.pathname.substring(1)), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
+      parameters.zoomed = !(rootCardElement != null);
+      rootCard = new cardType(this.cards, keys, $(rootCardElement), parameters);
       rootCard.event('ready').republish(this.event('ready'));
       if (rootCardElement) {
         this.cards.add(rootCard);
