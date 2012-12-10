@@ -433,11 +433,11 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           key = _ref[_i];
-          _results.push(key.replace('{', '').replace('}', ''));
+          _results.push(key.replace('{', '').replace('}', '').replace('?', ''));
         }
         return _results;
       })();
-      this.pattern = new RegExp('^' + String(pattern).replace('/', '\/').replace(/\{[^\}]+\}/g, '(.+)') + '/?$');
+      this.pattern = new RegExp('^' + String(pattern).replace('/', '\/').replace(/\/\{[^\}]+\?\}/g, '(?:/([^\/]+))?').replace(/\/\{[^\}]+\}/g, '(?:/([^\/]+))') + '/?$');
     }
 
     Route.prototype.test = function(path) {
