@@ -325,8 +325,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	class Route
 		
 		constructor: (pattern,@cardType) ->
-			@keys    = ( key.replace('{','').replace('}','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
-			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\{[^\}]+\}/g,'(.+)')+'/?$'
+			@keys       = ( key.replace('{','').replace('}','').replace('?','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
+			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\/\{[^\}]+\?\}/g,'(?:/([^\/]+))?').replace(/\/\{[^\}]+\}/g,'(?:/([^\/]+))')+'/?$'
 			
 		test: (path) -> @pattern.test path
 		
@@ -356,7 +356,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 				# Find keys from route
 				keys = route.match path
-			
+				
 				# Convert URL parameters to object
 				parameters = {}
 				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
