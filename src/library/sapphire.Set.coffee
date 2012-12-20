@@ -1,3 +1,1 @@
-define ->
-
-	window.Set = class Set
+window.Set = class Set

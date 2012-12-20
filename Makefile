@@ -2,7 +2,7 @@ RESERVED = "require"
 REQUIRE  = "./requirements/require.js"
 
 default:
-	@make core
+	@make sapphire
 
-core:
-	coffee --compile --bare --require $(REQUIRE) --output library/ src/library/
+sapphire:
+	coffee --compile --bare --join library/sapphire2.js src/library/sapphire.Set.coffee src/library/sapphire.List.coffee src/library/sapphire.Map.coffee
