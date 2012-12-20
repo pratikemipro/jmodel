@@ -137,7 +137,7 @@ define([
 						}
 					}
 					if ( completionEvent instanceof diamond.EventType ) {
-						completionEvent.raise();
+						completionEvent.raise(json);
 					}
 				},
 				error: function () {

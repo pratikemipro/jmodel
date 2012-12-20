@@ -1,6 +1,6 @@
 define ->
 	
-	class Map
+	window.Map = class Map
 	
 		constructor: ( mappings={} ) ->
 			@add key, value for own key, value of mappings

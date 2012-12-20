@@ -1,6 +1,6 @@
 define ->
 	
-	class List
+	window.List = class List
 	
 		constructor: ( elements=[] ) ->
 			if elements not instanceof Array then elements = [elements]
