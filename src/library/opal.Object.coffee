@@ -7,6 +7,6 @@
 ##
 
 	Object.isa = (constructor) ->
-		if constructor == Number then (obj) -> obj instanceof Number or typeof obj = 'number'
+		if      constructor == Number then (obj) -> obj instanceof Number or typeof obj = 'number'
 		else if constructor == String then (obj) -> obj instanceof String or typeof obj = 'string'
-		else (obj) -> obj instanceof Constructor
+		else                               (obj) -> obj instanceof Constructor
