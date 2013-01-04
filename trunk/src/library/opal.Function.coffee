@@ -210,6 +210,19 @@ define ->
 		
 	Function::create = (args...) -> Object.construct(this)(args...)
 	
+	# Restricted types
+	
+	Function::Where = (predicate,message='Invalid value') ->
+		construct = Object.construct @
+		restricted = (args...) ->
+			value = construct.apply undefined, args
+			if restricted.__predicate(value) then value else throw message	
+		restricted.__predicate = Object.isa(@).and predicate
+		return restricted
+		
+	
+	# Typed functions
+	
 	Function.To = (type) ->
 		predicate = Object.isa type
 		(fn) -> (args...) ->
@@ -217,3 +230,5 @@ define ->
 			if predicate val
 				return val
 			else throw 'Invalid return type'
+				
+	window.Predicate = Function.To Boolean
