@@ -52,9 +52,7 @@ define ['cs!jmodel/opal.Function'], ->
 	
 		# NOTE: Test this thoroughly
 		construct: (constructor,args1...) ->
-			if      constructor == String then String
-			else if constructor == Number then Number
-			else if constructor == Boolean then Boolean
+			if constructor in [String,Number,Boolean] then Constructor
 			else if constructor.nullable? then constructor
 			else (args2...) -> new constructor (args1.concat(args2))...
 			
