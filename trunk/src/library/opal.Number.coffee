@@ -8,7 +8,22 @@
 
 	Number.__predicate = Object.isa Number
 	
+	# Restrictions
+	
+	Number.LessThan = (max) ->
+		Number.Where \
+			Function.lt(max),
+			"Invalid Value: <value> is not less than #{max}"
+			
+	Number.GreaterThan = (min) ->
+		Number.Where \
+			Function.gt(min),
+			"Invalid Value: <value> is not greater than #{min}"
+			
+	Number.Positive = Number.GreaterThan 0
+	Number.Negative = Number.LessThan 0
+	
 	Number.Between = (min,max) ->
-		cons = (num) -> if cons.__predicate(num) then num else throw "Invalid Number: #{num} is not between #{min} and #{max}"	
-		cons.__predicate = (num) -> Number.__predicate(num) and min <= num <= max
-		return cons
+		Number.Where \
+			Function.between(min,max),
+			"Invalid Value: <value> is not between #{min} and #{max}"
