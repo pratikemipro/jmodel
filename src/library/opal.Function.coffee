@@ -209,3 +209,11 @@ define ->
 	# Constructor methods
 		
 	Function::create = (args...) -> Object.construct(this)(args...)
+	
+	Function.To = (type) ->
+		predicate = Object.isa type
+		(fn) -> (args...) ->
+			val = fn.apply @, args
+			if predicate val
+				return val
+			else throw 'Invalid return type'
