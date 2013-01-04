@@ -216,7 +216,7 @@ define ->
 		construct = Object.construct @
 		restricted = (args...) ->
 			value = construct.apply undefined, args
-			if restricted.__predicate(value) then value else throw message	
+			if restricted.__predicate(value) then value else throw message.replace '<value>', value
 		restricted.__predicate = Object.isa(@).and predicate
 		return restricted
 		
