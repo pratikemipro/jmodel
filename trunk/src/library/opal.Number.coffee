@@ -10,6 +10,8 @@
 	
 	# Restrictions
 	
+	Integer = Number.Where (value) -> Math.floor(value) === Math.ceil(value)
+	
 	Number.LessThan = (max) ->
 		Number.Where \
 			Function.lt(max),
