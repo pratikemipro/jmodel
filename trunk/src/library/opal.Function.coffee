@@ -211,16 +211,19 @@ define ->
 	Function::create = (args...) -> Object.construct(this)(args...)
 	
 	# Restricted types
+	# NOTE: Make this work with objects other than strings and numbers
 	
 	Function::Where = (predicate,message='Invalid value') ->
-		construct = Object.construct @
+		parent = @
+		base = parent.base || parent
 		restricted = (args...) ->
-			value = construct.apply undefined, args
-			if restricted.__predicate(value) then value else throw message.replace '<value>', value
-		restricted.__predicate = Object.isa(@).and predicate
+			value = parent args
+			if predicate(value) then value else throw message.replace '<value>', value
+		restricted.base = base
+		restricted.__predicate = predicate
+		restricted[property] = value for property, value of base
 		return restricted
-		
-	
+
 	# Typed functions
 	
 	Function.To = (type) ->
