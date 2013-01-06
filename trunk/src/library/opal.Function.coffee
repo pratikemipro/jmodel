@@ -157,11 +157,11 @@ define ->
 		
 	Function::and = (fn2) ->
 		fn1 = this
-		(args...) -> fn1.apply(this,args) && fn2.apply(this,args)
+		(args...) -> fn1.apply(this,args) and fn2.apply(this,args)
 			
 	Function::or = (fn2) ->
 		fn1 = this
-		(args...) -> fn1.apply(this,args) || fn2.apply(this,args)
+		(args...) -> fn1.apply(this,args) or fn2.apply(this,args)
 		
 	Function::not = ->
 		fn = this
