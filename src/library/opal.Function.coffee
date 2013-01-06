@@ -214,8 +214,8 @@ define ->
 	# NOTE: Make this work with objects other than strings and numbers
 	
 	Function::Where = (predicate,message='Invalid value') ->
-		parent = @
-		base = parent.base || parent
+		parent = this
+		base = parent.base or parent
 		restricted = (args...) ->
 			value = parent args
 			if predicate(value) then value else throw message.replace '<value>', value
