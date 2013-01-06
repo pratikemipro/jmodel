@@ -10,7 +10,7 @@
 	
 	# Restrictions
 	
-	Integer = Number.Where (value) -> Math.floor(value) === Math.ceil(value)
+	Integer = Number.Where (value) -> value === Math.round(value)
 	
 	Number.LessThan = (max) ->
 		Number.Where \
