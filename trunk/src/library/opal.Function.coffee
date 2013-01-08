@@ -39,29 +39,38 @@
 			when 1 then fn
 			when 0 then Function.identity
 			else Function.pipe [fn].concat(fns...).reverse()...
-			
-	# Logical functions
 	
+	##		
+	## Logical functions
+	##
+	
+	# Tests: full
 	Function.or = (predicate,predicates...) ->
 		switch arguments.length
 			when 1 then predicate
 			when 0 then -> false
 			else predicate.or Function.or predicates...
 
+	# Tests: full
 	Function.and = (predicate,predicates...) ->
 		switch arguments.length
 			when 1 then predicate
 			when 0 then -> true
 			else predicate.and Function.and predicates...
 
+	# Tests: full
 	Function.not = (predicate) ->
 		if typeof predicate == 'function' then predicate.not() else not predicate
-		
-	# Composite ordering
+	
+	##	
+	## Composite ordering
+	##
 		
 	Function.ordering = Function.or
 	
-	# Comparison functions
+	##
+	## Comparison functions
+	##
 	
 	Function.eq = (value) -> (x) -> x == value
 		
