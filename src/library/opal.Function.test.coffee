@@ -33,3 +33,23 @@
 		
 		equals counts('quarks'), 6, 'Works for first mapping entry'
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
+
+	test 'pipe', ->
+
+		times2 = (x) -> 2*x
+		addten = (x) -> x+10
+
+		equals Function.pipe(times2,addten)(7), 24, 'piping of two functions works'
+		equals Function.pipe(addten,times2)(7), 34, 'piping works in opposite direction'
+		equals Function.pipe(times2)(7), 14, 'pipe of a single function is just that function'
+		equals Function.pipe()(7), 7, 'pipe of no functions is identity'
+
+	test 'compose', ->
+	
+		times2 = (x) -> 2*x
+		addten = (x) -> x+10
+			
+		equals Function.compose(times2,addten)(7), 34, 'composition of two functions works'
+		equals Function.compose(addten,times2)(7), 24, 'composition works in opposite direction'
+		equals Function.compose(times2)(7), 14, 'composition of a single function is just that function'
+		equals Function.compose()(7), 7, 'composition of no functions is identity'
