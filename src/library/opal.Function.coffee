@@ -239,11 +239,8 @@
 	
 	Function.To = (type) ->
 		predicate = Object.isa type
-		(fn) -> (args...) ->
-			val = fn.apply @, args
-			if predicate val
-				return val
-			else throw 'Invalid return type'
+		(fn) -> fn.post (ret) ->
+			throw 'Invalid return type' unless predicate ret
 				
 	# window.Predicate = Function.To Boolean
 	window.Predicate = Function.identity
