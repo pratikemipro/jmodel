@@ -79,5 +79,11 @@
 	
 		equals Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false'
 		equals Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true'
-
+	
+	test 'ordering', ->
+		
+	test 'eq', ->
+		
+		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
+		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
 

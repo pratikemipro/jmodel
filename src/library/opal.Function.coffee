@@ -72,19 +72,19 @@
 	## Comparison functions
 	##
 	
-	Function.eq = (value) -> (x) -> x == value
+	Function.eq = (value) -> Predicate (x) -> x == value
 		
-	Function.neq = (value) -> (x) -> x != value
+	Function.neq = (value) -> Predicate (x) -> x != value
 		
-	Function.lt = (value) -> (x) -> x < value
+	Function.lt = (value) -> Predicate (x) -> x < value
 		
-	Function.gt = (value) -> (x) -> x > value
+	Function.gt = (value) -> Predicate (x) -> x > value
 		
-	Function.lte = (value) -> (x) -> x <= value
+	Function.lte = (value) -> Predicate (x) -> x <= value
 
-	Function.gte = (value) -> (x) -> x >= value
+	Function.gte = (value) -> Predicate (x) -> x >= value
 
-	Function.between = (lower,higher) -> (x) -> lower <= x <= higher
+	Function.between = (lower,higher) -> Predicate (x) -> lower <= x <= higher
 	
 	
 	###
@@ -245,4 +245,5 @@
 				return val
 			else throw 'Invalid return type'
 				
-	window.Predicate = Function.To Boolean
+	# window.Predicate = Function.To Boolean
+	window.Predicate = Function.identity
