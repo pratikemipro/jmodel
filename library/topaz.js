@@ -2,7 +2,7 @@
  *	Topaz Javascript Library
  *	http://code.google.com/p/jmodel/
  *
- *	Copyright (c) 2010-2011 Richard Baker
+ *	Copyright (c) 2010-2013 Richard Baker
  *	Dual licensed under the MIT and GPL licenses
  *
  *	Requires emerald.js
