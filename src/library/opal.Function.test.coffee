@@ -86,4 +86,3 @@
 		
 		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
-

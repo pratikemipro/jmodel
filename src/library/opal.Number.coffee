@@ -10,22 +10,24 @@
 	
 	# Restrictions
 	
-	Integer = Number.Where (value) -> value == Math.round(value)
-	
 	Number.LessThan = (max) ->
-		Number.Where \
+		@Where \
 			Function.lt(max),
 			"Invalid Value: <value> is not less than #{max}"
 			
 	Number.GreaterThan = (min) ->
-		Number.Where \
+		@Where \
 			Function.gt(min),
 			"Invalid Value: <value> is not greater than #{min}"
-			
-	Number.Positive = Number.GreaterThan 0
-	Number.Negative = Number.LessThan 0
 	
 	Number.Between = (min,max) ->
-		Number.Where \
+		@Where \
 			Function.between(min,max),
 			"Invalid Value: <value> is not between #{min} and #{max}"
+	
+	window.Integer = Number.Where \
+		(value) -> value == Math.round(value),
+		"Invalid Value: <value> is not an integer"
+	
+	Number.Positive = Number.GreaterThan 0
+	Number.Negative = Number.LessThan 0

@@ -11,7 +11,7 @@ var __slice = [].slice,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 define(function() {
-  var Integer, _base, _ref;
+  var _base, _ref;
   Function.identity = function(x) {
     return x;
   };
@@ -397,20 +397,20 @@ define(function() {
     }
   };
   Number.__predicate = Object.isa(Number);
-  Integer = Number.Where(function(value) {
-    return value === Math.round(value);
-  });
   Number.LessThan = function(max) {
-    return Number.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
+    return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
   };
   Number.GreaterThan = function(min) {
-    return Number.Where(Function.gt(min), "Invalid Value: <value> is not greater than " + min);
+    return this.Where(Function.gt(min), "Invalid Value: <value> is not greater than " + min);
   };
+  Number.Between = function(min, max) {
+    return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
+  };
+  window.Integer = Number.Where(function(value) {
+    return value === Math.round(value);
+  }, "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
-  Number.Between = function(min, max) {
-    return Number.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
-  };
   String.__predicate = Object.isa(String);
   String.In = function() {
     var cons, strings;
