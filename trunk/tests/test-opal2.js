@@ -75,8 +75,13 @@ define(['jmodel/opal2'], function() {
     equals(Function.and(Function.eq(5), Function.eq(6))(5), false, 'or with two arguments returns false when second is false');
     return equals(Function.and(Function.eq(5), Function.eq(6))(7), false, 'or with two arguments returns false when neither is true');
   });
-  return test('not', function() {
+  test('not', function() {
     equals(Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false');
     return equals(Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true');
+  });
+  test('ordering', function() {});
+  return test('eq', function() {
+    equal(Function.eq(5)(5), true, 'returns true when applied to value equal to argument');
+    return equal(Function.eq(5)(3), false, 'returns false when applied to value not equal to argument');
   });
 });

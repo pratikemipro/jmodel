@@ -93,39 +93,39 @@ define(function() {
   };
   Function.ordering = Function.or;
   Function.eq = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x === value;
-    };
+    });
   };
   Function.neq = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x !== value;
-    };
+    });
   };
   Function.lt = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x < value;
-    };
+    });
   };
   Function.gt = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x > value;
-    };
+    });
   };
   Function.lte = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x <= value;
-    };
+    });
   };
   Function.gte = function(value) {
-    return function(x) {
+    return Predicate(function(x) {
       return x >= value;
-    };
+    });
   };
   Function.between = function(lower, higher) {
-    return function(x) {
+    return Predicate(function(x) {
       return (lower <= x && x <= higher);
-    };
+    });
   };
   /*
   		Function.prototype
@@ -391,7 +391,7 @@ define(function() {
       };
     };
   };
-  window.Predicate = Function.To(Boolean);
+  window.Predicate = Function.identity;
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
