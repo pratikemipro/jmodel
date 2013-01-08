@@ -6,18 +6,25 @@
 ## Dual licensed under the MIT and GPL licenses
 ##
 
-
-	# Basic functions
+	##
+	## Basic functions
+	##
 	
+	# Tests: full
 	Function.identity = (x) -> x
 	
+	# Tests: full
 	Function.constant = (constant) -> () -> constant
 	
+	# Tests: full
 	Function.argument = (n) -> (args...) -> args[n]
 	
+	# Tests: full
 	Function.map = (mapping) -> (key) -> mapping[key]
 	
-	# Function composition
+	##
+	## Function composition
+	##
 	
 	Function.pipe = (fn,fns...) ->			
 		switch arguments.length
