@@ -2,7 +2,7 @@
 ## Opal JavaScript Library: Number
 ## http://code.google.com/p/jmodel/
 ##
-## Copyright (c) 2013 Richard Baker
+## Copyright (c) 2009-2013 Richard Baker
 ## Dual licensed under the MIT and GPL licenses
 ##
 
@@ -10,7 +10,7 @@
 	
 	# Restrictions
 	
-	Integer = Number.Where (value) -> value === Math.round(value)
+	Integer = Number.Where (value) -> value == Math.round(value)
 	
 	Number.LessThan = (max) ->
 		Number.Where \
