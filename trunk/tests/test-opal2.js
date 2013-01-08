@@ -87,7 +87,7 @@ define(['jmodel/opal2'], function() {
   module('Number');
   return test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
-    return throws((function() {
+    return raises((function() {
       return Integer(5.5);
     }), 'Throws an exception when called on a non-integer');
   });
