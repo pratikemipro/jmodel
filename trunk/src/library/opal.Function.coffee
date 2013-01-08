@@ -26,12 +26,14 @@
 	## Function composition
 	##
 	
+	# Tests: full
 	Function.pipe = (fn,fns...) ->			
 		switch arguments.length
 			when 1 then fn
 			when 0 then Function.identity
 			else fn.then Function.pipe fns...
 			
+	# Tests: full
 	Function.compose = (fn,fns...) ->
 		switch arguments.length
 			when 1 then fn
