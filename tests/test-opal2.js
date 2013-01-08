@@ -45,7 +45,7 @@ define(['jmodel/opal2'], function() {
     equals(Function.pipe(times2)(7), 14, 'pipe of a single function is just that function');
     return equals(Function.pipe()(7), 7, 'pipe of no functions is identity');
   });
-  return test('compose', function() {
+  test('compose', function() {
     var addten, times2;
     times2 = function(x) {
       return 2 * x;
@@ -57,5 +57,26 @@ define(['jmodel/opal2'], function() {
     equals(Function.compose(addten, times2)(7), 24, 'composition works in opposite direction');
     equals(Function.compose(times2)(7), 14, 'composition of a single function is just that function');
     return equals(Function.compose()(7), 7, 'composition of no functions is identity');
+  });
+  test('or', function() {
+    equals(Function.or()(5), false, 'or of zero arguments is false');
+    equals(Function.or(Function.eq(5))(5), true, 'or with one argument returns true when predicate is true');
+    equals(Function.or(Function.eq(5))(7), false, 'or with one argument returns false when predicate is false');
+    equals(Function.or(Function.eq(5), Function.eq(6))(5), true, 'or with two arguments returns true when first is true');
+    equals(Function.or(Function.eq(5), Function.eq(6))(6), true, 'or with two arguments returns true when second is true');
+    return equals(Function.or(Function.eq(5), Function.eq(6))(7), false, 'or with two arguments returns false when neither is true');
+  });
+  test('and', function() {
+    equals(Function.and()(5), true, 'or of zero arguments is true');
+    equals(Function.and(Function.eq(5))(5), true, 'and with one argument returns true when predicate is true');
+    equals(Function.and(Function.eq(5))(7), false, 'and with one argument returns false when predicate is false');
+    equals(Function.and(Function.lt(5), Function.lt(6))(3), true, 'and with two arguments returns true when both are true');
+    equals(Function.and(Function.eq(5), Function.eq(6))(6), false, 'and with two arguments returns false when first is false');
+    equals(Function.and(Function.eq(5), Function.eq(6))(5), false, 'or with two arguments returns false when second is false');
+    return equals(Function.and(Function.eq(5), Function.eq(6))(7), false, 'or with two arguments returns false when neither is true');
+  });
+  return test('not', function() {
+    equals(Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false');
+    return equals(Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true');
   });
 });
