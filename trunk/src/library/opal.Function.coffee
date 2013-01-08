@@ -168,19 +168,19 @@
 		
 	Function::and = (fn2) ->
 		fn1 = this
-		(args...) -> fn1.apply(this,args) and fn2.apply(this,args)
+		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
 			
 	Function::or = (fn2) ->
 		fn1 = this
-		(args...) -> fn1.apply(this,args) or fn2.apply(this,args)
+		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
 		
 	Function::not = ->
 		fn = this
-		(args...) -> not fn.apply this,args
+		Predicate (args...) -> not fn.apply this,args
 		
 	# Predicate methods
 		
-	Function::is = Function.prototype.then
+	Function::is = Function::then
 		
 	Function::eq = (value) -> @then Function.eq value
 		
@@ -196,13 +196,13 @@
 
 	Function::between = (lower,higher) -> @then Function.between lower,higher
 	
-	Function::matches = (regex) -> @then (x) -> regex.test x
+	Function::matches = (regex) -> @then Predicate (x) -> regex.test x
 		
 	Function::isnull = -> @then Function.eq null
 		
-	Function::isa = (constructor) -> @then (x) -> x instanceof constructor
+	Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
 		
-	Function::hastype = (type) -> @then (x) -> typeof x == type
+	Function::hastype = (type) -> @then Predicate (x) -> typeof x == type
 	
 	# Ordering methods
 		
