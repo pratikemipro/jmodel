@@ -413,41 +413,23 @@ define(function() {
   Number.Negative = Number.LessThan(0);
   String.__predicate = Object.isa(String);
   String.In = function() {
-    var cons, strings;
+    var string, strings;
     strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    cons = function(str) {
-      var string;
-      if (cons.__predicate(str)) {
-        return str;
-      } else {
-        throw "Invalid String: \"" + str + "\" is not in {" + (((function() {
-          var _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = strings.length; _i < _len; _i++) {
-            string = strings[_i];
-            _results.push('\"' + string + '\"');
-          }
-          return _results;
-        })()).join(',')) + "}";
+    return this.Where(function(str) {
+      return __indexOf.call(strings, str) >= 0;
+    }, "Invalid String: \"<value>\" is not in {" + (((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = strings.length; _i < _len; _i++) {
+        string = strings[_i];
+        _results.push('\"' + string + '\"');
       }
-    };
-    cons.__predicate = function(str) {
-      return String.__predicate(str) && __indexOf.call(strings, str) >= 0;
-    };
-    return cons;
+      return _results;
+    })()).join(',')) + "}");
   };
   return String.Matching = function(regex) {
-    var cons;
-    cons = function(str) {
-      if (cons.__predicate(str)) {
-        return str;
-      } else {
-        throw "Invalid String: \"" + str + "\" does not match " + (regex.toString());
-      }
-    };
-    cons.__predicate = function(str) {
-      return String.__predicate(str) && regex.test(str);
-    };
-    return cons;
+    return this.Where(function(str) {
+      return regex.test(str);
+    }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
   };
 });
