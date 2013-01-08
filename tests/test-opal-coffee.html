@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<link media="screen" href="qunit.css" type="text/css" rel="stylesheet">
+		<link media="screen" href="qunit.css" type="text/css" rel="stylesheet"/>
 		<script src="require.js"></script>
 		<script src="qunit.js"></script>
 
@@ -10,12 +10,11 @@
 			
 			require({
 			    paths: {
-					'cs': '../cs',
 			        'jmodel': '../library'
 			    }
 			});
 
-			require(['test-opal-coffee.js'], function (tests) {
+			require(['test-opal2.js'], function (tests) {
 				QUnit.start();
 		    });
 			
