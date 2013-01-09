@@ -94,6 +94,33 @@ define(function() {
         return Function.pipe.apply(Function, (_ref = [fn]).concat.apply(_ref, fns).reverse());
     }
   };
+  Function.prototype.and = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return fn1.apply(this, args) && fn2.apply(this, args);
+    });
+  };
+  Function.prototype.or = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return fn1.apply(this, args) || fn2.apply(this, args);
+    });
+  };
+  Function.prototype.not = function() {
+    var fn;
+    fn = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return !fn.apply(this, args);
+    });
+  };
   Function.or = function() {
     var predicate, predicates;
     predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -224,10 +251,6 @@ define(function() {
       return (lower <= x && x <= higher);
     });
   });
-  /*
-  		Function.prototype
-  */
-
   Function.prototype.as = function(name) {
     this.displayName = name;
     return this;
@@ -296,33 +319,6 @@ define(function() {
   }
   Function.prototype.map = function(mapping) {
     return this.then(Function.map(mapping));
-  };
-  Function.prototype.and = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) && fn2.apply(this, args);
-    });
-  };
-  Function.prototype.or = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) || fn2.apply(this, args);
-    });
-  };
-  Function.prototype.not = function() {
-    var fn;
-    fn = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return !fn.apply(this, args);
-    });
   };
   Function.prototype.is = Function.prototype.then;
   Function.prototype.eq = function(value) {

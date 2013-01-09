@@ -236,27 +236,27 @@ define(['cs!../library/opal'], function (opal) {
 		
 	});
 	
-	test('then', function () {
+	// test('then', function () {
+	// 	
+	// 		var red = function (arr) { arr.push('red'); return arr; },
+	// 			green = function (arr) { arr.push('green'); return arr; },
+	// 			blue = function (arr) { arr.push('blue'); return arr; };
+	// 			
+	// 		deepEqual( red.then(green)([]), ['red','green'], 'then works' );
+	// 		deepEqual( red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative' );
+	// 		
+	// 	});
 	
-		var red = function (arr) { arr.push('red'); return arr; },
-			green = function (arr) { arr.push('green'); return arr; },
-			blue = function (arr) { arr.push('blue'); return arr; };
-			
-		deepEqual( red.then(green)([]), ['red','green'], 'then works' );
-		deepEqual( red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative' );
-		
-	});
-	
-	test('but', function () {
-	
-		var arr = [],
-			red = function (arr) { arr.push('red'); return arr; },
-			length = function (arr) { return arr.length; };
-		
-		equal( red.but(length)(arr), 1, 'return value of second returned' );
-		deepEqual( arr, ['red'], 'first function has been applied');
-		
-	});
+	// test('but', function () {
+	// 	
+	// 		var arr = [],
+	// 			red = function (arr) { arr.push('red'); return arr; },
+	// 			length = function (arr) { return arr.length; };
+	// 		
+	// 		equal( red.but(length)(arr), 1, 'return value of second returned' );
+	// 		deepEqual( arr, ['red'], 'first function has been applied');
+	// 		
+	// 	});
 	
 	test('pre', function () {
 	
