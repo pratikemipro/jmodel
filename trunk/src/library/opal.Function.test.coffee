@@ -86,3 +86,44 @@
 		
 		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
+		
+		
+	test 'neq', ->
+		
+		equal Function.neq(5)(3), true, 'returns true when applied to value not equal to argument'
+		equal Function.neq(5)(5), false, 'returns false when applied to value equal to argument'
+
+
+	test 'lt', ->
+		
+		equal Function.lt(5)(3), true, 'returns true when applied to value less than argument'
+		equal Function.lt(5)(5), false, 'returns false when applied to value equal to argument'
+		equal Function.lt(5)(7), false, 'returns false when applied to value greater than argument'
+		
+	test 'gt', ->
+		
+		equal Function.gt(5)(3), false, 'returns false when applied to value less than argument'
+		equal Function.gt(5)(5), false, 'returns false when applied to value equal to argument'
+		equal Function.gt(5)(7), true, 'returns true when applied to value greater than argument'
+		
+	test 'lte', ->
+		
+		equal Function.lte(5)(3), true, 'returns true when applied to value less than argument'
+		equal Function.lte(5)(5), true, 'returns true when applied to value equal to argument'
+		equal Function.lte(5)(7), false, 'returns false when applied to value greater than argument'
+		
+	test 'gte', ->
+		
+		equal Function.gte(5)(3), false, 'returns false when applied to value less than argument'
+		equal Function.gte(5)(5), true, 'returns true when applied to value equal to argument'
+		equal Function.gte(5)(7), true, 'returns true when applied to value greater than argument'
+		
+	test 'between', ->
+		
+		equal Function.between(3,5)(2), false, 'returns false when applied to value less than lower bound'
+		equal Function.between(3,5)(3), true, 'returns true when applied to value equal to lower bound'
+		equal Function.between(3,5)(4), true, 'returns true when applied to value strictly between bounds'
+		equal Function.between(3,5)(5), true, 'returns true when applied to value equal to upper bound'
+		equal Function.between(3,5)(6), false, 'returns false when applied to value greater than upper bound'
+		
+	
