@@ -131,9 +131,7 @@
 		(fn) -> fn.ensure predicates...
 
 	Function::From = (types...) ->
-		@Requiring Function.and.apply \
-			undefined,
-			( Function.argument(n).then( Object.isa type ) for type, n in types )
+		@Requiring (Function.argument(n).then( Object.isa type ) for type, n in types)...
 
 	Function.From = (types...) ->
 		Function::From.apply Function, types
