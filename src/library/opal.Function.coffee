@@ -26,6 +26,16 @@
 	## Function composition
 	##
 	
+	Function::then = (fn2) ->
+		fn1 = this
+		(args...) -> fn2.call this, fn1.apply(this,args)
+			
+	Function::but = (fn2) ->
+		fn1 = this
+		(args...) ->
+			fn1.apply this,args
+			fn2.apply this,args
+	
 	# Tests: full
 	Function.pipe = (fn,fns...) ->			
 		switch arguments.length
@@ -62,6 +72,49 @@
 	Function.not = (predicate) ->
 		if typeof predicate == 'function' then predicate.not() else not predicate
 	
+	
+	##
+	## Aspect-like methods
+	##
+		
+	Function::pre = (pre) -> pre.but this
+		
+	Function::post = (post) ->
+		fn = this
+		(args...) ->
+			ret = fn.apply this,args
+			post.apply this,[ret].concat(args)
+			ret
+
+	##
+	## Preconditions and postconditions
+	##
+		
+	Function::require = (predicates...) ->
+		predicate = Function.and predicates...
+		@pre (args...) ->
+			throw 'Precondition failure' if not predicate.apply this,args
+		
+	Function::ensure = (predicates...) ->
+		predicate = Function.and predicates...
+		@post (args...) ->
+			console.log predicate.apply(this,args)
+			throw 'Postcondition failure' if not predicate.apply this,args
+
+	##
+	## Typed functions
+	##
+	
+	Function.Requiring = (predicates...) ->
+		(fn) -> fn.require predicates...
+		
+	Function.Ensuring = (predicates...) ->
+		(fn) -> fn.ensure predicates...
+
+	Function.To = (type) -> Function.Ensuring Object.isa type
+
+	window.Predicate = Function.To Boolean
+	
 	##	
 	## Composite ordering
 	##
@@ -91,7 +144,8 @@
 	Function.gte = (value) -> Predicate (x) -> x >= value
 
 	# Tests: full
-	Function.between = (lower,higher) -> Predicate (x) -> lower <= x <= higher
+	Function.between = ( Function.Requiring (lower,higher) -> lower <= higher ) (lower,higher) ->
+		Predicate (x) -> lower <= x <= higher
 	
 	
 	###
@@ -135,41 +189,6 @@
 	# Mapping methods
 		
 	Function::map = (mapping) -> @then Function.map mapping
-	
-	# Composition methods
-		
-	Function::then = (fn2) ->
-		fn1 = this
-		(args...) -> fn2.call this, fn1.apply(this,args)
-			
-	Function::but = (fn2) ->
-		fn1 = this
-		(args...) ->
-			fn1.apply this,args
-			fn2.apply this,args
-	
-	# Aspect-like methods
-		
-	Function::pre = (pre) -> pre.but this
-		
-	Function::post = (post) ->
-		fn = this
-		(args...) ->
-			ret = fn.apply this,args
-			post.apply this,[ret].concat(args)
-			ret
-
-	# Preconditions and postconditions
-		
-	Function::require = (predicates...) ->
-		predicate = Function.and predicates...
-		@pre (args...) ->
-			throw 'Precondition failure' if not predicate.apply this,args
-		
-	Function::ensure = (predicates...) ->
-		predicate = Function.and predicates...
-		@post (args...) ->
-			throw 'Postcondition failure' if not predicate.apply this,args
 			
 	# Logical methods
 		
@@ -238,13 +257,3 @@
 		restricted.__predicate = predicate
 		restricted[property] = value for property, value of restricted.base
 		return restricted
-
-	# Typed functions
-	
-	Function.To = (type) ->
-		predicate = Object.isa type
-		(fn) -> fn.post (ret) ->
-			throw 'Invalid return type' unless predicate ret
-				
-	# window.Predicate = Function.To Boolean
-	window.Predicate = Function.identity
