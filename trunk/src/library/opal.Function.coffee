@@ -30,7 +30,8 @@
 	Function::then = (fn2) ->
 		fn1 = this
 		(args...) -> fn2.call this, fn1.apply(this,args)
-			
+	
+	# Tests: full
 	Function::but = (fn2) ->
 		fn1 = this
 		(args...) ->
