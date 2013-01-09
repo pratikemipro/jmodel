@@ -35,6 +35,24 @@
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
 
 	module 'Function: Composition'
+	
+	test 'then', ->
+	
+		red = (arr) -> arr.push 'red'; arr
+		green = (arr) -> arr.push 'green'; arr
+		blue = (arr) -> arr.push 'blue'; arr	
+			
+		deepEqual red.then(green)([]), ['red','green'], 'then works'
+		deepEqual red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative'
+		
+	test 'but', ->
+	
+		arr = []
+		red = (arr) -> arr.push('red'); arr
+		length = (arr) -> arr.length
+		
+		equal red.but(length)(arr), 1, 'return value of second returned'
+		deepEqual arr, ['red'], 'first function has been applied'
 
 	test 'pipe', ->
 

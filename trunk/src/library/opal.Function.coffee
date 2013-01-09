@@ -26,6 +26,7 @@
 	## Function composition
 	##
 	
+	# Tests: full
 	Function::then = (fn2) ->
 		fn1 = this
 		(args...) -> fn2.call this, fn1.apply(this,args)
@@ -53,6 +54,18 @@
 	##		
 	## Logical functions
 	##
+	
+	Function::and = (fn2) ->
+		fn1 = this
+		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
+			
+	Function::or = (fn2) ->
+		fn1 = this
+		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
+		
+	Function::not = ->
+		fn = this
+		Predicate (args...) -> not fn.apply this,args
 	
 	# Tests: full
 	Function.or = (predicate,predicates...) ->
@@ -147,11 +160,6 @@
 	Function.between = ( Function.Requiring (lower,higher) -> lower <= higher ) (lower,higher) ->
 		Predicate (x) -> lower <= x <= higher
 	
-	
-	###
-		Function.prototype
-	###
-	
 	# Property methods
 	
 	Function::as = (name) ->
@@ -189,21 +197,7 @@
 	# Mapping methods
 		
 	Function::map = (mapping) -> @then Function.map mapping
-			
-	# Logical methods
-		
-	Function::and = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
-			
-	Function::or = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
-		
-	Function::not = ->
-		fn = this
-		Predicate (args...) -> not fn.apply this,args
-		
+
 	# Predicate methods
 		
 	Function::is = Function::then

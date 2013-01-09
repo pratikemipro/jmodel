@@ -33,6 +33,36 @@ define(['jmodel/opal2'], function() {
     return equals(counts('chargedLeptons'), 3, 'Works for other mapping entries');
   });
   module('Function: Composition');
+  test('then', function() {
+    var blue, green, red;
+    red = function(arr) {
+      arr.push('red');
+      return arr;
+    };
+    green = function(arr) {
+      arr.push('green');
+      return arr;
+    };
+    blue = function(arr) {
+      arr.push('blue');
+      return arr;
+    };
+    deepEqual(red.then(green)([]), ['red', 'green'], 'then works');
+    return deepEqual(red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative');
+  });
+  test('but', function() {
+    var arr, length, red;
+    arr = [];
+    red = function(arr) {
+      arr.push('red');
+      return arr;
+    };
+    length = function(arr) {
+      return arr.length;
+    };
+    equal(red.but(length)(arr), 1, 'return value of second returned');
+    return deepEqual(arr, ['red'], 'first function has been applied');
+  });
   test('pipe', function() {
     var addten, times2;
     times2 = function(x) {
