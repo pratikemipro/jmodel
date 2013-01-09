@@ -107,12 +107,12 @@
 	Function::require = (predicates...) ->
 		predicate = Function.and predicates...
 		@pre (args...) ->
-			throw 'Precondition failure' if not predicate.apply this,args
+			throw 'Precondition failure' unless predicate.apply this,args
 		
 	Function::ensure = (predicates...) ->
 		predicate = Function.and predicates...
 		@post (args...) ->
-			throw 'Postcondition failure' if not predicate.apply this,args
+			throw 'Postcondition failure' unless predicate.apply this,args
 
 	##
 	## Typed functions
