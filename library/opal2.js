@@ -194,13 +194,6 @@ define(function() {
       }
     });
   };
-  Function.Requiring = function() {
-    var predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return function(fn) {
-      return fn.require.apply(fn, predicates);
-    };
-  };
   Function.prototype.Requiring = function() {
     var predicates;
     predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -208,11 +201,11 @@ define(function() {
       return fn.require.apply(fn, predicates);
     });
   };
-  Function.Ensuring = function() {
+  Function.Requiring = function() {
     var predicates;
     predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return function(fn) {
-      return fn.ensure.apply(fn, predicates);
+      return fn.require.apply(fn, predicates);
     };
   };
   Function.prototype.Ensuring = function() {
@@ -222,18 +215,12 @@ define(function() {
       return fn.ensure.apply(fn, predicates);
     });
   };
-  Function.From = function() {
-    var n, type, types;
-    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return Function.Requiring(Function.and.apply(void 0, (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (n = _i = 0, _len = types.length; _i < _len; n = ++_i) {
-        type = types[n];
-        _results.push(Function.argument(n).then(Object.isa(type)));
-      }
-      return _results;
-    })()));
+  Function.Ensuring = function() {
+    var predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return function(fn) {
+      return fn.ensure.apply(fn, predicates);
+    };
   };
   Function.prototype.From = function() {
     var n, type, types;
@@ -248,11 +235,16 @@ define(function() {
       return _results;
     })()));
   };
-  Function.To = function(type) {
-    return Function.Ensuring(Object.isa(type));
+  Function.From = function() {
+    var types;
+    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return Function.prototype.From.apply(Function, types);
   };
   Function.prototype.To = function(type) {
     return this.Ensuring(Object.isa(type));
+  };
+  Function.To = function(type) {
+    return Function.prototype.To.call(Function, type);
   };
   window.Predicate = Function.To(Boolean);
   Function.ordering = Function.or;
