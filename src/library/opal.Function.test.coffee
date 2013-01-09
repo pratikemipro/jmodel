@@ -114,6 +114,12 @@
 		
 		equals inc(3), 4, 'works as untyped function when called with argument of correct type'
 		raises ( -> inc('red') ), 'raises an exception when called with argument of wrong type'
+		
+		repeat = Function.From(Number,String) (n,s) -> (s for i in [1..n]).join('')
+		
+		equals repeat(3,'a'), 'aaa', 'works as untyped function when called with arguments of correct type'
+		raises ( -> repeat('n','a') ), 'raises exception when first argument is of wrong type'
+		raises ( -> repeat(3,3) ), 'raises exception when second argument is of wrong type'
 	
 	test 'Function.To', ->
 		
