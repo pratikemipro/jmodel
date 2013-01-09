@@ -114,6 +114,16 @@ define(['jmodel/opal2'], function() {
   module('Aspect-like methods');
   module('Preconditions and postconditions');
   module('Typed functions');
+  test('Function.From', function() {
+    var inc;
+    inc = Function.From(Number)(function(x) {
+      return x + 1;
+    });
+    equals(inc(3), 4, 'works as untyped function when called with argument of correct type');
+    return raises((function() {
+      return inc('red');
+    }), 'raises an exception when called with argument of wrong type');
+  });
   test('Function.To', function() {
     var add;
     add = Function.To(Number)(function(a, b) {
@@ -122,7 +132,38 @@ define(['jmodel/opal2'], function() {
     equals(add(2, 3), 5, 'works as untyped function when return value of correct type');
     return raises((function() {
       return add('a', 'b');
-    }), 'raises excption when return value of wrong type');
+    }), 'raises exception when return value of wrong type');
+  });
+  test('Function.From.To', function() {
+    var inc, inc2;
+    inc = Function.From(Number).To(Number)(function(x) {
+      if (x === 2) {
+        return 'red';
+      } else {
+        return x + 1;
+      }
+    });
+    inc2 = Function.To(Number).From(Number)(function(x) {
+      if (x === 2) {
+        return 'red';
+      } else {
+        return x + 1;
+      }
+    });
+    equals(inc(3), 4, 'works as untyped function when called with argument of correct type and returns correct type');
+    raises((function() {
+      return inc('red');
+    }), 'raises an exception when called with argument of wrong type');
+    raises((function() {
+      return inc(2);
+    }), 'raises an exception when returning wrong type');
+    equals(inc2(3), 4, 'works as untyped function when called with argument of correct type and returns correct type, with From and To reversed');
+    raises((function() {
+      return inc2('red');
+    }), 'raises an exception when called with argument of wrong type, with From and To reversed');
+    return raises((function() {
+      return inc2(2);
+    }), 'raises an exception when returning wrong type, with From and To reversed');
   });
   module('Function: Ordering');
   test('Function.asc', function() {});

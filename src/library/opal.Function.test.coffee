@@ -108,12 +108,34 @@
 	
 	module 'Typed functions'
 	
+	test 'Function.From', ->
+		
+		inc = Function.From(Number) (x) -> x+1
+		
+		equals inc(3), 4, 'works as untyped function when called with argument of correct type'
+		raises ( -> inc('red') ), 'raises an exception when called with argument of wrong type'
+	
 	test 'Function.To', ->
 		
 		add = Function.To(Number) (a,b) -> a+b
 		
 		equals add(2,3), 5, 'works as untyped function when return value of correct type'
-		raises ( -> add('a','b') ), 'raises excption when return value of wrong type'
+		raises ( -> add('a','b') ), 'raises exception when return value of wrong type'
+		
+	test 'Function.From.To', ->
+		
+		inc = Function.From(Number).To(Number) (x) -> if x==2 then 'red' else x+1
+		
+		inc2 = Function.To(Number).From(Number) (x) -> if x==2 then 'red' else x+1
+		
+		equals inc(3), 4, 'works as untyped function when called with argument of correct type and returns correct type'
+		raises ( -> inc('red') ), 'raises an exception when called with argument of wrong type'
+		raises ( -> inc(2) ), 'raises an exception when returning wrong type'
+		
+		equals inc2(3), 4, 'works as untyped function when called with argument of correct type and returns correct type, with From and To reversed'
+		raises ( -> inc2('red') ), 'raises an exception when called with argument of wrong type, with From and To reversed'
+		raises ( -> inc2(2) ), 'raises an exception when returning wrong type, with From and To reversed'
+		
 	
 	module 'Function: Ordering'
 	
