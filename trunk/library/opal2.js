@@ -12,6 +12,25 @@ var __slice = [].slice,
 
 define(function() {
   var _base, _ref;
+  Object.isa = function(constructor) {
+    if (constructor === Number) {
+      return function(obj) {
+        return obj instanceof Number || typeof obj === 'number';
+      };
+    } else if (constructor === String) {
+      return function(obj) {
+        return obj instanceof String || typeof obj === 'string';
+      };
+    } else if (constructor === Boolean) {
+      return function(obj) {
+        return obj instanceof Boolean || typeof obj === 'boolean';
+      };
+    } else {
+      return function(obj) {
+        return obj instanceof constructor;
+      };
+    }
+  };
   Function.identity = function(x) {
     return x;
   };
@@ -30,6 +49,25 @@ define(function() {
   Function.map = function(mapping) {
     return function(key) {
       return mapping[key];
+    };
+  };
+  Function.prototype.then = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return fn2.call(this, fn1.apply(this, args));
+    };
+  };
+  Function.prototype.but = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      fn1.apply(this, args);
+      return fn2.apply(this, args);
     };
   };
   Function.pipe = function() {
@@ -91,6 +129,63 @@ define(function() {
       return !predicate;
     }
   };
+  Function.prototype.pre = function(pre) {
+    return pre.but(this);
+  };
+  Function.prototype.post = function(post) {
+    var fn;
+    fn = this;
+    return function() {
+      var args, ret;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      ret = fn.apply(this, args);
+      post.apply(this, [ret].concat(args));
+      return ret;
+    };
+  };
+  Function.prototype.require = function() {
+    var predicate, predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    predicate = Function.and.apply(Function, predicates);
+    return this.pre(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      if (!predicate.apply(this, args)) {
+        throw 'Precondition failure';
+      }
+    });
+  };
+  Function.prototype.ensure = function() {
+    var predicate, predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    predicate = Function.and.apply(Function, predicates);
+    return this.post(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      console.log(predicate.apply(this, args));
+      if (!predicate.apply(this, args)) {
+        throw 'Postcondition failure';
+      }
+    });
+  };
+  Function.Requiring = function() {
+    var predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return function(fn) {
+      return fn.require.apply(fn, predicates);
+    };
+  };
+  Function.Ensuring = function() {
+    var predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return function(fn) {
+      return fn.ensure.apply(fn, predicates);
+    };
+  };
+  Function.To = function(type) {
+    return Function.Ensuring(Object.isa(type));
+  };
+  window.Predicate = Function.To(Boolean);
   Function.ordering = Function.or;
   Function.eq = function(value) {
     return Predicate(function(x) {
@@ -122,11 +217,13 @@ define(function() {
       return x >= value;
     });
   };
-  Function.between = function(lower, higher) {
+  Function.between = (Function.Requiring(function(lower, higher) {
+    return lower <= higher;
+  }))(function(lower, higher) {
     return Predicate(function(x) {
       return (lower <= x && x <= higher);
     });
-  };
+  });
   /*
   		Function.prototype
   */
@@ -199,63 +296,6 @@ define(function() {
   }
   Function.prototype.map = function(mapping) {
     return this.then(Function.map(mapping));
-  };
-  Function.prototype.then = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn2.call(this, fn1.apply(this, args));
-    };
-  };
-  Function.prototype.but = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      fn1.apply(this, args);
-      return fn2.apply(this, args);
-    };
-  };
-  Function.prototype.pre = function(pre) {
-    return pre.but(this);
-  };
-  Function.prototype.post = function(post) {
-    var fn;
-    fn = this;
-    return function() {
-      var args, ret;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      ret = fn.apply(this, args);
-      post.apply(this, [ret].concat(args));
-      return ret;
-    };
-  };
-  Function.prototype.require = function() {
-    var predicate, predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicate = Function.and.apply(Function, predicates);
-    return this.pre(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (!predicate.apply(this, args)) {
-        throw 'Precondition failure';
-      }
-    });
-  };
-  Function.prototype.ensure = function() {
-    var predicate, predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicate = Function.and.apply(Function, predicates);
-    return this.post(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      if (!predicate.apply(this, args)) {
-        throw 'Postcondition failure';
-      }
-    });
   };
   Function.prototype.and = function(fn2) {
     var fn1;
@@ -369,34 +409,9 @@ define(function() {
     }
     return restricted;
   };
-  Function.To = function(type) {
-    var predicate;
-    predicate = Object.isa(type);
-    return function(fn) {
-      return fn.post(function(ret) {
-        if (!predicate(ret)) {
-          throw 'Invalid return type';
-        }
-      });
-    };
+  Number.__predicate = function(value) {
+    return value instanceof Number || typeof value === 'number';
   };
-  window.Predicate = Function.identity;
-  Object.isa = function(constructor) {
-    if (constructor === Number) {
-      return function(obj) {
-        return obj instanceof Number || typeof (obj = 'number');
-      };
-    } else if (constructor === String) {
-      return function(obj) {
-        return obj instanceof String || typeof (obj = 'string');
-      };
-    } else {
-      return function(obj) {
-        return obj instanceof Constructor;
-      };
-    }
-  };
-  Number.__predicate = Object.isa(Number);
   Number.LessThan = function(max) {
     return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
   };

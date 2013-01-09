@@ -1,4 +1,4 @@
-	module 'Function'
+	module 'Function: Basic functions'
 	
 	test 'identity', ->
 		
@@ -34,6 +34,8 @@
 		equals counts('quarks'), 6, 'Works for first mapping entry'
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
 
+	module 'Function: Composition'
+
 	test 'pipe', ->
 
 		times2 = (x) -> 2*x
@@ -53,6 +55,8 @@
 		equals Function.compose(addten,times2)(7), 24, 'composition works in opposite direction'
 		equals Function.compose(times2)(7), 14, 'composition of a single function is just that function'
 		equals Function.compose()(7), 7, 'composition of no functions is identity'
+	
+	module 'Function: Logical functions'
 		
 	test 'or', ->
 	
@@ -80,7 +84,24 @@
 		equals Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false'
 		equals Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true'
 	
+	module 'Function: Aspect-like methods'
+	
+	module 'Function: Preconditions and postconditions'
+	
+	module 'Function: Typed functions'
+	
+	test 'Function.To', ->
+		
+		add = Function.To(Number) (a,b) -> a+b
+		
+		equals add(2,3), 5, 'works as untyped function when return value of correct type'
+		raises ( -> add('a','b') ), 'raises excption when return value of wrong type'
+	
+	module 'Function: Ordering'
+	
 	test 'ordering', ->
+		
+	module 'Function: Comparisons'
 		
 	test 'eq', ->
 		
@@ -125,5 +146,6 @@
 		equal Function.between(3,5)(4), true, 'returns true when applied to value strictly between bounds'
 		equal Function.between(3,5)(5), true, 'returns true when applied to value equal to upper bound'
 		equal Function.between(3,5)(6), false, 'returns false when applied to value greater than upper bound'
+		raises ( -> Function.between(5,3) ), 'throws exception when lower bound not less or equal to upper bound'
 		
 	
