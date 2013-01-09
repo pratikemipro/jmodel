@@ -201,6 +201,13 @@ define(function() {
       return fn.require.apply(fn, predicates);
     };
   };
+  Function.prototype.Requiring = function() {
+    var predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return this.then(function(fn) {
+      return fn.require.apply(fn, predicates);
+    });
+  };
   Function.Ensuring = function() {
     var predicates;
     predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -208,8 +215,24 @@ define(function() {
       return fn.ensure.apply(fn, predicates);
     };
   };
+  Function.prototype.Ensuring = function() {
+    var predicates;
+    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return this.then(function(fn) {
+      return fn.ensure.apply(fn, predicates);
+    });
+  };
+  Function.From = function(type) {
+    return Function.Requiring(Object.isa(type));
+  };
+  Function.prototype.From = function(type) {
+    return this.Requiring(Object.isa(type));
+  };
   Function.To = function(type) {
     return Function.Ensuring(Object.isa(type));
+  };
+  Function.prototype.To = function(type) {
+    return this.Ensuring(Object.isa(type));
   };
   window.Predicate = Function.To(Boolean);
   Function.ordering = Function.or;

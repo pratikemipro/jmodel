@@ -35,8 +35,8 @@
 	Function::but = (fn2) ->
 		fn1 = this
 		(args...) ->
-			fn1.apply this,args
-			fn2.apply this,args
+			fn1.apply this, args
+			fn2.apply this, args
 	
 	# Tests: full
 	Function.pipe = (fn,fns...) ->			
@@ -66,7 +66,7 @@
 		
 	Function::not = ->
 		fn = this
-		Predicate (args...) -> not fn.apply this,args
+		Predicate (args...) -> not fn.apply this, args
 	
 	# Tests: full
 	Function.or = (predicate,predicates...) ->
@@ -96,8 +96,8 @@
 	Function::post = (post) ->
 		fn = this
 		(args...) ->
-			ret = fn.apply this,args
-			post.apply this,[ret].concat(args)
+			ret = fn.apply this, args
+			post.apply this, [ret].concat(args)
 			ret
 
 	##
@@ -107,12 +107,12 @@
 	Function::require = (predicates...) ->
 		predicate = Function.and predicates...
 		@pre (args...) ->
-			throw 'Precondition failure' unless predicate.apply this,args
+			throw 'Precondition failure' unless predicate.apply this, args
 		
 	Function::ensure = (predicates...) ->
 		predicate = Function.and predicates...
 		@post (args...) ->
-			throw 'Postcondition failure' unless predicate.apply this,args
+			throw 'Postcondition failure' unless predicate.apply this, args
 
 	##
 	## Typed functions
@@ -121,11 +121,28 @@
 	Function.Requiring = (predicates...) ->
 		(fn) -> fn.require predicates...
 		
+	Function::Requiring = (predicates...) ->
+		@then (fn) -> fn.require predicates...
+		
 	Function.Ensuring = (predicates...) ->
 		(fn) -> fn.ensure predicates...
+		
+	Function::Ensuring = (predicates...) ->
+		@then (fn) -> fn.ensure predicates...
 
-	Function.To = (type) -> Function.Ensuring Object.isa type
+	Function.From = (type) ->
+		Function.Requiring Object.isa type
+		
+	Function::From = (type) ->
+		@Requiring Object.isa type
 
+	Function.To = (type) ->
+		Function.Ensuring Object.isa type
+	
+	Function::To = (type) ->
+		@Ensuring Object.isa type
+		
+	
 	window.Predicate = Function.To Boolean
 	
 	##	
@@ -181,14 +198,14 @@
 	Function::except = (handler) ->
 		fn = this
 		(args...) ->
-			try fn.apply this,args
+			try fn.apply this, args
 			catch error
-				handler.call this,error
+				handler.call this, error
 				
 	Function::memo = ->
 		cache = {}
 		fn = @post (ret,args...) -> cache[args] = ret
-		(args...) -> cache[args] ? fn.apply this,arguments
+		(args...) -> cache[args] ? fn.apply this, arguments
 		
 	Function::delay ?= (duration=1,args1...) ->
 		fn = this
@@ -229,8 +246,8 @@
 	Function::asc = ->
 		fn = this
 		(a,b) ->
-			fna = fn.call this,a
-			fnb = fn.call this,b
+			fna = fn.call this, a
+			fnb = fn.call this, b
 			return -1 if fna < fnb
 			return  1 if fna > fnb
 			return  0
