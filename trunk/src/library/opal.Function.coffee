@@ -118,33 +118,31 @@
 	## Typed functions
 	##
 	
+	Function::Requiring = (predicates...) ->
+		@then (fn) -> fn.require predicates...
+	
 	Function.Requiring = (predicates...) ->
 		(fn) -> fn.require predicates...
 		
-	Function::Requiring = (predicates...) ->
-		@then (fn) -> fn.require predicates...
-		
-	Function.Ensuring = (predicates...) ->
-		(fn) -> fn.ensure predicates...
-		
 	Function::Ensuring = (predicates...) ->
 		@then (fn) -> fn.ensure predicates...
+	
+	Function.Ensuring = (predicates...) ->
+		(fn) -> fn.ensure predicates...
 
-	Function.From = (types...) ->
-		Function.Requiring Function.and.apply \
-			undefined,
-			( Function.argument(n).then( Object.isa type ) for type, n in types )
-		
 	Function::From = (types...) ->
 		@Requiring Function.and.apply \
 			undefined,
 			( Function.argument(n).then( Object.isa type ) for type, n in types )
 
-	Function.To = (type) ->
-		Function.Ensuring Object.isa type
-	
+	Function.From = (types...) ->
+		Function::From.apply Function, types
+
 	Function::To = (type) ->
 		@Ensuring Object.isa type
+
+	Function.To = (type) ->
+		Function::To.call Function, type
 		
 	
 	window.Predicate = Function.To Boolean
