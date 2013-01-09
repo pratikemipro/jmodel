@@ -1,20 +1,20 @@
-	module 'Function: Basic functions'
+	module 'Basic functions'
 	
-	test 'identity', ->
+	test 'Function.identity', ->
 		
 		obj = name: 'test'
 		
 		equals Function.identity(obj), obj, 'Works for objects'
 		equals Function.identity(17), 17, 'Words for bare values'
 		
-	test 'constant', ->
+	test 'Function.constant', ->
 		
 		fred = Function.constant 'fred'
 		
 		equals fred(), 'fred', 'Works with no arguments'
 		equals fred(1,2,3), 'fred', 'Works with arguments'
 		
-	test 'argument', ->
+	test 'Function.argument', ->
 	
 		equals Function.argument(0).call(this,'red','green','blue'), 'red', 'Function.argument(0) works'
 		equals Function.argument(1).call(this,'red','green','blue'), 'green', 'Function.argument(1) works'
@@ -24,7 +24,7 @@
 		# equals Function.argument(2).hastype('string').call(this,'red','green','blue'), true, 'Function.argument(4).hastype returns false if type does not match'
 		# equals Function.argument(2).hastype('number').call(this,'red','green','blue'), false, 'Function.argument(4).hastype returns false if type does not match'
 		
-	test 'map', ->
+	test 'Function.map', ->
 	
 		counts = Function.map
 			quarks: 6
@@ -34,9 +34,9 @@
 		equals counts('quarks'), 6, 'Works for first mapping entry'
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
 
-	module 'Function: Composition'
+	module 'Function composition'
 	
-	test 'then', ->
+	test 'Function::then', ->
 	
 		red = (arr) -> arr.push 'red'; arr
 		green = (arr) -> arr.push 'green'; arr
@@ -45,7 +45,7 @@
 		deepEqual red.then(green)([]), ['red','green'], 'then works'
 		deepEqual red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative'
 		
-	test 'but', ->
+	test 'Function::but', ->
 	
 		arr = []
 		red = (arr) -> arr.push('red'); arr
@@ -54,7 +54,7 @@
 		equal red.but(length)(arr), 1, 'return value of second returned'
 		deepEqual arr, ['red'], 'first function has been applied'
 
-	test 'pipe', ->
+	test 'Function.pipe', ->
 
 		times2 = (x) -> 2*x
 		addten = (x) -> x+10
@@ -64,7 +64,7 @@
 		equals Function.pipe(times2)(7), 14, 'pipe of a single function is just that function'
 		equals Function.pipe()(7), 7, 'pipe of no functions is identity'
 
-	test 'compose', ->
+	test 'Function.compose', ->
 	
 		times2 = (x) -> 2*x
 		addten = (x) -> x+10
@@ -74,9 +74,9 @@
 		equals Function.compose(times2)(7), 14, 'composition of a single function is just that function'
 		equals Function.compose()(7), 7, 'composition of no functions is identity'
 	
-	module 'Function: Logical functions'
+	module 'Logical functions'
 		
-	test 'or', ->
+	test 'Function::or', ->
 	
 		equals Function.or()(5), false, 'or of zero arguments is false'
 		equals Function.or(Function.eq(5))(5), true, 'or with one argument returns true when predicate is true'
@@ -86,7 +86,7 @@
 		equals Function.or(Function.eq(5),Function.eq(6))(6), true, 'or with two arguments returns true when second is true'
 		equals Function.or(Function.eq(5),Function.eq(6))(7), false, 'or with two arguments returns false when neither is true'
 
-	test 'and', ->
+	test 'Function::and', ->
 	
 		equals Function.and()(5), true, 'or of zero arguments is true'
 		equals Function.and(Function.eq(5))(5), true, 'and with one argument returns true when predicate is true'
@@ -97,16 +97,16 @@
 		equals Function.and(Function.eq(5),Function.eq(6))(5), false, 'or with two arguments returns false when second is false'
 		equals Function.and(Function.eq(5),Function.eq(6))(7), false, 'or with two arguments returns false when neither is true'
 
-	test 'not', ->
+	test 'Function::not', ->
 	
 		equals Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false'
 		equals Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true'
 	
-	module 'Function: Aspect-like methods'
+	module 'Aspect-like methods'
 	
-	module 'Function: Preconditions and postconditions'
+	module 'Preconditions and postconditions'
 	
-	module 'Function: Typed functions'
+	module 'Typed functions'
 	
 	test 'Function.To', ->
 		
@@ -117,47 +117,47 @@
 	
 	module 'Function: Ordering'
 	
-	test 'ordering', ->
+	test 'Function.asc', ->
 		
-	module 'Function: Comparisons'
+	module 'Comparison predicates'
 		
-	test 'eq', ->
+	test 'Function::eq', ->
 		
 		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
 		
 		
-	test 'neq', ->
+	test 'Function::neq', ->
 		
 		equal Function.neq(5)(3), true, 'returns true when applied to value not equal to argument'
 		equal Function.neq(5)(5), false, 'returns false when applied to value equal to argument'
 
 
-	test 'lt', ->
+	test 'Function::lt', ->
 		
 		equal Function.lt(5)(3), true, 'returns true when applied to value less than argument'
 		equal Function.lt(5)(5), false, 'returns false when applied to value equal to argument'
 		equal Function.lt(5)(7), false, 'returns false when applied to value greater than argument'
 		
-	test 'gt', ->
+	test 'Function::gt', ->
 		
 		equal Function.gt(5)(3), false, 'returns false when applied to value less than argument'
 		equal Function.gt(5)(5), false, 'returns false when applied to value equal to argument'
 		equal Function.gt(5)(7), true, 'returns true when applied to value greater than argument'
 		
-	test 'lte', ->
+	test 'Function::lte', ->
 		
 		equal Function.lte(5)(3), true, 'returns true when applied to value less than argument'
 		equal Function.lte(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.lte(5)(7), false, 'returns false when applied to value greater than argument'
 		
-	test 'gte', ->
+	test 'Function::gte', ->
 		
 		equal Function.gte(5)(3), false, 'returns false when applied to value less than argument'
 		equal Function.gte(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.gte(5)(7), true, 'returns true when applied to value greater than argument'
 		
-	test 'between', ->
+	test 'Function::between', ->
 		
 		equal Function.between(3,5)(2), false, 'returns false when applied to value less than lower bound'
 		equal Function.between(3,5)(3), true, 'returns true when applied to value equal to lower bound'
