@@ -115,14 +115,32 @@ define(['jmodel/opal2'], function() {
   module('Preconditions and postconditions');
   module('Typed functions');
   test('Function.From', function() {
-    var inc;
+    var inc, repeat;
     inc = Function.From(Number)(function(x) {
       return x + 1;
     });
     equals(inc(3), 4, 'works as untyped function when called with argument of correct type');
-    return raises((function() {
+    raises((function() {
       return inc('red');
     }), 'raises an exception when called with argument of wrong type');
+    repeat = Function.From(Number, String)(function(n, s) {
+      var i;
+      return ((function() {
+        var _i, _results;
+        _results = [];
+        for (i = _i = 1; 1 <= n ? _i <= n : _i >= n; i = 1 <= n ? ++_i : --_i) {
+          _results.push(s);
+        }
+        return _results;
+      })()).join('');
+    });
+    equals(repeat(3, 'a'), 'aaa', 'works as untyped function when called with arguments of correct type');
+    raises((function() {
+      return repeat('n', 'a');
+    }), 'raises exception when first argument is of wrong type');
+    return raises((function() {
+      return repeat(3, 3);
+    }), 'raises exception when second argument is of wrong type');
   });
   test('Function.To', function() {
     var add;

@@ -130,11 +130,15 @@
 	Function::Ensuring = (predicates...) ->
 		@then (fn) -> fn.ensure predicates...
 
-	Function.From = (type) ->
-		Function.Requiring Object.isa type
+	Function.From = (types...) ->
+		Function.Requiring Function.and.apply \
+			undefined,
+			( Function.argument(n).then( Object.isa type ) for type, n in types )
 		
-	Function::From = (type) ->
-		@Requiring Object.isa type
+	Function::From = (types...) ->
+		@Requiring Function.and.apply \
+			undefined,
+			( Function.argument(n).then( Object.isa type ) for type, n in types )
 
 	Function.To = (type) ->
 		Function.Ensuring Object.isa type

@@ -222,11 +222,31 @@ define(function() {
       return fn.ensure.apply(fn, predicates);
     });
   };
-  Function.From = function(type) {
-    return Function.Requiring(Object.isa(type));
+  Function.From = function() {
+    var n, type, types;
+    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return Function.Requiring(Function.and.apply(void 0, (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (n = _i = 0, _len = types.length; _i < _len; n = ++_i) {
+        type = types[n];
+        _results.push(Function.argument(n).then(Object.isa(type)));
+      }
+      return _results;
+    })()));
   };
-  Function.prototype.From = function(type) {
-    return this.Requiring(Object.isa(type));
+  Function.prototype.From = function() {
+    var n, type, types;
+    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return this.Requiring(Function.and.apply(void 0, (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (n = _i = 0, _len = types.length; _i < _len; n = ++_i) {
+        type = types[n];
+        _results.push(Function.argument(n).then(Object.isa(type)));
+      }
+      return _results;
+    })()));
   };
   Function.To = function(type) {
     return Function.Ensuring(Object.isa(type));
