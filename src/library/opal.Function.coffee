@@ -112,7 +112,6 @@
 	Function::ensure = (predicates...) ->
 		predicate = Function.and predicates...
 		@post (args...) ->
-			console.log predicate.apply(this,args)
 			throw 'Postcondition failure' if not predicate.apply this,args
 
 	##
