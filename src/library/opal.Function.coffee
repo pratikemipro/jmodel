@@ -72,18 +72,25 @@
 	## Comparison functions
 	##
 	
+	# Tests: full
 	Function.eq = (value) -> Predicate (x) -> x == value
-		
+	
+	# Tests: full
 	Function.neq = (value) -> Predicate (x) -> x != value
-		
+	
+	# Tests: full
 	Function.lt = (value) -> Predicate (x) -> x < value
-		
+	
+	# Tests: full
 	Function.gt = (value) -> Predicate (x) -> x > value
-		
+	
+	# Tests: full
 	Function.lte = (value) -> Predicate (x) -> x <= value
 
+	# Tests: full
 	Function.gte = (value) -> Predicate (x) -> x >= value
 
+	# Tests: full
 	Function.between = (lower,higher) -> Predicate (x) -> lower <= x <= higher
 	
 	
