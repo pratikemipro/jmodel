@@ -189,7 +189,6 @@ define(function() {
     return this.post(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      console.log(predicate.apply(this, args));
       if (!predicate.apply(this, args)) {
         throw 'Postcondition failure';
       }
