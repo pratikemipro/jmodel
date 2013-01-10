@@ -115,7 +115,7 @@ define(['jmodel/opal2'], function() {
   module('Preconditions and postconditions');
   module('Typed functions');
   test('Function.From', function() {
-    var inc, repeat;
+    var Person, fred, inc, repeat, _class;
     inc = Function.From(Number)(function(x) {
       return x + 1;
     });
@@ -138,19 +138,56 @@ define(['jmodel/opal2'], function() {
     raises((function() {
       return repeat('n', 'a');
     }), 'raises exception when first argument is of wrong type');
-    return raises((function() {
+    raises((function() {
       return repeat(3, 3);
     }), 'raises exception when second argument is of wrong type');
+    Person = (function() {
+
+      function _Class() {
+        return _class.apply(this, arguments);
+      }
+
+      _class = Function.From(String)(function(name) {
+        this.name = name;
+      });
+
+      return _Class;
+
+    })();
+    fred = new Person('fred');
+    equals(fred.name, 'fred', 'constructor works as untyped constructor when arguments of correct type');
+    return raises((function() {
+      return new Person(3);
+    }), 'constructor raises exception when arguments have wrong type');
   });
   test('Function.To', function() {
-    var add;
+    var Entity, add, fred, robot;
     add = Function.To(Number)(function(a, b) {
       return a + b;
     });
     equals(add(2, 3), 5, 'works as untyped function when return value of correct type');
-    return raises((function() {
+    raises((function() {
       return add('a', 'b');
     }), 'raises exception when return value of wrong type');
+    Entity = (function() {
+
+      function _Class(name) {
+        this.name = name;
+      }
+
+      _Class.prototype.getName = Function.To(String)(function() {
+        return this.name;
+      });
+
+      return _Class;
+
+    })();
+    fred = new Entity('fred');
+    robot = new Entity(3);
+    equals(fred.getName(), 'fred', 'works as untyped method when return value of correct type');
+    return raises((function() {
+      return robot.getName();
+    }), 'raises exception when return value method has incorrect type');
   });
   test('Function.From.To', function() {
     var inc, inc2;
