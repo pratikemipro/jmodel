@@ -12,6 +12,11 @@ var __slice = [].slice,
 
 define(function() {
   var _base, _ref;
+  Array.concat = function() {
+    var arrays, _ref;
+    arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return (_ref = []).concat.apply(_ref, arrays);
+  };
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -21,7 +26,7 @@ define(function() {
       return function() {
         var args, args2;
         args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        args = args1.concat(args2);
+        args = Array.concat(args1, args2);
         return (function(func, args, ctor) {
           ctor.prototype = func.prototype;
           var child = new ctor, result = func.apply(child, args), t = typeof result;
@@ -101,7 +106,7 @@ define(function() {
     }
   };
   Function.compose = function() {
-    var fn, fns, _ref;
+    var fn, fns;
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     switch (arguments.length) {
       case 1:
@@ -109,7 +114,7 @@ define(function() {
       case 0:
         return Function.identity;
       default:
-        return Function.pipe.apply(Function, (_ref = [fn]).concat.apply(_ref, fns).reverse());
+        return Function.pipe.apply(Function, (Array.concat.apply(Array, arguments)).reverse());
     }
   };
   Function.prototype.and = function(fn2) {
