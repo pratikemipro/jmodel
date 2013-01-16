@@ -50,7 +50,7 @@
 		switch arguments.length
 			when 1 then fn
 			when 0 then Function.identity
-			else Function.pipe [fn].concat(fns...).reverse()...
+			else Function.pipe (Array.concat arguments...).reverse()...
 	
 	##		
 	## Logical functions
