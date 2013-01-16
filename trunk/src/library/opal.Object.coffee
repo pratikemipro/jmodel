@@ -6,6 +6,15 @@
 ## Dual licensed under the MIT and GPL licenses
 ##
 
+	# NOTE: Need special handling for date here
+	Object.construct = (constructor,args1...) ->
+		if 		constructor == Number then Number
+		else if constructor == String then String
+		else if constructor == Boolean then Boolean
+		else (args2...) ->
+			args = args1.concat args2
+			new constructor args...
+
 	Object.isa = (constructor) ->
 		if      constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'
 		else if constructor == String  then (obj) -> obj instanceof String or typeof obj == 'string'
