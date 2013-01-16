@@ -15,12 +15,8 @@ define(function() {
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if (constructor === Number) {
-      return Number;
-    } else if (constructor === String) {
-      return String;
-    } else if (constructor === Boolean) {
-      return Boolean;
+    if (constructor === Number || constructor === String || constructor === Boolean) {
+      return constructor;
     } else {
       return function() {
         var args, args2;
