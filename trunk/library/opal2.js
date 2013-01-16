@@ -43,6 +43,22 @@ define(function() {
     }
     return _results;
   };
+  Array.flatten = function(array) {
+    var arr;
+    return Array.concat.apply(Array, ((function() {
+      var _i, _len, _results;
+      if (arr instanceof Array) {
+        return Array.flatten(arr);
+      } else {
+        _results = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          arr = array[_i];
+          _results.push(arr);
+        }
+        return _results;
+      }
+    })()));
+  };
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
