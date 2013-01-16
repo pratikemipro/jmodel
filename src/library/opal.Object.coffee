@@ -8,9 +8,7 @@
 
 	# NOTE: Need special handling for date here
 	Object.construct = (constructor,args1...) ->
-		if 		constructor == Number then Number
-		else if constructor == String then String
-		else if constructor == Boolean then Boolean
+		if 		constructor in [Number,String,Boolean] then constructor
 		else (args2...) ->
 			args = args1.concat args2
 			new constructor args...
