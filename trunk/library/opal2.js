@@ -17,6 +17,32 @@ define(function() {
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return (_ref = []).concat.apply(_ref, arrays);
   };
+  Array.zip = function() {
+    var arr, arrays, i, maxIndex, _i, _results;
+    arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    maxIndex = Math.min.apply(Math, (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = arrays.length; _i < _len; _i++) {
+        arr = arrays[_i];
+        _results.push(arr.length - 1);
+      }
+      return _results;
+    })());
+    _results = [];
+    for (i = _i = 0; 0 <= maxIndex ? _i <= maxIndex : _i >= maxIndex; i = 0 <= maxIndex ? ++_i : --_i) {
+      _results.push((function() {
+        var _j, _len, _results1;
+        _results1 = [];
+        for (_j = 0, _len = arrays.length; _j < _len; _j++) {
+          arr = arrays[_j];
+          _results1.push(arr[i]);
+        }
+        return _results1;
+      })());
+    }
+    return _results;
+  };
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
