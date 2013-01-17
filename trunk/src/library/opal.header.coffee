@@ -7,3 +7,7 @@
 ###
 
 define ->
+	
+	# NOTE: Define assert here
+	# NOTE: Define type here
+	# NOTE: Define delegateTo here
