@@ -62,14 +62,14 @@ define(function() {
       return _results;
     })());
   };
-  Object.extend || (Object.extend = function(target, source) {
+  Object.extend = function(target, source) {
     var key;
     for (key in source) {
       if (!__hasProp.call(source, key)) continue;
       target[key] = source[key];
     }
     return target;
-  });
+  };
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
