@@ -48,19 +48,19 @@ define(function() {
   };
   Array.flatten = function(array) {
     var arr;
-    return Array.concat.apply(Array, ((function() {
+    if (array == null) {
+      array = [];
+    }
+    console.log('flattening');
+    return Array.concat.apply(Array, (function() {
       var _i, _len, _results;
-      if (arr instanceof Array) {
-        return Array.flatten(arr);
-      } else {
-        _results = [];
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          arr = array[_i];
-          _results.push(arr);
-        }
-        return _results;
+      _results = [];
+      for (_i = 0, _len = array.length; _i < _len; _i++) {
+        arr = array[_i];
+        _results.push(arr instanceof Array ? Array.flatten(arr) : arr);
       }
-    })()));
+      return _results;
+    })());
   };
   Object.construct = function() {
     var args1, constructor;
