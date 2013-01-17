@@ -10,7 +10,7 @@
 	test 'Array.zip', ->
 		
 		deepEqual Array.zip(), [], 'Zip of zero arrays is empty array'
-		deepEqual Array.zip([1,2]), [1,2], 'Zip of one array is that array'
+		deepEqual Array.zip([1,2]), [[1],[2]], 'Zip works with one argument'
 		deepEqual Array.zip([1,2],[3,4]), [[1,3],[2,4]], 'Zip works with two arguments'
 		deepEqual Array.zip([1,2,3],[4,5,6],[7,8,9]), [[1,4,7],[2,5,8],[3,6,9]], 'Zip works with more than two arguments'
 		deepEqual Array.zip( [1,2], [3,4,5] ), [[1,3],[2,4]], 'Only zips matching elements of arrays of unequal length'
