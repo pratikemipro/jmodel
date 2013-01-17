@@ -197,20 +197,6 @@ define(function() {
       return !fn.apply(this, args);
     });
   };
-  Function.or = function() {
-    var predicate, predicates;
-    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (arguments.length) {
-      case 1:
-        return predicate;
-      case 0:
-        return function() {
-          return false;
-        };
-      default:
-        return predicate.or(Function.or.apply(Function, predicates));
-    }
-  };
   Function.and = function() {
     var predicate, predicates;
     predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -223,6 +209,20 @@ define(function() {
         };
       default:
         return predicate.and(Function.and.apply(Function, predicates));
+    }
+  };
+  Function.or = function() {
+    var predicate, predicates;
+    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    switch (arguments.length) {
+      case 1:
+        return predicate;
+      case 0:
+        return function() {
+          return false;
+        };
+      default:
+        return predicate.or(Function.or.apply(Function, predicates));
     }
   };
   Function.not = function(predicate) {
