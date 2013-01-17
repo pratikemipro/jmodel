@@ -131,9 +131,31 @@ define(['jmodel/opal2'], function() {
       return x < 6;
     };
     comp = gt.and(lt);
-    equal(comp(4), true, 'true if both conditions true');
-    equal(comp(1), false, 'false if first condition false');
-    return equal(comp(7), false, 'false if second condition false');
+    equals(comp(4), true, 'true if both conditions true');
+    equals(comp(1), false, 'false if first condition false');
+    return equals(comp(7), false, 'false if second condition false');
+  });
+  test('Function::or', function() {
+    var comp, gt, lt;
+    gt = function(x) {
+      return x > 2;
+    };
+    lt = function(x) {
+      return x < 2;
+    };
+    comp = gt.or(lt);
+    equals(comp(3), true, 'true if first condition true');
+    equals(comp(1), true, 'true if second condition true');
+    return equals(comp(2), false, 'false if both conditions false');
+  });
+  test('Function::not', function() {
+    var isOdd;
+    isOdd = function(x) {
+      return x % 2 === 1;
+    };
+    equals(isOdd(5), true, 'Base function works');
+    equals(isOdd.not()(5), false, 'Works as expected when base returns true');
+    return equals(isOdd.not()(6), true, 'Works as expected when base returns false');
   });
   test('Function.and', function() {
     equals(Function.and()(5), true, 'or of zero arguments is true');

@@ -61,10 +61,12 @@
 		fn1 = this
 		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
 			
+	# Tests: full
 	Function::or = (fn2) ->
 		fn1 = this
 		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
-		
+	
+	# Tests: full
 	Function::not = ->
 		fn = this
 		Predicate (args...) -> not fn.apply this, args
