@@ -56,6 +56,7 @@
 	## Logical functions
 	##
 	
+	# Tests: full
 	Function::and = (fn2) ->
 		fn1 = this
 		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
@@ -69,18 +70,18 @@
 		Predicate (args...) -> not fn.apply this, args
 	
 	# Tests: full
-	Function.or = (predicate,predicates...) ->
-		switch arguments.length
-			when 1 then predicate
-			when 0 then -> false
-			else predicate.or Function.or predicates...
-
-	# Tests: full
 	Function.and = (predicate,predicates...) ->
 		switch arguments.length
 			when 1 then predicate
 			when 0 then -> true
 			else predicate.and Function.and predicates...
+	
+	# Tests: full
+	Function.or = (predicate,predicates...) ->
+		switch arguments.length
+			when 1 then predicate
+			when 0 then -> false
+			else predicate.or Function.or predicates...
 
 	# Tests: full
 	Function.not = (predicate) ->

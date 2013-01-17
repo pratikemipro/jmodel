@@ -75,8 +75,19 @@
 		equals Function.compose()(7), 7, 'composition of no functions is identity'
 	
 	module 'Logical functions'
+	
+	test 'Function::and', ->
+	
+		gt = (x) -> x>2
+		lt = (x) -> x<6
+		comp = gt.and(lt);
+			
+		equal comp(4), true, 'true if both conditions true'
+		equal comp(1), false, 'false if first condition false'
+		equal comp(7), false, 'false if second condition false'
+
 		
-	test 'Function::or', ->
+	test 'Function.or', ->
 	
 		equals Function.or()(5), false, 'or of zero arguments is false'
 		equals Function.or(Function.eq(5))(5), true, 'or with one argument returns true when predicate is true'
@@ -86,7 +97,7 @@
 		equals Function.or(Function.eq(5),Function.eq(6))(6), true, 'or with two arguments returns true when second is true'
 		equals Function.or(Function.eq(5),Function.eq(6))(7), false, 'or with two arguments returns false when neither is true'
 
-	test 'Function::and', ->
+	test 'Function.and', ->
 	
 		equals Function.and()(5), true, 'or of zero arguments is true'
 		equals Function.and(Function.eq(5))(5), true, 'and with one argument returns true when predicate is true'
@@ -97,7 +108,7 @@
 		equals Function.and(Function.eq(5),Function.eq(6))(5), false, 'or with two arguments returns false when second is false'
 		equals Function.and(Function.eq(5),Function.eq(6))(7), false, 'or with two arguments returns false when neither is true'
 
-	test 'Function::not', ->
+	test 'Function.not', ->
 	
 		equals Function.not(Function.eq(5))(6), true, 'not returns true when predicate returns false'
 		equals Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true'
