@@ -16,7 +16,10 @@ define(['jmodel/opal2'], function() {
     return deepEqual(Array.zip([1, 2], [3, 4, 5]), [[1, 3], [2, 4]], 'Only zips matching elements of arrays of unequal length');
   });
   test('Array.flatten', function() {
-    return deepEqual(Array.flatten([[1, 2], [3, 4], [5, 6]]), [1, 2, 3, 4, 5, 6], 'Flattens array of arrays');
+    deepEqual(Array.flatten(), [], 'Empty argument flattens to empty array');
+    deepEqual(Array.flatten([1, 2, 3, 4]), [1, 2, 3, 4], 'Flat array is returned unchanged');
+    deepEqual(Array.flatten([[1, 2], [3, 4], [5, 6]]), [1, 2, 3, 4, 5, 6], 'Flattens array of arrays');
+    return deepEqual(Array.flatten([[1, [2, 3]], [[4, 5], 6]]), [1, 2, 3, 4, 5, 6], 'Flatten works with differing depths');
   });
   module('Basic functions');
   test('Function.identity', function() {

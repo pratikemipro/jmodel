@@ -17,4 +17,7 @@
 		
 	test 'Array.flatten', ->
 		
+		deepEqual Array.flatten(), [], 'Empty argument flattens to empty array'
+		deepEqual Array.flatten( [1,2,3,4] ), [1,2,3,4], 'Flat array is returned unchanged'
 		deepEqual Array.flatten( [[1,2],[3,4],[5,6]] ), [1,2,3,4,5,6], 'Flattens array of arrays'
+		deepEqual Array.flatten( [[1,[2,3]],[[4,5],6]] ), [1,2,3,4,5,6], 'Flatten works with differing depths'
