@@ -6,6 +6,11 @@
 ## Dual licensed under the MIT and GPL licenses
 ##
 
+	# Tests: full
+	Object.extend = (target,source) ->
+		target[key] = source[key] for own key of source
+		target
+
 	# NOTE: Need special handling for date here
 	Object.construct = (constructor,args1...) ->
 		if constructor in [Number,String,Boolean] then constructor
