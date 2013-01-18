@@ -154,6 +154,20 @@
 	
 	module 'Preconditions and postconditions'
 	
+	test 'require', ->
+		
+		add2 = (x) -> x+2
+		safeAdd2 = add2.require( Function.argument(0).hastype('number') )
+		restrictedAdd2 = add2.require( Function.argument(0).hastype('number'), Function.argument(0).between(0,5) )
+		
+		equal safeAdd2(2), 4, 'Works as normal if requirements satisfied'
+		raises ( -> safeAdd2('fred') ), 'Throws exception if requirements not satisfied'
+		
+		equals restrictedAdd2(2), 4, 'Works as normal if requirments satisfied'
+		raises ( -> restrictedAdd2('fred') ), 'Throws exception if first requirment unsatisfied'
+		raises ( -> restrictedAdd2(6) ), 'Throws exception if second requirment unsatisfied'
+	
+	
 	module 'Typed functions'
 	
 	test 'Function.From', ->
