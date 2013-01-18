@@ -309,3 +309,17 @@
 		getName = -> this.name
 			
 		equals getName.bind(person)(), 'fred', 'bind works'
+		
+	test 'Function::curry', ->
+	    
+	   add = (a,b) -> a+b
+	  
+	   equals add.curry(3)(5), 8, 'curry works'
+	   
+	test 'except', ->
+	
+		faulty = -> throw 'bang!'
+		handled = faulty.except( (err) -> 'Error: '+err )
+			
+		equal handled(), 'Error: bang!', 'except works correctly in simplest case'
+	

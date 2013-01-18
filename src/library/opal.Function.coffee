@@ -218,10 +218,12 @@
 		fn = this
 		(args2...) -> fn.apply context, Array.concat(args1,args2)
 	
+	# Tests: full
 	Function::curry = (args1...) ->
 		fn = this
-		(args2...) -> fn.apply this, args1.concat(args2)
+		(args2...) -> fn.apply this, Array.concat(args1,args2)
 	
+	# Tests: full
 	Function::except = (handler) ->
 		fn = this
 		(args...) ->
