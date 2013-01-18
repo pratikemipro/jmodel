@@ -241,12 +241,17 @@
 	Function::delay ?= (duration=1,args1...) ->
 		fn = this
 		(args2...) -> setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration
-		
-	# Mapping methods
-		
+	
+	##	
+	## Mapping methods
+	##
+	
+	# Tests: full	
 	Function::map = (mapping) -> @then Function.map mapping
 
-	# Predicate methods
+	##
+	## Predicate methods
+	##
 		
 	Function::is = Function::then
 		

@@ -316,18 +316,30 @@
 	  
 	   equals add.curry(3)(5), 8, 'curry works'
 	   
-	test 'except', ->
+	test 'Function::except', ->
 	
 		faulty = -> throw 'bang!'
 		handled = faulty.except( (err) -> 'Error: '+err )
 			
 		equal handled(), 'Error: bang!', 'except works correctly in simplest case'
 		
-	test 'memo', ->
+	test 'Function::memo', ->
 	
 		add = ( (a,b) -> a+b ).memo();
 		
 		equals add(2,3), 5, 'memoized function works normally on first call'
 		equals add(2,3), 5, 'memoized function works normally on subsequent calls'
+		
+	module 'Mapping methods'
 	
+	test 'Function::map', ->
+	
+		mod2 = (x) -> x % 2
+		oddEven = mod2.map
+			0: 'even',
+			1: 'odd'
+			
+		equal oddEven(6), 'even', 'Works for first mapping entry'
+		equal oddEven(7), 'odd', 'Works for second mapping entry'
+
 	

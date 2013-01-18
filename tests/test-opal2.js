@@ -433,7 +433,7 @@ define(['jmodel/opal2'], function() {
     };
     return equals(add.curry(3)(5), 8, 'curry works');
   });
-  test('except', function() {
+  test('Function::except', function() {
     var faulty, handled;
     faulty = function() {
       throw 'bang!';
@@ -443,13 +443,26 @@ define(['jmodel/opal2'], function() {
     });
     return equal(handled(), 'Error: bang!', 'except works correctly in simplest case');
   });
-  test('memo', function() {
+  test('Function::memo', function() {
     var add;
     add = (function(a, b) {
       return a + b;
     }).memo();
     equals(add(2, 3), 5, 'memoized function works normally on first call');
     return equals(add(2, 3), 5, 'memoized function works normally on subsequent calls');
+  });
+  module('Mapping methods');
+  test('Function::map', function() {
+    var mod2, oddEven;
+    mod2 = function(x) {
+      return x % 2;
+    };
+    oddEven = mod2.map({
+      0: 'even',
+      1: 'odd'
+    });
+    equal(oddEven(6), 'even', 'Works for first mapping entry');
+    return equal(oddEven(7), 'odd', 'Works for second mapping entry');
   });
   module('Number');
   test('Integer', function() {
