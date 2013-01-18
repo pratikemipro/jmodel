@@ -300,3 +300,12 @@
 			
 		equals fn.extend(type:'accessor').type, 'accessor', 'extend sets properties of function'
 		equals fn.extend(type:'accessor')(), 'red', 'function runs normally after use of "extend"'
+		
+	module 'Application methods'
+	
+	test 'Function::bind', ->
+	
+		person = name:'fred'
+		getName = -> this.name
+			
+		equals getName.bind(person)(), 'fred', 'bind works'

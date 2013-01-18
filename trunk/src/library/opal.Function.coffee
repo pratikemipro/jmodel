@@ -197,7 +197,9 @@
 	Function.between = ( Function.Requiring (lower,higher) -> lower <= higher ) (lower,higher) ->
 		Predicate (x) -> lower <= x <= higher
 	
-	# Property methods
+	##
+	## Property methods
+	##
 	
 	# Tests: full
 	Function::as = (name) ->
@@ -207,11 +209,14 @@
 	# Tests: full
 	Function::extend = (properties) -> Object.extend this, properties
 	
-	# Application methods
+	##
+	## Application methods
+	##
 	
+	# Tests: full
 	Function::bind = (context,args1...) ->
 		fn = this
-		(args2...) -> fn.apply context, args1.concat(args2)
+		(args2...) -> fn.apply context, Array.concat(args1,args2)
 	
 	Function::curry = (args1...) ->
 		fn = this

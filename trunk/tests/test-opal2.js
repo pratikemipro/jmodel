@@ -415,6 +415,17 @@ define(['jmodel/opal2'], function() {
       type: 'accessor'
     })(), 'red', 'function runs normally after use of "extend"');
   });
+  module('Application methods');
+  test('Function::bind', function() {
+    var getName, person;
+    person = {
+      name: 'fred'
+    };
+    getName = function() {
+      return this.name;
+    };
+    return equals(getName.bind(person)(), 'fred', 'bind works');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
