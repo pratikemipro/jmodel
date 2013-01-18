@@ -35,8 +35,7 @@
 	Object.ensure = (constructor) ->
 		isa = Object.isa constructor
 		construct = Object.construct arguments...
-		(obj) ->
-			if isa obj then obj else construct arguments...
+		(obj) -> if isa obj then obj else construct arguments...
 			
 	##
 	## Bare objects
@@ -52,8 +51,13 @@
 		equal &&= a[prop] == b[prop] for own prop of a
 		equal &&= a[prop] == b[prop] for own prop of b
 		return equal
-		
+	
+	# Tests: full
 	Object.remove = (fields...) ->
+		(source) ->
+			obj = {}
+			( obj[key] = value unless key in fields ) for own key, value of source
+			return obj
 		
 	Object.project = (fields...) ->
 		
