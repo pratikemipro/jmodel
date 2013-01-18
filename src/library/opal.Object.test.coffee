@@ -80,8 +80,16 @@
 	
 	test 'Object.remove', ->
 	
-		removeProperties = Object.remove('age','surname');
+		removeProperties = Object.remove 'age', 'surname'
 		
 		equals removeProperties(forename:'fred',surname:'smith',age:20).age, undefined, 'Removes first listed property'
 		equals removeProperties(forename:'fred',surname:'smith',age:20).surname, undefined, 'Removes second listed property'
 		equals removeProperties(forename:'fred',surname:'smith',age:20).forename, 'fred', 'Leaves other properties unchanged'
+
+	test 'project', ->
+	
+		projectProperties = Object.project 'age', 'surname'
+		
+		equals projectProperties(forename:'fred',surname:'smith',age:20).age, 20, 'Preserves first listed property'
+		equals projectProperties(forename:'fred',surname:'smith',age:20).surname, 'smith', 'Preserves other listed properties'
+		equals projectProperties(forename:'fred',surname:'smith',age:20).forename, undefined, 'Removes other listed properties'
