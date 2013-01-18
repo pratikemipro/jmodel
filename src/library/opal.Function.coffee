@@ -204,7 +204,8 @@
 		@displayName = name
 		this
 	
-#	Function::extend = (properties) -> Object.extend this, properties
+	# Tests: full
+	Function::extend = (properties) -> Object.extend this, properties
 	
 	# Application methods
 	

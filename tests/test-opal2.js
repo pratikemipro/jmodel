@@ -403,6 +403,18 @@ define(['jmodel/opal2'], function() {
     equals(fn.as('test').displayName, 'test', 'as sets displayName of function');
     return equals(fn.as('test')(), 'red', 'function runs normally after use of "as"');
   });
+  test('Function::extend', function() {
+    var fn;
+    fn = function() {
+      return 'red';
+    };
+    equals(fn.extend({
+      type: 'accessor'
+    }).type, 'accessor', 'extend sets properties of function');
+    return equals(fn.extend({
+      type: 'accessor'
+    })(), 'red', 'function runs normally after use of "extend"');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');

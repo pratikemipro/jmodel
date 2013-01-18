@@ -293,4 +293,10 @@
 			
 		equals fn.as('test').displayName, 'test', 'as sets displayName of function'
 		equals fn.as('test')(), 'red', 'function runs normally after use of "as"'
+		
+	test 'Function::extend', ->
 	
+		fn = -> 'red'
+			
+		equals fn.extend(type:'accessor').type, 'accessor', 'extend sets properties of function'
+		equals fn.extend(type:'accessor')(), 'red', 'function runs normally after use of "extend"'

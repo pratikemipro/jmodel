@@ -375,6 +375,9 @@ define(function() {
     this.displayName = name;
     return this;
   };
+  Function.prototype.extend = function(properties) {
+    return Object.extend(this, properties);
+  };
   Function.prototype.bind = function() {
     var args1, context, fn;
     context = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
