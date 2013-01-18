@@ -96,7 +96,8 @@
 	
 	# Tests: full
 	Function::pre = (pre) -> pre.but this
-		
+	
+	# Tests: full	
 	Function::post = (post) ->
 		fn = this
 		(args...) ->

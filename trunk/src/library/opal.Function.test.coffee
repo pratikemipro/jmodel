@@ -142,6 +142,15 @@
 		equal red.pre(inc)(), 'red', 'pre does not interfere with function'
 		equal a, 1, 'pre function runs first'
 		equal getA.pre(inc)(), 2, 'pre function runs first'
+		
+	test 'post', ->
+	
+		logged = ''
+		log = (c,a,b) -> logged = a+'+'+b+'='+c
+		add = ((a,b) -> a+b).post(log)
+			
+		equal add(2,3), 5, 'Post-function does not affect operation of function'
+		equal logged, '2+3=5', 'Post-function is run and has access to arguments and return value'
 	
 	module 'Preconditions and postconditions'
 	
