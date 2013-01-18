@@ -385,7 +385,7 @@ define(function() {
     return function() {
       var args2;
       args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn.apply(context, args1.concat(args2));
+      return fn.apply(context, Array.concat(args1, args2));
     };
   };
   Function.prototype.curry = function() {
