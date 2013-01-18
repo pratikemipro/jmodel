@@ -227,6 +227,25 @@ define(['jmodel/opal2'], function() {
       return restrictedAdd2(6);
     }), 'Throws exception if second requirment unsatisfied');
   });
+  test('ensure', function() {
+    var add, faultyAdd, safeAdd, safeFaultyAdd;
+    add = function(a, b) {
+      return a + b;
+    };
+    faultyAdd = function(a, b) {
+      return a + b + 1;
+    };
+    safeAdd = add.ensure(function(c, a, b) {
+      return c === a + b;
+    });
+    safeFaultyAdd = faultyAdd.ensure(function(c, a, b) {
+      return c === a + b;
+    });
+    equals(safeAdd(2, 3), 5, 'Works as expected when postcondition satisfied');
+    return raises((function() {
+      return safeFaultyAdd(2, 3);
+    }), 'Throws exception if postcondition unsatisfied');
+  });
   module('Typed functions');
   test('Function.From', function() {
     var Person, fred, inc, repeat, _class;

@@ -166,7 +166,16 @@
 		equals restrictedAdd2(2), 4, 'Works as normal if requirments satisfied'
 		raises ( -> restrictedAdd2('fred') ), 'Throws exception if first requirment unsatisfied'
 		raises ( -> restrictedAdd2(6) ), 'Throws exception if second requirment unsatisfied'
+		
+	test 'ensure', ->
 	
+		add = (a,b) -> a+b
+		faultyAdd = (a,b) -> a+b+1
+		safeAdd = add.ensure( (c,a,b) -> c == a+b )
+		safeFaultyAdd = faultyAdd.ensure( (c,a,b) -> c == a+b )
+			
+		equals safeAdd(2,3), 5, 'Works as expected when postcondition satisfied'
+		raises ( -> safeFaultyAdd(2,3) ), 'Throws exception if postcondition unsatisfied'
 	
 	module 'Typed functions'
 	
