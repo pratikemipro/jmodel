@@ -436,7 +436,7 @@ define(function() {
       return function() {
         var args2;
         args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return setTimeout(fn.curry.apply(fn, args1.concat(args2)), duration);
+        return setTimeout(fn.curry.apply(fn, Array.concat(args1, args2)), duration);
       };
     };
   }
