@@ -121,6 +121,18 @@ define(function() {
       };
     }
   };
+  Object.ensure = function(constructor) {
+    var construct, isa;
+    isa = Object.isa(constructor);
+    construct = Object.construct.apply(Object, arguments);
+    return function(obj) {
+      if (isa(obj)) {
+        return obj;
+      } else {
+        return construct.apply(null, arguments);
+      }
+    };
+  };
   Function.identity = function(x) {
     return x;
   };
