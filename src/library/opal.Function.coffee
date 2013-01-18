@@ -108,7 +108,8 @@
 	##
 	## Preconditions and postconditions
 	##
-		
+	
+	# Tests: full
 	Function::require = (predicates...) ->
 		predicate = Function.and predicates...
 		@pre (args...) ->

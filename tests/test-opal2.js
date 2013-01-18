@@ -208,6 +208,25 @@ define(['jmodel/opal2'], function() {
     return equal(logged, '2+3=5', 'Post-function is run and has access to arguments and return value');
   });
   module('Preconditions and postconditions');
+  test('require', function() {
+    var add2, restrictedAdd2, safeAdd2;
+    add2 = function(x) {
+      return x + 2;
+    };
+    safeAdd2 = add2.require(Function.argument(0).hastype('number'));
+    restrictedAdd2 = add2.require(Function.argument(0).hastype('number'), Function.argument(0).between(0, 5));
+    equal(safeAdd2(2), 4, 'Works as normal if requirements satisfied');
+    raises((function() {
+      return safeAdd2('fred');
+    }), 'Throws exception if requirements not satisfied');
+    equals(restrictedAdd2(2), 4, 'Works as normal if requirments satisfied');
+    raises((function() {
+      return restrictedAdd2('fred');
+    }), 'Throws exception if first requirment unsatisfied');
+    return raises((function() {
+      return restrictedAdd2(6);
+    }), 'Throws exception if second requirment unsatisfied');
+  });
   module('Typed functions');
   test('Function.From', function() {
     var Person, fred, inc, repeat, _class;
