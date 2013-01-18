@@ -24,8 +24,16 @@
 			args = Array.concat args1, args2
 			new constructor args...
 
+	# Tests: none
 	Object.isa = (constructor) ->
 		if      constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'
 		else if constructor == String  then (obj) -> obj instanceof String or typeof obj == 'string'
 		else if constructor == Boolean then (obj) -> obj instanceof Boolean or typeof obj == 'boolean'
 		else                                (obj) -> obj instanceof constructor
+	
+	# Tests: full		
+	Object.ensure = (constructor) ->
+		isa = Object.isa constructor
+		construct = Object.construct arguments...
+		(obj) ->
+			if isa obj then obj else construct arguments...

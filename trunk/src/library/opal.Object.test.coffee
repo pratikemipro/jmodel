@@ -53,3 +53,14 @@
 		equals Object.construct(Date)(1997,7,29,11,37,45,231).getMinutes(), 37, 'Construct creates date with correct minutes from seven integers'
 		equals Object.construct(Date)(1997,7,29,11,37,45,231).getSeconds(), 45, 'Construct creates date with correct seconds from seven integers'
 		equals Object.construct(Date)(1997,7,29,11,37,45,231).getMilliseconds(), 231, 'Construct creates date with correct milliseconds from seven integers'
+		
+	test 'ensure', ->
+	
+		Person = (@name,@age) ->
+		
+		fred = new Person('fred',30);
+		
+		equals Object.ensure(Person)(fred), fred, 'Acts as identity when object is already of type'
+		equals Object.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type'
+		
+		equals Object.ensure(Person,'fred')(28).name, 'fred', 'Allows passing at definition time'
