@@ -114,7 +114,8 @@
 		predicate = Function.and predicates...
 		@pre (args...) ->
 			throw 'Precondition failure' unless predicate.apply this, args
-		
+	
+	# Tests: full
 	Function::ensure = (predicates...) ->
 		predicate = Function.and predicates...
 		@post (args...) ->
