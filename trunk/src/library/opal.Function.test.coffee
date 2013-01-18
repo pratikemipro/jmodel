@@ -322,4 +322,12 @@
 		handled = faulty.except( (err) -> 'Error: '+err )
 			
 		equal handled(), 'Error: bang!', 'except works correctly in simplest case'
+		
+	test 'memo', ->
+	
+		add = ( (a,b) -> a+b ).memo();
+		
+		equals add(2,3), 5, 'memoized function works normally on first call'
+		equals add(2,3), 5, 'memoized function works normally on subsequent calls'
+	
 	

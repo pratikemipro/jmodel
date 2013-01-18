@@ -230,7 +230,8 @@
 			try fn.apply this, args
 			catch error
 				handler.call this, error
-				
+	
+	# Tests: full			
 	Function::memo = ->
 		cache = {}
 		fn = @post (ret,args...) -> cache[args] = ret
