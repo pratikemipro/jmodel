@@ -184,7 +184,18 @@ define(function() {
       return obj;
     };
   };
-  Object.rename = function(renaming) {};
+  Object.rename = function(renaming) {
+    return function(source) {
+      var key, obj, value;
+      obj = {};
+      for (key in source) {
+        if (!__hasProp.call(source, key)) continue;
+        value = source[key];
+        obj[renaming[key] || key] = value;
+      }
+      return obj;
+    };
+  };
   Object.union = function() {
     var objects;
     objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

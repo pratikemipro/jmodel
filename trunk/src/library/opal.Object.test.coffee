@@ -93,3 +93,19 @@
 		equals projectProperties(forename:'fred',surname:'smith',age:20).age, 20, 'Preserves first listed property'
 		equals projectProperties(forename:'fred',surname:'smith',age:20).surname, 'smith', 'Preserves other listed properties'
 		equals projectProperties(forename:'fred',surname:'smith',age:20).forename, undefined, 'Removes other listed properties'
+		
+	test 'rename', ->
+	
+		renameProperties = Object.rename
+			forename: 'personalName'
+			surname: 'familyName'
+		
+		equals renameProperties(forename:'fred',surname:'smith',age:20).forename, undefined, 'Old name of first renamed property unavailable'
+		equals renameProperties(forename:'fred',surname:'smith',age:20).surname, undefined, 'Old name of second renamed property unavailable'
+		
+		equals renameProperties(forename:'fred',surname:'smith',age:20).personalName, 'fred', 'New name of first renamed property available'
+		equals renameProperties(forename:'fred',surname:'smith',age:20).familyName, 'smith', 'New name of second renamed property available'
+		
+		equals renameProperties(forename:'fred',surname:'smith',age:20).age, 20, 'Other properties preserved'
+		
+		
