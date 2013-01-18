@@ -125,34 +125,44 @@
 	## Typed functions
 	##
 	
+	# Tests: none
 	Function.hastypes = (types...) ->
 		predicate = Function.and (Function.argument(n).then(Object.isa type) for type, n in types)...
 		(args...) -> predicate args...
 	
+	# Tests: none
 	Function::Requiring = (predicates...) ->
 		@then (fn) -> fn.require predicates...
 	
+	# Tests: none
 	Function.Requiring = (predicates...) ->
 		(fn) -> fn.require predicates...
-		
+	
+	# Tests: none	
 	Function::Ensuring = (predicates...) ->
 		@then (fn) -> fn.ensure predicates...
 	
+	# Tests: none
 	Function.Ensuring = (predicates...) ->
 		(fn) -> fn.ensure predicates...
 
+	# Tests: partial
 	Function::From = (types...) ->
 		@Requiring Function.hastypes types...
 
+	# Tests: full
 	Function.From = (types...) ->
 		Function.Requiring Function.hastypes types...
 
+	# Tests: partial
 	Function::To = (type) ->
 		@Ensuring Object.isa type
 
+	# Tests: full
 	Function.To = (type) ->
 		Function.Ensuring Object.isa type
 	
+	# Tests: none
 	window.Predicate = Function.To Boolean
 	
 	##	
