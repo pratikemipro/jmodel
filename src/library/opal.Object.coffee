@@ -65,8 +65,13 @@
 			obj = {}
 			( obj[key] = value if key in fields ) for own key, value of source
 			return obj
-		
+	
+	# Tests: full	
 	Object.rename = (renaming) ->
+		(source) ->
+			obj = {}
+			( obj[ renaming[key] or key ] = value ) for own key, value of source
+			return obj
 		
 	Object.union = (objects...) ->
 		

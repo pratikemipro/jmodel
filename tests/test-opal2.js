@@ -154,6 +154,38 @@ define(['jmodel/opal2'], function() {
       age: 20
     }).forename, void 0, 'Removes other listed properties');
   });
+  test('rename', function() {
+    var renameProperties;
+    renameProperties = Object.rename({
+      forename: 'personalName',
+      surname: 'familyName'
+    });
+    equals(renameProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).forename, void 0, 'Old name of first renamed property unavailable');
+    equals(renameProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).surname, void 0, 'Old name of second renamed property unavailable');
+    equals(renameProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).personalName, 'fred', 'New name of first renamed property available');
+    equals(renameProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).familyName, 'smith', 'New name of second renamed property available');
+    return equals(renameProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).age, 20, 'Other properties preserved');
+  });
   module('Basic functions');
   test('Function.identity', function() {
     var obj;
