@@ -285,4 +285,12 @@
 		equal Function.between(3,5)(6), false, 'returns false when applied to value greater than upper bound'
 		raises ( -> Function.between(5,3) ), 'throws exception when lower bound not less or equal to upper bound'
 		
+	module 'Property methods'
+	
+	test 'Function::as', ->
+	
+		fn = -> 'red'
+			
+		equals fn.as('test').displayName, 'test', 'as sets displayName of function'
+		equals fn.as('test')(), 'red', 'function runs normally after use of "as"'
 	
