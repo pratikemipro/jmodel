@@ -64,3 +64,17 @@
 		equals Object.ensure(Person)('jane',28) instanceof Person, true, 'Constructs new object when arguments not already of type'
 		
 		equals Object.ensure(Person,'fred')(28).name, 'fred', 'Allows passing at definition time'
+		
+	module 'Bare objects'
+	
+	test 'equal', ->
+	
+		equals Object.equal(undefined,{name:'fred'}), false, 'Returns false if first argument undefined'
+		equals Object.equal({name:'fred'},undefined), false, 'Returns false if second argument undefined'
+		
+		equals Object.equal({name:'fred',age:20},{name:'fred',age:20}), true, 'Returns true if objects have same properties and property valeus'
+		
+		equals Object.equal({name:'fred',age:20},{name:'fred'}), false, 'Returns false if first object has a property that second does not have'
+		equals Object.equal({name:'fred'},{name:'fred',age:20}), false, 'Returns false if second object has a property that second does not have'
+		equals Object.equal({name:'fred',age:20},{name:'fred',age:25}), false, 'Returns false if objects have same properties but different property valeus'
+	

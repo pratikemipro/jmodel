@@ -45,7 +45,13 @@
 	# Tests: none
 	Object.copy = (obj) -> Object.extend {}, obj
 	
+	# Tests: full
 	Object.equal = (a,b) ->
+		return false if a == undefined or b == undefined
+		equal = true
+		equal &&= a[prop] == b[prop] for own prop of a
+		equal &&= a[prop] == b[prop] for own prop of b
+		return equal
 		
 	Object.remove = (fields...) ->
 		

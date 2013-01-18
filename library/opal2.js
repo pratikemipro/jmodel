@@ -133,6 +133,44 @@ define(function() {
       }
     };
   };
+  Object.copy = function(obj) {
+    return Object.extend({}, obj);
+  };
+  Object.equal = function(a, b) {
+    var equal, prop;
+    if (a === void 0 || b === void 0) {
+      return false;
+    }
+    equal = true;
+    for (prop in a) {
+      if (!__hasProp.call(a, prop)) continue;
+      equal && (equal = a[prop] === b[prop]);
+    }
+    for (prop in b) {
+      if (!__hasProp.call(b, prop)) continue;
+      equal && (equal = a[prop] === b[prop]);
+    }
+    return equal;
+  };
+  Object.remove = function() {
+    var fields;
+    fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  };
+  Object.project = function() {
+    var fields;
+    fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  };
+  Object.rename = function(renaming) {};
+  Object.union = function() {
+    var objects;
+    objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  };
+  Object.intersection = function() {
+    var objects;
+    objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  };
+  Object.difference = function(a, b) {};
+  Object.join = function(predicate) {};
   Function.identity = function(x) {
     return x;
   };
