@@ -13,7 +13,7 @@
 		equals target.forename, 'john', 'Copies first property correctly'
 		equals target.surname, 'smith', 'Copies second property correctly'
 		
-	test 'construct', ->
+	test 'Object.construct', ->
 	
 		Person = (@name,@age) ->
 		
@@ -54,7 +54,7 @@
 		equals Object.construct(Date)(1997,7,29,11,37,45,231).getSeconds(), 45, 'Construct creates date with correct seconds from seven integers'
 		equals Object.construct(Date)(1997,7,29,11,37,45,231).getMilliseconds(), 231, 'Construct creates date with correct milliseconds from seven integers'
 		
-	test 'ensure', ->
+	test 'Object.ensure', ->
 	
 		Person = (@name,@age) ->
 		
@@ -67,7 +67,7 @@
 		
 	module 'Bare objects'
 	
-	test 'equal', ->
+	test 'Object.equal', ->
 	
 		equals Object.equal(undefined,{name:'fred'}), false, 'Returns false if first argument undefined'
 		equals Object.equal({name:'fred'},undefined), false, 'Returns false if second argument undefined'
@@ -78,3 +78,10 @@
 		equals Object.equal({name:'fred'},{name:'fred',age:20}), false, 'Returns false if second object has a property that second does not have'
 		equals Object.equal({name:'fred',age:20},{name:'fred',age:25}), false, 'Returns false if objects have same properties but different property valeus'
 	
+	test 'Object.remove', ->
+	
+		removeProperties = Object.remove('age','surname');
+		
+		equals removeProperties(forename:'fred',surname:'smith',age:20).age, undefined, 'Removes first listed property'
+		equals removeProperties(forename:'fred',surname:'smith',age:20).surname, undefined, 'Removes second listed property'
+		equals removeProperties(forename:'fred',surname:'smith',age:20).forename, 'fred', 'Leaves other properties unchanged'

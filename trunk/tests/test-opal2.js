@@ -33,7 +33,7 @@ define(['jmodel/opal2'], function() {
     equals(target.forename, 'john', 'Copies first property correctly');
     return equals(target.surname, 'smith', 'Copies second property correctly');
   });
-  test('construct', function() {
+  test('Object.construct', function() {
     var Person;
     Person = function(name, age) {
       this.name = name;
@@ -70,7 +70,7 @@ define(['jmodel/opal2'], function() {
     equals(Object.construct(Date)(1997, 7, 29, 11, 37, 45, 231).getSeconds(), 45, 'Construct creates date with correct seconds from seven integers');
     return equals(Object.construct(Date)(1997, 7, 29, 11, 37, 45, 231).getMilliseconds(), 231, 'Construct creates date with correct milliseconds from seven integers');
   });
-  test('ensure', function() {
+  test('Object.ensure', function() {
     var Person, fred;
     Person = function(name, age) {
       this.name = name;
@@ -82,7 +82,7 @@ define(['jmodel/opal2'], function() {
     return equals(Object.ensure(Person, 'fred')(28).name, 'fred', 'Allows passing at definition time');
   });
   module('Bare objects');
-  test('equal', function() {
+  test('Object.equal', function() {
     equals(Object.equal(void 0, {
       name: 'fred'
     }), false, 'Returns false if first argument undefined');
@@ -115,6 +115,25 @@ define(['jmodel/opal2'], function() {
       name: 'fred',
       age: 25
     }), false, 'Returns false if objects have same properties but different property valeus');
+  });
+  test('Object.remove', function() {
+    var removeProperties;
+    removeProperties = Object.remove('age', 'surname');
+    equals(removeProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).age, void 0, 'Removes first listed property');
+    equals(removeProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).surname, void 0, 'Removes second listed property');
+    return equals(removeProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).forename, 'fred', 'Leaves other properties unchanged');
   });
   module('Basic functions');
   test('Function.identity', function() {
