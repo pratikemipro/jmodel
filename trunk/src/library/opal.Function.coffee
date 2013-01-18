@@ -236,10 +236,11 @@
 		cache = {}
 		fn = @post (ret,args...) -> cache[args] = ret
 		(args...) -> cache[args] ? fn.apply this, arguments
-		
+	
+	# Tests: none
 	Function::delay ?= (duration=1,args1...) ->
 		fn = this
-		(args2...) -> setTimeout fn.curry.apply(fn,args1.concat(args2)), duration
+		(args2...) -> setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration
 		
 	# Mapping methods
 		
