@@ -443,6 +443,14 @@ define(['jmodel/opal2'], function() {
     });
     return equal(handled(), 'Error: bang!', 'except works correctly in simplest case');
   });
+  test('memo', function() {
+    var add;
+    add = (function(a, b) {
+      return a + b;
+    }).memo();
+    equals(add(2, 3), 5, 'memoized function works normally on first call');
+    return equals(add(2, 3), 5, 'memoized function works normally on subsequent calls');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
