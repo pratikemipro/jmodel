@@ -426,6 +426,23 @@ define(['jmodel/opal2'], function() {
     };
     return equals(getName.bind(person)(), 'fred', 'bind works');
   });
+  test('Function::curry', function() {
+    var add;
+    add = function(a, b) {
+      return a + b;
+    };
+    return equals(add.curry(3)(5), 8, 'curry works');
+  });
+  test('except', function() {
+    var faulty, handled;
+    faulty = function() {
+      throw 'bang!';
+    };
+    handled = faulty.except(function(err) {
+      return 'Error: ' + err;
+    });
+    return equal(handled(), 'Error: bang!', 'except works correctly in simplest case');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
