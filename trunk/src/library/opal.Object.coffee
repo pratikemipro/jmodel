@@ -37,3 +37,27 @@
 		construct = Object.construct arguments...
 		(obj) ->
 			if isa obj then obj else construct arguments...
+			
+	##
+	## Bare objects
+	##
+	
+	# Tests: none
+	Object.copy = (obj) -> Object.extend {}, obj
+	
+	Object.equal = (a,b) ->
+		
+	Object.remove = (fields...) ->
+		
+	Object.project = (fields...) ->
+		
+	Object.rename = (renaming) ->
+		
+	Object.union = (objects...) ->
+		
+	Object.intersection = (objects...) ->
+		
+	Object.difference = (a,b) ->
+		
+	Object.join = (predicate) ->
+		
