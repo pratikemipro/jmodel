@@ -108,4 +108,28 @@
 		
 		equals renameProperties(forename:'fred',surname:'smith',age:20).age, 20, 'Other properties preserved'
 		
+	test 'union', ->
+	
+		a = 
+			forename: 'fred',
+			surname: 'smith'
+		
+		b = 
+			surname: 'jones',
+			age: 20
+		
+		c =
+			department: 'IT'
+		
+		
+		d = Object.union a, b, c
+		
+		equals d.forename, 'fred', 'Union has property possed only by first object'
+		equals d.age, 20, 'Union has property possed only by second object'
+		equals d.department, 'IT', 'Union has property possed only by third object'
+		notEqual d.surname, undefined, 'Union has shared property'
+		equals d.surname, 'jones', 'Later objects supercede earlier ones for shared property values'
+		
+		deepEqual Object.union(a), a, 'Union of single object is a copy of that object'
+		deepEqual Object.union(), {}, 'Union of no objects is undefined'
 		
