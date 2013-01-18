@@ -199,6 +199,7 @@
 	
 	# Property methods
 	
+	# Tests: full
 	Function::as = (name) ->
 		@displayName = name
 		this

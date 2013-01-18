@@ -394,6 +394,15 @@ define(['jmodel/opal2'], function() {
       return Function.between(5, 3);
     }), 'throws exception when lower bound not less or equal to upper bound');
   });
+  module('Property methods');
+  test('Function::as', function() {
+    var fn;
+    fn = function() {
+      return 'red';
+    };
+    equals(fn.as('test').displayName, 'test', 'as sets displayName of function');
+    return equals(fn.as('test')(), 'red', 'function runs normally after use of "as"');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
