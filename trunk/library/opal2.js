@@ -197,8 +197,16 @@ define(function() {
     };
   };
   Object.union = function() {
-    var objects;
-    objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    var first, rest;
+    first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    switch (arguments.length) {
+      case 1:
+        return first;
+      case 0:
+        return {};
+      default:
+        return Object.extend(Object.copy(first), Object.union.apply(Object, rest));
+    }
   };
   Object.intersection = function() {
     var objects;

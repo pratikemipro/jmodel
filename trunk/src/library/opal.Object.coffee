@@ -72,8 +72,13 @@
 			obj = {}
 			( obj[ renaming[key] or key ] = value ) for own key, value of source
 			return obj
-		
-	Object.union = (objects...) ->
+	
+	# Tests: full
+	Object.union = (first,rest...) ->
+		switch arguments.length
+			when 1 then first
+			when 0 then {}
+			else Object.extend Object.copy(first), Object.union rest...
 		
 	Object.intersection = (objects...) ->
 		
