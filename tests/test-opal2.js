@@ -195,6 +195,18 @@ define(['jmodel/opal2'], function() {
     equal(a, 1, 'pre function runs first');
     return equal(getA.pre(inc)(), 2, 'pre function runs first');
   });
+  test('post', function() {
+    var add, log, logged;
+    logged = '';
+    log = function(c, a, b) {
+      return logged = a + '+' + b + '=' + c;
+    };
+    add = (function(a, b) {
+      return a + b;
+    }).post(log);
+    equal(add(2, 3), 5, 'Post-function does not affect operation of function');
+    return equal(logged, '2+3=5', 'Post-function is run and has access to arguments and return value');
+  });
   module('Preconditions and postconditions');
   module('Typed functions');
   test('Function.From', function() {
