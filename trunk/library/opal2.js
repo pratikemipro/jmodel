@@ -171,6 +171,18 @@ define(function() {
   Object.project = function() {
     var fields;
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return function(source) {
+      var key, obj, value;
+      obj = {};
+      for (key in source) {
+        if (!__hasProp.call(source, key)) continue;
+        value = source[key];
+        if (__indexOf.call(fields, key) >= 0) {
+          obj[key] = value;
+        }
+      }
+      return obj;
+    };
   };
   Object.rename = function(renaming) {};
   Object.union = function() {

@@ -58,8 +58,13 @@
 			obj = {}
 			( obj[key] = value unless key in fields ) for own key, value of source
 			return obj
-		
+	
+	# Tests: full	
 	Object.project = (fields...) ->
+		(source) ->
+			obj = {}
+			( obj[key] = value if key in fields ) for own key, value of source
+			return obj
 		
 	Object.rename = (renaming) ->
 		

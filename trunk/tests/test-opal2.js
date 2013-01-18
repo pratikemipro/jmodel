@@ -135,6 +135,25 @@ define(['jmodel/opal2'], function() {
       age: 20
     }).forename, 'fred', 'Leaves other properties unchanged');
   });
+  test('project', function() {
+    var projectProperties;
+    projectProperties = Object.project('age', 'surname');
+    equals(projectProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).age, 20, 'Preserves first listed property');
+    equals(projectProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).surname, 'smith', 'Preserves other listed properties');
+    return equals(projectProperties({
+      forename: 'fred',
+      surname: 'smith',
+      age: 20
+    }).forename, void 0, 'Removes other listed properties');
+  });
   module('Basic functions');
   test('Function.identity', function() {
     var obj;
