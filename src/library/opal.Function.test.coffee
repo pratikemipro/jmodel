@@ -132,6 +132,17 @@
 	
 	module 'Aspect-like methods'
 	
+	test 'Function::pre', ->
+	
+		a = 0
+		red = -> 'red'
+		inc = -> a++
+		getA = -> a
+		
+		equal red.pre(inc)(), 'red', 'pre does not interfere with function'
+		equal a, 1, 'pre function runs first'
+		equal getA.pre(inc)(), 2, 'pre function runs first'
+	
 	module 'Preconditions and postconditions'
 	
 	module 'Typed functions'

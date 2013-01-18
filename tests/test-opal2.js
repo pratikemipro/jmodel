@@ -179,6 +179,22 @@ define(['jmodel/opal2'], function() {
     return equals(Function.not(Function.eq(5))(5), false, 'not returns false when predicate returns true');
   });
   module('Aspect-like methods');
+  test('Function::pre', function() {
+    var a, getA, inc, red;
+    a = 0;
+    red = function() {
+      return 'red';
+    };
+    inc = function() {
+      return a++;
+    };
+    getA = function() {
+      return a;
+    };
+    equal(red.pre(inc)(), 'red', 'pre does not interfere with function');
+    equal(a, 1, 'pre function runs first');
+    return equal(getA.pre(inc)(), 2, 'pre function runs first');
+  });
   module('Preconditions and postconditions');
   module('Typed functions');
   test('Function.From', function() {

@@ -93,7 +93,8 @@
 	##
 	## Aspect-like methods
 	##
-		
+	
+	# Tests: full
 	Function::pre = (pre) -> pre.but this
 		
 	Function::post = (post) ->
