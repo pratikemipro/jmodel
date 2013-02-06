@@ -25,6 +25,5 @@
 		(array) ->
 			return false if array.length != predicates.length
 			valid = true
-			for x, i in array
-				valid = valid && predicates[i](x)
+			( valid = valid and predicates[i](x) ) for x, i in array
 			valid
