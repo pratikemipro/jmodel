@@ -62,6 +62,31 @@ define(function() {
       return _results;
     })());
   };
+  Array.hastypes = function() {
+    var predicates, type, types;
+    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    predicates = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = types.length; _i < _len; _i++) {
+        type = types[_i];
+        _results.push(Object.isa(type));
+      }
+      return _results;
+    })();
+    return function(array) {
+      var i, valid, x, _i, _len;
+      if (array.length !== predicates.length) {
+        return false;
+      }
+      valid = true;
+      for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
+        x = array[i];
+        valid = valid && predicates[i](x);
+      }
+      return valid;
+    };
+  };
   Object.extend = function(target, source) {
     var key;
     for (key in source) {
