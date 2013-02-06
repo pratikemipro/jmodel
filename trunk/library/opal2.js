@@ -395,31 +395,31 @@ define(function() {
     return Function.Ensuring(Object.isa(type));
   };
   window.Predicate = Function.To(Boolean);
-  Function.prototype.and = function(fn2) {
-    var fn1;
-    fn1 = this;
+  Function.prototype.and = function(predicate2) {
+    var predicate1;
+    predicate1 = this;
     return Predicate(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) && fn2.apply(this, args);
+      return predicate1.apply(this, args) && predicate2.apply(this, args);
     });
   };
-  Function.prototype.or = function(fn2) {
-    var fn1;
-    fn1 = this;
+  Function.prototype.or = function(predicate2) {
+    var predicate1;
+    predicate1 = this;
     return Predicate(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) || fn2.apply(this, args);
+      return predicate1.apply(this, args) || predicate2.apply(this, args);
     });
   };
   Function.prototype.not = function() {
-    var fn;
-    fn = this;
+    var predicate;
+    predicate = this;
     return Predicate(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return !fn.apply(this, args);
+      return !predicate.apply(this, args);
     });
   };
   Function.and = function() {
