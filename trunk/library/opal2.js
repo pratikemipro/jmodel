@@ -403,21 +403,13 @@ define(function() {
     });
   };
   Function.hastypes = function() {
-    var n, predicate, type, types;
+    var predicate, types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicate = Function.and.apply(Function, (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (n = _i = 0, _len = types.length; _i < _len; n = ++_i) {
-        type = types[n];
-        _results.push(Function.argument(n).then(Object.isa(type)));
-      }
-      return _results;
-    })());
+    predicate = Array.hastypes.apply(Array, types);
     return function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return predicate.apply(null, args);
+      return predicate(args);
     };
   };
   Function.prototype.Requiring = function() {
