@@ -132,19 +132,21 @@
 	##
 	
 	# Tests: full
-	Function::and = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
+	Function::and = (predicate2) ->
+		predicate1 = this
+		Predicate (args...) ->
+			predicate1.apply(this,args) and predicate2.apply(this,args)
 			
 	# Tests: full
-	Function::or = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
+	Function::or = (predicate2) ->
+		predicate1 = this
+		Predicate (args...) ->
+			predicate1.apply(this,args) or predicate2.apply(this,args)
 	
 	# Tests: full
 	Function::not = ->
-		fn = this
-		Predicate (args...) -> not fn.apply this, args
+		predicate = this
+		Predicate (args...) -> not predicate.apply this, args
 	
 	# Tests: full
 	Function.and = (predicate,predicates...) ->
