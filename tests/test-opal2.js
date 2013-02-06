@@ -337,7 +337,7 @@ define(['jmodel/opal2'], function() {
       return x + 2;
     };
     safeAdd2 = add2.require(Function.argument(0).hastype('number'));
-    restrictedAdd2 = add2.require(Function.argument(0).hastype('number'), Function.argument(0).between(0, 5));
+    restrictedAdd2 = add2.require(Function.argument(0).hastype('number')).require(Function.argument(0).between(0, 5));
     equal(safeAdd2(2), 4, 'Works as normal if requirements satisfied');
     raises((function() {
       return safeAdd2('fred');
@@ -503,7 +503,10 @@ define(['jmodel/opal2'], function() {
     comp = gt.and(lt);
     equals(comp(4), true, 'true if both conditions true');
     equals(comp(1), false, 'false if first condition false');
-    return equals(comp(7), false, 'false if second condition false');
+    equals(comp(7), false, 'false if second condition false');
+    return raises((function() {
+      return gt.and(4);
+    }), 'raises an exception if argument is not a function');
   });
   test('Function::or', function() {
     var comp, gt, lt;
