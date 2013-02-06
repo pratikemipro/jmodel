@@ -261,6 +261,9 @@ define(function() {
   };
   Function.prototype.then = function(fn2) {
     var fn1;
+    if (typeof fn2 !== 'function') {
+      throw 'Precondition failure';
+    }
     fn1 = this;
     return function() {
       var args;
@@ -270,6 +273,9 @@ define(function() {
   };
   Function.prototype.but = function(fn2) {
     var fn1;
+    if (typeof fn2 !== 'function') {
+      throw 'Precondition failure';
+    }
     fn1 = this;
     return function() {
       var args;
@@ -279,8 +285,11 @@ define(function() {
     };
   };
   Function.pipe = function() {
-    var fn, fns;
+    var fn, fns, _ref;
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
+      throw 'Precondition failure';
+    }
     switch (arguments.length) {
       case 1:
         return fn;
@@ -291,8 +300,11 @@ define(function() {
     }
   };
   Function.compose = function() {
-    var fn, fns;
+    var fn, fns, _ref;
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
+      throw 'Precondition failure';
+    }
     switch (arguments.length) {
       case 1:
         return fn;
@@ -303,10 +315,16 @@ define(function() {
     }
   };
   Function.prototype.pre = function(pre) {
+    if (typeof pre !== 'function') {
+      throw 'Precondition failure';
+    }
     return pre.but(this);
   };
   Function.prototype.post = function(post) {
     var fn;
+    if (typeof post !== 'function') {
+      throw 'Precondition failure';
+    }
     fn = this;
     return function() {
       var args, ret;

@@ -260,7 +260,10 @@ define(['jmodel/opal2'], function() {
       return arr;
     };
     deepEqual(red.then(green)([]), ['red', 'green'], 'then works');
-    return deepEqual(red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative');
+    deepEqual(red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative');
+    return raises((function() {
+      return red.then('green');
+    }), 'Raises an exception if argument is not a function');
   });
   test('Function::but', function() {
     var arr, length, red;
@@ -273,7 +276,10 @@ define(['jmodel/opal2'], function() {
       return arr.length;
     };
     equal(red.but(length)(arr), 1, 'return value of second returned');
-    return deepEqual(arr, ['red'], 'first function has been applied');
+    deepEqual(arr, ['red'], 'first function has been applied');
+    return raises((function() {
+      return red.but('green');
+    }), 'Raises an exception if argument is not a function');
   });
   test('Function.pipe', function() {
     var addten, times2;
@@ -286,7 +292,10 @@ define(['jmodel/opal2'], function() {
     equals(Function.pipe(times2, addten)(7), 24, 'piping of two functions works');
     equals(Function.pipe(addten, times2)(7), 34, 'piping works in opposite direction');
     equals(Function.pipe(times2)(7), 14, 'pipe of a single function is just that function');
-    return equals(Function.pipe()(7), 7, 'pipe of no functions is identity');
+    equals(Function.pipe()(7), 7, 'pipe of no functions is identity');
+    return raises((function() {
+      return Function.pipe(times2, 7);
+    }), 'Raises an exception if argument is not a function');
   });
   test('Function.compose', function() {
     var addten, times2;
@@ -299,7 +308,10 @@ define(['jmodel/opal2'], function() {
     equals(Function.compose(times2, addten)(7), 34, 'composition of two functions works');
     equals(Function.compose(addten, times2)(7), 24, 'composition works in opposite direction');
     equals(Function.compose(times2)(7), 14, 'composition of a single function is just that function');
-    return equals(Function.compose()(7), 7, 'composition of no functions is identity');
+    equals(Function.compose()(7), 7, 'composition of no functions is identity');
+    return raises((function() {
+      return Function.compose(times2, 7);
+    }), 'Raises an exception if argument is not a function');
   });
   module('Aspect-like methods');
   test('Function::pre', function() {
@@ -316,7 +328,10 @@ define(['jmodel/opal2'], function() {
     };
     equal(red.pre(inc)(), 'red', 'pre does not interfere with function');
     equal(a, 1, 'pre function runs first');
-    return equal(getA.pre(inc)(), 2, 'pre function runs first');
+    equal(getA.pre(inc)(), 2, 'pre function runs first');
+    return raises((function() {
+      return red.pre('fred');
+    }), 'Raises an exception if argument is not a function');
   });
   test('post', function() {
     var add, log, logged;
@@ -328,7 +343,12 @@ define(['jmodel/opal2'], function() {
       return a + b;
     }).post(log);
     equal(add(2, 3), 5, 'Post-function does not affect operation of function');
-    return equal(logged, '2+3=5', 'Post-function is run and has access to arguments and return value');
+    equal(logged, '2+3=5', 'Post-function is run and has access to arguments and return value');
+    return raises((function() {
+      return (function(a, b) {
+        return a + b;
+      }).post('fred');
+    }), 'Raises an exception if argument is not a function');
   });
   module('Preconditions and postconditions');
   test('require', function() {
