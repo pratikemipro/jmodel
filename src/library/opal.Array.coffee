@@ -18,3 +18,13 @@
 	# Tests: full	
 	Array.flatten = (array=[]) ->
 		Array.concat ( ( if arr instanceof Array then Array.flatten(arr) else arr ) for arr in array )...
+		
+	# Tests: full
+	Array.hastypes = (types...) ->
+		predicates = ( Object.isa(type) for type in types )
+		(array) ->
+			return false if array.length != predicates.length
+			valid = true
+			for x, i in array
+				valid = valid && predicates[i](x)
+			valid
