@@ -52,44 +52,6 @@
 			when 0 then Function.identity
 			else Function.pipe (Array.concat arguments...).reverse()...
 	
-	##		
-	## Logical functions
-	##
-	
-	# Tests: full
-	Function::and = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
-			
-	# Tests: full
-	Function::or = (fn2) ->
-		fn1 = this
-		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
-	
-	# Tests: full
-	Function::not = ->
-		fn = this
-		Predicate (args...) -> not fn.apply this, args
-	
-	# Tests: full
-	Function.and = (predicate,predicates...) ->
-		switch arguments.length
-			when 1 then predicate
-			when 0 then -> true
-			else predicate.and Function.and predicates...
-	
-	# Tests: full
-	Function.or = (predicate,predicates...) ->
-		switch arguments.length
-			when 1 then predicate
-			when 0 then -> false
-			else predicate.or Function.or predicates...
-
-	# Tests: full
-	Function.not = (predicate) ->
-		if typeof predicate == 'function' then predicate.not() else not predicate
-	
-	
 	##
 	## Aspect-like methods
 	##
@@ -164,6 +126,43 @@
 	
 	# Tests: none
 	window.Predicate = Function.To Boolean
+	
+	##		
+	## Logical functions
+	##
+	
+	# Tests: full
+	Function::and = (fn2) ->
+		fn1 = this
+		Predicate (args...) -> fn1.apply(this,args) and fn2.apply(this,args)
+			
+	# Tests: full
+	Function::or = (fn2) ->
+		fn1 = this
+		Predicate (args...) -> fn1.apply(this,args) or fn2.apply(this,args)
+	
+	# Tests: full
+	Function::not = ->
+		fn = this
+		Predicate (args...) -> not fn.apply this, args
+	
+	# Tests: full
+	Function.and = (predicate,predicates...) ->
+		switch arguments.length
+			when 1 then predicate
+			when 0 then -> true
+			else predicate.and Function.and predicates...
+	
+	# Tests: full
+	Function.or = (predicate,predicates...) ->
+		switch arguments.length
+			when 1 then predicate
+			when 0 then -> false
+			else predicate.or Function.or predicates...
+
+	# Tests: full
+	Function.not = (predicate) ->
+		if typeof predicate == 'function' then predicate.not() else not predicate
 	
 	##	
 	## Composite ordering
