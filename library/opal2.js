@@ -302,68 +302,6 @@ define(function() {
         return Function.pipe.apply(Function, (Array.concat.apply(Array, arguments)).reverse());
     }
   };
-  Function.prototype.and = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) && fn2.apply(this, args);
-    });
-  };
-  Function.prototype.or = function(fn2) {
-    var fn1;
-    fn1 = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn1.apply(this, args) || fn2.apply(this, args);
-    });
-  };
-  Function.prototype.not = function() {
-    var fn;
-    fn = this;
-    return Predicate(function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return !fn.apply(this, args);
-    });
-  };
-  Function.and = function() {
-    var predicate, predicates;
-    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (arguments.length) {
-      case 1:
-        return predicate;
-      case 0:
-        return function() {
-          return true;
-        };
-      default:
-        return predicate.and(Function.and.apply(Function, predicates));
-    }
-  };
-  Function.or = function() {
-    var predicate, predicates;
-    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (arguments.length) {
-      case 1:
-        return predicate;
-      case 0:
-        return function() {
-          return false;
-        };
-      default:
-        return predicate.or(Function.or.apply(Function, predicates));
-    }
-  };
-  Function.not = function(predicate) {
-    if (typeof predicate === 'function') {
-      return predicate.not();
-    } else {
-      return !predicate;
-    }
-  };
   Function.prototype.pre = function(pre) {
     return pre.but(this);
   };
@@ -457,6 +395,68 @@ define(function() {
     return Function.Ensuring(Object.isa(type));
   };
   window.Predicate = Function.To(Boolean);
+  Function.prototype.and = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return fn1.apply(this, args) && fn2.apply(this, args);
+    });
+  };
+  Function.prototype.or = function(fn2) {
+    var fn1;
+    fn1 = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return fn1.apply(this, args) || fn2.apply(this, args);
+    });
+  };
+  Function.prototype.not = function() {
+    var fn;
+    fn = this;
+    return Predicate(function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return !fn.apply(this, args);
+    });
+  };
+  Function.and = function() {
+    var predicate, predicates;
+    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    switch (arguments.length) {
+      case 1:
+        return predicate;
+      case 0:
+        return function() {
+          return true;
+        };
+      default:
+        return predicate.and(Function.and.apply(Function, predicates));
+    }
+  };
+  Function.or = function() {
+    var predicate, predicates;
+    predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    switch (arguments.length) {
+      case 1:
+        return predicate;
+      case 0:
+        return function() {
+          return false;
+        };
+      default:
+        return predicate.or(Function.or.apply(Function, predicates));
+    }
+  };
+  Function.not = function(predicate) {
+    if (typeof predicate === 'function') {
+      return predicate.not();
+    } else {
+      return !predicate;
+    }
+  };
   Function.ordering = Function.or;
   Function.eq = function(value) {
     return Predicate(function(x) {
