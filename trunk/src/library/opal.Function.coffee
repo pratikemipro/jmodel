@@ -72,14 +72,12 @@
 	##
 	
 	# Tests: full
-	Function::require = (predicates...) ->
-		predicate = Function.and predicates...
+	Function::require = (predicate) ->
 		@pre (args...) ->
 			throw 'Precondition failure' unless predicate.apply this, args
 	
 	# Tests: full
-	Function::ensure = (predicates...) ->
-		predicate = Function.and predicates...
+	Function::ensure = (predicate) ->
 		@post (args...) ->
 			throw 'Postcondition failure' unless predicate.apply this, args
 
@@ -93,20 +91,20 @@
 		(args...) -> predicate args
 	
 	# Tests: none
-	Function::Requiring = (predicates...) ->
-		@then (fn) -> fn.require predicates...
+	Function::Requiring = (predicate) ->
+		@then (fn) -> fn.require predicate
 	
 	# Tests: partial
-	Function.Requiring = (predicates...) ->
-		(fn) -> fn.require predicates...
+	Function.Requiring = (predicate) ->
+		(fn) -> fn.require predicate
 	
 	# Tests: none	
-	Function::Ensuring = (predicates...) ->
-		@then (fn) -> fn.ensure predicates...
+	Function::Ensuring = (predicate) ->
+		@then (fn) -> fn.ensure predicate
 	
 	# Tests: none
-	Function.Ensuring = (predicates...) ->
-		(fn) -> fn.ensure predicates...
+	Function.Ensuring = (predicate) ->
+		(fn) -> fn.ensure predicate
 
 	# Tests: partial
 	Function::From = (types...) ->
@@ -132,13 +130,13 @@
 	##
 	
 	# Tests: full
-	Function::and = (predicate2) ->
+	Function::and = Function.From(Function) (predicate2) ->
 		predicate1 = this
 		Predicate (args...) ->
 			predicate1.apply(this,args) and predicate2.apply(this,args)
 			
 	# Tests: full
-	Function::or = (predicate2) ->
+	Function::or = Function.From(Function) (predicate2) ->
 		predicate1 = this
 		Predicate (args...) ->
 			predicate1.apply(this,args) or predicate2.apply(this,args)

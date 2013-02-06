@@ -102,7 +102,9 @@
 		
 		add2 = (x) -> x+2
 		safeAdd2 = add2.require( Function.argument(0).hastype('number') )
-		restrictedAdd2 = add2.require( Function.argument(0).hastype('number'), Function.argument(0).between(0,5) )
+		restrictedAdd2 = add2
+			.require( Function.argument(0).hastype('number') )
+			.require( Function.argument(0).between(0,5) )
 		
 		equal safeAdd2(2), 4, 'Works as normal if requirements satisfied'
 		raises ( -> safeAdd2('fred') ), 'Throws exception if requirements not satisfied'
@@ -199,6 +201,7 @@
 		equals comp(4), true, 'true if both conditions true'
 		equals comp(1), false, 'false if first condition false'
 		equals comp(7), false, 'false if second condition false'
+		raises ( -> gt.and 4 ), 'raises an exception if argument is not a function'
 		
 	test 'Function::or', ->
 	

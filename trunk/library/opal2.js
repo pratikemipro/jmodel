@@ -316,10 +316,7 @@ define(function() {
       return ret;
     };
   };
-  Function.prototype.require = function() {
-    var predicate, predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicate = Function.and.apply(Function, predicates);
+  Function.prototype.require = function(predicate) {
     return this.pre(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -328,10 +325,7 @@ define(function() {
       }
     });
   };
-  Function.prototype.ensure = function() {
-    var predicate, predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicate = Function.and.apply(Function, predicates);
+  Function.prototype.ensure = function(predicate) {
     return this.post(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -350,32 +344,24 @@ define(function() {
       return predicate(args);
     };
   };
-  Function.prototype.Requiring = function() {
-    var predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  Function.prototype.Requiring = function(predicate) {
     return this.then(function(fn) {
-      return fn.require.apply(fn, predicates);
+      return fn.require(predicate);
     });
   };
-  Function.Requiring = function() {
-    var predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  Function.Requiring = function(predicate) {
     return function(fn) {
-      return fn.require.apply(fn, predicates);
+      return fn.require(predicate);
     };
   };
-  Function.prototype.Ensuring = function() {
-    var predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  Function.prototype.Ensuring = function(predicate) {
     return this.then(function(fn) {
-      return fn.ensure.apply(fn, predicates);
+      return fn.ensure(predicate);
     });
   };
-  Function.Ensuring = function() {
-    var predicates;
-    predicates = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+  Function.Ensuring = function(predicate) {
     return function(fn) {
-      return fn.ensure.apply(fn, predicates);
+      return fn.ensure(predicate);
     };
   };
   Function.prototype.From = function() {
@@ -395,7 +381,7 @@ define(function() {
     return Function.Ensuring(Object.isa(type));
   };
   window.Predicate = Function.To(Boolean);
-  Function.prototype.and = function(predicate2) {
+  Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
     return Predicate(function() {
@@ -403,8 +389,8 @@ define(function() {
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return predicate1.apply(this, args) && predicate2.apply(this, args);
     });
-  };
-  Function.prototype.or = function(predicate2) {
+  });
+  Function.prototype.or = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
     return Predicate(function() {
@@ -412,7 +398,7 @@ define(function() {
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return predicate1.apply(this, args) || predicate2.apply(this, args);
     });
-  };
+  });
   Function.prototype.not = function() {
     var predicate;
     predicate = this;
