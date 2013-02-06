@@ -127,8 +127,8 @@
 	
 	# Tests: none
 	Function.hastypes = (types...) ->
-		predicate = Function.and (Function.argument(n).then(Object.isa type) for type, n in types)...
-		(args...) -> predicate args...
+		predicate = Array.hastypes types...
+		(args...) -> predicate args
 	
 	# Tests: none
 	Function::Requiring = (predicates...) ->
