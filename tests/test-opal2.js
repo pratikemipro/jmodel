@@ -370,6 +370,21 @@ define(['jmodel/opal2'], function() {
     }), 'Throws exception if postcondition unsatisfied');
   });
   module('Typed functions');
+  test('Function.Requiring', function() {
+    var Person, fred;
+    Person = function() {};
+    Person.prototype.setAge = Function.Requiring(function(age) {
+      return (18 <= age && age <= 65);
+    })(function(age) {
+      return this.age = age;
+    });
+    fred = new Person();
+    fred.setAge(30);
+    equals(fred.age, 30, 'Respects context');
+    return raises((function() {
+      return fred.setAge(70);
+    }), 'Throws exception if argument violates precondition');
+  });
   test('Function.From', function() {
     var Person, fred, inc, repeat, _class;
     inc = Function.From(Number)(function(x) {

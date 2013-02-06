@@ -123,6 +123,17 @@
 	
 	module 'Typed functions'
 	
+	test 'Function.Requiring', ->
+		
+		Person = () ->
+		Person::setAge = Function.Requiring( (age) -> 18 <= age <= 65 ) (age) -> @age = age
+		
+		fred = new Person()
+		fred.setAge 30
+		
+		equals fred.age, 30, 'Respects context'
+		raises ( -> fred.setAge 70 ), 'Throws exception if argument violates precondition'
+	
 	test 'Function.From', ->
 		
 		inc = Function.From(Number) (x) -> x+1

@@ -96,7 +96,7 @@
 	Function::Requiring = (predicates...) ->
 		@then (fn) -> fn.require predicates...
 	
-	# Tests: none
+	# Tests: partial
 	Function.Requiring = (predicates...) ->
 		(fn) -> fn.require predicates...
 	
