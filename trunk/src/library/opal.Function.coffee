@@ -28,18 +28,21 @@
 	
 	# Tests: full
 	Function::then = (fn2) ->
+		throw 'Precondition failure' unless typeof fn2 == 'function'
 		fn1 = this
 		(args...) -> fn2.call this, fn1.apply(this,args)
 	
 	# Tests: full
 	Function::but = (fn2) ->
+		throw 'Precondition failure' unless typeof fn2 == 'function'
 		fn1 = this
 		(args...) ->
 			fn1.apply this, args
 			fn2.apply this, args
 	
 	# Tests: full
-	Function.pipe = (fn,fns...) ->			
+	Function.pipe = (fn,fns...) ->
+		throw 'Precondition failure' unless typeof fn in ['function','undefined']
 		switch arguments.length
 			when 1 then fn
 			when 0 then Function.identity
@@ -47,6 +50,7 @@
 			
 	# Tests: full
 	Function.compose = (fn,fns...) ->
+		throw 'Precondition failure' unless typeof fn in ['function','undefined']
 		switch arguments.length
 			when 1 then fn
 			when 0 then Function.identity
@@ -57,10 +61,13 @@
 	##
 	
 	# Tests: full
-	Function::pre = (pre) -> pre.but this
+	Function::pre = (pre) ->
+		throw 'Precondition failure' unless typeof pre == 'function'
+		pre.but this
 	
 	# Tests: full	
 	Function::post = (post) ->
+		throw 'Precondition failure' unless typeof post == 'function'
 		fn = this
 		(args...) ->
 			ret = fn.apply this, args

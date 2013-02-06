@@ -45,6 +45,8 @@
 		deepEqual red.then(green)([]), ['red','green'], 'then works'
 		deepEqual red.then(green.then(blue))([]), red.then(green).then(blue)([]), 'then is associative'
 		
+		raises ( -> red.then 'green' ), 'Raises an exception if argument is not a function'
+		
 	test 'Function::but', ->
 	
 		arr = []
@@ -53,6 +55,8 @@
 		
 		equal red.but(length)(arr), 1, 'return value of second returned'
 		deepEqual arr, ['red'], 'first function has been applied'
+		
+		raises ( -> red.but 'green' ), 'Raises an exception if argument is not a function'
 
 	test 'Function.pipe', ->
 
@@ -63,6 +67,8 @@
 		equals Function.pipe(addten,times2)(7), 34, 'piping works in opposite direction'
 		equals Function.pipe(times2)(7), 14, 'pipe of a single function is just that function'
 		equals Function.pipe()(7), 7, 'pipe of no functions is identity'
+		
+		raises ( -> Function.pipe times2, 7 ), 'Raises an exception if argument is not a function'
 
 	test 'Function.compose', ->
 	
@@ -73,6 +79,8 @@
 		equals Function.compose(addten,times2)(7), 24, 'composition works in opposite direction'
 		equals Function.compose(times2)(7), 14, 'composition of a single function is just that function'
 		equals Function.compose()(7), 7, 'composition of no functions is identity'
+		
+		raises ( -> Function.compose times2, 7 ), 'Raises an exception if argument is not a function'
 	
 	module 'Aspect-like methods'
 	
@@ -87,6 +95,8 @@
 		equal a, 1, 'pre function runs first'
 		equal getA.pre(inc)(), 2, 'pre function runs first'
 		
+		raises ( -> red.pre 'fred' ), 'Raises an exception if argument is not a function'
+		
 	test 'post', ->
 	
 		logged = ''
@@ -95,6 +105,8 @@
 			
 		equal add(2,3), 5, 'Post-function does not affect operation of function'
 		equal logged, '2+3=5', 'Post-function is run and has access to arguments and return value'
+		
+		raises ( -> ((a,b) -> a+b).post('fred') ), 'Raises an exception if argument is not a function'
 	
 	module 'Preconditions and postconditions'
 	
