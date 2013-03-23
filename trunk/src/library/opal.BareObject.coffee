@@ -7,8 +7,7 @@
 ##
 	
 	# Tests: full
-	Object.equal = (a,b) ->
-		return false if a == undefined or b == undefined
+	Object.equal = Predicate.From(Object,Object) (a,b) ->
 		equal = true
 		equal &&= a[prop] == b[prop] for own prop of a
 		equal &&= a[prop] == b[prop] for own prop of b
@@ -16,21 +15,21 @@
 	
 	# Tests: full
 	Object.remove = (fields...) ->
-		(source) ->
+		Function.From(Object).To(Object) (source) ->
 			obj = {}
 			( obj[key] = value unless key in fields ) for own key, value of source
 			return obj
 	
 	# Tests: full	
 	Object.project = (fields...) ->
-		(source) ->
+		Function.From(Object).To(Object) (source) ->
 			obj = {}
 			( obj[key] = value if key in fields ) for own key, value of source
 			return obj
 	
 	# Tests: full	
 	Object.rename = (renaming) ->
-		(source) ->
+		Function.From(Object).To(Object) (source) ->
 			obj = {}
 			( obj[ renaming[key] or key ] = value ) for own key, value of source
 			return obj
