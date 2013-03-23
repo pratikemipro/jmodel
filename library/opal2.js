@@ -632,12 +632,9 @@ define(function() {
     }
     return restricted;
   };
-  Object.equal = function(a, b) {
+  Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
 
-    if (a === void 0 || b === void 0) {
-      return false;
-    }
     equal = true;
     for (prop in a) {
       if (!__hasProp.call(a, prop)) continue;
@@ -648,12 +645,12 @@ define(function() {
       equal && (equal = a[prop] === b[prop]);
     }
     return equal;
-  };
+  });
   Object.remove = function() {
     var fields;
 
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return function(source) {
+    return Function.From(Object).To(Object)(function(source) {
       var key, obj, value;
 
       obj = {};
@@ -665,13 +662,13 @@ define(function() {
         }
       }
       return obj;
-    };
+    });
   };
   Object.project = function() {
     var fields;
 
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return function(source) {
+    return Function.From(Object).To(Object)(function(source) {
       var key, obj, value;
 
       obj = {};
@@ -683,10 +680,10 @@ define(function() {
         }
       }
       return obj;
-    };
+    });
   };
   Object.rename = function(renaming) {
-    return function(source) {
+    return Function.From(Object).To(Object)(function(source) {
       var key, obj, value;
 
       obj = {};
@@ -696,7 +693,7 @@ define(function() {
         obj[renaming[key] || key] = value;
       }
       return obj;
-    };
+    });
   };
   Object.union = function() {
     var first, rest;

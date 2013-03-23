@@ -585,12 +585,6 @@ define(['jmodel/opal2'], function() {
   });
   module('Bare objects');
   test('Object.equal', function() {
-    equals(Object.equal(void 0, {
-      name: 'fred'
-    }), false, 'Returns false if first argument undefined');
-    equals(Object.equal({
-      name: 'fred'
-    }, void 0), false, 'Returns false if second argument undefined');
     equals(Object.equal({
       name: 'fred',
       age: 20
