@@ -398,7 +398,7 @@ define(function() {
       return !predicate.apply(this, args);
     });
   };
-  Function.and = function() {
+  Function.and = Function.From([Function]).To(Function)(function() {
     var predicate, predicates;
 
     predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -412,8 +412,8 @@ define(function() {
       default:
         return predicate.and(Function.and.apply(Function, predicates));
     }
-  };
-  Function.or = function() {
+  });
+  Function.or = Function.From([Function]).To(Function)(function() {
     var predicate, predicates;
 
     predicate = arguments[0], predicates = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -427,7 +427,7 @@ define(function() {
       default:
         return predicate.or(Function.or.apply(Function, predicates));
     }
-  };
+  });
   Function.not = function(predicate) {
     if (typeof predicate === 'function') {
       return predicate.not();

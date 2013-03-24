@@ -137,16 +137,18 @@
 	##
 	
 	# Tests: full
-	Function::and = Function.From(Function) (predicate2) ->
-		predicate1 = this
-		Predicate (args...) ->
-			predicate1.apply(this,args) and predicate2.apply(this,args)
+	Function::and = Function.From(Function) \
+		(predicate2) ->
+			predicate1 = this
+			Predicate (args...) ->
+				predicate1.apply(this,args) and predicate2.apply(this,args)
 			
 	# Tests: full
-	Function::or = Function.From(Function) (predicate2) ->
-		predicate1 = this
-		Predicate (args...) ->
-			predicate1.apply(this,args) or predicate2.apply(this,args)
+	Function::or = Function.From(Function) \
+		(predicate2) ->
+			predicate1 = this
+			Predicate (args...) ->
+				predicate1.apply(this,args) or predicate2.apply(this,args)
 	
 	# Tests: full
 	Function::not = ->
@@ -154,18 +156,20 @@
 		Predicate (args...) -> not predicate.apply this, args
 	
 	# Tests: full
-	Function.and = (predicate,predicates...) ->
-		switch arguments.length
-			when 1 then predicate
-			when 0 then -> true
-			else predicate.and Function.and predicates...
+	Function.and = Function.From([Function]).To(Function) \
+		(predicate,predicates...) ->
+			switch arguments.length
+				when 1 then predicate
+				when 0 then -> true
+				else predicate.and Function.and predicates...
 	
 	# Tests: full
-	Function.or = (predicate,predicates...) ->
-		switch arguments.length
-			when 1 then predicate
-			when 0 then -> false
-			else predicate.or Function.or predicates...
+	Function.or = Function.From([Function]).To(Function) \
+		(predicate,predicates...) ->
+			switch arguments.length
+				when 1 then predicate
+				when 0 then -> false
+				else predicate.or Function.or predicates...
 
 	# Tests: full
 	Function.not = (predicate) ->
