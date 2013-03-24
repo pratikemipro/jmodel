@@ -70,32 +70,46 @@ define(function() {
     })());
   };
   Array.hastypes = function() {
-    var predicates, type, types;
+    var predicate, predicates, type, types;
 
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    predicates = (function() {
-      var _i, _len, _results;
+    if (types[0] instanceof Array) {
+      predicate = Object.isa(types[0][0]);
+      return function(array) {
+        var valid, x, _i, _len;
 
-      _results = [];
-      for (_i = 0, _len = types.length; _i < _len; _i++) {
-        type = types[_i];
-        _results.push(Object.isa(type));
-      }
-      return _results;
-    })();
-    return function(array) {
-      var i, valid, x, _i, _len;
+        valid = true;
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          x = array[_i];
+          valid = valid && predicate(x);
+        }
+        return valid;
+      };
+    } else {
+      predicates = (function() {
+        var _i, _len, _results;
 
-      if (array.length !== predicates.length) {
-        return false;
-      }
-      valid = true;
-      for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
-        x = array[i];
-        valid = valid && predicates[i](x);
-      }
-      return valid;
-    };
+        _results = [];
+        for (_i = 0, _len = types.length; _i < _len; _i++) {
+          type = types[_i];
+          _results.push(Object.isa(type));
+        }
+        return _results;
+      })();
+      return function(array) {
+        var i, valid, x, _i, _len;
+
+        if (array.length !== predicates.length) {
+          return false;
+        }
+        valid = true;
+        for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
+          x = array[i];
+          valid = valid && predicates[i](x);
+        }
+        return valid;
+      };
+    }
   };
   Object.extend = function(target, source) {
     var key;
@@ -646,7 +660,7 @@ define(function() {
     }
     return equal;
   });
-  Object.remove = function() {
+  Object.remove = Function.From([String])(function() {
     var fields;
 
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -663,8 +677,8 @@ define(function() {
       }
       return obj;
     });
-  };
-  Object.project = function() {
+  });
+  Object.project = Function.From([String])(function() {
     var fields;
 
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -681,8 +695,8 @@ define(function() {
       }
       return obj;
     });
-  };
-  Object.rename = function(renaming) {
+  });
+  Object.rename = Function.From(Object)(function(renaming) {
     return Function.From(Object).To(Object)(function(source) {
       var key, obj, value;
 
@@ -694,8 +708,8 @@ define(function() {
       }
       return obj;
     });
-  };
-  Object.union = function() {
+  });
+  Object.union = Function.From([Object]).To(Object)(function() {
     var first, rest;
 
     first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -707,7 +721,7 @@ define(function() {
       default:
         return Object.extend(Object.copy(first), Object.union.apply(Object, rest));
     }
-  };
+  });
   Object.intersection = function() {
     var objects;
 
