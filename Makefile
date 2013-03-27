@@ -1,10 +1,8 @@
-RESERVED = "require"
-REQUIRE  = "./requirements/require.js"
-
 default:
 	@make opal
 	@make opal-test
 	@make sapphire
+	@make jview
 
 opal:
 	coffee --compile --bare --map --join library/opal2.js \
@@ -33,3 +31,6 @@ sapphire:
 		src/library/sapphire.Set.coffee \
 		src/library/sapphire.List.coffee \
 		src/library/sapphire.Map.coffee
+		
+jview:
+	coffee --compile --bare --map jview/cards.coffee
