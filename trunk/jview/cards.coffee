@@ -444,6 +444,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			[rootCardElement] = @element.find 'ul.cards li.card'
 			[cardType,keys,parameters] = @router.resolve window.location.pathname.substring 1
 			
+			cardType ?= @constructors[0]
+			
 			parameters.zoomed = !rootCardElement?
 			
 			rootCard = new cardType @cards, keys, $(rootCardElement), parameters
