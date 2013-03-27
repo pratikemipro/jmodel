@@ -33,4 +33,4 @@ sapphire:
 		src/library/sapphire.Map.coffee
 		
 jview:
-	coffee --compile --bare --map jview/cards.coffee
+	coffee --compile --bare --map jview/
