@@ -19,8 +19,9 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		
 			@li.addClass @class
 			
-			@li.on 'click', 'button.close', =>
+			@li.on 'click', '.close', =>
 				@event('dispose').raise this
+				false
 				
 		event: (name) -> @events.get name
 	
