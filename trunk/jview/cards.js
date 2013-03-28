@@ -19,8 +19,9 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       this.event('ready').remember(1);
       this.li = this.li ? $(this.li) : $('<li class="card"/>');
       this.li.addClass(this["class"]);
-      this.li.on('click', 'button.close', function() {
-        return _this.event('dispose').raise(_this);
+      this.li.on('click', '.close', function() {
+        _this.event('dispose').raise(_this);
+        return false;
       });
     }
 
