@@ -782,11 +782,11 @@ define(function() {
     };
   };
   return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, on_fulfill, on_reject, reason, status, value, _ref1;
+    var FULFILLED, PENDING, REJECTED, on_fulfil, on_reject, reason, status, value, _ref1;
 
     _ref1 = [0, 1, 2], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
 
-    on_fulfill = [];
+    on_fulfil = [];
 
     on_reject = [];
 
@@ -801,28 +801,37 @@ define(function() {
     }
 
     Promise.prototype.then = function(fulfilled, rejected) {
+      var delay, promise;
+
       if (typeof fulfilled !== 'function') {
         fulfilled = function() {};
       }
       if (typeof rejected !== 'function') {
         rejected = function() {};
       }
+      delay = function(fn) {
+        return setTimeout(fn, 1);
+      };
       switch (this.status) {
         case PENDING:
-          on_fullfill.add(fulfilled);
+          on_fullfil.add(fulfilled);
           return on_reject.add(rejected);
         case FULFILLED:
-          return setTimeout((function() {
-            return fulfilled.apply(null, this.value);
-          }), 1);
+          promise = new Promise();
+          delay(function() {
+            return promise.fulfil(fulfilled.apply(null, this.value));
+          });
+          return promise;
         case REJECTED:
-          return setTimeout((function() {
-            return rejected(this.reason);
-          }), 1);
+          promise = new Promise();
+          delay(function() {
+            return promise.reject(rejected(this.reason));
+          });
+          return promise;
       }
     };
 
-    Promise.prototype.fulfill = Function.Requiring(function() {
+    Promise.prototype.fulfil = Function.Requiring(function() {
       return this.status === PENDING;
     })(function() {
       var fulfilled, value, _i, _len, _ref2, _results;
@@ -830,11 +839,11 @@ define(function() {
       value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       this.value = value;
       this.status = FULFILLED;
-      _ref2 = this.on_fulfill;
+      _ref2 = this.on_fulfil;
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         fulfilled = _ref2[_i];
-        _results.push(fulfilled.apply(null, this.value));
+        _results.push(this.then(fulfilled, void 0));
       }
       return _results;
     });
@@ -850,7 +859,7 @@ define(function() {
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         rejected = _ref2[_i];
-        _results.push(rejected(this.reason));
+        _results.push(this.then(void 0, rejected));
       }
       return _results;
     });

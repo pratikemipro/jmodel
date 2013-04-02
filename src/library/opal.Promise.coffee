@@ -10,7 +10,7 @@
 		
 		[PENDING,FULFILLED,REJECTED] = [0..2]
 		
-		on_fulfill = []
+		on_fulfil = []
 		on_reject  = []
 		
 		status = PENDING
@@ -21,23 +21,31 @@
 			@status = PENDING
 		
 		then: (fulfilled,rejected) ->
+			
 			if typeof fulfilled != 'function' then fulfilled = ->
 			if typeof rejected != 'function' then rejected = ->
+			
+			delay = (fn) -> setTimeout fn, 1
+				
 			switch @status
 				when PENDING
-					on_fullfill.add fulfilled
+					on_fullfil.add fulfilled
 					on_reject.add rejected
 				when FULFILLED
-					setTimeout (-> fulfilled @value...), 1
+					promise = new Promise()
+					delay -> promise.fulfil fulfilled @value...
+					return promise
 				when REJECTED
-					setTimeout (-> rejected @reason), 1
+					promise = new Promise()
+					delay -> promise.reject rejected @reason
+					return promise
 
-		fulfill: Function.Requiring(-> @status == PENDING) \
+		fulfil: Function.Requiring(-> @status == PENDING) \
 			(@value...) ->
 				@status = FULFILLED
-				fulfilled @value... for fulfilled in @on_fulfill
+				@then fulfilled, undefined for fulfilled in @on_fulfil
 			
 		reject: Function.Requiring(-> @status == PENDING) \
 			(@reason) ->
 				@status = REJECTED
-				rejected @reason for rejected in @on_reject
+				@then undefined, rejected for rejected in @on_reject
