@@ -9,7 +9,8 @@
 
 var __slice = [].slice,
   __hasProp = {}.hasOwnProperty,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
   var Promise, _base, _ref;
@@ -863,6 +864,30 @@ define(function() {
       }
       return _results;
     });
+
+    Promise.Of = function(cons) {
+      var ensure, _ref2;
+
+      ensure = Object.ensure(cons);
+      return (function(_super) {
+        __extends(_Class, _super);
+
+        function _Class() {
+          _ref2 = _Class.__super__.constructor.apply(this, arguments);
+          return _ref2;
+        }
+
+        _Class.prototype.fulfil = function() {
+          var args;
+
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return _Class.__super__.fulfil.call(this, ensure.apply(null, args));
+        };
+
+        return _Class;
+
+      })(this);
+    };
 
     return Promise;
 
