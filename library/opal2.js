@@ -12,7 +12,7 @@ var __slice = [].slice,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 define(function() {
-  var _base, _ref;
+  var Promise, _base, _ref;
 
   Array.concat = function() {
     var arrays, _ref;
@@ -769,7 +769,7 @@ define(function() {
       return regex.test(str);
     }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
   };
-  return window.Nullable = function(constructor) {
+  window.Nullable = function(constructor) {
     var construct;
 
     construct = Object.construct(constructor);
@@ -781,6 +781,83 @@ define(function() {
       }
     };
   };
+  return window.Promise = Promise = (function() {
+    var FULFILLED, PENDING, REJECTED, on_fulfill, on_reject, reason, status, value, _ref1;
+
+    _ref1 = [0, 1, 2], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
+
+    on_fulfill = [];
+
+    on_reject = [];
+
+    status = PENDING;
+
+    value = void 0;
+
+    reason = void 0;
+
+    function Promise() {
+      this.status = PENDING;
+    }
+
+    Promise.prototype.then = function(fulfilled, rejected) {
+      if (typeof fulfilled !== 'function') {
+        fulfilled = function() {};
+      }
+      if (typeof rejected !== 'function') {
+        rejected = function() {};
+      }
+      switch (this.status) {
+        case PENDING:
+          on_fullfill.add(fulfilled);
+          return on_reject.add(rejected);
+        case FULFILLED:
+          return setTimeout((function() {
+            return fulfilled.apply(null, this.value);
+          }), 1);
+        case REJECTED:
+          return setTimeout((function() {
+            return rejected(this.reason);
+          }), 1);
+      }
+    };
+
+    Promise.prototype.fulfill = Function.Requiring(function() {
+      return this.status === PENDING;
+    })(function() {
+      var fulfilled, value, _i, _len, _ref2, _results;
+
+      value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      this.value = value;
+      this.status = FULFILLED;
+      _ref2 = this.on_fulfill;
+      _results = [];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        fulfilled = _ref2[_i];
+        _results.push(fulfilled.apply(null, this.value));
+      }
+      return _results;
+    });
+
+    Promise.prototype.reject = Function.Requiring(function() {
+      return this.status === PENDING;
+    })(function(reason) {
+      var rejected, _i, _len, _ref2, _results;
+
+      this.reason = reason;
+      this.status = REJECTED;
+      _ref2 = this.on_reject;
+      _results = [];
+      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
+        rejected = _ref2[_i];
+        _results.push(rejected(this.reason));
+      }
+      return _results;
+    });
+
+    return Promise;
+
+  })();
 });
 
 /*
