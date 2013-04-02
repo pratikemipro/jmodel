@@ -49,3 +49,8 @@
 			(@reason) ->
 				@status = REJECTED
 				@then undefined, rejected for rejected in @on_reject
+				
+		@Of: (cons) ->
+			ensure = Object.ensure cons
+			class extends this
+				fulfil: (args...) -> super ensure args...
