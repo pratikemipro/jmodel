@@ -716,10 +716,11 @@ define(['jmodel/opal2'], function() {
     }), 'Throws an exception when called on a non-integer');
   });
   module('Nullable');
-  return test('Nullable Number', function() {
+  test('Nullable Number', function() {
     equals((Nullable(Number))(null), null, 'Returns null when called on null.');
     return equals((Nullable(Number))(5), 5, 'Throws an exception when called on a non-integer');
   });
+  return module('Promise');
 });
 
 /*
