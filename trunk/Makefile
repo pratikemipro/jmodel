@@ -13,7 +13,8 @@ opal:
 		src/library/opal.BareObject.coffee \
 		src/library/opal.Number.coffee \
 		src/library/opal.String.coffee \
-		src/library/opal.Nullable.coffee
+		src/library/opal.Nullable.coffee \
+		src/library/opal.Promise.coffee
 
 opal-test:
 	coffee --compile --bare --map --join tests/test-opal2.js \
@@ -23,7 +24,8 @@ opal-test:
 		src/library/opal.Function.test.coffee \
 		src/library/opal.BareObject.test.coffee \
 		src/library/opal.Number.test.coffee \
-		src/library/opal.Nullable.test.coffee
+		src/library/opal.Nullable.test.coffee \
+		src/library/opal.Promise.test.coffee
 
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
