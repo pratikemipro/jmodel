@@ -10,12 +10,12 @@
 		
 		[PENDING,FULFILLED,REJECTED] = [0..2]
 		
-		on_fulfil = []
-		on_reject  = []
+		status: PENDING
+		value:  undefined
+		reason: undefined
 		
-		status = PENDING
-		value  = undefined
-		reason = undefined
+		on_fulfil: []
+		on_reject: []
 		
 		constructor: ->
 			@status = PENDING
@@ -42,6 +42,7 @@
 
 		fulfil: Function.Requiring(-> @status == PENDING) \
 			(@value...) ->
+				console.log @on_fulfil
 				@status = FULFILLED
 				@then fulfilled, undefined for fulfilled in @on_fulfil
 			
