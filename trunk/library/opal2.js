@@ -783,19 +783,19 @@ define(function() {
     };
   };
   return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, on_fulfil, on_reject, reason, status, value, _ref1;
+    var FULFILLED, PENDING, REJECTED, _ref1;
 
     _ref1 = [0, 1, 2], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
 
-    on_fulfil = [];
+    Promise.prototype.status = PENDING;
 
-    on_reject = [];
+    Promise.prototype.value = void 0;
 
-    status = PENDING;
+    Promise.prototype.reason = void 0;
 
-    value = void 0;
+    Promise.prototype.on_fulfil = [];
 
-    reason = void 0;
+    Promise.prototype.on_reject = [];
 
     function Promise() {
       this.status = PENDING;
@@ -839,6 +839,7 @@ define(function() {
 
       value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       this.value = value;
+      console.log(this.on_fulfil);
       this.status = FULFILLED;
       _ref2 = this.on_fulfil;
       _results = [];
