@@ -720,7 +720,31 @@ define(['jmodel/opal2'], function() {
     equals((Nullable(Number))(null), null, 'Returns null when called on null.');
     return equals((Nullable(Number))(5), 5, 'Throws an exception when called on a non-integer');
   });
-  return module('Promise');
+  module('Promise');
+  test('Promise.fulfil', function() {
+    var promise;
+
+    promise = new Promise();
+    promise.fulfil();
+    raises((function() {
+      return promise.fulfil();
+    }), 'Throws exception if fulfiled more than once');
+    return raises((function() {
+      return promise.reject();
+    }), 'Throws exception if rejected after fulfilled');
+  });
+  return test('Promise.reject', function() {
+    var promise;
+
+    promise = new Promise();
+    promise.reject();
+    raises((function() {
+      return promise.reject();
+    }), 'Throws exception if rejected more than once');
+    return raises((function() {
+      return promise.fulfil();
+    }), 'Throws exception if fulfilled after rejected');
+  });
 });
 
 /*
