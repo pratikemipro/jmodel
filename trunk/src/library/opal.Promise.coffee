@@ -8,17 +8,16 @@
 
 	window.Promise = class Promise
 		
-		[PENDING,FULFILLED,REJECTED] = [0..2]
-		
-		status: PENDING
-		value:  undefined
-		reason: undefined
-		
-		on_fulfil: []
-		on_reject: []
+		[PENDING,FULFILLED,REJECTED] = [1..3]
 		
 		constructor: ->
+			
 			@status = PENDING
+			@value  = undefined
+			@reason = undefined
+		
+			@on_fulfil = []
+			@on_reject = []
 		
 		then: (fulfilled,rejected) ->
 			
@@ -29,20 +28,19 @@
 				
 			switch @status
 				when PENDING
-					on_fullfil.add fulfilled
-					on_reject.add rejected
+					@on_fulfil.push fulfilled
+					@on_reject.push rejected
 				when FULFILLED
 					promise = new Promise()
-					delay -> promise.fulfil fulfilled @value...
+					delay => promise.fulfil fulfilled @value...
 					return promise
 				when REJECTED
 					promise = new Promise()
-					delay -> promise.reject rejected @reason
+					delay => promise.reject rejected @reason
 					return promise
 
 		fulfil: Function.Requiring(-> @status == PENDING) \
 			(@value...) ->
-				console.log @on_fulfil
 				@status = FULFILLED
 				@then fulfilled, undefined for fulfilled in @on_fulfil
 			
