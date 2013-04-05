@@ -808,23 +808,23 @@ define(function() {
       delay = function(fn) {
         return setTimeout(fn, 1);
       };
+      promise = new Promise();
       switch (this.status) {
         case PENDING:
           this.on_fulfil.push(fulfilled);
-          return this.on_reject.push(rejected);
+          this.on_reject.push(rejected);
+          break;
         case FULFILLED:
-          promise = new Promise();
           delay(function() {
             return promise.fulfil(fulfilled.apply(null, _this.value));
           });
-          return promise;
+          break;
         case REJECTED:
-          promise = new Promise();
           delay(function() {
             return promise.reject(rejected(_this.reason));
           });
-          return promise;
       }
+      return promise;
     };
 
     Promise.prototype.fulfil = Function.Requiring(function() {

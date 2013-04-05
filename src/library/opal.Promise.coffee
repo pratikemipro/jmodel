@@ -25,19 +25,19 @@
 			if typeof rejected != 'function' then rejected = ->
 			
 			delay = (fn) -> setTimeout fn, 1
+			
+			promise = new Promise()
 				
 			switch @status
 				when PENDING
 					@on_fulfil.push fulfilled
 					@on_reject.push rejected
 				when FULFILLED
-					promise = new Promise()
 					delay => promise.fulfil fulfilled @value...
-					return promise
 				when REJECTED
-					promise = new Promise()
 					delay => promise.reject rejected @reason
-					return promise
+					
+			return promise
 
 		# Tests: full
 		fulfil: Function.Requiring(-> @status == PENDING) \

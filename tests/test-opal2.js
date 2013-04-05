@@ -721,6 +721,7 @@ define(['jmodel/opal2'], function() {
     return equals((Nullable(Number))(5), 5, 'Throws an exception when called on a non-integer');
   });
   module('Promise');
+  test('Promise.then', function() {});
   test('Promise.fulfil', function() {
     var promise;
 
