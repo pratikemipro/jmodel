@@ -10,32 +10,39 @@
 		
 		[PENDING,FULFILLED,REJECTED] = [1..3]
 		
+		delay = (fn) -> setTimeout fn, 1
+		
+		fulfil = (promise,fulfilled,value) ->
+			delay -> promise.fulfil fulfilled value...
+			
+		reject = (promise,rejected,reason) ->
+			delay -> promise.reject rejected reason
+			
 		constructor: ->
 			
 			@status = PENDING
 			@value  = undefined
 			@reason = undefined
 		
-			@on_fulfil = []
-			@on_reject = []
+			@waiting = []
 		
 		then: (fulfilled,rejected) ->
 			
 			if typeof fulfilled != 'function' then fulfilled = ->
 			if typeof rejected != 'function' then rejected = ->
 			
-			delay = (fn) -> setTimeout fn, 1
-			
 			promise = new Promise()
 				
 			switch @status
 				when PENDING
-					@on_fulfil.push fulfilled
-					@on_reject.push rejected
+					@waiting.push
+						promise: promise
+						fulfilled: fulfilled
+						rejected: rejected
 				when FULFILLED
-					delay => promise.fulfil fulfilled @value...
+					fulfil promise, fulfilled, @value
 				when REJECTED
-					delay => promise.reject rejected @reason
+					reject promise, rejected, @reason
 					
 			return promise
 
@@ -43,13 +50,15 @@
 		fulfil: Function.Requiring(-> @status == PENDING) \
 			(@value...) ->
 				@status = FULFILLED
-				@then fulfilled, undefined for fulfilled in @on_fulfil
+				for {promise,fulfilled} in @waiting
+					fulfil promise, fulfilled, @value
 		
 		# Tests: full	
 		reject: Function.Requiring(-> @status == PENDING) \
 			(@reason) ->
 				@status = REJECTED
-				@then undefined, rejected for rejected in @on_reject
+				for {promise,rejected} in @waiting
+					reject promise, rejected, @reason
 				
 		@Of: (cons) ->
 			ensure = Object.ensure cons
