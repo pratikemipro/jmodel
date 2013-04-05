@@ -25,9 +25,9 @@
 		ensure: (x) -> x
 
 		@To: (cons) ->
-			ensure = Object.ensure cons
 			class extends @
-				add: (key,value) -> super key, ensure(value)
+				add: (key,value) -> super key, @ensure(value)
+				ensure: Object.ensure cons
 	
 		@Using: (combine) ->
 			class extends @
