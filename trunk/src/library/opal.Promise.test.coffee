@@ -1,5 +1,9 @@
 	module 'Promise'
 	
+	test 'Promise.then', ->
+	
+		
+	
 	test 'Promise.fulfil', ->
 		
 		promise = new Promise()
