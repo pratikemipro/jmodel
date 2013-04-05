@@ -783,7 +783,7 @@ define(function() {
     };
   };
   return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, delay, fulfil, reject, _ref1;
+    var FULFILLED, PENDING, REJECTED, chain, delay, _ref1;
 
     _ref1 = [1, 2, 3], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
 
@@ -791,15 +791,17 @@ define(function() {
       return setTimeout(fn, 1);
     };
 
-    fulfil = function(promise, fulfilled, value) {
+    chain = function(promise, fn, value) {
       return delay(function() {
-        return promise.fulfil(fulfilled.apply(null, value));
-      });
-    };
+        var reason, ret;
 
-    reject = function(promise, rejected, reason) {
-      return delay(function() {
-        return promise.reject(rejected(reason));
+        try {
+          ret = fn.apply(null, value);
+          return promise.fulfil(ret);
+        } catch (_error) {
+          reason = _error;
+          return promise.reject(reason);
+        }
       });
     };
 
@@ -813,13 +815,20 @@ define(function() {
     Promise.prototype.then = function(fulfilled, rejected) {
       var promise;
 
+      promise = new Promise();
       if (typeof fulfilled !== 'function') {
-        fulfilled = function() {};
+        fulfilled = function() {
+          var value;
+
+          value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return value;
+        };
       }
       if (typeof rejected !== 'function') {
-        rejected = function() {};
+        rejected = function(reason) {
+          return reason;
+        };
       }
-      promise = new Promise();
       switch (this.status) {
         case PENDING:
           this.waiting.push({
@@ -829,10 +838,10 @@ define(function() {
           });
           break;
         case FULFILLED:
-          fulfil(promise, fulfilled, this.value);
+          chain(promise, fulfilled, this.value);
           break;
         case REJECTED:
-          reject(promise, rejected, this.reason);
+          chain(promise, rejected, [this.reason]);
       }
       return promise;
     };
@@ -849,7 +858,7 @@ define(function() {
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         _ref3 = _ref2[_i], promise = _ref3.promise, fulfilled = _ref3.fulfilled;
-        _results.push(fulfil(promise, fulfilled, this.value));
+        _results.push(chain(promise, fulfilled, this.value));
       }
       return _results;
     });
@@ -865,7 +874,7 @@ define(function() {
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
         _ref3 = _ref2[_i], promise = _ref3.promise, rejected = _ref3.rejected;
-        _results.push(reject(promise, rejected, this.reason));
+        _results.push(chain(promise, rejected, [this.reason]));
       }
       return _results;
     });

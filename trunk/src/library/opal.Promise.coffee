@@ -12,11 +12,12 @@
 		
 		delay = (fn) -> setTimeout fn, 1
 		
-		fulfil = (promise,fulfilled,value) ->
-			delay -> promise.fulfil fulfilled value...
-			
-		reject = (promise,rejected,reason) ->
-			delay -> promise.reject rejected reason
+		chain = (promise,fn,value) -> delay ->
+			try
+				ret = fn value...
+				promise.fulfil ret
+			catch reason
+				promise.reject reason
 			
 		constructor: ->
 			
@@ -28,10 +29,10 @@
 		
 		then: (fulfilled,rejected) ->
 			
-			if typeof fulfilled != 'function' then fulfilled = ->
-			if typeof rejected != 'function' then rejected = ->
-			
 			promise = new Promise()
+			
+			if typeof fulfilled != 'function' then fulfilled = (value...) -> value
+			if typeof rejected != 'function' then rejected = (reason) -> reason
 				
 			switch @status
 				when PENDING
@@ -40,9 +41,9 @@
 						fulfilled: fulfilled
 						rejected: rejected
 				when FULFILLED
-					fulfil promise, fulfilled, @value
+					chain promise, fulfilled, @value
 				when REJECTED
-					reject promise, rejected, @reason
+					chain promise, rejected, [@reason]
 					
 			return promise
 
@@ -51,14 +52,14 @@
 			(@value...) ->
 				@status = FULFILLED
 				for {promise,fulfilled} in @waiting
-					fulfil promise, fulfilled, @value
+					chain promise, fulfilled, @value
 		
 		# Tests: full	
 		reject: Function.Requiring(-> @status == PENDING) \
 			(@reason) ->
 				@status = REJECTED
 				for {promise,rejected} in @waiting
-					reject promise, rejected, @reason
+					chain promise, rejected, [@reason]
 				
 		@Of: (cons) ->
 			ensure = Object.ensure cons
