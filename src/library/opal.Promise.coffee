@@ -31,8 +31,8 @@
 			
 			promise = new Promise()
 			
-			if typeof fulfilled != 'function' then fulfilled = (value...) -> value
-			if typeof rejected != 'function' then rejected = (reason) -> reason
+			if typeof fulfilled != 'function' then fulfilled = Function.arguments
+			if typeof rejected != 'function' then rejected = Function.identity
 				
 			switch @status
 				when PENDING

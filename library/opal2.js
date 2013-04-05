@@ -199,6 +199,12 @@ define(function() {
       return constant;
     };
   };
+  Function["arguments"] = function() {
+    var args;
+
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return args;
+  };
   Function.argument = function(n) {
     return function() {
       var args;
@@ -817,17 +823,10 @@ define(function() {
 
       promise = new Promise();
       if (typeof fulfilled !== 'function') {
-        fulfilled = function() {
-          var value;
-
-          value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return value;
-        };
+        fulfilled = Function["arguments"];
       }
       if (typeof rejected !== 'function') {
-        rejected = function(reason) {
-          return reason;
-        };
+        rejected = Function.identity;
       }
       switch (this.status) {
         case PENDING:
