@@ -39,11 +39,13 @@
 					delay => promise.reject rejected @reason
 					return promise
 
+		# Tests: full
 		fulfil: Function.Requiring(-> @status == PENDING) \
 			(@value...) ->
 				@status = FULFILLED
 				@then fulfilled, undefined for fulfilled in @on_fulfil
-			
+		
+		# Tests: full	
 		reject: Function.Requiring(-> @status == PENDING) \
 			(@reason) ->
 				@status = REJECTED

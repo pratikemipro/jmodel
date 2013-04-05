@@ -725,25 +725,29 @@ define(['jmodel/opal2'], function() {
     var promise;
 
     promise = new Promise();
-    promise.fulfil();
+    promise.fulfil('fred');
     raises((function() {
       return promise.fulfil();
     }), 'Throws exception if fulfiled more than once');
-    return raises((function() {
+    raises((function() {
       return promise.reject();
     }), 'Throws exception if rejected after fulfilled');
+    equals(promise.value, 'fred', 'After fulfilment, promise value is fulfilment value');
+    return equals(promise.reason, void 0, 'After fulfulment, promise reason is undefined');
   });
   return test('Promise.reject', function() {
     var promise;
 
     promise = new Promise();
-    promise.reject();
+    promise.reject('fred');
     raises((function() {
       return promise.reject();
     }), 'Throws exception if rejected more than once');
-    return raises((function() {
+    raises((function() {
       return promise.fulfil();
     }), 'Throws exception if fulfilled after rejected');
+    equals(promise.value, void 0, 'After rejection, promise value is undefined');
+    return equals(promise.reason, 'fred', 'After rejection, promise reason is rejection reason');
   });
 });
 
