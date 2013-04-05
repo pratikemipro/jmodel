@@ -5,6 +5,27 @@
 		promise = new Promise()
 		
 		equals promise.then(->) instanceof Promise, true, 'Returns a Promise'
+		
+	asyncTest 'onFulfilled', 2, ->
+		
+		promise = new Promise()
+		
+		promise.then (x,y) ->
+			equals x, 'fred', 'onFulfilled called with fulfilment value'
+			equals y, 'smith', 'onFulfilled allows multi-part fulfilment values'
+			start()
+			
+		promise.fulfil 'fred', 'smith'
+		
+	asyncTest 'onRejected', 1, ->
+		
+		promise = new Promise()
+		
+		promise.then undefined, (x) ->
+			equals x, 'fred', 'onRejected called with rejection reason'
+			start()
+			
+		promise.reject 'fred'
 	
 	test 'Promise.fulfil', ->
 		
