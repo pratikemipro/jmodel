@@ -2,7 +2,9 @@
 	
 	test 'Promise.then', ->
 	
+		promise = new Promise()
 		
+		equals promise.then(->) instanceof Promise, true, 'Returns a Promise'
 	
 	test 'Promise.fulfil', ->
 		

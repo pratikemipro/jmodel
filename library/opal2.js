@@ -783,21 +783,35 @@ define(function() {
     };
   };
   return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, _ref1;
+    var FULFILLED, PENDING, REJECTED, delay, fulfil, reject, _ref1;
 
     _ref1 = [1, 2, 3], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
+
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+
+    fulfil = function(promise, fulfilled, value) {
+      return delay(function() {
+        return promise.fulfil(fulfilled.apply(null, value));
+      });
+    };
+
+    reject = function(promise, rejected, reason) {
+      return delay(function() {
+        return promise.reject(rejected(reason));
+      });
+    };
 
     function Promise() {
       this.status = PENDING;
       this.value = void 0;
       this.reason = void 0;
-      this.on_fulfil = [];
-      this.on_reject = [];
+      this.waiting = [];
     }
 
     Promise.prototype.then = function(fulfilled, rejected) {
-      var delay, promise,
-        _this = this;
+      var promise;
 
       if (typeof fulfilled !== 'function') {
         fulfilled = function() {};
@@ -805,24 +819,20 @@ define(function() {
       if (typeof rejected !== 'function') {
         rejected = function() {};
       }
-      delay = function(fn) {
-        return setTimeout(fn, 1);
-      };
       promise = new Promise();
       switch (this.status) {
         case PENDING:
-          this.on_fulfil.push(fulfilled);
-          this.on_reject.push(rejected);
+          this.waiting.push({
+            promise: promise,
+            fulfilled: fulfilled,
+            rejected: rejected
+          });
           break;
         case FULFILLED:
-          delay(function() {
-            return promise.fulfil(fulfilled.apply(null, _this.value));
-          });
+          fulfil(promise, fulfilled, this.value);
           break;
         case REJECTED:
-          delay(function() {
-            return promise.reject(rejected(_this.reason));
-          });
+          reject(promise, rejected, this.reason);
       }
       return promise;
     };
@@ -830,16 +840,16 @@ define(function() {
     Promise.prototype.fulfil = Function.Requiring(function() {
       return this.status === PENDING;
     })(function() {
-      var fulfilled, value, _i, _len, _ref2, _results;
+      var fulfilled, promise, value, _i, _len, _ref2, _ref3, _results;
 
       value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       this.value = value;
       this.status = FULFILLED;
-      _ref2 = this.on_fulfil;
+      _ref2 = this.waiting;
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        fulfilled = _ref2[_i];
-        _results.push(this.then(fulfilled, void 0));
+        _ref3 = _ref2[_i], promise = _ref3.promise, fulfilled = _ref3.fulfilled;
+        _results.push(fulfil(promise, fulfilled, this.value));
       }
       return _results;
     });
@@ -847,15 +857,15 @@ define(function() {
     Promise.prototype.reject = Function.Requiring(function() {
       return this.status === PENDING;
     })(function(reason) {
-      var rejected, _i, _len, _ref2, _results;
+      var promise, rejected, _i, _len, _ref2, _ref3, _results;
 
       this.reason = reason;
       this.status = REJECTED;
-      _ref2 = this.on_reject;
+      _ref2 = this.waiting;
       _results = [];
       for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        rejected = _ref2[_i];
-        _results.push(this.then(void 0, rejected));
+        _ref3 = _ref2[_i], promise = _ref3.promise, rejected = _ref3.rejected;
+        _results.push(reject(promise, rejected, this.reason));
       }
       return _results;
     });
