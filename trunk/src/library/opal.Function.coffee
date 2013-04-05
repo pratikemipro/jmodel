@@ -16,6 +16,9 @@
 	# Tests: full
 	Function.constant = (constant) -> () -> constant
 	
+	# Tests: none
+	Function.arguments = (args...) -> args
+	
 	# Tests: full
 	Function.argument = (n) -> (args...) -> args[n]
 	
