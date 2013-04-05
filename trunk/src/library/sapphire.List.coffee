@@ -25,6 +25,6 @@
 				( Array::slice.call(other) for other in others )
 
 		@Of: (cons) ->
+			ensure = Object.ensure cons
 			class extends @
-				add: (element) -> super @ensure element
-				ensure: (value) -> if value instanceof cons then value else new cons value
+				add: (element) -> super ensure element
