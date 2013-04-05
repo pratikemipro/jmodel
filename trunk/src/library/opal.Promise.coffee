@@ -19,13 +19,15 @@
 			catch reason
 				promise.reject reason
 			
-		constructor: ->
+		constructor: (args...) ->
 			
 			@status = PENDING
 			@value  = undefined
 			@reason = undefined
 		
 			@waiting = []
+			
+			@fulfil args... if args.length > 0
 		
 		then: (fulfilled,rejected) ->
 			

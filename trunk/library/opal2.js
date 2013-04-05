@@ -812,10 +812,16 @@ define(function() {
     };
 
     function Promise() {
+      var args;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       this.status = PENDING;
       this.value = void 0;
       this.reason = void 0;
       this.waiting = [];
+      if (args.length > 0) {
+        this.fulfil.apply(this, args);
+      }
     }
 
     Promise.prototype.then = function(fulfilled, rejected) {
