@@ -727,6 +727,27 @@ define(['jmodel/opal2'], function() {
     promise = new Promise();
     return equals(promise.then(function() {}) instanceof Promise, true, 'Returns a Promise');
   });
+  asyncTest('onFulfilled', 2, function() {
+    var promise;
+
+    promise = new Promise();
+    promise.then(function(x, y) {
+      equals(x, 'fred', 'onFulfilled called with fulfilment value');
+      equals(y, 'smith', 'onFulfilled allows multi-part fulfilment values');
+      return start();
+    });
+    return promise.fulfil('fred', 'smith');
+  });
+  asyncTest('onRejected', 1, function() {
+    var promise;
+
+    promise = new Promise();
+    promise.then(void 0, function(x) {
+      equals(x, 'fred', 'onRejected called with rejection reason');
+      return start();
+    });
+    return promise.reject('fred');
+  });
   test('Promise.fulfil', function() {
     var promise;
 
