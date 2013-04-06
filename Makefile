@@ -32,7 +32,8 @@ sapphire:
 		src/library/sapphire.header.coffee \
 		src/library/sapphire.Set.coffee \
 		src/library/sapphire.List.coffee \
-		src/library/sapphire.Map.coffee
+		src/library/sapphire.Map.coffee \
+		src/library/sapphire.Stream.coffee
 		
 jview:
 	coffee --compile --bare --map jview/
