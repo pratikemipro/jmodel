@@ -18,6 +18,12 @@
 		each: Function.From(Function) \
 			(fn) -> @fns.push fn
 			
+		where: Function.From(Function).To(Stream) \
+			(predicate) ->
+				child = new this.constructor()
+				@each (args...) -> child.add args... if predicate args...
+				return child
+			
 		@Of: Function.From(Function) \
 			(cons) ->
 				ensure = Object.ensure cons
