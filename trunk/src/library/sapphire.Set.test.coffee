@@ -1,10 +1,8 @@
-define (), ->
-	
-	module 'Set construction'
+	module 'Set'
 	
 	test 'Set constructor', ->
 		
-		var set = new Set ['red','green','blue']
+		set = new Set ['red','green','blue']
 		
-		equals set.count(), 3, 'Set returns a set with correct cardinality'
+		equals set.length, 3, 'Set returns a set with correct cardinality'
 		deepEqual ( member for member in set ), ['red','green','blue'], 'Set contains correct elements'
