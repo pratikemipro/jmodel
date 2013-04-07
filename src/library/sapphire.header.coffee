@@ -6,4 +6,4 @@
 	Dual licensed under the MIT and GPL licenses
 ###
 
-define ['jmodel/opal'], ->
+define ['jmodel/opal2'], ->

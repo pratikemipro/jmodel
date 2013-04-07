@@ -2,6 +2,7 @@ default:
 	@make opal
 	@make opal-test
 	@make sapphire
+	@make sapphire-test
 	@make jview
 
 opal:
@@ -34,6 +35,14 @@ sapphire:
 		src/library/sapphire.List.coffee \
 		src/library/sapphire.Map.coffee \
 		src/library/sapphire.Stream.coffee
+		
+sapphire-test:
+	coffee --compile --bare --map --join tests/test-sapphire2.js \
+		src/library/sapphire-test.header.coffee \
+		src/library/sapphire.Set.test.coffee \
+		src/library/sapphire.List.test.coffee \
+		src/library/sapphire.Map.test.coffee \
+		src/library/sapphire.Stream.test.coffee
 		
 jview:
 	coffee --compile --bare --map jview/
