@@ -1,8 +1,7 @@
 default:
 	@make opal
-	@make opal-test
 	@make sapphire
-	@make sapphire-test
+	@make library-test
 	@make jview
 
 opal:
@@ -17,17 +16,6 @@ opal:
 		src/library/opal.Nullable.coffee \
 		src/library/opal.Promise.coffee
 
-opal-test:
-	coffee --compile --bare --map --join tests/test-opal2.js \
-		src/library/opal-test.header.coffee \
-		src/library/opal.Array.test.coffee \
-		src/library/opal.Object.test.coffee \
-		src/library/opal.Function.test.coffee \
-		src/library/opal.BareObject.test.coffee \
-		src/library/opal.Number.test.coffee \
-		src/library/opal.Nullable.test.coffee \
-		src/library/opal.Promise.test.coffee
-
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
 		src/library/sapphire.header.coffee \
@@ -35,10 +23,17 @@ sapphire:
 		src/library/sapphire.List.coffee \
 		src/library/sapphire.Map.coffee \
 		src/library/sapphire.Stream.coffee
-		
-sapphire-test:
-	coffee --compile --bare --map --join tests/test-sapphire2.js \
-		src/library/sapphire-test.header.coffee \
+
+library-test:
+	coffee --compile --bare --map --join tests/test-library.js \
+		src/library/test.header.coffee \
+		src/library/opal.Array.test.coffee \
+		src/library/opal.Object.test.coffee \
+		src/library/opal.Function.test.coffee \
+		src/library/opal.BareObject.test.coffee \
+		src/library/opal.Number.test.coffee \
+		src/library/opal.Nullable.test.coffee \
+		src/library/opal.Promise.test.coffee \
 		src/library/sapphire.Set.test.coffee \
 		src/library/sapphire.List.test.coffee \
 		src/library/sapphire.Map.test.coffee \
