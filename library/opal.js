@@ -988,20 +988,21 @@ define(function (a,b,c,undefined) {
 			return value === undefined ? Object.get.curry(property) : Object.set.curry(property,value);
 		},
 		
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
-		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		method: function (name) {
 			var args = _slice.call(arguments,1);
 			return function (object) {
 				return typeof object[name] === 'function' ? object[name].apply(object,args) : undefined;
 			};
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: full
 		// Docs: none

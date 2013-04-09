@@ -89,3 +89,16 @@
 	
 		raises ( -> Object.property('age',17)(fred) ), 'raises exception on attempting to set property that does not exist'
 		equals fred.age, undefined, 'property is not set if it does not exist'
+		
+	test 'Object.method', ->
+
+		Adder = class
+			unit: -> 0
+			add: (a,b) -> a+b
+	
+		adder = new Adder();
+	
+		equals Object.method('unit')(adder),    0, 'Method works without any arguments'
+		equals Object.method('add',2,3)(adder), 5, 'Method works with arguments at creation time'
+		equals Object.method('add',2)(adder,3), 5, 'Method works with arguments at invocation time'
+		raises (-> Object.method('test')(adder) ), 'Method raises exception if method does not exist.'

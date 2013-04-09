@@ -619,6 +619,31 @@ define(['jmodel/sapphire2'], function() {
     }), 'raises exception on attempting to set property that does not exist');
     return equals(fred.age, void 0, 'property is not set if it does not exist');
   });
+  test('Object.method', function() {
+    var Adder, adder;
+
+    Adder = (function() {
+      function _Class() {}
+
+      _Class.prototype.unit = function() {
+        return 0;
+      };
+
+      _Class.prototype.add = function(a, b) {
+        return a + b;
+      };
+
+      return _Class;
+
+    })();
+    adder = new Adder();
+    equals(Object.method('unit')(adder), 0, 'Method works without any arguments');
+    equals(Object.method('add', 2, 3)(adder), 5, 'Method works with arguments at creation time');
+    equals(Object.method('add', 2)(adder, 3), 5, 'Method works with arguments at invocation time');
+    return raises((function() {
+      return Object.method('test')(adder);
+    }), 'Method raises exception if method does not exist.');
+  });
   module('Bare objects');
   test('Object.equal', function() {
     equals(Object.equal({
