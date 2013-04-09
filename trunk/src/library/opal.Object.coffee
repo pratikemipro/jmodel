@@ -53,6 +53,12 @@
 		switch arguments.length
 			when 1 then (obj) -> obj[property]
 			when 2 then (obj) ->
-				throw 'Undefined property' unless obj[property] != undefined
+				throw 'Undefined property' unless obj[property]
 				obj[property] = value
 				obj
+	
+	# Tests: full			
+	Object.method = (method,args1...) ->
+		(obj,args2...) ->
+			throw 'Undefined method' unless obj[method]
+			obj[method] (Array.concat args1, args2)...

@@ -698,13 +698,27 @@ define(function() {
         };
       case 2:
         return function(obj) {
-          if (obj[property] === void 0) {
+          if (!obj[property]) {
             throw 'Undefined property';
           }
           obj[property] = value;
           return obj;
         };
     }
+  };
+  Object.method = function() {
+    var args1, method;
+
+    method = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    return function() {
+      var args2, obj;
+
+      obj = arguments[0], args2 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (!obj[method]) {
+        throw 'Undefined method';
+      }
+      return obj[method].apply(obj, Array.concat(args1, args2));
+    };
   };
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
