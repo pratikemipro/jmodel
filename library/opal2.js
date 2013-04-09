@@ -15,6 +15,25 @@ var __slice = [].slice,
 define(function() {
   var Promise, _base, _ref, _ref1;
 
+  Object.isa = function(constructor) {
+    if (constructor === Number) {
+      return function(obj) {
+        return obj instanceof Number || typeof obj === 'number';
+      };
+    } else if (constructor === String) {
+      return function(obj) {
+        return obj instanceof String || typeof obj === 'string';
+      };
+    } else if (constructor === Boolean) {
+      return function(obj) {
+        return obj instanceof Boolean || typeof obj === 'boolean';
+      };
+    } else {
+      return function(obj) {
+        return obj instanceof constructor;
+      };
+    }
+  };
   Array.concat = function() {
     var arrays, _ref;
 
@@ -112,105 +131,6 @@ define(function() {
       };
     }
   };
-  Object.extend = function(target, source) {
-    var key;
-
-    for (key in source) {
-      if (!__hasProp.call(source, key)) continue;
-      target[key] = source[key];
-    }
-    return target;
-  };
-  Object.construct = function() {
-    var args1, constructor;
-
-    constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if (constructor === Number || constructor === String || constructor === Boolean) {
-      return constructor;
-    } else if (constructor === Date) {
-      return function() {
-        var args, args2;
-
-        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        args = Array.concat(args1, args2);
-        switch (args.length) {
-          case 1:
-            return new Date(args[0]);
-          case 3:
-            return new Date(args[0], args[1], args[2]);
-          case 7:
-            return new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-        }
-      };
-    } else {
-      return function() {
-        var args, args2;
-
-        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        args = Array.concat(args1, args2);
-        return (function(func, args, ctor) {
-          ctor.prototype = func.prototype;
-          var child = new ctor, result = func.apply(child, args);
-          return Object(result) === result ? result : child;
-        })(constructor, args, function(){});
-      };
-    }
-  };
-  Object.isa = function(constructor) {
-    if (constructor === Number) {
-      return function(obj) {
-        return obj instanceof Number || typeof obj === 'number';
-      };
-    } else if (constructor === String) {
-      return function(obj) {
-        return obj instanceof String || typeof obj === 'string';
-      };
-    } else if (constructor === Boolean) {
-      return function(obj) {
-        return obj instanceof Boolean || typeof obj === 'boolean';
-      };
-    } else {
-      return function(obj) {
-        return obj instanceof constructor;
-      };
-    }
-  };
-  Object.ensure = function(constructor) {
-    var construct, isa;
-
-    isa = Object.isa(constructor);
-    construct = Object.construct.apply(Object, arguments);
-    return function(obj) {
-      if (isa(obj)) {
-        return obj;
-      } else {
-        return construct.apply(null, arguments);
-      }
-    };
-  };
-  Object.copy = function(obj) {
-    return Object.extend({}, obj);
-  };
-  Object.type = function(obj) {
-    return typeof obj;
-  };
-  Object.eq = function(value) {
-    return function(object) {
-      return object === value;
-    };
-  };
-  if ((_ref = Object.keys) == null) {
-    Object.keys = Function.From(Object).To(Array)(function(object) {
-      var key, _results;
-
-      _results = [];
-      for (key in object) {
-        if (!__hasProp.call(object, key)) continue;
-        _results.push(key);
-      }
-      return _results;
-    });
-  }
   Function.identity = function(x) {
     return x;
   };
@@ -268,10 +188,10 @@ define(function() {
     };
   };
   Function.pipe = function() {
-    var fn, fns, _ref1;
+    var fn, fns, _ref;
 
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if ((_ref1 = typeof fn) !== 'function' && _ref1 !== 'undefined') {
+    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
       throw 'Precondition failure';
     }
     switch (arguments.length) {
@@ -284,10 +204,10 @@ define(function() {
     }
   };
   Function.compose = function() {
-    var fn, fns, _ref1;
+    var fn, fns, _ref;
 
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if ((_ref1 = typeof fn) !== 'function' && _ref1 !== 'undefined') {
+    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
       throw 'Precondition failure';
     }
     switch (arguments.length) {
@@ -564,13 +484,13 @@ define(function() {
       return cache[args] = ret;
     });
     return function() {
-      var args, _ref1;
+      var args, _ref;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return (_ref1 = cache[args]) != null ? _ref1 : fn.apply(this, arguments);
+      return (_ref = cache[args]) != null ? _ref : fn.apply(this, arguments);
     };
   };
-  if ((_ref1 = (_base = Function.prototype).delay) == null) {
+  if ((_ref = (_base = Function.prototype).delay) == null) {
     _base.delay = function() {
       var args1, duration, fn;
 
@@ -666,7 +586,7 @@ define(function() {
     };
   });
   Function.prototype.Where = function(predicate, message) {
-    var property, restricted, value, _ref2;
+    var property, restricted, value, _ref1;
 
     if (message == null) {
       message = 'Invalid value';
@@ -678,13 +598,93 @@ define(function() {
     });
     restricted.base = this.base || this;
     restricted.__predicate = predicate;
-    _ref2 = restricted.base;
-    for (property in _ref2) {
-      value = _ref2[property];
+    _ref1 = restricted.base;
+    for (property in _ref1) {
+      value = _ref1[property];
       restricted[property] = value;
     }
     return restricted;
   };
+  Object.extend = function(target, source) {
+    var key;
+
+    for (key in source) {
+      if (!__hasProp.call(source, key)) continue;
+      target[key] = source[key];
+    }
+    return target;
+  };
+  Object.construct = function() {
+    var args1, constructor;
+
+    constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if (constructor === Number || constructor === String || constructor === Boolean) {
+      return constructor;
+    } else if (constructor === Date) {
+      return function() {
+        var args, args2;
+
+        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        args = Array.concat(args1, args2);
+        switch (args.length) {
+          case 1:
+            return new Date(args[0]);
+          case 3:
+            return new Date(args[0], args[1], args[2]);
+          case 7:
+            return new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+        }
+      };
+    } else {
+      return function() {
+        var args, args2;
+
+        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        args = Array.concat(args1, args2);
+        return (function(func, args, ctor) {
+          ctor.prototype = func.prototype;
+          var child = new ctor, result = func.apply(child, args);
+          return Object(result) === result ? result : child;
+        })(constructor, args, function(){});
+      };
+    }
+  };
+  Object.ensure = function(constructor) {
+    var construct, isa;
+
+    isa = Object.isa(constructor);
+    construct = Object.construct.apply(Object, arguments);
+    return function(obj) {
+      if (isa(obj)) {
+        return obj;
+      } else {
+        return construct.apply(null, arguments);
+      }
+    };
+  };
+  Object.copy = function(obj) {
+    return Object.extend({}, obj);
+  };
+  Object.type = function(obj) {
+    return typeof obj;
+  };
+  Object.eq = function(value) {
+    return function(object) {
+      return object === value;
+    };
+  };
+  if ((_ref1 = Object.keys) == null) {
+    Object.keys = Function.From(Object).To(Array)(function(object) {
+      var key, _results;
+
+      _results = [];
+      for (key in object) {
+        if (!__hasProp.call(object, key)) continue;
+        _results.push(key);
+      }
+      return _results;
+    });
+  }
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
 
