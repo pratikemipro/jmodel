@@ -765,6 +765,30 @@ define(['jmodel/sapphire2'], function() {
     equal(c.age, 20, 'Properties not defined in second object are preserved');
     return equal(c.forename, void 0, 'Properties defined in second object are removed');
   });
+  test('join', function() {
+    var a, b, c, d, e, onid;
+
+    onid = function(a, b) {
+      return a.id === b.id;
+    };
+    a = {
+      id: 1,
+      name: 'fred',
+      age: 20
+    };
+    b = {
+      id: 1,
+      department: 'IT'
+    };
+    c = {
+      id: 2,
+      department: 'Finance'
+    };
+    d = Object.join(onid)(a, b);
+    e = Object.join(onid)(a, c);
+    equal(e, void 0, 'Join is undefined if pair of objects does not match predicate');
+    return deepEqual(d, Object.union(a, b), 'Join is union if objects match predicate');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
