@@ -20,6 +20,9 @@
 		
 		member: (element) ->
 			-1 != Array::indexOf.call @, element
+			
+		each: (fn) ->
+			fn element for element in this
 		
 		@union: (sets...) ->
 			new @.constructor ( x for x in set for set in sets )
@@ -27,3 +30,8 @@
 		@intersection: ->
 		
 		@difference: ->
+			
+		@Of: (cons) ->
+			class extends this
+				add: (element) -> super @ensure element
+				ensure: Object.ensure cons

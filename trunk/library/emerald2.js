@@ -8,32 +8,54 @@
 */
 
 var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __slice = [].slice;
 
 define(['jmodel/sapphire2'], function() {
-  var EventType, SubscriberSet, _ref;
+  var EventType, Subscriber;
 
-  window.SubscriberSet = SubscriberSet = (function(_super) {
-    __extends(SubscriberSet, _super);
+  window.Subscriber = Subscriber = (function() {
+    function Subscriber() {}
 
-    function SubscriberSet() {
-      _ref = SubscriberSet.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+    return Subscriber;
 
-    return SubscriberSet;
-
-  })(Set.Of(Subscriber));
+  })();
   return window.EventType = EventType = (function(_super) {
     __extends(EventType, _super);
 
-    function EventType() {}
+    function EventType() {
+      var _this = this;
 
-    EventType.prototype.subscribe = function() {};
+      EventType.__super__.constructor.call(this);
+      this.subscribers = new (Set.Of(Subscriber));
+      this.each(function(promise) {
+        _this.subscribers.each(function(subscriber) {});
+        return promise.then(subscriber.notify, subscriber.fail);
+      });
+    }
 
-    EventType.prototype.raise = function() {};
+    EventType.prototype.subscribe = function() {
+      var args, _ref;
 
-    EventType.prototype.fail = function() {};
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return (_ref = this.subscribers).add.apply(_ref, args);
+    };
+
+    EventType.prototype.raise = function() {
+      var args;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return this.add.apply(this, args);
+    };
+
+    EventType.prototype.fail = function() {
+      var args, promise;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      promise = new Promise();
+      this.add(promise);
+      return promise.reject.apply(promise, args);
+    };
 
     return EventType;
 

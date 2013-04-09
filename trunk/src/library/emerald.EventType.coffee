@@ -9,9 +9,21 @@
 	window.EventType = class EventType extends Stream.Of Promise
 		
 		constructor: ->
+			
+			super()
+			
+			@subscribers = new (Set.Of Subscriber)
+			
+			@each (promise) =>
+	 			@subscribers.each (subscriber) ->
+					promise.then subscriber.notify, subscriber.fail
 		
-		subscribe: ->
+		subscribe: (args...) -> @subscribers.add args...
 			
-		raise: ->
+		raise: (args...) -> @add args...
 			
-		fail: ->
+		fail: (args...) ->
+			promise = new Promise()
+			@add promise
+			promise.reject args...
+			

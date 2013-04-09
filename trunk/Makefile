@@ -28,7 +28,7 @@ sapphire:
 emerald:
 	coffee --compile --bare --map --join library/emerald2.js \
 		src/library/emerald.header.coffee \
-		src/library/emerald.SubscriberSet.coffee \
+		src/library/emerald.Subscriber.coffee \
 		src/library/emerald.EventType.coffee
 
 library-test:
@@ -45,7 +45,7 @@ library-test:
 		src/library/sapphire.List.test.coffee \
 		src/library/sapphire.Map.test.coffee \
 		src/library/sapphire.Stream.test.coffee \
-		src/library/emerald.SubscriberSet.test.coffee \
+		src/library/emerald.Subscriber.test.coffee \
 		src/library/emerald.EventType.test.coffee
 		
 jview:
