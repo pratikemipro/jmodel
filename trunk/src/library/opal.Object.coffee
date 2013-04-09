@@ -47,4 +47,5 @@
 	Object.eq = (value) -> (object) -> object == value
 	
 	# Tests: none
-	Object.keys ?= (object) -> key for own key of object
+	Object.keys ?= Function.From(Object).To(Array) \
+		(object) -> key for own key of object
