@@ -200,7 +200,7 @@ define(function() {
     };
   };
   if ((_ref = Object.keys) == null) {
-    Object.keys = function(object) {
+    Object.keys = Function.From(Object).To(Array)(function(object) {
       var key, _results;
 
       _results = [];
@@ -209,7 +209,7 @@ define(function() {
         _results.push(key);
       }
       return _results;
-    };
+    });
   }
   Function.identity = function(x) {
     return x;
