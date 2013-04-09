@@ -62,3 +62,12 @@
 		(obj,args2...) ->
 			throw 'Undefined method' unless obj[method]
 			obj[method] (Array.concat args1, args2)...
+	
+	# Tests: full		
+	Object.resolve = (name,args1...) ->
+		(obj,args2...) ->
+			throw 'Undefined member' unless obj[name]
+			if typeof obj[name] == 'function'
+				Object.method(name,(Array.concat args1, args2)...) obj
+			else
+				Object.property(name,(Array.concat args1, args2)...) obj

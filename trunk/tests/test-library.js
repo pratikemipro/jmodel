@@ -644,6 +644,34 @@ define(['jmodel/sapphire2'], function() {
       return Object.method('test')(adder);
     }), 'Method raises exception if method does not exist.');
   });
+  test('Object.resolve', function() {
+    var Person, person;
+
+    Person = (function() {
+      function Person(forename, surname, age) {
+        this.forename = forename;
+        this.surname = surname;
+        this.age = age;
+      }
+
+      Person.prototype.name = function() {
+        return "" + this.forename + " " + this.surname;
+      };
+
+      Person.prototype.Forename = function(forename) {
+        this.forename = forename;
+        return this;
+      };
+
+      return Person;
+
+    })();
+    person = new Person('John', 'Smith', 18);
+    equals(Object.resolve('age')(person), 18, 'Resolve works with properties');
+    equals(Object.resolve('name')(person), 'John Smith', 'Resolve works with methods');
+    Object.resolve('age', 17)(person);
+    return equals(person.age, 17, 'Resolve updates properties with values given at creation time');
+  });
   module('Bare objects');
   test('Object.equal', function() {
     equals(Object.equal({
