@@ -918,15 +918,10 @@ define(function (a,b,c,undefined) {
 		difference: function (x,y) {
 			return Object.remove.apply(null,Object.keys(y))(x);
 		},
-		
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
 
 		// Tests: none
 		// Docs: none
+		// Reimplemented: yes
 		join: function (predicate) {
 			return function () {
 				return predicate.apply(null,arguments) ? Object.union.apply(null,arguments) : undefined;
@@ -941,6 +936,12 @@ define(function (a,b,c,undefined) {
 	Object.extend(opal,{
 		project:   Object.project
 	});
+	
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 	
 	
 	//
