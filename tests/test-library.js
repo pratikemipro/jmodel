@@ -980,7 +980,8 @@ define(['jmodel/sapphire2'], function() {
   });
   module('List');
   module('Map');
-  return module('Stream');
+  module('Stream');
+  return module('EventType');
 });
 
 /*

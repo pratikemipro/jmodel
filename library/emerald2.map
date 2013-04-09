@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "emerald2.js",
+  "sourceRoot": "..",
+  "sources": [
+    "library/emerald2.js"
+  ],
+  "names": [],
+  "mappings": ";AAAA;;;;;;;CAAA;CAAA,GAAA;kSAAA;;AAQA,CARA,CAQ6B,CAAA,GAA7B,GAA6B,SAAtB;CASN,KAAA,SAAA;;CAAO,EAAkB,GAAnB,GAAN;CAAmB;;;;;CAAA;;CAAA;;CAAwB,CAAA,IAAM,CAAN;CATf"
+}
