@@ -35,7 +35,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: full
-	// Reimplemented: yes
+	// Reimplemented: yes, as Object.type
 	function type (object) {
 		return typeof object;
 	}
@@ -78,18 +78,21 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		identity: function (value) {
 			return value;
 		},
 		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		constant: function (constant) {
 			return function () { return constant; };
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		argument: function (n) {
 			return function () {
 				return arguments[n];
@@ -98,6 +101,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		map: function (mapping) {
 			return function (key) {
 				return mapping[key];
@@ -149,6 +153,7 @@ define(function (a,b,c,undefined) {
 
 	    // Tests: full
 		// Docs: partial
+		// Reimplemented: yes
 		pipe: function (fn) {
 			return    arguments.length === 1 ? fn
 			  		: arguments.length === 0 ? Function.identity
@@ -157,6 +162,7 @@ define(function (a,b,c,undefined) {
 
 		// Tests: full
 		// Docs: partial
+		// Reimplemented: yes
 		compose: function (fn) {
 			return	  arguments.length === 1 ? fn
 					: arguments.length === 0 ? Function.identity
@@ -187,6 +193,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		or: function (predicate) {
 			return    arguments.length === 1 ? predicate
 					: arguments.length === 0 ? Function.constant(false)
@@ -195,6 +202,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		and: function (predicate) {
 			return    arguments.length === 1 ? predicate
 					: arguments.length === 0 ? Function.constant(true)
@@ -203,6 +211,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		not: function (predicate) {
 			return typeof predicate === 'function' ? predicate.not() : !predicate;
 		}
@@ -244,6 +253,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		as: function (name) {
 			this.displayName = name;
 			return this;
@@ -251,6 +261,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		extend: function (properties) {
 			return Object.extend(this,properties);
 		}
@@ -272,6 +283,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: partial
 		// Docs: none
+		// Reimplemented: yes
 		bind: Function.prototype.bind || function (context) {
 			var args = _slice.call(arguments,1),
 				fn	 = this;
@@ -282,6 +294,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		curry: Function.prototype.curry || function () {
 			var args = _slice.call(arguments),
 				fn   = this;
@@ -292,6 +305,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		except: function (handler) {
 			var fn = this;
 			return function () {
@@ -306,6 +320,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		memo: function () {
 			var cache = {},
 				fn = this.post(function () {
@@ -319,6 +334,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: yes
 		delay: Function.prototype.delay || function (duration) {
 			var fn	 = this,
 				args = _slice.call(arguments,1);
@@ -345,6 +361,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		map: function (mapping) {
 			return this.then(Function.map(mapping));
 		}
@@ -366,6 +383,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		then: function (fn2) {
 			var fn1 = this;
 			return function () {
@@ -375,6 +393,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		but: function (fn2) {
 			var fn1 = this;
 			return function () {
@@ -401,12 +420,14 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		pre: function (pre) {
 			return pre.but(this);
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		post: function (post) {
 			var fn = this;
 			return function () {
@@ -434,6 +455,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		require: function () {
 			var predicates = _slice.call(arguments),
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
@@ -447,6 +469,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		ensure: function () {
 			var predicates = _slice.call(arguments),
 				message = typeof predicates[predicates.length-1] === 'string' ? predicates.pop() : '',
@@ -477,6 +500,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		and: function (fn2) {
 			var fn1 = this;
 			return function () {
@@ -486,6 +510,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		or: function (fn2) {
 			var fn1 = this;
 			return function () {
@@ -495,6 +520,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		not: function () {
 			var fn = this;
 			return function () {
@@ -531,70 +557,82 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		is: Function.prototype.then,
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		eq: function (value) {
 			return this.is(eq(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		neq: function (value) {
 			return this.is(neq(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		lt: function (value) {
 			return this.is(lt(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		gt: function (value) {
 			return this.is(gt(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		lte: function (value) {
 			return this.is(lte(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		gte: function (value) {
 			return this.is(gte(value));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		between: function (lower,higher) {
 			return this.is(between(lower,higher));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		matches: function (expression) {
 			return this.is(regex(expression));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		isnull: function () {
 			return this.then(isnull);
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		isa: function (constructor) {
 			return this.then(isa(constructor));
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		hastype: function (type) {
 			return this.then(is_of_type(type));
 		}
@@ -626,6 +664,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		asc: function () {
 			var fn = this;
 			return function (a,b) {
@@ -639,6 +678,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		desc: function () {
 			return this.asc().then(function (x) { return -x; } );
 		}
@@ -659,6 +699,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		create: function () {
 			return Object.construct(this).apply(null,arguments);
 		}
@@ -685,6 +726,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: partial (add testing for Nullable)
 		// Docs: full
+		// Reimplemented: yes
 		construct: function (constructor) {
 			var args1 = _slice.call(arguments,1);
 			return 	  constructor === String ? String
@@ -736,6 +778,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: partial (add testing for Nullable)
 		// Docs: none
+		// Reimplemented: yes
 		ensure: function (constructor) {
 			var _construct = Object.construct.apply(null,arguments);
 			return    constructor === String  ? function (value) { return typeof value === 'string' ? value : String(value); }
@@ -761,6 +804,7 @@ define(function (a,b,c,undefined) {
 	// Identity
 	//
 	
+	// Reimplemented: yes
 	Object.eq = function (value) {
 		return function (object) {
 			return object === value;
@@ -779,12 +823,14 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: yes
 		copy: function (obj) {
 			return Object.extend({},obj);
 		},
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		equal: function (a,b) {
 			if ( a === undefined || b === undefined ) {
 				return false;
@@ -806,6 +852,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		remove: function () {
 			var fields = _slice.call(arguments);
 			return function (obj) {
@@ -819,6 +866,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		project: function () {
 			var fields = _slice.call(arguments);
 			return function (object) {
@@ -835,6 +883,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		rename: function (renaming) {
 			return function (object) {
 				var renamed = {};
@@ -847,11 +896,19 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		union: function (x) {
 			return    arguments.length === 1 ? Object.copy(x)
 					: arguments.length === 0 ? {}
 					: Object.extend(x, Object.union.apply(null,_slice.call(arguments,1)));
 		},
+
+
+/*
+		
+		REIMPLEMENTED AS FAR AS HERE
+		
+*/
 		
 		// Test: full
 		// Docs: none
