@@ -191,6 +191,9 @@ define(function() {
   Object.copy = function(obj) {
     return Object.extend({}, obj);
   };
+  Object.type = function(obj) {
+    return typeof obj;
+  };
   Function.identity = function(x) {
     return x;
   };

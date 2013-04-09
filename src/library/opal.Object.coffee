@@ -39,3 +39,6 @@
 
 	# Tests: none
 	Object.copy = (obj) -> Object.extend {}, obj
+	
+	# Tests: none
+	Object.type = (obj) -> typeof obj
