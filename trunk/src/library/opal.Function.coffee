@@ -290,7 +290,9 @@
 		
 	Function::hastype = (type) -> @then Predicate (x) -> typeof x == type
 	
-	# Ordering methods
+	##
+	## Ordering methods
+	##
 		
 	Function::asc = ->
 		fn = this
@@ -303,11 +305,24 @@
 				
 	Function::desc = -> @asc().then (x) -> -x
 	
-	# Constructor methods
+	##
+	## Constructor methods
+	##
 		
 	Function::create = (args...) -> Object.construct(this)(args...)
 	
-	# Restricted types
+	##
+	## Delegation
+	##
+	
+	# Tests: none
+	Function.delegate = Function.From(Object,Function).To(Function) \
+		(context,method) -> (args...) -> context[method].apply context, args
+	
+	##
+	## Restricted types
+	##
+	
 	# NOTE: Make this work with objects other than strings and numbers
 	
 	Function::Where = (predicate,message='Invalid value') ->

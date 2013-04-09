@@ -636,6 +636,14 @@ define(function() {
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Object.construct(this).apply(null, args);
   };
+  Function.delegate = Function.From(Object, Function).To(Function)(function(context, method) {
+    return function() {
+      var args;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return context[method].apply(context, args);
+    };
+  });
   Function.prototype.Where = function(predicate, message) {
     var property, restricted, value, _ref1;
 

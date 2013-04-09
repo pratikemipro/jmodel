@@ -43,11 +43,15 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: yes
 	function delegateTo (context,methodName) {
 		return function _delegateTo () {
 			return context[methodName].apply(context,arguments);
 		};
 	}
+	
+	Function.delegate = delegateTo;
+	
 	
 	Object.extend(opal, {
 		type: 		type,
