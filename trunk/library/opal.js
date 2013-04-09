@@ -902,21 +902,21 @@ define(function (a,b,c,undefined) {
 					: arguments.length === 0 ? {}
 					: Object.extend(x, Object.union.apply(null,_slice.call(arguments,1)));
 		},
-
-
-/*
-		
-		REIMPLEMENTED AS FAR AS HERE
-		
-*/
 		
 		// Test: full
 		// Docs: none
+		// Reimplemented: yes
 		intersection: function (x,y) {
 			return    arguments.length === 1 ? Object.copy(x)
 					: arguments.length === 0 ? {}
 					: Object.project.apply(null,Object.keys(Object.intersection.apply(null,_slice.call(arguments,1))))(x);
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: none
 		// Docs: none

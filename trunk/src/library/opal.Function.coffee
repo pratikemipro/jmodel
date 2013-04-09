@@ -82,14 +82,14 @@
 	##
 	
 	# Tests: full
-	Function::require = (predicate) ->
+	Function::require = (predicate,message='Precondition failure') ->
 		@pre (args...) ->
-			throw 'Precondition failure' unless predicate.apply this, args
+			throw message+': '+args.toString() unless predicate.apply this, args
 	
 	# Tests: full
-	Function::ensure = (predicate) ->
+	Function::ensure = (predicate,message='Postcondition failure') ->
 		@post (args...) ->
-			throw 'Postcondition failure' unless predicate.apply this, args
+			throw message+': '+args.toString() unless predicate.apply this, args
 
 	##
 	## Typed functions
@@ -101,36 +101,36 @@
 		(args...) -> predicate args
 	
 	# Tests: none
-	Function::Requiring = (predicate) ->
-		@then (fn) -> fn.require predicate
+	Function::Requiring = (predicate,message) ->
+		@then (fn) -> fn.require predicate, message
 	
 	# Tests: partial
-	Function.Requiring = (predicate) ->
-		(fn) -> fn.require predicate
+	Function.Requiring = (predicate,message) ->
+		(fn) -> fn.require predicate, message
 	
 	# Tests: none	
-	Function::Ensuring = (predicate) ->
-		@then (fn) -> fn.ensure predicate
+	Function::Ensuring = (predicate,message) ->
+		@then (fn) -> fn.ensure predicate, message
 	
 	# Tests: none
-	Function.Ensuring = (predicate) ->
-		(fn) -> fn.ensure predicate
+	Function.Ensuring = (predicate,message) ->
+		(fn) -> fn.ensure predicate, message
 
 	# Tests: partial
 	Function::From = (types...) ->
-		@Requiring Function.hastypes types...
+		@Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
 
 	# Tests: full
 	Function.From = (types...) ->
-		Function.Requiring Function.hastypes types...
+		Function.Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
 
 	# Tests: partial
 	Function::To = (type) ->
-		@Ensuring Object.isa type
+		@Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 
 	# Tests: full
 	Function.To = (type) ->
-		Function.Ensuring Object.isa type
+		Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 	
 	# Tests: none
 	window.Predicate = Function.To Boolean

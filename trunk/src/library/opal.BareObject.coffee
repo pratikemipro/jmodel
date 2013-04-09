@@ -45,8 +45,14 @@
 				when 1 then first
 				when 0 then {}
 				else Object.extend Object.copy(first), Object.union rest...
-		
-	Object.intersection = (objects...) ->
+	
+	# Tests: full	
+	Object.intersection = Function.From([Object]).To(Object) \
+		(first,rest...) ->
+			switch arguments.length
+				when 1 then first
+				when 0 then {}
+				else Object.project(Object.keys(Object.intersection rest...)...) first
 		
 	Object.difference = (a,b) ->
 		

@@ -467,7 +467,7 @@ define(['jmodel/sapphire2'], function() {
   });
   module('Function: Ordering');
   test('Function.asc', function() {});
-  module('Comparison predicates');
+  module('Predicate methods');
   test('Function::eq', function() {
     equal(Function.eq(5)(5), true, 'returns true when applied to value equal to argument');
     return equal(Function.eq(5)(3), false, 'returns false when applied to value not equal to argument');
@@ -505,6 +505,15 @@ define(['jmodel/sapphire2'], function() {
     return raises((function() {
       return Function.between(5, 3);
     }), 'throws exception when lower bound not less or equal to upper bound');
+  });
+  test('Function::hastype', function() {
+    var test;
+
+    test = function() {
+      return 'red';
+    };
+    equal(test.hastype('string')(), true, 'returns true when function returns a value of specified type');
+    return equal(test.hastype('number')(), false, 'returns false when function returns a value not of specified type');
   });
   module('Property methods');
   test('Function::as', function() {
@@ -707,6 +716,36 @@ define(['jmodel/sapphire2'], function() {
     equals(d.surname, 'jones', 'Later objects supercede earlier ones for shared property values');
     deepEqual(Object.union(a), a, 'Union of single object is a copy of that object');
     return deepEqual(Object.union(), {}, 'Union of no objects is undefined');
+  });
+  test('intersection', function() {
+    var a, b, c, d;
+
+    a = {
+      forename: 'fred',
+      surname: 'smith',
+      age: 20,
+      title: 'Mr'
+    };
+    b = {
+      forename: 'fred',
+      surname: 'jones',
+      age: 20,
+      status: 'Employee'
+    };
+    c = {
+      forename: 'fred',
+      surname: 'jones',
+      department: 'IT'
+    };
+    d = Object.intersection(a, b, c);
+    equal(d.age, void 0, 'Properties not shared by all objects are undefined');
+    equal(d.department, void 0, 'Properties not shared by all objects are undefined');
+    notEqual(d.forename, void 0, 'Properties shared by all objects exist in intersection');
+    notEqual(d.surname, void 0, 'Properties shared by all objects exist in intersection');
+    equal(d.forename, 'fred', 'Property has same value in intersection if all objects have same value');
+    equal(d.surname, 'smith', 'Earlier objects supercede earlier ones for shared property values');
+    deepEqual(Object.intersection(a), a, 'Intersection of single object is a copy of that object');
+    return deepEqual(Object.intersection(), {}, 'Intersection of no objects is undefined');
   });
   module('Number');
   test('Integer', function() {
