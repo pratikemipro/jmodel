@@ -937,13 +937,6 @@ define(function (a,b,c,undefined) {
 		project:   Object.project
 	});
 	
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
-	
-	
 	//
 	// Accessors
 	//
@@ -961,6 +954,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: yes
 		keys: Object.keys || function (object) {
 			var keys = [];
 			for( var i in object ) {
@@ -968,6 +962,12 @@ define(function (a,b,c,undefined) {
 			}
 			return keys;
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: none
 		// Docs: none

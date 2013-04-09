@@ -45,3 +45,6 @@
 	
 	# Tests: none
 	Object.eq = (value) -> (object) -> object == value
+	
+	# Tests: none
+	Object.keys ?= (object) -> key for own key of object
