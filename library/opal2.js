@@ -765,16 +765,16 @@ define(function() {
   Object.difference = Function.From(Object, Object).To(Object)(function(a, b) {
     return Object.remove.apply(Object, Object.keys(b))(a);
   });
-  Object.join = function(predicate) {
-    return function() {
+  Object.join = Function.From(Function)(function(predicate) {
+    return Function.From([Object])(function() {
       var objects;
 
       objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (predicate.apply(null, objects)) {
         return Object.union.apply(Object, objects);
       }
-    };
-  };
+    });
+  });
   Number.__predicate = function(value) {
     return value instanceof Number || typeof value === 'number';
   };

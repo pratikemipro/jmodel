@@ -58,5 +58,6 @@
 	Object.difference = Function.From(Object,Object).To(Object) \
 		(a,b) -> Object.remove(Object.keys(b)...) a
 		
-	Object.join = (predicate) ->
-		(objects...) -> Object.union objects... if predicate objects...
+	Object.join = Function.From(Function) \
+		(predicate) -> Function.From([Object]) \
+			(objects...) -> Object.union objects... if predicate objects...
