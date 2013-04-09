@@ -31,6 +31,10 @@
 		take: Function.From(Number).To(Stream) \
 			(number) -> @derive (args...) ->
 				@add args... if number-- > 0
+		
+		drop: Function.From(Number).To(Stream) \
+			(number) -> @derive (args...) ->
+				@add args... if --number < 0
 			
 		@Of: Function.From(Function) \
 			(cons) ->
