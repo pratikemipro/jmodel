@@ -1009,20 +1009,21 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
-		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		path: function (elements,separator) {
 			return    typeof elements === 'string' ? Object.path.call(null,elements.split(separator||'.'))
 					: elements === undefined || elements.length === 0 ? Function.constant(undefined)
 					: elements.length === 1 ? Object.resolve(elements[0])
 					: Object.resolve(elements[0]).then(Object.path.call(null,elements.slice(1)));		
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: full
 		// Docs: none

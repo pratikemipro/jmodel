@@ -670,7 +670,31 @@ define(['jmodel/sapphire2'], function() {
     equals(Object.resolve('age')(person), 18, 'Resolve works with properties');
     equals(Object.resolve('name')(person), 'John Smith', 'Resolve works with methods');
     Object.resolve('age', 17)(person);
-    return equals(person.age, 17, 'Resolve updates properties with values given at creation time');
+    equals(person.age, 17, 'Resolve updates properties with values given at creation time');
+    Object.resolve('Forename', 'Adam')(person);
+    return equals(person.forename, 'Adam', 'Resolve updates methods with values given at creation time');
+  });
+  test('path', function() {
+    var person;
+
+    person = {
+      name: {
+        first: 'John',
+        last: 'Smith'
+      },
+      job: function() {
+        return {
+          company: 'Cyberdyne',
+          title: 'Developer'
+        };
+      }
+    };
+    equals(Object.path('name.last')(person), 'Smith', 'path works for paths specified in a string');
+    equals(Object.path('name/last', '/')(person), 'Smith', 'path works for paths specified in a string with alternative separator');
+    equals(Object.path(['name', 'first'])(person), 'John', 'path works for paths specified in an array');
+    equals(Object.path('job.title')(person), 'Developer', 'path works for containing methods');
+    equals(Object.path(['job', 'title'])(person), 'Developer', 'path works for paths containing methods specified as arrays');
+    return equals(Object.path('job.salary')(person), void 0, 'path returns undefined for paths that do not exist.');
   });
   module('Bare objects');
   test('Object.equal', function() {

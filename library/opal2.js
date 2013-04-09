@@ -729,7 +729,7 @@ define(function() {
 
       obj = arguments[0], args2 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       if (!obj[name]) {
-        throw 'Undefined member';
+        return void 0;
       }
       if (typeof obj[name] === 'function') {
         return Object.method.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
@@ -737,6 +737,28 @@ define(function() {
         return Object.property.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
       }
     };
+  };
+  Object.path = function(path, separator) {
+    var first, rest;
+
+    if (path == null) {
+      path = [];
+    }
+    if (separator == null) {
+      separator = '.';
+    }
+    if (typeof path === 'string') {
+      return Object.path(path.split(separator));
+    }
+    first = path[0], rest = 2 <= path.length ? __slice.call(path, 1) : [];
+    switch (path.length) {
+      case 0:
+        return Function.constant(void 0);
+      case 1:
+        return Object.resolve(first);
+      default:
+        return Object.resolve(first).then(Object.path(rest));
+    }
   };
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;

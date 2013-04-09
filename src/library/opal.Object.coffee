@@ -66,8 +66,16 @@
 	# Tests: full		
 	Object.resolve = (name,args1...) ->
 		(obj,args2...) ->
-			throw 'Undefined member' unless obj[name]
+			return undefined unless obj[name]
 			if typeof obj[name] == 'function'
 				Object.method(name,(Array.concat args1, args2)...) obj
 			else
 				Object.property(name,(Array.concat args1, args2)...) obj
+				
+	Object.path = (path=[],separator='.') ->
+		return Object.path path.split(separator) if typeof path == 'string'
+		[first,rest...] = path
+		switch path.length
+			when 0 then Function.constant undefined
+			when 1 then Object.resolve first
+			else Object.resolve(first).then Object.path rest
