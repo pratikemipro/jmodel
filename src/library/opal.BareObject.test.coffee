@@ -95,3 +95,22 @@
 	
 		deepEqual Object.intersection(a), a, 'Intersection of single object is a copy of that object'
 		deepEqual Object.intersection(), {}, 'Intersection of no objects is undefined'
+		
+	test 'difference', ->
+		
+		a =
+			forename: 'fred'
+			surname: 'smith'
+			age: 20
+			title: 'Mr'
+			
+		b =
+			forename: 'fred'
+			surname: 'jones'
+			department: 'IT'
+			
+		c = Object.difference a, b
+		
+		equal c.age, 20, 'Properties not defined in second object are preserved'
+		equal c.forename, undefined, 'Properties defined in second object are removed'
+		

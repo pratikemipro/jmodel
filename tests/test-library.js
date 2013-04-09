@@ -747,6 +747,24 @@ define(['jmodel/sapphire2'], function() {
     deepEqual(Object.intersection(a), a, 'Intersection of single object is a copy of that object');
     return deepEqual(Object.intersection(), {}, 'Intersection of no objects is undefined');
   });
+  test('difference', function() {
+    var a, b, c;
+
+    a = {
+      forename: 'fred',
+      surname: 'smith',
+      age: 20,
+      title: 'Mr'
+    };
+    b = {
+      forename: 'fred',
+      surname: 'jones',
+      department: 'IT'
+    };
+    c = Object.difference(a, b);
+    equal(c.age, 20, 'Properties not defined in second object are preserved');
+    return equal(c.forename, void 0, 'Properties defined in second object are removed');
+  });
   module('Number');
   test('Integer', function() {
     equals(Integer(5), 5, 'Returns the integer value when called on an integer.');

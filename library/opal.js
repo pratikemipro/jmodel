@@ -912,18 +912,19 @@ define(function (a,b,c,undefined) {
 					: Object.project.apply(null,Object.keys(Object.intersection.apply(null,_slice.call(arguments,1))))(x);
 		},
 		
+		// Tests: none
+		// Docs: none
+		// Reimplemented: yes
+		difference: function (x,y) {
+			return Object.remove.apply(null,Object.keys(y))(x);
+		},
+		
 /*
 
 		REIMPLEMENTED AS FAR AS HERE
 
 */
-		
-		// Tests: none
-		// Docs: none
-		difference: function (x,y) {
-			return Object.remove.apply(null,Object.keys(y))(x);
-		},
-		
+
 		// Tests: none
 		// Docs: none
 		join: function (predicate) {
