@@ -88,6 +88,17 @@ define(['jmodel/sapphire2'], function() {
     equals(Object.ensure(Person)('jane', 28) instanceof Person, true, 'Constructs new object when arguments not already of type');
     return equals(Object.ensure(Person, 'fred')(28).name, 'fred', 'Allows passing at definition time');
   });
+  test('Object.keys', function() {
+    var a;
+
+    a = {
+      forename: 'fred',
+      surname: 'smith',
+      age: 20,
+      title: 'Mr'
+    };
+    return deepEqual(Object.keys(a), ['forename', 'surname', 'age', 'title'], 'Returns keys');
+  });
   module('Basic functions');
   test('Function.identity', function() {
     var obj;

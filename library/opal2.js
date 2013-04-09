@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, _base, _ref;
+  var Promise, _base, _ref, _ref1;
 
   Array.concat = function() {
     var arrays, _ref;
@@ -199,6 +199,18 @@ define(function() {
       return object === value;
     };
   };
+  if ((_ref = Object.keys) == null) {
+    Object.keys = function(object) {
+      var key, _results;
+
+      _results = [];
+      for (key in object) {
+        if (!__hasProp.call(object, key)) continue;
+        _results.push(key);
+      }
+      return _results;
+    };
+  }
   Function.identity = function(x) {
     return x;
   };
@@ -256,10 +268,10 @@ define(function() {
     };
   };
   Function.pipe = function() {
-    var fn, fns, _ref;
+    var fn, fns, _ref1;
 
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
+    if ((_ref1 = typeof fn) !== 'function' && _ref1 !== 'undefined') {
       throw 'Precondition failure';
     }
     switch (arguments.length) {
@@ -272,10 +284,10 @@ define(function() {
     }
   };
   Function.compose = function() {
-    var fn, fns, _ref;
+    var fn, fns, _ref1;
 
     fn = arguments[0], fns = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if ((_ref = typeof fn) !== 'function' && _ref !== 'undefined') {
+    if ((_ref1 = typeof fn) !== 'function' && _ref1 !== 'undefined') {
       throw 'Precondition failure';
     }
     switch (arguments.length) {
@@ -552,13 +564,13 @@ define(function() {
       return cache[args] = ret;
     });
     return function() {
-      var args, _ref;
+      var args, _ref1;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return (_ref = cache[args]) != null ? _ref : fn.apply(this, arguments);
+      return (_ref1 = cache[args]) != null ? _ref1 : fn.apply(this, arguments);
     };
   };
-  if ((_ref = (_base = Function.prototype).delay) == null) {
+  if ((_ref1 = (_base = Function.prototype).delay) == null) {
     _base.delay = function() {
       var args1, duration, fn;
 
@@ -654,7 +666,7 @@ define(function() {
     };
   });
   Function.prototype.Where = function(predicate, message) {
-    var property, restricted, value, _ref1;
+    var property, restricted, value, _ref2;
 
     if (message == null) {
       message = 'Invalid value';
@@ -666,9 +678,9 @@ define(function() {
     });
     restricted.base = this.base || this;
     restricted.__predicate = predicate;
-    _ref1 = restricted.base;
-    for (property in _ref1) {
-      value = _ref1[property];
+    _ref2 = restricted.base;
+    for (property in _ref2) {
+      value = _ref2[property];
       restricted[property] = value;
     }
     return restricted;
@@ -828,9 +840,9 @@ define(function() {
     };
   };
   return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, chain, delay, _ref1;
+    var FULFILLED, PENDING, REJECTED, chain, delay, _ref2;
 
-    _ref1 = [1, 2, 3], PENDING = _ref1[0], FULFILLED = _ref1[1], REJECTED = _ref1[2];
+    _ref2 = [1, 2, 3], PENDING = _ref2[0], FULFILLED = _ref2[1], REJECTED = _ref2[2];
 
     delay = function(fn) {
       return setTimeout(fn, 1);
@@ -893,15 +905,15 @@ define(function() {
     Promise.prototype.fulfil = Function.Requiring(function() {
       return this.status === PENDING;
     })(function() {
-      var fulfilled, promise, value, _i, _len, _ref2, _ref3, _results;
+      var fulfilled, promise, value, _i, _len, _ref3, _ref4, _results;
 
       value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       this.value = value;
       this.status = FULFILLED;
-      _ref2 = this.waiting;
+      _ref3 = this.waiting;
       _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        _ref3 = _ref2[_i], promise = _ref3.promise, fulfilled = _ref3.fulfilled;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        _ref4 = _ref3[_i], promise = _ref4.promise, fulfilled = _ref4.fulfilled;
         _results.push(chain(promise, fulfilled, this.value));
       }
       return _results;
@@ -910,29 +922,29 @@ define(function() {
     Promise.prototype.reject = Function.Requiring(function() {
       return this.status === PENDING;
     })(function(reason) {
-      var promise, rejected, _i, _len, _ref2, _ref3, _results;
+      var promise, rejected, _i, _len, _ref3, _ref4, _results;
 
       this.reason = reason;
       this.status = REJECTED;
-      _ref2 = this.waiting;
+      _ref3 = this.waiting;
       _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        _ref3 = _ref2[_i], promise = _ref3.promise, rejected = _ref3.rejected;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        _ref4 = _ref3[_i], promise = _ref4.promise, rejected = _ref4.rejected;
         _results.push(chain(promise, rejected, [this.reason]));
       }
       return _results;
     });
 
     Promise.Of = function(cons) {
-      var ensure, _ref2;
+      var ensure, _ref3;
 
       ensure = Object.ensure(cons);
       return (function(_super) {
         __extends(_Class, _super);
 
         function _Class() {
-          _ref2 = _Class.__super__.constructor.apply(this, arguments);
-          return _ref2;
+          _ref3 = _Class.__super__.constructor.apply(this, arguments);
+          return _ref3;
         }
 
         _Class.prototype.fulfil = function() {
