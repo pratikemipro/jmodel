@@ -603,9 +603,7 @@ define(function() {
     }));
   };
   Function.prototype.hastype = function(type) {
-    return this.then(Predicate(function(x) {
-      return typeof x === type;
-    }));
+    return this.then(Object.type.eq(type));
   };
   Function.prototype.asc = function() {
     var fn;

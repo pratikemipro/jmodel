@@ -263,7 +263,7 @@
 	
 	test 'Function.asc', ->
 		
-	module 'Comparison predicates'
+	module 'Predicate methods'
 		
 	test 'Function::eq', ->
 		
@@ -309,6 +309,13 @@
 		equal Function.between(3,5)(5), true, 'returns true when applied to value equal to upper bound'
 		equal Function.between(3,5)(6), false, 'returns false when applied to value greater than upper bound'
 		raises ( -> Function.between(5,3) ), 'throws exception when lower bound not less or equal to upper bound'
+	
+	test 'Function::hastype', ->
+		
+		test = -> 'red'
+		
+		equal test.hastype('string')(), true, 'returns true when function returns a value of specified type'
+		equal test.hastype('number')(), false, 'returns false when function returns a value not of specified type'
 		
 	module 'Property methods'
 	
