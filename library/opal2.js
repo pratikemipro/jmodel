@@ -309,23 +309,29 @@ define(function() {
       return ret;
     };
   };
-  Function.prototype.require = function(predicate) {
+  Function.prototype.require = function(predicate, message) {
+    if (message == null) {
+      message = 'Precondition failure';
+    }
     return this.pre(function() {
       var args;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
-        throw 'Precondition failure';
+        throw message + ': ' + args.toString();
       }
     });
   };
-  Function.prototype.ensure = function(predicate) {
+  Function.prototype.ensure = function(predicate, message) {
+    if (message == null) {
+      message = 'Postcondition failure';
+    }
     return this.post(function() {
       var args;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
-        throw 'Postcondition failure';
+        throw message + ': ' + args.toString();
       }
     });
   };
@@ -341,43 +347,43 @@ define(function() {
       return predicate(args);
     };
   };
-  Function.prototype.Requiring = function(predicate) {
+  Function.prototype.Requiring = function(predicate, message) {
     return this.then(function(fn) {
-      return fn.require(predicate);
+      return fn.require(predicate, message);
     });
   };
-  Function.Requiring = function(predicate) {
+  Function.Requiring = function(predicate, message) {
     return function(fn) {
-      return fn.require(predicate);
+      return fn.require(predicate, message);
     };
   };
-  Function.prototype.Ensuring = function(predicate) {
+  Function.prototype.Ensuring = function(predicate, message) {
     return this.then(function(fn) {
-      return fn.ensure(predicate);
+      return fn.ensure(predicate, message);
     });
   };
-  Function.Ensuring = function(predicate) {
+  Function.Ensuring = function(predicate, message) {
     return function(fn) {
-      return fn.ensure(predicate);
+      return fn.ensure(predicate, message);
     };
   };
   Function.prototype.From = function() {
     var types;
 
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return this.Requiring(Function.hastypes.apply(Function, types));
+    return this.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.From = function() {
     var types;
 
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return Function.Requiring(Function.hastypes.apply(Function, types));
+    return Function.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.prototype.To = function(type) {
-    return this.Ensuring(Object.isa(type));
+    return this.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
   };
   Function.To = function(type) {
-    return Function.Ensuring(Object.isa(type));
+    return Function.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
   };
   window.Predicate = Function.To(Boolean);
   Function.prototype.and = Function.From(Function)(function(predicate2) {
@@ -743,11 +749,19 @@ define(function() {
         return Object.extend(Object.copy(first), Object.union.apply(Object, rest));
     }
   });
-  Object.intersection = function() {
-    var objects;
+  Object.intersection = Function.From([Object]).To(Object)(function() {
+    var first, rest;
 
-    objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-  };
+    first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    switch (arguments.length) {
+      case 1:
+        return first;
+      case 0:
+        return {};
+      default:
+        return Object.project.apply(Object, Object.keys(Object.intersection.apply(Object, rest)))(first);
+    }
+  });
   Object.difference = function(a, b) {};
   Object.join = function(predicate) {};
   Number.__predicate = function(value) {
