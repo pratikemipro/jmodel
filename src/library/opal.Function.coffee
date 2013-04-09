@@ -288,7 +288,7 @@
 		
 	Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
 		
-	Function::hastype = (type) -> @then Predicate (x) -> typeof x == type
+	Function::hastype = (type) -> @then Object.type.eq type
 	
 	##
 	## Ordering methods
