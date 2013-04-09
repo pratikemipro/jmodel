@@ -762,7 +762,9 @@ define(function() {
         return Object.project.apply(Object, Object.keys(Object.intersection.apply(Object, rest)))(first);
     }
   });
-  Object.difference = function(a, b) {};
+  Object.difference = Function.From(Object, Object).To(Object)(function(a, b) {
+    return Object.remove.apply(Object, Object.keys(b))(a);
+  });
   Object.join = function(predicate) {};
   Number.__predicate = function(value) {
     return value instanceof Number || typeof value === 'number';

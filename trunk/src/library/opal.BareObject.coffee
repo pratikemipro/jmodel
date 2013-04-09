@@ -54,7 +54,8 @@
 				when 0 then {}
 				else Object.project(Object.keys(Object.intersection rest...)...) first
 		
-	Object.difference = (a,b) ->
+	Object.difference = Function.From(Object,Object).To(Object) \
+		(a,b) -> Object.remove(Object.keys(b)...) a
 		
 	Object.join = (predicate) ->
 		
