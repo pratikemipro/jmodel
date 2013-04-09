@@ -15,6 +15,7 @@ var __slice = [].slice,
 define(function() {
   var Promise, _base, _ref, _ref1;
 
+  window.Value = function() {};
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
@@ -27,6 +28,10 @@ define(function() {
     } else if (constructor === Boolean) {
       return function(obj) {
         return obj instanceof Boolean || typeof obj === 'boolean';
+      };
+    } else if (constructor === Value) {
+      return function(obj) {
+        return obj !== void 0;
       };
     } else {
       return function(obj) {
@@ -685,6 +690,22 @@ define(function() {
       return _results;
     });
   }
+  Object.property = function(property, value) {
+    switch (arguments.length) {
+      case 1:
+        return function(obj) {
+          return obj[property];
+        };
+      case 2:
+        return function(obj) {
+          if (obj[property] === void 0) {
+            throw 'Undefined property';
+          }
+          obj[property] = value;
+          return obj;
+        };
+    }
+  };
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
 

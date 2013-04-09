@@ -74,3 +74,18 @@
 			title: 'Mr'
 			
 		deepEqual Object.keys(a), ['forename','surname','age','title'], 'Returns keys'
+		
+	test 'Object.property', ->
+		
+		fred =
+			forename: 'fred'
+			surname: 'smith'
+			
+		equals Object.property('surname')(fred), 'smith', 'property works on properties that exist'
+		equals Object.property('age')(fred), undefined, 'property returns "undefined" for properties that do not exist'
+	
+		Object.property('surname','jones')(fred);
+		equals fred.surname, 'jones', 'property allows setting of values at creation time'
+	
+		raises ( -> Object.property('age',17)(fred) ), 'raises exception on attempting to set property that does not exist'
+		equals fred.age, undefined, 'property is not set if it does not exist'
