@@ -7,3 +7,11 @@
 ##
 
 	window.EventType = class EventType extends Stream.Of Promise
+		
+		constructor: ->
+		
+		subscribe: ->
+			
+		raise: ->
+			
+		fail: ->

@@ -11,15 +11,29 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/sapphire2'], function() {
-  var EventType, _ref;
+  var EventType, SubscriberSet, _ref;
 
+  window.SubscriberSet = SubscriberSet = (function(_super) {
+    __extends(SubscriberSet, _super);
+
+    function SubscriberSet() {
+      _ref = SubscriberSet.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return SubscriberSet;
+
+  })(Set.Of(Subscriber));
   return window.EventType = EventType = (function(_super) {
     __extends(EventType, _super);
 
-    function EventType() {
-      _ref = EventType.__super__.constructor.apply(this, arguments);
-      return _ref;
-    }
+    function EventType() {}
+
+    EventType.prototype.subscribe = function() {};
+
+    EventType.prototype.raise = function() {};
+
+    EventType.prototype.fail = function() {};
 
     return EventType;
 

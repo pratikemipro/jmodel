@@ -981,6 +981,7 @@ define(['jmodel/sapphire2'], function() {
   module('List');
   module('Map');
   module('Stream');
+  module('SubscriberSet');
   return module('EventType');
 });
 
