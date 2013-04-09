@@ -42,3 +42,6 @@
 	
 	# Tests: none
 	Object.type = (obj) -> typeof obj
+	
+	# Tests: none
+	Object.eq = (value) -> (object) -> object == value

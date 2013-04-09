@@ -194,6 +194,11 @@ define(function() {
   Object.type = function(obj) {
     return typeof obj;
   };
+  Object.eq = function(value) {
+    return function(object) {
+      return object === value;
+    };
+  };
   Function.identity = function(x) {
     return x;
   };
