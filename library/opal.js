@@ -998,14 +998,9 @@ define(function (a,b,c,undefined) {
 			};
 		},
 		
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
-		
 		// Tests: full
 		// Docs: none
+		// Reimplemented: yes
 		resolve: function (name) {
 		    var args = _slice.call(arguments);
 			return function (object) {
@@ -1013,6 +1008,12 @@ define(function (a,b,c,undefined) {
 						: Object.property.apply(null,args)(object);
 			};
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: full
 		// Docs: full

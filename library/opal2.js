@@ -720,6 +720,24 @@ define(function() {
       return obj[method].apply(obj, Array.concat(args1, args2));
     };
   };
+  Object.resolve = function() {
+    var args1, name;
+
+    name = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    return function() {
+      var args2, obj;
+
+      obj = arguments[0], args2 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (!obj[name]) {
+        throw 'Undefined member';
+      }
+      if (typeof obj[name] === 'function') {
+        return Object.method.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
+      } else {
+        return Object.property.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
+      }
+    };
+  };
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
 

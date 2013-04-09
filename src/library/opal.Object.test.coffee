@@ -102,3 +102,21 @@
 		equals Object.method('add',2,3)(adder), 5, 'Method works with arguments at creation time'
 		equals Object.method('add',2)(adder,3), 5, 'Method works with arguments at invocation time'
 		raises (-> Object.method('test')(adder) ), 'Method raises exception if method does not exist.'
+		
+	test 'Object.resolve', ->
+    
+		class Person
+			constructor: (@forename,@surname,@age) ->
+			name: -> "#{@forename} #{@surname}"
+			Forename: (@forename) -> this
+	
+		person = new Person 'John', 'Smith', 18
+	
+		equals Object.resolve('age')(person),  18,           'Resolve works with properties'
+		equals Object.resolve('name')(person), 'John Smith', 'Resolve works with methods'
+	
+		Object.resolve('age',17)(person);
+		equals person.age, 17, 'Resolve updates properties with values given at creation time'
+    
+#		Object.resolve('Forename','Adam')(person)
+#	    equals person.forename, 'Adam', 'Resolve updates methods with values given at creation time'
