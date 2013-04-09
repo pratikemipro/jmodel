@@ -18,11 +18,19 @@
 		each: Function.From(Function) \
 			(fn) -> @fns.push fn
 			
-		where: Function.From(Function).To(Stream) \
-			(predicate) ->
+		derive: Function.From(Function).To(Stream) \
+			(fn) ->
 				child = new this.constructor()
-				@each (args...) -> child.add args... if predicate args...
+				@each fn.bind child
 				return child
+			
+		where: Function.From(Function).To(Stream) \
+			(predicate) -> @derive (args...) ->
+				@add args... if predicate args...
+		
+		take: Function.From(Number).To(Stream) \
+			(number) -> @derive (args...) ->
+				@add args... if number-- > 0
 			
 		@Of: Function.From(Function) \
 			(cons) ->
