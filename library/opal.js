@@ -971,12 +971,14 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		get: function (property,object) {
 			return object[property];
 		},
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		set: function (property,value,object) {
 			if ( object[property] !== undefined ) {
 				object[property] = value;
