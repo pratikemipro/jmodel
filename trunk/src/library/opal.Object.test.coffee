@@ -118,5 +118,25 @@
 		Object.resolve('age',17)(person);
 		equals person.age, 17, 'Resolve updates properties with values given at creation time'
     
-#		Object.resolve('Forename','Adam')(person)
-#	    equals person.forename, 'Adam', 'Resolve updates methods with values given at creation time'
+		Object.resolve('Forename','Adam')(person)
+		equals person.forename, 'Adam', 'Resolve updates methods with values given at creation time'
+
+	test 'path', ->
+	
+		person = {
+			name: {
+				first: 'John',
+				last: 'Smith'
+			},
+			job: -> {
+				company: 'Cyberdyne',
+				title: 'Developer'
+			}
+		}
+	
+		equals Object.path('name.last')(person), 'Smith', 'path works for paths specified in a string'
+		equals Object.path('name/last','/')(person), 'Smith', 'path works for paths specified in a string with alternative separator'
+		equals Object.path(['name','first'])(person), 'John', 'path works for paths specified in an array'
+		equals Object.path('job.title')(person), 'Developer', 'path works for containing methods'
+		equals Object.path(['job','title'])(person), 'Developer', 'path works for paths containing methods specified as arrays'
+		equals Object.path('job.salary')(person), undefined, 'path returns undefined for paths that do not exist.'
