@@ -1,6 +1,7 @@
 default:
 	@make opal
 	@make sapphire
+	@make emerald
 	@make library-test
 	@make jview
 
@@ -23,6 +24,11 @@ sapphire:
 		src/library/sapphire.List.coffee \
 		src/library/sapphire.Map.coffee \
 		src/library/sapphire.Stream.coffee
+		
+emerald:
+	coffee --compile --bare --map --join library/emerald2.js \
+		src/library/emerald.header.coffee \
+		src/library/emerald.EventType.coffee
 
 library-test:
 	coffee --compile --bare --map --join tests/test-library.js \
@@ -37,7 +43,8 @@ library-test:
 		src/library/sapphire.Set.test.coffee \
 		src/library/sapphire.List.test.coffee \
 		src/library/sapphire.Map.test.coffee \
-		src/library/sapphire.Stream.test.coffee
+		src/library/sapphire.Stream.test.coffee \
+		src/library/emerald.EventType.test.coffee
 		
 jview:
 	coffee --compile --bare --map jview/
