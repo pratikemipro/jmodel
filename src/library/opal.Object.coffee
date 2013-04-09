@@ -7,9 +7,10 @@
 ##
 
 	# Tests: full
-	Object.extend = (target,source) ->
-		target[key] = source[key] for own key of source
-		target
+	Object.extend = Function.From(Object,Object).To(Object) \
+		(target,source) ->
+			target[key] = source[key] for own key of source
+			target
 
 	# Tests: full
 	Object.construct = (constructor,args1...) ->

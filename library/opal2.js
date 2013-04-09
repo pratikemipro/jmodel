@@ -605,7 +605,7 @@ define(function() {
     }
     return restricted;
   };
-  Object.extend = function(target, source) {
+  Object.extend = Function.From(Object, Object).To(Object)(function(target, source) {
     var key;
 
     for (key in source) {
@@ -613,7 +613,7 @@ define(function() {
       target[key] = source[key];
     }
     return target;
-  };
+  });
   Object.construct = function() {
     var args1, constructor;
 
