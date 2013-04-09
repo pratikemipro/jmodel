@@ -24,6 +24,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	// Docs: none
+	// Reimplemented: yes
 	Object.extend = Object.extend || function (target,source) {
 		for ( var i in source ) {
 			target[i] = source[i];
@@ -34,6 +35,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: full
+	// Reimplemented: yes
 	function type (object) {
 		return typeof object;
 	}
