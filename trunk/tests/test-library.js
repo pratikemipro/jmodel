@@ -603,6 +603,22 @@ define(['jmodel/sapphire2'], function() {
     };
     return deepEqual(Object.keys(a), ['forename', 'surname', 'age', 'title'], 'Returns keys');
   });
+  test('Object.property', function() {
+    var fred;
+
+    fred = {
+      forename: 'fred',
+      surname: 'smith'
+    };
+    equals(Object.property('surname')(fred), 'smith', 'property works on properties that exist');
+    equals(Object.property('age')(fred), void 0, 'property returns "undefined" for properties that do not exist');
+    Object.property('surname', 'jones')(fred);
+    equals(fred.surname, 'jones', 'property allows setting of values at creation time');
+    raises((function() {
+      return Object.property('age', 17)(fred);
+    }), 'raises exception on attempting to set property that does not exist');
+    return equals(fred.age, void 0, 'property is not set if it does not exist');
+  });
   module('Bare objects');
   test('Object.equal', function() {
     equals(Object.equal({

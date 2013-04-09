@@ -963,12 +963,6 @@ define(function (a,b,c,undefined) {
 			return keys;
 		},
 		
-/*
-
-		REIMPLEMENTED AS FAR AS HERE
-
-*/
-		
 		// Tests: none
 		// Docs: none
 		// Reimplemented: no
@@ -989,9 +983,16 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: full
 		// Docs: full
+		// Reimplemented: yes
 		property: function (property,value) {
 			return value === undefined ? Object.get.curry(property) : Object.set.curry(property,value);
 		},
+		
+/*
+
+		REIMPLEMENTED AS FAR AS HERE
+
+*/
 		
 		// Tests: full
 		// Docs: full

@@ -43,3 +43,16 @@
 	# Tests: full
 	Object.keys ?= Function.From(Object).To(Array) \
 		(object) -> key for own key of object
+		
+	##
+	## Accessors
+	##
+	
+	# Tests: full
+	Object.property = (property,value) ->
+		switch arguments.length
+			when 1 then (obj) -> obj[property]
+			when 2 then (obj) ->
+				throw 'Undefined property' unless obj[property] != undefined
+				obj[property] = value
+				obj
