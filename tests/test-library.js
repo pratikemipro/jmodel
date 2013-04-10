@@ -981,6 +981,22 @@ define(['jmodel/emerald2'], function() {
   module('List');
   module('Map');
   module('Stream');
+  test('Stream::add', function() {
+    var output1, output2, stream;
+
+    stream = new Stream();
+    output1 = [];
+    output2 = [];
+    stream.each(function(obj) {
+      return output1.push(obj);
+    });
+    stream.each(function(obj) {
+      return output2.push("<" + obj + ">");
+    });
+    stream.add('red').add('green').add('blue');
+    deepEqual(output1, ['red', 'green', 'blue'], 'Items added to stream are passed to each');
+    return deepEqual(output2, ['<red>', '<green>', '<blue>'], 'Allows multiple each callbacks');
+  });
   module('Subscriber');
   return module('EventType');
 });
