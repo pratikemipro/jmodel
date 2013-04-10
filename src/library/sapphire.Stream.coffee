@@ -24,15 +24,15 @@
 				@each fn.bind child
 				return child
 			
-		where: Function.From(Function).To(this) \
+		where: Function.From(Function).To(Stream) \
 			(predicate) -> @derive (args...) ->
 				@add args... if predicate args...
 		
-		take: Function.From(Number).To(this) \
+		take: Function.From(Number).To(Stream) \
 			(number) -> @derive (args...) ->
 				@add args... if number-- > 0
 		
-		drop: Function.From(Number).To(this) \
+		drop: Function.From(Number).To(Stream) \
 			(number) -> @derive (args...) ->
 				@add args... if --number < 0
 			
