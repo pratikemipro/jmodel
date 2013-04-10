@@ -342,6 +342,16 @@ define(['jmodel/opal2'], function() {
       });
     });
 
+    Stream.prototype.transition = Function.To(Stream)(function() {
+      var _this = this;
+
+      return (function(last) {
+        return _this.where(function(x) {
+          return last !== x && ((last = x) || true);
+        });
+      })(void 0);
+    });
+
     Stream.Of = Function.From(Function)(function(cons) {
       var ensure, _ref;
 

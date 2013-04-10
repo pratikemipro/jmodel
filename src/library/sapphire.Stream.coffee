@@ -38,7 +38,12 @@
 		# Tests: full
 		drop: Function.From(Number).To(Stream) \
 			(number) -> @where -> --number < 0
-		
+			
+		# Tests: full
+		transition: Function.To(Stream) \
+			-> do (last=undefined) =>
+				@where (x) -> last != x and ( ( last = x ) or true )
+				
 		# Tests: full	
 		@Of: Function.From(Function) \
 			(cons) ->
