@@ -1066,7 +1066,15 @@ define(['jmodel/emerald2'], function() {
     return equal(john.name, 'john', 'Passes arguments to constructors correctly');
   });
   module('Subscriber');
-  return module('EventType');
+  module('EventType');
+  return test('EventType::subscribe', function() {
+    var et, subscriber;
+
+    et = new EventType();
+    subscriber = new Subscriber();
+    et.subscribe(subscriber);
+    return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
+  });
 });
 
 /*

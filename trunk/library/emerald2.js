@@ -17,6 +17,10 @@ define(['jmodel/sapphire2'], function() {
   window.Subscriber = Subscriber = (function() {
     function Subscriber() {}
 
+    Subscriber.prototype.notify = function() {};
+
+    Subscriber.prototype.fail = function() {};
+
     return Subscriber;
 
   })();
