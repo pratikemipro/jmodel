@@ -11,10 +11,12 @@
 		constructor: ->
 			@fns = []
 		
+		# Tests: full
 		add: (args...) ->
 			fn args... for fn in @fns
 			this
 		
+		# Tests: full
 		each: Function.From(Function) \
 			(fn) -> @fns.push fn
 			
