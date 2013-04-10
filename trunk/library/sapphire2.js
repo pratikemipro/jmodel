@@ -331,24 +331,14 @@ define(['jmodel/opal2'], function() {
     });
 
     Stream.prototype.take = Function.From(Number).To(Stream)(function(number) {
-      return this.derive(function() {
-        var args;
-
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (number-- > 0) {
-          return this.add.apply(this, args);
-        }
+      return this.where(function() {
+        return number-- > 0;
       });
     });
 
     Stream.prototype.drop = Function.From(Number).To(Stream)(function(number) {
-      return this.derive(function() {
-        var args;
-
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (--number < 0) {
-          return this.add.apply(this, args);
-        }
+      return this.where(function() {
+        return --number < 0;
       });
     });
 
