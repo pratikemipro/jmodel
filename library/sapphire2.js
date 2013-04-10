@@ -295,17 +295,18 @@ define(['jmodel/opal2'], function() {
       this.fns = [];
     }
 
-    Stream.prototype.add = function() {
-      var args, fn, _i, _len, _ref;
+    Stream.prototype.add = K(function() {
+      var args, fn, _i, _len, _ref, _results;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       _ref = this.fns;
+      _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         fn = _ref[_i];
-        fn.apply(null, args);
+        _results.push(fn.apply(null, args));
       }
-      return this;
-    };
+      return _results;
+    });
 
     Stream.prototype.each = Function.From(Function)(function(fn) {
       return this.fns.push(fn);

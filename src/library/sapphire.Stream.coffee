@@ -12,9 +12,7 @@
 			@fns = []
 		
 		# Tests: full
-		add: (args...) ->
-			fn args... for fn in @fns
-			this
+		add: K (args...) -> fn args... for fn in @fns
 		
 		# Tests: full
 		each: Function.From(Function) \
