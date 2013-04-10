@@ -30,6 +30,7 @@
 			(predicate) -> @derive (args...) ->
 				@add args... if predicate args...
 		
+		# Tests: full
 		take: Function.From(Number).To(Stream) \
 			(number) -> @derive (args...) ->
 				@add args... if number-- > 0
