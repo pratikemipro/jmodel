@@ -1013,6 +1013,22 @@ define(['jmodel/emerald2'], function() {
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, ['red', 'green', 'blue'], 'Derived stream only includes first n items');
   });
+  test('Stream::drop', function() {
+    var output1, output2, stream;
+
+    stream = new Stream();
+    output1 = [];
+    output2 = [];
+    stream.each(function(obj) {
+      return output1.push(obj);
+    });
+    stream.drop(3).each(function(obj) {
+      return output2.push(obj);
+    });
+    stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
+    deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
+    return deepEqual(output2, ['cyan', 'magenta', 'yellow'], 'Derived stream does not include first n items');
+  });
   module('Subscriber');
   return module('EventType');
 });
