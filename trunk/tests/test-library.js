@@ -1048,6 +1048,20 @@ define(['jmodel/emerald2'], function() {
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, ['cyan', 'magenta', 'yellow'], 'Derived stream does not include first n items');
   });
+  test('Stream::transition', function() {
+    var output, stream;
+
+    stream = new Stream();
+    output = [];
+    stream.transition().each(function(obj) {
+      return output.push(obj);
+    });
+    stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1);
+    deepEqual(output, [3, 2, 5, 1], 'Transition stream only contains distinct values');
+    output = [];
+    stream.add(false).add(false).add(false).add(true).add(false).add(true).add(true);
+    return deepEqual(output, [false, true, false, true], 'Transition works for Boolean values');
+  });
   test('Stream.Of', function() {
     var Person, fred, john, output, stream;
 

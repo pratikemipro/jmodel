@@ -61,6 +61,23 @@
 	
 		deepEqual output1, ['red','green','blue','cyan','magenta','yellow'], 'Behaviour of base stream is unaffected'
 		deepEqual output2, ['cyan','magenta','yellow'], 'Derived stream does not include first n items'
+	
+	test 'Stream::transition', ->
+		
+		stream = new Stream()
+		output = []
+		
+		stream.transition().each (obj) -> output.push obj
+		
+		stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1)
+		
+		deepEqual output, [3,2,5,1], 'Transition stream only contains distinct values'
+		
+		output = []
+		
+		stream.add(false).add(false).add(false).add(true).add(false).add(true).add(true)
+		
+		deepEqual output, [false,true,false,true], 'Transition works for Boolean values'
 		
 	test 'Stream.Of', ->
 		
