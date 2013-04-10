@@ -997,6 +997,25 @@ define(['jmodel/emerald2'], function() {
     deepEqual(output1, ['red', 'green', 'blue'], 'Items added to stream are passed to each');
     return deepEqual(output2, ['<red>', '<green>', '<blue>'], 'Allows multiple each callbacks');
   });
+  test('Stream::where', function() {
+    var odd, output1, output2, stream;
+
+    stream = new Stream();
+    output1 = [];
+    output2 = [];
+    odd = function(x) {
+      return x % 2 === 1;
+    };
+    stream.each(function(obj) {
+      return output1.push(obj);
+    });
+    stream.where(odd).each(function(obj) {
+      return output2.push(obj);
+    });
+    stream.add(1).add(2).add(3).add(4).add(5).add(6);
+    deepEqual(output1, [1, 2, 3, 4, 5, 6], 'Behaviour of base stream is unaffected');
+    return deepEqual(output2, [1, 3, 5], 'Derived stream only includes first n items');
+  });
   test('Stream::take', function() {
     var output1, output2, stream;
 
@@ -1028,6 +1047,23 @@ define(['jmodel/emerald2'], function() {
     stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, ['cyan', 'magenta', 'yellow'], 'Derived stream does not include first n items');
+  });
+  test('Stream.Of', function() {
+    var Person, fred, john, output, stream;
+
+    Person = function(name) {
+      this.name = name;
+    };
+    stream = new (Stream.Of(Person));
+    output = [];
+    stream.each(function(person) {
+      return output.push(person);
+    });
+    stream.add(new Person('fred')).add('john');
+    fred = output[0], john = output[1];
+    equal(stream instanceof Stream, true, 'Typed Streams are Streams');
+    equal(fred instanceof Person && john instanceof Person, true, 'Objects in stream are of correct type');
+    return equal(john.name, 'john', 'Passes arguments to constructors correctly');
   });
   module('Subscriber');
   return module('EventType');

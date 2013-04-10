@@ -25,7 +25,8 @@
 				child = new this.constructor()
 				@each fn.bind child
 				return child
-			
+		
+		# Tests: full	
 		where: Function.From(Function).To(Stream) \
 			(predicate) -> @derive (args...) ->
 				@add args... if predicate args...
@@ -39,7 +40,8 @@
 		drop: Function.From(Number).To(Stream) \
 			(number) -> @derive (args...) ->
 				@add args... if --number < 0
-			
+		
+		# Tests: full	
 		@Of: Function.From(Function) \
 			(cons) ->
 				ensure = Object.ensure cons
