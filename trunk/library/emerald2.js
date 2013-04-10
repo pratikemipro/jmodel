@@ -33,8 +33,9 @@ define(['jmodel/sapphire2'], function() {
       EventType.__super__.constructor.call(this);
       this.subscribers = new (Set.Of(Subscriber));
       this.each(function(promise) {
-        _this.subscribers.each(function(subscriber) {});
-        return promise.then(subscriber.notify, subscriber.fail);
+        return _this.subscribers.each(function(subscriber) {
+          return promise.then(subscriber.notify, subscriber.fail);
+        });
       });
     }
 

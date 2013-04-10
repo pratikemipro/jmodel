@@ -15,7 +15,7 @@
 			@subscribers = new (Set.Of Subscriber)
 			
 			@each (promise) =>
-	 			@subscribers.each (subscriber) ->
+				@subscribers.each (subscriber) ->
 					promise.then subscriber.notify, subscriber.fail
 		
 		# Tests: full
