@@ -18,6 +18,7 @@
 	 			@subscribers.each (subscriber) ->
 					promise.then subscriber.notify, subscriber.fail
 		
+		# Tests: full
 		subscribe: (args...) -> @subscribers.add args...
 			
 		raise: (args...) -> @add args...
