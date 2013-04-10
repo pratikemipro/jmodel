@@ -11,7 +11,9 @@ define ->
 	# NOTE: Define assert here
 	
 	window.Value = ->
-	
+		
+	window.K = K = (fn) -> (args...) -> fn.apply(this,args); this
+				
 	# Tests: none
 	Object.isa = (constructor) ->
 		if      constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'

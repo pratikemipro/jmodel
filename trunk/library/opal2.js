@@ -13,9 +13,18 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, _base, _ref, _ref1;
+  var K, Promise, _base, _ref, _ref1;
 
   window.Value = function() {};
+  window.K = K = function(fn) {
+    return function() {
+      var args;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      fn.apply(this, args);
+      return this;
+    };
+  };
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
