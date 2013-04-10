@@ -33,13 +33,11 @@
 		
 		# Tests: full
 		take: Function.From(Number).To(Stream) \
-			(number) -> @derive (args...) ->
-				@add args... if number-- > 0
+			(number) -> @where -> number-- > 0
 		
 		# Tests: full
 		drop: Function.From(Number).To(Stream) \
-			(number) -> @derive (args...) ->
-				@add args... if --number < 0
+			(number) -> @where -> --number < 0
 		
 		# Tests: full	
 		@Of: Function.From(Function) \
