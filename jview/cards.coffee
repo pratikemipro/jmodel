@@ -412,6 +412,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 				else
 					@cardList.insert currentIndex, card
+			else if  href[0] = '#'
+				history.pushState null, null, window.location.pathname + href
 			else if protocol not in ['mailto','javascript']
 				open href
 							
