@@ -49,4 +49,4 @@ library-test:
 		src/library/emerald.EventType.test.coffee
 		
 jview:
-	coffee --compile --bare --map jview/
+	coffee --compile --bare --map view/cards.coffee
