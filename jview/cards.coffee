@@ -344,7 +344,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 	class Router
 		
 		constructor: (@routes) ->
-			@routes.sort ( (route) -> route.pattern.toString().length ).desc()
 			
 		resolve: (url) ->
 			
@@ -352,6 +351,8 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			
 			# Find first matching route
 			[route] = ( route for route in @routes when route.test path )
+			
+			console.log route
 			
 			if route
 			
