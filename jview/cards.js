@@ -585,7 +585,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         } else {
           this.cardList.insert(currentIndex, card);
         }
-      } else if (href[0] = '#') {
+      } else if (href[0] = '#' && (protocol !== 'mailto')) {
         history.pushState(null, null, window.location.pathname + href);
       } else if (protocol !== 'mailto' && protocol !== 'javascript') {
         open(href);
