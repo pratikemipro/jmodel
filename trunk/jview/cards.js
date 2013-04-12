@@ -493,9 +493,6 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
   Router = (function() {
     function Router(routes) {
       this.routes = routes;
-      this.routes.sort((function(route) {
-        return route.pattern.toString().length;
-      }).desc());
     }
 
     Router.prototype.resolve = function(url) {
@@ -515,6 +512,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         }
         return _results;
       }).call(this))[0];
+      console.log(route);
       if (route) {
         keys = route.match(path);
         parameters = {};
