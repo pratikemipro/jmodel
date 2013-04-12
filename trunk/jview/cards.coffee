@@ -352,8 +352,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			# Find first matching route
 			[route] = ( route for route in @routes when route.test path )
 			
-			console.log route
-			
 			if route
 			
 				# Find keys from route
