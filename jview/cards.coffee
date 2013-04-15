@@ -19,7 +19,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		
 			@li.addClass @class
 			
-			@li.on 'click', '.close', =>
+			@li.event('click','.close').subscribe =>
 				@event('dispose').raise this
 				false
 				
