@@ -16,14 +16,27 @@ define(function() {
   var K, Promise, _base, _ref, _ref1;
 
   window.Value = function() {};
-  window.K = K = function(fn) {
-    return function() {
-      var args;
+  window.K = K = function(x) {
+    switch (typeof x) {
+      case 'function':
+        return function() {
+          var args;
 
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      fn.apply(this, args);
-      return this;
-    };
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          x.apply(this, args);
+          return this;
+        };
+      default:
+        return function(fn) {
+          return function() {
+            var args;
+
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            fn.apply(this, args);
+            return x;
+          };
+        };
+    }
   };
   Object.isa = function(constructor) {
     if (constructor === Number) {

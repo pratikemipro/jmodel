@@ -12,8 +12,11 @@ define ->
 	
 	window.Value = ->
 		
-	window.K = K = (fn) -> (args...) -> fn.apply(this,args); this
-				
+	window.K = K = (x) ->
+		switch typeof x
+			when 'function' then (args...) -> x.apply(this,args); this
+			else (fn) -> (args...) -> fn.apply(this,args); x
+			
 	# Tests: none
 	Object.isa = (constructor) ->
 		if      constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'
