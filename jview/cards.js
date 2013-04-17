@@ -223,7 +223,11 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
       this.element.find('li.extent > ul > li.label').removeClass('hidden');
       li = card.li;
       li.addClass('adding');
-      this.element.find('li.card').eq(index - 1).after(li);
+      if (index === 0) {
+        this.element.find('li.card').eq(0).before(li);
+      } else {
+        this.element.find('li.card').eq(index - 1).after(li);
+      }
       return card.event('ready').take(1).subscribe(function() {
         return after(350)(function() {
           var width;
@@ -555,7 +559,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, card, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref,
+      var a, before, card, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref,
         _this = this;
 
       target = _arg.target;
@@ -563,6 +567,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         return window.open(href, (Date()).split(' ').join(''));
       };
       a = $(target).closest('a');
+      before = a.hasClass('before');
       href = a.attr('href');
       protocol = href.split(':')[0];
       li = a.closest('li.card');
@@ -580,7 +585,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
             return _this.cardList.replace(_this.cardList.get(0), card);
           });
         } else {
-          this.cardList.insert(currentIndex, card);
+          this.cardList.insert(currentIndex + (before ? -1 : 0), card);
         }
       } else if (href[0] = '#' && (protocol !== 'mailto')) {
         history.pushState(null, null, window.location.pathname + href);
