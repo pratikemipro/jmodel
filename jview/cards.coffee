@@ -331,7 +331,6 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 		constructor: (pattern,@cardType) ->
 			@keys       = ( key.replace('{','').replace('}','').replace('?','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
 			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\/?\{[^\}]+\?\}/g,'(?:/?([^\/]+))?').replace(/\/?\{[^\}]+\}/g,'(?:/?([^\/]+))')+'/?$'
-			console.log @pattern
 			
 		test: (path) -> @pattern.test path
 		

@@ -472,7 +472,6 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         return _results;
       })();
       this.pattern = new RegExp('^' + String(pattern).replace('/', '\/').replace(/\/?\{[^\}]+\?\}/g, '(?:/?([^\/]+))?').replace(/\/?\{[^\}]+\}/g, '(?:/?([^\/]+))') + '/?$');
-      console.log(this.pattern);
     }
 
     Route.prototype.test = function(path) {
