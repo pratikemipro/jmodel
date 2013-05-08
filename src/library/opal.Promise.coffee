@@ -31,7 +31,7 @@
 		
 		then: (fulfilled,rejected) ->
 			
-			promise = new Promise()
+			promise = new @constructor()
 			
 			if typeof fulfilled != 'function' then fulfilled = Function.arguments
 			if typeof rejected != 'function' then rejected = Function.identity

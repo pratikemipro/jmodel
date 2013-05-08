@@ -975,7 +975,7 @@ define(function() {
     Promise.prototype.then = function(fulfilled, rejected) {
       var promise;
 
-      promise = new Promise();
+      promise = new this.constructor();
       if (typeof fulfilled !== 'function') {
         fulfilled = Function["arguments"];
       }
