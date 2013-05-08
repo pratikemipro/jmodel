@@ -1,4 +1,10 @@
-define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/emerald.keys'], ($,jm) ->
+define (require) ->
+	
+	$	= require 'jquery'
+	jm	= require 'jmodel/topaz'
+	
+	require 'jmodel-plugins/jquery.emerald'
+	require 'jmodel-plugins/emerald.keys'
 
 	# Utility functions
 	after = (period) -> (fn) -> jm.event.after(period).subscribe fn
@@ -364,7 +370,7 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				parameters = {}
 				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
 						
-			return [ route?.cardType, keys || {}, parameters || {} ]
+			return [ route?.cardType , keys || {}, parameters || {} ]
 	
 			
 	##
@@ -407,24 +413,29 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 				open href
 				return false
 			else if cardType
+			
 				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
 				# 					@viewPort.scrollTo card.li.index 'li.card'
 				# 				else
-				card = new cardType @cardList, keys, undefined, parameters
-				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
-				else
-					@cardList.insert currentIndex + ( if before then -1 else 0 ), card
+				require [cardType], (cardType) =>
+					
+					card = new cardType @cardList, keys, undefined, parameters
+					
+					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+					else
+						@cardList.insert currentIndex + ( if before then -1 else 0 ), card
+						
+					if animate
+						@view.event('ready')
+							.where( (inserted) -> inserted == card )
+							.subscribe =>
+								@viewport.state.index card.li.index('li.card')
+					
 			else if  href[0] = '#' and protocol not in ['mailto']
 				history.pushState null, null, window.location.pathname + href
 			else if protocol not in ['mailto','javascript']
 				open href
-							
-			if animate
-				@view.event('ready')
-					.where( (inserted) -> inserted == card )
-					.subscribe =>
-						@viewport.state.index card.li.index('li.card')
 				
 			return protocol == 'mailto'
 		
@@ -440,30 +451,35 @@ define ['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald','jmodel-plugins/
 			@element     = $ element
 			@menuElement = $ menuElement
 			
-			@events = new jm.EventRegistry 'ready'
+			@events = new jm.EventRegistry 'initialised','ready'
+			@event('initialised').remember 1
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
 			@cards  = new List @external
-			@router = new Router ( new Route(card::route,card) for card in @constructors )
+			@router = new Router ( new Route(route,card) for route, card of @constructors )
 			
 			[rootCardElement] = @element.find 'ul.cards li.card'
 			[cardType,keys,parameters] = @router.resolve window.location.pathname.substring 1
 			
-			cardType ?= @constructors[0]
+			cardType ?= require @constructors[0].card
 			
 			parameters.zoomed = !rootCardElement?
 			
-			rootCard = new cardType @cards, keys, $(rootCardElement), parameters
-			rootCard.event('ready').republish @event 'ready'
+			if cardType then require [cardType], (cardType) =>
 			
-			if rootCardElement then @cards.add rootCard
+				rootCard = new cardType @cards, keys, $(rootCardElement), parameters
+				rootCard.event('ready').republish @event 'ready'
 			
-			@view       = new ListView @cards, @element.find('ul.cards')
-			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
-			@controller = new Controller @cards, @view, @viewport, @element, @router
+				if rootCardElement then @cards.add rootCard
 			
-			if !rootCardElement then @cards.add rootCard
+				@view       = new ListView @cards, @element.find('ul.cards')
+				@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
+				@controller = new Controller @cards, @view, @viewport, @element, @router
+			
+				if !rootCardElement then @cards.add rootCard
+				
+				@event('initialised').raise()
 			
 		event: (name) -> @events.get name
 			
