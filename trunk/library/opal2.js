@@ -1056,6 +1056,10 @@ define(function() {
       })(this);
     };
 
+    Promise.conjoin = function() {};
+
+    Promise.disjoin = function() {};
+
     return Promise;
 
   })();
