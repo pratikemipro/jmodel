@@ -25,7 +25,7 @@
 			fn element for element in this
 		
 		@union: (sets...) ->
-			new @.constructor ( x for x in set for set in sets )
+			new @constructor ( x for x in set for set in sets )
 		
 		@intersection: ->
 		
