@@ -11,14 +11,14 @@ define(['jquery', 'jmodel/emerald', 'jmodel-plugins/jquery.emerald'], function($
       this.element = $(element);
       this.extractors = new jm.List.fromArray(extractors);
       this.element.attr('draggable', true).event('dragstart').subscribe(function(_arg) {
-        var dataTransfer, srcElement, _ref;
+        var dataTransfer, target, _ref;
 
-        (_ref = _arg.originalEvent, dataTransfer = _ref.dataTransfer), srcElement = _arg.srcElement;
+        (_ref = _arg.originalEvent, dataTransfer = _ref.dataTransfer), target = _arg.target;
         dataTransfer.dropEffect = 'none';
         return _this.extractors.each(function(extractor) {
           var data, type, _ref1;
 
-          _ref1 = extractor($(srcElement)), type = _ref1[0], data = _ref1[1];
+          _ref1 = extractor($(target)), type = _ref1[0], data = _ref1[1];
           return dataTransfer.setData(type, (/json/.test(type) ? JSON.stringify(data) : data));
         });
       });
