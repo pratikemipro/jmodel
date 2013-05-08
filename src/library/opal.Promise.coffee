@@ -67,3 +67,7 @@
 			ensure = Object.ensure cons
 			class extends this
 				fulfil: (args...) -> super ensure args...
+				
+		@conjoin: ->
+			
+		@disjoin: ->
