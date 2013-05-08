@@ -20,7 +20,7 @@
 	
 		get: (key) -> @[key]
 	
-		each: (fn) -> fn(key,value) for own key, value of @
+		each: (fn) -> fn(key,value) for own key, value of this
 	
 		ensure: (x) -> x
 
