@@ -3,9 +3,13 @@ var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   __slice = [].slice;
 
-define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugins/emerald.keys'], function($, jm) {
-  var AjaxCard, Application, Card, Controller, List, ListView, Route, Router, ViewPort, after;
+define(function(require) {
+  var $, AjaxCard, Application, Card, Controller, List, ListView, Route, Router, ViewPort, after, jm;
 
+  $ = require('jquery');
+  jm = require('jmodel/topaz');
+  require('jmodel-plugins/jquery.emerald');
+  require('jmodel-plugins/emerald.keys');
   after = function(period) {
     return function(fn) {
       return jm.event.after(period).subscribe(fn);
@@ -559,7 +563,7 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, before, card, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref,
+      var a, before, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref,
         _this = this;
 
       target = _arg.target;
@@ -577,27 +581,31 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
         open(href);
         return false;
       } else if (cardType) {
-        card = new cardType(this.cardList, keys, void 0, parameters);
-        if (card.li.hasClass('singleton') && li.hasClass('singleton') && this.cardList.count() === 1) {
-          this.element.animate({
-            scrollLeft: 0
-          }, 500, function() {
-            return _this.cardList.replace(_this.cardList.get(0), card);
-          });
-        } else {
-          this.cardList.insert(currentIndex + (before ? -1 : 0), card);
-        }
+        require([cardType], function(cardType) {
+          var card;
+
+          card = new cardType(_this.cardList, keys, void 0, parameters);
+          if (card.li.hasClass('singleton') && li.hasClass('singleton') && _this.cardList.count() === 1) {
+            _this.element.animate({
+              scrollLeft: 0
+            }, 500, function() {
+              return _this.cardList.replace(_this.cardList.get(0), card);
+            });
+          } else {
+            _this.cardList.insert(currentIndex + (before ? -1 : 0), card);
+          }
+          if (animate) {
+            return _this.view.event('ready').where(function(inserted) {
+              return inserted === card;
+            }).subscribe(function() {
+              return _this.viewport.state.index(card.li.index('li.card'));
+            });
+          }
+        });
       } else if (href[0] = '#' && (protocol !== 'mailto')) {
         history.pushState(null, null, window.location.pathname + href);
       } else if (protocol !== 'mailto' && protocol !== 'javascript') {
         open(href);
-      }
-      if (animate) {
-        this.view.event('ready').where(function(inserted) {
-          return inserted === card;
-        }).subscribe(function() {
-          return _this.viewport.state.index(card.li.index('li.card'));
-        });
       }
       return protocol === 'mailto';
     };
@@ -607,46 +615,54 @@ define(['jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald', 'jmodel-plugi
   })();
   Application = (function() {
     function Application(element, menuElement, external, constructors) {
-      var card, cardType, keys, parameters, rootCard, rootCardElement, _ref,
+      var card, cardType, keys, parameters, rootCardElement, route, _ref,
         _this = this;
 
       this.external = external;
       this.constructors = constructors;
       this.element = $(element);
       this.menuElement = $(menuElement);
-      this.events = new jm.EventRegistry('ready');
+      this.events = new jm.EventRegistry('initialised', 'ready');
+      this.event('initialised').remember(1);
       this.event('ready').remember(1);
       this.event('ready').subscribe(function() {
         return _this.element.removeClass('loading');
       });
       this.cards = new List(this.external);
       this.router = new Router((function() {
-        var _i, _len, _ref, _results;
+        var _ref, _results;
 
         _ref = this.constructors;
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          card = _ref[_i];
-          _results.push(new Route(card.prototype.route, card));
+        for (route in _ref) {
+          card = _ref[route];
+          _results.push(new Route(route, card));
         }
         return _results;
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
       _ref = this.router.resolve(window.location.pathname.substring(1)), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (cardType == null) {
-        cardType = this.constructors[0];
+        cardType = require(this.constructors[0].card);
       }
       parameters.zoomed = rootCardElement == null;
-      rootCard = new cardType(this.cards, keys, $(rootCardElement), parameters);
-      rootCard.event('ready').republish(this.event('ready'));
-      if (rootCardElement) {
-        this.cards.add(rootCard);
-      }
-      this.view = new ListView(this.cards, this.element.find('ul.cards'));
-      this.viewport = new ViewPort(this.view, this.element, this.menuElement, this.external.offset != null);
-      this.controller = new Controller(this.cards, this.view, this.viewport, this.element, this.router);
-      if (!rootCardElement) {
-        this.cards.add(rootCard);
+      if (cardType) {
+        require([cardType], function(cardType) {
+          var rootCard;
+
+          rootCard = new cardType(_this.cards, keys, $(rootCardElement), parameters);
+          rootCard.event('ready').republish(_this.event('ready'));
+          if (rootCardElement) {
+            _this.cards.add(rootCard);
+          }
+          _this.view = new ListView(_this.cards, _this.element.find('ul.cards'));
+          _this.viewport = new ViewPort(_this.view, _this.element, _this.menuElement, _this.external.offset != null);
+          _this.controller = new Controller(_this.cards, _this.view, _this.viewport, _this.element, _this.router);
+          if (!rootCardElement) {
+            _this.cards.add(rootCard);
+          }
+          return _this.event('initialised').raise();
+        });
       }
     }
 
