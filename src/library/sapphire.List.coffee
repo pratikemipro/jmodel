@@ -13,11 +13,11 @@
 			@add element for element in elements
 	
 		add: (element) ->
-			Array::push.call @, element
+			Array::push.call this, element
 			this
 	
 		member: (element) ->
-			-1 != Array::indexOf.call @, element
+			-1 != Array::indexOf.call this, element
 	
 		@concat: (base,others...) ->
 			new base.constructor Array::concat.apply \

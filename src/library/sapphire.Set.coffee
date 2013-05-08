@@ -13,13 +13,13 @@
 			@add element for element in elements
 		
 		add: (element) ->
-			if @.member element then @ else Array::push.call @, element
+			if @member element then this else Array::push.call this, element
 		
 		remove: (predicate) ->
-			Array::splice.call @, 0, @.length, ( x for x in @ when not predicate x )
+			Array::splice.call this, 0, @length, ( x for x in @ when not predicate x )
 		
 		member: (element) ->
-			-1 != Array::indexOf.call @, element
+			-1 != Array::indexOf.call this, element
 			
 		each: (fn) ->
 			fn element for element in this
