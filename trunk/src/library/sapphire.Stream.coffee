@@ -20,7 +20,7 @@
 			
 		derive: Function.From(Function).To(this) \
 			(fn) ->
-				child = new this.constructor()
+				child = new @constructor()
 				@each fn.bind child
 				return child
 		
