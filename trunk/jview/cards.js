@@ -585,6 +585,7 @@ define(function(require) {
           var card;
 
           card = new cardType(_this.cardList, keys, void 0, parameters);
+          card.url = href;
           if (card.li.hasClass('singleton') && li.hasClass('singleton') && _this.cardList.count() === 1) {
             _this.element.animate({
               scrollLeft: 0

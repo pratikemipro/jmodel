@@ -421,6 +421,8 @@ define (require) ->
 					
 					card = new cardType @cardList, keys, undefined, parameters
 					
+					card.url = href
+					
 					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 					else
