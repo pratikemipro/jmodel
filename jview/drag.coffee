@@ -13,10 +13,10 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 			
 			@element
 				.attr('draggable',true)
-				.event('dragstart').subscribe ({originalEvent:{dataTransfer},srcElement}) =>
+				.event('dragstart').subscribe ({originalEvent:{dataTransfer},target}) =>
 					dataTransfer.dropEffect = 'none'
 					@extractors.each (extractor) =>
-						[type,data] = extractor $ srcElement
+						[type,data] = extractor $ target
 						dataTransfer.setData type, (if /json/.test type then JSON.stringify data else data)
 	
 	
