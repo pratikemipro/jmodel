@@ -338,7 +338,7 @@
 	test 'Function::bind', ->
 	
 		person = name:'fred'
-		getName = -> this.name
+		getName = -> @name
 			
 		equals getName.bind(person)(), 'fred', 'bind works'
 		

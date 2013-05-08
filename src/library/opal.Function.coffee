@@ -326,9 +326,9 @@
 	# NOTE: Make this work with objects other than strings and numbers
 	
 	Function::Where = (predicate,message='Invalid value') ->
-		restricted = this.post (value) ->
+		restricted = @post (value) ->
 			throw message.replace('<value>',value) unless predicate value
-		restricted.base = this.base or this
+		restricted.base = @base or this
 		restricted.__predicate = predicate
 		restricted[property] = value for property, value of restricted.base
 		return restricted
