@@ -30,13 +30,11 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    Set.prototype.add = function(element) {
-      if (this.member(element)) {
-        return this;
-      } else {
+    Set.prototype.add = Function.Chaining(function(element) {
+      if (!this.member(element)) {
         return Array.prototype.push.call(this, element);
       }
-    };
+    });
 
     Set.prototype.remove = function(predicate) {
       var x;
