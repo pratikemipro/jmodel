@@ -13,31 +13,9 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var K, Promise, _base, _ref, _ref1;
+  var Promise, _base, _ref, _ref1;
 
   window.Value = function() {};
-  window.K = K = function(x) {
-    switch (typeof x) {
-      case 'function':
-        return function() {
-          var args;
-
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          x.apply(this, args);
-          return this;
-        };
-      default:
-        return function(fn) {
-          return function() {
-            var args;
-
-            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            fn.apply(this, args);
-            return x;
-          };
-        };
-    }
-  };
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
@@ -183,6 +161,27 @@ define(function() {
   Function.map = function(mapping) {
     return function(key) {
       return mapping[key];
+    };
+  };
+  Function.Constant = function(constant) {
+    return function(fn) {
+      return function() {
+        var args;
+
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        fn.apply(this, args);
+        return constant;
+      };
+    };
+  };
+  Function.Override = Function.Constant(false);
+  Function.Chaining = function(fn) {
+    return function() {
+      var args;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      fn.apply(this, args);
+      return this;
     };
   };
   Function.prototype.then = function(fn2) {

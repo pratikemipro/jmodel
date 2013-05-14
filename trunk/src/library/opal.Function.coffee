@@ -26,6 +26,20 @@
 	Function.map = (mapping) -> (key) -> mapping[key]
 	
 	##
+	## Return value manipulation
+	##
+	
+	# Tests: none
+	Function.Constant = (constant) ->
+		(fn) -> (args...) -> fn.apply(this,args); constant
+	
+	# Tests: none
+	Function.Override = Function.Constant false
+	
+	# Tests: none
+	Function.Chaining = (fn) -> (args...) -> fn.apply(this,args); this
+	
+	##
 	## Function composition
 	##
 	
