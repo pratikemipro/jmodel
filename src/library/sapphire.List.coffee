@@ -12,9 +12,8 @@
 			if elements not instanceof Array then elements = [elements]
 			@add element for element in elements
 	
-		add: (element) ->
+		add: Function.Chaining (element) ->
 			Array::push.call this, element
-			this
 	
 		member: (element) ->
 			-1 != Array::indexOf.call this, element

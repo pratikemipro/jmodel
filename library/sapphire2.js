@@ -140,10 +140,9 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    List.prototype.add = function(element) {
-      Array.prototype.push.call(this, element);
-      return this;
-    };
+    List.prototype.add = Function.Chaining(function(element) {
+      return Array.prototype.push.call(this, element);
+    });
 
     List.prototype.member = function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
