@@ -201,6 +201,17 @@
 		equals inc2(3), 4, 'works as untyped function when called with argument of correct type and returns correct type, with From and To reversed'
 		raises ( -> inc2('red') ), 'raises an exception when called with argument of wrong type, with From and To reversed'
 		raises ( -> inc2(2) ), 'raises an exception when returning wrong type, with From and To reversed'
+	
+	test 'Function.Returning', ->
+		
+		Person = class
+			constructor: ->
+				
+		namedPerson = Function.Returning(-> new Person() ) \
+			(person) -> (name) -> person.name = name
+			
+		equals namedPerson('fred') instanceof Person, true, 'Returns correct value'
+		equals namedPerson('fred').name, 'fred', 'Modified function works correctly'
 		
 	module 'Logical functions'
 	

@@ -339,6 +339,25 @@ define(['jmodel/emerald2'], function() {
       return inc2(2);
     }), 'raises an exception when returning wrong type, with From and To reversed');
   });
+  test('Function.Returning', function() {
+    var Person, namedPerson;
+
+    Person = (function() {
+      function _Class() {}
+
+      return _Class;
+
+    })();
+    namedPerson = Function.Returning(function() {
+      return new Person();
+    })(function(person) {
+      return function(name) {
+        return person.name = name;
+      };
+    });
+    equals(namedPerson('fred') instanceof Person, true, 'Returns correct value');
+    return equals(namedPerson('fred').name, 'fred', 'Modified function works correctly');
+  });
   module('Logical functions');
   test('Function::and', function() {
     var comp, gt, lt;
