@@ -603,7 +603,7 @@ define(function(require) {
             });
           }
         });
-      } else if (href[0] = '#' && (protocol !== 'mailto')) {
+      } else if (href[0] === '#' && (protocol !== 'mailto')) {
         history.pushState(null, null, window.location.pathname + href);
       } else if (protocol !== 'mailto' && protocol !== 'javascript') {
         open(href);
