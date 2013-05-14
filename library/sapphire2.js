@@ -295,7 +295,7 @@ define(['jmodel/opal2'], function() {
       this.fns = [];
     }
 
-    Stream.prototype.add = K(function() {
+    Stream.prototype.add = Function.Chaining(function() {
       var args, fn, _i, _len, _ref, _results;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
