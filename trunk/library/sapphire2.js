@@ -312,7 +312,7 @@ define(['jmodel/opal2'], function() {
       return this.fns.push(fn);
     });
 
-    Stream.prototype.derive = Function.Returning(function() {
+    Stream.prototype.derive = Function.From(Function).Returning(function() {
       return new this.constructor();
     })(function(child) {
       return function(fn) {
