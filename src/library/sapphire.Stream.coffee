@@ -18,7 +18,7 @@
 		each: Function.From(Function) \
 			(fn) -> @fns.push fn
 			
-		derive: Function.Returning(-> new @constructor() ) \
+		derive: Function.From(Function).Returning(-> new @constructor() ) \
 			(child) -> (fn) -> @each fn.bind child
 		
 		# Tests: full	
