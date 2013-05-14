@@ -132,7 +132,7 @@
 	Function.To = (type) ->
 		Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 	
-	# Tests: none
+	# Tests: partial
 	Function.Returning = (val) ->
 		(fn) -> (args...) ->
 			ret = val.call(this)
