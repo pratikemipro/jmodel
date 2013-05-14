@@ -12,8 +12,8 @@
 			if elements not instanceof Array then elements = [elements]
 			@add element for element in elements
 		
-		add: (element) ->
-			if @member element then this else Array::push.call this, element
+		add: Function.Chaining (element) ->
+			if not @member element then Array::push.call this, element
 		
 		remove: (predicate) ->
 			Array::splice.call this, 0, @length, ( x for x in @ when not predicate x )
