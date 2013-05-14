@@ -355,6 +355,9 @@ define(function() {
       };
     };
   };
+  Function.prototype.Returning = function(val) {
+    return Function.Returning(val).then(this);
+  };
   window.Predicate = Function.To(Boolean);
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;

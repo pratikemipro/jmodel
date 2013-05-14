@@ -146,12 +146,16 @@
 	Function.To = (type) ->
 		Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 	
-	# Tests: partial
+	# Tests: full
 	Function.Returning = (val) ->
 		(fn) -> (args...) ->
 			ret = val.call(this)
 			fn.call(this,ret).apply(this,args)
 			return ret
+	
+	# Tests: full		
+	Function::Returning = (val) ->
+		Function.Returning(val).then(this)
 	
 	# Tests: none
 	window.Predicate = Function.To Boolean
