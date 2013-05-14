@@ -213,6 +213,18 @@
 		equals namedPerson('fred') instanceof Person, true, 'Returns correct value'
 		equals namedPerson('fred').name, 'fred', 'Modified function works correctly'
 		
+	test 'Function.From.Returning', ->
+		
+		Person = class
+			constructor: ->
+				
+		namedPerson = Function.From(String).Returning(-> new Person() ) \
+			(person) -> (name) -> person.name = name
+			
+		equals namedPerson('fred') instanceof Person, true, 'Returns correct value'
+		equals namedPerson('fred').name, 'fred', 'Modified function works correctly'
+		raises ( -> namedPerson(1) ), 'raises an exception if type of argument is incorrect'
+		
 	module 'Logical functions'
 	
 	test 'Function::and', ->
