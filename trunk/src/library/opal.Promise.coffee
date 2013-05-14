@@ -70,4 +70,9 @@
 				
 		@conjoin: ->
 			
-		@disjoin: ->
+		@disjoin: Function.Returning(-> new @constructor() ) \
+			(disjunction) -> (promises...) ->
+				for promise in promises
+					promise.then \
+						( (args...) -> disjunction.fulfil args... ),
+						( (args...) -> disjunction.fail args... )

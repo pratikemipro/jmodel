@@ -133,6 +133,13 @@
 		Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 	
 	# Tests: none
+	Function.Returning = (val) ->
+		(fn) -> (args...) ->
+			ret = val.call(this)
+			fn.call(this,ret).apply(this,args)
+			return ret
+	
+	# Tests: none
 	window.Predicate = Function.To Boolean
 	
 	##		

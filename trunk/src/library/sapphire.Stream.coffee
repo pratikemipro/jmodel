@@ -18,11 +18,8 @@
 		each: Function.From(Function) \
 			(fn) -> @fns.push fn
 			
-		derive: Function.From(Function).To(this) \
-			(fn) ->
-				child = new @constructor()
-				@each fn.bind child
-				return child
+		derive: Function.Returning(-> new @constructor() ) \
+			(child) -> (fn) -> @each fn.bind child
 		
 		# Tests: full	
 		where: Function.From(Function).To(Stream) \

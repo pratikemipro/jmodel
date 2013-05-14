@@ -312,12 +312,12 @@ define(['jmodel/opal2'], function() {
       return this.fns.push(fn);
     });
 
-    Stream.prototype.derive = Function.From(Function).To(Stream)(function(fn) {
-      var child;
-
-      child = new this.constructor();
-      this.each(fn.bind(child));
-      return child;
+    Stream.prototype.derive = Function.Returning(function() {
+      return new this.constructor();
+    })(function(child) {
+      return function(fn) {
+        return this.each(fn.bind(child));
+      };
     });
 
     Stream.prototype.where = Function.From(Function).To(Stream)(function(predicate) {

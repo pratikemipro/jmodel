@@ -344,6 +344,18 @@ define(function() {
   Function.To = function(type) {
     return Function.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
   };
+  Function.Returning = function(val) {
+    return function(fn) {
+      return function() {
+        var args, ret;
+
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        ret = val.call(this);
+        fn.call(this, ret).apply(this, args);
+        return ret;
+      };
+    };
+  };
   window.Predicate = Function.To(Boolean);
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
@@ -1058,7 +1070,31 @@ define(function() {
 
     Promise.conjoin = function() {};
 
-    Promise.disjoin = function() {};
+    Promise.disjoin = Function.Returning(function() {
+      return new this.constructor();
+    })(function(disjunction) {
+      return function() {
+        var promise, promises, _i, _len, _results;
+
+        promises = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        _results = [];
+        for (_i = 0, _len = promises.length; _i < _len; _i++) {
+          promise = promises[_i];
+          _results.push(promise.then((function() {
+            var args;
+
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            return disjunction.fulfil.apply(disjunction, args);
+          }), (function() {
+            var args;
+
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            return disjunction.fail.apply(disjunction, args);
+          })));
+        }
+        return _results;
+      };
+    });
 
     return Promise;
 
