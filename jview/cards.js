@@ -389,7 +389,7 @@ define(function(require) {
         var count;
 
         count = _this.cardListView.cards.count();
-        return _this.controls.find('.count').text(count + ' cards');
+        return _this.controls.find('.count').text(count + ' card' + (count !== 1 ? 's' : ''));
       });
     }
 

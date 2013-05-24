@@ -268,7 +268,7 @@ define (require) ->
 			)
 			.subscribe =>
 				count =  @cardListView.cards.count()
-				@controls.find('.count').text( count + ' cards' )
+				@controls.find('.count').text( count + ' card' + if count != 1 then 's' else '' )
 				
 			# Drag
 			# @element.event('mousemove').map( (event) -> event.screenX )
