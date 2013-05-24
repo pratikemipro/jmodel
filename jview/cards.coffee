@@ -65,7 +65,7 @@ define (require) ->
 
 	class List
 	
-		constructor: (@external) ->
+		constructor: (@external,@application) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
 			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready'
@@ -286,6 +286,16 @@ define (require) ->
 					scrollLeft: Math.min(li.offset().left - @offset ,li.offset().left+li.width()-@element.width() - @offset)+1+'px'
 					scrollTop: '0px',
 					duration
+					
+		nudge: ->
+			scrollLeft = @element.scrollLeft()
+			@element.animate
+				scrollLeft: parseInt(scrollLeft,10)+200,
+				500,
+				=> jm.event.after(500).subscribe =>
+					@element.animate
+						scrollLeft: scrollLeft,
+						500
 			
 		zoom: (event) ->
 			
@@ -458,7 +468,7 @@ define (require) ->
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
-			@cards  = new List @external
+			@cards  = new List @external, this
 			@router = new Router ( new Route(route,card) for route, card of @constructors )
 			
 			[rootCardElement] = @element.find 'ul.cards li.card'
