@@ -68,10 +68,11 @@ define(function(require) {
 
   })(Card);
   List = (function() {
-    function List(external) {
+    function List(external, application) {
       var _this = this;
 
       this.external = external;
+      this.application = application;
       this.cards = new jm.ObservableTypedList(Card);
       this.events = new jm.EventRegistry('add', 'insert', 'replace', 'remove', 'count', 'ready');
       this.event('ready').remember(1);
@@ -407,6 +408,22 @@ define(function(require) {
       }
     };
 
+    ViewPort.prototype.nudge = function() {
+      var scrollLeft,
+        _this = this;
+
+      scrollLeft = this.element.scrollLeft();
+      return this.element.animate({
+        scrollLeft: parseInt(scrollLeft, 10) + 200
+      }, 500, function() {
+        return jm.event.after(500).subscribe(function() {
+          return _this.element.animate({
+            scrollLeft: scrollLeft
+          }, 500);
+        });
+      });
+    };
+
     ViewPort.prototype.zoom = function(event) {
       var _this = this;
 
@@ -629,7 +646,7 @@ define(function(require) {
       this.event('ready').subscribe(function() {
         return _this.element.removeClass('loading');
       });
-      this.cards = new List(this.external);
+      this.cards = new List(this.external, this);
       this.router = new Router((function() {
         var _ref, _results;
 
