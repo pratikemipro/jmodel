@@ -435,12 +435,17 @@ define(function(require) {
 
         target = _arg.target;
         div = $(target).closest('li').children('div');
-        list = div.children('ul');
-        list.children().remove();
-        _this.cardListView.cards.each(function(card, index) {
-          return list.append($("<li><a data-index='" + index + "' href='#'>" + card.title + "</a></li>"));
-        });
-        return div.fadeIn();
+        console.log(div.is(':visible'));
+        if (div.is(':visible')) {
+          return div.fadeOut();
+        } else {
+          list = div.children('ul');
+          list.children().remove();
+          _this.cardListView.cards.each(function(card, index) {
+            return list.append($("<li><a data-index='" + index + "' href='#'>" + card.title + "</a></li>"));
+          });
+          return div.fadeIn();
+        }
       });
     }
 

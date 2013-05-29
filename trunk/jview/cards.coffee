@@ -302,11 +302,15 @@ define (require) ->
 			@controls.find('.list').event('click')
 				.subscribe ({target}) =>
 					div = $(target).closest('li').children 'div'
-					list = div.children 'ul'
-					list.children().remove()
-					@cardListView.cards.each (card,index) ->
-						list.append $("<li><a data-index='#{index}' href='#'>#{card.title}</a></li>")
-					div.fadeIn()
+					console.log div.is ':visible'
+					if div.is ':visible'
+						div.fadeOut()
+					else
+						list = div.children 'ul'
+						list.children().remove()
+						@cardListView.cards.each (card,index) ->
+							list.append $("<li><a data-index='#{index}' href='#'>#{card.title}</a></li>")
+						div.fadeIn()
 				
 			# Drag
 			# @element.event('mousemove').map( (event) -> event.screenX )
