@@ -391,6 +391,23 @@ define(function(require) {
         count = _this.cardListView.cards.count();
         return _this.controls.find('.count').text(count + ' card' + (count !== 1 ? 's' : ''));
       });
+      jm.disjoin(this.cardListView.event('ready'), this.state.event('index')).map(function() {
+        return _this.cardListView.cards.count();
+      }).subscribe(function(count) {
+        console.log(count + ' ' + _this.state.index());
+        _this.controls.find('.previous').toggleClass('disabled', count < 2 || _this.state.index() === 0);
+        return _this.controls.find('.next').toggleClass('disabled', count < 2 || _this.state.index() === _this.cardListView.cards.count() - 1);
+      });
+      jm.disjoin(this.controls.find('.previous').event('click').tag(-1), this.controls.find('.next').event('click').tag(1)).where(function(_arg) {
+        var target;
+
+        target = _arg.target;
+        return !$(target).hasClass('disabled');
+      }).subscribe(function(event, step) {
+        return _this.state.index(function(value) {
+          return value + step;
+        });
+      });
     }
 
     ViewPort.prototype.scrollTo = function(index, duration) {
