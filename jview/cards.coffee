@@ -98,6 +98,7 @@ define (require) ->
 		get:	 (args...) -> @cards.get args...
 		count:	 (args...) -> @cards.count args...
 		first:	 (args...) -> @cards.first args...
+		each:    (args...) -> @cards.each args...
 		
 			
 	##
@@ -288,7 +289,24 @@ define (require) ->
 				@controls.find('.next').event('click').tag(1)
 			)
 			.where( $.target -> not @hasClass 'disabled' )
-			.subscribe (event,step) => @state.index (value) -> value + step 
+			.subscribe (event,step) => @state.index (value) -> value + step
+			
+			# List item
+			@controls.find('.list').closest('li').event('click','a')
+				.subscribe ({target}) =>
+					@state.index $(target).data 'index'
+					@controls.find('.list').closest('li').children('div').fadeOut()
+					false
+			
+			# List visibility
+			@controls.find('.list').event('click')
+				.subscribe ({target}) =>
+					div = $(target).closest('li').children 'div'
+					list = div.children 'ul'
+					list.children().remove()
+					@cardListView.cards.each (card,index) ->
+						list.append $("<li><a data-index='#{index}' href='#'>#{card.title}</a></li>")
+					div.fadeIn()
 				
 			# Drag
 			# @element.event('mousemove').map( (event) -> event.screenX )
