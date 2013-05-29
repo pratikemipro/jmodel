@@ -155,6 +155,13 @@ define(function(require) {
       return (_ref = this.cards).first.apply(_ref, args);
     };
 
+    List.prototype.each = function() {
+      var args, _ref;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return (_ref = this.cards).each.apply(_ref, args);
+    };
+
     return List;
 
   })();
@@ -414,6 +421,26 @@ define(function(require) {
         return _this.state.index(function(value) {
           return value + step;
         });
+      });
+      this.controls.find('.list').closest('li').event('click', 'a').subscribe(function(_arg) {
+        var target;
+
+        target = _arg.target;
+        _this.state.index($(target).data('index'));
+        _this.controls.find('.list').closest('li').children('div').fadeOut();
+        return false;
+      });
+      this.controls.find('.list').event('click').subscribe(function(_arg) {
+        var div, list, target;
+
+        target = _arg.target;
+        div = $(target).closest('li').children('div');
+        list = div.children('ul');
+        list.children().remove();
+        _this.cardListView.cards.each(function(card, index) {
+          return list.append($("<li><a data-index='" + index + "' href='#'>" + card.title + "</a></li>"));
+        });
+        return div.fadeIn();
       });
     }
 
