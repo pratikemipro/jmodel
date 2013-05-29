@@ -270,6 +270,25 @@ define (require) ->
 				count =  @cardListView.cards.count()
 				@controls.find('.count').text( count + ' card' + if count != 1 then 's' else '' )
 				
+			# Back/forward visiblity
+			jm.disjoin(
+				@cardListView.event('ready'),
+				@state.event('index')
+			)
+			.map(=> @cardListView.cards.count() )
+			.subscribe (count) =>
+				console.log count + ' ' + @state.index()
+				@controls.find('.previous').toggleClass 'disabled', count < 2 or @state.index() == 0
+				@controls.find('.next').toggleClass 'disabled', count < 2 or @state.index() == @cardListView.cards.count() - 1
+				
+			# Back
+			jm.disjoin(
+				@controls.find('.previous').event('click').tag(-1)
+				@controls.find('.next').event('click').tag(1)
+			)
+			.where( ({target}) -> not $(target).hasClass 'disabled' )
+			.subscribe (event,step) => @state.index (value) -> value + step 
+				
 			# Drag
 			# @element.event('mousemove').map( (event) -> event.screenX )
 			# 	.between(
