@@ -8,6 +8,8 @@ define (require) ->
 
 	# Utility functions
 	after = (period) -> (fn) -> jm.event.after(period).subscribe fn
+	
+	$.target = (fn) -> ({target}) -> fn.call $ target
 
 
 	##
@@ -267,7 +269,7 @@ define (require) ->
 				@cardListView.event('removed')
 			)
 			.subscribe =>
-				count =  @cardListView.cards.count()
+				count = @cardListView.cards.count()
 				@controls.find('.count').text( count + ' card' + if count != 1 then 's' else '' )
 				
 			# Back/forward visiblity
@@ -275,18 +277,17 @@ define (require) ->
 				@cardListView.event('ready'),
 				@state.event('index')
 			)
-			.map(=> @cardListView.cards.count() )
-			.subscribe (count) =>
-				console.log count + ' ' + @state.index()
-				@controls.find('.previous').toggleClass 'disabled', count < 2 or @state.index() == 0
-				@controls.find('.next').toggleClass 'disabled', count < 2 or @state.index() == @cardListView.cards.count() - 1
+			.map(=> [ @state.index(), @cardListView.cards.count() ] )
+			.subscribe ([index,count]) =>
+				@controls.find('.previous').toggleClass 'disabled', count < 2 or index == 0
+				@controls.find('.next').toggleClass 'disabled', count < 2 or index == count - 1
 				
 			# Back
 			jm.disjoin(
 				@controls.find('.previous').event('click').tag(-1)
 				@controls.find('.next').event('click').tag(1)
 			)
-			.where( ({target}) -> not $(target).hasClass 'disabled' )
+			.where( $.target -> not @hasClass 'disabled' )
 			.subscribe (event,step) => @state.index (value) -> value + step 
 				
 			# Drag
