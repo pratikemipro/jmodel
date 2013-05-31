@@ -435,7 +435,6 @@ define(function(require) {
 
         target = _arg.target;
         div = $(target).closest('li').children('div');
-        console.log(div.is(':visible'));
         if (div.is(':visible')) {
           return div.fadeOut();
         } else {

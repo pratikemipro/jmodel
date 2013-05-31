@@ -302,7 +302,6 @@ define (require) ->
 			@controls.find('.list').event('click')
 				.subscribe ({target}) =>
 					div = $(target).closest('li').children 'div'
-					console.log div.is ':visible'
 					if div.is ':visible'
 						div.fadeOut()
 					else
