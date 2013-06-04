@@ -647,7 +647,7 @@ define(function(require) {
       href = a.attr('href');
       protocol = href.split(':')[0];
       li = a.closest('li.card');
-      currentIndex = li.index('li.card') + 1;
+      currentIndex = li.length === 0 ? $('li.card').length : li.index('li.card') + 1;
       _ref = this.router.resolve(href), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (a.hasClass('permalink')) {
         open(href);
