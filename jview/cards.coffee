@@ -456,7 +456,7 @@ define (require) ->
 			[protocol] = href.split(':')
 			li         = a.closest 'li.card'
 
-			currentIndex = li.index('li.card') + 1
+			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
 			[cardType,keys,parameters] = @router.resolve href
 			
