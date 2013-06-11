@@ -39,16 +39,13 @@ define(['jmodel/sapphire2'], function() {
       });
     }
 
-    EventType.prototype.subscribe = Delegate(function() {
+    EventType.prototype.subscribe = Function.delegate(function() {
       return [this.subscribers, this.subscribers.add];
     });
 
-    EventType.prototype.raise = function() {
-      var args;
-
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return this.add.apply(this, args);
-    };
+    EventType.prototype.raise = Function.delegate(function() {
+      return [this, this.add];
+    });
 
     EventType.prototype.fail = function() {
       var args, promise;
