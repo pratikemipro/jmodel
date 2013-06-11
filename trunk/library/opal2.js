@@ -16,6 +16,15 @@ define(function() {
   var Promise, _base, _ref, _ref1;
 
   window.Value = function() {};
+  window.Delegate = function(fn) {
+    return function() {
+      var args, context, method, _ref;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      _ref = fn.call(this), context = _ref[0], method = _ref[1];
+      return method.apply(context, args);
+    };
+  };
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
