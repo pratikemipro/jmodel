@@ -19,9 +19,9 @@
 					promise.then subscriber.notify, subscriber.fail
 		
 		# Tests: full
-		subscribe: Delegate -> [ @subscribers, @subscribers.add ]
+		subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]
 			
-		raise: Delegate -> [ this, @add ]
+		raise: Function.delegate -> [ this, @add ]
 
 		fail: (args...) ->
 			promise = new Promise()

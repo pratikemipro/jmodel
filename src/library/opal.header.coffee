@@ -13,12 +13,6 @@ define ->
 	window.Value = ->
 	
 	# Tests: none
-	window.Delegate = (fn) ->
-		(args...) -> 
-			[context,method] = fn.call(this)
-			method.apply context, args
-	
-	# Tests: none
 	Object.isa = (constructor) ->
 		if      constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'
 		else if constructor == String  then (obj) -> obj instanceof String or typeof obj == 'string'

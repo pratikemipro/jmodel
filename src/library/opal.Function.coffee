@@ -203,6 +203,17 @@
 	Function.not = (predicate) ->
 		if typeof predicate == 'function' then predicate.not() else not predicate
 	
+	##
+	## Delegation
+	##
+
+	# Tests: none
+	Function.delegate = (fn) ->
+		(args...) -> 
+			[context,method] = fn.call(this)
+			method.apply context, args
+	
+	
 	##	
 	## Composite ordering
 	##
@@ -335,14 +346,6 @@
 	##
 		
 	Function::create = (args...) -> Object.construct(this)(args...)
-	
-	##
-	## Delegation
-	##
-	
-	# Tests: none
-	Function.delegate = Function.From(Object,Function).To(Function) \
-		(context,method) -> (args...) -> context[method].apply context, args
 	
 	##
 	## Restricted types
