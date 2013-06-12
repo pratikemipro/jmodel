@@ -92,7 +92,7 @@ define(['jmodel/opal'], function (opal) {
 			
 		// Tests: none
 		each: function () {
-			var callback = pipe.apply(null,arguments);
+			var callback = Function.pipe.apply(null,arguments);
 			for ( var i in this.__rep__ ) {
 				if ( this.__rep__.hasOwnProperty(i) ) {
 					callback.call(this,i,this.__rep__[i]);
@@ -105,7 +105,7 @@ define(['jmodel/opal'], function (opal) {
 
 	// Tests: none
 	function TypedMap (constructor,rep,combine) {
-		this.ensure = ensure(constructor);
+		this.ensure = Object.ensure(constructor);
 		Map.call(this,null,combine);
 		var repMap = new Map(rep),
 			that = this;
@@ -346,10 +346,10 @@ define(['jmodel/opal'], function (opal) {
 		// NOTE: Test passing of index
 		// NOTE: Test explicit definition
 		each: Array.prototype.forEach ? function () {
-			this.__rep__.forEach(pipe.apply(null,arguments),this);
+			this.__rep__.forEach(Function.pipe.apply(null,arguments),this);
 			return this;
 		} : function () {
-			var callback = pipe.apply(null,arguments);
+			var callback = Function.pipe.apply(null,arguments);
 			for ( var i=0, rep=this.__rep__; i<rep.length; i++) {
 				callback.call(this,rep[i],i);
 			}
@@ -382,9 +382,9 @@ define(['jmodel/opal'], function (opal) {
 		
 		// Tests: full
 		map: Array.prototype.map ? function () {
-			return List.fromArray(this.__rep__.map(pipe.apply(null,arguments)));
+			return List.fromArray(this.__rep__.map(Function.pipe.apply(null,arguments)));
 		} : function () {
-			var mapping = pipe.apply(null,arguments);
+			var mapping = Function.pipe.apply(null,arguments);
 			var list = [];
 			for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
 				list.push(mapping.call(null,rep[i]));
@@ -436,7 +436,7 @@ define(['jmodel/opal'], function (opal) {
 					: typeof parameter === 'function' ? parameter
 					: typeof parameter === 'string' && parameter.charAt(0) === ':' ? is(this.get(parameter)).extend({unique:true})
 					: ( typeof parameter === 'object' && parameter !== null ) || typeof parameter === 'string' || typeof parameter === 'number' ? is(parameter).extend({unique:true})
-					: AllPredicate;
+					: Function.constant(true);
 		},
 		
 		// Tests: none
@@ -451,7 +451,7 @@ define(['jmodel/opal'], function (opal) {
 		aggregate: function (combiner,acc) {
 			acc = acc || null;
 			return function __aggregate () {
-				var extractor = ( arguments.length > 1 ) ? pipe.apply(null,arguments) : arguments[0];
+				var extractor = ( arguments.length > 1 ) ? Function.pipe.apply(null,arguments) : arguments[0];
 				return this.map(extractor || identity).reduce(combiner,acc);
 			};
 		},
@@ -500,10 +500,16 @@ define(['jmodel/opal'], function (opal) {
 	Set.prototype.where = Set.prototype.filter;
 		
 	// Tests: none
-	Set.prototype.max = Set.prototype.aggregate(max);
-	Set.prototype.min = Set.prototype.aggregate(min);
-	Set.prototype.sum = Set.prototype.aggregate(plus);
-	Set.prototype.range = Set.prototype.aggregate(parallel(min,max),{min:null,max:null});
+	Set.prototype.max = Set.prototype.aggregate(Math.max);
+	Set.prototype.min = Set.prototype.aggregate(Math.min);
+	Set.prototype.sum = Set.prototype.aggregate(Math.plus);
+	
+	Set.prototype.range = Set.prototype.aggregate(function (acc,value) {
+		return    value < acc[0] ? [value,acc[1]]
+				: value > acc[1] ? [acc[0],value]
+				: acc
+	},[]);
+	
 
 	_.Set = Set;
 		
@@ -558,10 +564,12 @@ define(['jmodel/opal'], function (opal) {
 	
 	// Tests: none
 	function TypedSet (constructor) {
-		this.ensure = ensure(constructor);
-		this.valid  = valid(constructor);
+		this.ensure = Object.ensure(constructor);
+		this.valid  = Object.valid(constructor);
 		Set.apply(this,[]);
-		Set.fromArray(_slice.call(arguments,1)).reduce(bymethod('add'),this);
+		Set.fromArray(_slice.call(arguments,1)).reduce(function (acc,value) {
+			return acc.add(value)
+		},this);
 		return this;
 	}
 	
@@ -612,7 +620,7 @@ define(['jmodel/opal'], function (opal) {
 	});
 		
 		
-	List.prototype.constraint		= AllPredicate;
+	List.prototype.constraint		= Function.constant(true);
 	List.prototype.__constructor	= List;
 		
 	// Tests: none
@@ -635,7 +643,7 @@ define(['jmodel/opal'], function (opal) {
 	});
 		
 		
-	TypedList.prototype.constraint		= AllPredicate;
+	TypedList.prototype.constraint		= Function.constant(true);
 	TypedList.prototype.__constructor	= TypedList;
 	
 	// Tests: none
@@ -697,7 +705,7 @@ define(['jmodel/opal'], function (opal) {
 
 	}
 	
-	UniqueIndex.prototype = Object.extend(copy({}),{
+	UniqueIndex.prototype = Object.extend(Object.copy({}),{
 		
 		__constructor: UniqueIndex,
 	
@@ -764,8 +772,8 @@ define(['jmodel/opal'], function (opal) {
 
 	// Tests: none
 	function CardinalityPredicate (predicate) {
-		predicate = (typeof predicate == 'function') ? predicate : eq(predicate);
-		return method('count').is(predicate);
+		predicate = (typeof predicate == 'function') ? predicate : Object.eq(predicate);
+		return Object.method('count').is(predicate);
 	}
 	
 	// Tests: none
@@ -823,7 +831,7 @@ define(['jmodel/opal'], function (opal) {
 	// Tests: none
 	function NoFormat (object) { return object; }
 	
-	Object.extend({
+	Object.extend(_,{
 		noformat: 	NoFormat
 	});
 	
