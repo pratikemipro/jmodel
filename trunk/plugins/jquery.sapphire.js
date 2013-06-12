@@ -15,7 +15,7 @@ define(['jquery','jmodel/sapphire'], function (jQuery,sapphire) {
 		};
 		
 		if ( typeof _$ == 'undefined') {
-			_$ = sapphire.pipe(jQuery,sapphire.Set.fromJQuery);
+			_$ = Function.pipe(jQuery,sapphire.Set.fromJQuery);
 		}
 		
 	}
