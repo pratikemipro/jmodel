@@ -266,7 +266,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			this.field		= field;
 			this.options 	= options || {};
 
-			this.constraint	= this.options.constraint || AllPredicate;
+			this.constraint	= this.options.constraint || Function.constant(true);
 
 			this.event		= null;
 			this.change 	= this.object.event('change');
