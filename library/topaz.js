@@ -38,7 +38,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 	function observable (proto) {
 
-		return Object.extend(copy(proto,true), {
+		return Object.extend(Object.copy(proto,true), {
 
 			add: proto.add.post(function () {
 				if ( typeof this.added !== 'undefined' ) {
