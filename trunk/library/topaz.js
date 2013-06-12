@@ -133,7 +133,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 			this.event('replace'),
 			this.event('insert')
 		)			
-		.where(has('event','change'))
+		.where(Object.has('event','change'))
 		.subscribe({
 			context: this.event('change'),
 			message: function (object) {
