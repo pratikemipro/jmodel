@@ -598,22 +598,29 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		
 		EventType.call(this)
 
-		this.descriptor = copy(descriptor)
-			.addProperties( ( typeof settings === 'object' ) ? settings : {})
-			.addProperties({
-				success: function () {
-			        that.raise.apply(that,_slice.call(arguments).concat(that.descriptor));
-			    },
-				error: function () {
-					that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
-				},
-				beforeSend: (jQuery.ajaxSettings.beforeSend || function () {}).and(function (xhr,settings) {
-					if ( settings.type != 'GET' && settings.type != 'POST' ) {
-						xhr.setRequestHeader('X-HTTP-Method',settings.type);
-						settings.type = 'POST';
-					}
-				})
-			});
+		this.descriptor = Object.copy(descriptor)
+		
+		if ( typeof settings === 'object' ) {
+			this.description.settings = settings;
+		}
+		
+		Object.extend(this.descriptor,{
+			success: function () {
+		        that.raise.apply(that,_slice.call(arguments).concat(that.descriptor));
+		    },
+			error: function () {
+				that.fail.apply(that,_slice.call(arguments).concat(that.descriptor));
+			},
+			beforeSend: function (xhr,settings) {
+				if ( jQuery.ajaxSettings.beforeSend ) {
+					jQuery.ajaxSettings.beforeSend(xhr,settings);
+				}
+				if ( settings.type != 'GET' && settings.type != 'POST' ) {
+					xhr.setRequestHeader('X-HTTP-Method',settings.type);
+					settings.type = 'POST';
+				}
+			}
+		});
 			
 		this.descriptor.immediate = ( typeof this.descriptor.immediate === 'undefined' ) ? true : this.descriptor.immediate;
 		
@@ -773,8 +780,8 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	
 	function Subscriber (subscription) {
 		this.subscription = typeof subscription === 'function' ? {message:subscription} : subscription;
-		this.notify		  = (this.subscription.message || identity).bind(subscription.context || null);
-		this.fail		  = (this.subscription.error   || identity).bind(subscription.context || null);
+		this.notify		  = (this.subscription.message || Function.identity).bind(subscription.context || null);
+		this.fail		  = (this.subscription.error   || Function.identity).bind(subscription.context || null);
 	}
 	
 	Object.extend(em, {
