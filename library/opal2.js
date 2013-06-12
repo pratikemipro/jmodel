@@ -276,6 +276,7 @@ define(function() {
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
+        console.log(args);
         throw message + ': ' + args.toString();
       }
     });
@@ -289,6 +290,7 @@ define(function() {
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
+        console.log(args);
         throw message + ': ' + args.toString();
       }
     });
@@ -338,10 +340,10 @@ define(function() {
     return Function.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.prototype.To = function(type) {
-    return this.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
+    return this.Ensuring(Object.isa(type), 'Incorrect target type. Expecting ' + type.toString() + '. Returned value is');
   };
   Function.To = function(type) {
-    return Function.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
+    return Function.Ensuring(Object.isa(type), 'Incorrect target type. Expecting ' + type.toString() + '. Returned value is');
   };
   Function.Returning = function(val) {
     return function(fn) {
@@ -691,6 +693,20 @@ define(function() {
       };
     }
   };
+  Object.valid = function(constructor) {
+    switch (constructor) {
+      case Number:
+        return function(number) {
+          return Object.isa(Number)(number) && !isNan(number);
+        };
+      case Date:
+        return function(date) {
+          return Object.isa(Date)(date) && date.toString() !== 'Invalid Date';
+        };
+      default:
+        return Object.isa(constructor);
+    }
+  };
   Object.ensure = function(constructor) {
     var construct, isa;
 
@@ -796,6 +812,12 @@ define(function() {
       default:
         return Object.resolve(first).then(Object.path(rest));
     }
+  };
+  Object.has = function() {
+    var args;
+
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return Object.resolve.apply(null, args).then(Boolean);
   };
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
@@ -938,6 +960,12 @@ define(function() {
     return this.Where(function(str) {
       return regex.test(str);
     }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
+  };
+  Math.plus = function(a, b) {
+    return a + b;
+  };
+  Math.times = function(a, b) {
+    return a * b;
   };
   window.Nullable = function(constructor) {
     var construct;

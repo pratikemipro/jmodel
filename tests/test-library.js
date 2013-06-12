@@ -941,6 +941,7 @@ define(['jmodel/emerald2'], function() {
       return Integer(5.5);
     }), 'Throws an exception when called on a non-integer');
   });
+  module('Math');
   module('Nullable');
   test('Nullable Number', function() {
     equals((Nullable(Number))(null), null, 'Returns null when called on null.');
