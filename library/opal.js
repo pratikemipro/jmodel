@@ -140,7 +140,16 @@ define(function (a,b,c,undefined) {
 		_5: 		_5,
 		map: 	  	Function.map
 	});
-
+	
+	Function.delegate = function (fn) {
+		return function () {
+			env = fn.call(this);
+			context = env[0];
+			method = env[1];
+			method.apply(context,arguments);
+		}
+	};
+	
 	//
 	// Function composition
 	//
@@ -1061,6 +1070,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	function parallel () {
 		var fns = _slice.call(arguments);
 		return function () {
@@ -1084,12 +1094,14 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	function bind (context,fn) {
 		return fn.bind(context);
 	}
 	
 	// Tests: full
 	// Docs: partial
+	// Reimplemented: no
 	function apply () {
 		var args	= _slice.call(arguments),
 			context	= ( typeof args[0] === 'object' ) ? args.shift() : null,
@@ -1099,6 +1111,7 @@ define(function (a,b,c,undefined) {
 
     // Tests: full
 	// Docs: partial
+	// Reimplemented: no
 	function applyto () {
 		var args = arguments;
 		return function () {
@@ -1123,14 +1136,17 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no -> Use Math.plus
 	var plus = function (acc,value) { return acc + value; } .extend({unit:0,label:'sum'});
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	var times = function (acc,value) { return acc * value; } .extend({unit:1,label:'product'});
 	
 	// Tests: full
 	// Docs: full
+	// Reimplemented: no
 	var count = function _count (predicate) {
 		predicate = predicate || Function.constant(true);
 		return function (acc,value) { return acc += (predicate(value) ? 1 : 0); } .extend({unit:0,label:'count'});
@@ -1138,6 +1154,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	var withmethod = function method (name) {
 		var args = _slice.call(arguments,1);
 		return function (object,value) {
@@ -1149,10 +1166,12 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	var push = withmethod('push').but(first);
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	var add = function () {
 		switch (arguments.length) {
 			case 0:  return add0.apply(null,arguments);
@@ -1161,18 +1180,21 @@ define(function (a,b,c,undefined) {
 		}
 	};
 	
+	// Reimplemented: no
 	function add0 () {
 		return function (acc,value) {
 			return acc.add(value);
 		};
 	}
 	
+	// Reimplemented: no
 	function add1 (predicate) {
 		return function (acc,value) {
 			return predicate(value) ? acc.add(value) : acc;
 		};
 	}
 	
+	// Reimplemented: no
 	function add2 (predicate,mapping,mapfirst) {
 		return function (acc,value) {
 			var mapped = mapping(value);
@@ -1182,16 +1204,19 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	var contains = function (predicate) {
 		return function (acc,value) { return acc || predicate(value); } .extend({unit:false});
 	};
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no -> Use Math.max
 	var max = function (acc,value) { return acc > value ? acc : value; } .extend({label:'max'});
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no -> Use Math.min
 	var min = function (acc,value) { return ( acc < value && acc !== null ) ? acc : value; } .extend({label:'min'});
 
 	Object.extend(opal, {
@@ -1219,7 +1244,8 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	// Docs: none
-	function valid (constructor) {
+	// Reimplemented: no
+	Object.valid = function (constructor) {
 		return	  constructor === Number ? isNaN.not()
 				: constructor === Date ? function (date) { return date.toString() !== 'Invalid Date'; }
 				: isa(constructor);
@@ -1227,18 +1253,21 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	function is (object) {
 		return eq(object);
 	}
 
 	// Tests: full
 	// Docs: full
+	// Reimplemented: no
 	function is_of_type (type) {
 		return opal.type.eq(type);
 	}
 
 	// Tests: full
 	// Docs: full
+	// Reimplemented: no
 	function isa (constructor) {
 		return function (candidate) {
 			return candidate instanceof constructor;
@@ -1247,17 +1276,18 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: full
 	// Docs: none
-	function has () {
+	// Reimplemented: no
+	Object.has = function () {
 		return Object.resolve.apply(null,arguments).then(Boolean);
 	}
 
 	Object.extend(opal, {
-		valid: 		valid,
+		valid: 		Object.valid,
 		is: 		is,
 		is_of_type: is_of_type,
 		isa: 		isa,
 		isan: 		isa,
-		has: 		has
+		has: 		Object.has
 	});
 	
 	
@@ -1267,6 +1297,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	function compare (operator) {
 		return function (value) {
 			return function (candidate) {
@@ -1285,12 +1316,14 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	function between (lower,higher) {
 		return Function.and( gte(lower), lte(higher) );
 	}
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	function regex (expression) {
 		return expression.test.bind(expression);
 	}
@@ -1314,10 +1347,12 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
 	var istrue = eq(true);
 
 	// Tests: full
 	// Docs: none
+	// Reimplemented: no
     var isnull = eq(null);
 
 	Object.extend(opal, {
@@ -1334,14 +1369,17 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	function copy (obj,exact) {
 		return Object.extend(exact ? {} : new EnhancedObject(), obj);
 	}
 	
+	// Reimplemented: no
 	function EnhancedObject () {}
 	
 	// Tests: none
 	// Docs: none
+	// Reimplemented: no
 	EnhancedObject.from = function (obj) {
 		return copy(obj);
 	};
@@ -1352,12 +1390,14 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		addProperties: function (attributes) {
 			return Object.extend(this,attributes);
 		},
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		removeProperties: function () {
 			for ( var i=0; i<arguments.length; i++ ) {
 				delete this[arguments[i]];
@@ -1367,6 +1407,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		defaults: function (attributes) {
 			for ( var key in attributes ) {
 				if ( attributes.hasOwnProperty(key) ) {
@@ -1378,6 +1419,7 @@ define(function (a,b,c,undefined) {
 		
 		// Tests: none
 		// Docs: none
+		// Reimplemented: no
 		setProperty: function (key,value) {
 			this[key] = value;
 			return this;
@@ -1399,6 +1441,7 @@ define(function (a,b,c,undefined) {
 
 	// Tests: none
 	// Docs: none
+	// Reimplemented: yes
 	function Nullable (constructor) {
 		var construct = Object.construct(constructor);
 		return function (x) {
