@@ -25,6 +25,13 @@
 			args = Array.concat args1, args2
 			new constructor args...
 	
+	# Tests: none
+	Object.valid = (constructor) ->
+		switch constructor
+			when Number then (number) -> Object.isa(Number)(number) and not isNan number
+			when Date then (date) -> Object.isa(Date)(date) and date.toString() != 'Invalid Date'
+			else Object.isa(constructor)
+	
 	# Tests: full		
 	Object.ensure = (constructor) ->
 		isa = Object.isa constructor
@@ -79,3 +86,10 @@
 			when 0 then Function.constant undefined
 			when 1 then Object.resolve first
 			else Object.resolve(first).then Object.path rest
+	
+	##
+	## Existential test
+	##
+			
+	# Tests: none
+	Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean);
