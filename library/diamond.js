@@ -73,7 +73,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 	// Tests: full
 	function EntityTypes (context) {
 		Map.To(EntityType).apply(this);
-		this.ensure = ensure(EntityType,context);
+		this.ensure = Object.ensure(EntityType,context);
 		this.context = context;
 	}
 		
