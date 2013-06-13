@@ -14,6 +14,7 @@ opal:
 		src/library/opal.BareObject.coffee \
 		src/library/opal.Number.coffee \
 		src/library/opal.String.coffee \
+		src/library/opal.Boolean.coffee \
 		src/library/opal.Math.coffee \
 		src/library/opal.Nullable.coffee \
 		src/library/opal.Promise.coffee
@@ -40,6 +41,7 @@ library-test:
 		src/library/opal.Object.test.coffee \
 		src/library/opal.BareObject.test.coffee \
 		src/library/opal.Number.test.coffee \
+		src/library/opal.Boolean.test.coffee \
 		src/library/opal.Math.test.coffee \
 		src/library/opal.Nullable.test.coffee \
 		src/library/opal.Promise.test.coffee \

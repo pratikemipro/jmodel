@@ -276,7 +276,6 @@ define(function() {
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
-        console.log(args);
         throw message + ': ' + args.toString();
       }
     });
@@ -290,7 +289,6 @@ define(function() {
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       if (!predicate.apply(this, args)) {
-        console.log(args);
         throw message + ': ' + args.toString();
       }
     });
@@ -340,10 +338,10 @@ define(function() {
     return Function.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.prototype.To = function(type) {
-    return this.Ensuring(Object.isa(type), 'Incorrect target type. Expecting ' + type.toString() + '. Returned value is');
+    return this.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
   };
   Function.To = function(type) {
-    return Function.Ensuring(Object.isa(type), 'Incorrect target type. Expecting ' + type.toString() + '. Returned value is');
+    return Function.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
   };
   Function.Returning = function(val) {
     return function(fn) {
@@ -960,6 +958,12 @@ define(function() {
     return this.Where(function(str) {
       return regex.test(str);
     }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
+  };
+  Boolean.True = function() {
+    return true;
+  };
+  Boolean.False = function() {
+    return false;
   };
   Math.plus = function(a, b) {
     return a + b;
