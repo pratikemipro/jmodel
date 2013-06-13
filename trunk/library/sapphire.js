@@ -25,6 +25,15 @@ define(['jmodel/opal'], function (opal) {
 		_slice = Array.prototype.slice;
 			
 	function _replace  (a,b) { return b; };
+	
+	// NOTE: Temporary hack
+	function delegateTo (context,methodName) {
+		return function _delegateTo () {
+			return context[methodName].apply(context,arguments);
+		};
+	}
+	
+	_.delegateTo = delegateTo;
 
 
 	// ------------------------------------------------------------------------
