@@ -59,9 +59,34 @@ define(['jmodel/opal2'], function() {
       return -1 !== Array.prototype.indexOf.call(this, element);
     };
 
-    Set.prototype.count = function(predicate) {};
+    Set.prototype.count = function(predicate) {
+      var reduction;
 
-    Set.prototype.where = function(predicate) {};
+      if (predicate === void 0) {
+        return this.length;
+      }
+      reduction = function(sum, element) {
+        return sum += predicate(element) ? 1 : 0;
+      };
+      return this.reduce(reduction, 0);
+    };
+
+    Set.prototype.where = Function.Returning(function() {
+      return new Set;
+    })(function(set) {
+      return function(predicate) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          if (predicate(element)) {
+            _results.push(set.add(element));
+          }
+        }
+        return _results;
+      };
+    });
 
     Set.prototype.each = function(fn) {
       var element, _i, _len, _results;
@@ -76,7 +101,9 @@ define(['jmodel/opal2'], function() {
 
     Set.prototype.map = function(fn) {};
 
-    Set.prototype.reduce = function(fn) {};
+    Set.prototype.reduce = function(reduction, initial) {
+      return Array.prototype.reduce.call(this, reduction, 0);
+    };
 
     Set.prototype.partition = function(fn) {};
 
