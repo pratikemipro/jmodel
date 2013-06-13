@@ -53,9 +53,15 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     };
 
+    Set.prototype.replace = function(before, after) {};
+
     Set.prototype.member = function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
     };
+
+    Set.prototype.count = function(predicate) {};
+
+    Set.prototype.where = function(predicate) {};
 
     Set.prototype.each = function(fn) {
       var element, _i, _len, _results;
@@ -67,6 +73,12 @@ define(['jmodel/opal2'], function() {
       }
       return _results;
     };
+
+    Set.prototype.map = function(fn) {};
+
+    Set.prototype.reduce = function(fn) {};
+
+    Set.prototype.partition = function(fn) {};
 
     Set.union = function() {
       var set, sets, x;
