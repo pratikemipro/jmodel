@@ -37,16 +37,16 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.prototype.remove = function(predicate) {
-      var x;
+      var element;
 
       return Array.prototype.splice.call(this, 0, this.length, (function() {
         var _i, _len, _results;
 
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
-          x = this[_i];
-          if (!predicate(x)) {
-            _results.push(x);
+          element = this[_i];
+          if (!predicate(element)) {
+            _results.push(element);
           }
         }
         return _results;
@@ -105,32 +105,45 @@ define(['jmodel/opal2'], function() {
       return Array.prototype.reduce.call(this, reduction, 0);
     };
 
-    Set.prototype.partition = function(fn) {};
-
-    Set.union = function() {
-      var set, sets, x;
-
-      sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return new this.constructor((function() {
-        var _i, _len, _results;
+    Set.prototype.partition = Function.Returning(function() {
+      return new (Map.To(Set).Using(Set.union));
+    })(function(map) {
+      return function(key) {
+        var element, _i, _len, _results;
 
         _results = [];
-        for (_i = 0, _len = sets.length; _i < _len; _i++) {
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(map.add(key(element), element));
+        }
+        return _results;
+      };
+    });
+
+    Set.union = Function.Returning(function() {
+      return new Set;
+    })(function(union) {
+      return function() {
+        var element, set, sets, _i, _results;
+
+        sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        _results = [];
+        for (_i = sets.length - 1; _i >= 0; _i += -1) {
           set = sets[_i];
           _results.push((function() {
-            var _j, _len1, _results1;
+            var _j, _len, _results1;
 
             _results1 = [];
-            for (_j = 0, _len1 = set.length; _j < _len1; _j++) {
-              x = set[_j];
-              _results1.push(x);
+            for (_j = 0, _len = set.length; _j < _len; _j++) {
+              element = set[_j];
+              _results1.push(union.add(element));
             }
             return _results1;
           })());
         }
         return _results;
-      })());
-    };
+      };
+    });
 
     Set.intersection = function() {};
 
