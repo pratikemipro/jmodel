@@ -1058,6 +1058,33 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
   });
+  test('Set::partition', function() {
+    var is_even, key, member, numbers, partition;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    is_even = function(x) {
+      return x % 2 === 0;
+    };
+    key = function(x) {
+      if (is_even(x)) {
+        return 'even';
+      } else {
+        return 'odd';
+      }
+    };
+    partition = numbers.partition(key);
+    return deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = partition.get('even');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [2, 4, 6, 8], 'Produces correct value for key');
+  });
   module('List');
   module('Map');
   module('Stream');

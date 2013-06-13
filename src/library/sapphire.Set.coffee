@@ -19,7 +19,7 @@
 		
 		# Tests: none
 		remove: (predicate) ->
-			Array::splice.call this, 0, @length, ( x for x in @ when not predicate x )
+			Array::splice.call this, 0, @length, ( element for element in this when not predicate element )
 		
 		# Tests: none	
 		replace: (before,after) ->
@@ -51,12 +51,18 @@
 			Array::reduce.call this, reduction, 0
 		
 		# Tests: none
-		partition: (fn) ->
+		partition: Function.Returning(-> new ( Map.To(Set).Using Set.union ) ) \
+			 (map) -> (key) ->
+				 for element in this
+					 map.add key(element), element
 		
 		# Tests: none
-		@union: (sets...) ->
-			new @constructor ( x for x in set for set in sets )
-		
+		@union: Function.Returning(-> new Set) \
+			(union) -> (sets...) ->
+				for set in sets by -1
+					for element in set
+						union.add element
+			
 		# Tests: none
 		@intersection: ->
 		
