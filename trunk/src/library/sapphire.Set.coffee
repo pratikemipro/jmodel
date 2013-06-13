@@ -28,11 +28,16 @@
 		member: (element) ->
 			-1 != Array::indexOf.call this, element
 		
-		# Tests: none	
+		# Tests: full	
 		count: (predicate) ->
+			return @length if predicate == undefined
+			reduction = (sum,element) -> sum += if predicate element then 1 else 0 
+			@reduce reduction, 0
 		
-		# Tests: none
-		where: (predicate) ->
+		# Tests: full
+		where: Function.Returning(-> new Set ) \
+			(set) -> (predicate) ->
+				set.add element for element in this when predicate element
 		
 		# Tests: none
 		each: (fn) ->
@@ -42,7 +47,8 @@
 		map: (fn) ->
 		
 		# Tests: none
-		reduce: (fn) ->
+		reduce: (reduction,initial) ->
+			Array::reduce.call this, reduction, 0
 		
 		# Tests: none
 		partition: (fn) ->

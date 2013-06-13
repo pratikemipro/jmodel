@@ -1021,6 +1021,43 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), ['red', 'green', 'blue'], 'Set contains correct elements');
   });
+  test('Set.count', function() {
+    var numbers;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    equals(numbers.count(), 8, 'Returns cardinality of set when called without a predicate');
+    return equals(numbers.count(function(x) {
+      return x % 2 === 0;
+    }), 4, 'Returns number of elements matching predicate when called with predicate');
+  });
+  test('Set::where', function() {
+    var evens, member, numbers;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    evens = numbers.where(function(x) {
+      return x % 2 === 0;
+    });
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = evens.length; _i < _len; _i++) {
+        member = evens[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [2, 4, 6, 8], 'Filters according to criteria');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        member = numbers[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
+  });
   module('List');
   module('Map');
   module('Stream');
