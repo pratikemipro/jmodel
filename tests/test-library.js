@@ -1098,7 +1098,20 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Removes correct elements');
-    return equals(removed instanceof Set, true, 'Removed elements returned as Set');
+    equals(numbers.length, 4, 'Set has correct cardinality after removal');
+    equals(removed instanceof Set, true, 'Removed elements returned as Set');
+    removed = numbers.remove();
+    equals(numbers.length, 0, 'Set has correct cardinality after removal');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [], 'Removes all elements when called without an argument');
   });
   test('Set::replace', function() {
     var colour, colours;
@@ -1136,13 +1149,15 @@ define(['jmodel/emerald2'], function() {
     return equals(colours.member(), false, 'Returns false if called without an argument');
   });
   test('Set::count', function() {
-    var numbers;
+    var empty, numbers;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    empty = new Set([]);
     equals(numbers.count(), 8, 'Returns cardinality of set when called without a predicate');
-    return equals(numbers.count(function(x) {
+    equals(numbers.count(function(x) {
       return x % 2 === 0;
     }), 4, 'Returns number of elements matching predicate when called with predicate');
+    return equals(empty.count(), 0, 'Empty set is empty');
   });
   test('Set::where', function() {
     var evens, number, numbers;
