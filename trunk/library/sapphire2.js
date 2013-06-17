@@ -108,7 +108,7 @@ define(['jmodel/opal2'], function() {
     };
 
     Set.prototype.reduce = function(reduction, initial) {
-      return Array.prototype.reduce.call(this, reduction, initial);
+      return Array.prototype.reduce.apply(this, [reduction].concat(initial != null ? [initial] : []));
     };
 
     Set.prototype.partition = Function.From(Function).Returning(function() {
@@ -124,21 +124,6 @@ define(['jmodel/opal2'], function() {
         }
         return _results;
       };
-    });
-
-    Set.prototype.to = Function.From(Function)(function(cons) {
-      var element;
-
-      return new cons((function() {
-        var _i, _len, _results;
-
-        _results = [];
-        for (_i = 0, _len = this.length; _i < _len; _i++) {
-          element = this[_i];
-          _results.push(element);
-        }
-        return _results;
-      }).call(this));
     });
 
     Set.subset = Function.From(Set, Set).To(Boolean)(function(first, second) {
@@ -244,6 +229,21 @@ define(['jmodel/opal2'], function() {
 
         sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       };
+    });
+
+    Set.prototype.to = Function.From(Function)(function(cons) {
+      var element;
+
+      return new cons((function() {
+        var _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(element);
+        }
+        return _results;
+      }).call(this));
     });
 
     Set.Of = function(cons) {
