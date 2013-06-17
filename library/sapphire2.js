@@ -123,7 +123,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.prototype.reduce = function(reduction, initial) {
-      return Array.prototype.reduce.call(this, reduction, 0);
+      return Array.prototype.reduce.call(this, reduction, initial);
     };
 
     Set.prototype.partition = Function.From(Function).Returning(function() {
