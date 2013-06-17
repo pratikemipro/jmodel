@@ -11,6 +11,7 @@
 		# Tests: full
 		constructor: ( elements=[] ) ->
 			if elements not instanceof Array or arguments.length > 1 then elements = Array::slice.call arguments
+			@length = 0
 			@add element for element in elements
 		
 		##
@@ -22,10 +23,10 @@
 			if not @member element then Array::push.call this, element
 		
 		# Tests: full
-		remove: Function.From(Function) (predicate) ->
+		remove: Function.From(Maybe Function) (predicate=Boolean.True) ->
 			partition = @partition predicate
-			Array::splice.apply this, [0,@length].concat ( element for element in partition.get false )
-			return partition.get true
+			Array::splice.apply this, [0,@length].concat ( element for element in partition.get(false) ? [] )
+			return partition.get(true) ? new @constructor
 		
 		# Tests: full	
 		replace: Function.Chaining (before,after) ->

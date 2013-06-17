@@ -990,10 +990,10 @@ define(function() {
     construct = Object.construct(base);
     valid = Object.isa(base);
     derived = function(x) {
-      if (x != null) {
-        return construct.apply(null, arguments);
-      } else {
+      if (arguments.length === 0 || (x == null)) {
         return void 0;
+      } else {
+        return construct.apply(null, arguments);
       }
     };
     derived.valid = function(x) {

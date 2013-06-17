@@ -24,6 +24,7 @@ define(['jmodel/opal2'], function() {
       if (!(elements instanceof Array) || arguments.length > 1) {
         elements = Array.prototype.slice.call(arguments);
       }
+      this.length = 0;
       for (_i = 0, _len = elements.length; _i < _len; _i++) {
         element = elements[_i];
         this.add(element);
@@ -36,22 +37,25 @@ define(['jmodel/opal2'], function() {
       }
     });
 
-    Set.prototype.remove = Function.From(Function)(function(predicate) {
-      var element, partition;
+    Set.prototype.remove = Function.From(Maybe(Function))(function(predicate) {
+      var element, partition, _ref;
 
+      if (predicate == null) {
+        predicate = Boolean.True;
+      }
       partition = this.partition(predicate);
       Array.prototype.splice.apply(this, [0, this.length].concat((function() {
-        var _i, _len, _ref, _results;
+        var _i, _len, _ref, _ref1, _results;
 
-        _ref = partition.get(false);
+        _ref1 = (_ref = partition.get(false)) != null ? _ref : [];
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          element = _ref[_i];
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          element = _ref1[_i];
           _results.push(element);
         }
         return _results;
       })()));
-      return partition.get(true);
+      return (_ref = partition.get(true)) != null ? _ref : new this.constructor;
     });
 
     Set.prototype.replace = Function.Chaining(function(before, after) {

@@ -34,8 +34,14 @@
 		deepEqual ( number for number in numbers ).sort(), [1,3,5,7], 'Leaves correct elements in set'
 		deepEqual ( number for number in removed ).sort(), [2,4,6,8], 'Removes correct elements'
 		
+		equals numbers.length, 4, 'Set has correct cardinality after removal'
 		equals removed instanceof Set, true, 'Removed elements returned as Set'
-	
+		
+		removed = numbers.remove()
+		
+		equals numbers.length, 0, 'Set has correct cardinality after removal'
+		deepEqual ( number for number in numbers ), [], 'Removes all elements when called without an argument'
+			
 	test 'Set::replace', ->
 		
 		colours = new Set ['red','green','blue']
@@ -59,9 +65,11 @@
 	test 'Set::count', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
+		empty   = new Set [] 
 		
 		equals numbers.count(), 8, 'Returns cardinality of set when called without a predicate'
 		equals numbers.count((x) -> x % 2 == 0), 4, 'Returns number of elements matching predicate when called with predicate'
+		equals empty.count(), 0, 'Empty set is empty'
 		
 	test 'Set::where', ->
 		
