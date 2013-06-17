@@ -105,6 +105,18 @@
 		equals partition instanceof Map, true, 'Returns a Map'
 		raises (-> numbers.partition 'red' ), 'Raises an exception if argument not a function'
 	
+	test 'Set.equal', ->
+		
+		numbers   = new Set [7,5,3,1]
+		odds      = new Set [1,3,5,7]
+		evens     = new Set [2,4,6,8]
+		more_odds = new Set [1,3,5,7,9]
+		
+		equals Set.equal(numbers,numbers), true, 'A set is equal to itself'
+		equals Set.equal(numbers,odds), true, 'Two sets with the same elements are equal'
+		equals Set.equal(odds,evens), false, 'Two sets with the same cardinality but different elements are not equal'
+		equals Set.equal(odds,more_odds), false, 'Two sets with different numbers of elements are not equal' 
+	
 	test 'Set.union', ->
 		
 		odds  = new Set [1,3,5,7]

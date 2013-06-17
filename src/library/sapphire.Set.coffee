@@ -79,9 +79,13 @@
 		## Set algebra
 		##
 		
-		# Tests: none
+		# Tests: full
 		@equal: Function.From(Set,Set).To(Boolean) \
 			(first,second) ->
+				[true]
+					.concat( second.member element for element in first )
+					.concat( first.member element for element in second )
+					.reduce (a,b) -> a and b
 		
 		# Tests: full
 		@union: Function.From([Set]).Returning(-> new Set) \
