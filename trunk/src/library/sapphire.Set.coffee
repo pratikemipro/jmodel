@@ -26,7 +26,9 @@
 			Array::splice.call this, 0, @length, ( element for element in this when not predicate element )
 		
 		# Tests: none	
-		replace: (before,after) ->
+		replace: Function.Chaining (before,after) ->
+			index = Array::indexOf.call this, before
+			this[index] = after if index != -1
 		
 		##
 		## Pure methods
