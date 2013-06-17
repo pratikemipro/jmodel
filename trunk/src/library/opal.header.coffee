@@ -11,6 +11,7 @@ define ->
 	# NOTE: Define assert here
 	
 	window.Value = ->
+	window.Value.valid = (x) -> x != undefined
 	
 	# Tests: none
 	Object.isa = (constructor) ->
