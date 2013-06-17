@@ -71,7 +71,7 @@ define(['jmodel/opal2'], function() {
       return this.reduce(reduction, 0);
     };
 
-    Set.prototype.where = Function.Returning(function() {
+    Set.prototype.where = Function.From(Function).Returning(function() {
       return new Set;
     })(function(set) {
       return function(predicate) {
@@ -118,7 +118,7 @@ define(['jmodel/opal2'], function() {
       return Array.prototype.reduce.call(this, reduction, 0);
     };
 
-    Set.prototype.partition = Function.Returning(function() {
+    Set.prototype.partition = Function.From(Function).Returning(function() {
       return new (Map.To(Set).Using(Set.union));
     })(function(map) {
       return function(key) {
