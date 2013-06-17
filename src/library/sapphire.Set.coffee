@@ -76,7 +76,7 @@
 		## Comparisons
 		##
 		
-		# Tests: none
+		# Tests: full
 		@subset: Function.From(Set,Set).To(Boolean) \
 			(first,second) ->
 				[true]
