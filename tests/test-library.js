@@ -1021,6 +1021,33 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), ['red', 'green', 'blue'], 'Set contains correct elements');
   });
+  test('Set::add', function() {
+    var member, set;
+
+    set = new Set(['red', 'green', 'blue']);
+    set.add('cyan').add('magenta').add('yellow');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = set.length; _i < _len; _i++) {
+        member = set[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Adds elements and can be chained');
+    set.add('cyan').add('magenta').add('yellow');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = set.length; _i < _len; _i++) {
+        member = set[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Does not add elements more than once');
+  });
   test('Set::count', function() {
     var numbers;
 

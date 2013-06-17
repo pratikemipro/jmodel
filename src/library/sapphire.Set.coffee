@@ -17,13 +17,15 @@
 		## Mutators
 		##
 		
-		# Tests: none
+		# Tests: full
 		add: Function.Chaining (element) ->
 			if not @member element then Array::push.call this, element
 		
 		# Tests: none
 		remove: (predicate) ->
-			Array::splice.call this, 0, @length, ( element for element in this when not predicate element )
+			partition = @partition predicate
+			Array::splice.call this, 0, @length, partition.get false
+			return partition.get true
 		
 		# Tests: none	
 		replace: Function.Chaining (before,after) ->

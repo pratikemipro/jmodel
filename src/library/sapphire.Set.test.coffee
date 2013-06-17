@@ -6,6 +6,19 @@
 		
 		equals set.length, 3, 'Set returns a set with correct cardinality'
 		deepEqual ( member for member in set ), ['red','green','blue'], 'Set contains correct elements'
+		
+	test 'Set::add', ->
+		
+		set = new Set ['red','green','blue']
+		
+		set.add('cyan').add('magenta').add('yellow')
+		
+		deepEqual ( member for member in set), ['red','green','blue','cyan','magenta','yellow'], 'Adds elements and can be chained'
+		
+		set.add('cyan').add('magenta').add('yellow')
+		
+		deepEqual ( member for member in set), ['red','green','blue','cyan','magenta','yellow'], 'Does not add elements more than once'
+		
 	
 	test 'Set::count', ->
 		
