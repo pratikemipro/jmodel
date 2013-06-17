@@ -57,7 +57,7 @@
 			fn element for element in this
 		
 		# Tests: full
-		reduce: (reduction,initial) ->
+		reduce: Function.From(Function,Maybe Value) (reduction,initial) ->
 			Array::reduce.apply this, [reduction].concat if initial? then [initial] else []
 		
 		# Tests: full
@@ -118,7 +118,7 @@
 		##
 		
 		# Tests: none
-		@Of: (cons) ->
+		@Of: Function.From(Function) (cons) ->
 			class extends this
 				add: (element) -> super @ensure element
 				ensure: Object.ensure cons

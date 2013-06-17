@@ -16,6 +16,9 @@ define(function() {
   var Promise, _base, _ref, _ref1;
 
   window.Value = function() {};
+  window.Value.valid = function(x) {
+    return x !== void 0;
+  };
   Object.isa = function(constructor) {
     if (constructor === Number) {
       return function(obj) {
