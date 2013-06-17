@@ -55,22 +55,15 @@
 		each: (fn) ->
 			fn element for element in this
 		
-		# Tests: none
+		# Tests: full
 		reduce: (reduction,initial) ->
-			Array::reduce.call this, reduction, initial
+			Array::reduce.apply this, [reduction].concat if initial? then [initial] else []
 		
 		# Tests: full
 		partition: Function.From(Function).Returning(-> new ( Map.To(Set).Using Set.union ) ) \
 			 (map) -> (key) ->
 				 for element in this
 					 map.add key(element), element
-					 
-		##
-		## Casting
-		##
-		
-		# Tests: full
-		to: Function.From(Function) (cons) -> new cons (element for element in this)
 					 
 		##
 		## Comparisons
@@ -111,6 +104,13 @@
 		# Tests: none
 		@product: Function.From([Set]).Returning(-> new Set ) \
 			(product) -> (sets...) ->
+				
+		##
+		## Casting
+		##
+
+		# Tests: full
+		to: Function.From(Function) (cons) -> new cons (element for element in this)
 		
 		##
 		## Typed Sets

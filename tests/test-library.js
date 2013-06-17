@@ -1175,6 +1175,15 @@ define(['jmodel/emerald2'], function() {
     });
     return deepEqual(output, [1, 2, 3, 4, 5, 6, 7, 8], 'Function is called for each element of set');
   });
+  test('Set::reduce', function() {
+    var empty, numbers;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    empty = new Set([]);
+    equal(numbers.reduce(Math.plus), 36, 'Reduces values correctly');
+    equal(numbers.reduce(Math.plus, 0), 36, 'Allows initial value');
+    return equal(empty.reduce(Math.plus, 0), 0, 'Works with empty set and initial value');
+  });
   test('Set::partition', function() {
     var even, key, number, numbers, partition;
 
@@ -1205,29 +1214,6 @@ define(['jmodel/emerald2'], function() {
     return raises((function() {
       return numbers.partition('red');
     }), 'Raises an exception if argument not a function');
-  });
-  test('Set::to', function() {
-    var even, list, number, numbers;
-
-    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
-    even = even = function(x) {
-      return x % 2 === 0;
-    };
-    list = numbers.to(List);
-    equals(list instanceof List, true, 'Casts to correct type');
-    deepEqual((function() {
-      var _i, _len, _results;
-
-      _results = [];
-      for (_i = 0, _len = list.length; _i < _len; _i++) {
-        number = list[_i];
-        _results.push(number);
-      }
-      return _results;
-    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Constructor is passed correct elements');
-    return raises((function() {
-      return numbers.to('red');
-    }), 'Raises an exception if not called with a function');
   });
   test('Set.subset', function() {
     var empty, numbers, odds;
@@ -1441,6 +1427,29 @@ define(['jmodel/emerald2'], function() {
     return raises((function() {
       return Set.difference(numbers, 1);
     }), 'Raises an exception if second argument not a Set');
+  });
+  test('Set::to', function() {
+    var even, list, number, numbers;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    even = even = function(x) {
+      return x % 2 === 0;
+    };
+    list = numbers.to(List);
+    equals(list instanceof List, true, 'Casts to correct type');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = list.length; _i < _len; _i++) {
+        number = list[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Constructor is passed correct elements');
+    return raises((function() {
+      return numbers.to('red');
+    }), 'Raises an exception if not called with a function');
   });
   module('List');
   test('List::map', function() {

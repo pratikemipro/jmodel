@@ -83,6 +83,15 @@
 		
 		deepEqual output, [1,2,3,4,5,6,7,8], 'Function is called for each element of set'
 		
+	test 'Set::reduce', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		empty   = new Set []
+		
+		equal numbers.reduce(Math.plus), 36, 'Reduces values correctly'
+		equal numbers.reduce(Math.plus,0), 36, 'Allows initial value'
+		equal empty.reduce(Math.plus,0), 0, 'Works with empty set and initial value'
+		
 	test 'Set::partition', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
@@ -97,19 +106,6 @@
 		
 		equals partition instanceof Map, true, 'Returns a Map'
 		raises (-> numbers.partition 'red' ), 'Raises an exception if argument not a function'
-		
-	test 'Set::to', ->
-		
-		numbers = new Set [1,2,3,4,5,6,7,8]
-		
-		even = even = (x) -> x % 2 == 0
-		
-		list = numbers.to(List)
-	
-		equals list instanceof List, true, 'Casts to correct type'
-		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
-		
-		raises (-> numbers.to 'red'), 'Raises an exception if not called with a function'
 		
 	test 'Set.subset', ->
 		
@@ -192,3 +188,16 @@
 		equals difference instanceof Set, true, 'Returns a Set'
 		raises (-> Set.difference 1, odds ), 'Raises an exception if first argument not a Set'
 		raises (-> Set.difference numbers, 1 ), 'Raises an exception if second argument not a Set'
+	
+	test 'Set::to', ->
+	
+		numbers = new Set [1,2,3,4,5,6,7,8]
+	
+		even = even = (x) -> x % 2 == 0
+	
+		list = numbers.to(List)
+
+		equals list instanceof List, true, 'Casts to correct type'
+		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
+	
+		raises (-> numbers.to 'red'), 'Raises an exception if not called with a function'
