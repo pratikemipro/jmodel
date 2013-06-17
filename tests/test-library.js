@@ -21,7 +21,6 @@ define(['jmodel/emerald2'], function() {
     return deepEqual(Array.flatten([[1, [2, 3]], [[4, 5], 6]]), [1, 2, 3, 4, 5, 6], 'Flatten works with differing depths');
   });
   test('Array.hastypes', function() {
-    equal(Array.hastypes(Number, String)([5]), false, 'Returns false for argument of wrong cardinality');
     equal(Array.hastypes(Number)([5]), true, 'Returns true for single element array having correct type');
     return equal(Array.hastypes(Number, String, Number)([5, 'fred', 7]), true, 'Works for longer arrays');
   });
@@ -947,6 +946,18 @@ define(['jmodel/emerald2'], function() {
   test('Nullable Number', function() {
     equals((Nullable(Number))(null), null, 'Returns null when called on null.');
     return equals((Nullable(Number))(5), 5, 'Throws an exception when called on a non-integer');
+  });
+  module('Maybe');
+  test('Maybe Number', function() {
+    var type;
+
+    type = Maybe(Number);
+    equals(type(), void 0, 'Returns undefined when called with no arguments.');
+    equals(type(void 0), void 0, 'Returns undefined when called with undefined');
+    equals(type(5), 5, 'Returns value when called with value of correct type');
+    equals(type.valid(void 0), true, 'Undefined is a valid value');
+    equals(type.valid(5), true, 'Values from base type are valid');
+    return equals(type.valid('red'), false, 'Values not from base type are not valid');
   });
   module('Promise');
   test('Promise.then', function() {

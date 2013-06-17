@@ -30,7 +30,6 @@
 		else
 			predicates = ( Object.isa(type) for type in types )
 			(array) ->
-				return false if array.length != predicates.length
 				valid = true
 				( valid = valid and predicates[i](x) ) for x, i in array
 				valid

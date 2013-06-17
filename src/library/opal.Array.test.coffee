@@ -23,7 +23,6 @@
 		deepEqual Array.flatten( [[1,[2,3]],[[4,5],6]] ), [1,2,3,4,5,6], 'Flatten works with differing depths'
 		
 	test 'Array.hastypes', ->
-		
-		equal Array.hastypes(Number,String)([5]), false, 'Returns false for argument of wrong cardinality'
+
 		equal Array.hastypes(Number)([5]), true, 'Returns true for single element array having correct type'
 		equal Array.hastypes(Number,String,Number)([5,'fred',7]), true, 'Works for longer arrays'
