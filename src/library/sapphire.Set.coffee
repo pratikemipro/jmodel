@@ -86,7 +86,7 @@
 		# Tests: full
 		@equal: Function.From(Set,Set).To(Boolean) \
 			(first,second) ->
-				Set.subset(first,second) and Set.subset(second,first)
+				first.count() == second.count() and Set.subset(first,second) and Set.subset(second,first)
 		
 		##
 		## Set algebra
