@@ -13,6 +13,10 @@
 			if elements not instanceof Array then elements = [elements]
 			@add element for element in elements
 		
+		##
+		## Mutators
+		##
+		
 		# Tests: none
 		add: Function.Chaining (element) ->
 			if not @member element then Array::push.call this, element
@@ -23,6 +27,10 @@
 		
 		# Tests: none	
 		replace: (before,after) ->
+		
+		##
+		## Pure methods
+		##
 		
 		# Tests: none
 		member: (element) ->
@@ -57,6 +65,10 @@
 			 (map) -> (key) ->
 				 for element in this
 					 map.add key(element), element
+					 
+		##
+		## Set algebra
+		##
 		
 		# Tests: full
 		@union: Function.From([Set]).Returning(-> new Set) \
@@ -73,6 +85,10 @@
 		@difference: Function.From(Set,Set).Returning(-> new Set) \
 			(difference) -> (first,second) ->
 				difference.add element for element in first when not second.member element
+		
+		##
+		## Typed Sets
+		##
 		
 		# Tests: none
 		@Of: (cons) ->
