@@ -122,6 +122,21 @@ define(['jmodel/opal2'], function() {
       };
     });
 
+    Set.prototype.select = Function.From(Function).Returning(function() {
+      return new List;
+    })(function(list) {
+      return function(fn) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(list.add(fn(element)));
+        }
+        return _results;
+      };
+    });
+
     Set.prototype.reduce = function(reduction, initial) {
       return Array.prototype.reduce.call(this, reduction, initial);
     };

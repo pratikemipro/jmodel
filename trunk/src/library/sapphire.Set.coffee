@@ -60,6 +60,11 @@
 			(mapped) -> (fn) ->
 				mapped.add fn element for element in this
 		
+		# Test: none
+		select: Function.From(Function).Returning(-> new List) \
+			(list) -> (fn) ->
+				list.add fn element for element in this
+		
 		# Tests: none
 		reduce: (reduction,initial) ->
 			Array::reduce.call this, reduction, initial
