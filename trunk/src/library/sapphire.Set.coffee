@@ -70,6 +70,10 @@
 		## Set algebra
 		##
 		
+		# Tests: none
+		@equal: Function.From(Set,Set).To(Boolean) \
+			(first,second) ->
+		
 		# Tests: full
 		@union: Function.From([Set]).Returning(-> new Set) \
 			(union) -> (sets...) ->
@@ -85,6 +89,10 @@
 		@difference: Function.From(Set,Set).Returning(-> new Set) \
 			(difference) -> (first,second) ->
 				difference.add element for element in first when not second.member element
+				
+		# Tests: none
+		@product: Function.From([Set]).Returning(-> new Set ) \
+			(product) -> (sets...) ->
 		
 		##
 		## Typed Sets
