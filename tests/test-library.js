@@ -1048,6 +1048,36 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Does not add elements more than once');
   });
+  test('Set::remove', function() {
+    var even, member, numbers, removed;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    even = function(x) {
+      return x % 2 === 0;
+    };
+    removed = numbers.remove(even);
+    deepEqual(((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        member = numbers[_i];
+        _results.push(member);
+      }
+      return _results;
+    })()).sort(), [1, 3, 5, 7], 'Leaves correct elements in set');
+    deepEqual(((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = removed.length; _i < _len; _i++) {
+        member = removed[_i];
+        _results.push(member);
+      }
+      return _results;
+    })()).sort(), [2, 4, 6, 8], 'Removes correct elements');
+    return equals(removed instanceof Set, true, 'Removed elements returned as Set');
+  });
   test('Set::count', function() {
     var numbers;
 
@@ -1122,14 +1152,14 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if argument is not a function');
   });
   test('Set::partition', function() {
-    var is_even, key, member, numbers, partition;
+    var even, key, member, numbers, partition;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
-    is_even = function(x) {
+    even = function(x) {
       return x % 2 === 0;
     };
     key = function(x) {
-      if (is_even(x)) {
+      if (even(x)) {
         return 'even';
       } else {
         return 'odd';

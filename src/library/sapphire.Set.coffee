@@ -21,10 +21,10 @@
 		add: Function.Chaining (element) ->
 			if not @member element then Array::push.call this, element
 		
-		# Tests: none
-		remove: (predicate) ->
+		# Tests: full
+		remove: Function.From(Function) (predicate) ->
 			partition = @partition predicate
-			Array::splice.call this, 0, @length, partition.get false
+			Array::splice.apply this, [0,@length].concat ( element for element in partition.get false )
 			return partition.get true
 		
 		# Tests: none	
