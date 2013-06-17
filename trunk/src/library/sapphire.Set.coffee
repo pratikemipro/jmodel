@@ -41,7 +41,7 @@
 			-1 != Array::indexOf.call this, element
 		
 		# Tests: full	
-		count: (predicate) ->
+		count: Function.From(Maybe Function) (predicate) ->
 			return @length if predicate == undefined
 			reduction = (sum,element) -> sum += if predicate element then 1 else 0 
 			@reduce reduction, 0

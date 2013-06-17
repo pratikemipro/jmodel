@@ -18,4 +18,5 @@ define ->
 		else if constructor == String  then (obj) -> obj instanceof String or typeof obj == 'string'
 		else if constructor == Boolean then (obj) -> obj instanceof Boolean or typeof obj == 'boolean'
 		else if constructor == Value   then (obj) -> obj != undefined
+		else if constructor.valid?     then (obj) -> constructor.valid obj
 		else                                (obj) -> obj instanceof constructor

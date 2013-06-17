@@ -33,6 +33,10 @@ define(function() {
       return function(obj) {
         return obj !== void 0;
       };
+    } else if (constructor.valid != null) {
+      return function(obj) {
+        return constructor.valid(obj);
+      };
     } else {
       return function(obj) {
         return obj instanceof constructor;
@@ -124,9 +128,6 @@ define(function() {
       return function(array) {
         var i, valid, x, _i, _len;
 
-        if (array.length !== predicates.length) {
-          return false;
-        }
         valid = true;
         for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
           x = array[i];
@@ -982,6 +983,23 @@ define(function() {
         return construct.apply(null, arguments);
       }
     };
+  };
+  window.Maybe = function(base) {
+    var construct, derived, valid;
+
+    construct = Object.construct(base);
+    valid = Object.isa(base);
+    derived = function(x) {
+      if (x != null) {
+        return construct.apply(null, arguments);
+      } else {
+        return void 0;
+      }
+    };
+    derived.valid = function(x) {
+      return (x == null) || valid(x);
+    };
+    return derived;
   };
   return window.Promise = Promise = (function() {
     var FULFILLED, PENDING, REJECTED, chain, delay, _ref2;

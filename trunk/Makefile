@@ -17,6 +17,7 @@ opal:
 		src/library/opal.Boolean.coffee \
 		src/library/opal.Math.coffee \
 		src/library/opal.Nullable.coffee \
+		src/library/opal.Maybe.coffee \
 		src/library/opal.Promise.coffee
 
 sapphire:
@@ -44,6 +45,7 @@ library-test:
 		src/library/opal.Boolean.test.coffee \
 		src/library/opal.Math.test.coffee \
 		src/library/opal.Nullable.test.coffee \
+		src/library/opal.Maybe.test.coffee \
 		src/library/opal.Promise.test.coffee \
 		src/library/sapphire.Set.test.coffee \
 		src/library/sapphire.List.test.coffee \
