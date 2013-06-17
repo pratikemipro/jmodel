@@ -43,8 +43,10 @@
 		each: (fn) ->
 			fn element for element in this
 		
-		# Tests: none
-		map: (fn) ->
+		# Tests: full
+		map: Function.From(Function).Returning(-> new Set) \
+			(mapped) -> (fn) ->
+				mapped.add fn element for element in this
 		
 		# Tests: none
 		reduce: (reduction,initial) ->
