@@ -58,7 +58,7 @@
 				 for element in this
 					 map.add key(element), element
 		
-		# Tests: none
+		# Tests: full
 		@union: Function.From([Set]).Returning(-> new Set) \
 			(union) -> (sets...) ->
 				union.add element for element in set for set in sets
