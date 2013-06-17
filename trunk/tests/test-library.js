@@ -1006,50 +1006,50 @@ define(['jmodel/emerald2'], function() {
   });
   module('Set');
   test('Set constructor', function() {
-    var member, set;
+    var colour, colours;
 
-    set = new Set(['red', 'green', 'blue']);
-    equals(set.length, 3, 'Set returns a set with correct cardinality');
+    colours = new Set(['red', 'green', 'blue']);
+    equals(colours.length, 3, 'Set returns a set with correct cardinality');
     return deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
-      for (_i = 0, _len = set.length; _i < _len; _i++) {
-        member = set[_i];
-        _results.push(member);
+      for (_i = 0, _len = colours.length; _i < _len; _i++) {
+        colour = colours[_i];
+        _results.push(colour);
       }
       return _results;
     })(), ['red', 'green', 'blue'], 'Set contains correct elements');
   });
   test('Set::add', function() {
-    var member, set;
+    var colour, colours;
 
-    set = new Set(['red', 'green', 'blue']);
-    set.add('cyan').add('magenta').add('yellow');
+    colours = new Set(['red', 'green', 'blue']);
+    colours.add('cyan').add('magenta').add('yellow');
     deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
-      for (_i = 0, _len = set.length; _i < _len; _i++) {
-        member = set[_i];
-        _results.push(member);
+      for (_i = 0, _len = colours.length; _i < _len; _i++) {
+        colour = colours[_i];
+        _results.push(colour);
       }
       return _results;
     })(), ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Adds elements and can be chained');
-    set.add('cyan').add('magenta').add('yellow');
+    colours.add('cyan').add('magenta').add('yellow');
     return deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
-      for (_i = 0, _len = set.length; _i < _len; _i++) {
-        member = set[_i];
-        _results.push(member);
+      for (_i = 0, _len = colours.length; _i < _len; _i++) {
+        colour = colours[_i];
+        _results.push(colour);
       }
       return _results;
     })(), ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Does not add elements more than once');
   });
   test('Set::remove', function() {
-    var even, member, numbers, removed;
+    var even, number, numbers, removed;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     even = function(x) {
@@ -1061,8 +1061,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        member = numbers[_i];
-        _results.push(member);
+        number = numbers[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [1, 3, 5, 7], 'Leaves correct elements in set');
@@ -1071,12 +1071,39 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = removed.length; _i < _len; _i++) {
-        member = removed[_i];
-        _results.push(member);
+        number = removed[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Removes correct elements');
     return equals(removed instanceof Set, true, 'Removed elements returned as Set');
+  });
+  test('Set::replace', function() {
+    var colour, colours;
+
+    colours = new Set(['red', 'green', 'blue']);
+    colours.replace('green', 'cyan');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = colours.length; _i < _len; _i++) {
+        colour = colours[_i];
+        _results.push(colour);
+      }
+      return _results;
+    })(), ['red', 'cyan', 'blue'], 'Replaces matched element');
+    colours.replace('purple', 'magenta');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = colours.length; _i < _len; _i++) {
+        colour = colours[_i];
+        _results.push(colour);
+      }
+      return _results;
+    })(), ['red', 'cyan', 'blue'], 'Does nothing if element not matched');
   });
   test('Set::count', function() {
     var numbers;
@@ -1088,7 +1115,7 @@ define(['jmodel/emerald2'], function() {
     }), 4, 'Returns number of elements matching predicate when called with predicate');
   });
   test('Set::where', function() {
-    var evens, member, numbers;
+    var evens, number, numbers;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     evens = numbers.where(function(x) {
@@ -1099,8 +1126,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = evens.length; _i < _len; _i++) {
-        member = evens[_i];
-        _results.push(member);
+        number = evens[_i];
+        _results.push(number);
       }
       return _results;
     })(), [2, 4, 6, 8], 'Filters according to criteria');
@@ -1109,8 +1136,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        member = numbers[_i];
-        _results.push(member);
+        number = numbers[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
@@ -1120,7 +1147,7 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if argument is not a function');
   });
   test('Set::map', function() {
-    var member, numbers, squares;
+    var number, numbers, squares;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     squares = numbers.map(function(x) {
@@ -1131,8 +1158,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = squares.length; _i < _len; _i++) {
-        member = squares[_i];
-        _results.push(member);
+        number = squares[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 4, 9, 16, 25, 36, 49, 64], 'Mapped set contains correct elements');
@@ -1141,8 +1168,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        member = numbers[_i];
-        _results.push(member);
+        number = numbers[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
@@ -1152,7 +1179,7 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if argument is not a function');
   });
   test('Set::partition', function() {
-    var even, key, member, numbers, partition;
+    var even, key, number, numbers, partition;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     even = function(x) {
@@ -1172,8 +1199,8 @@ define(['jmodel/emerald2'], function() {
       _ref = partition.get('even');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        _results.push(member);
+        number = _ref[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Produces correct value for key');
@@ -1183,7 +1210,7 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if argument not a function');
   });
   test('Set.union', function() {
-    var evens, member, odds, union, zero;
+    var evens, number, odds, union, zero;
 
     odds = new Set([1, 3, 5, 7]);
     evens = new Set([2, 4, 6, 8]);
@@ -1194,8 +1221,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = union.length; _i < _len; _i++) {
-        member = union[_i];
-        _results.push(member);
+        number = union[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [0, 1, 2, 3, 4, 5, 6, 7, 8], 'Union contains correct elements');
@@ -1204,8 +1231,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = odds.length; _i < _len; _i++) {
-        member = odds[_i];
-        _results.push(member);
+        number = odds[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 3, 5, 7], 'Leaves first set unchanged');
@@ -1214,8 +1241,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = evens.length; _i < _len; _i++) {
-        member = evens[_i];
-        _results.push(member);
+        number = evens[_i];
+        _results.push(number);
       }
       return _results;
     })(), [2, 4, 6, 8], 'Leaves other sets unchanged');
@@ -1225,8 +1252,8 @@ define(['jmodel/emerald2'], function() {
       _ref = Set.union(odds);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        _results.push(member);
+        number = _ref[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 3, 5, 7], 'Union works with single argument');
@@ -1236,8 +1263,8 @@ define(['jmodel/emerald2'], function() {
       _ref = Set.union();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        _results.push(member);
+        number = _ref[_i];
+        _results.push(number);
       }
       return _results;
     })(), [], 'Union works with zero arguments');
@@ -1250,7 +1277,7 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if second argument not a Set');
   });
   test('Set.intersection', function() {
-    var evens, intersection, member, numbers, positives;
+    var evens, intersection, number, numbers, positives;
 
     numbers = new Set([-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]);
     evens = new Set([-8, -6, -4, -2, 0, 2, 4, 6, 8]);
@@ -1261,8 +1288,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = intersection.length; _i < _len; _i++) {
-        member = intersection[_i];
-        _results.push(member);
+        number = intersection[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Intersection contains correct elements');
@@ -1271,8 +1298,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        member = numbers[_i];
-        _results.push(member);
+        number = numbers[_i];
+        _results.push(number);
       }
       return _results;
     })(), [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8], 'Leaves first set unchanged');
@@ -1281,8 +1308,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = evens.length; _i < _len; _i++) {
-        member = evens[_i];
-        _results.push(member);
+        number = evens[_i];
+        _results.push(number);
       }
       return _results;
     })(), [-8, -6, -4, -2, 0, 2, 4, 6, 8], 'Leaves other sets unchanged');
@@ -1292,8 +1319,8 @@ define(['jmodel/emerald2'], function() {
       _ref = Set.intersection(positives);
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        _results.push(member);
+        number = _ref[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Intersection works with single argument');
@@ -1303,8 +1330,8 @@ define(['jmodel/emerald2'], function() {
       _ref = Set.intersection();
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
-        _results.push(member);
+        number = _ref[_i];
+        _results.push(number);
       }
       return _results;
     })(), [], 'Intersection works with zero arguments');
@@ -1317,7 +1344,7 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if second argument not a Set');
   });
   test('Set.difference', function() {
-    var difference, member, numbers, odds;
+    var difference, number, numbers, odds;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     odds = new Set([1, 3, 5, 7]);
@@ -1327,8 +1354,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = difference.length; _i < _len; _i++) {
-        member = difference[_i];
-        _results.push(member);
+        number = difference[_i];
+        _results.push(number);
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Difference contains correct elements');
@@ -1337,8 +1364,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        member = numbers[_i];
-        _results.push(member);
+        number = numbers[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves first set unchanged');
@@ -1347,8 +1374,8 @@ define(['jmodel/emerald2'], function() {
 
       _results = [];
       for (_i = 0, _len = odds.length; _i < _len; _i++) {
-        member = odds[_i];
-        _results.push(member);
+        number = odds[_i];
+        _results.push(number);
       }
       return _results;
     })(), [1, 3, 5, 7], 'Leaves second set unchanged');
