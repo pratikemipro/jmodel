@@ -141,7 +141,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {
+    Set.subset = Function.From(Set, Set).To(Boolean)(function(first, second) {
       var element;
 
       return [true].concat((function() {
@@ -153,18 +153,13 @@ define(['jmodel/opal2'], function() {
           _results.push(second.member(element));
         }
         return _results;
-      })()).concat((function() {
-        var _i, _len, _results;
-
-        _results = [];
-        for (_i = 0, _len = second.length; _i < _len; _i++) {
-          element = second[_i];
-          _results.push(first.member(element));
-        }
-        return _results;
       })()).reduce(function(a, b) {
         return a && b;
       });
+    });
+
+    Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {
+      return Set.subset(first, second) && Set.subset(second, first);
     });
 
     Set.union = Function.From([Set]).Returning(function() {

@@ -73,16 +73,24 @@
 		to: Function.From(Function) (cons) -> new cons (element for element in this)
 					 
 		##
-		## Set algebra
+		## Comparisons
 		##
+		
+		# Tests: none
+		@subset: Function.From(Set,Set).To(Boolean) \
+			(first,second) ->
+				[true]
+					.concat( second.member element for element in first )
+					.reduce (a,b) -> a and b
 		
 		# Tests: full
 		@equal: Function.From(Set,Set).To(Boolean) \
 			(first,second) ->
-				[true]
-					.concat( second.member element for element in first )
-					.concat( first.member element for element in second )
-					.reduce (a,b) -> a and b
+				Set.subset(first,second) and Set.subset(second,first)
+		
+		##
+		## Set algebra
+		##
 		
 		# Tests: full
 		@union: Function.From([Set]).Returning(-> new Set) \

@@ -1229,6 +1229,23 @@ define(['jmodel/emerald2'], function() {
       return numbers.to('red');
     }), 'Raises an exception if not called with a function');
   });
+  test('Set.subset', function() {
+    var empty, numbers, odds;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    odds = new Set([1, 3, 5, 7]);
+    empty = new Set([]);
+    equals(Set.subset(numbers, numbers), true, 'A set is a subset of itself');
+    equals(Set.subset(empty, numbers), true, 'The empty set is a subset of all sets');
+    equals(Set.subset(odds, numbers), true, 'Returns true when first is subset of second');
+    equals(Set.subset(numbers, odds), false, 'Returns false when first is not subset of second');
+    raises((function() {
+      return Set.subset(1, numbers);
+    }), 'Raises an exception if first argument not a Set');
+    return raises((function() {
+      return Set.subset(odds, 1);
+    }), 'Raises an exception if second argument not a Set');
+  });
   test('Set.equal', function() {
     var evens, more_odds, numbers, odds;
 
@@ -1239,7 +1256,13 @@ define(['jmodel/emerald2'], function() {
     equals(Set.equal(numbers, numbers), true, 'A set is equal to itself');
     equals(Set.equal(numbers, odds), true, 'Two sets with the same elements are equal');
     equals(Set.equal(odds, evens), false, 'Two sets with the same cardinality but different elements are not equal');
-    return equals(Set.equal(odds, more_odds), false, 'Two sets with different numbers of elements are not equal');
+    equals(Set.equal(odds, more_odds), false, 'Two sets with different numbers of elements are not equal');
+    raises((function() {
+      return Set.equal(1, numbers);
+    }), 'Raises an exception if first argument not a Set');
+    return raises((function() {
+      return Set.equal(numbers, 1);
+    }), 'Raises an exception if second argument not a Set');
   });
   test('Set.union', function() {
     var evens, number, odds, union, zero;
