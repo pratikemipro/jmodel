@@ -1162,12 +1162,101 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [2, 4, 6, 8], 'Leaves other sets unchanged');
+    deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = Set.union(odds);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 3, 5, 7], 'Union works with single argument');
+    deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = Set.union();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [], 'Union works with zero arguments');
     equals(union instanceof Set, true, 'Returns a Set');
     raises((function() {
       return Set.union(1, evens);
     }), 'Raises an exception if first argument not a Set');
     return raises((function() {
       return Set.union(odds, 1);
+    }), 'Raises an exception if second argument not a Set');
+  });
+  test('Set.intersection', function() {
+    var evens, intersection, member, numbers, positives;
+
+    numbers = new Set([-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8]);
+    evens = new Set([-8, -6, -4, -2, 0, 2, 4, 6, 8]);
+    positives = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    intersection = Set.intersection(numbers, evens, positives);
+    deepEqual(((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = intersection.length; _i < _len; _i++) {
+        member = intersection[_i];
+        _results.push(member);
+      }
+      return _results;
+    })()).sort(), [2, 4, 6, 8], 'Intersection contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        member = numbers[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [-8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8], 'Leaves first set unchanged');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = evens.length; _i < _len; _i++) {
+        member = evens[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [-8, -6, -4, -2, 0, 2, 4, 6, 8], 'Leaves other sets unchanged');
+    deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = Set.intersection(positives);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Intersection works with single argument');
+    deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = Set.intersection();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [], 'Intersection works with zero arguments');
+    equals(intersection instanceof Set, true, 'Returns a Set');
+    raises((function() {
+      return Set.intersection(1, evens);
+    }), 'Raises an exception if first argument not a Set');
+    return raises((function() {
+      return Set.intersection(numbers, 1);
     }), 'Raises an exception if second argument not a Set');
   });
   test('Set.difference', function() {
