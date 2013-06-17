@@ -110,6 +110,20 @@
 		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
 		
 		raises (-> numbers.to 'red'), 'Raises an exception if not called with a function'
+		
+	test 'Set.subset', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		odds    = new Set [1,3,5,7]
+		empty   = new Set []
+		
+		equals Set.subset(numbers,numbers), true, 'A set is a subset of itself'
+		equals Set.subset(empty,numbers), true, 'The empty set is a subset of all sets'
+		equals Set.subset(odds,numbers), true, 'Returns true when first is subset of second'
+		equals Set.subset(numbers,odds), false, 'Returns false when first is not subset of second'
+		
+		raises (-> Set.subset 1, numbers ), 'Raises an exception if first argument not a Set'
+		raises (-> Set.subset odds, 1 ), 'Raises an exception if second argument not a Set'
 	
 	test 'Set.equal', ->
 		
@@ -122,6 +136,9 @@
 		equals Set.equal(numbers,odds), true, 'Two sets with the same elements are equal'
 		equals Set.equal(odds,evens), false, 'Two sets with the same cardinality but different elements are not equal'
 		equals Set.equal(odds,more_odds), false, 'Two sets with different numbers of elements are not equal' 
+		
+		raises (-> Set.equal 1, numbers ), 'Raises an exception if first argument not a Set'
+		raises (-> Set.equal numbers, 1 ), 'Raises an exception if second argument not a Set'
 	
 	test 'Set.union', ->
 		
