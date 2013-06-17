@@ -147,7 +147,22 @@ define(['jmodel/opal2'], function() {
 
     Set.intersection = function() {};
 
-    Set.difference = function() {};
+    Set.difference = Function.From(Set, Set).Returning(function() {
+      return new Set;
+    })(function(difference) {
+      return function(first, second) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = first.length; _i < _len; _i++) {
+          element = first[_i];
+          if (!second.member(element)) {
+            _results.push(difference.add(element));
+          }
+        }
+        return _results;
+      };
+    });
 
     Set.Of = function(cons) {
       var _ref;

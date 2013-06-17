@@ -7,7 +7,7 @@
 		equals set.length, 3, 'Set returns a set with correct cardinality'
 		deepEqual ( member for member in set ), ['red','green','blue'], 'Set contains correct elements'
 	
-	test 'Set.count', ->
+	test 'Set::count', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
 		
@@ -34,3 +34,15 @@
 		partition = numbers.partition key
 		
 		deepEqual ( member for member in partition.get 'even' ), [2,4,6,8], 'Produces correct value for key'
+		
+	test 'Set.difference', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		odds    = new Set [1,3,5,7]
+		
+		deepEqual ( member for member in Set.difference numbers, odds ), [2,4,6,8], 'Difference contains correct elements'
+		deepEqual ( member for member in numbers ), [1,2,3,4,5,6,7,8], 'Leaves first set unchanged'
+		deepEqual ( member for member in odds ), [1,3,5,7], 'Leaves second set unchanged'
+		
+		raises (-> Set.difference 1, odds ), 'Raises an exception if first argument not a Set'
+		raises (-> Set.difference numbers, 1 ), 'Raises an exception if second argument not a Set'

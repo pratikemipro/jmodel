@@ -1021,7 +1021,7 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), ['red', 'green', 'blue'], 'Set contains correct elements');
   });
-  test('Set.count', function() {
+  test('Set::count', function() {
     var numbers;
 
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -1084,6 +1084,49 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [2, 4, 6, 8], 'Produces correct value for key');
+  });
+  test('Set.difference', function() {
+    var member, numbers, odds;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    odds = new Set([1, 3, 5, 7]);
+    deepEqual((function() {
+      var _i, _len, _ref, _results;
+
+      _ref = Set.difference(numbers, odds);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        member = _ref[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [2, 4, 6, 8], 'Difference contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        member = numbers[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves first set unchanged');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = odds.length; _i < _len; _i++) {
+        member = odds[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 3, 5, 7], 'Leaves second set unchanged');
+    raises((function() {
+      return Set.difference(1, odds);
+    }), 'Raises an exception if first argument not a Set');
+    return raises((function() {
+      return Set.difference(numbers, 1);
+    }), 'Raises an exception if second argument not a Set');
   });
   module('List');
   module('Map');

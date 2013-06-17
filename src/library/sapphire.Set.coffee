@@ -66,8 +66,10 @@
 		# Tests: none
 		@intersection: ->
 		
-		# Tests: none
-		@difference: ->
+		# Tests: full
+		@difference: Function.From(Set,Set).Returning(-> new Set) \
+			(difference) -> (first,second) ->
+				difference.add element for element in first when not second.member element
 		
 		# Tests: none
 		@Of: (cons) ->
