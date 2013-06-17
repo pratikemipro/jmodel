@@ -99,7 +99,20 @@ define(['jmodel/opal2'], function() {
       return _results;
     };
 
-    Set.prototype.map = function(fn) {};
+    Set.prototype.map = Function.From(Function).Returning(function() {
+      return new Set;
+    })(function(mapped) {
+      return function(fn) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(mapped.add(fn(element)));
+        }
+        return _results;
+      };
+    });
 
     Set.prototype.reduce = function(reduction, initial) {
       return Array.prototype.reduce.call(this, reduction, 0);

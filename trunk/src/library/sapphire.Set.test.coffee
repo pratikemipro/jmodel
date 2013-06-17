@@ -23,6 +23,18 @@
 		deepEqual ( member for member in evens ), [2,4,6,8], 'Filters according to criteria'
 		deepEqual ( member for member in numbers), [1,2,3,4,5,6,7,8], 'Leaves original set unchanged'
 		
+	test 'Set::map', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		squares = numbers.map (x) -> x*x
+		
+		deepEqual ( member for member in squares ), [1,4,9,16,25,36,49,64], 'Mapped set contains correct elements'
+		deepEqual ( member for member in numbers ), [1,2,3,4,5,6,7,8], 'Leaves original set unchanged'
+		
+		equals squares instanceof Set, true, 'Returns a Set'
+		raises (-> numbers.map 'red'), 'Raises an exception if argument is not a function'
+		
+		
 	test 'Set::partition', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]

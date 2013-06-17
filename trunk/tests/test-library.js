@@ -1058,6 +1058,38 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
   });
+  test('Set::map', function() {
+    var member, numbers, squares;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    squares = numbers.map(function(x) {
+      return x * x;
+    });
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = squares.length; _i < _len; _i++) {
+        member = squares[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 4, 9, 16, 25, 36, 49, 64], 'Mapped set contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        member = numbers[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
+    equals(squares instanceof Set, true, 'Returns a Set');
+    return raises((function() {
+      return numbers.map('red');
+    }), 'Raises an exception if argument is not a function');
+  });
   test('Set::partition', function() {
     var is_even, key, member, numbers, partition;
 
