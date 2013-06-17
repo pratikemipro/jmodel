@@ -133,6 +133,8 @@ define(['jmodel/opal2'], function() {
       };
     });
 
+    Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {});
+
     Set.union = Function.From([Set]).Returning(function() {
       return new Set;
     })(function(union) {
@@ -204,6 +206,16 @@ define(['jmodel/opal2'], function() {
           }
         }
         return _results;
+      };
+    });
+
+    Set.product = Function.From([Set]).Returning(function() {
+      return new Set;
+    })(function(product) {
+      return function() {
+        var sets;
+
+        sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       };
     });
 
