@@ -111,9 +111,9 @@ define(['jmodel/opal2'], function() {
       return _results;
     };
 
-    Set.prototype.reduce = function(reduction, initial) {
+    Set.prototype.reduce = Function.From(Function, Maybe(Value))(function(reduction, initial) {
       return Array.prototype.reduce.apply(this, [reduction].concat(initial != null ? [initial] : []));
-    };
+    });
 
     Set.prototype.partition = Function.From(Function).Returning(function() {
       return new (Map.To(Set).Using(Set.union));
@@ -250,7 +250,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.Of = function(cons) {
+    Set.Of = Function.From(Function)(function(cons) {
       var _ref;
 
       return (function(_super) {
@@ -270,7 +270,7 @@ define(['jmodel/opal2'], function() {
         return _Class;
 
       })(this);
-    };
+    });
 
     return Set;
 
