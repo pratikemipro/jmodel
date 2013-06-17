@@ -63,8 +63,11 @@
 			(union) -> (sets...) ->
 				union.add element for element in set for set in sets
 			
-		# Tests: none
-		@intersection: ->
+		# Tests: full
+		@intersection: Function.From([Set]).Returning(-> new Set) \
+			(intersection) -> (first=[],rest...) ->
+ 				intersection.add element for element in first when \
+ 					[true].concat( set.member element for set in rest ).reduce (a,b) -> a and b
 		
 		# Tests: full
 		@difference: Function.From(Set,Set).Returning(-> new Set) \

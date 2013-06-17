@@ -158,7 +158,37 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Set.intersection = function() {};
+    Set.intersection = Function.From([Set]).Returning(function() {
+      return new Set;
+    })(function(intersection) {
+      return function() {
+        var element, first, rest, set, _i, _len, _results;
+
+        first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+        if (first == null) {
+          first = [];
+        }
+        _results = [];
+        for (_i = 0, _len = first.length; _i < _len; _i++) {
+          element = first[_i];
+          if ([true].concat((function() {
+            var _j, _len1, _results1;
+
+            _results1 = [];
+            for (_j = 0, _len1 = rest.length; _j < _len1; _j++) {
+              set = rest[_j];
+              _results1.push(set.member(element));
+            }
+            return _results1;
+          })()).reduce(function(a, b) {
+            return a && b;
+          })) {
+            _results.push(intersection.add(element));
+          }
+        }
+        return _results;
+      };
+    });
 
     Set.difference = Function.From(Set, Set).Returning(function() {
       return new Set;
