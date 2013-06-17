@@ -159,7 +159,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {
-      return Set.subset(first, second) && Set.subset(second, first);
+      return first.count() === second.count() && Set.subset(first, second) && Set.subset(second, first);
     });
 
     Set.union = Function.From([Set]).Returning(function() {
