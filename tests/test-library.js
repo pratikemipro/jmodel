@@ -1073,7 +1073,7 @@ define(['jmodel/emerald2'], function() {
       }
     };
     partition = numbers.partition(key);
-    return deepEqual((function() {
+    return deepEqual(((function() {
       var _i, _len, _ref, _results;
 
       _ref = partition.get('even');
@@ -1083,24 +1083,69 @@ define(['jmodel/emerald2'], function() {
         _results.push(member);
       }
       return _results;
-    })(), [2, 4, 6, 8], 'Produces correct value for key');
+    })()).sort(), [2, 4, 6, 8], 'Produces correct value for key');
   });
-  test('Set.difference', function() {
-    var member, numbers, odds;
+  test('Set.union', function() {
+    var evens, member, odds, union, zero;
 
-    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     odds = new Set([1, 3, 5, 7]);
-    deepEqual((function() {
-      var _i, _len, _ref, _results;
+    evens = new Set([2, 4, 6, 8]);
+    zero = new Set([0]);
+    union = Set.union(odds, evens, zero);
+    deepEqual(((function() {
+      var _i, _len, _results;
 
-      _ref = Set.difference(numbers, odds);
       _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        member = _ref[_i];
+      for (_i = 0, _len = union.length; _i < _len; _i++) {
+        member = union[_i];
         _results.push(member);
       }
       return _results;
-    })(), [2, 4, 6, 8], 'Difference contains correct elements');
+    })()).sort(), [0, 1, 2, 3, 4, 5, 6, 7, 8], 'Union contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = odds.length; _i < _len; _i++) {
+        member = odds[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [1, 3, 5, 7], 'Leaves first set unchanged');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = evens.length; _i < _len; _i++) {
+        member = evens[_i];
+        _results.push(member);
+      }
+      return _results;
+    })(), [2, 4, 6, 8], 'Leaves other sets unchanged');
+    equals(union instanceof Set, true, 'Returns a Set');
+    raises((function() {
+      return Set.union(1, evens);
+    }), 'Raises an exception if first argument not a Set');
+    return raises((function() {
+      return Set.union(odds, 1);
+    }), 'Raises an exception if second argument not a Set');
+  });
+  test('Set.difference', function() {
+    var difference, member, numbers, odds;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    odds = new Set([1, 3, 5, 7]);
+    difference = Set.difference(numbers, odds);
+    deepEqual(((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = difference.length; _i < _len; _i++) {
+        member = difference[_i];
+        _results.push(member);
+      }
+      return _results;
+    })()).sort(), [2, 4, 6, 8], 'Difference contains correct elements');
     deepEqual((function() {
       var _i, _len, _results;
 
@@ -1121,6 +1166,7 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [1, 3, 5, 7], 'Leaves second set unchanged');
+    equals(difference instanceof Set, true, 'Returns a Set');
     raises((function() {
       return Set.difference(1, odds);
     }), 'Raises an exception if first argument not a Set');

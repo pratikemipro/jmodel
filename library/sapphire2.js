@@ -120,21 +120,21 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Set.union = Function.Returning(function() {
+    Set.union = Function.From([Set]).Returning(function() {
       return new Set;
     })(function(union) {
       return function() {
-        var element, set, sets, _i, _results;
+        var element, set, sets, _i, _len, _results;
 
         sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
         _results = [];
-        for (_i = sets.length - 1; _i >= 0; _i += -1) {
+        for (_i = 0, _len = sets.length; _i < _len; _i++) {
           set = sets[_i];
           _results.push((function() {
-            var _j, _len, _results1;
+            var _j, _len1, _results1;
 
             _results1 = [];
-            for (_j = 0, _len = set.length; _j < _len; _j++) {
+            for (_j = 0, _len1 = set.length; _j < _len1; _j++) {
               element = set[_j];
               _results1.push(union.add(element));
             }
