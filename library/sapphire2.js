@@ -21,8 +21,8 @@ define(['jmodel/opal2'], function() {
       if (elements == null) {
         elements = [];
       }
-      if (!(elements instanceof Array)) {
-        elements = [elements];
+      if (!(elements instanceof Array) || arguments.length > 1) {
+        elements = Array.prototype.slice.call(arguments);
       }
       for (_i = 0, _len = elements.length; _i < _len; _i++) {
         element = elements[_i];
