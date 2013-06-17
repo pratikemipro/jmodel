@@ -14,7 +14,6 @@
 		equals numbers.count(), 8, 'Returns cardinality of set when called without a predicate'
 		equals numbers.count((x) -> x % 2 == 0), 4, 'Returns number of elements matching predicate when called with predicate'
 		
-		
 	test 'Set::where', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
@@ -22,6 +21,9 @@
 		
 		deepEqual ( member for member in evens ), [2,4,6,8], 'Filters according to criteria'
 		deepEqual ( member for member in numbers), [1,2,3,4,5,6,7,8], 'Leaves original set unchanged'
+		
+		equals evens instanceof Set, true, 'Returns a Set'
+		raises (-> numbers.where 'red'), 'Raises an exception if argument is not a function'
 		
 	test 'Set::map', ->
 		
@@ -34,7 +36,6 @@
 		equals squares instanceof Set, true, 'Returns a Set'
 		raises (-> numbers.map 'red'), 'Raises an exception if argument is not a function'
 		
-		
 	test 'Set::partition', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
@@ -46,6 +47,9 @@
 		partition = numbers.partition key
 		
 		deepEqual ( member for member in partition.get 'even' ).sort(), [2,4,6,8], 'Produces correct value for key'
+		
+		equals partition instanceof Map, true, 'Returns a Map'
+		raises (-> numbers.partition 'red' ), 'Raises an exception if argument not a function'
 	
 	test 'Set.union', ->
 		

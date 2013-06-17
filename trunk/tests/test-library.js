@@ -1047,7 +1047,7 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [2, 4, 6, 8], 'Filters according to criteria');
-    return deepEqual((function() {
+    deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
@@ -1057,6 +1057,10 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
+    equals(evens instanceof Set, true, 'Returns a Set');
+    return raises((function() {
+      return numbers.where('red');
+    }), 'Raises an exception if argument is not a function');
   });
   test('Set::map', function() {
     var member, numbers, squares;
@@ -1105,7 +1109,7 @@ define(['jmodel/emerald2'], function() {
       }
     };
     partition = numbers.partition(key);
-    return deepEqual(((function() {
+    deepEqual(((function() {
       var _i, _len, _ref, _results;
 
       _ref = partition.get('even');
@@ -1116,6 +1120,10 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })()).sort(), [2, 4, 6, 8], 'Produces correct value for key');
+    equals(partition instanceof Map, true, 'Returns a Map');
+    return raises((function() {
+      return numbers.partition('red');
+    }), 'Raises an exception if argument not a function');
   });
   test('Set.union', function() {
     var evens, member, odds, union, zero;

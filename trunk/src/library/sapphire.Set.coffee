@@ -35,7 +35,7 @@
 			@reduce reduction, 0
 		
 		# Tests: full
-		where: Function.Returning(-> new Set ) \
+		where: Function.From(Function).Returning(-> new Set ) \
 			(set) -> (predicate) ->
 				set.add element for element in this when predicate element
 		
@@ -52,8 +52,8 @@
 		reduce: (reduction,initial) ->
 			Array::reduce.call this, reduction, 0
 		
-		# Tests: none
-		partition: Function.Returning(-> new ( Map.To(Set).Using Set.union ) ) \
+		# Tests: full
+		partition: Function.From(Function).Returning(-> new ( Map.To(Set).Using Set.union ) ) \
 			 (map) -> (key) ->
 				 for element in this
 					 map.add key(element), element
