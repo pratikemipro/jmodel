@@ -62,7 +62,7 @@
 		
 		# Tests: none
 		reduce: (reduction,initial) ->
-			Array::reduce.call this, reduction, 0
+			Array::reduce.call this, reduction, initial
 		
 		# Tests: full
 		partition: Function.From(Function).Returning(-> new ( Map.To(Set).Using Set.union ) ) \
