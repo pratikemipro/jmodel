@@ -8,9 +8,9 @@
 
 	window.Set = class Set
 	
-		# Tests: partial
+		# Tests: full
 		constructor: ( elements=[] ) ->
-			if elements not instanceof Array then elements = [elements]
+			if elements not instanceof Array or arguments.length > 1 then elements = Array::slice.call arguments
 			@add element for element in elements
 		
 		##

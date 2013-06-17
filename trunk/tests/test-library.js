@@ -1006,11 +1006,11 @@ define(['jmodel/emerald2'], function() {
   });
   module('Set');
   test('Set constructor', function() {
-    var colour, colours;
+    var colour, colours, number, numbers;
 
     colours = new Set(['red', 'green', 'blue']);
     equals(colours.length, 3, 'Set returns a set with correct cardinality');
-    return deepEqual((function() {
+    deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
@@ -1020,6 +1020,17 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), ['red', 'green', 'blue'], 'Set contains correct elements');
+    numbers = new Set(1, 2, 3);
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3], 'Constructor can be called on bare values');
   });
   test('Set::add', function() {
     var colour, colours;

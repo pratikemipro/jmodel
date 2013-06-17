@@ -7,6 +7,10 @@
 		equals colours.length, 3, 'Set returns a set with correct cardinality'
 		deepEqual ( colour for colour in colours ), ['red','green','blue'], 'Set contains correct elements'
 		
+		numbers = new Set 1, 2 ,3
+		
+		deepEqual ( number for number in numbers ), [1,2,3], 'Constructor can be called on bare values'
+		
 	test 'Set::add', ->
 		
 		colours= new Set ['red','green','blue']
