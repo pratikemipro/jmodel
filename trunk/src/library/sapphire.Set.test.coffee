@@ -19,6 +19,19 @@
 		
 		deepEqual ( member for member in set), ['red','green','blue','cyan','magenta','yellow'], 'Does not add elements more than once'
 		
+	test 'Set::remove', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		
+		even = (x) -> x % 2 == 0
+		
+		removed = numbers.remove even
+		
+		deepEqual ( member for member in numbers ).sort(), [1,3,5,7], 'Leaves correct elements in set'
+		deepEqual ( member for member in removed ).sort(), [2,4,6,8], 'Removes correct elements'
+		
+		equals removed instanceof Set, true, 'Removed elements returned as Set'
+		
 	
 	test 'Set::count', ->
 		
@@ -53,9 +66,9 @@
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
 		
-		is_even = (x) -> x % 2 == 0
+		even = (x) -> x % 2 == 0
 		
-		key = (x) -> if is_even x then 'even' else 'odd'
+		key = (x) -> if even x then 'even' else 'odd'
 		
 		partition = numbers.partition key
 		

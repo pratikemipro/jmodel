@@ -36,13 +36,23 @@ define(['jmodel/opal2'], function() {
       }
     });
 
-    Set.prototype.remove = function(predicate) {
-      var partition;
+    Set.prototype.remove = Function.From(Function)(function(predicate) {
+      var element, partition;
 
       partition = this.partition(predicate);
-      Array.prototype.splice.call(this, 0, this.length, partition.get(false));
+      Array.prototype.splice.apply(this, [0, this.length].concat((function() {
+        var _i, _len, _ref, _results;
+
+        _ref = partition.get(false);
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          element = _ref[_i];
+          _results.push(element);
+        }
+        return _results;
+      })()));
       return partition.get(true);
-    };
+    });
 
     Set.prototype.replace = Function.Chaining(function(before, after) {
       var index;
