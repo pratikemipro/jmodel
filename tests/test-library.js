@@ -1175,38 +1175,6 @@ define(['jmodel/emerald2'], function() {
     });
     return deepEqual(output, [1, 2, 3, 4, 5, 6, 7, 8], 'Function is called for each element of set');
   });
-  test('Set::map', function() {
-    var number, numbers, squares;
-
-    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
-    squares = numbers.map(function(x) {
-      return x * x;
-    });
-    deepEqual((function() {
-      var _i, _len, _results;
-
-      _results = [];
-      for (_i = 0, _len = squares.length; _i < _len; _i++) {
-        number = squares[_i];
-        _results.push(number);
-      }
-      return _results;
-    })(), [1, 4, 9, 16, 25, 36, 49, 64], 'Mapped set contains correct elements');
-    deepEqual((function() {
-      var _i, _len, _results;
-
-      _results = [];
-      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
-        number = numbers[_i];
-        _results.push(number);
-      }
-      return _results;
-    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
-    equals(squares instanceof Set, true, 'Returns a Set');
-    return raises((function() {
-      return numbers.map('red');
-    }), 'Raises an exception if argument is not a function');
-  });
   test('Set::partition', function() {
     var even, key, number, numbers, partition;
 
@@ -1237,6 +1205,26 @@ define(['jmodel/emerald2'], function() {
     return raises((function() {
       return numbers.partition('red');
     }), 'Raises an exception if argument not a function');
+  });
+  test('Set::to', function() {
+    var even, list, number, numbers;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    even = even = function(x) {
+      return x % 2 === 0;
+    };
+    list = numbers.to(List);
+    equals(list instanceof List, true, 'Casts to correct type');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = list.length; _i < _len; _i++) {
+        number = list[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Constructor is passed correct elements');
   });
   test('Set.equal', function() {
     var evens, more_odds, numbers, odds;
@@ -1429,6 +1417,38 @@ define(['jmodel/emerald2'], function() {
     }), 'Raises an exception if second argument not a Set');
   });
   module('List');
+  test('List::map', function() {
+    var number, numbers, squares;
+
+    numbers = new List([1, 2, 3, 4, 5, 6, 7, 8]);
+    squares = numbers.map(function(x) {
+      return x * x;
+    });
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = squares.length; _i < _len; _i++) {
+        number = squares[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 4, 9, 16, 25, 36, 49, 64], 'Mapped set contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
+    equals(squares instanceof List, true, 'Returns a List');
+    return raises((function() {
+      return numbers.map('red');
+    }), 'Raises an exception if argument is not a function');
+  });
   module('Map');
   module('Stream');
   test('Stream::add', function() {

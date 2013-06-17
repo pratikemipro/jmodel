@@ -107,36 +107,6 @@ define(['jmodel/opal2'], function() {
       return _results;
     };
 
-    Set.prototype.map = Function.From(Function).Returning(function() {
-      return new Set;
-    })(function(mapped) {
-      return function(fn) {
-        var element, _i, _len, _results;
-
-        _results = [];
-        for (_i = 0, _len = this.length; _i < _len; _i++) {
-          element = this[_i];
-          _results.push(mapped.add(fn(element)));
-        }
-        return _results;
-      };
-    });
-
-    Set.prototype.select = Function.From(Function).Returning(function() {
-      return new List;
-    })(function(list) {
-      return function(fn) {
-        var element, _i, _len, _results;
-
-        _results = [];
-        for (_i = 0, _len = this.length; _i < _len; _i++) {
-          element = this[_i];
-          _results.push(list.add(fn(element)));
-        }
-        return _results;
-      };
-    });
-
     Set.prototype.reduce = function(reduction, initial) {
       return Array.prototype.reduce.call(this, reduction, initial);
     };
@@ -154,6 +124,21 @@ define(['jmodel/opal2'], function() {
         }
         return _results;
       };
+    });
+
+    Set.prototype.to = Function.From(Function)(function(cons) {
+      var element;
+
+      return new cons((function() {
+        var _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(element);
+        }
+        return _results;
+      }).call(this));
     });
 
     Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {
@@ -314,6 +299,21 @@ define(['jmodel/opal2'], function() {
     List.prototype.member = function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
     };
+
+    List.prototype.map = Function.From(Function).Returning(function() {
+      return new List;
+    })(function(mapped) {
+      return function(fn) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(mapped.add(fn(element)));
+        }
+        return _results;
+      };
+    });
 
     List.concat = function() {
       var base, other, others;

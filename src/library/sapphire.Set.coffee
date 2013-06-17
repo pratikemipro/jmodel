@@ -55,16 +55,6 @@
 		each: (fn) ->
 			fn element for element in this
 		
-		# Tests: full
-		map: Function.From(Function).Returning(-> new Set) \
-			(mapped) -> (fn) ->
-				mapped.add fn element for element in this
-		
-		# Test: none
-		select: Function.From(Function).Returning(-> new List) \
-			(list) -> (fn) ->
-				list.add fn element for element in this
-		
 		# Tests: none
 		reduce: (reduction,initial) ->
 			Array::reduce.call this, reduction, initial
@@ -74,6 +64,13 @@
 			 (map) -> (key) ->
 				 for element in this
 					 map.add key(element), element
+					 
+		##
+		## Casting
+		##
+		
+		# Tests: full
+		to: Function.From(Function) (cons) -> new cons (element for element in this)
 					 
 		##
 		## Set algebra

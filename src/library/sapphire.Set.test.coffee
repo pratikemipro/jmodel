@@ -83,17 +83,6 @@
 		
 		deepEqual output, [1,2,3,4,5,6,7,8], 'Function is called for each element of set'
 		
-	test 'Set::map', ->
-		
-		numbers = new Set [1,2,3,4,5,6,7,8]
-		squares = numbers.map (x) -> x*x
-		
-		deepEqual ( number for number in squares ), [1,4,9,16,25,36,49,64], 'Mapped set contains correct elements'
-		deepEqual ( number for number in numbers ), [1,2,3,4,5,6,7,8], 'Leaves original set unchanged'
-		
-		equals squares instanceof Set, true, 'Returns a Set'
-		raises (-> numbers.map 'red'), 'Raises an exception if argument is not a function'
-		
 	test 'Set::partition', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
@@ -108,6 +97,17 @@
 		
 		equals partition instanceof Map, true, 'Returns a Map'
 		raises (-> numbers.partition 'red' ), 'Raises an exception if argument not a function'
+		
+	test 'Set::to', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		
+		even = even = (x) -> x % 2 == 0
+		
+		list = numbers.to(List)
+	
+		equals list instanceof List, true, 'Casts to correct type'
+		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
 	
 	test 'Set.equal', ->
 		
