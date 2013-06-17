@@ -38,11 +38,11 @@
 		##
 		
 		# Tests: full
-		member: (element) ->
+		member: Predicate.From(Value) (element) ->
 			-1 != Array::indexOf.call this, element
 		
 		# Tests: full	
-		count: Function.From(Maybe Function) (predicate) ->
+		count: Function.From(Maybe Function).To(Number) (predicate) ->
 			return @length if predicate == undefined
 			reduction = (sum,element) -> sum += if predicate element then 1 else 0 
 			@reduce reduction, 0
@@ -53,7 +53,7 @@
 				set.add element for element in this when predicate element
 		
 		# Tests: full
-		each: (fn) ->
+		each: Function.From(Function) (fn) ->
 			fn element for element in this
 		
 		# Tests: full
@@ -71,14 +71,14 @@
 		##
 		
 		# Tests: full
-		@subset: Function.From(Set,Set).To(Boolean) \
+		@subset: Predicate.From(Set,Set) \
 			(first,second) ->
 				[true]
 					.concat( second.member element for element in first )
 					.reduce (a,b) -> a and b
 		
 		# Tests: full
-		@equal: Function.From(Set,Set).To(Boolean) \
+		@equal: Predicate.From(Set,Set) \
 			(first,second) ->
 				first.count() == second.count() and Set.subset(first,second) and Set.subset(second,first)
 		

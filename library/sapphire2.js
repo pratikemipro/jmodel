@@ -67,11 +67,11 @@ define(['jmodel/opal2'], function() {
       }
     });
 
-    Set.prototype.member = function(element) {
+    Set.prototype.member = Predicate.From(Value)(function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
-    };
+    });
 
-    Set.prototype.count = Function.From(Maybe(Function))(function(predicate) {
+    Set.prototype.count = Function.From(Maybe(Function)).To(Number)(function(predicate) {
       var reduction;
 
       if (predicate === void 0) {
@@ -100,7 +100,7 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Set.prototype.each = function(fn) {
+    Set.prototype.each = Function.From(Function)(function(fn) {
       var element, _i, _len, _results;
 
       _results = [];
@@ -109,7 +109,7 @@ define(['jmodel/opal2'], function() {
         _results.push(fn(element));
       }
       return _results;
-    };
+    });
 
     Set.prototype.reduce = Function.From(Function, Maybe(Value))(function(reduction, initial) {
       return Array.prototype.reduce.apply(this, [reduction].concat(initial != null ? [initial] : []));
@@ -130,7 +130,7 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Set.subset = Function.From(Set, Set).To(Boolean)(function(first, second) {
+    Set.subset = Predicate.From(Set, Set)(function(first, second) {
       var element;
 
       return [true].concat((function() {
@@ -147,7 +147,7 @@ define(['jmodel/opal2'], function() {
       });
     });
 
-    Set.equal = Function.From(Set, Set).To(Boolean)(function(first, second) {
+    Set.equal = Predicate.From(Set, Set)(function(first, second) {
       return first.count() === second.count() && Set.subset(first, second) && Set.subset(second, first);
     });
 
