@@ -27,7 +27,7 @@
 			Array::splice.apply this, [0,@length].concat ( element for element in partition.get false )
 			return partition.get true
 		
-		# Tests: none	
+		# Tests: full	
 		replace: Function.Chaining (before,after) ->
 			index = Array::indexOf.call this, before
 			this[index] = after if index != -1
