@@ -1105,6 +1105,14 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })(), ['red', 'cyan', 'blue'], 'Does nothing if element not matched');
   });
+  test('Set::member', function() {
+    var colours;
+
+    colours = new Set(['red', 'green', 'blue']);
+    equals(colours.member('red'), true, 'Returns true if test element is a member');
+    equals(colours.member('cyan'), false, 'Returns false if test element is not a member');
+    return equals(colours.member(), false, 'Returns false if called without an argument');
+  });
   test('Set::count', function() {
     var numbers;
 

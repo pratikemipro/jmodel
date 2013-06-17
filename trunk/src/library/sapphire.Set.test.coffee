@@ -43,6 +43,14 @@
 		colours.replace('purple','magenta')
 		
 		deepEqual ( colour for colour in colours ), ['red','cyan','blue'], 'Does nothing if element not matched'
+		
+	test 'Set::member', ->
+		
+		colours = new Set ['red','green','blue']
+		
+		equals colours.member('red'), true, 'Returns true if test element is a member'
+		equals colours.member('cyan'), false, 'Returns false if test element is not a member'
+		equals colours.member(), false, 'Returns false if called without an argument'
 	
 	test 'Set::count', ->
 		

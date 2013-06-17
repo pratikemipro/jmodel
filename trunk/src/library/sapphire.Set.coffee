@@ -36,7 +36,7 @@
 		## Pure methods
 		##
 		
-		# Tests: none
+		# Tests: full
 		member: (element) ->
 			-1 != Array::indexOf.call this, element
 		
