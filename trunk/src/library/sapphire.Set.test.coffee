@@ -70,6 +70,15 @@
 		equals evens instanceof Set, true, 'Returns a Set'
 		raises (-> numbers.where 'red'), 'Raises an exception if argument is not a function'
 		
+	test 'Set::each', ->
+		
+		numbers = new Set [1,2,3,4,5,6,7,8]
+		output  = []
+		
+		numbers.each (x) -> output.push x
+		
+		deepEqual output, [1,2,3,4,5,6,7,8], 'Function is called for each element of set'
+		
 	test 'Set::map', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]

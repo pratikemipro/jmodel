@@ -1154,6 +1154,16 @@ define(['jmodel/emerald2'], function() {
       return numbers.where('red');
     }), 'Raises an exception if argument is not a function');
   });
+  test('Set::each', function() {
+    var numbers, output;
+
+    numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
+    output = [];
+    numbers.each(function(x) {
+      return output.push(x);
+    });
+    return deepEqual(output, [1, 2, 3, 4, 5, 6, 7, 8], 'Function is called for each element of set');
+  });
   test('Set::map', function() {
     var number, numbers, squares;
 

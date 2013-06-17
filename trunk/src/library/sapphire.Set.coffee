@@ -51,7 +51,7 @@
 			(set) -> (predicate) ->
 				set.add element for element in this when predicate element
 		
-		# Tests: none
+		# Tests: full
 		each: (fn) ->
 			fn element for element in this
 		
