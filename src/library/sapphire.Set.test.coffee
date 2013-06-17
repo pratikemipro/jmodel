@@ -108,6 +108,8 @@
 	
 		equals list instanceof List, true, 'Casts to correct type'
 		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
+		
+		raises (-> numbers.to 'red'), 'Raises an exception if not called with a function'
 	
 	test 'Set.equal', ->
 		

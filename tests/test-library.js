@@ -1215,7 +1215,7 @@ define(['jmodel/emerald2'], function() {
     };
     list = numbers.to(List);
     equals(list instanceof List, true, 'Casts to correct type');
-    return deepEqual((function() {
+    deepEqual((function() {
       var _i, _len, _results;
 
       _results = [];
@@ -1225,6 +1225,9 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Constructor is passed correct elements');
+    return raises((function() {
+      return numbers.to('red');
+    }), 'Raises an exception if not called with a function');
   });
   test('Set.equal', function() {
     var evens, more_odds, numbers, odds;
