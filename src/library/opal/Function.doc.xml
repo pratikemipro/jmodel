@@ -227,9 +227,9 @@
 			<object>Function</object>
 			<name>.and</name>
 			<arguments unbounded="true">
-				<argument>predicate1</argument>
-				<argument>predicate2</argument>
-				<argument>predicate3</argument>
+				<argument>pr1</argument>
+				<argument>pr2</argument>
+				<argument>pr3</argument>
 			</arguments>
 			<return>Predicate</return>
 		</function>
@@ -238,9 +238,18 @@
 			<object>Function</object>
 			<name>.or</name>
 			<arguments unbounded="true">
-				<argument>predicate1</argument>
-				<argument>predicate2</argument>
-				<argument>predicate3</argument>
+				<argument>pr1</argument>
+				<argument>pr2</argument>
+				<argument>pr3</argument>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>.not</name>
+			<arguments unbounded="true">
+				<argument>pr</argument>
 			</arguments>
 			<return>Predicate</return>
 		</function>
