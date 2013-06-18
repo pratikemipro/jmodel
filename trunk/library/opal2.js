@@ -865,7 +865,6 @@ define(function() {
   }, "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
-  String.__predicate = Object.isa(String);
   String.In = function() {
     var string, strings;
     strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
