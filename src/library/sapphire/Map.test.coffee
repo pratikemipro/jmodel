@@ -35,3 +35,12 @@
 		
 		equal cities instanceof Set, true, 'Returns a Set'
 		deepEqual ( city for city in cities ).sort(), ['constantinople','rome'], 'Returns correct keys'
+		
+	test 'Map.To', ->
+		
+		falls = new (Map.To Date)
+			rome: '476-9-4'
+			constantinople: '1453-5-29'
+			
+		equal falls.get 'rome' instanceof Date, true, 'Converts values to correct type'
+		equal falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct'
