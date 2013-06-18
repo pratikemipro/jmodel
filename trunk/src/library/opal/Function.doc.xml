@@ -194,7 +194,57 @@
 	</functions>
 	
 	<functions>
+		
 		<name>Logical Functions</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::and</name>
+			<arguments>
+				<argument>predicate</argument>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+
+		<function>
+			<object>Function</object>
+			<name>::or</name>
+			<arguments>
+				<argument>predicate</argument>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>::not</name>
+			<arguments>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>.and</name>
+			<arguments unbounded="true">
+				<argument>predicate1</argument>
+				<argument>predicate2</argument>
+				<argument>predicate3</argument>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>.or</name>
+			<arguments unbounded="true">
+				<argument>predicate1</argument>
+				<argument>predicate2</argument>
+				<argument>predicate3</argument>
+			</arguments>
+			<return>Predicate</return>
+		</function>
+		
 	</functions>
 	
 	<functions>
