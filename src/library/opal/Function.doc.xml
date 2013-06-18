@@ -38,12 +38,8 @@
 			<examples>
 				<example>
 					<input>test = Function.constant 'test'</input>
-				</example>
-                <example>
                     <input>test 5</input>
 				    <output>"test"</output>
-				</example>
-				<example>
 				    <input>test 'fred'</input>
 				    <output>"test"</output>
 				</example>
@@ -261,7 +257,29 @@
 	</functions>
 	
 	<functions>
+		
 		<name>Predicates</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::eq</name>
+			<arguments>
+				<argument>value</argument>
+			</arguments>
+			<return>Predicate</return>
+			<description><p><code>fn.eq(value)</code> is a predicate that is true when <code>fn</code> returns a value equal to <code>value</code> (including type).</p></description>
+			<examples>
+				<example>
+					<input>buffy = forename: 'Buffy', surname: 'Summers'</input>
+					<input>willow = forename: 'Willow', surname: 'Rosenberg'</input>
+					<input>Object.property('surname').eq('Summers') buffy</input>
+					<output>true</output>
+					<input>Object.property('surname').eq('Summers') willow</input>
+					<output>false</output>
+				</example>
+			</examples>
+		</function>
+		
 	</functions>
 	
 	<functions>
@@ -286,10 +304,6 @@
 			</examples>
 		</function>
 		
-	</functions>
-	
-	<functions>
-		<name>Predicate Methods</name>
 	</functions>
 	
 	<functions>
