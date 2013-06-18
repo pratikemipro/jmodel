@@ -6,8 +6,6 @@
 ## Dual licensed under the MIT and GPL licenses
 ##
 
-	String.__predicate = Object.isa String
-
 	String.In = (strings...) ->
 		@Where \
 			(str) -> str in strings,
