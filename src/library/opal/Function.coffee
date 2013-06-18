@@ -181,6 +181,7 @@
 	##
 	
 	# Tests: full
+	# Docs: partial
 	Function::and = Function.From(Function) \
 		(predicate2) ->
 			predicate1 = this
@@ -188,6 +189,7 @@
 				predicate1.apply(this,args) and predicate2.apply(this,args)
 			
 	# Tests: full
+	# Docs: partial
 	Function::or = Function.From(Function) \
 		(predicate2) ->
 			predicate1 = this
@@ -195,11 +197,13 @@
 				predicate1.apply(this,args) or predicate2.apply(this,args)
 	
 	# Tests: full
+	# Docs: partial
 	Function::not = ->
 		predicate = this
 		Predicate (args...) -> not predicate.apply this, args
 	
 	# Tests: full
+	# Docs: partial
 	Function.and = Function.From([Function]).To(Function) \
 		(predicate,predicates...) ->
 			switch arguments.length
@@ -208,6 +212,7 @@
 				else predicate.and Function.and predicates...
 	
 	# Tests: full
+	# Docs: partial
 	Function.or = Function.From([Function]).To(Function) \
 		(predicate,predicates...) ->
 			switch arguments.length
@@ -216,6 +221,7 @@
 				else predicate.or Function.or predicates...
 
 	# Tests: full
+	# Docs: none
 	Function.not = (predicate) ->
 		if typeof predicate == 'function' then predicate.not() else not predicate
 	
