@@ -20,19 +20,6 @@ opal:
 		src/library/opal/Maybe.coffee \
 		src/library/opal/Promise.coffee
 
-opal-doc:
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/opal/Array.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Function.doc.xml -o:documentation/web/opal/Function.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Object.doc.xml -o:documentation/web/opal/Object.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/BareObject.doc.xml -o:documentation/web/opal/BareObject.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Number.doc.xml -o:documentation/web/opal/Number.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/String.doc.xml -o:documentation/web/opal/String.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Boolean.doc.xml -o:documentation/web/opal/Boolean.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Math.doc.xml -o:documentation/web/opal/Math.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Nullable.doc.xml -o:documentation/web/opal/Nullable.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Maybe.doc.xml -o:documentation/web/opal/Maybe.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Promise.doc.xml -o:documentation/web/opal/Promise.html
-
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
 		src/library/sapphire/header.coffee \
@@ -66,6 +53,19 @@ library-test:
 		src/library/sapphire/Stream.test.coffee \
 		src/library/emerald/Subscriber.test.coffee \
 		src/library/emerald/EventType.test.coffee
+		
+library-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/opal/Array.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Function.doc.xml -o:documentation/web/opal/Function.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Object.doc.xml -o:documentation/web/opal/Object.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/BareObject.doc.xml -o:documentation/web/opal/BareObject.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Number.doc.xml -o:documentation/web/opal/Number.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/String.doc.xml -o:documentation/web/opal/String.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Boolean.doc.xml -o:documentation/web/opal/Boolean.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Math.doc.xml -o:documentation/web/opal/Math.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Nullable.doc.xml -o:documentation/web/opal/Nullable.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Maybe.doc.xml -o:documentation/web/opal/Maybe.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Promise.doc.xml -o:documentation/web/opal/Promise.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
