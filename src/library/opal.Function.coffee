@@ -59,6 +59,7 @@
 		(args...) -> fn2.call this, fn1.apply(this,args)
 	
 	# Tests: full
+	# Docs: partial
 	Function::but = (fn2) ->
 		throw 'Precondition failure' unless typeof fn2 == 'function'
 		fn1 = this
