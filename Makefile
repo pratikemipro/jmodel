@@ -57,6 +57,7 @@ library-test:
 library-doc:
 	@make opal-doc
 	@make sapphire-doc
+	@make emerald-doc
 
 opal-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/opal/Array.html
@@ -76,6 +77,10 @@ sapphire-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/List.doc.xml -o:documentation/web/sapphire/List.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Map.doc.xml -o:documentation/web/sapphire/Map.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Stream.doc.xml -o:documentation/web/sapphire/Stream.html
+	
+emerald-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/emerald/EventType.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/emerald/Subscriber.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
