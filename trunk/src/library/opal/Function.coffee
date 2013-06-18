@@ -250,6 +250,7 @@
 	Function.eq = (value) -> Predicate (x) -> x == value
 	
 	# Tests: none
+	# Docs: full
 	Function::eq = (value) -> @then Function.eq value
 	
 	# Tests: full
