@@ -136,4 +136,28 @@
 	
 	</functions>
 	
+	<functions>
+	
+		<name>Aspect-like methods</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::pre</name>
+			<arguments>
+				<argument>fn</argument>
+			</arguments>
+			<return>function</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>::post</name>
+			<arguments>
+				<argument>fn</argument>
+			</arguments>
+			<return>function</return>
+		</function>
+		
+	</functions>
+	
 </module>
