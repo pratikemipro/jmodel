@@ -15,6 +15,7 @@
 	Function.identity = (x) -> x
 	
 	# Tests: full
+	# Docs: full
 	Function.constant = (constant) -> () -> constant
 	
 	# Tests: none
