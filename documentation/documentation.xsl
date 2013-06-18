@@ -42,7 +42,7 @@
 	</xsl:template>
 	
 	<xsl:template match="arguments">
-        <ul class="arguments">
+        <ul class="arguments {if (@unbounded='true') then 'unbounded' else ''}">
 	        <xsl:apply-templates select="argument"/>
 	    </ul>
 	</xsl:template>
