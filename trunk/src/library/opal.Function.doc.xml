@@ -24,6 +24,31 @@
 			    </p>
 			</example>
 		</function>
+		
+		<function>
+			<name>Function.constant</name>
+			<arguments>
+				<argument>a</argument>
+			</arguments>
+			<return>function</return>
+			<description>
+				<p><code>Function.constant(a)</code> is a function that always returns <code>a</code>.</p>
+			</description>
+			<example>
+                <p>
+                    <code>test = Function.constant 'test'</code>
+                </p>
+                <p>
+                    <code>test 5</code>
+				    <br/><span class="output"><code>"test"</code></span>
+				</p>
+				<p>
+				    <code>test 'fred'</code>
+				    <br/><span class="output"><code>"test"</code></span>
+                </p>
+			    
+			</example>
+		</function>
 	
 	</functions>
 	
