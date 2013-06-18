@@ -6,7 +6,7 @@
 ## Dual licensed under the MIT and GPL licenses
 ##
 
-	Number.__predicate = (value) -> value instanceof Number or typeof value == 'number'
+	Number.valid = (value) -> ( value instanceof Number or typeof value == 'number' ) and not isNan value
 	
 	# Restrictions
 	
