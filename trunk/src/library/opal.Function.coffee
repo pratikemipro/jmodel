@@ -66,6 +66,7 @@
 			fn2.apply this, args
 	
 	# Tests: full
+	# Docs: partial
 	Function.pipe = (fn,fns...) ->
 		throw 'Precondition failure' unless typeof fn in ['function','undefined']
 		switch arguments.length
