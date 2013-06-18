@@ -17,12 +17,12 @@
 			<description>
 				<p><code>Function.identity</code> returns its argument.</p>
 			</description>
-			<example>
-			    <p>
-				    <code>Function.identity 'test'</code>
-				    <br/><span class="output"><code>"test"</code></span>
-			    </p>
-			</example>
+			<examples>
+				<example>
+					<input>Function.identity 'test'</input>
+					<output>"test"</output>
+				</example>
+			</examples>
 		</function>
 		
 		<function>
@@ -34,20 +34,19 @@
 			<description>
 				<p><code>Function.constant(a)</code> is a function that always returns <code>a</code>.</p>
 			</description>
-			<example>
-                <p>
-                    <code>test = Function.constant 'test'</code>
-                </p>
-                <p>
-                    <code>test 5</code>
-				    <br/><span class="output"><code>"test"</code></span>
-				</p>
-				<p>
-				    <code>test 'fred'</code>
-				    <br/><span class="output"><code>"test"</code></span>
-                </p>
-			    
-			</example>
+			<examples>
+				<example>
+					<input>test = Function.constant 'test'</input>
+				</example>
+                <example>
+                    <input>test 5</input>
+				    <output>"test"</output>
+				</example>
+				<example>
+				    <input>test 'fred'</input>
+				    <output>"test"</output>
+				</example>
+			</examples>
 		</function>
 	
 	</functions>

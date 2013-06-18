@@ -38,7 +38,7 @@
 		    <xsl:apply-templates select="return"/>
         </dt>
 		<xsl:apply-templates select="description"/>
-		<xsl:apply-templates select="example"/>
+		<xsl:apply-templates select="examples"/>
 	</xsl:template>
 	
 	<xsl:template match="arguments">
@@ -59,8 +59,25 @@
 		 <dd><xsl:apply-templates select="node()"/></dd>
 	</xsl:template>
 	
-	<xsl:template match="function/example">
-		<dd class="example"><xsl:apply-templates select="node()"/></dd>
+	<xsl:template match="function/examples">
+		<dd class="example">
+			<xsl:apply-templates select="example"/>
+		</dd>
+	</xsl:template>
+	
+	<xsl:template match="function/examples/example">
+		<p>
+			<xsl:apply-templates select="input"/>
+			<xsl:apply-templates select="output"/>
+		</p>
+	</xsl:template>
+	
+	<xsl:template match="input">
+		<code><xsl:value-of select="."/></code>
+	</xsl:template>
+	
+	<xsl:template match="output">
+		<span class="output"><code><xsl:value-of select="."/></code></span>
 	</xsl:template>
 	
     <xsl:template match="*">

@@ -136,6 +136,7 @@ code {
 }
 
 span.output {
+	display: block;
 	color: #3030d0;
 	margin-left: 14px;
 }
