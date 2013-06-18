@@ -90,6 +90,15 @@
 		
 		<function>
 			<object>Function</object>
+			<name>::then</name>
+			<arguments>
+				<argument>fn</argument>
+			</arguments>
+			<return>function</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
 			<name>.pipe</name>
 			<arguments unbounded="true">
 		        <argument>fn1</argument>
