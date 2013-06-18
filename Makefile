@@ -55,6 +55,10 @@ library-test:
 		src/library/emerald/EventType.test.coffee
 		
 library-doc:
+	@make opal-doc
+	@make sapphire-doc
+
+opal-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/opal/Array.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Function.doc.xml -o:documentation/web/opal/Function.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Object.doc.xml -o:documentation/web/opal/Object.html
@@ -66,6 +70,12 @@ library-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Nullable.doc.xml -o:documentation/web/opal/Nullable.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Maybe.doc.xml -o:documentation/web/opal/Maybe.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Promise.doc.xml -o:documentation/web/opal/Promise.html
+	
+sapphire-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Set.doc.xml -o:documentation/web/sapphire/Set.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/List.doc.xml -o:documentation/web/sapphire/List.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Map.doc.xml -o:documentation/web/sapphire/Map.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Stream.doc.xml -o:documentation/web/sapphire/Stream.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
