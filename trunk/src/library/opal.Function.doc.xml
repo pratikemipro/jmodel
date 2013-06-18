@@ -9,7 +9,8 @@
 		<name>Elementary Functions</name>
 	
 		<function>
-			<name>Function.identity</name>
+			<object>Function</object>
+			<name>.identity</name>
 			<arguments>
 				<argument>a</argument>
 			</arguments>
@@ -26,7 +27,8 @@
 		</function>
 		
 		<function>
-			<name>Function.constant</name>
+			<object>Function</object>
+			<name>.constant</name>
 			<arguments>
 				<argument>a</argument>
 			</arguments>
@@ -50,7 +52,8 @@
 		</function>
 		
 		<function>
-			<name>Function.arguments</name>
+			<object>Function</object>
+			<name>.arguments</name>
 			<arguments unbounded="true">
 				<argument>a</argument>
 				<argument>b</argument>
@@ -60,7 +63,8 @@
 		</function>
 		
 		<function>
-			<name>Function.argument</name>
+			<object>Function</object>
+			<name>.argument</name>
 			<arguments unbounded="true">
 				<argument>a</argument>
 				<argument>b</argument>
@@ -70,12 +74,19 @@
 		</function>
 		
 		<function>
-			<name>Function.map</name>
+			<object>Function</object>
+			<name>.map</name>
 			<arguments>
 				<argument>mapping</argument>
 			</arguments>
 			<return>function</return>
 		</function>
+	
+	</functions>
+	
+	<functions>
+	
+		<name>Function composition</name>
 	
 	</functions>
 	
