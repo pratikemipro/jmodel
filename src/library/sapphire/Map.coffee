@@ -18,7 +18,9 @@
 				when 2 then @[key] = value
 				else @add(key,value) for own key, value of key
 	
-		remove: (key) -> @[key] = undefined
+		# Tests: full
+		# Docs: none
+		remove: (key) -> delete @[key]
 	
 		get: (key) -> @[key]
 	
