@@ -245,12 +245,37 @@
             <dl></dl>
          </section>
          <section>
-            <h1>Comparison Functions</h1>
+            <h1>Predicates</h1>
             <dl></dl>
          </section>
          <section>
             <h1>Application Methods</h1>
-            <dl></dl>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::except
+                  <ul class="arguments ">
+                     <li>handler</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>fn.except</code> abstracts exception handling. If 
+                     <code>fn</code> throws an exception, the function 
+                     <code>handler</code> will be invoked with the error object and its return value returned.
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>faulty = -&gt; throw 'bang!'</code>
+                     <code>handled = faulty.except (error) -&gt; "Error: #{error}"</code>
+                     <code>handled()</code>
+                     <span class="output">
+                        <code>"Error: bang!"</code>
+                     </span>
+                  </p>
+               </dd>
+            </dl>
          </section>
          <section>
             <h1>Predicate Methods</h1>

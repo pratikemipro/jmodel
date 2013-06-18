@@ -331,6 +331,7 @@
 		(args2...) -> fn.apply this, Array.concat(args1,args2)
 	
 	# Tests: full
+	# Docs: full
 	Function::except = (handler) ->
 		fn = this
 		(args...) ->
