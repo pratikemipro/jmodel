@@ -1,6 +1,5 @@
 default:
 	@make opal
-	@make opal-doc
 	@make sapphire
 	@make emerald
 	@make library-test
