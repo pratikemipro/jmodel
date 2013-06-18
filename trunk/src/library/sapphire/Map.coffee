@@ -38,7 +38,9 @@
 			class extends this
 				add: (key,value) -> super key, @ensure(value)
 				ensure: Object.ensure cons
-	
+
+		# Tests: full
+		# Docs: none
 		@Using: (combine) ->
 			class extends this
 				add: (key,value) ->
