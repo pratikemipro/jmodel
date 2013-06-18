@@ -19,10 +19,10 @@
 	Function.constant = (constant) -> () -> constant
 	
 	# Tests: none
-	# Docs: partial
 	Function.arguments = (args...) -> args
 	
 	# Tests: full
+	# Docs: partial
 	Function.argument = (n) -> (args...) -> args[n]
 	
 	# Tests: full
