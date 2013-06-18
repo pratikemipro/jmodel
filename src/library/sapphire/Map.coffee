@@ -23,6 +23,10 @@
 		remove: (key) -> delete @[key]
 	
 		get: (key) -> @[key]
+		
+		# Tests: full
+		# Docs: none
+		keys: -> new Set ( key for own key of this )
 	
 		each: (fn) -> fn(key,value) for own key, value of this
 	

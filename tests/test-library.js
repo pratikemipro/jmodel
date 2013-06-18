@@ -1454,6 +1454,24 @@ define(['jmodel/emerald2'], function() {
     })(), ['constantinople'], 'Correctly removes key');
     return equal(falls.get('constantinople'), 1453, 'Remaining key mappings unchanged');
   });
+  test('Map::keys', function() {
+    var cities, city, falls;
+    falls = new Map({
+      rome: 476,
+      constantinople: 1453
+    });
+    cities = falls.keys();
+    equal(cities instanceof Set, true, 'Returns a Set');
+    return deepEqual(((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = cities.length; _i < _len; _i++) {
+        city = cities[_i];
+        _results.push(city);
+      }
+      return _results;
+    })()).sort(), ['constantinople', 'rome'], 'Returns correct keys');
+  });
   module('Stream');
   test('Stream::add', function() {
     var output1, output2, stream;
