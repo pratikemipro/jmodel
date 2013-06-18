@@ -110,6 +110,23 @@
                      <code>fn3 fn2 fn1 x</code>.
                   </p>
                </dd>
+               <dt>
+                  <span class="base">Function</span>.compose
+                  <ul class="arguments unbounded">
+                     <li>fn1</li>
+                     <li>fn2</li>
+                     <li>fn3</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>Function.compose</code> performs “point-free” function composition in the traditional order. When the composition
+                     is applied, the rightmost function is applied first so that 
+                     <code>Function.compose(fn1,fn2,fn3) x</code> is the same as 
+                     <code>fn1 fn2 fn3 x</code>.
+                  </p>
+               </dd>
             </dl>
          </section>
       </article>

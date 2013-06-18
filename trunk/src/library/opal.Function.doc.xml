@@ -101,6 +101,20 @@
 				<p><code>Function.pipe</code> composes functions as a pipeline in a “point-free” manner. Applying the pipelined function applies the leftmost function first so that <code>Function.pipe(fn1,fn2,fn3) x</code> is the same as <code>fn3 fn2 fn1 x</code>.</p>
 			</description>
 		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>.compose</name>
+			<arguments unbounded="true">
+		        <argument>fn1</argument>
+		        <argument>fn2</argument>
+		        <argument>fn3</argument>
+			</arguments>
+			<return>function</return>
+			<description>
+				<p><code>Function.compose</code> performs “point-free” function composition in the traditional order. When the composition is applied, the rightmost function is applied first so that <code>Function.compose(fn1,fn2,fn3) x</code> is the same as <code>fn1 fn2 fn3 x</code>.</p>
+			</description>
+		</function>
 	
 	</functions>
 	
