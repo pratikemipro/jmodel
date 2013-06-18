@@ -19,6 +19,7 @@
 	Function.constant = (constant) -> () -> constant
 	
 	# Tests: none
+	# Docs: partial
 	Function.arguments = (args...) -> args
 	
 	# Tests: full
