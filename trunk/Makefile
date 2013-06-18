@@ -1,5 +1,6 @@
 default:
 	@make opal
+	@make opal-doc
 	@make sapphire
 	@make emerald
 	@make library-test
@@ -19,6 +20,9 @@ opal:
 		src/library/opal.Nullable.coffee \
 		src/library/opal.Maybe.coffee \
 		src/library/opal.Promise.coffee
+
+opal-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal.Function.doc.xml -o:documentation/web/opal/Function.html
 
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
