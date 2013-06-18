@@ -6,7 +6,7 @@
 
 	<functions>
 	
-		<name>Elementary Functions</name>
+		<name>Basic Functions</name>
 	
 		<function>
 			<object>Function</object>
@@ -85,8 +85,12 @@
 	</functions>
 	
 	<functions>
+		<name>Return-Value Manipulation</name>
+	</functions>
 	
-		<name>Function composition</name>
+	<functions>
+	
+		<name>Function Composition</name>
 		
 		<function>
 			<object>Function</object>
@@ -138,7 +142,7 @@
 	
 	<functions>
 	
-		<name>Aspect-like methods</name>
+		<name>Aspect-like Methods</name>
 		
 		<function>
 			<object>Function</object>
@@ -162,7 +166,7 @@
 	
 	<functions>
 	
-		<name>Preconditions and postconditions</name>
+		<name>Preconditions and Postconditions</name>
 		
 		<function>
 			<object>Function</object>
@@ -184,6 +188,42 @@
 			<return>function</return>
 		</function>
 		
+	</functions>
+	
+	<functions>
+		<name>Typed Functions</name>
+	</functions>
+	
+	<functions>
+		<name>Logical Functions</name>
+	</functions>
+	
+	<functions>
+		<name>Delegation</name>
+	</functions>
+	
+	<functions>
+		<name>Comparison Functions</name>
+	</functions>
+	
+	<functions>
+		<name>Application Methods</name>
+	</functions>
+	
+	<functions>
+		<name>Predicate Methods</name>
+	</functions>
+	
+	<functions>
+		<name>Ordering Methods</name>
+	</functions>
+	
+	<functions>
+		<name>Constructor Methods</name>
+	</functions>
+	
+	<functions>
+		<name>Restricted Types</name>
 	</functions>
 	
 </module>
