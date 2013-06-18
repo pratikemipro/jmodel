@@ -75,6 +75,7 @@
 			else fn.then Function.pipe fns...
 			
 	# Tests: full
+	# Docs: partial
 	Function.compose = (fn,fns...) ->
 		throw 'Precondition failure' unless typeof fn in ['function','undefined']
 		switch arguments.length
