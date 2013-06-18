@@ -1472,6 +1472,15 @@ define(['jmodel/emerald2'], function() {
       return _results;
     })()).sort(), ['constantinople', 'rome'], 'Returns correct keys');
   });
+  test('Map.To', function() {
+    var falls;
+    falls = new (Map.To(Date))({
+      rome: '476-9-4',
+      constantinople: '1453-5-29'
+    });
+    equal(falls.get('rome' instanceof Date, true, 'Converts values to correct type'));
+    return equal(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
+  });
   module('Stream');
   test('Stream::add', function() {
     var output1, output2, stream;

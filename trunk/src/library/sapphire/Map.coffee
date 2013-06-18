@@ -32,6 +32,8 @@
 	
 		ensure: Function.identity
 
+		# Tests: full
+		# Docs: none
 		@To: (cons) ->
 			class extends this
 				add: (key,value) -> super key, @ensure(value)
