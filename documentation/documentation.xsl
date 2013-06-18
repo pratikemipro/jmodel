@@ -75,8 +75,7 @@
 	
 	<xsl:template match="function/examples/example">
 		<p>
-			<xsl:apply-templates select="input"/>
-			<xsl:apply-templates select="output"/>
+			<xsl:apply-templates select="input|output"/>
 		</p>
 	</xsl:template>
 	

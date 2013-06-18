@@ -134,6 +134,7 @@ dd.example p {
 
 dd.example code {
 	display: block;
+	margin-bottom: 1em;
 }
 
 code {
@@ -142,6 +143,8 @@ code {
 
 span.output {
 	display: block;
+	margin-top: -1em;
+	margin-bottom: 1em;
 	color: #3030d0;
 	margin-left: 14px;
 }
