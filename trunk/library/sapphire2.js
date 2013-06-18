@@ -367,6 +367,19 @@ define(['jmodel/opal2'], function() {
       return this[key];
     };
 
+    Map.prototype.keys = function() {
+      var key;
+      return new Set((function() {
+        var _results;
+        _results = [];
+        for (key in this) {
+          if (!__hasProp.call(this, key)) continue;
+          _results.push(key);
+        }
+        return _results;
+      }).call(this));
+    };
+
     Map.prototype.each = function(fn) {
       var key, value, _results;
       _results = [];
