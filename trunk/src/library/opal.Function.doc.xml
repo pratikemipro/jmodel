@@ -160,4 +160,30 @@
 		
 	</functions>
 	
+	<functions>
+	
+		<name>Preconditions and postconditions</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::require</name>
+			<arguments>
+				<argument>predicate</argument>
+				<argument optional="true">message</argument>
+			</arguments>
+			<return>function</return>
+		</function>
+		
+		<function>
+			<object>Function</object>
+			<name>::ensure</name>
+			<arguments>
+				<argument>predicate</argument>
+				<argument optional="true">message</argument>
+			</arguments>
+			<return>function</return>
+		</function>
+		
+	</functions>
+	
 </module>
