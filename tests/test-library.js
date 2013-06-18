@@ -1452,7 +1452,7 @@ define(['jmodel/emerald2'], function() {
       }
       return _results;
     })(), ['constantinople'], 'Correctly removes key');
-    return equal(falls.get('constantinople'), 1453, 'Remaining key mappings unchanged');
+    return equals(falls.get('constantinople'), 1453, 'Remaining key mappings unchanged');
   });
   test('Map::keys', function() {
     var cities, city, falls;
@@ -1461,7 +1461,7 @@ define(['jmodel/emerald2'], function() {
       constantinople: 1453
     });
     cities = falls.keys();
-    equal(cities instanceof Set, true, 'Returns a Set');
+    equals(cities instanceof Set, true, 'Returns a Set');
     return deepEqual(((function() {
       var _i, _len, _results;
       _results = [];
@@ -1478,8 +1478,36 @@ define(['jmodel/emerald2'], function() {
       rome: '476-9-4',
       constantinople: '1453-5-29'
     });
-    equal(falls.get('rome' instanceof Date, true, 'Converts values to correct type'));
-    return equal(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
+    equals(falls.get('rome' instanceof Date, true, 'Converts values to correct type'));
+    return equals(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
+  });
+  test('Map.Using', function() {
+    var departments, person, scores;
+    scores = new (Map.Using(Math.plus))({
+      england: 0,
+      france: 0
+    });
+    scores.add('england', 3);
+    scores.add('france', 2);
+    scores.add('england', 5);
+    scores.add('france', 3);
+    deepEqual([scores.get('england'), scores.get('france')], [8, 5], 'Combines values correctly');
+    departments = new (Map.To(Set).Using(Set.union));
+    departments.add('IT', 'Richard');
+    departments.add('Finance', 'Michael');
+    departments.add('IT', 'Jonathan');
+    departments.add('Finance', 'Rachel');
+    equals(departments.get('IT') instanceof Set, true, 'Converts values to correct type');
+    return deepEqual(((function() {
+      var _i, _len, _ref, _results;
+      _ref = departments.get('IT');
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        person = _ref[_i];
+        _results.push(person);
+      }
+      return _results;
+    })()).sort(), ['Jonathan', 'Richard'], 'Combines values correctly');
   });
   module('Stream');
   test('Stream::add', function() {

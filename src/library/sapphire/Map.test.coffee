@@ -23,7 +23,7 @@
 		falls.remove 'rome'
 		
 		deepEqual ( key for own key of falls ), ['constantinople'], 'Correctly removes key'
-		equal falls.get('constantinople'), 1453, 'Remaining key mappings unchanged'
+		equals falls.get('constantinople'), 1453, 'Remaining key mappings unchanged'
 		
 	test 'Map::keys', ->
 		
@@ -33,7 +33,7 @@
 			
 		cities = falls.keys()
 		
-		equal cities instanceof Set, true, 'Returns a Set'
+		equals cities instanceof Set, true, 'Returns a Set'
 		deepEqual ( city for city in cities ).sort(), ['constantinople','rome'], 'Returns correct keys'
 		
 	test 'Map.To', ->
@@ -42,5 +42,28 @@
 			rome: '476-9-4'
 			constantinople: '1453-5-29'
 			
-		equal falls.get 'rome' instanceof Date, true, 'Converts values to correct type'
-		equal falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct'
+		equals falls.get 'rome' instanceof Date, true, 'Converts values to correct type'
+		equals falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct'
+		
+	test 'Map.Using', ->
+		
+		scores = new (Map.Using Math.plus)
+			england: 0
+			france: 0
+			
+		scores.add 'england', 3
+		scores.add 'france', 2
+		scores.add 'england', 5
+		scores.add 'france', 3
+		
+		deepEqual [scores.get('england'),scores.get('france')], [8,5], 'Combines values correctly'
+		
+		departments = new (Map.To(Set).Using Set.union)
+		
+		departments.add 'IT', 'Richard'
+		departments.add 'Finance', 'Michael'
+		departments.add 'IT', 'Jonathan'
+		departments.add 'Finance', 'Rachel'
+		
+		equals departments.get('IT') instanceof Set, true, 'Converts values to correct type'
+		deepEqual (person for person in departments.get('IT')).sort(), ['Jonathan','Richard'], 'Combines values correctly'
