@@ -326,11 +326,11 @@
 			<description><p>For a constructor <code>fn</code>, the method <code>fn.create</code> abstracts the use of the <code>new</code> operator.</p></description>
 			<examples>
 				<example>
-					<input>judgementDay = Date.create 1997, 8, 29</input>
+					<input>judgementDay = Date.create 1997, 7, 29</input>
 					<input>jd instanceof Date</input>
 					<output>true</output>
 					<input>jd.toDateString()</input>
-					<output>"Mon Sep 29 1997 00:00:00 GMT+0100 (BST)"</output>
+					<output>"Fri August 29 1997 00:00:00 GMT+0100 (BST)"</output>
 				</example>
 			</examples>
 		</function>
