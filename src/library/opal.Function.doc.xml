@@ -50,13 +50,31 @@
 		</function>
 		
 		<function>
+			<name>Function.arguments</name>
+			<arguments unbounded="true">
+				<argument>a</argument>
+				<argument>b</argument>
+				<argument>c</argument>
+			</arguments>
+			<return>Array</return>
+		</function>
+		
+		<function>
 			<name>Function.argument</name>
 			<arguments unbounded="true">
 				<argument>a</argument>
 				<argument>b</argument>
 				<argument>c</argument>
 			</arguments>
-			<return>value</return>
+			<return>function</return>
+		</function>
+		
+		<function>
+			<name>Function.map</name>
+			<arguments>
+				<argument>mapping</argument>
+			</arguments>
+			<return>function</return>
 		</function>
 	
 	</functions>

@@ -19,6 +19,7 @@
 	Function.constant = (constant) -> () -> constant
 	
 	# Tests: none
+	# Docs: partial
 	Function.arguments = (args...) -> args
 	
 	# Tests: full
@@ -26,6 +27,7 @@
 	Function.argument = (n) -> (args...) -> args[n]
 	
 	# Tests: full
+	# Docs: partial
 	Function.map = (mapping) -> (key) -> mapping[key]
 	
 	##
