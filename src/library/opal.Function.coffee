@@ -52,6 +52,7 @@
 	##
 	
 	# Tests: full
+	# Docs: partial
 	Function::then = (fn2) ->
 		throw 'Precondition failure' unless typeof fn2 == 'function'
 		fn1 = this
