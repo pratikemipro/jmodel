@@ -35,13 +35,16 @@
 	##
 	
 	# Tests: none
+	# Docs: none
 	Function.Constant = (constant) ->
 		(fn) -> (args...) -> fn.apply(this,args); constant
 	
 	# Tests: none
+	# Docs: none
 	Function.Override = Function.Constant false
 	
 	# Tests: none
+	# Docs: none
 	Function.Chaining = (fn) -> (args...) -> fn.apply(this,args); this
 	
 	##

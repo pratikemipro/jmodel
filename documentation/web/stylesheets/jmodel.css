@@ -93,6 +93,8 @@ ul.unbounded li:last-child::after {
 	text-decoration: underline;
 }
 
+span.base { font-weight: normal; }
+
 span.object,
 span.return {
     font-weight: normal;

@@ -33,12 +33,17 @@
 	
 	<xsl:template match="function">
         <dt>
+			<xsl:apply-templates select="object"/>
             <xsl:value-of select="name"/>
 			<xsl:apply-templates select="arguments"/>
 		    <xsl:apply-templates select="return"/>
         </dt>
 		<xsl:apply-templates select="description"/>
 		<xsl:apply-templates select="examples"/>
+	</xsl:template>
+	
+	<xsl:template match="function/object">
+		<span class="base"><xsl:value-of select="."/></span>
 	</xsl:template>
 	
 	<xsl:template match="arguments">
