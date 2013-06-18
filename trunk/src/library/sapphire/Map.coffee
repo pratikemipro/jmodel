@@ -8,6 +8,8 @@
 
 	window.Map = class Map
 	
+		# Tests: full
+		# Docs: none
 		constructor: ( mappings={} ) ->
 			@add key, value for own key, value of mappings
 	
