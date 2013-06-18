@@ -53,7 +53,10 @@
 	</xsl:template>
 	
 	<xsl:template match="argument">
-		<li><xsl:value-of select="."/></li>
+		<li>
+			<xsl:if test="@optional"><xsl:attribute name="class">optional</xsl:attribute></xsl:if>
+			<xsl:value-of select="."/>
+		</li>
 	</xsl:template>
 	
 	<xsl:template match="function/return">

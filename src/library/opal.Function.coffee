@@ -110,11 +110,13 @@
 	##
 	
 	# Tests: full
+	# Docs: partial
 	Function::require = (predicate,message='Precondition failure') ->
 		@pre (args...) ->
 			throw message+': '+args.toString() unless predicate.apply this, args
 	
 	# Tests: full
+	# Docs: partial
 	Function::ensure = (predicate,message='Postcondition failure') ->
 		@post (args...) ->
 			throw message+': '+args.toString() unless predicate.apply this, args
