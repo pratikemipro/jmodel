@@ -243,30 +243,66 @@
 	Function.ordering = Function.or
 	
 	##
-	## Comparison functions
+	## Predicates
 	##
 	
 	# Tests: full
 	Function.eq = (value) -> Predicate (x) -> x == value
 	
+	# Tests: none
+	Function::eq = (value) -> @then Function.eq value
+	
 	# Tests: full
 	Function.neq = (value) -> Predicate (x) -> x != value
+	
+	# Tests: none
+	Function::neq = (value) -> @then Function.neq value
 	
 	# Tests: full
 	Function.lt = (value) -> Predicate (x) -> x < value
 	
+	# Tests: none
+	Function::lt = (value) -> @then Function.lt value
+	
 	# Tests: full
 	Function.gt = (value) -> Predicate (x) -> x > value
 	
+	# Tests: none
+	Function::gt = (value) -> @then Function.gt value
+	
 	# Tests: full
 	Function.lte = (value) -> Predicate (x) -> x <= value
+	
+	# Tests: none
+	Function::lte = (value) -> @then Function.lte value
 
 	# Tests: full
 	Function.gte = (value) -> Predicate (x) -> x >= value
 
+	# Tests: none
+	Function::gte = (value) -> @then Function.gte value
+
 	# Tests: full
 	Function.between = ( Function.Requiring (lower,higher) -> lower <= higher ) (lower,higher) ->
 		Predicate (x) -> lower <= x <= higher
+	
+	# Tests: none	
+	Function::between = (lower,higher) -> @then Function.between lower,higher
+	
+	# Tests: none	
+	Function::is = Function::then
+	
+	# Tests: none
+	Function::matches = (regex) -> @then Predicate (x) -> regex.test x
+	
+	# Tests: none
+	Function::isnull = -> @then Function.eq null
+	
+	# Tests: none	
+	Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
+	
+	# Tests: none	
+	Function::hastype = (type) -> @then Object.type.eq type
 	
 	##
 	## Property methods
@@ -319,34 +355,6 @@
 	
 	# Tests: full	
 	Function::map = (mapping) -> @then Function.map mapping
-
-	##
-	## Predicate methods
-	##
-		
-	Function::is = Function::then
-		
-	Function::eq = (value) -> @then Function.eq value
-		
-	Function::neq = (value) -> @then Function.neq value
-		
-	Function::lt = (value) -> @then Function.lt value
-		
-	Function::gt = (value) -> @then Function.gt value
-		
-	Function::lte = (value) -> @then Function.lte value
-
-	Function::gte = (value) -> @then Function.gte value
-
-	Function::between = (lower,higher) -> @then Function.between lower,higher
-	
-	Function::matches = (regex) -> @then Predicate (x) -> regex.test x
-		
-	Function::isnull = -> @then Function.eq null
-		
-	Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
-		
-	Function::hastype = (type) -> @then Object.type.eq type
 	
 	##
 	## Ordering methods
