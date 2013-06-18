@@ -132,6 +132,9 @@ dd.example p {
 	margin-bottom: 12px;
 }
 
+dd.example code {
+	display: block;
+}
 
 code {
 	font-family: Courier New;
@@ -141,6 +144,10 @@ span.output {
 	display: block;
 	color: #3030d0;
 	margin-left: 14px;
+}
+
+span.output code {
+	display: inline;
 }
 
 span.output::before {

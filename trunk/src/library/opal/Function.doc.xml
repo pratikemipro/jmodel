@@ -265,7 +265,27 @@
 	</functions>
 	
 	<functions>
+		
 		<name>Application Methods</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::except</name>
+			<arguments>
+				<argument>handler</argument>
+			</arguments>
+			<return>function</return>
+			<description><p><code>fn.except</code> abstracts exception handling. If <code>fn</code> throws an exception, the function <code>handler</code> will be invoked with the error object and its return value returned.</p></description>
+			<examples>
+				<example>
+					<input>faulty = -> throw 'bang!'</input>
+					<input>handled = faulty.except (error) -> "Error: #{error}"</input>
+					<input>handled()</input>
+					<output>"Error: bang!"</output>
+				</example>
+			</examples>
+		</function>
+		
 	</functions>
 	
 	<functions>
