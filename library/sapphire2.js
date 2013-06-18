@@ -343,7 +343,7 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    Map.prototype.add = function(key, value) {
+    Map.prototype.add = Function.Chaining(function(key, value) {
       var _results;
       switch (arguments.length) {
         case 2:
@@ -357,11 +357,11 @@ define(['jmodel/opal2'], function() {
           }
           return _results;
       }
-    };
+    });
 
-    Map.prototype.remove = function(key) {
+    Map.prototype.remove = Function.Chaining(function(key) {
       return delete this[key];
-    };
+    });
 
     Map.prototype.get = function(key) {
       return this[key];

@@ -13,14 +13,14 @@
 		constructor: ( mappings={} ) ->
 			@add key, value for own key, value of mappings
 	
-		add: (key,value) ->
+		add: Function.Chaining (key,value) ->
 			switch arguments.length
 				when 2 then @[key] = value
 				else @add(key,value) for own key, value of key
 	
 		# Tests: full
 		# Docs: none
-		remove: (key) -> delete @[key]
+		remove: Function.Chaining (key) -> delete @[key]
 	
 		get: (key) -> @[key]
 		
