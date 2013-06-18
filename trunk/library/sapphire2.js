@@ -360,7 +360,7 @@ define(['jmodel/opal2'], function() {
     };
 
     Map.prototype.remove = function(key) {
-      return this[key] = void 0;
+      return delete this[key];
     };
 
     Map.prototype.get = function(key) {

@@ -1436,6 +1436,24 @@ define(['jmodel/emerald2'], function() {
     empty = new Map();
     return equals(empty instanceof Map, true, 'Empty maps are valid');
   });
+  test('Map::remove', function() {
+    var falls, key;
+    falls = new Map({
+      rome: 476,
+      constantinople: 1453
+    });
+    falls.remove('rome');
+    deepEqual((function() {
+      var _results;
+      _results = [];
+      for (key in falls) {
+        if (!__hasProp.call(falls, key)) continue;
+        _results.push(key);
+      }
+      return _results;
+    })(), ['constantinople'], 'Correctly removes key');
+    return equal(falls.get('constantinople'), 1453, 'Remaining key mappings unchanged');
+  });
   module('Stream');
   test('Stream::add', function() {
     var output1, output2, stream;
