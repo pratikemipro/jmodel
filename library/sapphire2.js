@@ -378,9 +378,7 @@ define(['jmodel/opal2'], function() {
       return _results;
     };
 
-    Map.prototype.ensure = function(x) {
-      return x;
-    };
+    Map.prototype.ensure = Function.identity;
 
     Map.To = function(cons) {
       var _ref;

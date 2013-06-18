@@ -22,7 +22,7 @@
 	
 		each: (fn) -> fn(key,value) for own key, value of this
 	
-		ensure: (x) -> x
+		ensure: Function.identity
 
 		@To: (cons) ->
 			class extends this
