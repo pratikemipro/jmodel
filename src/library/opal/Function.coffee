@@ -376,7 +376,9 @@
 	##
 	## Constructor methods
 	##
-		
+	
+	# Tests: none
+	# Docs: full
 	Function::create = (args...) -> Object.construct(this)(args...)
 	
 	##

@@ -311,7 +311,30 @@
 	</functions>
 	
 	<functions>
+		
 		<name>Constructor Methods</name>
+		
+		<function>
+			<object>Function</object>
+			<name>::create</name>
+			<arguments unbounded="true">
+				<argument>a</argument>
+				<argument>b</argument>
+				<argument>c</argument>
+			</arguments>
+			<return>object</return>
+			<description><p>For a constructor <code>fn</code>, the method <code>fn.create</code> abstracts the use of the <code>new</code> operator.</p></description>
+			<examples>
+				<example>
+					<input>judgementDay = Date.create 1997, 8, 29</input>
+					<input>jd instanceof Date</input>
+					<output>true</output>
+					<input>jd.toDateString()</input>
+					<output>"Mon Sep 29 1997 00:00:00 GMT+0100 (BST)"</output>
+				</example>
+			</examples>
+		</function>
+		
 	</functions>
 	
 	<functions>
