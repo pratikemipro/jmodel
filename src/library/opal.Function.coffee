@@ -11,6 +11,7 @@
 	##
 	
 	# Tests: full
+	# Docs: full
 	Function.identity = (x) -> x
 	
 	# Tests: full
