@@ -90,11 +90,13 @@
 	##
 	
 	# Tests: full
+	# Docs: partial
 	Function::pre = (pre) ->
 		throw 'Precondition failure' unless typeof pre == 'function'
 		pre.but this
 	
-	# Tests: full	
+	# Tests: full
+	# Docs: partial
 	Function::post = (post) ->
 		throw 'Precondition failure' unless typeof post == 'function'
 		fn = this
