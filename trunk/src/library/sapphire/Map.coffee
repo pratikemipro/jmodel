@@ -34,10 +34,10 @@
 
 		# Tests: full
 		# Docs: none
-		@To: (cons) ->
+		@To: (constructor) ->
 			class extends this
 				add: (key,value) -> super key, @ensure(value)
-				ensure: Object.ensure cons
+				ensure: Object.ensure constructor
 
 		# Tests: full
 		# Docs: none
