@@ -14,13 +14,16 @@
 
 	# Tests: full
 	Object.construct = (constructor,args1...) -> switch
+	
 		when constructor in [Number,String,Boolean] then constructor
+		
 		when constructor == Date then (args2...) ->
 			args = Array.concat args1, args2
 			switch args.length
 				when 1 then new Date args[0]
 				when 3 then new Date args[0],args[1],args[2]
 				when 7 then new Date args[0],args[1],args[2],args[3],args[4],args[5],args[6]
+				
 		else (args2...) ->
 			args = Array.concat args1, args2
 			new constructor args...
