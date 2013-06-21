@@ -202,6 +202,24 @@
 		raises ( -> inc2('red') ), 'raises an exception when called with argument of wrong type, with From and To reversed'
 		raises ( -> inc2(2) ), 'raises an exception when returning wrong type, with From and To reversed'
 	
+	test 'Function.Of', ->
+		
+		Person = class
+			constructor: (@name) ->
+			setBirthday: Function.Of(Date) (@birthday) ->
+		
+		makePerson = Function.Of(Person) (person) -> person	
+		
+		equals makePerson('fred') instanceof Person, true, 'Implicitly applies constructor'
+		equals makePerson('fred').name, 'fred', 'Passes arguments correctly to constructor'
+		
+		fred = new Person('fred')
+		
+		fred.setBirthday('1974-11-20')
+		
+		equals fred.birthday instanceof Date, true, 'Works correctly with methods'
+		equals fred.birthday.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly to method'
+	
 	test 'Function.Returning', ->
 		
 		Person = class

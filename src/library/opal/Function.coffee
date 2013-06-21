@@ -163,6 +163,11 @@
 		Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
 	
 	# Tests: full
+	Function.Of = (constructor) ->
+		ensure = Object.ensure constructor
+		(fn) -> (args...) -> fn.call this, ensure args...
+	
+	# Tests: full
 	Function.Returning = (val) ->
 		(fn) -> (args...) ->
 			ret = val.call(this)
