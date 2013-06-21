@@ -111,7 +111,8 @@
 		##
 
 		# Tests: full
-		to: Function.From(Function) (cons) -> new cons (element for element in this)
+		to: Function.From(Function) (constructor) ->
+			new constructor (element for element in this)
 		
 		##
 		## Typed Sets
