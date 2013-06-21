@@ -31,6 +31,7 @@ sapphire:
 emerald:
 	coffee --compile --bare --map --join library/emerald2.js \
 		src/library/emerald/header.coffee \
+		src/library/emerald/Event.coffee \
 		src/library/emerald/Subscriber.coffee \
 		src/library/emerald/EventType.coffee
 
@@ -51,6 +52,7 @@ library-test:
 		src/library/sapphire/List.test.coffee \
 		src/library/sapphire/Map.test.coffee \
 		src/library/sapphire/Stream.test.coffee \
+		src/library/emerald/Event.test.coffee \
 		src/library/emerald/Subscriber.test.coffee \
 		src/library/emerald/EventType.test.coffee
 		
@@ -79,6 +81,7 @@ sapphire-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Stream.doc.xml -o:documentation/web/sapphire/Stream.html
 	
 emerald-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Event.doc.xml -o:documentation/web/emerald/Event.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/emerald/EventType.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/emerald/Subscriber.html
 		

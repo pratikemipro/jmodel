@@ -1602,6 +1602,7 @@ define(['jmodel/emerald2'], function() {
     equal(fred instanceof Person && john instanceof Person, true, 'Objects in stream are of correct type');
     return equal(john.name, 'john', 'Passes arguments to constructors correctly');
   });
+  module('Event');
   module('Subscriber');
   module('EventType');
   return test('EventType::subscribe', function() {
