@@ -7,12 +7,55 @@
 	Dual licensed under the MIT and GPL licenses
 */
 
-var __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  __slice = [].slice;
+var __slice = [].slice,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/sapphire2'], function() {
-  var EventType, Subscriber;
+  var EventType, Subscriber, codes;
+  codes = {
+    ':backspace': 8,
+    ':tab': 9,
+    ':return': 13,
+    ':shift': 16,
+    ':ctrl': 17,
+    ':alt': 18,
+    ':escape': 27,
+    ':left': 37,
+    ':up': 38,
+    ':right': 39,
+    ':down': 40,
+    ':delete': 46,
+    ':leftcmd': 91,
+    ':rightcmd': 93
+  };
+  Event.key = function() {
+    var identifier, identifiers;
+    identifier = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+    if (arguments.length > 1) {
+      return Event.key(identifier).or(Event.key.apply(Event, identifiers));
+    } else if (identifier instanceof Regex) {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return String.fromCharCode(which).toUpperCase().match(identifier) || false;
+      };
+    } else if (Object.isa(Number)(identifier)) {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return which === identifier;
+      };
+    } else if (Object.isa(String)(identifier) && identifier.length > 1) {
+      return Event.key(codes[identifier]);
+    } else {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return String.fromCharCode(which).toUpperCase() === identifier;
+      };
+    }
+  };
   window.Subscriber = Subscriber = (function() {
     function Subscriber() {}
 
