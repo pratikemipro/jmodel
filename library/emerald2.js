@@ -34,7 +34,7 @@ define(['jmodel/sapphire2'], function() {
     identifier = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     if (arguments.length > 1) {
       return Event.key(identifier).or(Event.key.apply(Event, identifiers));
-    } else if (identifier instanceof Regex) {
+    } else if (Object.isa(Regex)(identifier)) {
       return function(_arg) {
         var which;
         which = _arg.which;

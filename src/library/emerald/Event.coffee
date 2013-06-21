@@ -27,7 +27,7 @@
 	Event.key = (identifier,identifiers...) ->
 		if arguments.length > 1
 			Event.key(identifier).or Event.key identifiers...
-		else if identifier instanceof Regex
+		else if Object.isa(Regex) identifier
 			({which}) -> String.fromCharCode(which).toUpperCase().match(identifier) or false
 		else if Object.isa(Number) identifier
 			({which}) -> which == identifier
