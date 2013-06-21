@@ -118,7 +118,6 @@
 		##
 		
 		# Tests: none
-		@Of: Function.From(Function) (cons) ->
+		@Of: Function.From(Function) (constructor) ->
 			class extends this
-				add: (element) -> super @ensure element
-				ensure: Object.ensure cons
+				add: Function.Of(constructor) this::add

@@ -27,7 +27,6 @@
 				Array::slice.call(base),
 				( Array::slice.call(other) for other in others )
 
-		@Of: (cons) ->
+		@Of: Function.From(Function) (constructor) ->
 			class extends this
-				add: (element) -> super @ensure element
-				ensure: Object.ensure cons
+				add: Function.Of(constructor) this::add
