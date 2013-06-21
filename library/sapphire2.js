@@ -295,6 +295,23 @@ define(['jmodel/opal2'], function() {
       return -1 !== Array.prototype.indexOf.call(this, element);
     };
 
+    List.prototype.where = Function.From(Function).Returning(function() {
+      return new List;
+    })(function(list) {
+      return function(predicate) {
+        var element, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          if (predicate(element)) {
+            _results.push(List.add(element));
+          }
+        }
+        return _results;
+      };
+    });
+
     List.prototype.map = Function.From(Function).Returning(function() {
       return new List;
     })(function(mapped) {
