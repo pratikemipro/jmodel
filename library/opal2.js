@@ -19,30 +19,31 @@ define(function() {
     return x !== void 0;
   };
   Object.isa = function(constructor) {
-    if (constructor === Number) {
-      return function(obj) {
-        return obj instanceof Number || typeof obj === 'number';
-      };
-    } else if (constructor === String) {
-      return function(obj) {
-        return obj instanceof String || typeof obj === 'string';
-      };
-    } else if (constructor === Boolean) {
-      return function(obj) {
-        return obj instanceof Boolean || typeof obj === 'boolean';
-      };
-    } else if (constructor === Value) {
-      return function(obj) {
-        return obj !== void 0;
-      };
-    } else if (constructor.valid != null) {
-      return function(obj) {
-        return constructor.valid(obj);
-      };
-    } else {
-      return function(obj) {
-        return obj instanceof constructor;
-      };
+    switch (false) {
+      case constructor !== Number:
+        return function(obj) {
+          return obj instanceof Number || typeof obj === 'number';
+        };
+      case constructor !== String:
+        return function(obj) {
+          return obj instanceof String || typeof obj === 'string';
+        };
+      case constructor !== Boolean:
+        return function(obj) {
+          return obj instanceof Boolean || typeof obj === 'boolean';
+        };
+      case constructor !== Value:
+        return function(obj) {
+          return obj !== void 0;
+        };
+      case constructor.valid == null:
+        return function(obj) {
+          return constructor.valid(obj);
+        };
+      default:
+        return function(obj) {
+          return obj instanceof constructor;
+        };
     }
   };
   Array.concat = function() {
@@ -608,33 +609,34 @@ define(function() {
   Object.construct = function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if (constructor === Number || constructor === String || constructor === Boolean) {
-      return constructor;
-    } else if (constructor === Date) {
-      return function() {
-        var args, args2;
-        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        args = Array.concat(args1, args2);
-        switch (args.length) {
-          case 1:
-            return new Date(args[0]);
-          case 3:
-            return new Date(args[0], args[1], args[2]);
-          case 7:
-            return new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
-        }
-      };
-    } else {
-      return function() {
-        var args, args2;
-        args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        args = Array.concat(args1, args2);
-        return (function(func, args, ctor) {
-          ctor.prototype = func.prototype;
-          var child = new ctor, result = func.apply(child, args);
-          return Object(result) === result ? result : child;
-        })(constructor, args, function(){});
-      };
+    switch (false) {
+      case constructor !== Number && constructor !== String && constructor !== Boolean:
+        return constructor;
+      case constructor !== Date:
+        return function() {
+          var args, args2;
+          args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          args = Array.concat(args1, args2);
+          switch (args.length) {
+            case 1:
+              return new Date(args[0]);
+            case 3:
+              return new Date(args[0], args[1], args[2]);
+            case 7:
+              return new Date(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+          }
+        };
+      default:
+        return function() {
+          var args, args2;
+          args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          args = Array.concat(args1, args2);
+          return (function(func, args, ctor) {
+            ctor.prototype = func.prototype;
+            var child = new ctor, result = func.apply(child, args);
+            return Object(result) === result ? result : child;
+          })(constructor, args, function(){});
+        };
     }
   };
   Object.valid = function(constructor) {
