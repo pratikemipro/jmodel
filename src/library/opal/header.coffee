@@ -15,9 +15,21 @@ define ->
 	
 	# Tests: none
 	Object.isa = (constructor) -> switch
-		when constructor == Number  then (obj) -> obj instanceof Number or typeof obj == 'number'
-		when constructor == String  then (obj) -> obj instanceof String or typeof obj == 'string'
-		when constructor == Boolean then (obj) -> obj instanceof Boolean or typeof obj == 'boolean'
-		when constructor == Value   then (obj) -> obj != undefined
-		when constructor.valid?     then (obj) -> constructor.valid obj
-		else                             (obj) -> obj instanceof constructor
+	
+		when constructor == Number
+			(obj) -> obj instanceof Number or typeof obj == 'number'
+		
+		when constructor == String
+			(obj) -> obj instanceof String or typeof obj == 'string'
+		
+		when constructor == Boolean
+			(obj) -> obj instanceof Boolean or typeof obj == 'boolean'
+		
+		when constructor == Value
+			(obj) -> obj != undefined
+		
+		when constructor.valid?
+			(obj) -> constructor.valid obj
+		
+		else
+			(obj) -> obj instanceof constructor
