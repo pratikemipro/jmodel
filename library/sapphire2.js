@@ -415,7 +415,7 @@ define(['jmodel/opal2'], function() {
 
     Map.prototype.ensure = Function.identity;
 
-    Map.To = function(cons) {
+    Map.To = function(constructor) {
       var _ref;
 
       return (function(_super) {
@@ -430,7 +430,7 @@ define(['jmodel/opal2'], function() {
           return _Class.__super__.add.call(this, key, this.ensure(value));
         };
 
-        _Class.prototype.ensure = Object.ensure(cons);
+        _Class.prototype.ensure = Object.ensure(constructor);
 
         return _Class;
 
