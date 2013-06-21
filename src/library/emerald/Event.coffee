@@ -24,14 +24,14 @@
 
 	# Tests: none
 	# Docs: none
-	Event.key = (identifier,identifiers...) ->
-		if arguments.length > 1
+	Event.key = (identifier,identifiers...) -> switch
+		when arguments.length > 1
 			Event.key(identifier).or Event.key identifiers...
-		else if Object.isa(Regex) identifier
+		when Object.isa(Regex) identifier
 			({which}) -> String.fromCharCode(which).toUpperCase().match(identifier) or false
-		else if Object.isa(Number) identifier
+		when Object.isa(Number) identifier
 			({which}) -> which == identifier
-		else if Object.isa(String)(identifier) and identifier.length > 1
+		when Object.isa(String)(identifier) and identifier.length > 1
 			Event.key codes[identifier]
 		else
 			({which}) -> String.fromCharCode(which).toUpperCase() == identifier

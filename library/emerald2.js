@@ -32,28 +32,29 @@ define(['jmodel/sapphire2'], function() {
   Event.key = function() {
     var identifier, identifiers;
     identifier = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    if (arguments.length > 1) {
-      return Event.key(identifier).or(Event.key.apply(Event, identifiers));
-    } else if (Object.isa(Regex)(identifier)) {
-      return function(_arg) {
-        var which;
-        which = _arg.which;
-        return String.fromCharCode(which).toUpperCase().match(identifier) || false;
-      };
-    } else if (Object.isa(Number)(identifier)) {
-      return function(_arg) {
-        var which;
-        which = _arg.which;
-        return which === identifier;
-      };
-    } else if (Object.isa(String)(identifier) && identifier.length > 1) {
-      return Event.key(codes[identifier]);
-    } else {
-      return function(_arg) {
-        var which;
-        which = _arg.which;
-        return String.fromCharCode(which).toUpperCase() === identifier;
-      };
+    switch (false) {
+      case !(arguments.length > 1):
+        return Event.key(identifier).or(Event.key.apply(Event, identifiers));
+      case !Object.isa(Regex)(identifier):
+        return function(_arg) {
+          var which;
+          which = _arg.which;
+          return String.fromCharCode(which).toUpperCase().match(identifier) || false;
+        };
+      case !Object.isa(Number)(identifier):
+        return function(_arg) {
+          var which;
+          which = _arg.which;
+          return which === identifier;
+        };
+      case !(Object.isa(String)(identifier) && identifier.length > 1):
+        return Event.key(codes[identifier]);
+      default:
+        return function(_arg) {
+          var which;
+          which = _arg.which;
+          return String.fromCharCode(which).toUpperCase() === identifier;
+        };
     }
   };
   window.Subscriber = Subscriber = (function() {
