@@ -235,10 +235,10 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Set.prototype.to = Function.From(Function)(function(cons) {
+    Set.prototype.to = Function.From(Function)(function(constructor) {
       var element;
 
-      return new cons((function() {
+      return new constructor((function() {
         var _i, _len, _results;
 
         _results = [];
