@@ -209,3 +209,13 @@
 		deepEqual ( number for number in list ), [1,2,3,4,5,6,7,8], 'Constructor is passed correct elements'
 	
 		raises (-> numbers.to 'red'), 'Raises an exception if not called with a function'
+		
+	test 'Set.Of', ->
+		
+		dates = new (Set.Of Date)
+		
+		dates.add('1974-11-20').add('1979-1-14')
+		
+		deepEqual ( date instanceof Date for date in dates ), [true,true], 'Implicitly applies constructor'
+		
+		deepEqual ( date.toDateString() for date in dates ), ['Wed Nov 20 1974','Sun Jan 14 1979'], 'Passes correct values to constructor'

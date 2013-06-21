@@ -1504,6 +1504,32 @@ define(['jmodel/emerald2'], function() {
       return numbers.to('red');
     }), 'Raises an exception if not called with a function');
   });
+  test('Set.Of', function() {
+    var date, dates;
+
+    dates = new (Set.Of(Date));
+    dates.add('1974-11-20').add('1979-1-14');
+    deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = dates.length; _i < _len; _i++) {
+        date = dates[_i];
+        _results.push(date instanceof Date);
+      }
+      return _results;
+    })(), [true, true], 'Implicitly applies constructor');
+    return deepEqual((function() {
+      var _i, _len, _results;
+
+      _results = [];
+      for (_i = 0, _len = dates.length; _i < _len; _i++) {
+        date = dates[_i];
+        _results.push(date.toDateString());
+      }
+      return _results;
+    })(), ['Wed Nov 20 1974', 'Sun Jan 14 1979'], 'Passes correct values to constructor');
+  });
   module('List');
   test('List::map', function() {
     var number, numbers, squares;

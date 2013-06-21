@@ -250,7 +250,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.Of = Function.From(Function)(function(cons) {
+    Set.Of = Function.From(Function)(function(constructor) {
       var _ref;
 
       return (function(_super) {
@@ -261,11 +261,7 @@ define(['jmodel/opal2'], function() {
           return _ref;
         }
 
-        _Class.prototype.add = function(element) {
-          return _Class.__super__.add.call(this, this.ensure(element));
-        };
-
-        _Class.prototype.ensure = Object.ensure(cons);
+        _Class.prototype.add = Function.Of(constructor)(_Class.prototype.add);
 
         return _Class;
 
@@ -330,7 +326,7 @@ define(['jmodel/opal2'], function() {
       })()));
     };
 
-    List.Of = function(cons) {
+    List.Of = Function.From(Function)(function(constructor) {
       var _ref;
 
       return (function(_super) {
@@ -341,16 +337,12 @@ define(['jmodel/opal2'], function() {
           return _ref;
         }
 
-        _Class.prototype.add = function(element) {
-          return _Class.__super__.add.call(this, this.ensure(element));
-        };
-
-        _Class.prototype.ensure = Object.ensure(cons);
+        _Class.prototype.add = Function.Of(constructor)(_Class.prototype.add);
 
         return _Class;
 
       })(this);
-    };
+    });
 
     return List;
 
@@ -531,10 +523,9 @@ define(['jmodel/opal2'], function() {
       })(void 0);
     });
 
-    Stream.Of = Function.From(Function)(function(cons) {
-      var ensure, _ref;
+    Stream.Of = Function.From(Function)(function(constructor) {
+      var _ref;
 
-      ensure = Object.ensure(cons);
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -543,12 +534,7 @@ define(['jmodel/opal2'], function() {
           return _ref;
         }
 
-        _Class.prototype.add = function() {
-          var args;
-
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return _Class.__super__.add.call(this, ensure.apply(null, args));
-        };
+        _Class.prototype.add = Function.Of(constructor)(_Class.prototype.add);
 
         return _Class;
 

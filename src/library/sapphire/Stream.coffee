@@ -40,8 +40,6 @@
 				@where (x) -> last != x and ( ( last = x ) or true )
 				
 		# Tests: full	
-		@Of: Function.From(Function) \
-			(cons) ->
-				ensure = Object.ensure cons
-				class extends this
-					add: (args...) -> super ensure args...
+		@Of: Function.From(Function) (constructor) ->
+			class extends this
+				add: Function.Of(constructor) this::add
