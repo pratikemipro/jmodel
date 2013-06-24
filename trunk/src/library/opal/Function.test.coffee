@@ -137,6 +137,15 @@
 	
 	module 'Typed functions'
 	
+	test 'Function.hastypes', ->
+		
+		equals Function.hastypes()(), true, 'Works correctly for empty types and empty value'
+		equals Function.hastypes()(5), false, 'Works correctly for empty types and non-empty value'
+		equals Function.hastypes(Number)(5), true, 'Works correctly with single matching value'
+		equals Function.hastypes(Number)('fred'), false, 'Works correctly with single non-matching value'
+		equals Function.hastypes(String,[Number],String)('red',1,2,3,'green'), true, 'Works correctly for complex matching type'
+		equals Function.hastypes(String,[Number],String)(1,2,3), false, 'Works correctly for complex non-matching type'
+	
 	test 'Function.Requiring', ->
 		
 		Person = () ->
@@ -168,6 +177,11 @@
 		
 		equals fred.name, 'fred', 'constructor works as untyped constructor when arguments of correct type'
 		raises ( -> new Person 3 ), 'constructor raises exception when arguments have wrong type'
+		
+		join = Function.From([String]) (strings...) -> strings.join ''
+		
+		equals join('red','green','blue'), 'redgreenblue', 'works with repeated matching types'
+		raises (-> join 1, 2, 3), 'raises exception when repeated matching types do not match input'
 		
 	
 	test 'Function.To', ->
@@ -243,17 +257,26 @@
 		equals namedPerson('fred').name, 'fred', 'Modified function works correctly'
 		raises ( -> namedPerson(1) ), 'raises an exception if type of argument is incorrect'
 		
+		deptPerson = Function.From([String]).Returning(-> new Person() ) \
+			(person) -> (depts...) -> person.depts = depts.join ','
+			
+		equals deptPerson('IT','Marketing').depts, 'IT,Marketing', 'works correctly with repeated type specifier'
+		equals deptPerson().depts, '', 'works correct for empty arguments with repeated type specifier'
+		raises (-> deptPerson 1, 2, 3), 'raieses exception when arguments do not match repeated type specifier'
+		
 	test 'Function.switch', ->
 		
 		getType = Function.switch [
 		
+			Type()		 () -> 'nothing'
 			Type(Number) (number) -> 'number'
 			Type(String) (string) -> 'string'
 			Type(Object) (object) -> 'object'
 		
 		]
 		
-		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant'
+		equal getType(), 'nothing', 'Correctly handles empty case'
+		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
 		
 	module 'Logical functions'
 	
