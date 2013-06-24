@@ -180,13 +180,14 @@
 	
 	# Tests: partial
 	# Docs: none
-	Function.switch = (variants) ->
+	Function.switch = (variants=[]) ->
 		(args...) ->
-			[fn] = ( variant for variant in variants when variant.test args...)
-			fn?.apply this, args
+			for fn in variants
+				return fn.apply(this,args) if fn.test args...
+			return undefined
 		
 	window.Type = Type = (types...) ->
-		(fn) -> 
+		(fn) ->
 			fn.test = Function.hastypes types...
 			return fn
 	
