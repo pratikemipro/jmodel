@@ -12,7 +12,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/sapphire2'], function() {
-  var EventType, Subscriber, codes;
+  var Character, EventType, SpecialKey, Subscriber, codes;
   codes = {
     ':backspace': 8,
     ':tab': 9,
@@ -29,34 +29,37 @@ define(['jmodel/sapphire2'], function() {
     ':leftcmd': 91,
     ':rightcmd': 93
   };
-  Event.key = function() {
-    var identifier, identifiers;
-    identifier = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (false) {
-      case !(arguments.length > 1):
-        return Event.key(identifier).or(Event.key.apply(Event, identifiers));
-      case !Object.isa(Regex)(identifier):
-        return function(_arg) {
-          var which;
-          which = _arg.which;
-          return String.fromCharCode(which).toUpperCase().match(identifier) || false;
-        };
-      case !Object.isa(Number)(identifier):
-        return function(_arg) {
-          var which;
-          which = _arg.which;
-          return which === identifier;
-        };
-      case !(Object.isa(String)(identifier) && identifier.length > 1):
-        return Event.key(codes[identifier]);
-      default:
-        return function(_arg) {
-          var which;
-          which = _arg.which;
-          return String.fromCharCode(which).toUpperCase() === identifier;
-        };
-    }
-  };
+  Character = String.Where(function(str) {
+    return str.length === 1;
+  });
+  SpecialKey = String.Matching(/:.+/);
+  Event.key = Function["switch"]([
+    Type(Character)(function(key) {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return String.fromCharCode(which).toUpperCase() === key;
+      };
+    }), Type(RegExp)(function(regex) {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return String.fromCharCode(which).toUpperCase().match(regex) || false;
+      };
+    }), Type(Number)(function(number) {
+      return function(_arg) {
+        var which;
+        which = _arg.which;
+        return which === number;
+      };
+    }), Type(SpecialKey)(function(identifier) {
+      return Event.key(codes[identifier]);
+    }), Type(Value, [Value])(function() {
+      var identifer, identifiers;
+      identifer = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      return Event.key(identifier).or(Event.key.apply(Event, identifiers));
+    })
+  ]);
   window.Subscriber = Subscriber = (function() {
     function Subscriber() {}
 

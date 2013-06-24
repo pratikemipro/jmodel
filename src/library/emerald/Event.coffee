@@ -21,17 +21,23 @@
 		':delete': 		46
 		':leftcmd': 	91
 		':rightcmd': 	93
+		
+	Character = String.Where (str) -> str.length == 1
+	SpecialKey = String.Matching /:.+/
 
 	# Tests: none
 	# Docs: none
-	Event.key = (identifier,identifiers...) -> switch
-		when arguments.length > 1
-			Event.key(identifier).or Event.key identifiers...
-		when Object.isa(Regex) identifier
-			({which}) -> String.fromCharCode(which).toUpperCase().match(identifier) or false
-		when Object.isa(Number) identifier
-			({which}) -> which == identifier
-		when Object.isa(String)(identifier) and identifier.length > 1
-			Event.key codes[identifier]
-		else
-			({which}) -> String.fromCharCode(which).toUpperCase() == identifier
+	Event.key = Function.switch [
+		
+		Type(Character)		(key) -> ({which}) -> String.fromCharCode(which).toUpperCase() == key
+		
+		Type(RegExp)		(regex) -> ({which}) -> String.fromCharCode(which).toUpperCase().match(regex) or false
+		
+		Type(Number)		(number) -> ({which}) -> which == number
+		
+		Type(SpecialKey)	(identifier) -> Event.key codes[identifier]
+		
+		Type(Value,[Value])	(identifer,identifiers...) -> Event.key(identifier).or Event.key identifiers...
+		
+	]
+			
