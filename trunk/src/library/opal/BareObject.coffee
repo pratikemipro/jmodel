@@ -39,24 +39,19 @@
 				return obj
 	
 	# Tests: full
-	Object.union = Function.From([Object]).To(Object) \
-		(first,rest...) ->
-			switch arguments.length
-				when 1 then first
-				when 0 then {}
-				else Object.extend Object.copy(first), Object.union rest...
-	
-	# Tests: full	
-	Object.intersection = Function.From([Object]).To(Object) \
-		(first,rest...) ->
-			switch arguments.length
-				when 1 then first
-				when 0 then {}
-				else Object.project(Object.keys(Object.intersection rest...)...) first
+	Object.union = Function.From([Object]).Returning(-> new Object) \
+		(union) -> (objects...) ->
+			union[key] = value for own key, value of object for object in objects
+
+	# Tests: full
+	Object.intersection = Function.From([Object]).Returning(-> new Object) \
+		(intersection) -> (first={},rest...) ->
+			intersection[key] = value for own key, value of first when \
+				[true].concat( key in Object.keys(object) for object in rest ).reduce (a,b) -> a and b
 	
 	# Tests: full	
 	Object.difference = Function.From(Object,Object).To(Object) \
-		(a,b) -> Object.remove(Object.keys(b)...) a
+		(a,b) -> Object.remove(Object.keys(b)...) Object.copy a
 		
 	Object.join = Function.From(Function) \
 		(predicate) -> Function.From([Object]) \
