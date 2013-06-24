@@ -38,7 +38,7 @@
 		##
 		
 		# Tests: full
-		member: Predicate.From(Value) (element) ->
+		member: Predicate.From(Maybe Value) (element) ->
 			-1 != Array::indexOf.call this, element
 		
 		# Tests: full	
