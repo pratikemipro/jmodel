@@ -21,15 +21,17 @@
 		
 	# Tests: partial
 	Array.hastypes = (types...) ->
-		if types[0] instanceof Array
-			predicate = Object.isa types[0][0]
-			(array) ->
-				valid = true
-				( valid = valid and predicate(x) ) for x in array
-				valid
-		else
-			predicates = ( Object.isa(type) for type in types )
-			(array) ->
-				valid = true
-				( valid = valid and predicates[i](x) ) for x, i in array
-				valid
+		(array=[]) ->
+			return true if types.length == 0 and array.length == 0
+			types2 = types.slice 0
+			array2 = array.slice 0
+			value  = undefined
+			while type = types2.shift()
+				if type instanceof Array
+					[type] = type
+					while array2.length > 0 and Object.isa(type) array2[0]
+						array2.shift()
+				else
+					value = array2.shift()
+					return false if not Object.isa(type) value
+			return types2.length == 0 and array2.length == 0
