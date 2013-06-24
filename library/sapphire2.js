@@ -62,7 +62,7 @@ define(['jmodel/opal2'], function() {
       }
     });
 
-    Set.prototype.member = Predicate.From(Value)(function(element) {
+    Set.prototype.member = Predicate.From(Maybe(Value))(function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
     });
 
@@ -351,21 +351,20 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    Map.prototype.add = Function.Chaining(function(key, value) {
-      var _results;
-      switch (arguments.length) {
-        case 2:
-          return this[key] = value;
-        default:
-          _results = [];
-          for (key in key) {
-            if (!__hasProp.call(key, key)) continue;
-            value = key[key];
-            _results.push(this.add(key, value));
-          }
-          return _results;
-      }
-    });
+    Map.prototype.add = Function.Chaining(Function["switch"]([
+      Type(Value, Value)(function(key, value) {
+        return this[key] = value;
+      }), Type(Object)(function(mappings) {
+        var key, value, _results;
+        _results = [];
+        for (key in mappings) {
+          if (!__hasProp.call(mappings, key)) continue;
+          value = mappings[key];
+          _results.push(this.add(key, value));
+        }
+        return _results;
+      })
+    ]));
 
     Map.prototype.remove = Function.Chaining(function(key) {
       return delete this[key];

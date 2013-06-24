@@ -96,39 +96,34 @@ define(function() {
     })());
   };
   Array.hastypes = function() {
-    var predicate, predicates, type, types;
+    var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    if (types[0] instanceof Array) {
-      predicate = Object.isa(types[0][0]);
-      return function(array) {
-        var valid, x, _i, _len;
-        valid = true;
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          x = array[_i];
-          valid = valid && predicate(x);
+    return function(array) {
+      var array2, type, types2, value;
+      if (array == null) {
+        array = [];
+      }
+      if (types.length === 0 && array.length === 0) {
+        return true;
+      }
+      types2 = types.slice(0);
+      array2 = array.slice(0);
+      value = void 0;
+      while (type = types2.shift()) {
+        if (type instanceof Array) {
+          type = type[0];
+          while (array2.length > 0 && Object.isa(type)(array2[0])) {
+            array2.shift();
+          }
+        } else {
+          value = array2.shift();
+          if (!Object.isa(type)(value)) {
+            return false;
+          }
         }
-        return valid;
-      };
-    } else {
-      predicates = (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = types.length; _i < _len; _i++) {
-          type = types[_i];
-          _results.push(Object.isa(type));
-        }
-        return _results;
-      })();
-      return function(array) {
-        var i, valid, x, _i, _len;
-        valid = true;
-        for (i = _i = 0, _len = array.length; _i < _len; i = ++_i) {
-          x = array[i];
-          valid = valid && predicates[i](x);
-        }
-        return valid;
-      };
-    }
+      }
+      return types2.length === 0 && array2.length === 0;
+    };
   };
   Function.identity = function(x) {
     return x;
@@ -345,21 +340,19 @@ define(function() {
     return Function.Returning(val).then(this);
   };
   Function["switch"] = function(variants) {
+    if (variants == null) {
+      variants = [];
+    }
     return function() {
-      var args, fn, variant;
+      var args, fn, _i, _len;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      fn = ((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = variants.length; _i < _len; _i++) {
-          variant = variants[_i];
-          if (variant.test.apply(variant, args)) {
-            _results.push(variant);
-          }
+      for (_i = 0, _len = variants.length; _i < _len; _i++) {
+        fn = variants[_i];
+        if (fn.test.apply(fn, args)) {
+          return fn.apply(this, args);
         }
-        return _results;
-      })())[0];
-      return fn != null ? fn.apply(this, args) : void 0;
+      }
+      return void 0;
     };
   };
   window.Type = Type = function() {
@@ -851,32 +844,61 @@ define(function() {
       return obj;
     });
   });
-  Object.union = Function.From([Object]).To(Object)(function() {
-    var first, rest;
-    first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (arguments.length) {
-      case 1:
-        return first;
-      case 0:
-        return {};
-      default:
-        return Object.extend(Object.copy(first), Object.union.apply(Object, rest));
-    }
+  Object.union = Function.From([Object]).Returning(function() {
+    return new Object;
+  })(function(union) {
+    return function() {
+      var key, object, objects, value, _i, _len, _results;
+      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      _results = [];
+      for (_i = 0, _len = objects.length; _i < _len; _i++) {
+        object = objects[_i];
+        _results.push((function() {
+          var _results1;
+          _results1 = [];
+          for (key in object) {
+            if (!__hasProp.call(object, key)) continue;
+            value = object[key];
+            _results1.push(union[key] = value);
+          }
+          return _results1;
+        })());
+      }
+      return _results;
+    };
   });
-  Object.intersection = Function.From([Object]).To(Object)(function() {
-    var first, rest;
-    first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    switch (arguments.length) {
-      case 1:
-        return first;
-      case 0:
-        return {};
-      default:
-        return Object.project.apply(Object, Object.keys(Object.intersection.apply(Object, rest)))(first);
-    }
+  Object.intersection = Function.From([Object]).Returning(function() {
+    return new Object;
+  })(function(intersection) {
+    return function() {
+      var first, key, object, rest, value, _results;
+      first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (first == null) {
+        first = {};
+      }
+      _results = [];
+      for (key in first) {
+        if (!__hasProp.call(first, key)) continue;
+        value = first[key];
+        if ([true].concat((function() {
+          var _i, _len, _results1;
+          _results1 = [];
+          for (_i = 0, _len = rest.length; _i < _len; _i++) {
+            object = rest[_i];
+            _results1.push(__indexOf.call(Object.keys(object), key) >= 0);
+          }
+          return _results1;
+        })()).reduce(function(a, b) {
+          return a && b;
+        })) {
+          _results.push(intersection[key] = value);
+        }
+      }
+      return _results;
+    };
   });
   Object.difference = Function.From(Object, Object).To(Object)(function(a, b) {
-    return Object.remove.apply(Object, Object.keys(b))(a);
+    return Object.remove.apply(Object, Object.keys(b))(Object.copy(a));
   });
   Object.join = Function.From(Function)(function(predicate) {
     return Function.From([Object])(function() {
