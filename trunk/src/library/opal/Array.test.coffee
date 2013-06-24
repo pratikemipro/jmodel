@@ -24,5 +24,9 @@
 		
 	test 'Array.hastypes', ->
 
+		equal Array.hastypes()([]), true, 'Returns true for empty array when type array is empty'
+		equal Array.hastypes()([5]), false, 'Returns false for non-empty array when type array is empty'
 		equal Array.hastypes(Number)([5]), true, 'Returns true for single element array having correct type'
 		equal Array.hastypes(Number,String,Number)([5,'fred',7]), true, 'Works for longer arrays'
+		equal Array.hastypes([Number])([1,2,3]), true, 'Works for array type specifiers'
+		equal Array.hastypes([Number])(), true, 'Array type specifiers include zero length case'
