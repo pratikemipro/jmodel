@@ -243,6 +243,18 @@
 		equals namedPerson('fred').name, 'fred', 'Modified function works correctly'
 		raises ( -> namedPerson(1) ), 'raises an exception if type of argument is incorrect'
 		
+	test 'Function.switch', ->
+		
+		getType = Function.switch [
+		
+			Type(Number) (number) -> 'number'
+			Type(String) (string) -> 'string'
+			Type(Object) (object) -> 'object'
+		
+		]
+		
+		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant'
+		
 	module 'Logical functions'
 	
 	test 'Function::and', ->

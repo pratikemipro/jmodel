@@ -178,6 +178,18 @@
 	Function::Returning = (val) ->
 		Function.Returning(val).then(this)
 	
+	# Tests: partial
+	# Docs: none
+	Function.switch = (variants) ->
+		(args...) ->
+			[fn] = ( variant for variant in variants when variant.test args...)
+			fn?.apply this, args
+		
+	window.Type = Type = (types...) ->
+		(fn) -> 
+			fn.test = Function.hastypes types...
+			return fn
+	
 	# Tests: none
 	window.Predicate = Function.To Boolean
 	
