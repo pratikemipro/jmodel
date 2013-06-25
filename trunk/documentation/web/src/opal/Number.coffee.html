@@ -101,7 +101,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; ( value <span class="keyword">instanceof</span> Number <span class="keyword">or</span> <span class="keyword">typeof</span> value == <span class="string">'number'</span> ) <span class="keyword">and</span> <span class="keyword">not</span> isNan value</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNan value</pre></div></div>
             
         </li>
         
@@ -117,18 +117,15 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">LessThan</span></span> = (max) -&gt;
-		<span class="property">@Where</span> \
-			Function.lt(max),
+		<span class="property">@Where</span> Function.lt(max),
 			<span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
 
 	Number.<span class="function"><span class="title">GreaterThan</span></span> = (min) -&gt;
-		<span class="property">@Where</span> \
-			Function.gt(min),
+		<span class="property">@Where</span> Function.gt(min),
 			<span class="string">"Invalid Value: &lt;value&gt; is not greater than <span class="subst">#{min}</span>"</span>
 
 	Number.<span class="function"><span class="title">Between</span></span> = (min,max) -&gt;
-		<span class="property">@Where</span> \
-			Function.between(min,max),
+		<span class="property">@Where</span> Function.between(min,max),
 			<span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
 
 	window.Integer = Number.Where \
