@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Promise.coffee.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Array.coffee.html">
+                Array.coffee.md
+              </a>
+            
+              
+              <a class="source" href="BareObject.coffee.html">
+                BareObject.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Boolean.coffee.html">
+                Boolean.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Function.coffee.html">
+                Function.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Math.coffee.html">
+                Math.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Maybe.coffee.html">
+                Maybe.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Nullable.coffee.html">
+                Nullable.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Number.coffee.html">
+                Number.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Object.coffee.html">
+                Object.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Promise.coffee.html">
+                Promise.coffee.md
+              </a>
+            
+              
+              <a class="source" href="String.coffee.html">
+                String.coffee.md
+              </a>
+            
+              
+              <a class="source" href="header.coffee.html">
+                header.coffee.md
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Promise.coffee.md</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	window.Promise = <span class="class"><span class="keyword">class</span> <span class="title">Promise</span></span>
+
+		[PENDING,FULFILLED,REJECTED] = [<span class="number">1.</span><span class="number">.3</span>]
+
+		<span class="function"><span class="title">delay</span></span> = (fn) -&gt; setTimeout fn, <span class="number">1</span>
+
+		<span class="function"><span class="title">chain</span></span> = (promise,fn,value) -&gt; delay -&gt;
+			<span class="keyword">try</span>
+				ret = fn value...
+				promise.fulfil ret
+			<span class="keyword">catch</span> reason
+				promise.reject reason
+
+		constructor: (args...) -&gt;
+
+			<span class="property">@status</span> = PENDING
+			<span class="property">@value</span>  = <span class="literal">undefined</span>
+			<span class="property">@reason</span> = <span class="literal">undefined</span>
+
+			<span class="property">@waiting</span> = []
+
+			<span class="property">@fulfil</span> args... <span class="keyword">if</span> args.length &gt; <span class="number">0</span>
+
+		<span class="keyword">then</span>: (fulfilled,rejected) -&gt;
+
+			promise = <span class="keyword">new</span> <span class="property">@constructor</span>()
+
+			<span class="keyword">if</span> <span class="keyword">typeof</span> fulfilled != <span class="string">'function'</span> <span class="keyword">then</span> fulfilled = Function.arguments
+			<span class="keyword">if</span> <span class="keyword">typeof</span> rejected != <span class="string">'function'</span> <span class="keyword">then</span> rejected = Function.identity
+
+			<span class="keyword">switch</span> <span class="property">@status</span>
+				<span class="keyword">when</span> PENDING
+					<span class="property">@waiting</span>.push
+						promise: promise
+						fulfilled: fulfilled
+						rejected: rejected
+				<span class="keyword">when</span> FULFILLED
+					chain promise, fulfilled, <span class="property">@value</span>
+				<span class="keyword">when</span> REJECTED
+					chain promise, rejected, [<span class="property">@reason</span>]
+
+			<span class="keyword">return</span> promise</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Tests: full</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		fulfil: Function.Requiring(-&gt; <span class="property">@status</span> == PENDING) \
+			(<span class="property">@value</span>...) -&gt;
+				<span class="property">@status</span> = FULFILLED
+				<span class="keyword">for</span> {promise,fulfilled} <span class="keyword">in</span> <span class="property">@waiting</span>
+					chain promise, fulfilled, <span class="property">@value</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Tests: full    </p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		reject: Function.Requiring(-&gt; <span class="property">@status</span> == PENDING) \
+			(<span class="property">@reason</span>) -&gt;
+				<span class="property">@status</span> = REJECTED
+				<span class="keyword">for</span> {promise,rejected} <span class="keyword">in</span> <span class="property">@waiting</span>
+					chain promise, rejected, [<span class="property">@reason</span>]
+
+		<span class="property">@Of</span>: (cons) -&gt;
+			ensure = Object.ensure cons
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				fulfil: (args...) -&gt; <span class="keyword">super</span> ensure args...
+
+		<span class="property">@conjoin</span>: -&gt;
+
+		<span class="property">@disjoin</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="property">@constructor</span>() ) \
+			(disjunction) -&gt; (promises...) -&gt;
+				<span class="keyword">for</span> promise <span class="keyword">in</span> promises
+					promise.<span class="keyword">then</span> \
+						( (args...) -&gt; disjunction.fulfil args... ),
+						( (args...) -&gt; disjunction.fail args... )</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

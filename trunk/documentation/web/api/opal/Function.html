@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+      <title>Opal</title>
+      <base href="../../"></base>
+      <link rel="stylesheet" href="stylesheets/reset.css"></link>
+      <link rel="stylesheet" href="stylesheets/jmodel.css"></link>
+   </head>
+   <body>
+      <article>
+         <h1>Function</h1>
+         <section>
+            <h1>Basic Functions</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>.identity
+                  <ul class="arguments ">
+                     <li>a</li>
+                  </ul>
+                  <span class="return">value</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>Function.identity</code> returns its argument.
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>Function.identity 'test'</code>
+                     <span class="output">
+                        <code>"test"</code>
+                     </span>
+                  </p>
+               </dd>
+               <dt>
+                  <span class="base">Function</span>.constant
+                  <ul class="arguments ">
+                     <li>a</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>Function.constant(a)</code> is a function that always returns 
+                     <code>a</code>.
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>test = Function.constant 'test'</code>
+                     <code>test 5</code>
+                     <span class="output">
+                        <code>"test"</code>
+                     </span>
+                     <code>test 'fred'</code>
+                     <span class="output">
+                        <code>"test"</code>
+                     </span>
+                  </p>
+               </dd>
+               <dt>
+                  <span class="base">Function</span>.arguments
+                  <ul class="arguments unbounded">
+                     <li>a</li>
+                     <li>b</li>
+                     <li>c</li>
+                  </ul>
+                  <span class="return">Array</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.argument
+                  <ul class="arguments unbounded">
+                     <li>a</li>
+                     <li>b</li>
+                     <li>c</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.map
+                  <ul class="arguments ">
+                     <li>mapping</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+            </dl>
+         </section>
+         <section>
+            <h1>Return-Value Manipulation</h1>
+            <dl></dl>
+         </section>
+         <section>
+            <h1>Function Composition</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::then
+                  <ul class="arguments ">
+                     <li>fn</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>::but
+                  <ul class="arguments ">
+                     <li>fn</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.pipe
+                  <ul class="arguments unbounded">
+                     <li>fn1</li>
+                     <li>fn2</li>
+                     <li>fn3</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>Function.pipe</code> composes functions as a pipeline in a “point-free” manner. Applying the pipelined
+                     function applies the leftmost function first so that 
+                     <code>Function.pipe(fn1,fn2,fn3) x</code> is the same as 
+                     <code>fn3 fn2 fn1 x</code>.
+                  </p>
+               </dd>
+               <dt>
+                  <span class="base">Function</span>.compose
+                  <ul class="arguments unbounded">
+                     <li>fn1</li>
+                     <li>fn2</li>
+                     <li>fn3</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>Function.compose</code> performs “point-free” function composition in the traditional order. When the composition
+                     is applied, the rightmost function is applied first so that 
+                     <code>Function.compose(fn1,fn2,fn3) x</code> is the same as 
+                     <code>fn1 fn2 fn3 x</code>.
+                  </p>
+               </dd>
+            </dl>
+         </section>
+         <section>
+            <h1>Aspect-like Methods</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::pre
+                  <ul class="arguments ">
+                     <li>fn</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>::post
+                  <ul class="arguments ">
+                     <li>fn</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+            </dl>
+         </section>
+         <section>
+            <h1>Preconditions and Postconditions</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::require
+                  <ul class="arguments ">
+                     <li>predicate</li>
+                     <li class="optional">message</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>::ensure
+                  <ul class="arguments ">
+                     <li>predicate</li>
+                     <li class="optional">message</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+            </dl>
+         </section>
+         <section>
+            <h1>Typed Functions</h1>
+            <dl></dl>
+         </section>
+         <section>
+            <h1>Logical Functions</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::and
+                  <ul class="arguments ">
+                     <li>predicate</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>::or
+                  <ul class="arguments ">
+                     <li>predicate</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>::not
+                  <ul class="arguments "></ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.and
+                  <ul class="arguments unbounded">
+                     <li>pr1</li>
+                     <li>pr2</li>
+                     <li>pr3</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.or
+                  <ul class="arguments unbounded">
+                     <li>pr1</li>
+                     <li>pr2</li>
+                     <li>pr3</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dt>
+                  <span class="base">Function</span>.not
+                  <ul class="arguments unbounded">
+                     <li>pr</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+            </dl>
+         </section>
+         <section>
+            <h1>Delegation</h1>
+            <dl></dl>
+         </section>
+         <section>
+            <h1>Predicates</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::eq
+                  <ul class="arguments ">
+                     <li>value</li>
+                  </ul>
+                  <span class="return">Predicate</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>fn.eq(value)</code> is a predicate that is true when 
+                     <code>fn</code> returns a value equal to 
+                     <code>value</code> (including type).
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>buffy = forename: 'Buffy', surname: 'Summers'</code>
+                     <code>willow = forename: 'Willow', surname: 'Rosenberg'</code>
+                     <code>Object.property('surname').eq('Summers') buffy</code>
+                     <span class="output">
+                        <code>true</code>
+                     </span>
+                     <code>Object.property('surname').eq('Summers') willow</code>
+                     <span class="output">
+                        <code>false</code>
+                     </span>
+                  </p>
+               </dd>
+            </dl>
+         </section>
+         <section>
+            <h1>Application Methods</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::except
+                  <ul class="arguments ">
+                     <li>handler</li>
+                  </ul>
+                  <span class="return">function</span>
+               </dt>
+               <dd>
+                  <p>
+                     <code>fn.except</code> abstracts exception handling. If 
+                     <code>fn</code> throws an exception, the function 
+                     <code>handler</code> will be invoked with the error object and its return value returned.
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>faulty = -&gt; throw 'bang!'</code>
+                     <code>handled = faulty.except (error) -&gt; "Error: #{error}"</code>
+                     <code>handled()</code>
+                     <span class="output">
+                        <code>"Error: bang!"</code>
+                     </span>
+                  </p>
+               </dd>
+            </dl>
+         </section>
+         <section>
+            <h1>Ordering Methods</h1>
+            <dl></dl>
+         </section>
+         <section>
+            <h1>Constructor Methods</h1>
+            <dl>
+               <dt>
+                  <span class="base">Function</span>::create
+                  <ul class="arguments unbounded">
+                     <li>a</li>
+                     <li>b</li>
+                     <li>c</li>
+                  </ul>
+                  <span class="return">object</span>
+               </dt>
+               <dd>
+                  <p>For a constructor 
+                     <code>fn</code>, the method 
+                     <code>fn.create</code> abstracts the use of the 
+                     <code>new</code> operator.
+                  </p>
+               </dd>
+               <dd class="example">
+                  <p>
+                     <code>judgementDay = Date.create 1997, 7, 29</code>
+                     <code>jd instanceof Date</code>
+                     <span class="output">
+                        <code>true</code>
+                     </span>
+                     <code>jd.toDateString()</code>
+                     <span class="output">
+                        <code>"Fri August 29 1997 00:00:00 GMT+0100 (BST)"</code>
+                     </span>
+                  </p>
+               </dd>
+            </dl>
+         </section>
+         <section>
+            <h1>Restricted Types</h1>
+            <dl></dl>
+         </section>
+      </article>
+   </body>
+</html>

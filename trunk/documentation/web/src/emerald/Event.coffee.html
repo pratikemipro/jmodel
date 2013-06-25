@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Event.coffee.md</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="Event.coffee.html">
+                Event.coffee.md
+              </a>
+            
+              
+              <a class="source" href="EventType.coffee.html">
+                EventType.coffee.md
+              </a>
+            
+              
+              <a class="source" href="Subscriber.coffee.html">
+                Subscriber.coffee.md
+              </a>
+            
+              
+              <a class="source" href="header.coffee.html">
+                header.coffee.md
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Event.coffee.md</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	codes =
+		<span class="string">':backspace'</span>: 	<span class="number">8</span>
+		<span class="string">':tab'</span>: 		<span class="number">9</span>
+		<span class="string">':return'</span>: 		<span class="number">13</span>
+		<span class="string">':shift'</span>: 		<span class="number">16</span>
+		<span class="string">':ctrl'</span>: 		<span class="number">17</span>
+		<span class="string">':alt'</span>: 		<span class="number">18</span>
+		<span class="string">':escape'</span>: 		<span class="number">27</span>
+		<span class="string">':left'</span>: 		<span class="number">37</span>
+		<span class="string">':up'</span>: 			<span class="number">38</span>
+		<span class="string">':right'</span>: 		<span class="number">39</span>
+		<span class="string">':down'</span>: 		<span class="number">40</span>
+		<span class="string">':delete'</span>: 		<span class="number">46</span>
+		<span class="string">':leftcmd'</span>: 	<span class="number">91</span>
+		<span class="string">':rightcmd'</span>: 	<span class="number">93</span>
+
+	Character = String.Where (str) -&gt; str.length == <span class="number">1</span>
+	SpecialKey = String.Matching <span class="regexp">/:.+/</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Tests: none
+Docs: none</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Event.key = Function.<span class="keyword">switch</span> [
+
+		Type(Character) (key) -&gt;
+			({which}) -&gt; String.fromCharCode(which).toUpperCase() == key
+
+		Type(RegExp) (regex) -&gt;
+			({which}) -&gt; String.fromCharCode(which).toUpperCase().match(regex) <span class="keyword">or</span> <span class="literal">false</span>
+
+		Type(Number) (number) -&gt;
+			({which}) -&gt; which == number
+
+		Type(SpecialKey) (identifier) -&gt;
+			Event.key codes[identifier]
+
+		Type(Value,[Value])	(identifer,identifiers...) -&gt;
+			Event.key(identifier).<span class="keyword">or</span> Event.key identifiers...
+
+	]</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
