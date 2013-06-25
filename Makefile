@@ -7,33 +7,33 @@ default:
 
 opal:
 	coffee --compile --bare --map --join library/opal2.js \
-		src/library/opal/header.coffee \
-		src/library/opal/Array.coffee \
-		src/library/opal/Function.coffee \
-		src/library/opal/Object.coffee \
-		src/library/opal/BareObject.coffee \
-		src/library/opal/Number.coffee \
-		src/library/opal/String.coffee \
-		src/library/opal/Boolean.coffee \
-		src/library/opal/Math.coffee \
-		src/library/opal/Nullable.coffee \
-		src/library/opal/Maybe.coffee \
-		src/library/opal/Promise.coffee
+		src/library/opal/header.coffee.md \
+		src/library/opal/Array.coffee.md \
+		src/library/opal/Function.coffee.md \
+		src/library/opal/Object.coffee.md \
+		src/library/opal/BareObject.coffee.md \
+		src/library/opal/Number.coffee.md \
+		src/library/opal/String.coffee.md \
+		src/library/opal/Boolean.coffee.md \
+		src/library/opal/Math.coffee.md \
+		src/library/opal/Nullable.coffee.md \
+		src/library/opal/Maybe.coffee.md \
+		src/library/opal/Promise.coffee.md
 
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
-		src/library/sapphire/header.coffee \
-		src/library/sapphire/Set.coffee \
-		src/library/sapphire/List.coffee \
-		src/library/sapphire/Map.coffee \
-		src/library/sapphire/Stream.coffee
+		src/library/sapphire/header.coffee.md \
+		src/library/sapphire/Set.coffee.md \
+		src/library/sapphire/List.coffee.md \
+		src/library/sapphire/Map.coffee.md \
+		src/library/sapphire/Stream.coffee.md
 		
 emerald:
 	coffee --compile --bare --map --join library/emerald2.js \
-		src/library/emerald/header.coffee \
-		src/library/emerald/Event.coffee \
-		src/library/emerald/Subscriber.coffee \
-		src/library/emerald/EventType.coffee
+		src/library/emerald/header.coffee.md \
+		src/library/emerald/Event.coffee.md \
+		src/library/emerald/Subscriber.coffee.md \
+		src/library/emerald/EventType.coffee.md
 
 library-test:
 	coffee --compile --bare --map --join tests/test-library.js \
