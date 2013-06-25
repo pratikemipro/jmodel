@@ -1,3 +1,6 @@
+Maybe
+===
+		
 		window.Maybe = (base) ->
 		
 			construct = Object.construct base
@@ -7,3 +10,4 @@
 			derived.valid = (x) -> not x? or valid x
 		
 			return derived
+			
