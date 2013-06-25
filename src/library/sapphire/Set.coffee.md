@@ -101,7 +101,7 @@
 			##
 			## Casting
 			##
-
+			
 			# Tests: full
 			to: Function.From(Function) (constructor) ->
 				new constructor (element for element in this)

@@ -16,7 +16,7 @@
 		
 		Character = String.Where (str) -> str.length == 1
 		SpecialKey = String.Matching /:.+/
-
+		
 		# Tests: none
 		# Docs: none
 		Event.key = Function.switch [

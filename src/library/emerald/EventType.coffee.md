@@ -14,7 +14,7 @@
 			subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]
 			
 			raise: Function.delegate -> [ this, @add ]
-
+			
 			fail: (args...) ->
 				promise = new Promise()
 				@add promise

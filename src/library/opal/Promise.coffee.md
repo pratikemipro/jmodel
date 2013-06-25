@@ -40,7 +40,7 @@
 						chain promise, rejected, [@reason]
 					
 				return promise
-
+				
 			# Tests: full
 			fulfil: Function.Requiring(-> @status == PENDING) \
 				(@value...) ->

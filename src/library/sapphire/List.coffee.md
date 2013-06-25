@@ -22,7 +22,7 @@
 				new base.constructor Array::concat.apply \
 					Array::slice.call(base),
 					( Array::slice.call(other) for other in others )
-
+					
 			@Of: Function.From(Function) (constructor) ->
 				class extends this
 					add: Function.Of(constructor) this::add
