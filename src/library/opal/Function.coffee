@@ -30,6 +30,21 @@
 	# Docs: partial
 	Function.map = (mapping) -> (key) -> mapping[key]
 	
+	# Tests: partial
+	# Docs: none
+	Function.switch = (variants=[]) ->
+		fn = (args...) ->
+			for variant in variants
+				return variant.apply(this,args) if variant.test args...
+			return undefined
+		fn.add = (variant) -> variants.unshift variant
+		return fn
+		
+	window.Type = Type = (types...) ->
+		(fn) ->
+			fn.test = Function.hastypes types...
+			return fn
+	
 	##
 	## Return value manipulation
 	##
@@ -177,19 +192,6 @@
 	# Tests: full		
 	Function::Returning = (val) ->
 		Function.Returning(val).then(this)
-	
-	# Tests: partial
-	# Docs: none
-	Function.switch = (variants=[]) ->
-		(args...) ->
-			for fn in variants
-				return fn.apply(this,args) if fn.test args...
-			return undefined
-		
-	window.Type = Type = (types...) ->
-		(fn) ->
-			fn.test = Function.hastypes types...
-			return fn
 	
 	# Tests: none
 	window.Predicate = Function.To Boolean
