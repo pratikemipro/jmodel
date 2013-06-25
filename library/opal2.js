@@ -810,45 +810,53 @@ define(function() {
   Object.remove = Function.From([String])(function() {
     var fields;
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return Function.From(Object).To(Object)(function(source) {
-      var key, obj, value;
-      obj = {};
-      for (key in source) {
-        if (!__hasProp.call(source, key)) continue;
-        value = source[key];
-        if (__indexOf.call(fields, key) < 0) {
-          obj[key] = value;
+    return Function.From(Object).Returning(function() {
+      return new Object;
+    })(function(obj) {
+      return function(source) {
+        var key, value, _results;
+        _results = [];
+        for (key in source) {
+          if (!__hasProp.call(source, key)) continue;
+          value = source[key];
+          _results.push(__indexOf.call(fields, key) < 0 ? obj[key] = value : void 0);
         }
-      }
-      return obj;
+        return _results;
+      };
     });
   });
   Object.project = Function.From([String])(function() {
     var fields;
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return Function.From(Object).To(Object)(function(source) {
-      var key, obj, value;
-      obj = {};
-      for (key in source) {
-        if (!__hasProp.call(source, key)) continue;
-        value = source[key];
-        if (__indexOf.call(fields, key) >= 0) {
-          obj[key] = value;
+    return Function.From(Object).Returning(function() {
+      return new Object;
+    })(function(obj) {
+      return function(source) {
+        var key, value, _results;
+        _results = [];
+        for (key in source) {
+          if (!__hasProp.call(source, key)) continue;
+          value = source[key];
+          _results.push(__indexOf.call(fields, key) >= 0 ? obj[key] = value : void 0);
         }
-      }
-      return obj;
+        return _results;
+      };
     });
   });
   Object.rename = Function.From(Object)(function(renaming) {
-    return Function.From(Object).To(Object)(function(source) {
-      var key, obj, value;
-      obj = {};
-      for (key in source) {
-        if (!__hasProp.call(source, key)) continue;
-        value = source[key];
-        obj[renaming[key] || key] = value;
-      }
-      return obj;
+    return Function.From(Object).Returning(function() {
+      return new Object;
+    })(function(obj) {
+      return function(source) {
+        var key, value, _results;
+        _results = [];
+        for (key in source) {
+          if (!__hasProp.call(source, key)) continue;
+          value = source[key];
+          _results.push(obj[renaming[key] || key] = value);
+        }
+        return _results;
+      };
     });
   });
   Object.union = Function.From([Object]).Returning(function() {
