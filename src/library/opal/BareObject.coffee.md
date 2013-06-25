@@ -32,8 +32,9 @@ BareObject
 				intersection[key] = value for own key, value of first when \
 					[true].concat( key in Object.keys(object) for object in rest ).reduce (a,b) -> a and b
 		
-		Object.difference = Function.From(Object,Object).To(Object) \
-			(a,b) -> Object.remove(Object.keys(b)...) Object.copy a
+		Object.difference = Function.From(Object,Object).Returning(-> new Object) \
+			(difference) -> (first,second) ->
+				difference[key] = value for own key, value of first when not second[key]?
 		
 		Object.join = Function.From(Function) \
 			(predicate) -> Function.From([Object]) \

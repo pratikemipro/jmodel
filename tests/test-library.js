@@ -925,7 +925,7 @@ define(['jmodel/emerald2'], function() {
   test('difference', function() {
     var a, b, c;
     a = {
-      forename: 'fred',
+      forename: 'john',
       surname: 'smith',
       age: 20,
       title: 'Mr'

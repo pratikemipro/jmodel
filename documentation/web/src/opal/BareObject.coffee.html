@@ -139,8 +139,9 @@
 			intersection[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> first <span class="keyword">when</span> \
 				[<span class="literal">true</span>].concat( key <span class="keyword">in</span> Object.keys(object) <span class="keyword">for</span> object <span class="keyword">in</span> rest ).reduce (a,b) -&gt; a <span class="keyword">and</span> b
 
-	Object.difference = Function.From(Object,Object).To(Object) \
-		(a,b) -&gt; Object.remove(Object.keys(b)...) Object.copy a
+	Object.difference = Function.From(Object,Object).Returning(-&gt; <span class="keyword">new</span> Object) \
+		(difference) -&gt; (first,second) -&gt;
+			difference[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> first <span class="keyword">when</span> <span class="keyword">not</span> second[key]?
 
 	Object.join = Function.From(Function) \
 		(predicate) -&gt; Function.From([Object]) \

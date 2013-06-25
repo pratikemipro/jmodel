@@ -99,7 +99,7 @@
 	test 'difference', ->
 		
 		a =
-			forename: 'fred'
+			forename: 'john'
 			surname: 'smith'
 			age: 20
 			title: 'Mr'
