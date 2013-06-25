@@ -1,10 +1,11 @@
-		# Tests: full
+Object
+===
+		
 		Object.extend = Function.From(Object,Object).To(Object) \
 			(target,source) ->
 				target[key] = source[key] for own key of source
 				target
-				
-		# Tests: full
+		
 		Object.construct = (constructor,args1...) -> switch
 	
 			when constructor in [Number,String,Boolean] then constructor
@@ -19,38 +20,31 @@
 			else (args2...) ->
 				args = Array.concat args1, args2
 				new constructor args...
-	
-		# Tests: none
+		
 		Object.valid = (constructor) ->
 			switch constructor
 				when Number then (number) -> Object.isa(Number)(number) and not isNan number
 				when Date then (date) -> Object.isa(Date)(date) and date.toString() != 'Invalid Date'
 				else Object.isa(constructor)
-	
-		# Tests: full		
+		
 		Object.ensure = (constructor) ->
 			isa = Object.isa constructor
 			construct = Object.construct arguments...
 			(obj) -> if isa obj then obj else construct arguments...
-			
-		# Tests: none
+		
 		Object.copy = (obj) -> Object.extend {}, obj
-	
-		# Tests: none
+		
 		Object.type = (obj) -> typeof obj
-	
-		# Tests: none
+		
 		Object.eq = (value) -> (object) -> object == value
-	
-		# Tests: full
+		
 		Object.keys ?= Function.From(Object).To(Array) \
 			(object) -> key for own key of object
 		
-		##
-		## Accessors
-		##
-	
-		# Tests: full
+
+Accessors
+---------
+		
 		Object.property = (property,value) ->
 			switch arguments.length
 				when 1 then (obj) -> obj[property]
@@ -58,14 +52,12 @@
 					throw 'Undefined property' unless obj[property]
 					obj[property] = value
 					obj
-	
-		# Tests: full			
+		
 		Object.method = (method,args1...) ->
 			(obj,args2...) ->
 				throw 'Undefined method' unless obj[method]
 				obj[method] (Array.concat args1, args2)...
-	
-		# Tests: full		
+		
 		Object.resolve = (name,args1...) ->
 			(obj,args2...) ->
 				return undefined unless obj[name]
@@ -82,9 +74,9 @@
 				when 1 then Object.resolve first
 				else Object.resolve(first).then Object.path rest
 	
-		##
-		## Existential test
-		##
-			
-		# Tests: none
+
+Existential test
+---------------
+		
 		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean);
+		

@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Object.coffee.md</title>
+  <title>Object</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -84,28 +84,17 @@
     
     <ul class="sections">
         
-          <li id="title">
-              <div class="annotation">
-                  <h1>Object.coffee.md</h1>
-              </div>
-          </li>
-        
         
         
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>Tests: full</p>
+              <h1>Object</h1>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.extend = Function.From(Object,Object).To(Object) \
-		(target,source) -&gt;
-			target[key] = source[key] <span class="keyword">for</span> own key <span class="keyword">of</span> source
-			target</pre></div></div>
             
         </li>
         
@@ -116,11 +105,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Tests: full</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">construct</span></span> = (constructor,args1...) -&gt; <span class="keyword">switch</span>
+            <div class="content"><div class='highlight'><pre>	Object.extend = Function.From(Object,Object).To(Object) \
+		(target,source) -&gt;
+			target[key] = source[key] <span class="keyword">for</span> own key <span class="keyword">of</span> source
+			target
+
+	Object.<span class="function"><span class="title">construct</span></span> = (constructor,args1...) -&gt; <span class="keyword">switch</span>
 
 		<span class="keyword">when</span> constructor <span class="keyword">in</span> [Number,String,Boolean] <span class="keyword">then</span> constructor
 
@@ -133,7 +126,27 @@
 
 		<span class="keyword">else</span> (args2...) -&gt;
 			args = Array.concat args1, args2
-			<span class="keyword">new</span> constructor args...</pre></div></div>
+			<span class="keyword">new</span> constructor args...
+
+	Object.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt;
+		<span class="keyword">switch</span> constructor
+			<span class="keyword">when</span> Number <span class="keyword">then</span> (number) -&gt; Object.isa(Number)(number) <span class="keyword">and</span> <span class="keyword">not</span> isNan number
+			<span class="keyword">when</span> Date <span class="keyword">then</span> (date) -&gt; Object.isa(Date)(date) <span class="keyword">and</span> date.toString() != <span class="string">'Invalid Date'</span>
+			<span class="keyword">else</span> Object.isa(constructor)
+
+	Object.<span class="function"><span class="title">ensure</span></span> = (constructor) -&gt;
+		isa = Object.isa constructor
+		construct = Object.construct arguments...
+		(obj) -&gt; <span class="keyword">if</span> isa obj <span class="keyword">then</span> obj <span class="keyword">else</span> construct arguments...
+
+	Object.<span class="function"><span class="title">copy</span></span> = (obj) -&gt; Object.extend {}, obj
+
+	Object.<span class="function"><span class="title">type</span></span> = (obj) -&gt; <span class="keyword">typeof</span> obj
+
+	Object.<span class="function"><span class="title">eq</span></span> = (value) -&gt; (object) -&gt; object == value
+
+	Object.keys ?= Function.From(Object).To(Array) \
+		(object) -&gt; key <span class="keyword">for</span> own key <span class="keyword">of</span> object</pre></div></div>
             
         </li>
         
@@ -141,18 +154,12 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Tests: none</p>
+              <h2>Accessors</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt;
-		<span class="keyword">switch</span> constructor
-			<span class="keyword">when</span> Number <span class="keyword">then</span> (number) -&gt; Object.isa(Number)(number) <span class="keyword">and</span> <span class="keyword">not</span> isNan number
-			<span class="keyword">when</span> Date <span class="keyword">then</span> (date) -&gt; Object.isa(Date)(date) <span class="keyword">and</span> date.toString() != <span class="string">'Invalid Date'</span>
-			<span class="keyword">else</span> Object.isa(constructor)</pre></div></div>
             
         </li>
         
@@ -163,90 +170,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Tests: full        </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">ensure</span></span> = (constructor) -&gt;
-		isa = Object.isa constructor
-		construct = Object.construct arguments...
-		(obj) -&gt; <span class="keyword">if</span> isa obj <span class="keyword">then</span> obj <span class="keyword">else</span> construct arguments...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">copy</span></span> = (obj) -&gt; Object.extend {}, obj</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">type</span></span> = (obj) -&gt; <span class="keyword">typeof</span> obj</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-7">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">eq</span></span> = (value) -&gt; (object) -&gt; object == value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.keys ?= Function.From(Object).To(Array) \
-		(object) -&gt; key <span class="keyword">for</span> own key <span class="keyword">of</span> object</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <p>#</p>
-<h1>Accessors</h1>
-<p>#</p>
-<p>Tests: full</p>
-
             </div>
             
             <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">property</span></span> = (property,value) -&gt;
@@ -255,40 +179,14 @@
 			<span class="keyword">when</span> <span class="number">2</span> <span class="keyword">then</span> (obj) -&gt;
 				<span class="keyword">throw</span> <span class="string">'Undefined property'</span> <span class="keyword">unless</span> obj[property]
 				obj[property] = value
-				obj</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <p>Tests: full            </p>
+				obj
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">method</span></span> = (method,args1...) -&gt;
+	Object.<span class="function"><span class="title">method</span></span> = (method,args1...) -&gt;
 		(obj,args2...) -&gt;
 			<span class="keyword">throw</span> <span class="string">'Undefined method'</span> <span class="keyword">unless</span> obj[method]
-			obj[method] (Array.concat args1, args2)...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>Tests: full        </p>
+			obj[method] (Array.concat args1, args2)...
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">resolve</span></span> = (name,args1...) -&gt;
+	Object.<span class="function"><span class="title">resolve</span></span> = (name,args1...) -&gt;
 		(obj,args2...) -&gt;
 			<span class="keyword">return</span> <span class="literal">undefined</span> <span class="keyword">unless</span> obj[name]
 			<span class="keyword">if</span> <span class="keyword">typeof</span> obj[name] == <span class="string">'function'</span>
@@ -307,17 +205,26 @@
         </li>
         
         
-        <li id="section-12">
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h2>Existential test</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Existential test</h1>
-<p>#</p>
-<p>Tests: none</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">has</span></span> = (args...) -&gt; Object.resolve.apply(<span class="literal">null</span>,args).<span class="keyword">then</span>(Boolean);</pre></div></div>
