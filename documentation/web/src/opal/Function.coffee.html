@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Function.coffee.md</title>
+  <title>Function</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -84,26 +84,17 @@
     
     <ul class="sections">
         
-          <li id="title">
-              <div class="annotation">
-                  <h1>Function.coffee.md</h1>
-              </div>
-          </li>
-        
         
         
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>Tests: none
-Docs: none</p>
+              <h1>Function</h1>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">extend</span></span> = (properties) -&gt; Object.extend <span class="keyword">this</span>, properties</pre></div></div>
             
         </li>
         
@@ -114,15 +105,10 @@ Docs: none</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Basic functions</h1>
-<p>#</p>
-<p>Tests: full
-Docs: full</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">identity</span></span> = (x) -&gt; x</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">extend</span></span> = (properties) -&gt; Object.extend <span class="keyword">this</span>, properties</pre></div></div>
             
         </li>
         
@@ -130,15 +116,12 @@ Docs: full</p>
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Tests: full
-Docs: full</p>
+              <h2>Basic functions</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">constant</span></span> = (constant) -&gt; () -&gt; constant</pre></div></div>
             
         </li>
         
@@ -149,12 +132,29 @@ Docs: full</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>Tests: none
-Docs: partial</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">arguments</span></span> = (args...) -&gt; args</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">identity</span></span> = (x) -&gt; x
+
+	Function.<span class="function"><span class="title">constant</span></span> = (constant) -&gt; () -&gt; constant
+
+	Function.<span class="function"><span class="title">arguments</span></span> = (args...) -&gt; args
+
+	Function.<span class="function"><span class="title">argument</span></span> = (n) -&gt; (args...) -&gt; args[n]
+
+	Function.<span class="function"><span class="title">map</span></span> = (mapping) -&gt; (key) -&gt; mapping[key]
+
+	Function.<span class="function"><span class="title">switch</span></span> = (variants=[]) -&gt;
+		<span class="function"><span class="title">fn</span></span> = (args...) -&gt;
+			<span class="keyword">for</span> variant <span class="keyword">in</span> variants
+				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.test args...
+			<span class="keyword">return</span> <span class="literal">undefined</span>
+		fn.extend extend: (variants2=[]) -&gt;
+			Function.<span class="keyword">switch</span> variants2.concat variants
+
+	window.Type = <span class="function"><span class="title">Type</span></span> = (types...) -&gt;
+		(fn) -&gt; fn.extend test: Function.hastypes types...</pre></div></div>
             
         </li>
         
@@ -162,15 +162,12 @@ Docs: partial</p>
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Tests: full
-Docs: partial</p>
+              <h2>Return value manipulation</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">argument</span></span> = (n) -&gt; (args...) -&gt; args[n]</pre></div></div>
             
         </li>
         
@@ -181,12 +178,15 @@ Docs: partial</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Tests: full
-Docs: partial</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">map</span></span> = (mapping) -&gt; (key) -&gt; mapping[key]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt;
+		(fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); constant
+
+	Function.Override = Function.Constant <span class="literal">false</span>
+
+	Function.<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); <span class="keyword">this</span></pre></div></div>
             
         </li>
         
@@ -194,23 +194,12 @@ Docs: partial</p>
         <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Tests: partial
-Docs: none</p>
+              <h2>Function composition</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">switch</span></span> = (variants=[]) -&gt;
-		<span class="function"><span class="title">fn</span></span> = (args...) -&gt;
-			<span class="keyword">for</span> variant <span class="keyword">in</span> variants
-				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.test args...
-			<span class="keyword">return</span> <span class="literal">undefined</span>
-		fn.extend extend: (variants2=[]) -&gt; Function.<span class="keyword">switch</span> variants2.concat variants
-
-	window.Type = <span class="function"><span class="title">Type</span></span> = (types...) -&gt;
-		(fn) -&gt; fn.extend test: Function.hastypes types...</pre></div></div>
             
         </li>
         
@@ -221,16 +210,34 @@ Docs: none</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Return value manipulation</h1>
-<p>#</p>
-<p>Tests: none
-Docs: none</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt;
-		(fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); constant</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">then</span></span> = (fn2) -&gt;
+		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
+		fn1 = <span class="keyword">this</span>
+		(args...) -&gt; fn2.call <span class="keyword">this</span>, fn1.apply(<span class="keyword">this</span>,args)
+
+	Function::<span class="function"><span class="title">but</span></span> = (fn2) -&gt;
+		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
+		fn1 = <span class="keyword">this</span>
+		(args...) -&gt;
+			fn1.apply <span class="keyword">this</span>, args
+			fn2.apply <span class="keyword">this</span>, args
+
+	Function.<span class="function"><span class="title">pipe</span></span> = (fn,fns...) -&gt;
+		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
+		<span class="keyword">switch</span> arguments.length
+			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
+			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
+			<span class="keyword">else</span> fn.<span class="keyword">then</span> Function.pipe fns...
+
+	Function.<span class="function"><span class="title">compose</span></span> = (fn,fns...) -&gt;
+		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
+		<span class="keyword">switch</span> arguments.length
+			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
+			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
+			<span class="keyword">else</span> Function.pipe (Array.concat arguments...).reverse()...</pre></div></div>
             
         </li>
         
@@ -238,15 +245,12 @@ Docs: none</p>
         <li id="section-9">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Tests: none
-Docs: none</p>
+              <h2>Aspect-like methods</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.Override = Function.Constant <span class="literal">false</span></pre></div></div>
             
         </li>
         
@@ -257,134 +261,14 @@ Docs: none</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Tests: none
-Docs: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); <span class="keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-11">&#182;</a>
-              </div>
-              <p>#</p>
-<h1>Function composition</h1>
-<p>#</p>
-<p>Tests: full
-Docs: partial</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">then</span></span> = (fn2) -&gt;
-		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
-		fn1 = <span class="keyword">this</span>
-		(args...) -&gt; fn2.call <span class="keyword">this</span>, fn1.apply(<span class="keyword">this</span>,args)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-12">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">but</span></span> = (fn2) -&gt;
-		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
-		fn1 = <span class="keyword">this</span>
-		(args...) -&gt;
-			fn1.apply <span class="keyword">this</span>, args
-			fn2.apply <span class="keyword">this</span>, args</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-13">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">pipe</span></span> = (fn,fns...) -&gt;
-		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
-		<span class="keyword">switch</span> arguments.length
-			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
-			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
-			<span class="keyword">else</span> fn.<span class="keyword">then</span> Function.pipe fns...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-14">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-14">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">compose</span></span> = (fn,fns...) -&gt;
-		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
-		<span class="keyword">switch</span> arguments.length
-			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
-			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
-			<span class="keyword">else</span> Function.pipe (Array.concat arguments...).reverse()...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
-              <p>#</p>
-<h1>Aspect-like methods</h1>
-<p>#</p>
-<p>Tests: full
-Docs: partial</p>
-
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">pre</span></span> = (pre) -&gt;
 		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> pre == <span class="string">'function'</span>
-		pre.but <span class="keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-16">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
+		pre.but <span class="keyword">this</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">post</span></span> = (post) -&gt;
+	Function::<span class="function"><span class="title">post</span></span> = (post) -&gt;
 		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> post == <span class="string">'function'</span>
 		fn = <span class="keyword">this</span>
 		(args...) -&gt;
@@ -395,271 +279,114 @@ Docs: partial</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-11">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Preconditions and postconditions</h1>
-<p>#</p>
-<p>Tests: full
-Docs: partial</p>
+              <h2>Preconditions and postconditions</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">require</span></span> = (predicate,message=<span class="string">'Precondition failure'</span>) -&gt;
-		<span class="property">@pre</span> (args...) -&gt;
-			<span class="keyword">throw</span> message+<span class="string">': '</span>+args.toString() <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args</pre></div></div>
             
         </li>
         
         
-        <li id="section-18">
+        <li id="section-12">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Tests: full
-Docs: partial</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">ensure</span></span> = (predicate,message=<span class="string">'Postcondition failure'</span>) -&gt;
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">require</span></span> = (predicate,message=<span class="string">'Precondition failure'</span>) -&gt;
+		<span class="property">@pre</span> (args...) -&gt;
+			<span class="keyword">throw</span> message+<span class="string">': '</span>+args.toString() <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args
+
+	Function::<span class="function"><span class="title">ensure</span></span> = (predicate,message=<span class="string">'Postcondition failure'</span>) -&gt;
 		<span class="property">@post</span> (args...) -&gt;
 			<span class="keyword">throw</span> message+<span class="string">': '</span>+args.toString() <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args</pre></div></div>
             
         </li>
         
         
-        <li id="section-19">
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <h2>Typed functions</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Typed functions</h1>
-<p>#</p>
-<p>Tests: none</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">hastypes</span></span> = (types...) -&gt;
 		predicate = Array.hastypes types...
-		(args...) -&gt; predicate args</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>Tests: none</p>
+		(args...) -&gt; predicate args
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
-		<span class="property">@then</span> (fn) -&gt; fn.require predicate, message</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-21">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
-              </div>
-              <p>Tests: partial</p>
+	Function::<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
+		<span class="property">@then</span> (fn) -&gt; fn.require predicate, message
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
-		(fn) -&gt; fn.require predicate, message</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-22">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
-              </div>
-              <p>Tests: none    </p>
+	Function.<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
+		(fn) -&gt; fn.require predicate, message
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
-		<span class="property">@then</span> (fn) -&gt; fn.ensure predicate, message</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-23">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
-              </div>
-              <p>Tests: none</p>
+	Function::<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
+		<span class="property">@then</span> (fn) -&gt; fn.ensure predicate, message
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
-		(fn) -&gt; fn.ensure predicate, message</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-24">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
-              </div>
-              <p>Tests: partial</p>
+	Function.<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
+		(fn) -&gt; fn.ensure predicate, message
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		<span class="property">@Requiring</span> Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>Tests: full</p>
+	Function::<span class="function"><span class="title">From</span></span> = (types...) -&gt;
+		<span class="property">@Requiring</span> Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		Function.Requiring Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-26">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
-              </div>
-              <p>Tests: partial</p>
+	Function.<span class="function"><span class="title">From</span></span> = (types...) -&gt;
+		Function.Requiring Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">To</span></span> = (type) -&gt;
-		<span class="property">@Ensuring</span> Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-27">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
-              </div>
-              <p>Tests: full</p>
+	Function::<span class="function"><span class="title">To</span></span> = (type) -&gt;
+		<span class="property">@Ensuring</span> Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">To</span></span> = (type) -&gt;
-		Function.Ensuring Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-28">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
-              </div>
-              <p>Tests: full</p>
+	Function.<span class="function"><span class="title">To</span></span> = (type) -&gt;
+		Function.Ensuring Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Of</span></span> = (constructor) -&gt;
+	Function.<span class="function"><span class="title">Of</span></span> = (constructor) -&gt;
 		ensure = Object.ensure constructor
-		(fn) -&gt; (args...) -&gt; fn.call <span class="keyword">this</span>, ensure args...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-29">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
-              </div>
-              <p>Tests: full</p>
+		(fn) -&gt; (args...) -&gt; fn.call <span class="keyword">this</span>, ensure args...
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
 		(fn) -&gt; (args...) -&gt;
 			ret = val.call(<span class="keyword">this</span>)
 			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
-			<span class="keyword">return</span> ret</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-30">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
-              </div>
-              <p>Tests: full        </p>
+			<span class="keyword">return</span> ret
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
-		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-31">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
-              </div>
-              <p>Tests: none</p>
+	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	window.Predicate = Function.To Boolean</pre></div></div>
+	window.Predicate = Function.To Boolean</pre></div></div>
             
         </li>
         
         
-        <li id="section-32">
+        <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h1> </h1>
-<h1>Logical functions</h1>
-<p>#</p>
-<p>Tests: full
-Docs: partial</p>
+              <h2>Logical functions</h2>
 
             </div>
             
@@ -667,119 +394,58 @@ Docs: partial</p>
 		(predicate2) -&gt;
 			predicate1 = <span class="keyword">this</span>
 			Predicate (args...) -&gt;
-				predicate1.apply(<span class="keyword">this</span>,args) <span class="keyword">and</span> predicate2.apply(<span class="keyword">this</span>,args)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-33">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
+				predicate1.apply(<span class="keyword">this</span>,args) <span class="keyword">and</span> predicate2.apply(<span class="keyword">this</span>,args)
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="keyword">or</span> = Function.From(Function) \
+	Function::<span class="keyword">or</span> = Function.From(Function) \
 		(predicate2) -&gt;
 			predicate1 = <span class="keyword">this</span>
 			Predicate (args...) -&gt;
-				predicate1.apply(<span class="keyword">this</span>,args) <span class="keyword">or</span> predicate2.apply(<span class="keyword">this</span>,args)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-34">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
+				predicate1.apply(<span class="keyword">this</span>,args) <span class="keyword">or</span> predicate2.apply(<span class="keyword">this</span>,args)
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">not</span></span> = -&gt;
+	Function::<span class="function"><span class="title">not</span></span> = -&gt;
 		predicate = <span class="keyword">this</span>
-		Predicate (args...) -&gt; <span class="keyword">not</span> predicate.apply <span class="keyword">this</span>, args</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-35">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
+		Predicate (args...) -&gt; <span class="keyword">not</span> predicate.apply <span class="keyword">this</span>, args
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="keyword">and</span> = Function.From([Function]).To(Function) \
+	Function.<span class="keyword">and</span> = Function.From([Function]).To(Function) \
 		(predicate,predicates...) -&gt;
 			<span class="keyword">switch</span> arguments.length
 				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> predicate
 				<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> -&gt; <span class="literal">true</span>
-				<span class="keyword">else</span> predicate.<span class="keyword">and</span> Function.<span class="keyword">and</span> predicates...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-36">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: partial</p>
+				<span class="keyword">else</span> predicate.<span class="keyword">and</span> Function.<span class="keyword">and</span> predicates...
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="keyword">or</span> = Function.From([Function]).To(Function) \
+	Function.<span class="keyword">or</span> = Function.From([Function]).To(Function) \
 		(predicate,predicates...) -&gt;
 			<span class="keyword">switch</span> arguments.length
 				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> predicate
 				<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> -&gt; <span class="literal">false</span>
-				<span class="keyword">else</span> predicate.<span class="keyword">or</span> Function.<span class="keyword">or</span> predicates...</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-37">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: none</p>
+				<span class="keyword">else</span> predicate.<span class="keyword">or</span> Function.<span class="keyword">or</span> predicates...
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">not</span></span> = (predicate) -&gt;
+	Function.<span class="function"><span class="title">not</span></span> = (predicate) -&gt;
 		<span class="keyword">if</span> <span class="keyword">typeof</span> predicate == <span class="string">'function'</span> <span class="keyword">then</span> predicate.<span class="keyword">not</span>() <span class="keyword">else</span> <span class="keyword">not</span> predicate</pre></div></div>
             
         </li>
         
         
-        <li id="section-38">
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <h2>Delegation</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Delegation</h1>
-<p>#</p>
-<p>Tests: none</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">delegate</span></span> = (fn) -&gt;
@@ -790,16 +456,26 @@ Docs: none</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-18">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <h1> </h1>
-<h1>Composite ordering</h1>
-<p>#</p>
+              <h2>Composite ordering</h2>
 
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function.ordering = Function.<span class="keyword">or</span></pre></div></div>
@@ -807,435 +483,135 @@ Docs: none</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-20">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Predicates</h1>
-<p>#</p>
-<p>Tests: full</p>
+              <h2>Predicates</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">eq</span></span> = (value) -&gt; Predicate (x) -&gt; x == value</pre></div></div>
             
         </li>
         
         
-        <li id="section-41">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>Tests: none
-Docs: full</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">eq</span></span> = (value) -&gt; <span class="property">@then</span> Function.eq value</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">eq</span></span>  = (value) -&gt; Predicate (x) -&gt; x == value
+	Function::<span class="function"><span class="title">eq</span></span> = (value) -&gt; <span class="property">@then</span> Function.eq value
+
+	Function.<span class="function"><span class="title">neq</span></span>  = (value) -&gt; Predicate (x) -&gt; x != value
+	Function::<span class="function"><span class="title">neq</span></span> = (value) -&gt; <span class="property">@then</span> Function.neq value
+
+	Function.<span class="function"><span class="title">lt</span></span>  = (value) -&gt; Predicate (x) -&gt; x &lt; value
+	Function::<span class="function"><span class="title">lt</span></span> = (value) -&gt; <span class="property">@then</span> Function.lt value
+
+	Function.<span class="function"><span class="title">gt</span></span>  = (value) -&gt; Predicate (x) -&gt; x &gt; value
+	Function::<span class="function"><span class="title">gt</span></span> = (value) -&gt; <span class="property">@then</span> Function.gt value
+
+	Function.<span class="function"><span class="title">lte</span></span>  = (value) -&gt; Predicate (x) -&gt; x &lt;= value
+	Function::<span class="function"><span class="title">lte</span></span> = (value) -&gt; <span class="property">@then</span> Function.lte value
+
+	Function.<span class="function"><span class="title">gte</span></span>  = (value) -&gt; Predicate (x) -&gt; x &gt;= value
+	Function::<span class="function"><span class="title">gte</span></span> = (value) -&gt; <span class="property">@then</span> Function.gte value
+
+	<span class="function"><span class="title">ordered</span></span> = (lower,higher) -&gt; lower &lt;= higher
+
+	Function.<span class="function"><span class="title">between</span></span> = ( Function.Requiring ordered ) (lower,higher) -&gt;
+		Predicate (x) -&gt; lower &lt;= x &lt;= higher
+
+	Function::<span class="function"><span class="title">between</span></span> = (lower,higher) -&gt; <span class="property">@then</span> Function.between lower,higher
+
+	Function::<span class="keyword">is</span> = Function::<span class="keyword">then</span>
+
+	Function::<span class="function"><span class="title">matches</span></span> = (regex) -&gt; <span class="property">@then</span> Predicate (x) -&gt; regex.test x
+
+	Function::<span class="function"><span class="title">isnull</span></span> = -&gt; <span class="property">@then</span> Function.eq <span class="literal">null</span>
+
+	Function::<span class="function"><span class="title">isa</span></span> = (constructor) -&gt; <span class="property">@then</span> Predicate (x) -&gt; x <span class="keyword">instanceof</span> constructor
+
+	Function::<span class="function"><span class="title">hastype</span></span> = (type) -&gt; <span class="property">@then</span> Object.type.eq type</pre></div></div>
             
         </li>
         
         
-        <li id="section-42">
+        <li id="section-22">
             <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Tests: full</p>
+              <h2>Application methods</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">neq</span></span> = (value) -&gt; Predicate (x) -&gt; x != value</pre></div></div>
             
         </li>
         
         
-        <li id="section-43">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">neq</span></span> = (value) -&gt; <span class="property">@then</span> Function.neq value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-44">
-            <div class="annotation">
               
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">lt</span></span> = (value) -&gt; Predicate (x) -&gt; x &lt; value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-45">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">lt</span></span> = (value) -&gt; <span class="property">@then</span> Function.lt value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-46">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">gt</span></span> = (value) -&gt; Predicate (x) -&gt; x &gt; value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-47">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">gt</span></span> = (value) -&gt; <span class="property">@then</span> Function.gt value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-48">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">lte</span></span> = (value) -&gt; Predicate (x) -&gt; x &lt;= value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-49">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">lte</span></span> = (value) -&gt; <span class="property">@then</span> Function.lte value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-50">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">gte</span></span> = (value) -&gt; Predicate (x) -&gt; x &gt;= value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-51">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">gte</span></span> = (value) -&gt; <span class="property">@then</span> Function.gte value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-52">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">between</span></span> = ( Function.Requiring (lower,higher) -&gt; lower &lt;= higher ) (lower,higher) -&gt;
-		Predicate (x) -&gt; lower &lt;= x &lt;= higher</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-53">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
-              </div>
-              <p>Tests: none    </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">between</span></span> = (lower,higher) -&gt; <span class="property">@then</span> Function.between lower,higher</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-54">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
-              </div>
-              <p>Tests: none    </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="keyword">is</span> = Function::<span class="keyword">then</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-55">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">matches</span></span> = (regex) -&gt; <span class="property">@then</span> Predicate (x) -&gt; regex.test x</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-56">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
-              </div>
-              <p>Tests: none</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">isnull</span></span> = -&gt; <span class="property">@then</span> Function.eq <span class="literal">null</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-57">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
-              </div>
-              <p>Tests: none    </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">isa</span></span> = (constructor) -&gt; <span class="property">@then</span> Predicate (x) -&gt; x <span class="keyword">instanceof</span> constructor</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-58">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
-              </div>
-              <p>Tests: none    </p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">hastype</span></span> = (type) -&gt; <span class="property">@then</span> Object.type.eq type</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-59">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
-              </div>
-              <p>#</p>
-<h1>Property methods</h1>
-<p>#</p>
-<p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">as</span></span> = (name) -&gt;
-		<span class="property">@displayName</span> = name
-		<span class="keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-60">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
-              </div>
-              <p>Tests: full</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">extend</span></span> = (properties) -&gt; Object.extend <span class="keyword">this</span>, properties</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-61">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
-              </div>
-              <p>#</p>
-<h1>Application methods</h1>
-<p>#</p>
-<p>Tests: full</p>
-
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">bind</span></span> = (context,args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply context, Array.concat(args1,args2)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-62">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-62">&#182;</a>
-              </div>
-              <p>Tests: full</p>
+		(args2...) -&gt; fn.apply context, Array.concat(args1,args2)
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">curry</span></span> = (args1...) -&gt;
+	Function::<span class="function"><span class="title">curry</span></span> = (args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply <span class="keyword">this</span>, Array.concat(args1,args2)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-63">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
-              </div>
-              <p>Tests: full
-Docs: full</p>
+		(args2...) -&gt; fn.apply <span class="keyword">this</span>, Array.concat(args1,args2)
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">except</span></span> = (handler) -&gt;
+	Function::<span class="function"><span class="title">except</span></span> = (handler) -&gt;
 		fn = <span class="keyword">this</span>
 		(args...) -&gt;
 			<span class="keyword">try</span> fn.apply <span class="keyword">this</span>, args
 			<span class="keyword">catch</span> error
-				handler.call <span class="keyword">this</span>, error</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-64">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
-              </div>
-              <p>Tests: full            </p>
+				handler.call <span class="keyword">this</span>, error
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">memo</span></span> = -&gt;
+	Function::<span class="function"><span class="title">memo</span></span> = -&gt;
 		cache = {}
 		fn = <span class="property">@post</span> (ret,args...) -&gt; cache[args] = ret
-		(args...) -&gt; cache[args] ? fn.apply <span class="keyword">this</span>, arguments</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-65">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
-              </div>
-              <p>Tests: none</p>
+		(args...) -&gt; cache[args] ? fn.apply <span class="keyword">this</span>, arguments
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function::delay ?= (duration=<span class="number">1</span>,args1...) -&gt;
+	Function::delay ?= (duration=<span class="number">1</span>,args1...) -&gt;
 		fn = <span class="keyword">this</span>
 		(args2...) -&gt; setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration</pre></div></div>
             
         </li>
         
         
-        <li id="section-66">
+        <li id="section-24">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <h1> </h1>
-<h1>Mapping methods</h1>
-<p>#</p>
-<p>Tests: full    </p>
+              <h2>Mapping methods</h2>
 
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">map</span></span> = (mapping) -&gt; <span class="property">@then</span> Function.map mapping</pre></div></div>
@@ -1243,16 +619,26 @@ Docs: full</p>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <h2>Ordering methods</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Ordering methods</h1>
-<p>#</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">asc</span></span> = -&gt;
@@ -1269,18 +655,26 @@ Docs: full</p>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <h2>Constructor methods</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Constructor methods</h1>
-<p>#</p>
-<p>Tests: none
-Docs: full</p>
-
+              
             </div>
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">create</span></span> = (args...) -&gt; Object.construct(<span class="keyword">this</span>)(args...)</pre></div></div>
@@ -1288,16 +682,26 @@ Docs: full</p>
         </li>
         
         
-        <li id="section-69">
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <h2>Restricted types</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>#</p>
-<h1>Restricted types</h1>
-<p>#</p>
-<p>NOTE: Make this work with objects other than strings and numbers</p>
+              <p>NOTE: Make this work with objects other than strings and numbers</p>
 
             </div>
             
