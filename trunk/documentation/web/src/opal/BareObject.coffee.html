@@ -116,25 +116,19 @@
 			<span class="keyword">return</span> equal
 
 	Object.remove = Function.From([String]) \
-		(fields...) -&gt; Function.From(Object).To(Object) \
-			(source) -&gt;
-				obj = {}
+		(fields...) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
+			(obj) -&gt; (source) -&gt;
 				( obj[key] = value <span class="keyword">unless</span> key <span class="keyword">in</span> fields ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source
-				<span class="keyword">return</span> obj
 
 	Object.project = Function.From([String]) \
-		(fields...) -&gt; Function.From(Object).To(Object) \
-			(source) -&gt;
-				obj = {}
+		(fields...) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
+			(obj) -&gt; (source) -&gt;
 				( obj[key] = value <span class="keyword">if</span> key <span class="keyword">in</span> fields ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source
-				<span class="keyword">return</span> obj
 
 	Object.rename = Function.From(Object) \
-		(renaming) -&gt; Function.From(Object).To(Object) \
-			(source) -&gt;
-				obj = {}
+		(renaming) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
+			(obj) -&gt; (source) -&gt;
 				( obj[ renaming[key] <span class="keyword">or</span> key ] = value ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source
-				<span class="keyword">return</span> obj
 
 	Object.union = Function.From([Object]).Returning(-&gt; <span class="keyword">new</span> Object) \
 		(union) -&gt; (objects...) -&gt;

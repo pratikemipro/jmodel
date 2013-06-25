@@ -9,25 +9,19 @@ BareObject
 				return equal
 		
 		Object.remove = Function.From([String]) \
-			(fields...) -> Function.From(Object).To(Object) \
-				(source) ->
-					obj = {}
+			(fields...) -> Function.From(Object).Returning(-> new Object) \
+				(obj) -> (source) ->
 					( obj[key] = value unless key in fields ) for own key, value of source
-					return obj
 		
 		Object.project = Function.From([String]) \
-			(fields...) -> Function.From(Object).To(Object) \
-				(source) ->
-					obj = {}
+			(fields...) -> Function.From(Object).Returning(-> new Object) \
+				(obj) -> (source) ->
 					( obj[key] = value if key in fields ) for own key, value of source
-					return obj
 		
 		Object.rename = Function.From(Object) \
-			(renaming) -> Function.From(Object).To(Object) \
-				(source) ->
-					obj = {}
+			(renaming) -> Function.From(Object).Returning(-> new Object) \
+				(obj) -> (source) ->
 					( obj[ renaming[key] or key ] = value ) for own key, value of source
-					return obj
 		
 		Object.union = Function.From([Object]).Returning(-> new Object) \
 			(union) -> (objects...) ->
