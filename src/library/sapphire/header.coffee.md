@@ -1,3 +1,6 @@
+Sapphire
+===
+		
 	###
 		Sapphire JavaScript Library
 		http://code.google.com/p/jmodel/
@@ -7,3 +10,4 @@
 	###
 	
 	define ['jmodel/opal2'], ->
+	
