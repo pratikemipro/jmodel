@@ -1,3 +1,6 @@
+Promise
+===
+		
 		window.Promise = class Promise
 		
 			[PENDING,FULFILLED,REJECTED] = [1..3]
@@ -68,3 +71,4 @@
 						promise.then \
 							( (args...) -> disjunction.fulfil args... ),
 							( (args...) -> disjunction.fail args... )
+							
