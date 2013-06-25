@@ -19,6 +19,7 @@ opal:
 		src/library/opal/Nullable.coffee.md \
 		src/library/opal/Maybe.coffee.md \
 		src/library/opal/Promise.coffee.md
+	docco -o documentation/web/src/opal src/library/opal/*.coffee.md
 
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
@@ -27,6 +28,7 @@ sapphire:
 		src/library/sapphire/List.coffee.md \
 		src/library/sapphire/Map.coffee.md \
 		src/library/sapphire/Stream.coffee.md
+	docco -o documentation/web/src/sapphire src/library/sapphire/*.coffee.md
 		
 emerald:
 	coffee --compile --bare --map --join library/emerald2.js \
@@ -34,6 +36,7 @@ emerald:
 		src/library/emerald/Event.coffee.md \
 		src/library/emerald/Subscriber.coffee.md \
 		src/library/emerald/EventType.coffee.md
+	docco -o documentation/web/src/emerald src/library/emerald/*.coffee.md
 
 library-test:
 	coffee --compile --bare --map --join tests/test-library.js \
@@ -62,28 +65,28 @@ library-doc:
 	@make emerald-doc
 
 opal-doc:
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/opal/Array.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Function.doc.xml -o:documentation/web/opal/Function.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Object.doc.xml -o:documentation/web/opal/Object.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/BareObject.doc.xml -o:documentation/web/opal/BareObject.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Number.doc.xml -o:documentation/web/opal/Number.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/String.doc.xml -o:documentation/web/opal/String.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Boolean.doc.xml -o:documentation/web/opal/Boolean.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Math.doc.xml -o:documentation/web/opal/Math.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Nullable.doc.xml -o:documentation/web/opal/Nullable.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Maybe.doc.xml -o:documentation/web/opal/Maybe.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Promise.doc.xml -o:documentation/web/opal/Promise.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/api/opal/Array.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Function.doc.xml -o:documentation/web/api/opal/Function.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Object.doc.xml -o:documentation/web/api/opal/Object.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/BareObject.doc.xml -o:documentation/web/api/opal/BareObject.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Number.doc.xml -o:documentation/web/api/opal/Number.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/String.doc.xml -o:documentation/web/api/opal/String.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Boolean.doc.xml -o:documentation/web/api/opal/Boolean.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Math.doc.xml -o:documentation/web/api/opal/Math.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Nullable.doc.xml -o:documentation/web/api/opal/Nullable.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Maybe.doc.xml -o:documentation/web/api/opal/Maybe.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Promise.doc.xml -o:documentation/web/api/opal/Promise.html
 	
 sapphire-doc:
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Set.doc.xml -o:documentation/web/sapphire/Set.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/List.doc.xml -o:documentation/web/sapphire/List.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Map.doc.xml -o:documentation/web/sapphire/Map.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Stream.doc.xml -o:documentation/web/sapphire/Stream.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Set.doc.xml -o:documentation/web/api/sapphire/Set.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/List.doc.xml -o:documentation/web/api/sapphire/List.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Map.doc.xml -o:documentation/web/api/sapphire/Map.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/sapphire/Stream.doc.xml -o:documentation/web/api/sapphire/Stream.html
 	
 emerald-doc:
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Event.doc.xml -o:documentation/web/emerald/Event.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/emerald/EventType.html
-	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/emerald/Subscriber.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Event.doc.xml -o:documentation/web/api/emerald/Event.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/api/emerald/EventType.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/api/emerald/Subscriber.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
