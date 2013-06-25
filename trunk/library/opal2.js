@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, Type, _base;
+  var Promise, Type, ordered, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -496,9 +496,10 @@ define(function() {
   Function.prototype.gte = function(value) {
     return this.then(Function.gte(value));
   };
-  Function.between = (Function.Requiring(function(lower, higher) {
+  ordered = function(lower, higher) {
     return lower <= higher;
-  }))(function(lower, higher) {
+  };
+  Function.between = (Function.Requiring(ordered))(function(lower, higher) {
     return Predicate(function(x) {
       return (lower <= x && x <= higher);
     });
@@ -522,13 +523,6 @@ define(function() {
   };
   Function.prototype.hastype = function(type) {
     return this.then(Object.type.eq(type));
-  };
-  Function.prototype.as = function(name) {
-    this.displayName = name;
-    return this;
-  };
-  Function.prototype.extend = function(properties) {
-    return Object.extend(this, properties);
   };
   Function.prototype.bind = function() {
     var args1, context, fn;

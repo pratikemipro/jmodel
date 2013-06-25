@@ -31,6 +31,19 @@ define(['jmodel/emerald2'], function() {
     equal(Array.hastypes([Number])([1, 2, 3]), true, 'Works for array type specifiers');
     return equal(Array.hastypes([Number])(), true, 'Array type specifiers include zero length case');
   });
+  module('Property methods');
+  test('Function::extend', function() {
+    var fn;
+    fn = function() {
+      return 'red';
+    };
+    equals(fn.extend({
+      type: 'accessor'
+    }).type, 'accessor', 'extend sets properties of function');
+    return equals(fn.extend({
+      type: 'accessor'
+    })(), 'red', 'function runs normally after use of "extend"');
+  });
   module('Basic functions');
   test('Function.identity', function() {
     var obj;
@@ -550,27 +563,6 @@ define(['jmodel/emerald2'], function() {
     };
     equal(test.hastype('string')(), true, 'returns true when function returns a value of specified type');
     return equal(test.hastype('number')(), false, 'returns false when function returns a value not of specified type');
-  });
-  module('Property methods');
-  test('Function::as', function() {
-    var fn;
-    fn = function() {
-      return 'red';
-    };
-    equals(fn.as('test').displayName, 'test', 'as sets displayName of function');
-    return equals(fn.as('test')(), 'red', 'function runs normally after use of "as"');
-  });
-  test('Function::extend', function() {
-    var fn;
-    fn = function() {
-      return 'red';
-    };
-    equals(fn.extend({
-      type: 'accessor'
-    }).type, 'accessor', 'extend sets properties of function');
-    return equals(fn.extend({
-      type: 'accessor'
-    })(), 'red', 'function runs normally after use of "extend"');
   });
   module('Application methods');
   test('Function::bind', function() {

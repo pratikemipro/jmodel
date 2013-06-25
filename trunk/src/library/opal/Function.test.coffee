@@ -1,3 +1,12 @@
+	module 'Property methods'
+		
+	test 'Function::extend', ->
+	
+		fn = -> 'red'
+			
+		equals fn.extend(type:'accessor').type, 'accessor', 'extend sets properties of function'
+		equals fn.extend(type:'accessor')(), 'red', 'function runs normally after use of "extend"'
+	
 	module 'Basic functions'
 	
 	test 'Function.identity', ->
@@ -392,22 +401,6 @@
 		
 		equal test.hastype('string')(), true, 'returns true when function returns a value of specified type'
 		equal test.hastype('number')(), false, 'returns false when function returns a value not of specified type'
-		
-	module 'Property methods'
-	
-	test 'Function::as', ->
-	
-		fn = -> 'red'
-			
-		equals fn.as('test').displayName, 'test', 'as sets displayName of function'
-		equals fn.as('test')(), 'red', 'function runs normally after use of "as"'
-		
-	test 'Function::extend', ->
-	
-		fn = -> 'red'
-			
-		equals fn.extend(type:'accessor').type, 'accessor', 'extend sets properties of function'
-		equals fn.extend(type:'accessor')(), 'red', 'function runs normally after use of "extend"'
 		
 	module 'Application methods'
 	
