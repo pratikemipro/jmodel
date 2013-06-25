@@ -1,0 +1,13 @@
+Function			Tests	Docs
+-----------------------------------
+
+Object.equal		full	none
+Object.remove		full	none
+Object.project		full	none
+Object.rename		full	none
+
+Object.union		full	none
+Object.intersection	full	none
+Object.difference	full	none
+
+Object.join			none	none
