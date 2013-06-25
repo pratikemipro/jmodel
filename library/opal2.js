@@ -125,6 +125,9 @@ define(function() {
       return types2.length === 0 && array2.length === 0;
     };
   };
+  Function.prototype.extend = function(properties) {
+    return Object.extend(this, properties);
+  };
   Function.identity = function(x) {
     return x;
   };
@@ -166,20 +169,22 @@ define(function() {
       }
       return void 0;
     };
-    fn.extend = function(variants2) {
-      if (variants2 == null) {
-        variants2 = [];
+    return fn.extend({
+      extend: function(variants2) {
+        if (variants2 == null) {
+          variants2 = [];
+        }
+        return Function["switch"](variants2.concat(variants));
       }
-      return Function["switch"](variants2.concat(variants));
-    };
-    return fn;
+    });
   };
   window.Type = Type = function() {
     var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return function(fn) {
-      fn.test = Function.hastypes.apply(Function, types);
-      return fn;
+      return fn.extend({
+        test: Function.hastypes.apply(Function, types)
+      });
     };
   };
   Function.Constant = function(constant) {
