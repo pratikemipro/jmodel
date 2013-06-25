@@ -21,14 +21,19 @@
 		# Docs: none
 		Event.key = Function.switch [
 		
-			Type(Character)		(key) -> ({which}) -> String.fromCharCode(which).toUpperCase() == key
+			Type(Character) (key) ->
+				({which}) -> String.fromCharCode(which).toUpperCase() == key
 		
-			Type(RegExp)		(regex) -> ({which}) -> String.fromCharCode(which).toUpperCase().match(regex) or false
+			Type(RegExp) (regex) ->
+				({which}) -> String.fromCharCode(which).toUpperCase().match(regex) or false
 		
-			Type(Number)		(number) -> ({which}) -> which == number
+			Type(Number) (number) ->
+				({which}) -> which == number
 		
-			Type(SpecialKey)	(identifier) -> Event.key codes[identifier]
+			Type(SpecialKey) (identifier) ->
+				Event.key codes[identifier]
 		
-			Type(Value,[Value])	(identifer,identifiers...) -> Event.key(identifier).or Event.key identifiers...
+			Type(Value,[Value])	(identifer,identifiers...) ->
+				Event.key(identifier).or Event.key identifiers...
 		
 		]
