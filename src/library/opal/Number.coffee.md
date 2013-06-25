@@ -1,7 +1,12 @@
+Number
+===
+		
 		Number.valid = (value) -> Object.isa(Number)(value) and not isNan value
 	
-		# Restrictions
-	
+
+Restrictions
+-----------	
+		
 		Number.LessThan = (max) ->
 			@Where Function.lt(max),
 				"Invalid Value: <value> is not less than #{max}"
@@ -20,3 +25,4 @@
 	
 		Number.Positive = Number.GreaterThan 0
 		Number.Negative = Number.LessThan 0
+		

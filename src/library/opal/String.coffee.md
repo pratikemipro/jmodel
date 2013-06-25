@@ -1,3 +1,6 @@
+String
+===
+		
 		String.In = (strings...) ->
 			@Where \
 				(str) -> str in strings,
@@ -7,3 +10,4 @@
 			@Where \
 				(str) -> regex.test str,
 				"Invalid String: \"<value>\" does not match #{regex.toString()}"
+				
