@@ -912,8 +912,21 @@ define(function() {
       return _results;
     };
   });
-  Object.difference = Function.From(Object, Object).To(Object)(function(a, b) {
-    return Object.remove.apply(Object, Object.keys(b))(Object.copy(a));
+  Object.difference = Function.From(Object, Object).Returning(function() {
+    return new Object;
+  })(function(difference) {
+    return function(first, second) {
+      var key, value, _results;
+      _results = [];
+      for (key in first) {
+        if (!__hasProp.call(first, key)) continue;
+        value = first[key];
+        if (second[key] == null) {
+          _results.push(difference[key] = value);
+        }
+      }
+      return _results;
+    };
   });
   Object.join = Function.From(Function)(function(predicate) {
     return Function.From([Object])(function() {
