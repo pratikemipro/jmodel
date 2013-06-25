@@ -25,21 +25,21 @@
 			each: (fn) -> fn(key,value) for own key, value of this
 	
 			ensure: Function.identity
-
+			
 			# Tests: full
 			# Docs: none
 			@To: (constructor) ->
 				class extends this
-
+				
 					add: this::add.extend [
 					
 						Type(Value,Value) Function.Chaining (key,value) -> @[key] = @ensure value
 						Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
 					
 					]
-
+					
 					ensure: Object.ensure constructor
-
+					
 			# Tests: full
 			# Docs: none
 			@Using: (combine) ->

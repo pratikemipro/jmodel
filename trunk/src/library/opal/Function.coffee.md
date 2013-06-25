@@ -111,7 +111,7 @@
 				ret = fn.apply this, args
 				post.apply this, [ret].concat(args)
 				ret
-
+				
 		##
 		## Preconditions and postconditions
 		##
@@ -127,7 +127,7 @@
 		Function::ensure = (predicate,message='Postcondition failure') ->
 			@post (args...) ->
 				throw message+': '+args.toString() unless predicate.apply this, args
-
+				
 		##
 		## Typed functions
 		##
@@ -152,19 +152,19 @@
 		# Tests: none
 		Function.Ensuring = (predicate,message) ->
 			(fn) -> fn.ensure predicate, message
-
+			
 		# Tests: partial
 		Function::From = (types...) ->
 			@Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
-
+			
 		# Tests: full
 		Function.From = (types...) ->
 			Function.Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
-
+			
 		# Tests: partial
 		Function::To = (type) ->
 			@Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
-
+			
 		# Tests: full
 		Function.To = (type) ->
 			Function.Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
@@ -231,7 +231,7 @@
 					when 1 then predicate
 					when 0 then -> false
 					else predicate.or Function.or predicates...
-
+					
 		# Tests: full
 		# Docs: none
 		Function.not = (predicate) ->
@@ -240,7 +240,7 @@
 		##
 		## Delegation
 		##
-
+		
 		# Tests: none
 		Function.delegate = (fn) ->
 			(args...) -> 
@@ -288,13 +288,13 @@
 	
 		# Tests: none
 		Function::lte = (value) -> @then Function.lte value
-
+		
 		# Tests: full
 		Function.gte = (value) -> Predicate (x) -> x >= value
-
+		
 		# Tests: none
 		Function::gte = (value) -> @then Function.gte value
-
+		
 		# Tests: full
 		Function.between = ( Function.Requiring (lower,higher) -> lower <= higher ) (lower,higher) ->
 			Predicate (x) -> lower <= x <= higher

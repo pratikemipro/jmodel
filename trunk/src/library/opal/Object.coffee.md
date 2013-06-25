@@ -3,7 +3,7 @@
 			(target,source) ->
 				target[key] = source[key] for own key of source
 				target
-
+				
 		# Tests: full
 		Object.construct = (constructor,args1...) -> switch
 	
@@ -32,7 +32,7 @@
 			isa = Object.isa constructor
 			construct = Object.construct arguments...
 			(obj) -> if isa obj then obj else construct arguments...
-
+			
 		# Tests: none
 		Object.copy = (obj) -> Object.extend {}, obj
 	

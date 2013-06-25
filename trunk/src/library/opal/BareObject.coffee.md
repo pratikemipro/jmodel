@@ -34,7 +34,7 @@
 		Object.union = Function.From([Object]).Returning(-> new Object) \
 			(union) -> (objects...) ->
 				union[key] = value for own key, value of object for object in objects
-
+				
 		# Tests: full
 		Object.intersection = Function.From([Object]).Returning(-> new Object) \
 			(intersection) -> (first={},rest...) ->
