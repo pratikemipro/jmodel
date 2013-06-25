@@ -170,7 +170,6 @@ define(function() {
       if (variants2 == null) {
         variants2 = [];
       }
-      console.log(variants2.concat(variants));
       return Function["switch"](variants2.concat(variants));
     };
     return fn;
