@@ -1,0 +1,7 @@
+Function			Tests	Docs
+-----------------------------------
+
+Array.concat		full	none
+Array.zip			full	none
+Array.flatten		full	none
+Array.hastypes		partial	none
