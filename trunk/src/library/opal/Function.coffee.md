@@ -1,3 +1,7 @@
+		# Tests: none
+		# Docs: none
+		Function::extend = (properties) -> Object.extend this, properties
+		
 		##
 		## Basic functions
 		##
@@ -29,13 +33,10 @@
 				for variant in variants
 					return variant.apply(this,args) if variant.test args...
 				return undefined
-			fn.extend = (variants2=[]) -> Function.switch variants2.concat variants
-			return fn
+			fn.extend extend: (variants2=[]) -> Function.switch variants2.concat variants
 		
 		window.Type = Type = (types...) ->
-			(fn) ->
-				fn.test = Function.hastypes types...
-				return fn
+			(fn) -> fn.extend test: Function.hastypes types...
 	
 		##
 		## Return value manipulation
