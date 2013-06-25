@@ -37,7 +37,7 @@
 			for variant in variants
 				return variant.apply(this,args) if variant.test args...
 			return undefined
-		fn.add = (variant) -> variants.unshift variant
+		fn.extend = (variants2=[]) -> Function.switch variants2.concat variants
 		return fn
 		
 	window.Type = Type = (types...) ->
