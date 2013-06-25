@@ -1,3 +1,6 @@
+List
+===
+		
 		window.List = class List
 	
 			constructor: ( elements=[] ) ->
@@ -26,3 +29,4 @@
 			@Of: Function.From(Function) (constructor) ->
 				class extends this
 					add: Function.Of(constructor) this::add
+					

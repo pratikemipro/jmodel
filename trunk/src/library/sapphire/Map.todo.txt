@@ -1,0 +1,12 @@
+Function			Tests	Docs
+-----------------------------------
+
+Map					full	none
+Map::add			none	none
+Map::remove			full	none
+Map::get			none	none
+Map::keys			none	none
+Map:each			none	none
+Map:ensure			none	none
+Map.To				full	none
+Map.Using			full	none
