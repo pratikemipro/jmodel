@@ -302,3 +302,4 @@ Restricted types
 			restricted.__predicate = predicate
 			restricted[property] = value for property, value of restricted.base
 			return restricted
+			
