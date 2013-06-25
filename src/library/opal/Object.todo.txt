@@ -1,0 +1,18 @@
+Function			Tests	Docs
+-----------------------------------
+
+Object.extend		full	none
+Object.construct	full	none
+Object.valid		none	none
+Object.ensure		full	none
+Object.copy			none	none
+Object.type			none	none
+Object.eq			none	none
+Object.keys			full	none
+
+Object.property		full	none
+Object.method		full	none
+Object.resolve		full	none
+Object.path			none	none
+
+Object.has			none	none
