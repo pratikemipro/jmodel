@@ -917,7 +917,7 @@ define(function() {
     });
   });
   Number.valid = function(value) {
-    return (value instanceof Number || typeof value === 'number') && !isNan(value);
+    return Object.isa(Number)(value) && !isNan(value);
   };
   Number.LessThan = function(max) {
     return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);

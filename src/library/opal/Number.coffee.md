@@ -1,20 +1,17 @@
-		Number.valid = (value) -> ( value instanceof Number or typeof value == 'number' ) and not isNan value
+		Number.valid = (value) -> Object.isa(Number)(value) and not isNan value
 	
 		# Restrictions
 	
 		Number.LessThan = (max) ->
-			@Where \
-				Function.lt(max),
+			@Where Function.lt(max),
 				"Invalid Value: <value> is not less than #{max}"
 			
 		Number.GreaterThan = (min) ->
-			@Where \
-				Function.gt(min),
+			@Where Function.gt(min),
 				"Invalid Value: <value> is not greater than #{min}"
 	
 		Number.Between = (min,max) ->
-			@Where \
-				Function.between(min,max),
+			@Where Function.between(min,max),
 				"Invalid Value: <value> is not between #{min} and #{max}"
 	
 		window.Integer = Number.Where \
