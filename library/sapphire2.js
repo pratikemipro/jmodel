@@ -351,10 +351,10 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    Map.prototype.add = Function.Chaining(Function["switch"]([
-      Type(Value, Value)(function(key, value) {
+    Map.prototype.add = Function["switch"]([
+      Type(Value, Value)(Function.Chaining(function(key, value) {
         return this[key] = value;
-      }), Type(Object)(function(mappings) {
+      })), Type(Object)(Function.Chaining(function(mappings) {
         var key, value, _results;
         _results = [];
         for (key in mappings) {
@@ -363,8 +363,8 @@ define(['jmodel/opal2'], function() {
           _results.push(this.add(key, value));
         }
         return _results;
-      })
-    ]));
+      }))
+    ]);
 
     Map.prototype.remove = Function.Chaining(function(key) {
       return delete this[key];
@@ -410,9 +410,19 @@ define(['jmodel/opal2'], function() {
           return _ref;
         }
 
-        _Class.prototype.add = function(key, value) {
-          return _Class.__super__.add.call(this, key, this.ensure(value));
-        };
+        _Class.prototype.add = _Class.prototype.add.extend([
+          Type(Value, Value)(Function.Chaining(function(key, value) {
+            return this[key] = this.ensure(value);
+          })), Type(Array)(Function.Chaining(function(keys) {
+            var key, _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = keys.length; _i < _len; _i++) {
+              key = keys[_i];
+              _results.push(this.add(key, this.ensure()));
+            }
+            return _results;
+          }))
+        ]);
 
         _Class.prototype.ensure = Object.ensure(constructor);
 
@@ -431,9 +441,11 @@ define(['jmodel/opal2'], function() {
           return _ref;
         }
 
-        _Class.prototype.add = function(key, value) {
-          return _Class.__super__.add.call(this, key, !this[key] ? this.ensure(value) : combine(this.ensure(value), this.ensure(this[key])));
-        };
+        _Class.prototype.add = _Class.prototype.add.extend([
+          Type(Value, Value)(Function.Chaining(function(key, value) {
+            return this[key] = !this[key] ? this.ensure(value) : combine(this.ensure(value), this[key]);
+          }))
+        ]);
 
         return _Class;
 

@@ -13,10 +13,10 @@
 		constructor: ( mappings={} ) ->
 			@add key, value for own key, value of mappings
 	
-		add: Function.Chaining Function.switch [
+		add: Function.switch [
 			
-			Type(Value,Value) (key,value) -> @[key] = value
-			Type(Object)	  (mappings) -> @add(key,value) for own key, value of mappings
+			Type(Value,Value) Function.Chaining (key,value) -> @[key] = value
+			Type(Object)	  Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
 			
 		]
 	
@@ -38,12 +38,21 @@
 		# Docs: none
 		@To: (constructor) ->
 			class extends this
-				add: (key,value) -> super key, @ensure(value)
+
+				add: this::add.extend [
+					
+					Type(Value,Value) Function.Chaining (key,value) -> @[key] = @ensure value
+					Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
+					
+				]
+
 				ensure: Object.ensure constructor
 
 		# Tests: full
 		# Docs: none
 		@Using: (combine) ->
 			class extends this
-				add: (key,value) ->
-					super key, if !@[key] then @ensure(value) else combine @ensure(value), @ensure(@[key])
+				add: this::add.extend [
+					Type(Value,Value) Function.Chaining (key,value) ->
+						@[key] = if not @[key] then @ensure(value) else combine @ensure(value), @[key]
+				]
