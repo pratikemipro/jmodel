@@ -41,8 +41,6 @@
 		falls = new (Map.To Date)
 			rome: '476-9-4'
 			constantinople: '1453-5-29'
-			
-		console.log falls
 		
 		equals falls.get('rome') instanceof Date, true, 'Converts values to correct type'
 		equals falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct'
