@@ -34,6 +34,20 @@
 		equals counts('quarks'), 6, 'Works for first mapping entry'
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
 
+	test 'Function.switch', ->
+		
+		getType = Function.switch [
+		
+			Type()		 () -> 'nothing'
+			Type(Number) (number) -> 'number'
+			Type(String) (string) -> 'string'
+			Type(Object) (object) -> 'object'
+		
+		]
+		
+		equal getType(), 'nothing', 'Correctly handles empty case'
+		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
+
 	module 'Function composition'
 	
 	test 'Function::then', ->
@@ -263,20 +277,6 @@
 		equals deptPerson('IT','Marketing').depts, 'IT,Marketing', 'works correctly with repeated type specifier'
 		equals deptPerson().depts, '', 'works correct for empty arguments with repeated type specifier'
 		raises (-> deptPerson 1, 2, 3), 'raieses exception when arguments do not match repeated type specifier'
-		
-	test 'Function.switch', ->
-		
-		getType = Function.switch [
-		
-			Type()		 () -> 'nothing'
-			Type(Number) (number) -> 'number'
-			Type(String) (string) -> 'string'
-			Type(Object) (object) -> 'object'
-		
-		]
-		
-		equal getType(), 'nothing', 'Correctly handles empty case'
-		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
 		
 	module 'Logical functions'
 	
