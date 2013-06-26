@@ -1,0 +1,27 @@
+Function			Tests	Docs
+-----------------------------------
+
+Set					full	none
+
+Set::add			full	none
+Set::remove			full	none
+Set::replace		full	none
+
+Set::member			full	none
+Set::count			full	none
+Set::where			full	none
+Set::each			full	none
+Set::reduce			full	none
+Set::partition		full	none
+
+Set.subset			full	none
+Set.equal			full	none
+
+Set.union			full	none
+Set.intersection	full	none
+Set.difference		full	none
+Set.product			none	none
+
+Set::to				full	none
+
+Set.Of				none	none

@@ -61,18 +61,6 @@
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              
-            </div>
-            
             <div class="content"><div class='highlight'><pre>	window.Map = <span class="class"><span class="keyword">class</span> <span class="title">Map</span></span>
 
 		constructor: ( mappings={} ) -&gt;
@@ -91,9 +79,22 @@
 
 		each: (fn) -&gt; fn(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> <span class="keyword">this</span>
 
-		ensure: Function.identity
+		ensure: Function.identity</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Typed maps</h2>
 
-		<span class="property">@To</span>: (constructor) -&gt;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@To</span>: (constructor) -&gt;
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 
 				add: <span class="keyword">this</span>::add.extend [			

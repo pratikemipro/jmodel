@@ -1,5 +1,5 @@
-Object
-===
+# Object
+
 		
 		Object.extend = Function.From(Object,Object).To(Object) \
 			(target,source) ->
@@ -42,8 +42,8 @@ Object
 			(object) -> key for own key of object
 		
 
-Accessors
----------
+## Accessors
+
 		
 		Object.property = (property,value) ->
 			switch arguments.length
@@ -75,8 +75,8 @@ Accessors
 				else Object.resolve(first).then Object.path rest
 	
 
-Existential test
----------------
+## Existential test
+
 		
 		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean);
 		

@@ -1,5 +1,4 @@
-List
-===
+# List
 		
 		window.List = class List
 	

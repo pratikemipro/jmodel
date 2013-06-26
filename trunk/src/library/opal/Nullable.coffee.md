@@ -1,5 +1,5 @@
-Nullable
-===
+# Nullable
+
 		
 		window.Nullable = (constructor) ->
 			construct = Object.construct constructor

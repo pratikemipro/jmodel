@@ -1,11 +1,11 @@
-Function
-===
+# Function
+
 		
 		Function::extend = (properties) -> Object.extend this, properties
 		
 
-Basic functions
---------------
+## Basic functions
+
 		
 		Function.identity = (x) -> x
 		
@@ -29,8 +29,8 @@ Basic functions
 			(fn) -> fn.extend test: Function.hastypes types...
 			
 
-Return value manipulation
------------------------
+## Return value manipulation
+
 		
 		Function.Constant = (constant) ->
 			(fn) -> (args...) -> fn.apply(this,args); constant
@@ -40,8 +40,8 @@ Return value manipulation
 		Function.Chaining = (fn) -> (args...) -> fn.apply(this,args); this
 	
 
-Function composition
--------------------
+## Function composition
+
 		
 		Function::then = (fn2) ->
 			throw 'Precondition failure' unless typeof fn2 == 'function'
@@ -70,8 +70,8 @@ Function composition
 				else Function.pipe (Array.concat arguments...).reverse()...
 	
 
-Aspect-like methods
-------------------
+## Aspect-like methods
+
 		
 		Function::pre = (pre) ->
 			throw 'Precondition failure' unless typeof pre == 'function'
@@ -86,8 +86,8 @@ Aspect-like methods
 				ret
 		
 
-Preconditions and postconditions
-------------------------------
+## Preconditions and postconditions
+
 		
 		Function::require = (predicate,message='Precondition failure') ->
 			@pre (args...) ->
@@ -98,8 +98,8 @@ Preconditions and postconditions
 				throw message+': '+args.toString() unless predicate.apply this, args
 		
 
-Typed functions
---------------
+## Typed functions
+
 		
 		Function.hastypes = (types...) ->
 			predicate = Array.hastypes types...
@@ -145,8 +145,8 @@ Typed functions
 		window.Predicate = Function.To Boolean
 	
 
-Logical functions
-----------------	
+## Logical functions
+	
 		
 		Function::and = Function.From(Function) \
 			(predicate2) ->
@@ -182,8 +182,8 @@ Logical functions
 			if typeof predicate == 'function' then predicate.not() else not predicate
 	
 
-Delegation
----------
+## Delegation
+
 		
 		Function.delegate = (fn) ->
 			(args...) -> 
@@ -191,14 +191,14 @@ Delegation
 				method.apply context, args
 	
 
-Composite ordering
------------------
+## Composite ordering
+
 		
 		Function.ordering = Function.or
 	
 
-Predicates
----------
+## Predicates
+
 		
 		Function.eq  = (value) -> Predicate (x) -> x == value
 		Function::eq = (value) -> @then Function.eq value
@@ -236,8 +236,8 @@ Predicates
 		Function::hastype = (type) -> @then Object.type.eq type
 	
 
-Application methods
-------------------
+## Application methods
+
 		
 		Function::bind = (context,args1...) ->
 			fn = this
@@ -264,14 +264,14 @@ Application methods
 			(args2...) -> setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration
 	
 
-Mapping methods
---------------
+## Mapping methods
+
 			
 		Function::map = (mapping) -> @then Function.map mapping
 	
 
-Ordering methods
----------------
+## Ordering methods
+
 		
 		Function::asc = ->
 			fn = this
@@ -285,14 +285,14 @@ Ordering methods
 		Function::desc = -> @asc().then (x) -> -x
 	
 
-Constructor methods
-------------------
+## Constructor methods
+
 		
 		Function::create = (args...) -> Object.construct(this)(args...)
 	
 
-Restricted types
----------------
+## Restricted types
+
 		
 		# NOTE: Make this work with objects other than strings and numbers
 		Function::Where = (predicate,message='Invalid value') ->
