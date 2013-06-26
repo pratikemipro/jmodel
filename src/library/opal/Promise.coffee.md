@@ -1,5 +1,5 @@
-Promise
-===
+# Promise
+
 		
 		window.Promise = class Promise
 		

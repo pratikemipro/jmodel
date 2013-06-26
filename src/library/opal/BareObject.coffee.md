@@ -1,5 +1,5 @@
-BareObject
-===
+# BareObject
+
 		
 		Object.equal = Predicate.From(Object,Object) \
 			(a,b) ->

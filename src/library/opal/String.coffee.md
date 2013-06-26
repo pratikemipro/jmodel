@@ -1,5 +1,5 @@
-String
-===
+# String
+
 		
 		String.In = (strings...) ->
 			@Where \

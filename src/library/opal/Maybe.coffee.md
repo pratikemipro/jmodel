@@ -1,5 +1,4 @@
-Maybe
-===
+# Maybe
 		
 		window.Maybe = (base) ->
 		

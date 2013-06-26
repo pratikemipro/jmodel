@@ -1,11 +1,11 @@
-Number
-===
+# Number
+
 		
 		Number.valid = (value) -> Object.isa(Number)(value) and not isNan value
 	
 
-Restrictions
------------	
+## Restrictions
+
 		
 		Number.LessThan = (max) ->
 			@Where Function.lt(max),

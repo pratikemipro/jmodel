@@ -1,5 +1,5 @@
-Map
-===
+# Map
+
 		
 		window.Map = class Map
 			
@@ -20,6 +20,10 @@ Map
 			each: (fn) -> fn(key,value) for own key, value of this
 	
 			ensure: Function.identity
+			
+
+## Typed maps
+
 			
 			@To: (constructor) ->
 				class extends this
