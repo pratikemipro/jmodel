@@ -58,16 +58,28 @@
 					for {promise,rejected} in @waiting
 						chain promise, rejected, [@reason]
 			
+
+# Pre-resolved Promises
+
+			
 			@Fulfilled: Function.Returning(-> new Promise) \
 				(promise) -> (args...) -> promise.fulfil args...
 				
 			@Rejected: Function.Returning(-> new Promise) \
 				(promise) -> (args...) -> promise.reject args...
+			
+
+# Typed Promises
+
 				
 			@Of: (cons) ->
 				ensure = Object.ensure cons
 				class extends this
 					fulfil: (args...) -> super ensure args...
+			
+
+# Promise combinators
+
 				
 			@conjoin: ->
 			
