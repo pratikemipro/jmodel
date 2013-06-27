@@ -1094,6 +1094,18 @@ define(['jmodel/emerald2'], function() {
     equals(promise.value, void 0, 'After rejection, promise value is undefined');
     return equals(promise.reason, 'fred', 'After rejection, promise reason is rejection reason');
   });
+  asyncTest('Promise.Of', 2, function() {
+    var promise, x;
+
+    promise = new (Promise.Of(Date));
+    x = void 0;
+    promise.then(function(value) {
+      equals(value instanceof Date, true, 'Creates object of correct type');
+      equals(value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly');
+      return start();
+    });
+    return promise.fulfil('1974-11-20');
+  });
   module('Set');
   test('Set constructor', function() {
     var colour, colours, number, numbers;
