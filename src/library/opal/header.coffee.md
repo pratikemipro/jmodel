@@ -33,3 +33,4 @@
 		
 			else
 				(obj) -> obj instanceof constructor
+				
