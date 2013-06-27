@@ -627,12 +627,12 @@ define(function() {
       }
     });
     restricted.base = this.base || this;
-    restricted.__predicate = predicate;
     _ref = restricted.base;
     for (property in _ref) {
       value = _ref[property];
       restricted[property] = value;
     }
+    restricted.valid = Object.isa(restricted.base).and(predicate);
     return restricted;
   };
   Object.extend = Function.From(Object, Object).To(Object)(function(target, source) {
@@ -941,22 +941,18 @@ define(function() {
     return Object.isa(Number)(value) && !isNaN(value);
   };
   Number.LessThan = Function.From(Number).To(Function)(function(max) {
-    this.valid = Function.lt(max);
-    return this.Where(this.valid, "Invalid Value: <value> is not less than " + max);
+    return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
   });
   Number.GreaterThan = Function.From(Number).To(Function)(function(min) {
-    this.valid = Function.gt(min);
-    return this.Where(this.valid, "Invalid Value: <value> is not greater than " + min);
+    return this.Where(Function.gt(min), "Invalid Value: <value> is not greater than " + min);
   });
   Number.Between = Function.From(Number, Number).To(Function)(function(min, max) {
-    this.valid = Function.between(min, max);
-    return this.Where(this.valid, "Invalid Value: <value> is not between " + min + " and " + max);
+    return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
   });
   is_integer = function(value) {
     return value === Math.round(value);
   };
   window.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
-  window.Integer.valid = Object.isa(Number).and(is_integer);
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
   String.concat = Function.From([String]).To(String)(function() {
