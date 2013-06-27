@@ -125,9 +125,7 @@
 	Number.Between = Function.From(Number,Number).To(Function) (min,max) -&gt;
 		<span class="property">@Where</span> Function.between(min,max), <span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
 
-	<span class="function"><span class="title">is_integer</span></span> = (value) -&gt; value == Math.round(value)
-
-	Number.Integer = Number.Where is_integer, <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	Number.Integer = Number.Where ( (value) -&gt; value == Math.round value ), <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
 
 	Number.Positive = Number.GreaterThan <span class="number">0</span>
 	Number.Negative = Number.LessThan <span class="number">0</span>
