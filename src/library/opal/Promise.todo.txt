@@ -1,15 +1,15 @@
 Function				Tests	Docs
 --------------------------------------
 
-Promise::constructor
-Promise::then
-Promise::fulfil
-Promise::reject
+Promise::constructor	none	none
+Promise::then			partial	none
+Promise::fulfil			partial	none
+Promise::reject			partial	none
 
-Promise.Fulfilled
-Promise.Rejected
+Promise.Fulfilled		none	none
+Promise.Rejected		none	none
 
-Promise.Of
+Promise.Of				none	none
 
-Promise.conjoin
-Promise.disjoin
+Promise.conjoin			none	none
+Promise.disjoin			none	none
