@@ -9,6 +9,7 @@
 
 ## Restrictions
 
+		
 		String.In = Function.From([String]).To(Function) (strings...) ->
 			@Where \
 				(str) -> str in strings,
