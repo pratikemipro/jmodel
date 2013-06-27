@@ -12,7 +12,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/sapphire2'], function() {
-  var Character, EventType, SpecialKey, Subscriber, codes;
+  var Character, EventRegistry, EventType, SpecialKey, Subscriber, codes, _ref;
   codes = {
     ':backspace': 8,
     ':tab': 9,
@@ -70,7 +70,7 @@ define(['jmodel/sapphire2'], function() {
     return Subscriber;
 
   })();
-  return window.EventType = EventType = (function(_super) {
+  window.EventType = EventType = (function(_super) {
     __extends(EventType, _super);
 
     function EventType() {
@@ -103,6 +103,17 @@ define(['jmodel/sapphire2'], function() {
     return EventType;
 
   })(Stream.Of(Promise));
+  return window.EventRegistry = EventRegistry = (function(_super) {
+    __extends(EventRegistry, _super);
+
+    function EventRegistry() {
+      _ref = EventRegistry.__super__.constructor.apply(this, arguments);
+      return _ref;
+    }
+
+    return EventRegistry;
+
+  })(Map.To(EventType));
 });
 
 /*

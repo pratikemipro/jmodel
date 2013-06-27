@@ -1786,13 +1786,14 @@ define(['jmodel/emerald2'], function() {
   module('Event');
   module('Subscriber');
   module('EventType');
-  return test('EventType::subscribe', function() {
+  test('EventType::subscribe', function() {
     var et, subscriber;
     et = new EventType();
     subscriber = new Subscriber();
     et.subscribe(subscriber);
     return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
   });
+  return module('EventRegistry');
 });
 
 /*

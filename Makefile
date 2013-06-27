@@ -35,7 +35,8 @@ emerald:
 		src/library/emerald/header.coffee.md \
 		src/library/emerald/Event.coffee.md \
 		src/library/emerald/Subscriber.coffee.md \
-		src/library/emerald/EventType.coffee.md
+		src/library/emerald/EventType.coffee.md \
+		src/library/emerald/EventRegistry.coffee.md
 	docco -o documentation/web/src/emerald src/library/emerald/*.coffee.md
 
 library-test:
@@ -57,7 +58,8 @@ library-test:
 		src/library/sapphire/Stream.test.coffee \
 		src/library/emerald/Event.test.coffee \
 		src/library/emerald/Subscriber.test.coffee \
-		src/library/emerald/EventType.test.coffee
+		src/library/emerald/EventType.test.coffee \
+		src/library/emerald/EventRegistry.test.coffee
 		
 library-doc:
 	@make opal-doc
@@ -87,6 +89,7 @@ emerald-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Event.doc.xml -o:documentation/web/api/emerald/Event.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/api/emerald/EventType.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/api/emerald/Subscriber.html
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventRegistry.doc.xml -o:documentation/web/api/emerald/EventRegistry.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
