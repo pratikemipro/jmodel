@@ -1,3 +1,2 @@
 		window.Subscriber = class Subscriber
-			notify: ->
-			fail: ->
+			constructor: Function.From(Maybe Function, Maybe Function) (@notify,@fail) ->
