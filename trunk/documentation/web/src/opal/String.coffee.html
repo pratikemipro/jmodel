@@ -96,7 +96,12 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	String.<span class="function"><span class="title">In</span></span> = (strings...) -&gt;
+            <div class="content"><div class='highlight'><pre>	String.concat = Function.From([String]).To(String) \
+		(first=<span class="string">''</span>,rest...) -&gt; first.concat rest...
+
+	String.concat.unit = <span class="string">''</span>
+
+	String.<span class="function"><span class="title">In</span></span> = (strings...) -&gt;
 		<span class="property">@Where</span> \
 			(str) -&gt; str <span class="keyword">in</span> strings,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" is not in {<span class="subst">#{( '\"'+string+'\"' <span class="keyword">for</span> string <span class="keyword">in</span> strings ).join(',')}</span>}"</span>

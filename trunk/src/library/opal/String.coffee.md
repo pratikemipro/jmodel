@@ -1,5 +1,11 @@
 # String
 
+
+		
+		String.concat = Function.From([String]).To(String) \
+			(first='',rest...) -> first.concat rest...
+		
+		String.concat.unit = ''
 		
 		String.In = (strings...) ->
 			@Where \
