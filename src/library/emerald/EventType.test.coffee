@@ -11,8 +11,30 @@
 		et.subscribe subscriber
 		
 		equal et.subscribers[0], subscriber, 'Subscribers are added to subscriber set'
+	
+	asyncTest 'EventType::add', ->
 		
-	asyncTest 'EventType::raise — Implict', ->
+		expect(1)
+		
+		et = new EventType()
+		
+		output = []
+		promise1 = new Promise()
+		promise2 = new Promise()
+		
+		et.subscribe (x) -> output.push x
+		
+		et.add promise1
+		et.add promise2
+		
+		promise1.fulfil 'red'
+		promise2.fulfil 'green'
+		
+		delay ->
+			deepEqual output, ['red','green'], 'Raising notifies first subscriber'
+			start()
+		
+	asyncTest 'EventType::raise', ->
 		
 		expect(2)
 		
@@ -32,26 +54,4 @@
 			deepEqual output1, ['red','green'], 'Raising notifies first subscriber'
 			deepEqual output2, ['red','green'], 'Raising notifies other subscribers'
 		
-			start()
-			
-	asyncTest 'EventType::raise — Explicit', ->
-		
-		expect(1)
-		
-		et = new EventType()
-		
-		output = []
-		promise1 = new Promise()
-		promise2 = new Promise()
-		
-		et.subscribe (x) -> output.push x
-		
-		et.raise promise1
-		et.raise promise2
-		
-		promise1.fulfil 'red'
-		promise2.fulfil 'green'
-		
-		delay ->
-			deepEqual output, ['red','green'], 'Raising notifies first subscriber'
 			start()

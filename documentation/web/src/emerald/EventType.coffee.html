@@ -106,7 +106,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		raise: Function.delegate -&gt; [ <span class="keyword">this</span>, <span class="property">@add</span> ]
+            <div class="content"><div class='highlight'><pre>		raise: (args...) -&gt;
+			promise = <span class="keyword">new</span> Promise()
+			<span class="property">@add</span> promise
+			promise.fulfil args...
 
 		fail: (args...) -&gt;
 			promise = <span class="keyword">new</span> Promise()

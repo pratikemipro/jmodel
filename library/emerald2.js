@@ -101,9 +101,14 @@ define(['jmodel/sapphire2'], function() {
       return [this.subscribers, this.subscribers.add];
     });
 
-    EventType.prototype.raise = Function.delegate(function() {
-      return [this, this.add];
-    });
+    EventType.prototype.raise = function() {
+      var args, promise;
+
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      promise = new Promise();
+      this.add(promise);
+      return promise.fulfil.apply(promise, args);
+    };
 
     EventType.prototype.fail = function() {
       var args, promise;

@@ -1921,7 +1921,27 @@ define(['jmodel/emerald2'], function() {
     et.subscribe(subscriber);
     return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
   });
-  asyncTest('EventType::raise — Implict', function() {
+  asyncTest('EventType::add', function() {
+    var et, output, promise1, promise2;
+
+    expect(1);
+    et = new EventType();
+    output = [];
+    promise1 = new Promise();
+    promise2 = new Promise();
+    et.subscribe(function(x) {
+      return output.push(x);
+    });
+    et.add(promise1);
+    et.add(promise2);
+    promise1.fulfil('red');
+    promise2.fulfil('green');
+    return delay(function() {
+      deepEqual(output, ['red', 'green'], 'Raising notifies first subscriber');
+      return start();
+    });
+  });
+  asyncTest('EventType::raise', function() {
     var et, output1, output2;
 
     expect(2);
@@ -1939,26 +1959,6 @@ define(['jmodel/emerald2'], function() {
     return delay(function() {
       deepEqual(output1, ['red', 'green'], 'Raising notifies first subscriber');
       deepEqual(output2, ['red', 'green'], 'Raising notifies other subscribers');
-      return start();
-    });
-  });
-  asyncTest('EventType::raise — Explicit', function() {
-    var et, output, promise1, promise2;
-
-    expect(1);
-    et = new EventType();
-    output = [];
-    promise1 = new Promise();
-    promise2 = new Promise();
-    et.subscribe(function(x) {
-      return output.push(x);
-    });
-    et.raise(promise1);
-    et.raise(promise2);
-    promise1.fulfil('red');
-    promise2.fulfil('green');
-    return delay(function() {
-      deepEqual(output, ['red', 'green'], 'Raising notifies first subscriber');
       return start();
     });
   });
