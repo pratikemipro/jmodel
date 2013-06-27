@@ -14,5 +14,6 @@ Stream::drop		full	none
 Stream::transition	full	none
 Stream::control		full	none
 Stream::between		full	none
+Stream::accumulate	full	none
 
 Stream.disjoin		full	none
