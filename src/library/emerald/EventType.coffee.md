@@ -7,12 +7,13 @@
 				@subscribers = new (Set.Of Subscriber)
 			
 				@each (promise) =>
-					@subscribers.each (subscriber) ->
-						promise.then subscriber.notify, subscriber.fail
+					@subscribers.each ({notify,fail}) ->
+						promise.then notify, fail
 		
 			# Tests: full
 			subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]
 			
+			# Tests: partial
 			raise: Function.delegate -> [ this, @add ]
 			
 			fail: (args...) ->
