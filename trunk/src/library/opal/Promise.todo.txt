@@ -9,7 +9,7 @@ Promise::reject			partial	none
 Promise.Fulfilled		none	none
 Promise.Rejected		none	none
 
-Promise.Of				none	none
+Promise.Of				partial	none
 
 Promise.conjoin			none	none
 Promise.disjoin			none	none
