@@ -123,7 +123,7 @@
 
 		control: Function.From(Stream).To(Stream) \
 			(control) -&gt; <span class="keyword">do</span> (active=<span class="literal">true</span>) =&gt;
-				control.each (state) -&gt; active = state
+				control.each Function.Of(Boolean) (state) -&gt; active = state
 				<span class="property">@where</span> -&gt; active
 
 		between: Function.From(Stream,Stream).To(Stream) \
