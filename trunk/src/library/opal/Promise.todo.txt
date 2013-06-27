@@ -1,0 +1,15 @@
+Function				Tests	Docs
+--------------------------------------
+
+Promise::constructor
+Promise::then
+Promise::fulfil
+Promise::reject
+
+Promise.Fulfilled
+Promise.Rejected
+
+Promise.Of
+
+Promise.conjoin
+Promise.disjoin
