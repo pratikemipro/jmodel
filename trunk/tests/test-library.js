@@ -1681,6 +1681,25 @@ define(['jmodel/emerald2'], function() {
     stream.add(false).add(false).add(false).add(true).add(false).add(true).add(true);
     return deepEqual(output, [false, true, false, true], 'Transition works for Boolean values');
   });
+  test('Stream::control', function() {
+    var control, data, output;
+    data = new Stream();
+    control = new Stream();
+    output = [];
+    data.control(control).each(function(item) {
+      return output.push(item);
+    });
+    data.add('red');
+    data.add('green');
+    control.add(false);
+    data.add('blue');
+    data.add('cyan');
+    control.add(true);
+    data.add('magenta');
+    control.add(false);
+    data.add('yellow');
+    return deepEqual(output, ['red', 'green', 'magenta'], 'Control stream gates output');
+  });
   test('Stream.Of', function() {
     var Person, fred, john, output, stream;
     Person = function(name) {

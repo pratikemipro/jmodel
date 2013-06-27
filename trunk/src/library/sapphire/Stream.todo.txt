@@ -5,9 +5,10 @@ Stream::add			full	none
 Stream::each		full	none
 Stream::derive		full	none
 
+Stream.Of			full	none
+
 Stream::where		full	none
 Stream::take		full	none
 Stream::drop		full	none
 Stream::transition	full	none
-
-Stream.Of			full	none
+Stream::control		none	none

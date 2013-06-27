@@ -80,8 +80,25 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h1>Typed streams</h1>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: Function.From(Function) (constructor) -&gt;
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
               <h2>Derived streams</h2>
 
@@ -99,24 +116,12 @@
 
 		transition: Function.To(Stream) \
 			-&gt; <span class="keyword">do</span> (last=<span class="literal">undefined</span>) =&gt;
-				<span class="property">@where</span> (x) -&gt; last != x <span class="keyword">and</span> ( ( last = x ) <span class="keyword">or</span> <span class="literal">true</span> )</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-3">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h1">
-                <a class="pilcrow" href="#section-3">&#182;</a>
-              </div>
-              <h1>Typed streams</h1>
+				<span class="property">@where</span> (x) -&gt; last != x <span class="keyword">and</span> ( ( last = x ) <span class="keyword">or</span> <span class="literal">true</span> )
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: Function.From(Function) (constructor) -&gt;
-			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
+		control: Function.From(Stream).To(Stream) \
+			(control) -&gt; <span class="keyword">do</span> (active=<span class="literal">true</span>) =&gt;
+				control.each (state) -&gt; active = state
+				<span class="property">@where</span> -&gt; active</pre></div></div>
             
         </li>
         
