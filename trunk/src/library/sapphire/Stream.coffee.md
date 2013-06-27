@@ -45,7 +45,7 @@
 					
 			control: Function.From(Stream).To(Stream) \
 				(control) -> do (active=true) =>
-					control.each (state) -> active = state
+					control.each Function.Of(Boolean) (state) -> active = state
 					@where -> active
 					
 			between: Function.From(Stream,Stream).To(Stream) \

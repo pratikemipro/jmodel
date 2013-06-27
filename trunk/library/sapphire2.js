@@ -543,9 +543,9 @@ define(['jmodel/opal2'], function() {
     Stream.prototype.control = Function.From(Stream).To(Stream)(function(control) {
       var _this = this;
       return (function(active) {
-        control.each(function(state) {
+        control.each(Function.Of(Boolean)(function(state) {
           return active = state;
-        });
+        }));
         return _this.where(function() {
           return active;
         });
