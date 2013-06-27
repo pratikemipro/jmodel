@@ -175,20 +175,59 @@
 			(<span class="property">@reason</span>) -&gt;
 				<span class="property">@status</span> = REJECTED
 				<span class="keyword">for</span> {promise,rejected} <span class="keyword">in</span> <span class="property">@waiting</span>
-					chain promise, rejected, [<span class="property">@reason</span>]
+					chain promise, rejected, [<span class="property">@reason</span>]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h1>Pre-resolved Promises</h1>
 
-		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise) \
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise) \
 			(promise) -&gt; (args...) -&gt; promise.fulfil args...
 
 		<span class="property">@Rejected</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise) \
-			(promise) -&gt; (args...) -&gt; promise.reject args...
+			(promise) -&gt; (args...) -&gt; promise.reject args...</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <h1>Typed Promises</h1>
 
-		<span class="property">@Of</span>: (cons) -&gt;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: (cons) -&gt;
 			ensure = Object.ensure cons
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				fulfil: (args...) -&gt; <span class="keyword">super</span> ensure args...
+				fulfil: (args...) -&gt; <span class="keyword">super</span> ensure args...</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h1">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h1>Promise combinators</h1>
 
-		<span class="property">@conjoin</span>: -&gt;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@conjoin</span>: -&gt;
 
 		<span class="property">@disjoin</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="property">@constructor</span>() ) \
 			(disjunction) -&gt; (promises...) -&gt;
