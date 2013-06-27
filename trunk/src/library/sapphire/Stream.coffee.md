@@ -26,6 +26,9 @@
 ## Derived streams
 
 			
+			map: Function.From(Function).To(Stream) \
+				(fn) -> @derive (args...) -> @add fn args...
+			
 			where: Function.From(Function).To(Stream) \
 				(predicate) -> @derive (args...) ->
 					@add args... if predicate args...
@@ -44,4 +47,19 @@
 				(control) -> do (active=true) =>
 					control.each (state) -> active = state
 					@where -> active
+					
+			between: Function.From(Stream,Stream).To(Stream) \
+				(start,stop) ->
+					@control Stream.disjoin \
+						start.map(Boolean.True),
+						stop.map(Boolean.False)
+						
+
+## Stream combinators
+
+			
+			@disjoin: Function.From([Stream]).Returning(-> new Stream) \
+				(disjunction) -> (streams...) ->
+					for stream in streams
+						stream.each (args...) -> disjunction.add args...
 					
