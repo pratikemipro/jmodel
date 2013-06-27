@@ -12,7 +12,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/sapphire2'], function() {
-  var Character, EventRegistry, EventType, SpecialKey, Subscriber, codes, _ref;
+  var Character, EventRegistry, EventType, SpecialKey, Subscriber, codes;
   codes = {
     ':backspace': 8,
     ':tab': 9,
@@ -106,10 +106,43 @@ define(['jmodel/sapphire2'], function() {
   return window.EventRegistry = EventRegistry = (function(_super) {
     __extends(EventRegistry, _super);
 
-    function EventRegistry() {
-      _ref = EventRegistry.__super__.constructor.apply(this, arguments);
-      return _ref;
+    function EventRegistry(eventtypes) {
+      var eventtype, _i, _len;
+      if (eventtypes == null) {
+        eventtypes = [];
+      }
+      for (_i = 0, _len = eventtypes.length; _i < _len; _i++) {
+        eventtype = eventtypes[_i];
+        this.add(eventtype);
+      }
     }
+
+    EventRegistry.prototype.register = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return this.add.apply(this, args);
+    };
+
+    EventRegistry.prototype.create = Function.Returning(function() {
+      return new EventType;
+    })(function(eventtype) {
+      return function(key) {
+        return this.add(key, eventtype);
+      };
+    });
+
+    EventRegistry.prototype.subscribe = Function.From(Object)(function(subscriptions) {
+      var name, subscriber, _results;
+      _results = [];
+      for (name in subscriptions) {
+        if (!__hasProp.call(subscriptions, name)) continue;
+        subscriber = subscriptions[name];
+        _results.push(this.get(name).subscribe(subscriber));
+      }
+      return _results;
+    });
+
+    EventRegistry.prototype.republish = function() {};
 
     return EventRegistry;
 
