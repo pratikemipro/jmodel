@@ -151,6 +151,26 @@
 		
 		deepEqual output, ['red','green','magenta'], 'Start and stop streams open and close gate'
 		
+	test 'Stream::accumulate', ->
+		
+		numbers = new Stream()
+		
+		output = []
+		numbers.accumulate(Math.plus).each (item) -> output.push item
+		
+		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
+		
+		deepEqual output, [1,3,6,10,15,21], 'Accumulates correctly'
+		
+		numbers = new Stream()
+		
+		output = []
+		numbers.accumulate(Math.plus,10).each (item) -> output.push item
+		
+		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
+		
+		deepEqual output, [11,13,16,20,25,31], 'Starts with initial value'
+		
 	test 'Stream.disjoin', ->
 		
 		colours1 = new Stream()

@@ -54,6 +54,11 @@
 						start.map(Boolean.True),
 						stop.map(Boolean.False)
 						
+			accumulate: Function.From(Function,Maybe Value).To(Stream) \
+				(reduction,initial=reduction.unit) -> do (acc=initial) =>
+					@derive (args...) ->
+						@add acc = reduction.apply this, [acc].concat args
+						
 
 ## Stream combinators
 

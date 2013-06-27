@@ -556,6 +556,20 @@ define(['jmodel/opal2'], function() {
       return this.control(Stream.disjoin(start.map(Boolean.True), stop.map(Boolean.False)));
     });
 
+    Stream.prototype.accumulate = Function.From(Function, Maybe(Value)).To(Stream)(function(reduction, initial) {
+      var _this = this;
+      if (initial == null) {
+        initial = reduction.unit;
+      }
+      return (function(acc) {
+        return _this.derive(function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return this.add(acc = reduction.apply(this, [acc].concat(args)));
+        });
+      })(initial);
+    });
+
     Stream.disjoin = Function.From([Stream]).Returning(function() {
       return new Stream;
     })(function(disjunction) {

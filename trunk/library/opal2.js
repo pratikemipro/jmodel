@@ -983,9 +983,11 @@ define(function() {
   Math.plus = function(a, b) {
     return a + b;
   };
+  Math.plus.unit = 0;
   Math.times = function(a, b) {
     return a * b;
   };
+  Math.times.unit = 1;
   window.Nullable = function(constructor) {
     var construct;
     construct = Object.construct(constructor);
