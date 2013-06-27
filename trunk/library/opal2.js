@@ -970,6 +970,12 @@ define(function() {
   window.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
+  Number.Odd = Integer.Where((function(number) {
+    return number % 2 === 1;
+  }), "Invalid Value: <value> is not odd");
+  Number.Even = Integer.Where((function(number) {
+    return number % 2 === 0;
+  }), "Invalid Value: <value> is not even");
   String.concat = Function.From([String]).To(String)(function() {
     var first, rest;
     first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
