@@ -75,8 +75,8 @@
 			<span class="property">@subscribers</span> = <span class="keyword">new</span> (Set.Of Subscriber)
 
 			<span class="property">@each</span> (promise) =&gt;
-				<span class="property">@subscribers</span>.each (subscriber) -&gt;
-					promise.<span class="keyword">then</span> subscriber.notify, subscriber.fail</pre></div></div>
+				<span class="property">@subscribers</span>.each ({notify,fail}) -&gt;
+					promise.<span class="keyword">then</span> notify, fail</pre></div></div>
             
         </li>
         
@@ -91,9 +91,22 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		subscribe: Function.delegate -&gt; [ <span class="property">@subscribers</span>, <span class="property">@subscribers</span>.add ]
+            <div class="content"><div class='highlight'><pre>		subscribe: Function.delegate -&gt; [ <span class="property">@subscribers</span>, <span class="property">@subscribers</span>.add ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Tests: partial</p>
 
-		raise: Function.delegate -&gt; [ <span class="keyword">this</span>, <span class="property">@add</span> ]
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		raise: Function.delegate -&gt; [ <span class="keyword">this</span>, <span class="property">@add</span> ]
 
 		fail: (args...) -&gt;
 			promise = <span class="keyword">new</span> Promise()
