@@ -99,9 +99,22 @@
             <div class="content"><div class='highlight'><pre>	String.concat = Function.From([String]).To(String) \
 		(first=<span class="string">''</span>,rest...) -&gt; first.concat rest...
 
-	String.concat.unit = <span class="string">''</span>
+	String.concat.unit = <span class="string">''</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Restrictions</h2>
 
-	String.In = Function.From([String]).To(Function) (strings...) -&gt;
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	String.In = Function.From([String]).To(Function) (strings...) -&gt;
 		<span class="property">@Where</span> \
 			(str) -&gt; str <span class="keyword">in</span> strings,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" is not in {<span class="subst">#{( '\"'+string+'\"' <span class="keyword">for</span> string <span class="keyword">in</span> strings ).join(',')}</span>}"</span>

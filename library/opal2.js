@@ -940,15 +940,15 @@ define(function() {
   Number.valid = function(value) {
     return Object.isa(Number)(value) && !isNan(value);
   };
-  Number.LessThan = function(max) {
+  Number.LessThan = Function.From(Number).To(Function)(function(max) {
     return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
-  };
-  Number.GreaterThan = function(min) {
+  });
+  Number.GreaterThan = Function.From(Number).To(Function)(function(min) {
     return this.Where(Function.gt(min), "Invalid Value: <value> is not greater than " + min);
-  };
-  Number.Between = function(min, max) {
+  });
+  Number.Between = Function.From(Number, Number).To(Function)(function(min, max) {
     return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
-  };
+  });
   window.Integer = Number.Where(function(value) {
     return value === Math.round(value);
   }, "Invalid Value: <value> is not an integer");
