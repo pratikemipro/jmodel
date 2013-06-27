@@ -79,6 +79,27 @@
 		
 		deepEqual output, [false,true,false,true], 'Transition works for Boolean values'
 		
+	test 'Stream::control', ->
+		
+		data    = new Stream()
+		control = new Stream()
+
+		output = []
+		data.control(control).each (item) -> output.push item
+		
+		data.add 'red'
+		data.add 'green'
+		control.add false
+		data.add 'blue'
+		data.add 'cyan'
+		control.add true
+		data.add 'magenta'
+		control.add false
+		data.add 'yellow'
+		
+		deepEqual output, ['red','green','magenta'], 'Control stream gates output'
+		
+		
 	test 'Stream.Of', ->
 		
 		Person = (@name) ->

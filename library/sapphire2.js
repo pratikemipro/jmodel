@@ -484,6 +484,23 @@ define(['jmodel/opal2'], function() {
       };
     });
 
+    Stream.Of = Function.From(Function)(function(constructor) {
+      var _ref;
+      return (function(_super) {
+        __extends(_Class, _super);
+
+        function _Class() {
+          _ref = _Class.__super__.constructor.apply(this, arguments);
+          return _ref;
+        }
+
+        _Class.prototype.add = Function.Of(constructor)(_Class.prototype.add);
+
+        return _Class;
+
+      })(this);
+    });
+
     Stream.prototype.where = Function.From(Function).To(Stream)(function(predicate) {
       return this.derive(function() {
         var args;
@@ -515,21 +532,16 @@ define(['jmodel/opal2'], function() {
       })(void 0);
     });
 
-    Stream.Of = Function.From(Function)(function(constructor) {
-      var _ref;
-      return (function(_super) {
-        __extends(_Class, _super);
-
-        function _Class() {
-          _ref = _Class.__super__.constructor.apply(this, arguments);
-          return _ref;
-        }
-
-        _Class.prototype.add = Function.Of(constructor)(_Class.prototype.add);
-
-        return _Class;
-
-      })(this);
+    Stream.prototype.control = Function.From(Stream).To(Stream)(function(control) {
+      var _this = this;
+      return (function(active) {
+        control.each(function(state) {
+          return active = state;
+        });
+        return _this.where(function() {
+          return active;
+        });
+      })(true);
     });
 
     return Stream;

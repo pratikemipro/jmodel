@@ -15,6 +15,14 @@
 				(child) -> (fn) -> @each fn.bind child
 			
 
+# Typed streams
+
+			
+			@Of: Function.From(Function) (constructor) ->
+				class extends this
+					add: Function.Of(constructor) this::add
+					
+
 ## Derived streams
 
 			
@@ -32,11 +40,8 @@
 				-> do (last=undefined) =>
 					@where (x) -> last != x and ( ( last = x ) or true )
 					
-
-# Typed streams
-
-			
-			@Of: Function.From(Function) (constructor) ->
-				class extends this
-					add: Function.Of(constructor) this::add
+			control: Function.From(Stream).To(Stream) \
+				(control) -> do (active=true) =>
+					control.each (state) -> active = state
+					@where -> active
 					
