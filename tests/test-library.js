@@ -964,9 +964,9 @@ define(['jmodel/emerald2'], function() {
   });
   module('Number');
   test('Integer', function() {
-    equals(Integer(5), 5, 'Returns the integer value when called on an integer.');
+    equals(Number.Integer(5), 5, 'Returns the integer value when called on an integer.');
     return raises((function() {
-      return Integer(5.5);
+      return Number.Integer(5.5);
     }), 'Throws an exception when called on a non-integer');
   });
   module('Boolean');

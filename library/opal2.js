@@ -967,13 +967,13 @@ define(function() {
   is_integer = function(value) {
     return value === Math.round(value);
   };
-  window.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
+  Number.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
-  Number.Odd = Integer.Where((function(number) {
+  Number.Odd = Number.Integer.Where((function(number) {
     return number % 2 === 1;
   }), "Invalid Value: <value> is not odd");
-  Number.Even = Integer.Where((function(number) {
+  Number.Even = Number.Integer.Where((function(number) {
     return number % 2 === 0;
   }), "Invalid Value: <value> is not even");
   String.concat = Function.From([String]).To(String)(function() {
