@@ -111,7 +111,12 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.LessThan = Function.From(Number).To(Function) (max) -&gt;
+            <div class="content"><div class='highlight'><pre>	Number.In = Function.From([Number]).To(Function) (numbers...) -&gt;
+		<span class="property">@Where</span> \
+			(number) -&gt; number <span class="keyword">in</span> numbers,
+			<span class="string">"Invalid Number: \"&lt;value&gt;\" is not in {<span class="subst">#{(number <span class="keyword">for</span> number <span class="keyword">in</span> numbers ).join(',')}</span>}"</span>
+
+	Number.LessThan = Function.From(Number).To(Function) (max) -&gt;
 		<span class="property">@Where</span> Function.lt(max), <span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
 
 	Number.GreaterThan = Function.From(Number).To(Function) (min) -&gt;
