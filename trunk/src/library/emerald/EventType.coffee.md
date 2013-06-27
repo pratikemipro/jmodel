@@ -14,7 +14,10 @@
 			subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]
 			
 			# Tests: partial
-			raise: Function.delegate -> [ this, @add ]
+			raise: (args...) ->
+				promise = new Promise()
+				@add promise
+				promise.fulfil args...
 			
 			fail: (args...) ->
 				promise = new Promise()
