@@ -1236,7 +1236,7 @@ define(function() {
     });
 
     Promise.Fulfilled = Function.Returning(function() {
-      return new Promise;
+      return new this;
     })(function(promise) {
       return function() {
         var args;
@@ -1247,7 +1247,7 @@ define(function() {
     });
 
     Promise.Rejected = Function.Returning(function() {
-      return new Promise;
+      return new this;
     })(function(promise) {
       return function() {
         var args;
@@ -1257,10 +1257,9 @@ define(function() {
       };
     });
 
-    Promise.Of = function(cons) {
-      var ensure, _ref3;
+    Promise.Of = function(constructor) {
+      var _ref3;
 
-      ensure = Object.ensure(cons);
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -1269,12 +1268,7 @@ define(function() {
           return _ref3;
         }
 
-        _Class.prototype.fulfil = function() {
-          var args;
-
-          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return _Class.__super__.fulfil.call(this, ensure.apply(null, args));
-        };
+        _Class.prototype.fulfil = Function.Of(constructor)(_Class.prototype.fulfil);
 
         return _Class;
 
@@ -1284,7 +1278,7 @@ define(function() {
     Promise.conjoin = function() {};
 
     Promise.disjoin = Function.Returning(function() {
-      return new this.constructor();
+      return new this;
     })(function(disjunction) {
       return function() {
         var promise, promises, _i, _len, _results;

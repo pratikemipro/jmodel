@@ -62,20 +62,19 @@
 # Pre-resolved Promises
 
 			
-			@Fulfilled: Function.Returning(-> new Promise) \
+			@Fulfilled: Function.Returning(-> new this ) \
 				(promise) -> (args...) -> promise.fulfil args...
 				
-			@Rejected: Function.Returning(-> new Promise) \
+			@Rejected: Function.Returning(-> new this ) \
 				(promise) -> (args...) -> promise.reject args...
 			
 
 # Typed Promises
 
 				
-			@Of: (cons) ->
-				ensure = Object.ensure cons
+			@Of: (constructor) ->
 				class extends this
-					fulfil: (args...) -> super ensure args...
+					fulfil: Function.Of(constructor) this::fulfil
 			
 
 # Promise combinators
@@ -83,7 +82,7 @@
 				
 			@conjoin: ->
 			
-			@disjoin: Function.Returning(-> new @constructor() ) \
+			@disjoin: Function.Returning(-> new this ) \
 				(disjunction) -> (promises...) ->
 					for promise in promises
 						promise.then \
