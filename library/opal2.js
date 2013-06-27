@@ -963,7 +963,7 @@ define(function() {
     return first.concat.apply(first, rest);
   });
   String.concat.unit = '';
-  String.In = function() {
+  String.In = Function.From([String]).To(Function)(function() {
     var string, strings;
     strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return this.Where(function(str) {
@@ -977,12 +977,12 @@ define(function() {
       }
       return _results;
     })()).join(',')) + "}");
-  };
-  String.Matching = function(regex) {
+  });
+  String.Matching = Function.From(RegExp).To(Function)(function(regex) {
     return this.Where(function(str) {
       return regex.test(str);
     }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
-  };
+  });
   Boolean.True = function() {
     return true;
   };
