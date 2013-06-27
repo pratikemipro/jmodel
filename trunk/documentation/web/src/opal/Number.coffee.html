@@ -96,7 +96,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNan value</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value</pre></div></div>
             
         </li>
         
@@ -112,20 +112,21 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	Number.LessThan = Function.From(Number).To(Function) (max) -&gt;
-		<span class="property">@Where</span> Function.lt(max),
-			<span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
+		<span class="property">@valid</span> = Function.lt max
+		<span class="property">@Where</span> <span class="property">@valid</span>, <span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
 
 	Number.GreaterThan = Function.From(Number).To(Function) (min) -&gt;
-		<span class="property">@Where</span> Function.gt(min),
-			<span class="string">"Invalid Value: &lt;value&gt; is not greater than <span class="subst">#{min}</span>"</span>
+		<span class="property">@valid</span> = Function.gt min
+		<span class="property">@Where</span> <span class="property">@valid</span>, <span class="string">"Invalid Value: &lt;value&gt; is not greater than <span class="subst">#{min}</span>"</span>
 
 	Number.Between = Function.From(Number,Number).To(Function) (min,max) -&gt;
-		<span class="property">@Where</span> Function.between(min,max),
-			<span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
+		<span class="property">@valid</span> = Function.between min, max
+		<span class="property">@Where</span> <span class="property">@valid</span>, <span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
 
-	window.Integer = Number.Where \
-		(value) -&gt; value == Math.round(value),
-		<span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	<span class="function"><span class="title">is_integer</span></span> = (value) -&gt; value == Math.round(value)
+
+	window.Integer = Number.Where is_integer, <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	window.Integer.valid = Object.isa(Number).<span class="keyword">and</span> is_integer
 
 	Number.Positive = Number.GreaterThan <span class="number">0</span>
 	Number.Negative = Number.LessThan <span class="number">0</span></pre></div></div>

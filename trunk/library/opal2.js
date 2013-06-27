@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, Type, ordered, _base;
+  var Promise, Type, is_integer, ordered, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -938,20 +938,25 @@ define(function() {
     });
   });
   Number.valid = function(value) {
-    return Object.isa(Number)(value) && !isNan(value);
+    return Object.isa(Number)(value) && !isNaN(value);
   };
   Number.LessThan = Function.From(Number).To(Function)(function(max) {
-    return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
+    this.valid = Function.lt(max);
+    return this.Where(this.valid, "Invalid Value: <value> is not less than " + max);
   });
   Number.GreaterThan = Function.From(Number).To(Function)(function(min) {
-    return this.Where(Function.gt(min), "Invalid Value: <value> is not greater than " + min);
+    this.valid = Function.gt(min);
+    return this.Where(this.valid, "Invalid Value: <value> is not greater than " + min);
   });
   Number.Between = Function.From(Number, Number).To(Function)(function(min, max) {
-    return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
+    this.valid = Function.between(min, max);
+    return this.Where(this.valid, "Invalid Value: <value> is not between " + min + " and " + max);
   });
-  window.Integer = Number.Where(function(value) {
+  is_integer = function(value) {
     return value === Math.round(value);
-  }, "Invalid Value: <value> is not an integer");
+  };
+  window.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
+  window.Integer.valid = Object.isa(Number).and(is_integer);
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
   String.concat = Function.From([String]).To(String)(function() {
