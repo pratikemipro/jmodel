@@ -1235,6 +1235,28 @@ define(function() {
       return _results;
     });
 
+    Promise.Fulfilled = Function.Returning(function() {
+      return new Promise;
+    })(function(promise) {
+      return function() {
+        var args;
+
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return promise.fulfil.apply(promise, args);
+      };
+    });
+
+    Promise.Rejected = Function.Returning(function() {
+      return new Promise;
+    })(function(promise) {
+      return function() {
+        var args;
+
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return promise.reject.apply(promise, args);
+      };
+    });
+
     Promise.Of = function(cons) {
       var ensure, _ref3;
 

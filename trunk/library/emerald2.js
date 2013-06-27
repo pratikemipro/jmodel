@@ -102,21 +102,17 @@ define(['jmodel/sapphire2'], function() {
     });
 
     EventType.prototype.raise = function() {
-      var args, promise;
+      var args;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      promise = new Promise();
-      this.add(promise);
-      return promise.fulfil.apply(promise, args);
+      return this.add(Promise.Fulfilled.apply(Promise, args));
     };
 
     EventType.prototype.fail = function() {
-      var args, promise;
+      var args;
 
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      promise = new Promise();
-      this.add(promise);
-      return promise.reject.apply(promise, args);
+      return this.add(Promise.Rejected.apply(Promise, args));
     };
 
     return EventType;

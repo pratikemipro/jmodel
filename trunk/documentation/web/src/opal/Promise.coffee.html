@@ -177,6 +177,12 @@
 				<span class="keyword">for</span> {promise,rejected} <span class="keyword">in</span> <span class="property">@waiting</span>
 					chain promise, rejected, [<span class="property">@reason</span>]
 
+		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise) \
+			(promise) -&gt; (args...) -&gt; promise.fulfil args...
+
+		<span class="property">@Rejected</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise) \
+			(promise) -&gt; (args...) -&gt; promise.reject args...
+
 		<span class="property">@Of</span>: (cons) -&gt;
 			ensure = Object.ensure cons
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>

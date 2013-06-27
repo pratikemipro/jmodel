@@ -107,14 +107,10 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>		raise: (args...) -&gt;
-			promise = <span class="keyword">new</span> Promise()
-			<span class="property">@add</span> promise
-			promise.fulfil args...
+			<span class="property">@add</span> Promise.Fulfilled args...
 
 		fail: (args...) -&gt;
-			promise = <span class="keyword">new</span> Promise()
-			<span class="property">@add</span> promise
-			promise.reject args...</pre></div></div>
+			<span class="property">@add</span> Promise.Rejected args...</pre></div></div>
             
         </li>
         
