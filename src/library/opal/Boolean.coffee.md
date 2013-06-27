@@ -7,4 +7,3 @@
 		Boolean.False = -> false
 		Boolean.False.valid = Object.isa(Boolean).and (value) -> not value
 		
-	
