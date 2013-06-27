@@ -101,12 +101,12 @@
 
 	String.concat.unit = <span class="string">''</span>
 
-	String.<span class="function"><span class="title">In</span></span> = (strings...) -&gt;
+	String.In = Function.From([String]).To(Function) (strings...) -&gt;
 		<span class="property">@Where</span> \
 			(str) -&gt; str <span class="keyword">in</span> strings,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" is not in {<span class="subst">#{( '\"'+string+'\"' <span class="keyword">for</span> string <span class="keyword">in</span> strings ).join(',')}</span>}"</span>
 
-	String.<span class="function"><span class="title">Matching</span></span> = (regex) -&gt;
+	String.Matching = Function.From(RegExp).To(Function) (regex) -&gt;
 		<span class="property">@Where</span> \
 			(str) -&gt; regex.test str,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" does not match <span class="subst">#{regex.toString()}</span>"</span></pre></div></div>
