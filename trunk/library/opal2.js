@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, Type, is_integer, ordered, _base;
+  var Promise, Type, ordered, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -964,10 +964,9 @@ define(function() {
   Number.Between = Function.From(Number, Number).To(Function)(function(min, max) {
     return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
   });
-  is_integer = function(value) {
+  Number.Integer = Number.Where((function(value) {
     return value === Math.round(value);
-  };
-  Number.Integer = Number.Where(is_integer, "Invalid Value: <value> is not an integer");
+  }), "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
   Number.Odd = Number.Integer.Where((function(number) {
