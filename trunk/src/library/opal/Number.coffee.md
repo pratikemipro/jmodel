@@ -7,15 +7,15 @@
 ## Restrictions
 
 		
-		Number.LessThan = (max) ->
+		Number.LessThan = Function.From(Number).To(Function) (max) ->
 			@Where Function.lt(max),
 				"Invalid Value: <value> is not less than #{max}"
 			
-		Number.GreaterThan = (min) ->
+		Number.GreaterThan = Function.From(Number).To(Function) (min) ->
 			@Where Function.gt(min),
 				"Invalid Value: <value> is not greater than #{min}"
 	
-		Number.Between = (min,max) ->
+		Number.Between = Function.From(Number,Number).To(Function) (min,max) ->
 			@Where Function.between(min,max),
 				"Invalid Value: <value> is not between #{min} and #{max}"
 	
