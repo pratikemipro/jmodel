@@ -127,13 +127,13 @@
 
 	<span class="function"><span class="title">is_integer</span></span> = (value) -&gt; value == Math.round(value)
 
-	window.Integer = Number.Where is_integer, <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	Number.Integer = Number.Where is_integer, <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
 
 	Number.Positive = Number.GreaterThan <span class="number">0</span>
 	Number.Negative = Number.LessThan <span class="number">0</span>
 
-	Number.Odd  = Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">1</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
-	Number.Even = Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">0</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
+	Number.Odd  = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">1</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
+	Number.Even = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">0</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
             
         </li>
         
