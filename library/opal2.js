@@ -1007,9 +1007,15 @@ define(function() {
   Boolean.True = function() {
     return true;
   };
+  Boolean.True.valid = Object.isa(Boolean).and(function(value) {
+    return value;
+  });
   Boolean.False = function() {
     return false;
   };
+  Boolean.False.valid = Object.isa(Boolean).and(function(value) {
+    return !value;
+  });
   Math.plus = function(a, b) {
     return a + b;
   };

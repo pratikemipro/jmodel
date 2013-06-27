@@ -97,7 +97,10 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	Boolean.<span class="function"><span class="title">True</span></span> = -&gt; <span class="literal">true</span>
-	Boolean.<span class="function"><span class="title">False</span></span> = -&gt; <span class="literal">false</span></pre></div></div>
+	Boolean.True.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; value
+
+	Boolean.<span class="function"><span class="title">False</span></span> = -&gt; <span class="literal">false</span>
+	Boolean.False.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; <span class="keyword">not</span> value</pre></div></div>
             
         </li>
         
