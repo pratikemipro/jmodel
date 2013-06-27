@@ -61,7 +61,20 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.EventRegistry = <span class="class"><span class="keyword">class</span> <span class="title">EventRegistry</span> <span class="keyword">extends</span> <span class="title">Map</span>.<span class="title">To</span> <span class="title">EventType</span></span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	window.EventRegistry = <span class="class"><span class="keyword">class</span> <span class="title">EventRegistry</span> <span class="keyword">extends</span> <span class="title">Map</span>.<span class="title">To</span> <span class="title">EventType</span></span>
+
+		constructor: (eventtypes=[]) -&gt;
+			<span class="property">@add</span> eventtype <span class="keyword">for</span> eventtype <span class="keyword">in</span> eventtypes
+
+		register: (args...) -&gt; <span class="property">@add</span> args...
+
+		create: Function.Returning(-&gt; <span class="keyword">new</span> EventType) \
+			(eventtype) -&gt; (key) -&gt; <span class="property">@add</span> key, eventtype
+
+		subscribe: Function.From(Object) (subscriptions) -&gt;
+			<span class="property">@get</span>(name).subscribe(subscriber) <span class="keyword">for</span> own name, subscriber <span class="keyword">of</span> subscriptions
+
+		republish: -&gt;</pre></div></div>
             
         </li>
         
