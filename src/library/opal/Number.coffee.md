@@ -20,7 +20,7 @@
 	
 		Number.Between = Function.From(Number,Number).To(Function) (min,max) ->
 			@Where Function.between(min,max), "Invalid Value: <value> is not between #{min} and #{max}"
-
+		
 		Number.Integer = Number.Where ( (value) -> value == Math.round value ), "Invalid Value: <value> is not an integer"
 	
 		Number.Positive = Number.GreaterThan 0
