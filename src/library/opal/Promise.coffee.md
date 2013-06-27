@@ -57,6 +57,12 @@
 					@status = REJECTED
 					for {promise,rejected} in @waiting
 						chain promise, rejected, [@reason]
+			
+			@Fulfilled: Function.Returning(-> new Promise) \
+				(promise) -> (args...) -> promise.fulfil args...
+				
+			@Rejected: Function.Returning(-> new Promise) \
+				(promise) -> (args...) -> promise.reject args...
 				
 			@Of: (cons) ->
 				ensure = Object.ensure cons

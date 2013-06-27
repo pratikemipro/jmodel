@@ -15,11 +15,7 @@
 			
 			# Tests: partial
 			raise: (args...) ->
-				promise = new Promise()
-				@add promise
-				promise.fulfil args...
+				@add Promise.Fulfilled args...
 			
 			fail: (args...) ->
-				promise = new Promise()
-				@add promise
-				promise.reject args...
+				@add Promise.Rejected args...
