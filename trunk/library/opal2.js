@@ -940,6 +940,21 @@ define(function() {
   Number.valid = function(value) {
     return Object.isa(Number)(value) && !isNaN(value);
   };
+  Number.In = Function.From([Number]).To(Function)(function() {
+    var number, numbers;
+    numbers = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return this.Where(function(number) {
+      return __indexOf.call(numbers, number) >= 0;
+    }, "Invalid Number: \"<value>\" is not in {" + (((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })()).join(',')) + "}");
+  });
   Number.LessThan = Function.From(Number).To(Function)(function(max) {
     return this.Where(Function.lt(max), "Invalid Value: <value> is not less than " + max);
   });

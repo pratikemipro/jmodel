@@ -7,6 +7,11 @@
 ## Restrictions
 
 		
+		Number.In = Function.From([Number]).To(Function) (numbers...) ->
+			@Where \
+				(number) -> number in numbers,
+				"Invalid Number: \"<value>\" is not in {#{(number for number in numbers ).join(',')}}"
+		
 		Number.LessThan = Function.From(Number).To(Function) (max) ->
 			@Where Function.lt(max), "Invalid Value: <value> is not less than #{max}"
 			
