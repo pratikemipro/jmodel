@@ -104,7 +104,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		where: Function.From(Function).To(Stream) \
+            <div class="content"><div class='highlight'><pre>		map: Function.From(Function).To(Stream) \
+			(fn) -&gt; <span class="property">@derive</span> (args...) -&gt; <span class="property">@add</span> fn args...
+
+		where: Function.From(Function).To(Stream) \
 			(predicate) -&gt; <span class="property">@derive</span> (args...) -&gt;
 				<span class="property">@add</span> args... <span class="keyword">if</span> predicate args...
 
@@ -121,7 +124,31 @@
 		control: Function.From(Stream).To(Stream) \
 			(control) -&gt; <span class="keyword">do</span> (active=<span class="literal">true</span>) =&gt;
 				control.each (state) -&gt; active = state
-				<span class="property">@where</span> -&gt; active</pre></div></div>
+				<span class="property">@where</span> -&gt; active
+
+		between: Function.From(Stream,Stream).To(Stream) \
+			(start,stop) -&gt;
+				<span class="property">@control</span> Stream.disjoin \
+					start.map(Boolean.True),
+					stop.map(Boolean.False)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2>Stream combinators</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@disjoin</span>: Function.From([Stream]).Returning(-&gt; <span class="keyword">new</span> Stream) \
+			(disjunction) -&gt; (streams...) -&gt;
+				<span class="keyword">for</span> stream <span class="keyword">in</span> streams
+					stream.each (args...) -&gt; disjunction.add args...</pre></div></div>
             
         </li>
         

@@ -1620,6 +1620,35 @@ define(['jmodel/emerald2'], function() {
     deepEqual(output1, ['red', 'green', 'blue'], 'Items added to stream are passed to each');
     return deepEqual(output2, ['<red>', '<green>', '<blue>'], 'Allows multiple each callbacks');
   });
+  test('Stream.Of', function() {
+    var Person, fred, john, output, stream;
+    Person = function(name) {
+      this.name = name;
+    };
+    stream = new (Stream.Of(Person));
+    output = [];
+    stream.each(function(person) {
+      return output.push(person);
+    });
+    stream.add(new Person('fred')).add('john');
+    fred = output[0], john = output[1];
+    equal(stream instanceof Stream, true, 'Typed Streams are Streams');
+    equal(fred instanceof Person && john instanceof Person, true, 'Objects in stream are of correct type');
+    return equal(john.name, 'john', 'Passes arguments to constructors correctly');
+  });
+  test('Stream::map', function() {
+    var odd, output, stream;
+    stream = new Stream();
+    output = [];
+    odd = function(x) {
+      return x % 2 === 1;
+    };
+    stream.map(odd).each(function(item) {
+      return output.push(item);
+    });
+    stream.add(1).add(2).add(3).add(4).add(5).add(6);
+    return deepEqual(output, [true, false, true, false, true, false], 'Correctly applies map');
+  });
   test('Stream::where', function() {
     var odd, output1, output2, stream;
     stream = new Stream();
@@ -1700,21 +1729,42 @@ define(['jmodel/emerald2'], function() {
     data.add('yellow');
     return deepEqual(output, ['red', 'green', 'magenta'], 'Control stream gates output');
   });
-  test('Stream.Of', function() {
-    var Person, fred, john, output, stream;
-    Person = function(name) {
-      this.name = name;
-    };
-    stream = new (Stream.Of(Person));
+  test('Stream::between', function() {
+    var data, output, start, stop;
+    data = new Stream();
+    start = new Stream();
+    stop = new Stream();
     output = [];
-    stream.each(function(person) {
-      return output.push(person);
+    data.between(start, stop).each(function(item) {
+      return output.push(item);
     });
-    stream.add(new Person('fred')).add('john');
-    fred = output[0], john = output[1];
-    equal(stream instanceof Stream, true, 'Typed Streams are Streams');
-    equal(fred instanceof Person && john instanceof Person, true, 'Objects in stream are of correct type');
-    return equal(john.name, 'john', 'Passes arguments to constructors correctly');
+    data.add('red');
+    data.add('green');
+    stop.add(16);
+    data.add('blue');
+    data.add('cyan');
+    start.add('fred');
+    start.add('smith');
+    data.add('magenta');
+    stop.add(false);
+    data.add('yellow');
+    return deepEqual(output, ['red', 'green', 'magenta'], 'Start and stop streams open and close gate');
+  });
+  test('Stream.disjoin', function() {
+    var colours1, colours2, output;
+    colours1 = new Stream();
+    colours2 = new Stream();
+    output = [];
+    Stream.disjoin(colours1, colours2).each(function(item) {
+      return output.push(item);
+    });
+    colours1.add('red');
+    colours2.add('cyan');
+    colours1.add('green');
+    colours2.add('magenta');
+    colours1.add('blue');
+    colours2.add('yellow');
+    return deepEqual(output, ['red', 'cyan', 'green', 'magenta', 'blue', 'yellow'], 'Correctly disjoins streams');
   });
   module('Event');
   module('Subscriber');

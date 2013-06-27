@@ -501,6 +501,14 @@ define(['jmodel/opal2'], function() {
       })(this);
     });
 
+    Stream.prototype.map = Function.From(Function).To(Stream)(function(fn) {
+      return this.derive(function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return this.add(fn.apply(null, args));
+      });
+    });
+
     Stream.prototype.where = Function.From(Function).To(Stream)(function(predicate) {
       return this.derive(function() {
         var args;
@@ -542,6 +550,29 @@ define(['jmodel/opal2'], function() {
           return active;
         });
       })(true);
+    });
+
+    Stream.prototype.between = Function.From(Stream, Stream).To(Stream)(function(start, stop) {
+      return this.control(Stream.disjoin(start.map(Boolean.True), stop.map(Boolean.False)));
+    });
+
+    Stream.disjoin = Function.From([Stream]).Returning(function() {
+      return new Stream;
+    })(function(disjunction) {
+      return function() {
+        var stream, streams, _i, _len, _results;
+        streams = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        _results = [];
+        for (_i = 0, _len = streams.length; _i < _len; _i++) {
+          stream = streams[_i];
+          _results.push(stream.each(function() {
+            var args;
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            return disjunction.add.apply(disjunction, args);
+          }));
+        }
+        return _results;
+      };
     });
 
     return Stream;

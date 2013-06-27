@@ -15,6 +15,36 @@
 		deepEqual output1, ['red','green','blue'], 'Items added to stream are passed to each'
 		deepEqual output2, ['<red>','<green>','<blue>'], 'Allows multiple each callbacks'
 	
+	test 'Stream.Of', ->
+		
+		Person = (@name) ->
+		
+		stream = new (Stream.Of Person)
+		output = []
+		
+		stream.each (person) -> output.push person
+		
+		stream.add(new Person('fred')).add('john')
+		
+		[fred,john] = output
+		
+		equal stream instanceof Stream, true, 'Typed Streams are Streams'
+		equal fred instanceof Person and john instanceof Person, true, 'Objects in stream are of correct type'
+		equal john.name, 'john', 'Passes arguments to constructors correctly'
+	
+	test 'Stream::map', ->
+		
+		stream = new Stream()
+		output = []
+		
+		odd = (x) -> x % 2 == 1
+		
+		stream.map(odd).each (item) -> output.push item
+		
+		stream.add(1).add(2).add(3).add(4).add(5).add(6)
+		
+		deepEqual output, [true,false,true,false,true,false], 'Correctly applies map'
+	
 	test 'Stream::where', ->
 		
 		stream = new Stream()
@@ -99,20 +129,41 @@
 		
 		deepEqual output, ['red','green','magenta'], 'Control stream gates output'
 		
+	test 'Stream::between', ->
 		
-	test 'Stream.Of', ->
+		data  = new Stream()
+		start = new Stream()
+		stop  = new Stream()
 		
-		Person = (@name) ->
-		
-		stream = new (Stream.Of Person)
 		output = []
+		data.between(start,stop).each (item) -> output.push item
 		
-		stream.each (person) -> output.push person
+		data.add 'red'
+		data.add 'green'
+		stop.add 16
+		data.add 'blue'
+		data.add 'cyan'
+		start.add 'fred'
+		start.add 'smith'
+		data.add 'magenta'
+		stop.add false
+		data.add 'yellow'
 		
-		stream.add(new Person('fred')).add('john')
+		deepEqual output, ['red','green','magenta'], 'Start and stop streams open and close gate'
 		
-		[fred,john] = output
+	test 'Stream.disjoin', ->
 		
-		equal stream instanceof Stream, true, 'Typed Streams are Streams'
-		equal fred instanceof Person and john instanceof Person, true, 'Objects in stream are of correct type'
-		equal john.name, 'john', 'Passes arguments to constructors correctly'
+		colours1 = new Stream()
+		colours2 = new Stream()
+		
+		output = []
+		Stream.disjoin(colours1,colours2).each (item) -> output.push item
+		
+		colours1.add 'red'
+		colours2.add 'cyan'
+		colours1.add 'green'
+		colours2.add 'magenta'
+		colours1.add 'blue'
+		colours2.add 'yellow'
+		
+		deepEqual output, ['red','cyan','green','magenta','blue','yellow'], 'Correctly disjoins streams'
