@@ -28,3 +28,6 @@
 		Number.Positive = Number.GreaterThan 0
 		Number.Negative = Number.LessThan 0
 		
+		Number.Odd  = Integer.Where ( (number) -> number % 2 == 1 ), "Invalid Value: <value> is not odd"
+		Number.Even = Integer.Where ( (number) -> number % 2 == 0 ), "Invalid Value: <value> is not even"
+		

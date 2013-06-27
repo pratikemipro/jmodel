@@ -130,7 +130,10 @@
 	window.Integer = Number.Where is_integer, <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
 
 	Number.Positive = Number.GreaterThan <span class="number">0</span>
-	Number.Negative = Number.LessThan <span class="number">0</span></pre></div></div>
+	Number.Negative = Number.LessThan <span class="number">0</span>
+
+	Number.Odd  = Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">1</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
+	Number.Even = Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">0</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
             
         </li>
         
