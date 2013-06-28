@@ -5,7 +5,7 @@
 		
 			[PENDING,FULFILLED,REJECTED] = [1..3]
 		
-			delay = (fn) -> setTimeout fn, 1
+			delay = (fn) -> setTimeout fn, 0
 		
 			chain = (promise,fn,value) -> delay ->
 				try
@@ -84,8 +84,6 @@
 			
 			@disjoin: Function.Returning(-> new Promise ) \
 				(disjunction) -> (promises...) ->
-					for promise in promises
-						promise.then \
-							( (args...) -> disjunction.fulfil args... ),
-							( (args...) -> disjunction.fail args... )
+					[fulfil,reject] = Function.delegates -> [ disjunction, disjunction.fulfil, disjunction.reject ]
+					promise.then fulfil, reject for promise in promises
 							

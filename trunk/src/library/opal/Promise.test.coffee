@@ -79,8 +79,25 @@
 		
 		promise.fulfil '1974-11-20'
 		
+	asyncTest 'Promise.disjoin', 2, ->
 		
+		delay = (fn) -> setTimeout fn, 10
 		
+		promise1 = new Promise
+		promise2 = new Promise
+		promise3 = new Promise
 		
+		promise = Promise.disjoin promise1, promise2, promise3
 		
+		equals promise instanceof Promise, true, 'A disjunction of promises is a promise'
 		
+		output = []
+		
+		promise.then (value) -> output.push value
+		
+		promise2.fulfil 'green'
+		promise1.fulfil 'red'
+		
+		delay ->
+			deepEqual output, ['green'], 'Disjunction fulfilled with first fulfilled value only'
+			start()
