@@ -62,10 +62,10 @@
 # Pre-resolved Promises
 
 			
-			@Fulfilled: Function.Returning(-> new this ) \
+			@Fulfilled: Function.Returning(-> new Promise ) \
 				(promise) -> (args...) -> promise.fulfil args...
 				
-			@Rejected: Function.Returning(-> new this ) \
+			@Rejected: Function.Returning(-> new Promise ) \
 				(promise) -> (args...) -> promise.reject args...
 			
 
@@ -82,7 +82,7 @@
 				
 			@conjoin: ->
 			
-			@disjoin: Function.Returning(-> new this ) \
+			@disjoin: Function.Returning(-> new Promise ) \
 				(disjunction) -> (promises...) ->
 					for promise in promises
 						promise.then \
