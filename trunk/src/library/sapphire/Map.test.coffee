@@ -6,9 +6,9 @@
 			rome: 476
 			constantinople: 1453
 			
-		deepEqual ( key for own key of falls ), ['rome','constantinople'], 'Map has correct keys'
+		deepEqual ( key for own key of falls._ ), ['rome','constantinople'], 'Map has correct keys'
 		
-		deepEqual [falls['rome'],falls['constantinople']], [476,1453], 'Keys map to correct values'
+		deepEqual [falls._['rome'],falls._['constantinople']], [476,1453], 'Keys map to correct values'
 		
 		empty = new Map()
 		
@@ -22,7 +22,7 @@
 			
 		falls.remove 'rome'
 		
-		deepEqual ( key for own key of falls ), ['constantinople'], 'Correctly removes key'
+		deepEqual ( key for own key of falls._ ), ['constantinople'], 'Correctly removes key'
 		equals falls.get('constantinople'), 1453, 'Remaining key mappings unchanged'
 		
 	test 'Map::keys', ->

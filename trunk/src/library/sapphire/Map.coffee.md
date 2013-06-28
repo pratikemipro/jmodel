@@ -4,20 +4,21 @@
 		window.Map = class Map
 			
 			constructor: ( mappings={} ) ->
+				@_ = {}
 				@add key, value for own key, value of mappings
 	
 			add: Function.switch [	
-				Type(Value,Value) Function.Chaining (key,value) -> @[key] = value
+				Type(Value,Value) Function.Chaining (key,value) -> @_[key] = value
 				Type(Object)	  Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
 			]
 			
-			remove: Function.Chaining (key) -> delete @[key]
+			remove: Function.Chaining (key) -> delete @_[key]
 	
-			get: (key) -> @[key]
+			get: (key) -> @_[key]
 			
-			keys: -> new Set ( key for own key of this )
+			keys: -> new Set ( key for own key of @_ )
 	
-			each: (fn) -> fn(key,value) for own key, value of this
+			each: (fn) -> fn(key,value) for own key, value of @_
 	
 			ensure: Function.identity
 			
@@ -29,7 +30,8 @@
 				class extends this
 				
 					add: this::add.extend [			
-						Type(Value,Value) Function.Chaining (key,value) -> @[key] = @ensure value
+						Type(Value,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
+						Type(Value)		  Function.Chaining (key) -> @add key, @ensure()
 						Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
 					]
 					
@@ -42,6 +44,6 @@
 				class extends this
 					add: this::add.extend [
 						Type(Value,Value) Function.Chaining (key,value) ->
-							@[key] = if not @[key] then @ensure(value) else combine @ensure(value), @[key]
+							@_[key] = if not @_[key] then @ensure(value) else combine @ensure(value), @_[key]
 					]
 					
