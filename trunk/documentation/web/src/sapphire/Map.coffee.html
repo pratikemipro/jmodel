@@ -63,9 +63,9 @@
             
             <div class="content"><div class='highlight'><pre>	window.Map = <span class="class"><span class="keyword">class</span> <span class="title">Map</span></span>
 
-		constructor: ( mappings={} ) -&gt;
+		constructor: ( mappings ) -&gt;
 			<span class="property">@_</span> = {}
-			<span class="property">@add</span> key, value <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
+			<span class="property">@add</span> mappings <span class="keyword">if</span> mappings <span class="keyword">instanceof</span> Object
 
 		add: Function.<span class="keyword">switch</span> [	
 			Type(Value,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = value
@@ -100,7 +100,6 @@
 
 				add: <span class="keyword">this</span>::add.extend [			
 					Type(Value,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = <span class="property">@ensure</span> value
-					Type(Value)		  Function.Chaining (key) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>()
 					Type(Array)       Function.Chaining (keys) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>() <span class="keyword">for</span> key <span class="keyword">in</span> keys
 				]
 

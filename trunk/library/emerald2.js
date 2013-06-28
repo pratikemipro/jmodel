@@ -121,14 +121,10 @@ define(['jmodel/sapphire2'], function() {
     __extends(EventRegistry, _super);
 
     function EventRegistry(eventtypes) {
-      var eventtype, _i, _len;
       if (eventtypes == null) {
         eventtypes = [];
       }
-      for (_i = 0, _len = eventtypes.length; _i < _len; _i++) {
-        eventtype = eventtypes[_i];
-        this.add(eventtype);
-      }
+      EventRegistry.__super__.constructor.call(this, eventtypes);
     }
 
     EventRegistry.prototype.register = function() {

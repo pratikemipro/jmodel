@@ -1,1 +1,1 @@
-define ['jmodel/emerald2'], ->
+define ['jmodel/topaz2'], ->
