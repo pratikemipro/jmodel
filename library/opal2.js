@@ -539,6 +539,9 @@ define(function() {
   Function.prototype.hastype = function(type) {
     return this.then(Object.type.eq(type));
   };
+  Function.prototype.inherits = function(constructor) {
+    return this.prototype instanceof constructor;
+  };
   Function.prototype.bind = function() {
     var args1, context, fn;
     context = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
