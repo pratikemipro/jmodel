@@ -64,20 +64,21 @@
             <div class="content"><div class='highlight'><pre>	window.Map = <span class="class"><span class="keyword">class</span> <span class="title">Map</span></span>
 
 		constructor: ( mappings={} ) -&gt;
+			<span class="property">@_</span> = {}
 			<span class="property">@add</span> key, value <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
 
 		add: Function.<span class="keyword">switch</span> [	
-			Type(Value,Value) Function.Chaining (key,value) -&gt; @[key] = value
+			Type(Value,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = value
 			Type(Object)	  Function.Chaining (mappings) -&gt; <span class="property">@add</span>(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
 		]
 
-		remove: Function.Chaining (key) -&gt; <span class="keyword">delete</span> @[key]
+		remove: Function.Chaining (key) -&gt; <span class="keyword">delete</span> <span class="property">@_</span>[key]
 
-		get: (key) -&gt; @[key]
+		get: (key) -&gt; <span class="property">@_</span>[key]
 
-		keys: -&gt; <span class="keyword">new</span> Set ( key <span class="keyword">for</span> own key <span class="keyword">of</span> <span class="keyword">this</span> )
+		keys: -&gt; <span class="keyword">new</span> Set ( key <span class="keyword">for</span> own key <span class="keyword">of</span> <span class="property">@_</span> )
 
-		each: (fn) -&gt; fn(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> <span class="keyword">this</span>
+		each: (fn) -&gt; fn(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> <span class="property">@_</span>
 
 		ensure: Function.identity</pre></div></div>
             
@@ -98,7 +99,8 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 
 				add: <span class="keyword">this</span>::add.extend [			
-					Type(Value,Value) Function.Chaining (key,value) -&gt; @[key] = <span class="property">@ensure</span> value
+					Type(Value,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = <span class="property">@ensure</span> value
+					Type(Value)		  Function.Chaining (key) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>()
 					Type(Array)       Function.Chaining (keys) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>() <span class="keyword">for</span> key <span class="keyword">in</span> keys
 				]
 
@@ -111,7 +113,7 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 				add: <span class="keyword">this</span>::add.extend [
 					Type(Value,Value) Function.Chaining (key,value) -&gt;
-						@[key] = <span class="keyword">if</span> <span class="keyword">not</span> @[key] <span class="keyword">then</span> <span class="property">@ensure</span>(value) <span class="keyword">else</span> combine <span class="property">@ensure</span>(value), @[key]
+						<span class="property">@_</span>[key] = <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@_</span>[key] <span class="keyword">then</span> <span class="property">@ensure</span>(value) <span class="keyword">else</span> combine <span class="property">@ensure</span>(value), <span class="property">@_</span>[key]
 				]</pre></div></div>
             
         </li>

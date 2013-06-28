@@ -344,6 +344,7 @@ define(['jmodel/opal2'], function() {
       if (mappings == null) {
         mappings = {};
       }
+      this._ = {};
       for (key in mappings) {
         if (!__hasProp.call(mappings, key)) continue;
         value = mappings[key];
@@ -353,7 +354,7 @@ define(['jmodel/opal2'], function() {
 
     Map.prototype.add = Function["switch"]([
       Type(Value, Value)(Function.Chaining(function(key, value) {
-        return this[key] = value;
+        return this._[key] = value;
       })), Type(Object)(Function.Chaining(function(mappings) {
         var key, value, _results;
         _results = [];
@@ -367,20 +368,21 @@ define(['jmodel/opal2'], function() {
     ]);
 
     Map.prototype.remove = Function.Chaining(function(key) {
-      return delete this[key];
+      return delete this._[key];
     });
 
     Map.prototype.get = function(key) {
-      return this[key];
+      return this._[key];
     };
 
     Map.prototype.keys = function() {
       var key;
       return new Set((function() {
-        var _results;
+        var _ref, _results;
+        _ref = this._;
         _results = [];
-        for (key in this) {
-          if (!__hasProp.call(this, key)) continue;
+        for (key in _ref) {
+          if (!__hasProp.call(_ref, key)) continue;
           _results.push(key);
         }
         return _results;
@@ -388,11 +390,12 @@ define(['jmodel/opal2'], function() {
     };
 
     Map.prototype.each = function(fn) {
-      var key, value, _results;
+      var key, value, _ref, _results;
+      _ref = this._;
       _results = [];
-      for (key in this) {
-        if (!__hasProp.call(this, key)) continue;
-        value = this[key];
+      for (key in _ref) {
+        if (!__hasProp.call(_ref, key)) continue;
+        value = _ref[key];
         _results.push(fn(key, value));
       }
       return _results;
@@ -412,7 +415,9 @@ define(['jmodel/opal2'], function() {
 
         _Class.prototype.add = _Class.prototype.add.extend([
           Type(Value, Value)(Function.Chaining(function(key, value) {
-            return this[key] = this.ensure(value);
+            return this._[key] = this.ensure(value);
+          })), Type(Value)(Function.Chaining(function(key) {
+            return this.add(key, this.ensure());
           })), Type(Array)(Function.Chaining(function(keys) {
             var key, _i, _len, _results;
             _results = [];
@@ -446,7 +451,7 @@ define(['jmodel/opal2'], function() {
 
         _Class.prototype.add = _Class.prototype.add.extend([
           Type(Value, Value)(Function.Chaining(function(key, value) {
-            return this[key] = !this[key] ? this.ensure(value) : combine(this.ensure(value), this[key]);
+            return this._[key] = !this._[key] ? this.ensure(value) : combine(this.ensure(value), this._[key]);
           }))
         ]);
 

@@ -3,7 +3,7 @@ var __slice = [].slice,
   __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(['jmodel/emerald2'], function() {
+define(['jmodel/topaz2'], function() {
   module('Array');
   test('Array.concat', function() {
     deepEqual(Array.concat(), [], 'Concatenation of zero arrays is empty array');
@@ -1652,15 +1652,16 @@ define(['jmodel/emerald2'], function() {
       constantinople: 1453
     });
     deepEqual((function() {
-      var _results;
+      var _ref, _results;
+      _ref = falls._;
       _results = [];
-      for (key in falls) {
-        if (!__hasProp.call(falls, key)) continue;
+      for (key in _ref) {
+        if (!__hasProp.call(_ref, key)) continue;
         _results.push(key);
       }
       return _results;
     })(), ['rome', 'constantinople'], 'Map has correct keys');
-    deepEqual([falls['rome'], falls['constantinople']], [476, 1453], 'Keys map to correct values');
+    deepEqual([falls._['rome'], falls._['constantinople']], [476, 1453], 'Keys map to correct values');
     empty = new Map();
     return equals(empty instanceof Map, true, 'Empty maps are valid');
   });
@@ -1672,10 +1673,11 @@ define(['jmodel/emerald2'], function() {
     });
     falls.remove('rome');
     deepEqual((function() {
-      var _results;
+      var _ref, _results;
+      _ref = falls._;
       _results = [];
-      for (key in falls) {
-        if (!__hasProp.call(falls, key)) continue;
+      for (key in _ref) {
+        if (!__hasProp.call(_ref, key)) continue;
         _results.push(key);
       }
       return _results;
@@ -1969,7 +1971,12 @@ define(['jmodel/emerald2'], function() {
       return start();
     });
   });
-  return module('EventRegistry');
+  module('EventRegistry');
+  module('Observable');
+  return test('Observable Set', function() {
+    var set;
+    return set = new (Observable(Set));
+  });
 });
 
 /*
