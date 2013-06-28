@@ -447,6 +447,21 @@ define(function() {
       return method.apply(context, args);
     };
   };
+  Function.delegates = function(fn) {
+    var index, _i, _results;
+    _results = [];
+    for (index = _i = 0; _i <= 9; index = ++_i) {
+      _results.push((function(index) {
+        return function() {
+          var args, context, fns, _ref;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          _ref = fn.call(this), context = _ref[0], fns = 2 <= _ref.length ? __slice.call(_ref, 1) : [];
+          return fns[index].apply(context, args);
+        };
+      })(index));
+    }
+    return _results;
+  };
   Function.ordering = Function.or;
   Function.eq = function(value) {
     return Predicate(function(x) {
@@ -1057,7 +1072,7 @@ define(function() {
     _ref = [1, 2, 3], PENDING = _ref[0], FULFILLED = _ref[1], REJECTED = _ref[2];
 
     delay = function(fn) {
-      return setTimeout(fn, 1);
+      return setTimeout(fn, 0);
     };
 
     chain = function(promise, fn, value) {
@@ -1185,20 +1200,15 @@ define(function() {
       return new Promise;
     })(function(disjunction) {
       return function() {
-        var promise, promises, _i, _len, _results;
+        var fulfil, promise, promises, reject, _i, _len, _ref1, _results;
         promises = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        _ref1 = Function.delegates(function() {
+          return [disjunction, disjunction.fulfil, disjunction.reject];
+        }), fulfil = _ref1[0], reject = _ref1[1];
         _results = [];
         for (_i = 0, _len = promises.length; _i < _len; _i++) {
           promise = promises[_i];
-          _results.push(promise.then((function() {
-            var args;
-            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            return disjunction.fulfil.apply(disjunction, args);
-          }), (function() {
-            var args;
-            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            return disjunction.fail.apply(disjunction, args);
-          })));
+          _results.push(promise.then(fulfil, reject));
         }
         return _results;
       };
