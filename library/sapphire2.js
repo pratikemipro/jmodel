@@ -54,14 +54,6 @@ define(['jmodel/opal2'], function() {
       return (_ref = partition.get(true)) != null ? _ref : new this.constructor;
     });
 
-    Set.prototype.replace = Function.Chaining(function(before, after) {
-      var index;
-      index = Array.prototype.indexOf.call(this, before);
-      if (index !== -1) {
-        return this[index] = after;
-      }
-    });
-
     Set.prototype.member = Predicate.From(Maybe(Value))(function(element) {
       return -1 !== Array.prototype.indexOf.call(this, element);
     });

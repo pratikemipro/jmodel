@@ -1259,30 +1259,6 @@ define(['jmodel/topaz2'], function() {
       return _results;
     })(), [], 'Removes all elements when called without an argument');
   });
-  test('Set::replace', function() {
-    var colour, colours;
-    colours = new Set(['red', 'green', 'blue']);
-    colours.replace('green', 'cyan');
-    deepEqual((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = colours.length; _i < _len; _i++) {
-        colour = colours[_i];
-        _results.push(colour);
-      }
-      return _results;
-    })(), ['red', 'cyan', 'blue'], 'Replaces matched element');
-    colours.replace('purple', 'magenta');
-    return deepEqual((function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = colours.length; _i < _len; _i++) {
-        colour = colours[_i];
-        _results.push(colour);
-      }
-      return _results;
-    })(), ['red', 'cyan', 'blue'], 'Does nothing if element not matched');
-  });
   test('Set::member', function() {
     var colours;
     colours = new Set(['red', 'green', 'blue']);
