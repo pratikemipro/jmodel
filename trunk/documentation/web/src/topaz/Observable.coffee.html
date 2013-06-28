@@ -46,15 +46,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Observable = <span class="function"><span class="title">Observable</span></span> = (constructor) -&gt; <span class="keyword">switch</span>
-
-		<span class="keyword">when</span> constructor == Set <span class="keyword">or</span> constructor.inherits Set
-
-			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
-
-				constructor: (args...) -&gt;
-					<span class="keyword">super</span>
-					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	window.Observable = <span class="function"><span class="title">Observable</span></span> = (constructor) -&gt; <span class="keyword">switch</span></pre></div></div>
             
         </li>
         
@@ -62,17 +54,30 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>@event = Function.delegate -&gt; [@events,@events.get]</p>
+              <h2>Observable Set</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>				add: -&gt;
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">when</span> constructor == Set <span class="keyword">or</span> constructor.inherits Set
+
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
+
+				constructor: (args...) -&gt;
+					<span class="keyword">super</span>
+					events = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [events,events.get]
+
+				add: -&gt;
 					length = <span class="property">@length</span>
 					<span class="keyword">super</span>
-					<span class="property">@event</span>(<span class="string">'add'</span>).raise @[<span class="property">@length</span>] <span class="keyword">if</span> length != <span class="property">@length</span></pre></div></div>
+					<span class="property">@event</span>(<span class="string">'add'</span>).raise @[length] <span class="keyword">if</span> length != <span class="property">@length</span>
+					<span class="keyword">return</span> <span class="keyword">this</span>
+
+				remove: <span class="keyword">this</span>::remove.post (removed) -&gt;
+					<span class="property">@event</span>(<span class="string">'remove'</span>).raise(item) <span class="keyword">for</span> item <span class="keyword">in</span> removed</pre></div></div>
             
         </li>
         
