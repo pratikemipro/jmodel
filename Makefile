@@ -41,8 +41,8 @@ emerald:
 	docco -o documentation/web/src/emerald src/library/emerald/*.coffee.md
 	
 topaz:
-	coffee --compile --bare --map --join library/emerald2.js \
-		src/library/emerald/header.coffee.md
+	coffee --compile --bare --map --join library/topaz2.js \
+		src/library/topaz/header.coffee.md
 	docco -o documentation/web/src/topaz src/library/topaz/*.coffee.md
 
 library-test:
