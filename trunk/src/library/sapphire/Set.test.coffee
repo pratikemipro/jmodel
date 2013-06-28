@@ -41,18 +41,6 @@
 		
 		equals numbers.length, 0, 'Set has correct cardinality after removal'
 		deepEqual ( number for number in numbers ), [], 'Removes all elements when called without an argument'
-			
-	test 'Set::replace', ->
-		
-		colours = new Set ['red','green','blue']
-		
-		colours.replace('green','cyan')
-		
-		deepEqual ( colour for colour in colours ), ['red','cyan','blue'], 'Replaces matched element'
-		
-		colours.replace('purple','magenta')
-		
-		deepEqual ( colour for colour in colours ), ['red','cyan','blue'], 'Does nothing if element not matched'
 		
 	test 'Set::member', ->
 		
