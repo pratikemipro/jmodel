@@ -69,20 +69,20 @@
 ## Set algebra
 
 			
-			@union: Function.From([Set]).Returning(-> new Set) \
+			@union: Function.From([Set]).Returning(-> new this) \
 				(union) -> (sets...) ->
 					union.add element for element in set for set in sets
 			
-			@intersection: Function.From([Set]).Returning(-> new Set) \
+			@intersection: Function.From([Set]).Returning(-> new this) \
 				(intersection) -> (first=[],rest...) ->
 	 				intersection.add element for element in first when \
 	 					[true].concat( set.member element for set in rest ).reduce (a,b) -> a and b
 			
-			@difference: Function.From(Set,Set).Returning(-> new Set) \
+			@difference: Function.From(Set,Set).Returning(-> new this) \
 				(difference) -> (first,second) ->
 					difference.add element for element in first when not second.member element
 			
-			@product: Function.From([Set]).Returning(-> new Set ) \
+			@product: Function.From([Set]).Returning(-> new this ) \
 				(product) -> (sets...) ->
 				
 

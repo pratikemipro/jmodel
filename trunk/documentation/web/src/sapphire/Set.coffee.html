@@ -165,20 +165,20 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="property">@union</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> Set) \
+            <div class="content"><div class='highlight'><pre>		<span class="property">@union</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(union) -&gt; (sets...) -&gt;
 				union.add element <span class="keyword">for</span> element <span class="keyword">in</span> set <span class="keyword">for</span> set <span class="keyword">in</span> sets
 
-		<span class="property">@intersection</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> Set) \
+		<span class="property">@intersection</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(intersection) -&gt; (first=[],rest...) -&gt;
  				intersection.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> \
  					[<span class="literal">true</span>].concat( set.member element <span class="keyword">for</span> set <span class="keyword">in</span> rest ).reduce (a,b) -&gt; a <span class="keyword">and</span> b
 
-		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> Set) \
+		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(difference) -&gt; (first,second) -&gt;
 				difference.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> <span class="keyword">not</span> second.member element
 
-		<span class="property">@product</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> Set ) \
+		<span class="property">@product</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
 			(product) -&gt; (sets...) -&gt;</pre></div></div>
             
         </li>

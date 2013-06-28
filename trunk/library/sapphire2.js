@@ -141,7 +141,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.union = Function.From([Set]).Returning(function() {
-      return new Set;
+      return new this;
     })(function(union) {
       return function() {
         var element, set, sets, _i, _len, _results;
@@ -164,7 +164,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.intersection = Function.From([Set]).Returning(function() {
-      return new Set;
+      return new this;
     })(function(intersection) {
       return function() {
         var element, first, rest, set, _i, _len, _results;
@@ -194,7 +194,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.difference = Function.From(Set, Set).Returning(function() {
-      return new Set;
+      return new this;
     })(function(difference) {
       return function(first, second) {
         var element, _i, _len, _results;
@@ -210,7 +210,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.product = Function.From([Set]).Returning(function() {
-      return new Set;
+      return new this;
     })(function(product) {
       return function() {
         var sets;
@@ -426,6 +426,8 @@ define(['jmodel/opal2'], function() {
 
         _Class.prototype.ensure = Object.ensure(constructor);
 
+        _Class.element_constructor = constructor;
+
         return _Class;
 
       })(this);
@@ -433,6 +435,7 @@ define(['jmodel/opal2'], function() {
 
     Map.Using = function(combine) {
       var _ref;
+      combine = combine.bind(this.element_constructor);
       return (function(_super) {
         __extends(_Class, _super);
 
