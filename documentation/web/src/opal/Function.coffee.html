@@ -355,7 +355,13 @@
             <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">delegate</span></span> = (fn) -&gt;
 		(args...) -&gt; 
 			[context,method] = fn.call(<span class="keyword">this</span>)
-			method.apply context, args</pre></div></div>
+			method.apply context, args
+
+	Function.<span class="function"><span class="title">delegates</span></span> = (fn) -&gt;
+		<span class="keyword">for</span> index <span class="keyword">in</span> [<span class="number">0.</span><span class="number">.9</span>]
+			<span class="keyword">do</span> (index) -&gt; (args...) -&gt;
+				[context,fns...] = fn.call(<span class="keyword">this</span>)
+				fns[index].apply context, args</pre></div></div>
             
         </li>
         

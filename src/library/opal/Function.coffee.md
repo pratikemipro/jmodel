@@ -189,6 +189,12 @@
 			(args...) -> 
 				[context,method] = fn.call(this)
 				method.apply context, args
+				
+		Function.delegates = (fn) ->
+			for index in [0..9]
+				do (index) -> (args...) ->
+					[context,fns...] = fn.call(this)
+					fns[index].apply context, args
 	
 
 ## Composite ordering
