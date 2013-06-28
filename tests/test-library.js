@@ -1981,7 +1981,7 @@ define(['jmodel/topaz2'], function() {
       return start();
     });
   });
-  return asyncTest('(Observable List)::add', 1, function() {
+  asyncTest('(Observable List)::add', 1, function() {
     var delay, items, list;
     delay = function(fn) {
       return setTimeout(fn, 1);
@@ -1994,6 +1994,50 @@ define(['jmodel/topaz2'], function() {
     list.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6);
     return delay(function() {
       deepEqual(items, [1, 1, 2, 3, 2, 4, 1, 5, 6], 'Raises correct events on addition');
+      return start();
+    });
+  });
+  asyncTest('(Observable Map)::add', 1, function() {
+    var delay, map, mappings;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+    map = new (Observable(Map));
+    mappings = [];
+    map.event('add').subscribe(function(key, value) {
+      return mappings.push("" + key + "->" + value);
+    });
+    map.add({
+      up: 'quark',
+      down: 'quark',
+      electron: 'lepton',
+      neutrino: 'lepton'
+    });
+    return delay(function() {
+      deepEqual(mappings, ['up->quark', 'down->quark', 'electron->lepton', 'neutrino->lepton'], 'Raises correct events on addition');
+      return start();
+    });
+  });
+  return asyncTest('(Observable Map)::remove', 1, function() {
+    var delay, map, removed;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+    map = new (Observable(Map));
+    removed = [];
+    map.event('remove').subscribe(function(key) {
+      return removed.push(key);
+    });
+    map.add({
+      up: 'quark',
+      down: 'quark',
+      electron: 'lepton',
+      neutrino: 'lepton'
+    });
+    map.remove('up');
+    map.remove('electron');
+    return delay(function() {
+      deepEqual(removed, ['up', 'electron'], 'Raises correct events on removal');
       return start();
     });
   });

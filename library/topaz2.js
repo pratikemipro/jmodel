@@ -22,7 +22,7 @@ define(['jmodel/emerald2'], function() {
           function _Class() {
             var args;
             args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            this.events = new EventRegistry(['add', 'remove', 'replace', 'change']);
+            this.events = new EventRegistry(['add', 'remove', 'change']);
             this.event = Function.delegate(function() {
               return [this.events, this.events.get];
             });
@@ -68,6 +68,38 @@ define(['jmodel/emerald2'], function() {
 
           _Class.prototype.add = _Class.prototype.add.post(function(list, item) {
             return this.event('add').raise(item);
+          });
+
+          return _Class;
+
+        })(constructor);
+      case !(constructor === Map || constructor.inherits(Map)):
+        return (function(_super) {
+          __extends(_Class, _super);
+
+          function _Class() {
+            var args;
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            this.events = new EventRegistry(['add', 'remove', 'change']);
+            this.event = Function.delegate(function() {
+              return [this.events, this.events.get];
+            });
+            _Class.__super__.constructor.apply(this, arguments);
+          }
+
+          _Class.prototype.add = _Class.prototype.add.extend([
+            Type(Value, Value)(Function.Chaining(function(key, value) {
+              value = this.ensure(value);
+              this._[key] = value;
+              return this.event('add').raise(key, value);
+            }))
+          ]);
+
+          _Class.prototype.remove = Function.Chaining(function(key) {
+            if (this._[key] != null) {
+              delete this._[key];
+              return this.event('remove').raise(key);
+            }
           });
 
           return _Class;
