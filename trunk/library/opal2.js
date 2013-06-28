@@ -1158,7 +1158,7 @@ define(function() {
     });
 
     Promise.Fulfilled = Function.Returning(function() {
-      return new Promise;
+      return new this;
     })(function(promise) {
       return function() {
         var args;
@@ -1168,7 +1168,7 @@ define(function() {
     });
 
     Promise.Rejected = Function.Returning(function() {
-      return new Promise;
+      return new this;
     })(function(promise) {
       return function() {
         var args;
@@ -1196,7 +1196,7 @@ define(function() {
 
     Promise.conjoin = function() {};
 
-    Promise.disjoin = Function.Returning(function() {
+    Promise.disjoin = Function.From([Promise]).Returning(function() {
       return new this;
     })(function(disjunction) {
       return function() {

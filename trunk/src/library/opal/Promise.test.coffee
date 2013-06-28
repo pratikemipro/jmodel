@@ -51,7 +51,7 @@
 		
 	asyncTest 'Promise.Fulfilled', 2, ->
 		
-		promise = new (Promise.Fulfilled) 'red'
+		promise = Promise.Fulfilled 'red'
 		
 		promise.then (value) ->
 			equals promise instanceof Promise, true, 'Already fulfilled promises are promises'
@@ -60,13 +60,12 @@
 			
 	asyncTest 'Promise.Rejected', 2, ->
 		
-		promise = new (Promise.Rejected) 'red'
+		promise = Promise.Rejected 'red'
 		
 		promise.then (->), (value) ->
 			equals promise instanceof Promise, true, 'Already rejected promises are promises'
 			equals value, 'red', 'Promise rejected with correct value'
 			start()
-		
 		
 	asyncTest 'Promise.Of', 2, ->
 		
@@ -78,6 +77,23 @@
 			start()
 		
 		promise.fulfil '1974-11-20'
+		
+	asyncTest 'Promise.Of.Fulfilled', 2, ->
+		
+		promise = Promise.Of(Date).Fulfilled '1974-11-20'
+		
+		promise.then (value) ->
+			equals value instanceof Date, true, 'Creates object of correct type'
+			equals value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly'
+			start()
+			
+	asyncTest 'Promise.Of.Rejected', 1, ->
+		
+		promise = Promise.Of(Date).Rejected 'error'
+		
+		promise.then (->), (value) ->
+			equals value, 'error', 'Passes argument correctly'
+			start()
 		
 	asyncTest 'Promise.disjoin', 2, ->
 		
