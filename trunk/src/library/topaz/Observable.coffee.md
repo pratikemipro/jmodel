@@ -25,3 +25,18 @@
 					remove: this::remove.post (removed) ->
 						@event('remove').raise(item) for item in removed by -1
 									
+
+## Observable List
+
+			when constructor == List or constructor.inherits List
+			
+				class extends constructor
+				
+					constructor: (args...) ->
+						@events = new EventRegistry ['add','change']
+						@event = Function.delegate -> [@events,@events.get]
+						super
+						
+					add: this::add.post (list,item) ->
+						@event('add').raise(item)
+						
