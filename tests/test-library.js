@@ -1040,7 +1040,7 @@ define(['jmodel/emerald2'], function() {
   });
   asyncTest('Promise.Fulfilled', 2, function() {
     var promise;
-    promise = new Promise.Fulfilled('red');
+    promise = Promise.Fulfilled('red');
     return promise.then(function(value) {
       equals(promise instanceof Promise, true, 'Already fulfilled promises are promises');
       equals(value, 'red', 'Promise fulfilled with correct value');
@@ -1049,7 +1049,7 @@ define(['jmodel/emerald2'], function() {
   });
   asyncTest('Promise.Rejected', 2, function() {
     var promise;
-    promise = new Promise.Rejected('red');
+    promise = Promise.Rejected('red');
     return promise.then((function() {}), function(value) {
       equals(promise instanceof Promise, true, 'Already rejected promises are promises');
       equals(value, 'red', 'Promise rejected with correct value');
@@ -1065,6 +1065,23 @@ define(['jmodel/emerald2'], function() {
       return start();
     });
     return promise.fulfil('1974-11-20');
+  });
+  asyncTest('Promise.Of.Fulfilled', 2, function() {
+    var promise;
+    promise = Promise.Of(Date).Fulfilled('1974-11-20');
+    return promise.then(function(value) {
+      equals(value instanceof Date, true, 'Creates object of correct type');
+      equals(value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly');
+      return start();
+    });
+  });
+  asyncTest('Promise.Of.Rejected', 1, function() {
+    var promise;
+    promise = Promise.Of(Date).Rejected('error');
+    return promise.then((function() {}), function(value) {
+      equals(value, 'error', 'Passes argument correctly');
+      return start();
+    });
   });
   asyncTest('Promise.disjoin', 2, function() {
     var delay, output, promise, promise1, promise2, promise3;
