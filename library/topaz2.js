@@ -52,6 +52,27 @@ define(['jmodel/emerald2'], function() {
           return _Class;
 
         })(constructor);
+      case !(constructor === List || constructor.inherits(List)):
+        return (function(_super) {
+          __extends(_Class, _super);
+
+          function _Class() {
+            var args;
+            args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+            this.events = new EventRegistry(['add', 'change']);
+            this.event = Function.delegate(function() {
+              return [this.events, this.events.get];
+            });
+            _Class.__super__.constructor.apply(this, arguments);
+          }
+
+          _Class.prototype.add = _Class.prototype.add.post(function(list, item) {
+            return this.event('add').raise(item);
+          });
+
+          return _Class;
+
+        })(constructor);
     }
   };
 });

@@ -1959,13 +1959,13 @@ define(['jmodel/topaz2'], function() {
     set.event('add').subscribe(function(item) {
       return items.push(item);
     });
-    set.add(1).add(2).add(3).add(4).add(5).add(6);
+    set.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6);
     return delay(function() {
       deepEqual(items, [1, 2, 3, 4, 5, 6], 'Raises correct events on addition');
       return start();
     });
   });
-  return asyncTest('(Observable Set)::remove', 1, function() {
+  asyncTest('(Observable Set)::remove', 1, function() {
     var delay, items, set;
     delay = function(fn) {
       return setTimeout(fn, 1);
@@ -1978,6 +1978,22 @@ define(['jmodel/topaz2'], function() {
     set.remove(Number.Odd.valid);
     return delay(function() {
       deepEqual(items, [1, 3, 5], 'Raises correct events on addition');
+      return start();
+    });
+  });
+  return asyncTest('(Observable List)::add', 1, function() {
+    var delay, items, list;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+    list = new (Observable(List));
+    items = [];
+    list.event('add').subscribe(function(item) {
+      return items.push(item);
+    });
+    list.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6);
+    return delay(function() {
+      deepEqual(items, [1, 1, 2, 3, 2, 4, 1, 5, 6], 'Raises correct events on addition');
       return start();
     });
   });
