@@ -101,3 +101,28 @@
 		delay ->
 			deepEqual output, ['green'], 'Disjunction fulfilled with first fulfilled value only'
 			start()
+			
+	asyncTest 'Promise.Of.disjoin', 3, ->
+		
+		delay = (fn) -> setTimeout fn, 10
+		
+		promise1 = new Promise
+		promise2 = new Promise
+		promise3 = new Promise
+		
+		promise = Promise.Of(Date).disjoin promise1, promise2, promise3
+		
+		equals promise instanceof Promise, true, 'A typed disjunction of promises is a promise'
+		
+		output = []
+		
+		promise.then (value) -> output.push value
+		
+		promise2.fulfil '1974-11-20'
+		promise1.fulfil '1979-1-14'
+		
+		delay ->
+			equal output[0] instanceof Date, true, 'Constructor correctly applied'
+			deepEqual (date.toDateString() for date in output), ['Wed Nov 20 1974'], 'Disjunction fulfilled with first fulfilled value only'
+			start()
+		

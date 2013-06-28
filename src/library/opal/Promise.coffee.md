@@ -82,7 +82,7 @@
 				
 			@conjoin: ->
 			
-			@disjoin: Function.Returning(-> new Promise ) \
+			@disjoin: Function.Returning(-> new this ) \
 				(disjunction) -> (promises...) ->
 					[fulfil,reject] = Function.delegates -> [ disjunction, disjunction.fulfil, disjunction.reject ]
 					promise.then fulfil, reject for promise in promises
