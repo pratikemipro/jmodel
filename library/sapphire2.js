@@ -340,15 +340,9 @@ define(['jmodel/opal2'], function() {
   })();
   window.Map = Map = (function() {
     function Map(mappings) {
-      var key, value;
-      if (mappings == null) {
-        mappings = {};
-      }
       this._ = {};
-      for (key in mappings) {
-        if (!__hasProp.call(mappings, key)) continue;
-        value = mappings[key];
-        this.add(key, value);
+      if (mappings instanceof Object) {
+        this.add(mappings);
       }
     }
 
@@ -416,8 +410,6 @@ define(['jmodel/opal2'], function() {
         _Class.prototype.add = _Class.prototype.add.extend([
           Type(Value, Value)(Function.Chaining(function(key, value) {
             return this._[key] = this.ensure(value);
-          })), Type(Value)(Function.Chaining(function(key) {
-            return this.add(key, this.ensure());
           })), Type(Array)(Function.Chaining(function(keys) {
             var key, _i, _len, _results;
             _results = [];

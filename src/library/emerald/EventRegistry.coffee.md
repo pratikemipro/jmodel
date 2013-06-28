@@ -4,7 +4,7 @@
 		window.EventRegistry = class EventRegistry extends Map.To EventType
 		
 			constructor: (eventtypes=[]) ->
-				@add eventtype for eventtype in eventtypes
+				super eventtypes
 				
 			register: (args...) -> @add args...
 			

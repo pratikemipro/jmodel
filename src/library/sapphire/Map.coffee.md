@@ -3,9 +3,9 @@
 		
 		window.Map = class Map
 			
-			constructor: ( mappings={} ) ->
+			constructor: ( mappings ) ->
 				@_ = {}
-				@add key, value for own key, value of mappings
+				@add mappings if mappings instanceof Object
 	
 			add: Function.switch [	
 				Type(Value,Value) Function.Chaining (key,value) -> @_[key] = value
@@ -31,7 +31,6 @@
 				
 					add: this::add.extend [			
 						Type(Value,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
-						Type(Value)		  Function.Chaining (key) -> @add key, @ensure()
 						Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
 					]
 					

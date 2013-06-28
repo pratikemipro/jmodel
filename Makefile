@@ -42,7 +42,8 @@ emerald:
 	
 topaz:
 	coffee --compile --bare --map --join library/topaz2.js \
-		src/library/topaz/header.coffee.md
+		src/library/topaz/header.coffee.md \
+		src/library/topaz/Observable.coffee.md
 	docco -o documentation/web/src/topaz src/library/topaz/*.coffee.md
 
 library-test:
@@ -65,7 +66,8 @@ library-test:
 		src/library/emerald/Event.test.coffee \
 		src/library/emerald/Subscriber.test.coffee \
 		src/library/emerald/EventType.test.coffee \
-		src/library/emerald/EventRegistry.test.coffee
+		src/library/emerald/EventRegistry.test.coffee \
+		src/library/topaz/Observable.test.coffee
 		
 library-doc:
 	@make opal-doc
@@ -99,6 +101,7 @@ emerald-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventRegistry.doc.xml -o:documentation/web/api/emerald/EventRegistry.html
 
 topaz-doc:
+	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/topaz/Observable.doc.xml -o:documentation/web/api/topaz/Observable.html
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
