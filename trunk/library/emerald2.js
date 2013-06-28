@@ -156,7 +156,16 @@ define(['jmodel/sapphire2'], function() {
       return _results;
     });
 
-    EventRegistry.prototype.republish = function() {};
+    EventRegistry.prototype.republish = Function.From(Object)(function(publications) {
+      var eventtype, name, _results;
+      _results = [];
+      for (name in publications) {
+        if (!__hasProp.call(publications, name)) continue;
+        eventtype = publications[name];
+        _results.push(this.get(name).republished(eventtype));
+      }
+      return _results;
+    });
 
     return EventRegistry;
 

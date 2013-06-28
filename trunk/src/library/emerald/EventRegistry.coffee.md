@@ -14,5 +14,6 @@
 			subscribe: Function.From(Object) (subscriptions) ->
 				@get(name).subscribe(subscriber) for own name, subscriber of subscriptions
 			
-			republish: ->
+			republish: Function.From(Object) (publications) ->
+				@get(name).republished(eventtype) for own name, eventtype of publications
 		
