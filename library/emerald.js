@@ -100,6 +100,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		
 		__constructor: EventType,
 	
+		// Reimplemented: yes
 		subscribe: function _subscribe (subscriber) {
 			var subs = this.subscribers().add(subscriber).added;
 			for ( var i in this.events ) {
@@ -109,6 +110,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			}
 		},
 	
+		// Reimplemented: yes
 		raise: function _raise () {
 			if ( this.__remember ) {
 				this.events.push(arguments);
@@ -119,6 +121,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			return this.subscribers().notify.apply(this.subscribers(),arguments);
 		},
 		
+		// Reimplemented: yes
 		fail: function _error () {
 			this.subscribers().fail.apply(this.subscribers(),arguments);
 		},
