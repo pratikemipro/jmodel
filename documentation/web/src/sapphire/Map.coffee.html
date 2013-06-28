@@ -104,10 +104,10 @@
 
 				ensure: Object.ensure constructor
 
-				<span class="property">@element_constructor</span>: constructor
+				<span class="property">@value_constructor</span>: constructor
 
 		<span class="property">@Using</span>: (combine) -&gt;
-			combine = combine.bind <span class="property">@element_constructor</span>
+			combine = combine.bind <span class="property">@value_constructor</span>
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 				add: <span class="keyword">this</span>::add.extend [
 					Type(Value,Value) Function.Chaining (key,value) -&gt;
