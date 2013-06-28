@@ -66,8 +66,8 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
 				constructor: (args...) -&gt;
-					events = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]
-					<span class="property">@event</span> = Function.delegate -&gt; [events,events.get]
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
 					<span class="keyword">super</span>
 
 				add: -&gt;

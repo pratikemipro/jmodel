@@ -20,11 +20,11 @@ define(['jmodel/emerald2'], function() {
           __extends(_Class, _super);
 
           function _Class() {
-            var args, events;
+            var args;
             args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            events = new EventRegistry(['add', 'remove', 'replace', 'change']);
+            this.events = new EventRegistry(['add', 'remove', 'replace', 'change']);
             this.event = Function.delegate(function() {
-              return [events, events.get];
+              return [this.events, this.events.get];
             });
             _Class.__super__.constructor.apply(this, arguments);
           }

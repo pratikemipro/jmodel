@@ -12,8 +12,8 @@
 				class extends constructor
 				
 					constructor: (args...) ->
-						events = new EventRegistry ['add','remove','replace','change']
-						@event = Function.delegate -> [events,events.get]
+						@events = new EventRegistry ['add','remove','replace','change']
+						@event = Function.delegate -> [@events,@events.get]
 						super
 						
 					add: ->
