@@ -66,9 +66,9 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
 				constructor: (args...) -&gt;
-					<span class="keyword">super</span>
 					events = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]
 					<span class="property">@event</span> = Function.delegate -&gt; [events,events.get]
+					<span class="keyword">super</span>
 
 				add: -&gt;
 					length = <span class="property">@length</span>
@@ -77,7 +77,7 @@
 					<span class="keyword">return</span> <span class="keyword">this</span>
 
 				remove: <span class="keyword">this</span>::remove.post (removed) -&gt;
-					<span class="property">@event</span>(<span class="string">'remove'</span>).raise(item) <span class="keyword">for</span> item <span class="keyword">in</span> removed</pre></div></div>
+					<span class="property">@event</span>(<span class="string">'remove'</span>).raise(item) <span class="keyword">for</span> item <span class="keyword">in</span> removed <span class="keyword">by</span> -<span class="number">1</span></pre></div></div>
             
         </li>
         

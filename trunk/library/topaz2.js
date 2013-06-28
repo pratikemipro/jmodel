@@ -22,11 +22,11 @@ define(['jmodel/emerald2'], function() {
           function _Class() {
             var args, events;
             args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-            _Class.__super__.constructor.apply(this, arguments);
             events = new EventRegistry(['add', 'remove', 'replace', 'change']);
             this.event = Function.delegate(function() {
               return [events, events.get];
             });
+            _Class.__super__.constructor.apply(this, arguments);
           }
 
           _Class.prototype.add = function() {
@@ -40,9 +40,9 @@ define(['jmodel/emerald2'], function() {
           };
 
           _Class.prototype.remove = _Class.prototype.remove.post(function(removed) {
-            var item, _i, _len, _results;
+            var item, _i, _results;
             _results = [];
-            for (_i = 0, _len = removed.length; _i < _len; _i++) {
+            for (_i = removed.length - 1; _i >= 0; _i += -1) {
               item = removed[_i];
               _results.push(this.event('remove').raise(item));
             }
