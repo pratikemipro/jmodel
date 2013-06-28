@@ -426,7 +426,7 @@ define(['jmodel/opal2'], function() {
 
         _Class.prototype.ensure = Object.ensure(constructor);
 
-        _Class.element_constructor = constructor;
+        _Class.value_constructor = constructor;
 
         return _Class;
 
@@ -435,7 +435,7 @@ define(['jmodel/opal2'], function() {
 
     Map.Using = function(combine) {
       var _ref;
-      combine = combine.bind(this.element_constructor);
+      combine = combine.bind(this.value_constructor);
       return (function(_super) {
         __extends(_Class, _super);
 

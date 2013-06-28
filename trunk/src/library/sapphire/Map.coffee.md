@@ -35,10 +35,10 @@
 					
 					ensure: Object.ensure constructor
 					
-					@element_constructor: constructor
+					@value_constructor: constructor
 			
 			@Using: (combine) ->
-				combine = combine.bind @element_constructor
+				combine = combine.bind @value_constructor
 				class extends this
 					add: this::add.extend [
 						Type(Value,Value) Function.Chaining (key,value) ->
