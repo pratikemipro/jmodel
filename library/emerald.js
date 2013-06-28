@@ -64,7 +64,8 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 			}
 			return this;
 		},
-			
+		
+		// Reimplemented: yes
 		republish: function (map) {
 			for ( var eventName in map ) {
 				if ( map.hasOwnProperty(eventName) ) {

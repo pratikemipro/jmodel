@@ -74,7 +74,8 @@
 		subscribe: Function.From(Object) (subscriptions) -&gt;
 			<span class="property">@get</span>(name).subscribe(subscriber) <span class="keyword">for</span> own name, subscriber <span class="keyword">of</span> subscriptions
 
-		republish: -&gt;</pre></div></div>
+		republish: Function.From(Object) (publications) -&gt;
+			<span class="property">@get</span>(name).republished(eventtype) <span class="keyword">for</span> own name, eventtype <span class="keyword">of</span> publications</pre></div></div>
             
         </li>
         
