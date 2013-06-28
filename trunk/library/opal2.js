@@ -1197,7 +1197,7 @@ define(function() {
     Promise.conjoin = function() {};
 
     Promise.disjoin = Function.Returning(function() {
-      return new Promise;
+      return new this;
     })(function(disjunction) {
       return function() {
         var fulfil, promise, promises, reject, _i, _len, _ref1, _results;

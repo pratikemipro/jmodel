@@ -1087,6 +1087,37 @@ define(['jmodel/emerald2'], function() {
       return start();
     });
   });
+  asyncTest('Promise.Of.disjoin', 3, function() {
+    var delay, output, promise, promise1, promise2, promise3;
+    delay = function(fn) {
+      return setTimeout(fn, 10);
+    };
+    promise1 = new Promise;
+    promise2 = new Promise;
+    promise3 = new Promise;
+    promise = Promise.Of(Date).disjoin(promise1, promise2, promise3);
+    equals(promise instanceof Promise, true, 'A typed disjunction of promises is a promise');
+    output = [];
+    promise.then(function(value) {
+      return output.push(value);
+    });
+    promise2.fulfil('1974-11-20');
+    promise1.fulfil('1979-1-14');
+    return delay(function() {
+      var date;
+      equal(output[0] instanceof Date, true, 'Constructor correctly applied');
+      deepEqual((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = output.length; _i < _len; _i++) {
+          date = output[_i];
+          _results.push(date.toDateString());
+        }
+        return _results;
+      })(), ['Wed Nov 20 1974'], 'Disjunction fulfilled with first fulfilled value only');
+      return start();
+    });
+  });
   module('Set');
   test('Set constructor', function() {
     var colour, colours, number, numbers;
