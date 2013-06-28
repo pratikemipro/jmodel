@@ -108,7 +108,12 @@
             
             <div class="content"><div class='highlight'><pre>		raise: (args...) -&gt; <span class="property">@add</span> Promise.Fulfilled args...
 
-		fail: (args...) -&gt; <span class="property">@add</span> Promise.Rejected args...</pre></div></div>
+		fail: (args...) -&gt; <span class="property">@add</span> Promise.Rejected args...
+
+		republish: (eventtype) -&gt;
+			<span class="property">@subscribe</span> \
+				Function.delegate -&gt; [eventtype,eventtype.raise],
+				Function.delegate -&gt; [eventtype,eventtype.fail]</pre></div></div>
             
         </li>
         

@@ -36,6 +36,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 	// 															  EventRegistry
 	// ------------------------------------------------------------------------
  
+ 	// Reimplemented: yes
 	function EventRegistry () {
 		Map.To(EventType).apply(this);
 		this.addArray.call(this,_slice.call(arguments));
@@ -43,15 +44,18 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		
 	EventRegistry.prototype = Object.extend(new (Map.To(EventType))(), {
 			
+		// Reimplemented: yes
 		register: function () {
 			return this.add(_slice.call(arguments));
 		},
-			
+		
+		// Reimplemented: yes	
 		create: function (key) {
 			this.add.apply(this,arguments);
 			return this.get(key);
 		},
-			
+		
+		// Reimplemented: yes
 		subscribe: function (map) {
 			for ( var eventName in map ) {
 				if ( map.hasOwnProperty(eventName) ) {

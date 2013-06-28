@@ -17,3 +17,9 @@
 			raise: (args...) -> @add Promise.Fulfilled args...
 			
 			fail: (args...) -> @add Promise.Rejected args...
+			
+			republish: (eventtype) ->
+				@subscribe \
+					Function.delegate -> [eventtype,eventtype.raise],
+					Function.delegate -> [eventtype,eventtype.fail]
+			

@@ -106,6 +106,14 @@ define(['jmodel/sapphire2'], function() {
       return this.add(Promise.Rejected.apply(Promise, args));
     };
 
+    EventType.prototype.republish = function(eventtype) {
+      return this.subscribe(Function.delegate(function() {
+        return [eventtype, eventtype.raise];
+      }, Function.delegate(function() {
+        return [eventtype, eventtype.fail];
+      })));
+    };
+
     return EventType;
 
   })(Stream.Of(Promise));
