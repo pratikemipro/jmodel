@@ -1973,9 +1973,37 @@ define(['jmodel/topaz2'], function() {
   });
   module('EventRegistry');
   module('Observable');
-  return test('Observable Set', function() {
-    var set;
-    return set = new (Observable(Set));
+  asyncTest('(Observable Set)::add', 1, function() {
+    var delay, items, set;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+    set = new (Observable(Set));
+    items = [];
+    set.event('add').subscribe(function(item) {
+      return items.push(item);
+    });
+    set.add(1).add(2).add(3).add(4).add(5).add(6);
+    return delay(function() {
+      deepEqual(items, [1, 2, 3, 4, 5, 6], 'Raises correct events on addition');
+      return start();
+    });
+  });
+  return asyncTest('(Observable Set)::remove', 1, function() {
+    var delay, items, set;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
+    set = new (Observable(Set))([1, 2, 3, 4, 5, 6]);
+    items = [];
+    set.event('remove').subscribe(function(item) {
+      return items.push(item);
+    });
+    set.remove(Number.Odd.valid);
+    return delay(function() {
+      deepEqual(items, [1, 3, 5], 'Raises correct events on addition');
+      return start();
+    });
   });
 });
 
