@@ -240,6 +240,8 @@
 		Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
 		
 		Function::hastype = (type) -> @then Object.type.eq type
+		
+		Function::inherits = (constructor) -> @prototype instanceof constructor
 	
 
 ## Application methods

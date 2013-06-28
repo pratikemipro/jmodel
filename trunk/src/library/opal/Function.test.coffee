@@ -401,6 +401,17 @@
 		
 		equal test.hastype('string')(), true, 'returns true when function returns a value of specified type'
 		equal test.hastype('number')(), false, 'returns false when function returns a value not of specified type'
+	
+	test 'Function::inherits', ->
+		
+		Contact = class
+		Person = class extends Contact
+		Employee = class extends Person
+			
+		equal Person.inherits(Contact), true, 'Classes extend their superclass'
+		equal Employee.inherits(Contact), true, 'Classes extend their supersuperclass'
+		equal Contact.inherits(Person), false, 'Classes do not extend subclasses'
+		equal Contact.inherits(Contact), false, 'Classes do not extend themselves'
 		
 	module 'Application methods'
 	

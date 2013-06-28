@@ -71,6 +71,7 @@ Function::matches	none	none
 Function::isnull	none	none
 Function::isa		none	none
 Function::hastype	none	none
+Function::inherits	none	none
 
 Function::bind		full	none
 Function::curry		full	none
