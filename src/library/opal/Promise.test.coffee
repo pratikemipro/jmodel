@@ -49,11 +49,29 @@
 		equals promise.value, undefined, 'After rejection, promise value is undefined'
 		equals promise.reason, 'fred', 'After rejection, promise reason is rejection reason'
 		
+	asyncTest 'Promise.Fulfilled', 2, ->
+		
+		promise = new (Promise.Fulfilled) 'red'
+		
+		promise.then (value) ->
+			equals promise instanceof Promise, true, 'Already fulfilled promises are promises'
+			equals value, 'red', 'Promise fulfilled with correct value'
+			start()
+			
+	asyncTest 'Promise.Rejected', 2, ->
+		
+		promise = new (Promise.Rejected) 'red'
+		
+		promise.then (->), (value) ->
+			equals promise instanceof Promise, true, 'Already rejected promises are promises'
+			equals value, 'red', 'Promise rejected with correct value'
+			start()
+		
+		
 	asyncTest 'Promise.Of', 2, ->
 		
 		promise = new (Promise.Of Date)
-		
-		x = undefined
+
 		promise.then (value) ->
 			equals value instanceof Date, true, 'Creates object of correct type'
 			equals value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly'

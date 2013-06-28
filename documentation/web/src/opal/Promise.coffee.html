@@ -190,10 +190,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise ) \
 			(promise) -&gt; (args...) -&gt; promise.fulfil args...
 
-		<span class="property">@Rejected</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+		<span class="property">@Rejected</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise ) \
 			(promise) -&gt; (args...) -&gt; promise.reject args...</pre></div></div>
             
         </li>
@@ -228,7 +228,7 @@
             
             <div class="content"><div class='highlight'><pre>		<span class="property">@conjoin</span>: -&gt;
 
-		<span class="property">@disjoin</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+		<span class="property">@disjoin</span>: Function.Returning(-&gt; <span class="keyword">new</span> Promise ) \
 			(disjunction) -&gt; (promises...) -&gt;
 				<span class="keyword">for</span> promise <span class="keyword">in</span> promises
 					promise.<span class="keyword">then</span> \
