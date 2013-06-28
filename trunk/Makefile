@@ -2,6 +2,7 @@ default:
 	@make opal
 	@make sapphire
 	@make emerald
+	@make topaz
 	@make library-test
 	@make jview
 
@@ -38,6 +39,11 @@ emerald:
 		src/library/emerald/EventType.coffee.md \
 		src/library/emerald/EventRegistry.coffee.md
 	docco -o documentation/web/src/emerald src/library/emerald/*.coffee.md
+	
+topaz:
+	coffee --compile --bare --map --join library/emerald2.js \
+		src/library/emerald/header.coffee.md
+	docco -o documentation/web/src/topaz src/library/topaz/*.coffee.md
 
 library-test:
 	coffee --compile --bare --map --join tests/test-library.js \
@@ -65,6 +71,7 @@ library-doc:
 	@make opal-doc
 	@make sapphire-doc
 	@make emerald-doc
+	@make topaz-doc
 
 opal-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/opal/Array.doc.xml -o:documentation/web/api/opal/Array.html
@@ -90,6 +97,8 @@ emerald-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventType.doc.xml -o:documentation/web/api/emerald/EventType.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/Subscriber.doc.xml -o:documentation/web/api/emerald/Subscriber.html
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/emerald/EventRegistry.doc.xml -o:documentation/web/api/emerald/EventRegistry.html
+
+topaz-doc:
 		
 jview:
 	coffee --compile --bare --map view/cards.coffee
