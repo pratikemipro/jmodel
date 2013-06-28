@@ -3,7 +3,6 @@ var __slice = [].slice,
   __hasProp = {}.hasOwnProperty;
 
 define(['jmodel/emerald2'], function() {
-  var delay;
   module('Array');
   test('Array.concat', function() {
     deepEqual(Array.concat(), [], 'Concatenation of zero arrays is empty array');
@@ -1067,6 +1066,27 @@ define(['jmodel/emerald2'], function() {
     });
     return promise.fulfil('1974-11-20');
   });
+  asyncTest('Promise.disjoin', 2, function() {
+    var delay, output, promise, promise1, promise2, promise3;
+    delay = function(fn) {
+      return setTimeout(fn, 10);
+    };
+    promise1 = new Promise;
+    promise2 = new Promise;
+    promise3 = new Promise;
+    promise = Promise.disjoin(promise1, promise2, promise3);
+    equals(promise instanceof Promise, true, 'A disjunction of promises is a promise');
+    output = [];
+    promise.then(function(value) {
+      return output.push(value);
+    });
+    promise2.fulfil('green');
+    promise1.fulfil('red');
+    return delay(function() {
+      deepEqual(output, ['green'], 'Disjunction fulfilled with first fulfilled value only');
+      return start();
+    });
+  });
   module('Set');
   test('Set constructor', function() {
     var colour, colours, number, numbers;
@@ -1815,9 +1835,6 @@ define(['jmodel/emerald2'], function() {
   module('Event');
   module('Subscriber');
   module('EventType');
-  delay = function(fn) {
-    return setTimeout(fn, 1);
-  };
   test('EventType::subscribe', function() {
     var et, subscriber;
     et = new EventType();
@@ -1825,9 +1842,11 @@ define(['jmodel/emerald2'], function() {
     et.subscribe(subscriber);
     return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
   });
-  asyncTest('EventType::add', function() {
-    var et, output, promise1, promise2;
-    expect(1);
+  asyncTest('EventType::add', 1, function() {
+    var delay, et, output, promise1, promise2;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
     et = new EventType();
     output = [];
     promise1 = new Promise();
@@ -1844,9 +1863,11 @@ define(['jmodel/emerald2'], function() {
       return start();
     });
   });
-  asyncTest('EventType::raise', function() {
-    var et, output1, output2;
-    expect(2);
+  asyncTest('EventType::raise', 2, function() {
+    var delay, et, output1, output2;
+    delay = function(fn) {
+      return setTimeout(fn, 1);
+    };
     et = new EventType();
     output1 = [];
     output2 = [];

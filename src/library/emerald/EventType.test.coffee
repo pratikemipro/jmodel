@@ -1,7 +1,5 @@
 	module 'EventType'
 	
-	delay = (fn) -> setTimeout fn, 1
-	
 	test 'EventType::subscribe', ->
 		
 		et = new EventType()
@@ -12,9 +10,9 @@
 		
 		equal et.subscribers[0], subscriber, 'Subscribers are added to subscriber set'
 	
-	asyncTest 'EventType::add', ->
+	asyncTest 'EventType::add', 1, ->
 		
-		expect(1)
+		delay = (fn) -> setTimeout fn, 1
 		
 		et = new EventType()
 		
@@ -34,9 +32,9 @@
 			deepEqual output, ['red','green'], 'Raising notifies first subscriber'
 			start()
 		
-	asyncTest 'EventType::raise', ->
+	asyncTest 'EventType::raise', 2, ->
 		
-		expect(2)
+		delay = (fn) -> setTimeout fn, 1
 		
 		et = new EventType()
 		
