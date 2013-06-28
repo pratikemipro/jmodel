@@ -48,6 +48,7 @@ Function.or			full	partial
 Function.not		full	none
 
 Function.delegate	none	none
+Function.delegates	none	none
 
 Function.ordering	none	none
 
