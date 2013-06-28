@@ -66,7 +66,7 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
 				constructor: (args...) -&gt;
-					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'replace'</span>,<span class="string">'change'</span>]
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'change'</span>]
 					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
 					<span class="keyword">super</span>
 
@@ -103,6 +103,40 @@
 
 				add: <span class="keyword">this</span>::add.post (list,item) -&gt;
 					<span class="property">@event</span>(<span class="string">'add'</span>).raise(item)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2>Observable Map</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="keyword">when</span> constructor == Map <span class="keyword">or</span> constructor.inherits Map
+
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
+
+				constructor: (args...) -&gt;
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
+					<span class="keyword">super</span>
+
+				add: <span class="keyword">this</span>::add.extend [			
+					Type(Value,Value) Function.Chaining (key,value) -&gt;
+						value = <span class="property">@ensure</span> value
+						<span class="property">@_</span>[key] = value
+						<span class="property">@event</span>(<span class="string">'add'</span>).raise(key,value)
+				]
+
+				remove: Function.Chaining (key) -&gt;
+					<span class="keyword">if</span> <span class="property">@_</span>[key]?
+						<span class="keyword">delete</span> <span class="property">@_</span>[key]
+						<span class="property">@event</span>(<span class="string">'remove'</span>).raise(key)</pre></div></div>
             
         </li>
         

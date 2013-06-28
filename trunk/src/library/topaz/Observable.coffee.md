@@ -12,7 +12,7 @@
 				class extends constructor
 				
 					constructor: (args...) ->
-						@events = new EventRegistry ['add','remove','replace','change']
+						@events = new EventRegistry ['add','remove','change']
 						@event = Function.delegate -> [@events,@events.get]
 						super
 						
@@ -28,6 +28,7 @@
 
 ## Observable List
 
+			
 			when constructor == List or constructor.inherits List
 			
 				class extends constructor
@@ -40,3 +41,27 @@
 					add: this::add.post (list,item) ->
 						@event('add').raise(item)
 						
+
+## Observable Map
+
+			
+			when constructor == Map or constructor.inherits Map
+			
+				class extends constructor
+				
+					constructor: (args...) ->
+						@events = new EventRegistry ['add','remove','change']
+						@event = Function.delegate -> [@events,@events.get]
+						super
+						
+					add: this::add.extend [			
+						Type(Value,Value) Function.Chaining (key,value) ->
+							value = @ensure value
+							@_[key] = value
+							@event('add').raise(key,value)
+					]
+					
+					remove: Function.Chaining (key) ->
+						if @_[key]?
+							delete @_[key]
+							@event('remove').raise(key)

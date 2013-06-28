@@ -36,7 +36,7 @@
 		
 		delay = (fn) -> setTimeout fn, 1
 		
-		list= new (Observable List)
+		list = new (Observable List)
 		
 		items = []
 		
@@ -46,4 +46,47 @@
 		
 		delay ->
 			deepEqual items, [1,1,2,3,2,4,1,5,6], 'Raises correct events on addition'
+			start()
+			
+	asyncTest '(Observable Map)::add', 1, ->
+		
+		delay = (fn) -> setTimeout fn, 1
+		
+		map = new (Observable Map)
+		
+		mappings = []
+		
+		map.event('add').subscribe (key,value) -> mappings.push "#{key}->#{value}"
+		
+		map.add
+			up: 'quark'
+			down: 'quark'
+			electron: 'lepton'
+			neutrino: 'lepton'
+		
+		delay ->
+			deepEqual mappings, ['up->quark','down->quark','electron->lepton','neutrino->lepton'], 'Raises correct events on addition'
+			start()
+			
+	asyncTest '(Observable Map)::remove', 1, ->
+		
+		delay = (fn) -> setTimeout fn, 1
+		
+		map = new (Observable Map)
+		
+		removed = []
+		
+		map.event('remove').subscribe (key) -> removed.push key
+		
+		map.add
+			up: 'quark'
+			down: 'quark'
+			electron: 'lepton'
+			neutrino: 'lepton'
+		
+		map.remove 'up'
+		map.remove 'electron'
+		
+		delay ->
+			deepEqual removed, ['up','electron'], 'Raises correct events on removal'
 			start()
