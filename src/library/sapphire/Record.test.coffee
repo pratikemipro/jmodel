@@ -15,3 +15,7 @@
 		
 		equals einstein.dob() instanceof Date, true, 'Creates date fields of correct type'
 		equals einstein.dob().toDateString(), 'Fri Mar 14 1879', true, 'Creates string fields with correct value'
+		
+		einstein.name 'Al Einstein'
+		
+		equals einstein.name(), 'Al Einstein', true, 'String fields can be updated'
