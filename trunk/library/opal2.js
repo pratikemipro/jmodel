@@ -19,6 +19,16 @@ define(function() {
   window.Value.valid = function(x) {
     return x !== void 0;
   };
+  window.Not = function(constructor) {
+    var fn, valid;
+
+    fn = function() {};
+    valid = Object.isa(constructor);
+    fn.valid = function(x) {
+      return !valid(x);
+    };
+    return fn;
+  };
   Object.isa = function(constructor) {
     switch (false) {
       case constructor !== Number:

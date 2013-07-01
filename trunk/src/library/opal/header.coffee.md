@@ -12,6 +12,12 @@
 	
 		window.Value = ->
 		window.Value.valid = (x) -> x != undefined
+		
+		window.Not = (constructor) ->
+			fn = ->
+			valid = Object.isa constructor
+			fn.valid = (x) -> not valid x
+			return fn
 	
 		# Tests: none
 		Object.isa = (constructor) -> switch
