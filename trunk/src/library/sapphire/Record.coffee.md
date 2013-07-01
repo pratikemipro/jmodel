@@ -18,7 +18,7 @@
 					do (field) ->
 						record.prototype[field] = Function.switch [
 							Type(Function) Function.Chaining (fn) ->
-								@_[field] = fn.call this, @_[field]
+								@[field] fn.call this, @_[field]
 							Type(Value) Function.Chaining (value) ->
 								@_[field] = value
 							Type() ->
