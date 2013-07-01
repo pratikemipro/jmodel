@@ -23,14 +23,27 @@
 				(obj) -> (source) ->
 					( obj[ renaming[key] or key ] = value ) for own key, value of source
 		
-		Object.union = Function.From([Object]).Returning(-> new Object) \
-			(union) -> (objects...) ->
-				union[key] = value for own key, value of object for object in objects
+		Object.union = Function.switch [
 		
-		Object.intersection = Function.From([Object]).Returning(-> new Object) \
-			(intersection) -> (first={},rest...) ->
-				intersection[key] = value for own key, value of first when \
-					[true].concat( key in Object.keys(object) for object in rest ).reduce (a,b) -> a and b
+			Type(Array) Function.Returning(-> new Object) \
+				(union) -> (objects) ->
+					union[key] = value for own key, value of object for object in objects
+				
+			Type([Object]) (objects...) -> Object.union objects
+			
+		]
+		
+		Object.intersection = Function.switch [
+		
+			Type(Array) Function.Returning(-> new Object) \
+				(intersection) -> ([first,rest...]) ->
+					intersection[key] = value for own key, value of first when \
+						[true].concat( key in Object.keys(object) for object in rest ).reduce (a,b) -> a and b
+						
+			Type([Object]) (objects...) -> Object.intersection objects
+			
+		
+		]
 		
 		Object.difference = Function.From(Object,Object).Returning(-> new Object) \
 			(difference) -> (first,second) ->

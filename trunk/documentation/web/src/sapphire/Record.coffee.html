@@ -68,9 +68,24 @@
             
             <div class="content"><div class='highlight'><pre>	window.Record = <span class="class"><span class="keyword">class</span> <span class="title">Record</span></span>
 
-		<span class="property">@Of</span>: Function.From(Object) (constructors) -&gt;
-			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				constructor: -&gt;</pre></div></div>
+		<span class="property">@Of</span>: Function.From(Object) (constructors) -&gt; 
+
+			record = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+
+				constructor: (data={}) -&gt;
+					<span class="property">@_</span> = {}
+					<span class="property">@_</span>[field] = ensure data[field] <span class="keyword">for</span> own field, ensure <span class="keyword">of</span> <span class="property">@ensure</span>
+
+			ensure = {}
+			<span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors
+				ensure[field] = Object.ensure constructor
+
+ 			record.prototype.ensure = ensure
+
+			<span class="keyword">for</span> own field <span class="keyword">of</span> constructors		
+				<span class="keyword">do</span> (field) -&gt; record.prototype[field] = -&gt; <span class="property">@_</span>[field] 
+
+			<span class="keyword">return</span> record</pre></div></div>
             
         </li>
         

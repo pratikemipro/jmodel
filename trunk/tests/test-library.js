@@ -2024,6 +2024,22 @@ define(['jmodel/topaz2'], function() {
     return deepEqual(output, ['red', 'cyan', 'green', 'magenta', 'blue', 'yellow'], 'Correctly disjoins streams');
   });
   module('Record');
+  test('Constructor', function() {
+    var Person, einstein;
+
+    Person = Record.Of({
+      name: String,
+      dob: Date
+    });
+    einstein = new Person({
+      name: 'Albert Einstein',
+      dob: '1879-3-14'
+    });
+    equals(typeof einstein.name() === 'string', true, 'Creates string fields of correct type');
+    equals(einstein.name(), 'Albert Einstein', true, 'Creates string fields with correct value');
+    equals(einstein.dob() instanceof Date, true, 'Creates date fields of correct type');
+    return equals(einstein.dob().toDateString(), 'Fri Mar 14 1879', true, 'Creates string fields with correct value');
+  });
   module('Event');
   module('Subscriber');
   module('EventType');
