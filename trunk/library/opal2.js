@@ -883,6 +883,13 @@ define(function() {
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Object.resolve.apply(null, args).then(Boolean);
   };
+  Object.from = Function.From(Value, Value).Returning(function() {
+    return new Object;
+  })(function(obj) {
+    return function(key, value) {
+      return obj[key] = value;
+    };
+  });
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var equal, prop;
 
