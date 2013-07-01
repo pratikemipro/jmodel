@@ -669,7 +669,9 @@ define(['jmodel/opal2'], function() {
       })(this);
       _fn = function(field) {
         return record.prototype[field] = Function["switch"]([
-          Type(Value)(Function.Chaining(function(value) {
+          Type(Function)(Function.Chaining(function(fn) {
+            return this._[field] = fn.call(this, this._[field]);
+          })), Type(Value)(Function.Chaining(function(value) {
             return this._[field] = value;
           })), Type()(function() {
             return this._[field];
