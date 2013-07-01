@@ -19,3 +19,7 @@
 		einstein.name 'Al Einstein'
 		
 		equals einstein.name(), 'Al Einstein', true, 'String fields can be updated'
+		
+		einstein.name (name) -> "#{name} rules!"
+		
+		equals einstein.name(), 'Al Einstein rules!', true, 'String fields allow functional updates'

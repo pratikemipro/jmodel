@@ -2040,7 +2040,11 @@ define(['jmodel/topaz2'], function() {
     equals(einstein.dob() instanceof Date, true, 'Creates date fields of correct type');
     equals(einstein.dob().toDateString(), 'Fri Mar 14 1879', true, 'Creates string fields with correct value');
     einstein.name('Al Einstein');
-    return equals(einstein.name(), 'Al Einstein', true, 'String fields can be updated');
+    equals(einstein.name(), 'Al Einstein', true, 'String fields can be updated');
+    einstein.name(function(name) {
+      return "" + name + " rules!";
+    });
+    return equals(einstein.name(), 'Al Einstein rules!', true, 'String fields allow functional updates');
   });
   module('Event');
   module('Subscriber');
