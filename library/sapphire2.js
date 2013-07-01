@@ -630,9 +630,11 @@ define(['jmodel/opal2'], function() {
     function Record() {}
 
     Record.Of = Function.From(Object)(function(constructors) {
-      var constructor, ensure, field, record, _fn;
+      var field, record, _fn;
 
       record = (function(_super) {
+        var constructor, field;
+
         __extends(_Class, _super);
 
         function _Class(data) {
@@ -650,20 +652,29 @@ define(['jmodel/opal2'], function() {
           }
         }
 
+        _Class.prototype.ensure = Object.union((function() {
+          var _results;
+
+          _results = [];
+          for (field in constructors) {
+            if (!__hasProp.call(constructors, field)) continue;
+            constructor = constructors[field];
+            _results.push(Object.from(field, Object.ensure(constructor)));
+          }
+          return _results;
+        })());
+
         return _Class;
 
       })(this);
-      ensure = {};
-      for (field in constructors) {
-        if (!__hasProp.call(constructors, field)) continue;
-        constructor = constructors[field];
-        ensure[field] = Object.ensure(constructor);
-        record.prototype.ensure = ensure;
-      }
       _fn = function(field) {
-        return record.prototype[field] = function() {
-          return this._[field];
-        };
+        return record.prototype[field] = Function["switch"]([
+          Type(Value)(Function.Chaining(function(value) {
+            return this._[field] = value;
+          })), Type()(function() {
+            return this._[field];
+          })
+        ]);
       };
       for (field in constructors) {
         if (!__hasProp.call(constructors, field)) continue;

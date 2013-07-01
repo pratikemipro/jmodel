@@ -10,15 +10,18 @@
 					constructor: (data={}) ->
 						@_ = {}
 						@_[field] = ensure data[field] for own field, ensure of @ensure
-						
-				ensure = {}
-				for own field, constructor of constructors
-					ensure[field] = Object.ensure constructor
-	 			
-	 			record.prototype.ensure = ensure
+					
+					ensure: Object.union \
+						( Object.from(field,Object.ensure constructor) for own field, constructor of constructors )
 				
-				for own field of constructors		
-					do (field) -> record.prototype[field] = -> @_[field] 
+				for own field of constructors
+					do (field) ->
+						record.prototype[field] = Function.switch [
+							Type(Value) Function.Chaining (value) ->
+								@_[field] = value
+							Type() ->
+								@_[field]
+						]
 				
 				return record
 					
