@@ -28,7 +28,8 @@ sapphire:
 		src/library/sapphire/Set.coffee.md \
 		src/library/sapphire/List.coffee.md \
 		src/library/sapphire/Map.coffee.md \
-		src/library/sapphire/Stream.coffee.md
+		src/library/sapphire/Stream.coffee.md \
+		src/library/sapphire/Record.coffee.md
 	docco -o documentation/web/src/sapphire src/library/sapphire/*.coffee.md
 		
 emerald:
@@ -63,6 +64,7 @@ library-test:
 		src/library/sapphire/List.test.coffee \
 		src/library/sapphire/Map.test.coffee \
 		src/library/sapphire/Stream.test.coffee \
+		src/library/sapphire/Record.test.coffee \
 		src/library/emerald/Event.test.coffee \
 		src/library/emerald/Subscriber.test.coffee \
 		src/library/emerald/EventType.test.coffee \
