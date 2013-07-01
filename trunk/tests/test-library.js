@@ -1183,7 +1183,7 @@ define(['jmodel/topaz2'], function() {
     var delay, output, promise, promise1, promise2, promise3;
 
     delay = function(fn) {
-      return setTimeout(fn, 10);
+      return setTimeout(fn, 100);
     };
     promise1 = new Promise;
     promise2 = new Promise;
@@ -1205,7 +1205,7 @@ define(['jmodel/topaz2'], function() {
     var delay, output, promise, promise1, promise2, promise3;
 
     delay = function(fn) {
-      return setTimeout(fn, 10);
+      return setTimeout(fn, 100);
     };
     promise1 = new Promise;
     promise2 = new Promise;

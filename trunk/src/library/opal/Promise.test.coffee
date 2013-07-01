@@ -97,7 +97,7 @@
 		
 	asyncTest 'Promise.disjoin', 2, ->
 		
-		delay = (fn) -> setTimeout fn, 10
+		delay = (fn) -> setTimeout fn, 100
 		
 		promise1 = new Promise
 		promise2 = new Promise
@@ -120,7 +120,7 @@
 			
 	asyncTest 'Promise.Of.disjoin', 3, ->
 		
-		delay = (fn) -> setTimeout fn, 10
+		delay = (fn) -> setTimeout fn, 100
 		
 		promise1 = new Promise
 		promise2 = new Promise

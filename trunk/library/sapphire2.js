@@ -629,6 +629,17 @@ define(['jmodel/opal2'], function() {
   return window.Record = Record = (function() {
     function Record() {}
 
+    Record.Of = Function.From(Object)(function(constructors) {
+      return (function(_super) {
+        __extends(_Class, _super);
+
+        function _Class() {}
+
+        return _Class;
+
+      })(this);
+    });
+
     return Record;
 
   })();
