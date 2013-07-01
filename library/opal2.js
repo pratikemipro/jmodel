@@ -954,63 +954,73 @@ define(function() {
       };
     });
   });
-  Object.union = Function.From([Object]).Returning(function() {
-    return new Object;
-  })(function(union) {
-    return function() {
-      var key, object, objects, value, _i, _len, _results;
+  Object.union = Function["switch"]([
+    Type(Array)(Function.Returning(function() {
+      return new Object;
+    })(function(union) {
+      return function(objects) {
+        var key, object, value, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = objects.length; _i < _len; _i++) {
+          object = objects[_i];
+          _results.push((function() {
+            var _results1;
+
+            _results1 = [];
+            for (key in object) {
+              if (!__hasProp.call(object, key)) continue;
+              value = object[key];
+              _results1.push(union[key] = value);
+            }
+            return _results1;
+          })());
+        }
+        return _results;
+      };
+    })), Type([Object])(function() {
+      var objects;
 
       objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      _results = [];
-      for (_i = 0, _len = objects.length; _i < _len; _i++) {
-        object = objects[_i];
-        _results.push((function() {
-          var _results1;
+      return Object.union(objects);
+    })
+  ]);
+  Object.intersection = Function["switch"]([
+    Type(Array)(Function.Returning(function() {
+      return new Object;
+    })(function(intersection) {
+      return function(_arg) {
+        var first, key, object, rest, value, _results;
 
-          _results1 = [];
-          for (key in object) {
-            if (!__hasProp.call(object, key)) continue;
-            value = object[key];
-            _results1.push(union[key] = value);
+        first = _arg[0], rest = 2 <= _arg.length ? __slice.call(_arg, 1) : [];
+        _results = [];
+        for (key in first) {
+          if (!__hasProp.call(first, key)) continue;
+          value = first[key];
+          if ([true].concat((function() {
+            var _i, _len, _results1;
+
+            _results1 = [];
+            for (_i = 0, _len = rest.length; _i < _len; _i++) {
+              object = rest[_i];
+              _results1.push(__indexOf.call(Object.keys(object), key) >= 0);
+            }
+            return _results1;
+          })()).reduce(function(a, b) {
+            return a && b;
+          })) {
+            _results.push(intersection[key] = value);
           }
-          return _results1;
-        })());
-      }
-      return _results;
-    };
-  });
-  Object.intersection = Function.From([Object]).Returning(function() {
-    return new Object;
-  })(function(intersection) {
-    return function() {
-      var first, key, object, rest, value, _results;
-
-      first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (first == null) {
-        first = {};
-      }
-      _results = [];
-      for (key in first) {
-        if (!__hasProp.call(first, key)) continue;
-        value = first[key];
-        if ([true].concat((function() {
-          var _i, _len, _results1;
-
-          _results1 = [];
-          for (_i = 0, _len = rest.length; _i < _len; _i++) {
-            object = rest[_i];
-            _results1.push(__indexOf.call(Object.keys(object), key) >= 0);
-          }
-          return _results1;
-        })()).reduce(function(a, b) {
-          return a && b;
-        })) {
-          _results.push(intersection[key] = value);
         }
-      }
-      return _results;
-    };
-  });
+        return _results;
+      };
+    })), Type([Object])(function() {
+      var objects;
+
+      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return Object.intersection(objects);
+    })
+  ]);
   Object.difference = Function.From(Object, Object).Returning(function() {
     return new Object;
   })(function(difference) {

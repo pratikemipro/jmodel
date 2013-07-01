@@ -630,14 +630,46 @@ define(['jmodel/opal2'], function() {
     function Record() {}
 
     Record.Of = Function.From(Object)(function(constructors) {
-      return (function(_super) {
+      var constructor, ensure, field, record, _fn;
+
+      record = (function(_super) {
         __extends(_Class, _super);
 
-        function _Class() {}
+        function _Class(data) {
+          var ensure, field, _ref;
+
+          if (data == null) {
+            data = {};
+          }
+          this._ = {};
+          _ref = this.ensure;
+          for (field in _ref) {
+            if (!__hasProp.call(_ref, field)) continue;
+            ensure = _ref[field];
+            this._[field] = ensure(data[field]);
+          }
+        }
 
         return _Class;
 
       })(this);
+      ensure = {};
+      for (field in constructors) {
+        if (!__hasProp.call(constructors, field)) continue;
+        constructor = constructors[field];
+        ensure[field] = Object.ensure(constructor);
+        record.prototype.ensure = ensure;
+      }
+      _fn = function(field) {
+        return record.prototype[field] = function() {
+          return this._[field];
+        };
+      };
+      for (field in constructors) {
+        if (!__hasProp.call(constructors, field)) continue;
+        _fn(field);
+      }
+      return record;
     });
 
     return Record;
