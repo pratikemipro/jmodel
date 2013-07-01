@@ -1,6 +1,9 @@
 # BareObject
 
 		
+		Object.from = Function.From(Value,Value).Returning(-> new Object) \
+			(obj) -> (key,value) -> obj[key] = value
+		
 		Object.equal = Predicate.From(Object,Object) \
 			(a,b) ->
 				equal = true

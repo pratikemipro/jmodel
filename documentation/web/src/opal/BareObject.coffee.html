@@ -96,7 +96,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Object.equal = Predicate.From(Object,Object) \
+            <div class="content"><div class='highlight'><pre>	Object.from = Function.From(Value,Value).Returning(-&gt; <span class="keyword">new</span> Object) \
+		(obj) -&gt; (key,value) -&gt; obj[key] = value
+
+	Object.equal = Predicate.From(Object,Object) \
 		(a,b) -&gt;
 			equal = <span class="literal">true</span>
 			equal &amp;&amp;= a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> a

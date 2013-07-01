@@ -1,6 +1,8 @@
 Function			Tests	Docs
 -----------------------------------
 
+Object.from			none	none
+
 Object.equal		full	none
 Object.remove		full	none
 Object.project		full	none
