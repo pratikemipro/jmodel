@@ -196,24 +196,6 @@ define(function() {
       });
     };
   };
-  Function.Constant = function(constant) {
-    return function(fn) {
-      return fn.but(function() {
-        return constant;
-      });
-    };
-  };
-  Function.Override = Function.Constant(false);
-  Function.Chaining = function(fn) {
-    return fn.but(function() {
-      return this;
-    });
-  };
-  Function.prototype.Chaining = function(fn) {
-    return this(fn).but(function() {
-      return this;
-    });
-  };
   Function.prototype.then = function(fn2) {
     var fn1;
     if (typeof fn2 !== 'function') {
@@ -385,6 +367,23 @@ define(function() {
     return Function.Returning(val).then(this);
   };
   window.Predicate = Function.To(Boolean);
+  Function.Constant = function(constant) {
+    return function(fn) {
+      return fn.but(function() {
+        return constant;
+      });
+    };
+  };
+  Function.Chaining = function(fn) {
+    return fn.but(function() {
+      return this;
+    });
+  };
+  Function.prototype.Chaining = function(fn) {
+    return this(fn).but(function() {
+      return this;
+    });
+  };
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;

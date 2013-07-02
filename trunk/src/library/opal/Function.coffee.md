@@ -29,18 +29,6 @@
 			(fn) -> fn.extend test: Function.hastypes types...
 			
 
-## Return value manipulation
-
-		
-		Function.Constant = (constant) -> (fn) -> fn.but -> constant
-		
-		Function.Override = Function.Constant false
-		
-		Function.Chaining = (fn) -> fn.but -> this
-		
-		Function::Chaining = (fn) -> @(fn).but -> this
-	
-
 ## Function composition
 
 		
@@ -144,6 +132,16 @@
 			Function.Returning(val).then(this)
 		
 		window.Predicate = Function.To Boolean
+	
+
+## Return value manipulation
+
+		
+		Function.Constant = (constant) -> (fn) -> fn.but -> constant
+		
+		Function.Chaining = (fn) -> fn.but -> this
+		
+		Function::Chaining = (fn) -> @(fn).but -> this
 	
 
 ## Logical functions
