@@ -145,14 +145,13 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt;
-		(fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); constant
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
 
 	Function.Override = Function.Constant <span class="literal">false</span>
 
-	Function.<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; (args...) -&gt; fn.apply(<span class="keyword">this</span>,args); <span class="keyword">this</span>
+	Function.<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; fn.but -&gt; <span class="keyword">this</span>
 
-	Function::<span class="function"><span class="title">Chaining</span></span> = -&gt; <span class="property">@but</span> -&gt; <span class="keyword">this</span></pre></div></div>
+	Function::<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; @(fn).but -&gt; <span class="keyword">this</span></pre></div></div>
             
         </li>
         

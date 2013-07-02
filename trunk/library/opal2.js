@@ -198,25 +198,19 @@ define(function() {
   };
   Function.Constant = function(constant) {
     return function(fn) {
-      return function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        fn.apply(this, args);
+      return fn.but(function() {
         return constant;
-      };
+      });
     };
   };
   Function.Override = Function.Constant(false);
   Function.Chaining = function(fn) {
-    return function() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      fn.apply(this, args);
+    return fn.but(function() {
       return this;
-    };
+    });
   };
-  Function.prototype.Chaining = function() {
-    return this.but(function() {
+  Function.prototype.Chaining = function(fn) {
+    return this(fn).but(function() {
       return this;
     });
   };
