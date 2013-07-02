@@ -625,8 +625,6 @@ define(['jmodel/opal2'], function() {
           Type(Function)(Function.Chaining(function(fn) {
             return this[field](fn.call(this, this._[field]));
           })), Type(Not(Function))(Function.Of(constructor).Chaining(function(value) {
-            console.log('Not Function!');
-            console.log("" + field + " -> " + value);
             return this._[field] = value;
           })), Type()(function() {
             return this._[field];
