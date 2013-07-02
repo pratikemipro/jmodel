@@ -53,3 +53,17 @@
 			deepEqual output2, ['red','green'], 'Raising notifies other subscribers'
 		
 			start()
+			
+	asyncTest 'EventType.Of', 0, ->
+		
+		ValueChangeEvent = (@value,@old) ->
+		
+		et = new (EventType.Of ValueChangeEvent)
+		
+		et.subscribe (event) ->
+			equal event instanceof ValueChangeEvent, true, 'Generates events of right type'
+			deepEqual [event.value,event.old], ['red','green'], 'Passes correct values to constructor'
+			start()
+			
+		et.raise 'red', 'green'
+			

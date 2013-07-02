@@ -114,6 +114,36 @@ define(['jmodel/sapphire2'], function() {
       })));
     };
 
+    EventType.Of = function(constructor) {
+      var type, _ref1;
+      type = Promise.Of(constructor);
+      return (function(_super1) {
+        __extends(_Class, _super1);
+
+        function _Class() {
+          _ref1 = _Class.__super__.constructor.apply(this, arguments);
+          return _ref1;
+        }
+
+        _Class.prototype.add = Function.Of(type)(_Class.prototype.add);
+
+        _Class.prototype.raise = function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return this.add(type.Fulfilled.apply(type, args));
+        };
+
+        _Class.prototype.fail = function() {
+          var args;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          return this.add(type.Rejected.apply(type, args));
+        };
+
+        return _Class;
+
+      })(this);
+    };
+
     return EventType;
 
   })(Stream.Of(Promise));
