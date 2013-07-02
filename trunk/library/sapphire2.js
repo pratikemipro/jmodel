@@ -588,54 +588,53 @@ define(['jmodel/opal2'], function() {
     function Record() {}
 
     Record.Of = Function.From(Object)(function(constructors) {
-      var field, record, _fn;
+      var constructor, field, record, _fn;
       record = (function(_super) {
-        var constructor, field;
+        var field;
 
         __extends(_Class, _super);
 
         function _Class(data) {
-          var ensure, field, _ref;
+          var field, _i, _len, _ref;
           if (data == null) {
             data = {};
           }
           this._ = {};
-          _ref = this.ensure;
-          for (field in _ref) {
-            if (!__hasProp.call(_ref, field)) continue;
-            ensure = _ref[field];
-            this._[field] = ensure(data[field]);
+          _ref = this.fields;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            field = _ref[_i];
+            this[field](data[field]);
           }
         }
 
-        _Class.prototype.ensure = Object.union((function() {
+        _Class.prototype.fields = (function() {
           var _results;
           _results = [];
           for (field in constructors) {
             if (!__hasProp.call(constructors, field)) continue;
-            constructor = constructors[field];
-            _results.push(Object.from(field, Object.ensure(constructor)));
+            _results.push(field);
           }
           return _results;
-        })());
+        })();
 
         return _Class;
 
       })(this);
-      _fn = function(field) {
+      _fn = function(field, constructor) {
         return record.prototype[field] = Function["switch"]([
           Type(Function)(Function.Chaining(function(fn) {
             return this[field](fn.call(this, this._[field]));
-          })), Type(Value)(Function.Chaining(function(value) {
+          })), Type(Value)(Function.Chaining(Function.Of(constructor)(function(value) {
             return this._[field] = value;
-          })), Type()(function() {
+          }))), Type()(function() {
             return this._[field];
           })
         ]);
       };
       for (field in constructors) {
         if (!__hasProp.call(constructors, field)) continue;
-        _fn(field);
+        constructor = constructors[field];
+        _fn(field, constructor);
       }
       return record;
     });

@@ -74,17 +74,16 @@
 
 				constructor: (data={}) -&gt;
 					<span class="property">@_</span> = {}
-					<span class="property">@_</span>[field] = ensure data[field] <span class="keyword">for</span> own field, ensure <span class="keyword">of</span> <span class="property">@ensure</span>
+					@[field] data[field] <span class="keyword">for</span> field <span class="keyword">in</span> <span class="property">@fields</span>
 
-				ensure: Object.union \
-					( Object.from(field,Object.ensure constructor) <span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors )
+				fields: ( field <span class="keyword">for</span> own field <span class="keyword">of</span> constructors )
 
-			<span class="keyword">for</span> own field <span class="keyword">of</span> constructors
-				<span class="keyword">do</span> (field) -&gt;
+			<span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors
+				<span class="keyword">do</span> (field,constructor) -&gt;
 					record.prototype[field] = Function.<span class="keyword">switch</span> [
 						Type(Function) Function.Chaining (fn) -&gt;
 							@[field] fn.call <span class="keyword">this</span>, <span class="property">@_</span>[field]
-						Type(Value) Function.Chaining (value) -&gt;
+						Type(Value) Function.Chaining Function.Of(constructor) (value) -&gt;
 							<span class="property">@_</span>[field] = value
 						Type() -&gt;
 							<span class="property">@_</span>[field]
