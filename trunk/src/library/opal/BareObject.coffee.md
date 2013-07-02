@@ -1,7 +1,7 @@
 # BareObject
 
 		
-		Object.from = Function.From(Value,Value).Returning(-> new Object) \
+		Object.from = Function.From(Scalar,Value).Returning(-> new Object) \
 			(obj) -> (key,value) -> obj[key] = value
 		
 		Object.equal = Predicate.From(Object,Object) \
@@ -11,12 +11,12 @@
 				equal &&= a[prop] == b[prop] for own prop of b
 				return equal
 		
-		Object.remove = Function.From([String]) \
+		Object.remove = Function.From([Scalar]) \
 			(fields...) -> Function.From(Object).Returning(-> new Object) \
 				(obj) -> (source) ->
 					( obj[key] = value unless key in fields ) for own key, value of source
 		
-		Object.project = Function.From([String]) \
+		Object.project = Function.From([Scalar]) \
 			(fields...) -> Function.From(Object).Returning(-> new Object) \
 				(obj) -> (source) ->
 					( obj[key] = value if key in fields ) for own key, value of source

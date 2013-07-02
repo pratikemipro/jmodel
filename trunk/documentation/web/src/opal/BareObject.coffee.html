@@ -96,7 +96,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Object.from = Function.From(Value,Value).Returning(-&gt; <span class="keyword">new</span> Object) \
+            <div class="content"><div class='highlight'><pre>	Object.from = Function.From(Scalar,Value).Returning(-&gt; <span class="keyword">new</span> Object) \
 		(obj) -&gt; (key,value) -&gt; obj[key] = value
 
 	Object.equal = Predicate.From(Object,Object) \
@@ -106,12 +106,12 @@
 			equal &amp;&amp;= a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> b
 			<span class="keyword">return</span> equal
 
-	Object.remove = Function.From([String]) \
+	Object.remove = Function.From([Scalar]) \
 		(fields...) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(obj) -&gt; (source) -&gt;
 				( obj[key] = value <span class="keyword">unless</span> key <span class="keyword">in</span> fields ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source
 
-	Object.project = Function.From([String]) \
+	Object.project = Function.From([Scalar]) \
 		(fields...) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(obj) -&gt; (source) -&gt;
 				( obj[key] = value <span class="keyword">if</span> key <span class="keyword">in</span> fields ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source

@@ -339,7 +339,7 @@ define(['jmodel/opal2'], function() {
     }
 
     Map.prototype.add = Function["switch"]([
-      Type(Value, Value)(Function.Chaining(function(key, value) {
+      Type(Scalar, Value)(Function.Chaining(function(key, value) {
         return this._[key] = value;
       })), Type(Object)(Function.Chaining(function(mappings) {
         var key, value, _results;
@@ -400,7 +400,7 @@ define(['jmodel/opal2'], function() {
         }
 
         _Class.prototype.add = _Class.prototype.add.extend([
-          Type(Value, Value)(Function.Chaining(function(key, value) {
+          Type(Scalar, Value)(Function.Chaining(function(key, value) {
             return this._[key] = this.ensure(value);
           })), Type(Array)(Function.Chaining(function(keys) {
             var key, _i, _len, _results;
@@ -434,7 +434,7 @@ define(['jmodel/opal2'], function() {
         }
 
         _Class.prototype.add = _Class.prototype.add.extend([
-          Type(Value, Value)(Function.Chaining(function(key, value) {
+          Type(Scalar, Value)(Function.Chaining(function(key, value) {
             return this._[key] = !this._[key] ? this.ensure(value) : combine(this.ensure(value), this._[key]);
           }))
         ]);
