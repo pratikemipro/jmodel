@@ -9,6 +9,8 @@
 		einstein = new Person
 			name: 'Albert Einstein'
 			dob: '1879-3-14'
+			
+		console.log einstein
 		
 		equals typeof einstein.name() == 'string', true, 'Creates string fields of correct type'
 		equals einstein.name(), 'Albert Einstein', 'Creates string fields with correct value'
