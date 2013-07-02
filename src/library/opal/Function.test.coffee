@@ -256,6 +256,8 @@
 		
 		equals fred.birthday instanceof Date, true, 'Works correctly with methods'
 		equals fred.birthday.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly to method'
+
+	module 'Return value manipulation'
 	
 	test 'Function.Returning', ->
 		
@@ -286,8 +288,6 @@
 		equals deptPerson('IT','Marketing').depts, 'IT,Marketing', 'works correctly with repeated type specifier'
 		equals deptPerson().depts, '', 'works correct for empty arguments with repeated type specifier'
 		raises (-> deptPerson 1, 2, 3), 'raieses exception when arguments do not match repeated type specifier'
-
-	module 'Return value manipulation'
 	
 	test 'Function.Chaining', ->
 		

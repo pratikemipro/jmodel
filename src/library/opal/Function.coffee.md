@@ -122,6 +122,12 @@
 			ensure = Object.ensure constructor
 			(fn) -> (args...) -> fn.call this, ensure args...
 		
+		window.Predicate = Function.To Boolean
+	
+
+## Return value manipulation
+
+		
 		Function.Returning = (val) ->
 			(fn) -> (args...) ->
 				ret = val.call(this)
@@ -130,12 +136,6 @@
 		
 		Function::Returning = (val) ->
 			Function.Returning(val).then(this)
-		
-		window.Predicate = Function.To Boolean
-	
-
-## Return value manipulation
-
 		
 		Function.Constant = (constant) -> (fn) -> fn.but -> constant
 		
