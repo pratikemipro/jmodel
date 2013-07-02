@@ -81,12 +81,12 @@
 			<span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors
 				<span class="keyword">do</span> (field,constructor) -&gt;
 					record.prototype[field] = Function.<span class="keyword">switch</span> [
-						Type(Function) \
-							Function.Chaining (fn) -&gt;
-								@[field] fn.call <span class="keyword">this</span>, <span class="property">@_</span>[field]
 						Type(Not Function) \
 							Function.Of(constructor).Chaining (value) -&gt;
 								<span class="property">@_</span>[field] = value
+						Type(Function) \
+							Function.Chaining (fn) -&gt;
+								@[field] fn.call <span class="keyword">this</span>, <span class="property">@_</span>[field]
 						Type() \
 							-&gt; <span class="property">@_</span>[field]
 					]

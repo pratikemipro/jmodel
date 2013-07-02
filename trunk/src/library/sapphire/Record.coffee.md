@@ -16,12 +16,12 @@
 				for own field, constructor of constructors
 					do (field,constructor) ->
 						record.prototype[field] = Function.switch [
-							Type(Function) \
-								Function.Chaining (fn) ->
-									@[field] fn.call this, @_[field]
 							Type(Not Function) \
 								Function.Of(constructor).Chaining (value) ->
 									@_[field] = value
+							Type(Function) \
+								Function.Chaining (fn) ->
+									@[field] fn.call this, @_[field]
 							Type() \
 								-> @_[field]
 						]
