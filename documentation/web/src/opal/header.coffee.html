@@ -136,7 +136,7 @@
 	window.<span class="function"><span class="title">Not</span></span> = (constructor) -&gt;
 		<span class="function"><span class="title">fn</span></span> = -&gt;
 		valid = Object.isa constructor
-		fn.<span class="function"><span class="title">valid</span></span> = (x) -&gt; <span class="keyword">not</span> valid x
+		fn.<span class="function"><span class="title">valid</span></span> = (x) -&gt; x? <span class="keyword">and</span> <span class="keyword">not</span> valid x
 		<span class="keyword">return</span> fn</pre></div></div>
             
         </li>

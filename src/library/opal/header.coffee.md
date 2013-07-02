@@ -16,7 +16,7 @@
 		window.Not = (constructor) ->
 			fn = ->
 			valid = Object.isa constructor
-			fn.valid = (x) -> not valid x
+			fn.valid = (x) -> x? and not valid x
 			return fn
 	
 		# Tests: none
