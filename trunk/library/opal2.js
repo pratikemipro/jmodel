@@ -20,7 +20,7 @@ define(function() {
   };
   window.Scalar = function() {};
   window.Scalar.valid = function(x) {
-    return typeof x === 'number' || typeof x === 'string' || typeof x === 'boolean' || x instanceof Number || x instanceof String || x instanceof Boolean;
+    return typeof x === 'number' || typeof x === 'string' || typeof x === 'boolean' || x === null || x instanceof Number || x instanceof String || x instanceof Boolean;
   };
   window.Not = function(constructor) {
     var fn, valid;

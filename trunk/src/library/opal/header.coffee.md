@@ -18,6 +18,7 @@
 			typeof x == 'number' \
 			or typeof x == 'string' \
 			or typeof x == 'boolean' \
+			or x == null \
 			or x instanceof Number \
 			or x instanceof String \
 			or x instanceof Boolean
