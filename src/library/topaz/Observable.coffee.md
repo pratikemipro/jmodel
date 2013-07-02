@@ -55,7 +55,7 @@
 						super
 						
 					add: this::add.extend [			
-						Type(Value,Value) Function.Chaining (key,value) ->
+						Type(Scalar,Value) Function.Chaining (key,value) ->
 							value = @ensure value
 							@_[key] = value
 							@event('add').raise(key,value)

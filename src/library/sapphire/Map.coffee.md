@@ -8,7 +8,7 @@
 				@add mappings if mappings instanceof Object
 	
 			add: Function.switch [	
-				Type(Value,Value) Function.Chaining (key,value) -> @_[key] = value
+				Type(Scalar,Value) Function.Chaining (key,value) -> @_[key] = value
 				Type(Object)	  Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
 			]
 			
@@ -30,7 +30,7 @@
 				class extends this
 				
 					add: this::add.extend [			
-						Type(Value,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
+						Type(Scalar,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
 						Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
 					]
 					
@@ -42,7 +42,7 @@
 				combine = combine.bind @value_constructor
 				class extends this
 					add: this::add.extend [
-						Type(Value,Value) Function.Chaining (key,value) ->
+						Type(Scalar,Value) Function.Chaining (key,value) ->
 							@_[key] = if not @_[key] then @ensure(value) else combine @ensure(value), @_[key]
 					]
 					

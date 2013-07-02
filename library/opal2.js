@@ -823,7 +823,7 @@ define(function() {
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Object.resolve.apply(null, args).then(Boolean);
   };
-  Object.from = Function.From(Value, Value).Returning(function() {
+  Object.from = Function.From(Scalar, Value).Returning(function() {
     return new Object;
   })(function(obj) {
     return function(key, value) {
@@ -843,7 +843,7 @@ define(function() {
     }
     return equal;
   });
-  Object.remove = Function.From([String])(function() {
+  Object.remove = Function.From([Scalar])(function() {
     var fields;
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Function.From(Object).Returning(function() {
@@ -861,7 +861,7 @@ define(function() {
       };
     });
   });
-  Object.project = Function.From([String])(function() {
+  Object.project = Function.From([Scalar])(function() {
     var fields;
     fields = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Function.From(Object).Returning(function() {

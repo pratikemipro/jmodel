@@ -88,7 +88,7 @@ define(['jmodel/emerald2'], function() {
           }
 
           _Class.prototype.add = _Class.prototype.add.extend([
-            Type(Value, Value)(Function.Chaining(function(key, value) {
+            Type(Scalar, Value)(Function.Chaining(function(key, value) {
               value = this.ensure(value);
               this._[key] = value;
               return this.event('add').raise(key, value);
