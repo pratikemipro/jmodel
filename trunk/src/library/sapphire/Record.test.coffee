@@ -11,8 +11,6 @@
 			name: 'Albert Einstein'
 			dob: '1879-3-14'
 			affiliations: ['Swiss Patent Office','Insititute for Advanced Study']
-			
-		console.log einstein
 		
 		equals typeof einstein.name() == 'string', true, 'Creates string fields of correct type'
 		equals einstein.name(), 'Albert Einstein', 'Creates string fields with correct value'
