@@ -262,15 +262,6 @@
 		ensure = Object.ensure constructor
 		(fn) -&gt; (args...) -&gt; fn.call <span class="keyword">this</span>, ensure args...
 
-	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
-		(fn) -&gt; (args...) -&gt;
-			ret = val.call(<span class="keyword">this</span>)
-			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
-			<span class="keyword">return</span> ret
-
-	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
-		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
-
 	window.Predicate = Function.To Boolean</pre></div></div>
             
         </li>
@@ -286,7 +277,16 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		(fn) -&gt; (args...) -&gt;
+			ret = val.call(<span class="keyword">this</span>)
+			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
+			<span class="keyword">return</span> ret
+
+	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
+
+	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
 
 	Function.<span class="function"><span class="title">Chaining</span></span> = (fn) -&gt; fn.but -&gt; <span class="keyword">this</span>
 

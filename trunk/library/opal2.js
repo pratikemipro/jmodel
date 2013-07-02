@@ -352,6 +352,7 @@ define(function() {
       };
     };
   };
+  window.Predicate = Function.To(Boolean);
   Function.Returning = function(val) {
     return function(fn) {
       return function() {
@@ -366,7 +367,6 @@ define(function() {
   Function.prototype.Returning = function(val) {
     return Function.Returning(val).then(this);
   };
-  window.Predicate = Function.To(Boolean);
   Function.Constant = function(constant) {
     return function(fn) {
       return fn.but(function() {

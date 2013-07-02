@@ -32,10 +32,10 @@ Function.From		full	none
 Function::To		partial	none
 Function.To			full	none
 Function.Of			full	partial
-Function.Returning	full	none
-Function::Returning	full	none
 window.Predicate	none	none
 
+Function.Returning	full	none
+Function::Returning	full	none
 Function.Constant	none	none
 Function.Chaining	full	none
 Function::Chaining	full	none

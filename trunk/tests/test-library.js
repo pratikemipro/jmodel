@@ -403,6 +403,7 @@ define(['jmodel/topaz2'], function() {
     equals(fred.birthday instanceof Date, true, 'Works correctly with methods');
     return equals(fred.birthday.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly to method');
   });
+  module('Return value manipulation');
   test('Function.Returning', function() {
     var Person, namedPerson;
     Person = (function() {
@@ -456,7 +457,6 @@ define(['jmodel/topaz2'], function() {
       return deptPerson(1, 2, 3);
     }), 'raieses exception when arguments do not match repeated type specifier');
   });
-  module('Return value manipulation');
   test('Function.Chaining', function() {
     var Person, fred, returned;
     Person = (function() {
