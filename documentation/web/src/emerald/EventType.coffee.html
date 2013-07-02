@@ -113,7 +113,14 @@
 		republish: (eventtype) -&gt;
 			<span class="property">@subscribe</span> \
 				Function.delegate -&gt; [eventtype,eventtype.raise],
-				Function.delegate -&gt; [eventtype,eventtype.fail]</pre></div></div>
+				Function.delegate -&gt; [eventtype,eventtype.fail]
+
+		<span class="property">@Of</span>: (constructor) -&gt;
+			type = Promise.Of constructor
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				add: Function.Of(type) <span class="keyword">this</span>::add
+				raise: (args...) -&gt; <span class="property">@add</span> type.Fulfilled args...
+				fail:  (args...) -&gt; <span class="property">@add</span> type.Rejected args...</pre></div></div>
             
         </li>
         

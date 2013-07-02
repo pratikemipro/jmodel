@@ -22,4 +22,11 @@
 				@subscribe \
 					Function.delegate -> [eventtype,eventtype.raise],
 					Function.delegate -> [eventtype,eventtype.fail]
+					
+			@Of: (constructor) ->
+				type = Promise.Of constructor
+				class extends this
+					add: Function.Of(type) this::add
+					raise: (args...) -> @add type.Fulfilled args...
+					fail:  (args...) -> @add type.Rejected args...
 			

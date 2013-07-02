@@ -1111,7 +1111,7 @@ define(['jmodel/topaz2'], function() {
   });
   asyncTest('Promise.Fulfilled', 2, function() {
     var promise;
-    promise = new Promise.Fulfilled('red');
+    promise = Promise.Fulfilled('red');
     return promise.then(function(value) {
       equals(promise instanceof Promise, true, 'Already fulfilled promises are promises');
       equals(value, 'red', 'Promise fulfilled with correct value');
@@ -1120,7 +1120,7 @@ define(['jmodel/topaz2'], function() {
   });
   asyncTest('Promise.Rejected', 2, function() {
     var promise;
-    promise = new Promise.Rejected('red');
+    promise = Promise.Rejected('red');
     return promise.then((function() {}), function(value) {
       equals(promise instanceof Promise, true, 'Already rejected promises are promises');
       equals(value, 'red', 'Promise rejected with correct value');
@@ -1139,7 +1139,7 @@ define(['jmodel/topaz2'], function() {
   });
   asyncTest('Promise.Of.Fulfilled', 2, function() {
     var promise;
-    promise = new (Promise.Of(Date).Fulfilled)('1974-11-20');
+    promise = Promise.Of(Date).Fulfilled('1974-11-20');
     return promise.then(function(value) {
       equals(value instanceof Date, true, 'Creates object of correct type');
       equals(value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly');
@@ -1148,7 +1148,7 @@ define(['jmodel/topaz2'], function() {
   });
   asyncTest('Promise.Of.Rejected', 1, function() {
     var promise;
-    promise = new (Promise.Of(Date).Rejected)('error');
+    promise = Promise.Of(Date).Rejected('error');
     return promise.then((function() {}), function(value) {
       equals(value, 'error', 'Passes argument correctly');
       return start();
@@ -2016,6 +2016,20 @@ define(['jmodel/topaz2'], function() {
       deepEqual(output2, ['red', 'green'], 'Raising notifies other subscribers');
       return start();
     });
+  });
+  asyncTest('EventType.Of', 0, function() {
+    var ValueChangeEvent, et;
+    ValueChangeEvent = function(value, old) {
+      this.value = value;
+      this.old = old;
+    };
+    et = new (EventType.Of(ValueChangeEvent));
+    et.subscribe(function(event) {
+      equal(event instanceof ValueChangeEvent, true, 'Generates events of right type');
+      deepEqual([event.value, event.old], ['red', 'green'], 'Passes correct values to constructor');
+      return start();
+    });
+    return et.raise('red', 'green');
   });
   module('EventRegistry');
   module('Observable');
