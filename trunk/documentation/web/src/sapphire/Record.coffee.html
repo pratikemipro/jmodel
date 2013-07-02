@@ -83,7 +83,7 @@
 					record.prototype[field] = Function.<span class="keyword">switch</span> [
 						Type(Function) Function.Chaining (fn) -&gt;
 							@[field] fn.call <span class="keyword">this</span>, <span class="property">@_</span>[field]
-						Type(Value) Function.Chaining Function.Of(constructor) (value) -&gt;
+						Type(Value) Function.Of(constructor).Chaining (value) -&gt;
 							<span class="property">@_</span>[field] = value
 						Type() -&gt;
 							<span class="property">@_</span>[field]
