@@ -21,8 +21,6 @@
 									@[field] fn.call this, @_[field]
 							Type(Not Function) \
 								Function.Of(constructor).Chaining (value) ->
-									console.log 'Not Function!'
-									console.log "#{field} -> #{value}"
 									@_[field] = value
 							Type() \
 								-> @_[field]
