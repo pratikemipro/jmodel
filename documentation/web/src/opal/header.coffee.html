@@ -133,6 +133,15 @@
             <div class="content"><div class='highlight'><pre>	window.<span class="function"><span class="title">Value</span></span> = -&gt;
 	window.Value.<span class="function"><span class="title">valid</span></span> = (x) -&gt; x != <span class="literal">undefined</span>
 
+	window.<span class="function"><span class="title">Scalar</span></span> = -&gt;
+	window.Scalar.<span class="function"><span class="title">valid</span></span> = (x) -&gt;
+		<span class="keyword">typeof</span> x == <span class="string">'number'</span> \
+		<span class="keyword">or</span> <span class="keyword">typeof</span> x == <span class="string">'string'</span> \
+		<span class="keyword">or</span> <span class="keyword">typeof</span> x == <span class="string">'boolean'</span> \
+		<span class="keyword">or</span> x <span class="keyword">instanceof</span> Number \
+		<span class="keyword">or</span> x <span class="keyword">instanceof</span> String \
+		<span class="keyword">or</span> x <span class="keyword">instanceof</span> Boolean
+
 	window.<span class="function"><span class="title">Not</span></span> = (constructor) -&gt;
 		<span class="function"><span class="title">fn</span></span> = -&gt;
 		valid = Object.isa constructor

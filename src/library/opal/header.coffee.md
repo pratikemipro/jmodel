@@ -13,6 +13,15 @@
 		window.Value = ->
 		window.Value.valid = (x) -> x != undefined
 		
+		window.Scalar = ->
+		window.Scalar.valid = (x) ->
+			typeof x == 'number' \
+			or typeof x == 'string' \
+			or typeof x == 'boolean' \
+			or x instanceof Number \
+			or x instanceof String \
+			or x instanceof Boolean
+		
 		window.Not = (constructor) ->
 			fn = ->
 			valid = Object.isa constructor
