@@ -78,5 +78,5 @@
 ## Existential test
 
 		
-		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean);
+		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean)
 		
