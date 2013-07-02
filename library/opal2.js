@@ -374,16 +374,16 @@ define(function() {
       });
     };
   };
-  Function.Chaining = function(fn) {
+  Function.Chaining = Function.From(Function)(function(fn) {
     return fn.but(function() {
       return this;
     });
-  };
-  Function.prototype.Chaining = function(fn) {
+  });
+  Function.prototype.Chaining = Function.From(Function)(function(fn) {
     return this(fn).but(function() {
       return this;
     });
-  };
+  });
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;

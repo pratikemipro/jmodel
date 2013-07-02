@@ -139,9 +139,9 @@
 		
 		Function.Constant = (constant) -> (fn) -> fn.but -> constant
 		
-		Function.Chaining = (fn) -> fn.but -> this
+		Function.Chaining = Function.From(Function) (fn) -> fn.but -> this
 		
-		Function::Chaining = (fn) -> @(fn).but -> this
+		Function::Chaining = Function.From(Function) (fn) -> @(fn).but -> this
 	
 
 ## Logical functions
