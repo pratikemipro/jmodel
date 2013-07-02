@@ -57,6 +57,20 @@
 		equal getType(), 'nothing', 'Correctly handles empty case'
 		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
 
+	module 'Return value manipulation'
+	
+	test 'Function.Chaining', ->
+		
+		Person = class
+			name: Function.Chaining (@name) ->
+				
+		fred = new Person
+		
+		returned = fred.name 'fred'
+		
+		equal returned, fred, 'Returns correct object'
+		equal fred.name, 'fred', 'Function still works as expected'
+
 	module 'Function composition'
 	
 	test 'Function::then', ->
