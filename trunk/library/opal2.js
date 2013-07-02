@@ -23,7 +23,7 @@ define(function() {
     fn = function() {};
     valid = Object.isa(constructor);
     fn.valid = function(x) {
-      return !valid(x);
+      return (x != null) && !valid(x);
     };
     return fn;
   };
