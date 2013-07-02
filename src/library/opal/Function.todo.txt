@@ -11,10 +11,6 @@ Function.map		full	partial
 Function.switch		partial	none
 Window.Type			none	none
 
-Function.Constant	none	none
-Function.Override	none	none
-Function.Chaining	none	none
-
 Function::then		full	partial
 Function::but		full	partial
 Function.pipe		full	partial
@@ -39,6 +35,10 @@ Function.Of			full	partial
 Function.Returning	full	none
 Function::Returning	full	none
 window.Predicate	none	none
+
+Function.Constant	none	none
+Function.Chaining	full	none
+Function::Chaining	full	none
 
 Function::and		full	partial
 Function::or		full	partial

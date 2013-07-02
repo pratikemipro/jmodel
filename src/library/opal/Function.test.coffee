@@ -56,34 +56,7 @@
 		
 		equal getType(), 'nothing', 'Correctly handles empty case'
 		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
-
-	module 'Return value manipulation'
-	
-	test 'Function.Chaining', ->
 		
-		Person = class
-			name: Function.Chaining (@name) ->
-				
-		fred = new Person
-		
-		returned = fred.name 'fred'
-		
-		equal returned, fred, 'Returns correct object'
-		equal fred.name, 'fred', 'Function still works as expected'
-		
-	test 'Function::Chaining', ->
-		
-		Person = class
-			name: Function.From(String).Chaining (@name) ->
-				
-		fred = new Person
-		
-		returned = fred.name 'fred'
-		
-		equal returned, fred, 'Returns correct object'
-		equal fred.name, 'fred', 'Function still works as expected'
-		
-
 	module 'Function composition'
 	
 	test 'Function::then', ->
@@ -313,6 +286,34 @@
 		equals deptPerson('IT','Marketing').depts, 'IT,Marketing', 'works correctly with repeated type specifier'
 		equals deptPerson().depts, '', 'works correct for empty arguments with repeated type specifier'
 		raises (-> deptPerson 1, 2, 3), 'raieses exception when arguments do not match repeated type specifier'
+
+	module 'Return value manipulation'
+	
+	test 'Function.Chaining', ->
+		
+		Person = class
+			name: Function.Chaining (@name) ->
+				
+		fred = new Person
+		
+		returned = fred.name 'fred'
+		
+		equal returned, fred, 'Returns correct object'
+		equal fred.name, 'fred', 'Function still works as expected'
+		
+	test 'Function::Chaining', ->
+		
+		Person = class
+			name: Function.From(String).Chaining (@name) ->
+				
+		fred = new Person
+		
+		returned = fred.name 'fred'
+		
+		equal returned, fred, 'Returns correct object'
+		equal fred.name, 'fred', 'Function still works as expected'
+		
+	
 		
 	module 'Logical functions'
 	

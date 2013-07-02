@@ -96,41 +96,6 @@ define(['jmodel/topaz2'], function() {
       })
     ], ['number', 'string', 'object'], 'Selects correct variant for non-empty arguments');
   });
-  module('Return value manipulation');
-  test('Function.Chaining', function() {
-    var Person, fred, returned;
-    Person = (function() {
-      function _Class() {}
-
-      _Class.prototype.name = Function.Chaining(function(name) {
-        this.name = name;
-      });
-
-      return _Class;
-
-    })();
-    fred = new Person;
-    returned = fred.name('fred');
-    equal(returned, fred, 'Returns correct object');
-    return equal(fred.name, 'fred', 'Function still works as expected');
-  });
-  test('Function::Chaining', function() {
-    var Person, fred, returned;
-    Person = (function() {
-      function _Class() {}
-
-      _Class.prototype.name = Function.From(String).Chaining(function(name) {
-        this.name = name;
-      });
-
-      return _Class;
-
-    })();
-    fred = new Person;
-    returned = fred.name('fred');
-    equal(returned, fred, 'Returns correct object');
-    return equal(fred.name, 'fred', 'Function still works as expected');
-  });
   module('Function composition');
   test('Function::then', function() {
     var blue, green, red;
@@ -490,6 +455,41 @@ define(['jmodel/topaz2'], function() {
     return raises((function() {
       return deptPerson(1, 2, 3);
     }), 'raieses exception when arguments do not match repeated type specifier');
+  });
+  module('Return value manipulation');
+  test('Function.Chaining', function() {
+    var Person, fred, returned;
+    Person = (function() {
+      function _Class() {}
+
+      _Class.prototype.name = Function.Chaining(function(name) {
+        this.name = name;
+      });
+
+      return _Class;
+
+    })();
+    fred = new Person;
+    returned = fred.name('fred');
+    equal(returned, fred, 'Returns correct object');
+    return equal(fred.name, 'fred', 'Function still works as expected');
+  });
+  test('Function::Chaining', function() {
+    var Person, fred, returned;
+    Person = (function() {
+      function _Class() {}
+
+      _Class.prototype.name = Function.From(String).Chaining(function(name) {
+        this.name = name;
+      });
+
+      return _Class;
+
+    })();
+    fred = new Person;
+    returned = fred.name('fred');
+    equal(returned, fred, 'Returns correct object');
+    return equal(fred.name, 'fred', 'Function still works as expected');
   });
   module('Logical functions');
   test('Function::and', function() {
