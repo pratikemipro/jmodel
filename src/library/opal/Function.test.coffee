@@ -70,6 +70,19 @@
 		
 		equal returned, fred, 'Returns correct object'
 		equal fred.name, 'fred', 'Function still works as expected'
+		
+	test 'Function::Chaining', ->
+		
+		Person = class
+			name: Function.From(String).Chaining (@name) ->
+				
+		fred = new Person
+		
+		returned = fred.name 'fred'
+		
+		equal returned, fred, 'Returns correct object'
+		equal fred.name, 'fred', 'Function still works as expected'
+		
 
 	module 'Function composition'
 	

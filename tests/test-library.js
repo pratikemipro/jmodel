@@ -114,6 +114,23 @@ define(['jmodel/topaz2'], function() {
     equal(returned, fred, 'Returns correct object');
     return equal(fred.name, 'fred', 'Function still works as expected');
   });
+  test('Function::Chaining', function() {
+    var Person, fred, returned;
+    Person = (function() {
+      function _Class() {}
+
+      _Class.prototype.name = Function.From(String).Chaining(function(name) {
+        this.name = name;
+      });
+
+      return _Class;
+
+    })();
+    fred = new Person;
+    returned = fred.name('fred');
+    equal(returned, fred, 'Returns correct object');
+    return equal(fred.name, 'fred', 'Function still works as expected');
+  });
   module('Function composition');
   test('Function::then', function() {
     var blue, green, red;

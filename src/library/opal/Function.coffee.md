@@ -32,14 +32,13 @@
 ## Return value manipulation
 
 		
-		Function.Constant = (constant) ->
-			(fn) -> (args...) -> fn.apply(this,args); constant
+		Function.Constant = (constant) -> (fn) -> fn.but -> constant
 		
 		Function.Override = Function.Constant false
 		
-		Function.Chaining = (fn) -> (args...) -> fn.apply(this,args); this
+		Function.Chaining = (fn) -> fn.but -> this
 		
-		Function::Chaining = -> @but -> this
+		Function::Chaining = (fn) -> @(fn).but -> this
 	
 
 ## Function composition
