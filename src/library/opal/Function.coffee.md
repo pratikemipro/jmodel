@@ -38,6 +38,8 @@
 		Function.Override = Function.Constant false
 		
 		Function.Chaining = (fn) -> (args...) -> fn.apply(this,args); this
+		
+		Function::Chaining = -> @but -> this
 	
 
 ## Function composition

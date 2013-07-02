@@ -215,6 +215,11 @@ define(function() {
       return this;
     };
   };
+  Function.prototype.Chaining = function() {
+    return this.but(function() {
+      return this;
+    });
+  };
   Function.prototype.then = function(fn2) {
     var fn1;
     if (typeof fn2 !== 'function') {
