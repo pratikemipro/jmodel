@@ -18,7 +18,7 @@
 						record.prototype[field] = Function.switch [
 							Type(Function) Function.Chaining (fn) ->
 								@[field] fn.call this, @_[field]
-							Type(Value) Function.Chaining Function.Of(constructor) (value) ->
+							Type(Value) Function.Of(constructor).Chaining (value) ->
 								@_[field] = value
 							Type() ->
 								@_[field]
