@@ -130,6 +130,24 @@
 		window.Predicate = Function.To Boolean
 	
 
+## Return value manipulation
+
+		Function.Returning = (val) ->
+			(fn) -> (args...) ->
+				ret = val.call(this)
+				fn.call(this,ret).apply(this,args)
+				return ret
+		
+		Function::Returning = (val) ->
+			Function.Returning(val).then(this)
+	
+		Function.Constant = (constant) -> (fn) -> fn.but -> constant
+		
+		Function.Chaining = Function.From(Function) (fn) -> fn.but -> this
+		
+		Function::Chaining = Function.From(Function) (fn) -> @(fn).but -> this
+		
+
 ## Logical functions
 	
 		
@@ -165,24 +183,6 @@
 		
 		Function.not = (predicate) ->
 			if typeof predicate == 'function' then predicate.not() else not predicate
-	
-
-## Return value manipulation
-
-		Function.Returning = (val) ->
-			(fn) -> (args...) ->
-				ret = val.call(this)
-				fn.call(this,ret).apply(this,args)
-				return ret
-				
-		Function::Returning = (val) ->
-			Function.Returning(val).then(this)
-			
-		Function.Constant = (constant) -> (fn) -> fn.but -> constant
-		
-		Function.Chaining = Function.From(Function) (fn) -> fn.but -> this
-		
-		Function::Chaining = Function.From(Function) (fn) -> @(fn).but -> this
 	
 
 ## Delegation

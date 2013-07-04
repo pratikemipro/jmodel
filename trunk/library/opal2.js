@@ -357,6 +357,37 @@ define(function() {
     };
   };
   window.Predicate = Function.To(Boolean);
+  Function.Returning = function(val) {
+    return function(fn) {
+      return function() {
+        var args, ret;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        ret = val.call(this);
+        fn.call(this, ret).apply(this, args);
+        return ret;
+      };
+    };
+  };
+  Function.prototype.Returning = function(val) {
+    return Function.Returning(val).then(this);
+  };
+  Function.Constant = function(constant) {
+    return function(fn) {
+      return fn.but(function() {
+        return constant;
+      });
+    };
+  };
+  Function.Chaining = Function.From(Function)(function(fn) {
+    return fn.but(function() {
+      return this;
+    });
+  });
+  Function.prototype.Chaining = Function.From(Function)(function(fn) {
+    return this(fn).but(function() {
+      return this;
+    });
+  });
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
@@ -419,37 +450,6 @@ define(function() {
       return !predicate;
     }
   };
-  Function.Returning = function(val) {
-    return function(fn) {
-      return function() {
-        var args, ret;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        ret = val.call(this);
-        fn.call(this, ret).apply(this, args);
-        return ret;
-      };
-    };
-  };
-  Function.prototype.Returning = function(val) {
-    return Function.Returning(val).then(this);
-  };
-  Function.Constant = function(constant) {
-    return function(fn) {
-      return fn.but(function() {
-        return constant;
-      });
-    };
-  };
-  Function.Chaining = Function.From(Function)(function(fn) {
-    return fn.but(function() {
-      return this;
-    });
-  });
-  Function.prototype.Chaining = Function.From(Function)(function(fn) {
-    return this(fn).but(function() {
-      return this;
-    });
-  });
   Function.delegate = function(fn) {
     return function() {
       var args, context, method, _ref;
