@@ -275,6 +275,9 @@ define(function() {
       return ret;
     };
   };
+  Function.prototype.matches = function() {
+    return true;
+  };
   Function.prototype.require = function(predicate, message) {
     if (message == null) {
       message = 'Precondition failure';
@@ -330,14 +333,20 @@ define(function() {
     };
   };
   Function.prototype.From = function() {
-    var types;
+    var fn, matches, types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return this.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
+    matches = Function.hastypes.apply(Function, types);
+    fn = this.Requiring(matches, 'Incorrect source type. Arguments are');
+    fn.matches = matches;
+    return fn;
   };
   Function.From = function() {
-    var types;
+    var fn, matches, types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return Function.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
+    matches = Function.hastypes.apply(Function, types);
+    fn = Function.Requiring(matches, 'Incorrect source type. Arguments are');
+    fn.matches = matches;
+    return fn;
   };
   Function.prototype.To = function(type) {
     return this.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
@@ -357,37 +366,6 @@ define(function() {
     };
   };
   window.Predicate = Function.To(Boolean);
-  Function.Returning = function(val) {
-    return function(fn) {
-      return function() {
-        var args, ret;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        ret = val.call(this);
-        fn.call(this, ret).apply(this, args);
-        return ret;
-      };
-    };
-  };
-  Function.prototype.Returning = function(val) {
-    return Function.Returning(val).then(this);
-  };
-  Function.Constant = function(constant) {
-    return function(fn) {
-      return fn.but(function() {
-        return constant;
-      });
-    };
-  };
-  Function.Chaining = Function.From(Function)(function(fn) {
-    return fn.but(function() {
-      return this;
-    });
-  });
-  Function.prototype.Chaining = Function.From(Function)(function(fn) {
-    return this(fn).but(function() {
-      return this;
-    });
-  });
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
@@ -450,6 +428,37 @@ define(function() {
       return !predicate;
     }
   };
+  Function.Returning = function(val) {
+    return function(fn) {
+      return function() {
+        var args, ret;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        ret = val.call(this);
+        fn.call(this, ret).apply(this, args);
+        return ret;
+      };
+    };
+  };
+  Function.prototype.Returning = function(val) {
+    return Function.Returning(val).then(this);
+  };
+  Function.Constant = function(constant) {
+    return function(fn) {
+      return fn.but(function() {
+        return constant;
+      });
+    };
+  };
+  Function.Chaining = Function.From(Function)(function(fn) {
+    return fn.but(function() {
+      return this;
+    });
+  });
+  Function.prototype.Chaining = Function.From(Function)(function(fn) {
+    return this(fn).but(function() {
+      return this;
+    });
+  });
   Function.delegate = function(fn) {
     return function() {
       var args, context, method, _ref;

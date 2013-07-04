@@ -209,7 +209,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">require</span></span> = (predicate,message=<span class="string">'Precondition failure'</span>) -&gt;
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">matches</span></span> = -&gt; <span class="literal">true</span>
+
+	Function::<span class="function"><span class="title">require</span></span> = (predicate,message=<span class="string">'Precondition failure'</span>) -&gt;
 		<span class="property">@pre</span> (args...) -&gt;
 			<span class="keyword">throw</span> message+<span class="string">': '</span>+args.toString() <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args
 
@@ -247,10 +249,16 @@
 		(fn) -&gt; fn.ensure predicate, message
 
 	Function::<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		<span class="property">@Requiring</span> Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
+		matches = Function.hastypes types...
+		fn = <span class="property">@Requiring</span> matches, <span class="string">'Incorrect source type. Arguments are'</span>
+		fn.matches = matches
+		<span class="keyword">return</span> fn
 
 	Function.<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		Function.Requiring Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
+		matches = Function.hastypes types...
+		fn = Function.Requiring matches, <span class="string">'Incorrect source type. Arguments are'</span>
+		fn.matches = matches
+		<span class="keyword">return</span> fn
 
 	Function::<span class="function"><span class="title">To</span></span> = (type) -&gt;
 		<span class="property">@Ensuring</span> Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>
@@ -272,34 +280,6 @@
               
               <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
-              </div>
-              <h2>Return value manipulation</h2>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
-		(fn) -&gt; (args...) -&gt;
-			ret = val.call(<span class="keyword">this</span>)
-			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
-			<span class="keyword">return</span> ret
-
-	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
-		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
-
-	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
-
-	Function.Chaining = Function.From(Function) (fn) -&gt; fn.but -&gt; <span class="keyword">this</span>
-
-	Function::Chaining = Function.From(Function) (fn) -&gt; @(fn).but -&gt; <span class="keyword">this</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-8">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h2>Logical functions</h2>
 
@@ -337,6 +317,34 @@
 
 	Function.<span class="function"><span class="title">not</span></span> = (predicate) -&gt;
 		<span class="keyword">if</span> <span class="keyword">typeof</span> predicate == <span class="string">'function'</span> <span class="keyword">then</span> predicate.<span class="keyword">not</span>() <span class="keyword">else</span> <span class="keyword">not</span> predicate</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2>Return value manipulation</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		(fn) -&gt; (args...) -&gt;
+			ret = val.call(<span class="keyword">this</span>)
+			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
+			<span class="keyword">return</span> ret
+
+	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
+
+	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
+
+	Function.Chaining = Function.From(Function) (fn) -&gt; fn.but -&gt; <span class="keyword">this</span>
+
+	Function::Chaining = Function.From(Function) (fn) -&gt; @(fn).but -&gt; <span class="keyword">this</span></pre></div></div>
             
         </li>
         
