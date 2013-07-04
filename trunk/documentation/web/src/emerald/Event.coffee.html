@@ -101,20 +101,15 @@ Docs: none</p>
             
             <div class="content"><div class='highlight'><pre>	Event.key = Function.<span class="keyword">switch</span> [
 
-		Type(Character) (key) -&gt;
-			({which}) -&gt; String.fromCharCode(which).toUpperCase() == key
+		Function.From(Character)     (key) -&gt; ({which}) -&gt; String.fromCharCode(which).toUpperCase() == key
 
-		Type(RegExp) (regex) -&gt;
-			({which}) -&gt; String.fromCharCode(which).toUpperCase().match(regex) <span class="keyword">or</span> <span class="literal">false</span>
+		Function.From(RegExp)        (regex) -&gt; ({which}) -&gt; String.fromCharCode(which).toUpperCase().match(regex) <span class="keyword">or</span> <span class="literal">false</span>
 
-		Type(Number) (number) -&gt;
-			({which}) -&gt; which == number
+		Function.From(Number)        (number) -&gt; ({which}) -&gt; which == number
 
-		Type(SpecialKey) (identifier) -&gt;
-			Event.key codes[identifier]
+		Function.From(SpecialKey)    (identifier) -&gt; Event.key codes[identifier]
 
-		Type(Value,[Value])	(identifer,identifiers...) -&gt;
-			Event.key(identifier).<span class="keyword">or</span> Event.key identifiers...
+		Function.From(Value,[Value]) (identifer,identifiers...) -&gt; Event.key(identifier).<span class="keyword">or</span> Event.key identifiers...
 
 	]</pre></div></div>
             

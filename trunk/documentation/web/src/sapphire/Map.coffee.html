@@ -73,8 +73,8 @@
 			<span class="property">@add</span> mappings <span class="keyword">if</span> mappings <span class="keyword">instanceof</span> Object
 
 		add: Function.<span class="keyword">switch</span> [	
-			Type(Scalar,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = value
-			Type(Object)	  Function.Chaining (mappings) -&gt; <span class="property">@add</span>(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
+			Function.From(Scalar,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = value
+			Function.From(Object)       Function.Chaining (mappings) -&gt; <span class="property">@add</span>(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
 		]
 
 		remove: Function.Chaining (key) -&gt; <span class="keyword">delete</span> <span class="property">@_</span>[key]
@@ -104,8 +104,8 @@
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 
 				add: <span class="keyword">this</span>::add.extend [			
-					Type(Scalar,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = <span class="property">@ensure</span> value
-					Type(Array)       Function.Chaining (keys) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>() <span class="keyword">for</span> key <span class="keyword">in</span> keys
+					Function.From(Scalar,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = <span class="property">@ensure</span> value
+					Function.From(Array)        Function.Chaining (keys) -&gt; <span class="property">@add</span> key, <span class="property">@ensure</span>() <span class="keyword">for</span> key <span class="keyword">in</span> keys
 				]
 
 				ensure: Object.ensure constructor
@@ -116,7 +116,7 @@
 			combine = combine.bind <span class="property">@value_constructor</span>
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 				add: <span class="keyword">this</span>::add.extend [
-					Type(Scalar,Value) Function.Chaining (key,value) -&gt;
+					Function.From(Scalar,Value) Function.Chaining (key,value) -&gt;
 						<span class="property">@_</span>[key] = <span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@_</span>[key] <span class="keyword">then</span> <span class="property">@ensure</span>(value) <span class="keyword">else</span> combine <span class="property">@ensure</span>(value), <span class="property">@_</span>[key]
 				]</pre></div></div>
             

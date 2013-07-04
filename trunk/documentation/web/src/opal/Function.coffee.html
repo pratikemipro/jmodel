@@ -124,13 +124,10 @@
 	Function.<span class="function"><span class="title">switch</span></span> = (variants=[]) -&gt;
 		<span class="function"><span class="title">fn</span></span> = (args...) -&gt;
 			<span class="keyword">for</span> variant <span class="keyword">in</span> variants
-				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.test args...
+				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.matches args...
 			<span class="keyword">return</span> <span class="literal">undefined</span>
 		fn.extend extend: (variants2=[]) -&gt;
-			Function.<span class="keyword">switch</span> variants2.concat variants
-
-	window.Type = <span class="function"><span class="title">Type</span></span> = (types...) -&gt;
-		(fn) -&gt; fn.extend test: Function.hastypes types...</pre></div></div>
+			Function.<span class="keyword">switch</span> variants2.concat variants</pre></div></div>
             
         </li>
         
@@ -237,10 +234,16 @@
 		(args...) -&gt; predicate args
 
 	Function::<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
-		<span class="property">@then</span> (fn) -&gt; fn.require predicate, message
+		<span class="property">@then</span> (fn) -&gt;
+			fn2 = fn.require predicate, message
+			fn2.matches = predicate
+			<span class="keyword">return</span> fn2
 
 	Function.<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
-		(fn) -&gt; fn.require predicate, message
+		(fn) -&gt;
+			fn2 = fn.require predicate, message
+			fn2.matches = predicate
+			<span class="keyword">return</span> fn2
 
 	Function::<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
 		<span class="property">@then</span> (fn) -&gt; fn.ensure predicate, message
@@ -249,16 +252,10 @@
 		(fn) -&gt; fn.ensure predicate, message
 
 	Function::<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		matches = Function.hastypes types...
-		fn = <span class="property">@Requiring</span> matches, <span class="string">'Incorrect source type. Arguments are'</span>
-		fn.matches = matches
-		<span class="keyword">return</span> fn
+		<span class="property">@Requiring</span> Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
 
 	Function.<span class="function"><span class="title">From</span></span> = (types...) -&gt;
-		matches = Function.hastypes types...
-		fn = Function.Requiring matches, <span class="string">'Incorrect source type. Arguments are'</span>
-		fn.matches = matches
-		<span class="keyword">return</span> fn
+		Function.Requiring Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
 
 	Function::<span class="function"><span class="title">To</span></span> = (type) -&gt;
 		<span class="property">@Ensuring</span> Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>

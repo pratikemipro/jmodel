@@ -47,15 +47,17 @@
 		
 		getType = Function.switch [
 		
-			Type()		 () -> 'nothing'
-			Type(Number) (number) -> 'number'
-			Type(String) (string) -> 'string'
-			Type(Object) (object) -> 'object'
+			Function.From()		  () -> 'nothing'
+			Function.From(Number) (number) -> 'number'
+			Function.From(String) (string) -> 'string'
+			Function.From(Object) (object) -> 'object'
 		
 		]
 		
-		equal getType(), 'nothing', 'Correctly handles empty case'
-		deepEqual [ getType(1), getType('fred'), getType(name: 'fred') ], ['number','string','object'], 'Selects correct variant for non-empty arguments'
+		equal getType(),  'nothing', 'Correctly handles empty case'
+		equal getType(1), 'number', 'Correctly handles number argument'
+		equal getType('fred'), 'string', 'Correctly handles string argument'
+		equal getType(name:'fred'), 'object', 'Correctly handles object argument'
 		
 	module 'Function composition'
 	

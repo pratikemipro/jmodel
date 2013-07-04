@@ -79,22 +79,22 @@ define(['jmodel/topaz2'], function() {
   test('Function.switch', function() {
     var getType;
     getType = Function["switch"]([
-      Type()(function() {
+      Function.From()(function() {
         return 'nothing';
-      }), Type(Number)(function(number) {
+      }), Function.From(Number)(function(number) {
         return 'number';
-      }), Type(String)(function(string) {
+      }), Function.From(String)(function(string) {
         return 'string';
-      }), Type(Object)(function(object) {
+      }), Function.From(Object)(function(object) {
         return 'object';
       })
     ]);
     equal(getType(), 'nothing', 'Correctly handles empty case');
-    return deepEqual([
-      getType(1), getType('fred'), getType({
-        name: 'fred'
-      })
-    ], ['number', 'string', 'object'], 'Selects correct variant for non-empty arguments');
+    equal(getType(1), 'number', 'Correctly handles number argument');
+    equal(getType('fred'), 'string', 'Correctly handles string argument');
+    return equal(getType({
+      name: 'fred'
+    }), 'object', 'Correctly handles object argument');
   });
   module('Function composition');
   test('Function::then', function() {

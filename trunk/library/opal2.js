@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, Type, ordered, _base;
+  var Promise, ordered, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -176,7 +176,7 @@ define(function() {
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       for (_i = 0, _len = variants.length; _i < _len; _i++) {
         variant = variants[_i];
-        if (variant.test.apply(variant, args)) {
+        if (variant.matches.apply(variant, args)) {
           return variant.apply(this, args);
         }
       }
@@ -190,15 +190,6 @@ define(function() {
         return Function["switch"](variants2.concat(variants));
       }
     });
-  };
-  window.Type = Type = function() {
-    var types;
-    types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return function(fn) {
-      return fn.extend({
-        test: Function.hastypes.apply(Function, types)
-      });
-    };
   };
   Function.prototype.then = function(fn2) {
     var fn1;
@@ -314,12 +305,18 @@ define(function() {
   };
   Function.prototype.Requiring = function(predicate, message) {
     return this.then(function(fn) {
-      return fn.require(predicate, message);
+      var fn2;
+      fn2 = fn.require(predicate, message);
+      fn2.matches = predicate;
+      return fn2;
     });
   };
   Function.Requiring = function(predicate, message) {
     return function(fn) {
-      return fn.require(predicate, message);
+      var fn2;
+      fn2 = fn.require(predicate, message);
+      fn2.matches = predicate;
+      return fn2;
     };
   };
   Function.prototype.Ensuring = function(predicate, message) {
@@ -333,20 +330,14 @@ define(function() {
     };
   };
   Function.prototype.From = function() {
-    var fn, matches, types;
+    var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    matches = Function.hastypes.apply(Function, types);
-    fn = this.Requiring(matches, 'Incorrect source type. Arguments are');
-    fn.matches = matches;
-    return fn;
+    return this.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.From = function() {
-    var fn, matches, types;
+    var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    matches = Function.hastypes.apply(Function, types);
-    fn = Function.Requiring(matches, 'Incorrect source type. Arguments are');
-    fn.matches = matches;
-    return fn;
+    return Function.Requiring(Function.hastypes.apply(Function, types), 'Incorrect source type. Arguments are');
   };
   Function.prototype.To = function(type) {
     return this.Ensuring(Object.isa(type), 'Incorrect target type. Returned value is');
@@ -905,7 +896,7 @@ define(function() {
     });
   });
   Object.union = Function["switch"]([
-    Type(Array)(Function.Returning(function() {
+    Function.From(Array).Returning(function() {
       return new Object;
     })(function(union) {
       return function(objects) {
@@ -926,14 +917,14 @@ define(function() {
         }
         return _results;
       };
-    })), Type([Object])(function() {
+    }), Function.From([Object])(function() {
       var objects;
       objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return Object.union(objects);
     })
   ]);
   Object.intersection = Function["switch"]([
-    Type(Array)(Function.Returning(function() {
+    Function.From(Array).Returning(function() {
       return new Object;
     })(function(intersection) {
       return function(_arg) {
@@ -959,7 +950,7 @@ define(function() {
         }
         return _results;
       };
-    })), Type([Object])(function() {
+    }), Function.From([Object])(function() {
       var objects;
       objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return Object.intersection(objects);

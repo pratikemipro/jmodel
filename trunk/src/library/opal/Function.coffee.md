@@ -20,14 +20,11 @@
 		Function.switch = (variants=[]) ->
 			fn = (args...) ->
 				for variant in variants
-					return variant.apply(this,args) if variant.test args...
+					return variant.apply(this,args) if variant.matches args...
 				return undefined
 			fn.extend extend: (variants2=[]) ->
 				Function.switch variants2.concat variants
 		
-		window.Type = Type = (types...) ->
-			(fn) -> fn.extend test: Function.hastypes types...
-			
 
 ## Function composition
 
@@ -97,10 +94,16 @@
 			(args...) -> predicate args
 		
 		Function::Requiring = (predicate,message) ->
-			@then (fn) -> fn.require predicate, message
+			@then (fn) ->
+				fn2 = fn.require predicate, message
+				fn2.matches = predicate
+				return fn2
 		
 		Function.Requiring = (predicate,message) ->
-			(fn) -> fn.require predicate, message
+			(fn) ->
+				fn2 = fn.require predicate, message
+				fn2.matches = predicate
+				return fn2
 		
 		Function::Ensuring = (predicate,message) ->
 			@then (fn) -> fn.ensure predicate, message
@@ -109,16 +112,10 @@
 			(fn) -> fn.ensure predicate, message
 		
 		Function::From = (types...) ->
-			matches = Function.hastypes types...
-			fn = @Requiring matches, 'Incorrect source type. Arguments are'
-			fn.matches = matches
-			return fn
+			@Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
 		
 		Function.From = (types...) ->
-			matches = Function.hastypes types...
-			fn = Function.Requiring matches, 'Incorrect source type. Arguments are'
-			fn.matches = matches
-			return fn
+			Function.Requiring Function.hastypes(types...), 'Incorrect source type. Arguments are'
 		
 		Function::To = (type) ->
 			@Ensuring Object.isa(type), 'Incorrect target type. Returned value is'
