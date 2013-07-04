@@ -123,22 +123,22 @@
 
 	Object.union = Function.<span class="keyword">switch</span> [
 
-		Type(Array) Function.Returning(-&gt; <span class="keyword">new</span> Object) \
+		Function.From(Array).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(union) -&gt; (objects) -&gt;
 				union[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> object <span class="keyword">for</span> object <span class="keyword">in</span> objects
 
-		Type([Object]) (objects...) -&gt; Object.union objects
+		Function.From([Object]) (objects...) -&gt; Object.union objects
 
 	]
 
 	Object.intersection = Function.<span class="keyword">switch</span> [
 
-		Type(Array) Function.Returning(-&gt; <span class="keyword">new</span> Object) \
+		Function.From(Array).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(intersection) -&gt; ([first,rest...]) -&gt;
 				intersection[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> first <span class="keyword">when</span> \
 					[<span class="literal">true</span>].concat( key <span class="keyword">in</span> Object.keys(object) <span class="keyword">for</span> object <span class="keyword">in</span> rest ).reduce (a,b) -&gt; a <span class="keyword">and</span> b
 
-		Type([Object]) (objects...) -&gt; Object.intersection objects
+		Function.From([Object]) (objects...) -&gt; Object.intersection objects
 
 
 	]

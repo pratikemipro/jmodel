@@ -127,7 +127,7 @@
 					<span class="keyword">super</span>
 
 				add: <span class="keyword">this</span>::add.extend [			
-					Type(Scalar,Value) Function.Chaining (key,value) -&gt;
+					Function.From(Scalar,Value) Function.Chaining (key,value) -&gt;
 						value = <span class="property">@ensure</span> value
 						<span class="property">@_</span>[key] = value
 						<span class="property">@event</span>(<span class="string">'add'</span>).raise(key,value)

@@ -34,27 +34,27 @@ define(['jmodel/sapphire2'], function() {
   });
   SpecialKey = String.Matching(/:.+/);
   Event.key = Function["switch"]([
-    Type(Character)(function(key) {
+    Function.From(Character)(function(key) {
       return function(_arg) {
         var which;
         which = _arg.which;
         return String.fromCharCode(which).toUpperCase() === key;
       };
-    }), Type(RegExp)(function(regex) {
+    }), Function.From(RegExp)(function(regex) {
       return function(_arg) {
         var which;
         which = _arg.which;
         return String.fromCharCode(which).toUpperCase().match(regex) || false;
       };
-    }), Type(Number)(function(number) {
+    }), Function.From(Number)(function(number) {
       return function(_arg) {
         var which;
         which = _arg.which;
         return which === number;
       };
-    }), Type(SpecialKey)(function(identifier) {
+    }), Function.From(SpecialKey)(function(identifier) {
       return Event.key(codes[identifier]);
-    }), Type(Value, [Value])(function() {
+    }), Function.From(Value, [Value])(function() {
       var identifer, identifiers;
       identifer = arguments[0], identifiers = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       return Event.key(identifier).or(Event.key.apply(Event, identifiers));

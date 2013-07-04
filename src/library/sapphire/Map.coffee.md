@@ -8,8 +8,8 @@
 				@add mappings if mappings instanceof Object
 	
 			add: Function.switch [	
-				Type(Scalar,Value) Function.Chaining (key,value) -> @_[key] = value
-				Type(Object)	  Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
+				Function.From(Scalar,Value) Function.Chaining (key,value) -> @_[key] = value
+				Function.From(Object)       Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
 			]
 			
 			remove: Function.Chaining (key) -> delete @_[key]
@@ -30,8 +30,8 @@
 				class extends this
 				
 					add: this::add.extend [			
-						Type(Scalar,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
-						Type(Array)       Function.Chaining (keys) -> @add key, @ensure() for key in keys
+						Function.From(Scalar,Value) Function.Chaining (key,value) -> @_[key] = @ensure value
+						Function.From(Array)        Function.Chaining (keys) -> @add key, @ensure() for key in keys
 					]
 					
 					ensure: Object.ensure constructor
@@ -42,7 +42,7 @@
 				combine = combine.bind @value_constructor
 				class extends this
 					add: this::add.extend [
-						Type(Scalar,Value) Function.Chaining (key,value) ->
+						Function.From(Scalar,Value) Function.Chaining (key,value) ->
 							@_[key] = if not @_[key] then @ensure(value) else combine @ensure(value), @_[key]
 					]
 					

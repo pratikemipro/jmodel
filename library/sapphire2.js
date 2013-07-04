@@ -339,9 +339,9 @@ define(['jmodel/opal2'], function() {
     }
 
     Map.prototype.add = Function["switch"]([
-      Type(Scalar, Value)(Function.Chaining(function(key, value) {
+      Function.From(Scalar, Value)(Function.Chaining(function(key, value) {
         return this._[key] = value;
-      })), Type(Object)(Function.Chaining(function(mappings) {
+      })), Function.From(Object)(Function.Chaining(function(mappings) {
         var key, value, _results;
         _results = [];
         for (key in mappings) {
@@ -400,9 +400,9 @@ define(['jmodel/opal2'], function() {
         }
 
         _Class.prototype.add = _Class.prototype.add.extend([
-          Type(Scalar, Value)(Function.Chaining(function(key, value) {
+          Function.From(Scalar, Value)(Function.Chaining(function(key, value) {
             return this._[key] = this.ensure(value);
-          })), Type(Array)(Function.Chaining(function(keys) {
+          })), Function.From(Array)(Function.Chaining(function(keys) {
             var key, _i, _len, _results;
             _results = [];
             for (_i = 0, _len = keys.length; _i < _len; _i++) {
@@ -434,7 +434,7 @@ define(['jmodel/opal2'], function() {
         }
 
         _Class.prototype.add = _Class.prototype.add.extend([
-          Type(Scalar, Value)(Function.Chaining(function(key, value) {
+          Function.From(Scalar, Value)(Function.Chaining(function(key, value) {
             return this._[key] = !this._[key] ? this.ensure(value) : combine(this.ensure(value), this._[key]);
           }))
         ]);
@@ -622,11 +622,11 @@ define(['jmodel/opal2'], function() {
       })(this);
       _fn = function(field, constructor) {
         return record.prototype[field] = Function["switch"]([
-          Type(Not(Function))(Function.Of(constructor).Chaining(function(value) {
+          Function.From(Not(Function))(Function.Of(constructor).Chaining(function(value) {
             return this._[field] = value;
-          })), Type(Function)(Function.Chaining(function(fn) {
+          })), Function.From(Function)(Function.Chaining(function(fn) {
             return this[field](fn.call(this, this._[field]));
-          })), Type()(function() {
+          })), Function.From()(function() {
             return this._[field];
           })
         ]);
