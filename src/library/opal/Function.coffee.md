@@ -132,6 +132,7 @@
 
 ## Return value manipulation
 
+		
 		Function.Returning = (val) ->
 			(fn) -> (args...) ->
 				ret = val.call(this)
