@@ -64,6 +64,16 @@ define(function() {
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return (_ref = []).concat.apply(_ref, arrays);
   };
+  Array.map = function(fn) {
+    return function(arr) {
+      return arr.map(fn);
+    };
+  };
+  Array.reduce = function(reduction, initial) {
+    return function(arr) {
+      return arr.reduce(reduction, initial || reduction.unit);
+    };
+  };
   Array.zip = function() {
     var arr, arrays, i, maxIndex, _i, _results;
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -136,16 +146,6 @@ define(function() {
         }
       }
       return types2.length === 0 && array2.length === 0;
-    };
-  };
-  Array.map = function(fn) {
-    return function(arr) {
-      return arr.map(fn);
-    };
-  };
-  Array.reduce = function(reduction, initial) {
-    return function(arr) {
-      return arr.reduce(reduction, initial || reduction.unit);
     };
   };
   Array.prototype.ordered = function() {
