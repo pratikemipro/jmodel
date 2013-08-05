@@ -9,6 +9,7 @@ Object.copy			none	none
 Object.type			none	none
 Object.eq			none	none
 Object.keys			full	none
+Object.has			none	none
 
 Object.property		full	none
 Object.method		full	none

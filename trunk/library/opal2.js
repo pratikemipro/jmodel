@@ -845,6 +845,11 @@ define(function() {
       return _results;
     });
   }
+  Object.has = function(key) {
+    return function(object) {
+      return __indexOf.call(Object.keys(object), key) >= 0;
+    };
+  };
   Object.property = function(property, value) {
     switch (arguments.length) {
       case 1:
@@ -1026,9 +1031,7 @@ define(function() {
         for (key in first) {
           if (!__hasProp.call(first, key)) continue;
           value = first[key];
-          if (rest.all(function(object) {
-            return __indexOf.call(Object.keys(object), key) >= 0;
-          })) {
+          if (rest.all(Object.has(key))) {
             _results.push(intersection[key] = value);
           }
         }
