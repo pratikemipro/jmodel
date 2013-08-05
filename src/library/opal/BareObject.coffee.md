@@ -40,8 +40,7 @@
 		
 			Function.From(Array).Returning(-> new Object) \
 				(intersection) -> ([first,rest...]) ->
-					intersection[key] = value for own key, value of first when \
-						[true].concat( key in Object.keys(object) for object in rest ).reduce (a,b) -> a and b
+					intersection[key] = value for own key, value of first when rest.all (object) -> key in Object.keys(object)
 						
 			Function.From([Object]) (objects...) -> Object.intersection objects
 			
