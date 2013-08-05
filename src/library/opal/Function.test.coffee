@@ -258,6 +258,36 @@
 		
 		equals fred.birthday instanceof Date, true, 'Works correctly with methods'
 		equals fred.birthday.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly to method'
+	
+	module 'Argument manipulation'
+	
+	test 'Function.Defaults', ->
+		
+		Person = Function.Defaults(department:'IT') ({@name,@department}) ->
+		
+		fred = new Person
+			name: 'Fred'
+			
+		equal fred.department, 'IT', 'Object has default values for unspecified fields'
+		equal fred.name, 'Fred', 'Other fields behave normally'
+		
+		john = new Person
+			name: 'John'
+			department: 'Marketing'
+			
+		equal john.department, 'Marketing', 'Defaults can be overriden'
+		
+	test 'Function.Defaults.Of', ->
+	
+		Person = ({@name,@department}) ->
+			
+		makeMarketer = Function.Of(Person).Defaults(department:'Marketing') (person) -> person
+		
+		fred = makeMarketer name: 'Fred'
+		
+		equal fred instanceof Person, true, 'Makes object of correct type'
+		equal fred.department, 'Marketing', 'Object has default values for unspecified fields'
+		equal fred.name, 'Fred', 'Other fields behave normally'		
 
 	module 'Return value manipulation'
 	

@@ -357,6 +357,28 @@ define(function() {
     };
   };
   window.Predicate = Function.To(Boolean);
+  Function.Defaults = function(defaults) {
+    if (defaults == null) {
+      defaults = {};
+    }
+    return function(fn) {
+      return function(object) {
+        return fn.call(this, Object.union(defaults, object));
+      };
+    };
+  };
+  Function.prototype.Defaults = function(defaults) {
+    var fn1;
+    if (defaults == null) {
+      defaults = {};
+    }
+    fn1 = this;
+    return function(fn) {
+      return function(object) {
+        return fn1.call(this, fn).call(this, Object.union(defaults, object));
+      };
+    };
+  };
   Function.Returning = function(val) {
     return function(fn) {
       return function() {
@@ -981,6 +1003,11 @@ define(function() {
       }
     });
   });
+  Object.WithDefaults = function(defaults) {
+    return function(object) {
+      return Object.union(defaults, object);
+    };
+  };
   Number.valid = function(value) {
     return Object.isa(Number)(value) && !isNaN(value);
   };

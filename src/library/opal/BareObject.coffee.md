@@ -56,3 +56,9 @@
 			(predicate) -> Function.From([Object]) \
 				(objects...) -> Object.union objects... if predicate objects...
 				
+
+# Object with defaults
+
+		
+		Object.WithDefaults = (defaults) -> (object) -> Object.union defaults, object
+		

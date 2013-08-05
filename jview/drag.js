@@ -89,3 +89,7 @@ define(['jquery', 'jmodel/emerald', 'jmodel-plugins/jquery.emerald'], function($
     Target: Target
   };
 });
+
+/*
+//@ sourceMappingURL=drag.map
+*/

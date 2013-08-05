@@ -136,4 +136,21 @@
 		
 		equal e, undefined, 'Join is undefined if pair of objects does not match predicate'
 		deepEqual d, Object.union(a,b), 'Join is union if objects match predicate'
+	
+	test 'Object.WithDefaults', ->
+		
+		Person = Object.WithDefaults
+			department: 'IT'
+			
+		fred = Person
+			name: 'Fred'
+			
+		equal fred.department, 'IT', 'Object has default values for unspecified fields'
+		equal fred.name, 'Fred', 'Other fields behave normally'
+		
+		john = Person
+			name: 'John'
+			department: 'Marketing'
+			
+		equal john.department, 'Marketing', 'Defaults can be overriden'
 		
