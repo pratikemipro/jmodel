@@ -9,6 +9,8 @@ Array.all			none	none
 Array::all			none	none
 Array.any			none	none
 Array::any			none	none
+Array.none			none	none
+Array::none			none	none
 
 Array.zip			full	none
 Array.flatten		full	none
