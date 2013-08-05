@@ -934,17 +934,24 @@ define(function() {
     };
   });
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
-    var equal, prop;
-    equal = true;
-    for (prop in a) {
-      if (!__hasProp.call(a, prop)) continue;
-      equal && (equal = a[prop] === b[prop]);
-    }
-    for (prop in b) {
-      if (!__hasProp.call(b, prop)) continue;
-      equal && (equal = a[prop] === b[prop]);
-    }
-    return equal;
+    var prop;
+    return Array.reduce(Boolean.and)(Array.concat((function() {
+      var _results;
+      _results = [];
+      for (prop in a) {
+        if (!__hasProp.call(a, prop)) continue;
+        _results.push(a[prop] === b[prop]);
+      }
+      return _results;
+    })(), (function() {
+      var _results;
+      _results = [];
+      for (prop in b) {
+        if (!__hasProp.call(b, prop)) continue;
+        _results.push(a[prop] === b[prop]);
+      }
+      return _results;
+    })()));
   });
   Object.remove = Function.From([Scalar])(function() {
     var fields;
