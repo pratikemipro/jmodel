@@ -79,6 +79,9 @@ define(function() {
       }
       return _results;
     })());
+    if (maxIndex < 0) {
+      return [];
+    }
     _results = [];
     for (i = _i = 0; 0 <= maxIndex ? _i <= maxIndex : _i >= maxIndex; i = 0 <= maxIndex ? ++_i : --_i) {
       _results.push((function() {
@@ -137,6 +140,19 @@ define(function() {
       }
       return types2.length === 0 && array2.length === 0;
     };
+  };
+  Array.prototype.ordered = function() {
+    var x, y;
+    return ((function() {
+      var _i, _len, _ref, _ref1, _results;
+      _ref = Array.zip(this, this.slice(1));
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        _ref1 = _ref[_i], x = _ref1[0], y = _ref1[1];
+        _results.push(x < y);
+      }
+      return _results;
+    }).call(this)).reduce(Boolean.and, true);
   };
   Function.prototype.extend = function(properties) {
     return Object.extend(this, properties);
@@ -1101,6 +1117,18 @@ define(function() {
   Boolean.False.valid = Object.isa(Boolean).and(function(value) {
     return !value;
   });
+  Boolean.and = function(a, b) {
+    return a && b;
+  };
+  Boolean.or = function(a, b) {
+    return a || b;
+  };
+  Boolean.xor = function(a, b) {
+    return (a && !b) || (b && !a);
+  };
+  Boolean.not = function(a) {
+    return !a;
+  };
   Math.plus = function(a, b) {
     return a + b;
   };

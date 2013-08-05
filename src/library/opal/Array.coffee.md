@@ -6,6 +6,7 @@
 		Array.zip = (arrays...) ->
 			return [] if arrays.length == 0
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
+			return [] if maxIndex < 0
 			( arr[i] for arr in arrays for i in [0..maxIndex] )
 		
 		Array.flatten = (array=[]) ->
@@ -26,4 +27,6 @@
 						value = array2.shift()
 						return false if not Object.isa(type) value
 				return types2.length == 0 and array2.length == 0
+				
+		Array::ordered = -> ( x < y for [x,y] in Array.zip this, this[1..] ).reduce(Boolean.and,true)
 				
