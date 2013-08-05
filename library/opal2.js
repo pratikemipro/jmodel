@@ -958,7 +958,9 @@ define(function() {
         for (key in source) {
           if (!__hasProp.call(source, key)) continue;
           value = source[key];
-          _results.push(__indexOf.call(fields, key) < 0 ? obj[key] = value : void 0);
+          if (__indexOf.call(fields, key) < 0) {
+            _results.push(obj[key] = value);
+          }
         }
         return _results;
       };
@@ -976,7 +978,9 @@ define(function() {
         for (key in source) {
           if (!__hasProp.call(source, key)) continue;
           value = source[key];
-          _results.push(__indexOf.call(fields, key) >= 0 ? obj[key] = value : void 0);
+          if (__indexOf.call(fields, key) >= 0) {
+            _results.push(obj[key] = value);
+          }
         }
         return _results;
       };

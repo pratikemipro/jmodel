@@ -14,17 +14,17 @@
 		Object.remove = Function.From([Scalar]) \
 			(fields...) -> Function.From(Object).Returning(-> new Object) \
 				(obj) -> (source) ->
-					( obj[key] = value unless key in fields ) for own key, value of source
+					obj[key] = value for own key, value of source when key not in fields
 		
 		Object.project = Function.From([Scalar]) \
 			(fields...) -> Function.From(Object).Returning(-> new Object) \
 				(obj) -> (source) ->
-					( obj[key] = value if key in fields ) for own key, value of source
+					obj[key] = value for own key, value of source when key in fields
 		
 		Object.rename = Function.From(Object) \
 			(renaming) -> Function.From(Object).Returning(-> new Object) \
 				(obj) -> (source) ->
-					( obj[ renaming[key] or key ] = value ) for own key, value of source
+					obj[ renaming[key] or key ] = value for own key, value of source
 		
 		Object.union = Function.overload [
 		
