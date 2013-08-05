@@ -40,7 +40,7 @@
 		
 			Function.From(Array).Returning(-> new Object) \
 				(intersection) -> ([first,rest...]) ->
-					intersection[key] = value for own key, value of first when rest.all (object) -> key in Object.keys(object)
+					intersection[key] = value for own key, value of first when rest.all Object.has(key)
 						
 			Function.From([Object]) (objects...) -> Object.intersection objects
 			

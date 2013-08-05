@@ -41,6 +41,8 @@
 		Object.keys ?= Function.From(Object).To(Array) \
 			(object) -> key for own key of object
 		
+		Object.has = (key) -> (object) -> key in Object.keys(object)
+		
 
 ## Accessors
 
