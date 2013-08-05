@@ -26,6 +26,10 @@
 						value = array2.shift()
 						return false if not Object.isa(type) value
 				return types2.length == 0 and array2.length == 0
+		
+		Array.map = (fn) -> (arr) -> arr.map fn
 				
-		Array::ordered = -> ( x < y for [x,y] in Array.zip this, this[1..] ).reduce(Boolean.and,true)
+		Array.reduce = (reduction,initial) -> (arr) -> arr.reduce(reduction,initial or reduction.unit)
+				
+		Array::ordered = -> Array.reduce(Boolean.and) ( x < y for [x,y] in Array.zip this, this[1..] )
 				
