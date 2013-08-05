@@ -142,9 +142,15 @@
 
 	]
 
-	Object.difference = Function.From(Object,Object).Returning(-&gt; <span class="keyword">new</span> Object) \
-		(difference) -&gt; (first,second) -&gt;
-			difference[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> first <span class="keyword">when</span> <span class="keyword">not</span> second[key]?
+	Object.difference = Function.overload [
+
+		Function.From(Array).Returning(-&gt; <span class="keyword">new</span> Object) \
+			(difference) -&gt; ([first,rest...]) -&gt;
+				difference[key] = value <span class="keyword">for</span> own key, value <span class="keyword">of</span> first <span class="keyword">when</span> rest.none Object.has(key)
+
+		Function.From([Object]) (objects...) -&gt; Object.difference objects
+
+	]	
 
 	Object.join = Function.From(Function) \
 		(predicate) -&gt; Function.From([Object]) \

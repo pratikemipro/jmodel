@@ -108,6 +108,12 @@ define(function() {
   Array.prototype.any = function(predicate) {
     return Array.any(predicate)(this);
   };
+  Array.none = function(predicate) {
+    return Array.any(predicate).not();
+  };
+  Array.prototype.none = function(predicate) {
+    return Array.none(predicate)(this);
+  };
   Array.zip = function() {
     var arr, arrays, i, maxIndex, _i, _results;
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -1043,22 +1049,29 @@ define(function() {
       return Object.intersection(objects);
     })
   ]);
-  Object.difference = Function.From(Object, Object).Returning(function() {
-    return new Object;
-  })(function(difference) {
-    return function(first, second) {
-      var key, value, _results;
-      _results = [];
-      for (key in first) {
-        if (!__hasProp.call(first, key)) continue;
-        value = first[key];
-        if (second[key] == null) {
-          _results.push(difference[key] = value);
+  Object.difference = Function.overload([
+    Function.From(Array).Returning(function() {
+      return new Object;
+    })(function(difference) {
+      return function(_arg) {
+        var first, key, rest, value, _results;
+        first = _arg[0], rest = 2 <= _arg.length ? __slice.call(_arg, 1) : [];
+        _results = [];
+        for (key in first) {
+          if (!__hasProp.call(first, key)) continue;
+          value = first[key];
+          if (rest.none(Object.has(key))) {
+            _results.push(difference[key] = value);
+          }
         }
-      }
-      return _results;
-    };
-  });
+        return _results;
+      };
+    }), Function.From([Object])(function() {
+      var objects;
+      objects = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return Object.difference(objects);
+    })
+  ]);
   Object.join = Function.From(Function)(function(predicate) {
     return Function.From([Object])(function() {
       var objects;

@@ -14,6 +14,10 @@
 		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) ( predicate x for x in array )
 	
 		Array::any = (predicate) -> Array.any(predicate) this
+		
+		Array.none = (predicate) -> Array.any(predicate).not()
+		
+		Array::none = (predicate) -> Array.none(predicate) this
 	
 		Array.zip = (arrays...) ->
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...

@@ -110,6 +110,10 @@
 
 	Array::<span class="function"><span class="title">any</span></span> = (predicate) -&gt; Array.any(predicate) <span class="keyword">this</span>
 
+	Array.<span class="function"><span class="title">none</span></span> = (predicate) -&gt; Array.any(predicate).<span class="keyword">not</span>()
+
+	Array::<span class="function"><span class="title">none</span></span> = (predicate) -&gt; Array.none(predicate) <span class="keyword">this</span>
+
 	Array.<span class="function"><span class="title">zip</span></span> = (arrays...) -&gt;
 		maxIndex = Math.min ( arr.length-<span class="number">1</span> <span class="keyword">for</span> arr <span class="keyword">in</span> arrays )...
 		<span class="keyword">return</span> [] <span class="keyword">if</span> maxIndex <span class="keyword">in</span> [-<span class="number">1</span>,Infinity]
