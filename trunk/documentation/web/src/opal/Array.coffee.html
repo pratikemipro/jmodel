@@ -99,9 +99,8 @@
             <div class="content"><div class='highlight'><pre>	Array.<span class="function"><span class="title">concat</span></span> = (arrays...) -&gt; [].concat arrays...
 
 	Array.<span class="function"><span class="title">zip</span></span> = (arrays...) -&gt;
-		<span class="keyword">return</span> [] <span class="keyword">if</span> arrays.length == <span class="number">0</span>
 		maxIndex = Math.min ( arr.length-<span class="number">1</span> <span class="keyword">for</span> arr <span class="keyword">in</span> arrays )...
-		<span class="keyword">return</span> [] <span class="keyword">if</span> maxIndex &lt; <span class="number">0</span>
+		<span class="keyword">return</span> [] <span class="keyword">if</span> maxIndex <span class="keyword">in</span> [-<span class="number">1</span>,Infinity]
 		( arr[i] <span class="keyword">for</span> arr <span class="keyword">in</span> arrays <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0.</span>.maxIndex] )
 
 	Array.<span class="function"><span class="title">flatten</span></span> = (array=[]) -&gt;

@@ -67,9 +67,6 @@ define(function() {
   Array.zip = function() {
     var arr, arrays, i, maxIndex, _i, _results;
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    if (arrays.length === 0) {
-      return [];
-    }
     maxIndex = Math.min.apply(Math, (function() {
       var _i, _len, _results;
       _results = [];
@@ -79,7 +76,7 @@ define(function() {
       }
       return _results;
     })());
-    if (maxIndex < 0) {
+    if (maxIndex === (-1) || maxIndex === Infinity) {
       return [];
     }
     _results = [];
