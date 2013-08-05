@@ -13,3 +13,5 @@ Object.intersection	full	none
 Object.difference	full	none
 
 Object.join			none	none
+
+Object.WithDefaults	full	none

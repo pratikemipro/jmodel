@@ -128,7 +128,17 @@
 			(fn) -> (args...) -> fn.call this, ensure args...
 		
 		window.Predicate = Function.To Boolean
-	
+
+## Argument manipulation
+
+		
+		Function.Defaults = (defaults={}) -> (fn) -> (object) -> fn.call this, Object.union(defaults,object)
+		
+		Function::Defaults = (defaults={}) -> 
+			fn1 = this
+			(fn) -> (object) -> fn1.call(this,fn).call this, Object.union(defaults,object)
+		
+
 
 ## Return value manipulation
 

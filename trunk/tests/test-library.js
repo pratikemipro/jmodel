@@ -403,6 +403,42 @@ define(['jmodel/topaz2'], function() {
     equals(fred.birthday instanceof Date, true, 'Works correctly with methods');
     return equals(fred.birthday.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly to method');
   });
+  module('Argument manipulation');
+  test('Function.Defaults', function() {
+    var Person, fred, john;
+    Person = Function.Defaults({
+      department: 'IT'
+    })(function(_arg) {
+      this.name = _arg.name, this.department = _arg.department;
+    });
+    fred = new Person({
+      name: 'Fred'
+    });
+    equal(fred.department, 'IT', 'Object has default values for unspecified fields');
+    equal(fred.name, 'Fred', 'Other fields behave normally');
+    john = new Person({
+      name: 'John',
+      department: 'Marketing'
+    });
+    return equal(john.department, 'Marketing', 'Defaults can be overriden');
+  });
+  test('Function.Defaults.Of', function() {
+    var Person, fred, makeMarketer;
+    Person = function(_arg) {
+      this.name = _arg.name, this.department = _arg.department;
+    };
+    makeMarketer = Function.Of(Person).Defaults({
+      department: 'Marketing'
+    })(function(person) {
+      return person;
+    });
+    fred = makeMarketer({
+      name: 'Fred'
+    });
+    equal(fred instanceof Person, true, 'Makes object of correct type');
+    equal(fred.department, 'Marketing', 'Object has default values for unspecified fields');
+    return equal(fred.name, 'Fred', 'Other fields behave normally');
+  });
   module('Return value manipulation');
   test('Function.Returning', function() {
     var Person, namedPerson;
@@ -1032,6 +1068,22 @@ define(['jmodel/topaz2'], function() {
     e = Object.join(onid)(a, c);
     equal(e, void 0, 'Join is undefined if pair of objects does not match predicate');
     return deepEqual(d, Object.union(a, b), 'Join is union if objects match predicate');
+  });
+  test('Object.WithDefaults', function() {
+    var Person, fred, john;
+    Person = Object.WithDefaults({
+      department: 'IT'
+    });
+    fred = Person({
+      name: 'Fred'
+    });
+    equal(fred.department, 'IT', 'Object has default values for unspecified fields');
+    equal(fred.name, 'Fred', 'Other fields behave normally');
+    john = Person({
+      name: 'John',
+      department: 'Marketing'
+    });
+    return equal(john.department, 'Marketing', 'Defaults can be overriden');
   });
   module('Number');
   test('Integer', function() {
