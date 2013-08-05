@@ -13,7 +13,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(function() {
-  var Promise, ordered, _base;
+  var Promise, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -574,10 +574,9 @@ define(function() {
   Function.prototype.gte = function(value) {
     return this.then(Function.gte(value));
   };
-  ordered = function(lower, higher) {
-    return lower <= higher;
-  };
-  Function.between = (Function.Requiring(ordered))(function(lower, higher) {
+  Function.between = (Function.Requiring(function(lower, higher) {
+    return lower < higher;
+  }))(function(lower, higher) {
     return Predicate(function(x) {
       return (lower <= x && x <= higher);
     });

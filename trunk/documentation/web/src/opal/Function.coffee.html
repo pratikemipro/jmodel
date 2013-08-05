@@ -440,9 +440,7 @@
 	Function.<span class="function"><span class="title">gte</span></span>  = (value) -&gt; Predicate (x) -&gt; x &gt;= value
 	Function::<span class="function"><span class="title">gte</span></span> = (value) -&gt; <span class="property">@then</span> Function.gte value
 
-	<span class="function"><span class="title">ordered</span></span> = (lower,higher) -&gt; lower &lt;= higher
-
-	Function.<span class="function"><span class="title">between</span></span> = ( Function.Requiring ordered ) (lower,higher) -&gt;
+	Function.<span class="function"><span class="title">between</span></span> = ( Function.Requiring (lower,higher) -&gt; lower &lt; higher ) (lower,higher) -&gt;
 		Predicate (x) -&gt; lower &lt;= x &lt;= higher
 
 	Function::<span class="function"><span class="title">between</span></span> = (lower,higher) -&gt; <span class="property">@then</span> Function.between lower,higher
