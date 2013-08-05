@@ -100,7 +100,15 @@
 	Boolean.True.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; value
 
 	Boolean.<span class="function"><span class="title">False</span></span> = -&gt; <span class="literal">false</span>
-	Boolean.False.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; <span class="keyword">not</span> value</pre></div></div>
+	Boolean.False.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; <span class="keyword">not</span> value
+
+	Boolean.<span class="function"><span class="title">and</span></span> = (a,b) -&gt; a <span class="keyword">and</span> b
+
+	Boolean.<span class="function"><span class="title">or</span></span> = (a,b) -&gt; a <span class="keyword">or</span> b
+
+	Boolean.<span class="function"><span class="title">xor</span></span> = (a,b) -&gt; (a <span class="keyword">and</span> <span class="keyword">not</span> b) <span class="keyword">or</span> (b <span class="keyword">and</span> <span class="keyword">not</span> a)
+
+	Boolean.<span class="function"><span class="title">not</span></span> = (a) -&gt; <span class="keyword">not</span> a</pre></div></div>
             
         </li>
         
