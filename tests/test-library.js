@@ -439,6 +439,21 @@ define(['jmodel/topaz2'], function() {
     equal(fred.department, 'Marketing', 'Object has default values for unspecified fields');
     return equal(fred.name, 'Fred', 'Other fields behave normally');
   });
+  test('Function::defaults', function() {
+    var Marketer, Person, fred;
+    Person = function(_arg) {
+      this.name = _arg.name, this.department = _arg.department;
+    };
+    Marketer = Person.defaults({
+      department: 'Marketing'
+    });
+    fred = new Marketer({
+      name: 'Fred'
+    });
+    equal(fred instanceof Person, true, 'Makes object of correct type');
+    equal(fred.department, 'Marketing', 'Object has default values for unspecified fields');
+    return equal(fred.name, 'Fred', 'Other fields behave normally');
+  });
   module('Return value manipulation');
   test('Function.Returning', function() {
     var Person, namedPerson;
