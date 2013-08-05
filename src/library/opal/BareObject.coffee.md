@@ -43,8 +43,7 @@
 					intersection[key] = value for own key, value of first when rest.all Object.has(key)
 						
 			Function.From([Object]) (objects...) -> Object.intersection objects
-			
-		
+				
 		]
 		
 		Object.difference = Function.overload [
