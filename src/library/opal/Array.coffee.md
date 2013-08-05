@@ -4,9 +4,8 @@
 		Array.concat = (arrays...) -> [].concat arrays...
 	
 		Array.zip = (arrays...) ->
-			return [] if arrays.length == 0
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
-			return [] if maxIndex < 0
+			return [] if maxIndex in [-1,Infinity]
 			( arr[i] for arr in arrays for i in [0..maxIndex] )
 		
 		Array.flatten = (array=[]) ->
