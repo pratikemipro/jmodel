@@ -70,9 +70,43 @@ define(function() {
     };
   };
   Array.reduce = function(reduction, initial) {
-    return function(arr) {
-      return arr.reduce(reduction, initial || reduction.unit);
+    return function(array) {
+      return array.reduce(reduction, initial || reduction.unit);
     };
+  };
+  Array.all = function(predicate) {
+    return function(array) {
+      var x;
+      return Array.reduce(Boolean.and)((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          x = array[_i];
+          _results.push(predicate(x));
+        }
+        return _results;
+      })());
+    };
+  };
+  Array.prototype.all = function(predicate) {
+    return Array.all(predicate)(this);
+  };
+  Array.any = function(predicate) {
+    return function(array) {
+      var x;
+      return Array.reduce(Boolean.or)((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          x = array[_i];
+          _results.push(predicate(x));
+        }
+        return _results;
+      })());
+    };
+  };
+  Array.prototype.any = function(predicate) {
+    return Array.any(predicate)(this);
   };
   Array.zip = function() {
     var arr, arrays, i, maxIndex, _i, _results;
@@ -986,22 +1020,14 @@ define(function() {
       return new Object;
     })(function(intersection) {
       return function(_arg) {
-        var first, key, object, rest, value, _results;
+        var first, key, rest, value, _results;
         first = _arg[0], rest = 2 <= _arg.length ? __slice.call(_arg, 1) : [];
         _results = [];
         for (key in first) {
           if (!__hasProp.call(first, key)) continue;
           value = first[key];
-          if ([true].concat((function() {
-            var _i, _len, _results1;
-            _results1 = [];
-            for (_i = 0, _len = rest.length; _i < _len; _i++) {
-              object = rest[_i];
-              _results1.push(__indexOf.call(Object.keys(object), key) >= 0);
-            }
-            return _results1;
-          })()).reduce(function(a, b) {
-            return a && b;
+          if (rest.all(function(object) {
+            return __indexOf.call(Object.keys(object), key) >= 0;
           })) {
             _results.push(intersection[key] = value);
           }

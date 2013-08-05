@@ -2,6 +2,14 @@ Function			Tests	Docs
 -----------------------------------
 
 Array.concat		full	none
+Array.map			none	none
+Array.reduce		none	none
+
+Array.all			none	none
+Array::all			none	none
+Array.any			none	none
+Array::any			none	none
+
 Array.zip			full	none
 Array.flatten		full	none
 Array.hastypes		partial	none

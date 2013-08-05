@@ -100,7 +100,15 @@
 
 	Array.<span class="function"><span class="title">map</span></span> = (fn) -&gt; (arr) -&gt; arr.map fn
 
-	Array.<span class="function"><span class="title">reduce</span></span> = (reduction,initial) -&gt; (arr) -&gt; arr.reduce(reduction,initial <span class="keyword">or</span> reduction.unit)
+	Array.<span class="function"><span class="title">reduce</span></span> = (reduction,initial) -&gt; (array) -&gt; array.reduce(reduction,initial <span class="keyword">or</span> reduction.unit)
+
+	Array.<span class="function"><span class="title">all</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">and</span>) ( predicate x <span class="keyword">for</span> x <span class="keyword">in</span> array )
+
+	Array::<span class="function"><span class="title">all</span></span> = (predicate) -&gt; Array.all(predicate) <span class="keyword">this</span>
+
+	Array.<span class="function"><span class="title">any</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">or</span>) ( predicate x <span class="keyword">for</span> x <span class="keyword">in</span> array )
+
+	Array::<span class="function"><span class="title">any</span></span> = (predicate) -&gt; Array.any(predicate) <span class="keyword">this</span>
 
 	Array.<span class="function"><span class="title">zip</span></span> = (arrays...) -&gt;
 		maxIndex = Math.min ( arr.length-<span class="number">1</span> <span class="keyword">for</span> arr <span class="keyword">in</span> arrays )...

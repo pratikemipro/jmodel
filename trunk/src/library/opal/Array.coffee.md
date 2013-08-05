@@ -5,7 +5,15 @@
 		
 		Array.map = (fn) -> (arr) -> arr.map fn
 				
-		Array.reduce = (reduction,initial) -> (arr) -> arr.reduce(reduction,initial or reduction.unit)
+		Array.reduce = (reduction,initial) -> (array) -> array.reduce(reduction,initial or reduction.unit)
+		
+		Array.all = (predicate) -> (array) -> Array.reduce(Boolean.and) ( predicate x for x in array )
+		
+		Array::all = (predicate) -> Array.all(predicate) this
+		
+		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) ( predicate x for x in array )
+	
+		Array::any = (predicate) -> Array.any(predicate) this
 	
 		Array.zip = (arrays...) ->
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
