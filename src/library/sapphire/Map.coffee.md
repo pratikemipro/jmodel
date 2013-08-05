@@ -7,7 +7,7 @@
 				@_ = {}
 				@add mappings if mappings instanceof Object
 	
-			add: Function.switch [	
+			add: Function.overload [	
 				Function.From(Scalar,Value) Function.Chaining (key,value) -> @_[key] = value
 				Function.From(Object)       Function.Chaining (mappings) -> @add(key,value) for own key, value of mappings
 			]

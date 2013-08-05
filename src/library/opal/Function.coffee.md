@@ -17,13 +17,13 @@
 		
 		Function.map = (mapping) -> (key) -> mapping[key]
 		
-		Function.switch = (variants=[]) ->
+		Function.overload = (variants=[]) ->
 			fn = (args...) ->
 				for variant in variants
 					return variant.apply(this,args) if variant.matches args...
 				return undefined
 			fn.extend extend: (variants2=[]) ->
-				Function.switch variants2.concat variants
+				Function.overload variants2.concat variants
 		
 
 ## Function composition

@@ -15,7 +15,7 @@
 				
 				for own field, constructor of constructors
 					do (field,constructor) ->
-						record.prototype[field] = Function.switch [
+						record.prototype[field] = Function.overload [
 							Function.From(Not Function) \
 								Function.Of(constructor).Chaining (value) ->
 									@_[field] = value

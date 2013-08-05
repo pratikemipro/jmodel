@@ -121,7 +121,7 @@
 			(obj) -&gt; (source) -&gt;
 				( obj[ renaming[key] <span class="keyword">or</span> key ] = value ) <span class="keyword">for</span> own key, value <span class="keyword">of</span> source
 
-	Object.union = Function.<span class="keyword">switch</span> [
+	Object.union = Function.overload [
 
 		Function.From(Array).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(union) -&gt; (objects) -&gt;
@@ -131,7 +131,7 @@
 
 	]
 
-	Object.intersection = Function.<span class="keyword">switch</span> [
+	Object.intersection = Function.overload [
 
 		Function.From(Array).Returning(-&gt; <span class="keyword">new</span> Object) \
 			(intersection) -&gt; ([first,rest...]) -&gt;

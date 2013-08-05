@@ -80,7 +80,7 @@
 
 			<span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors
 				<span class="keyword">do</span> (field,constructor) -&gt;
-					record.prototype[field] = Function.<span class="keyword">switch</span> [
+					record.prototype[field] = Function.overload [
 						Function.From(Not Function) \
 							Function.Of(constructor).Chaining (value) -&gt;
 								<span class="property">@_</span>[field] = value

@@ -33,7 +33,7 @@ define(['jmodel/sapphire2'], function() {
     return str.length === 1;
   });
   SpecialKey = String.Matching(/:.+/);
-  Event.key = Function["switch"]([
+  Event.key = Function.overload([
     Function.From(Character)(function(key) {
       return function(_arg) {
         var which;

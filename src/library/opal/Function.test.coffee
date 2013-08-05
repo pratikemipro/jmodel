@@ -43,9 +43,9 @@
 		equals counts('quarks'), 6, 'Works for first mapping entry'
 		equals counts('chargedLeptons'), 3, 'Works for other mapping entries'
 
-	test 'Function.switch', ->
+	test 'Function.overload', ->
 		
-		getType = Function.switch [
+		getType = Function.overload [
 		
 			Function.From()		  () -> 'nothing'
 			Function.From(Number) (number) -> 'number'
