@@ -138,9 +138,19 @@ define(function() {
       return types2.length === 0 && array2.length === 0;
     };
   };
+  Array.map = function(fn) {
+    return function(arr) {
+      return arr.map(fn);
+    };
+  };
+  Array.reduce = function(reduction, initial) {
+    return function(arr) {
+      return arr.reduce(reduction, initial || reduction.unit);
+    };
+  };
   Array.prototype.ordered = function() {
     var x, y;
-    return ((function() {
+    return Array.reduce(Boolean.and)((function() {
       var _i, _len, _ref, _ref1, _results;
       _ref = Array.zip(this, this.slice(1));
       _results = [];
@@ -149,7 +159,7 @@ define(function() {
         _results.push(x < y);
       }
       return _results;
-    }).call(this)).reduce(Boolean.and, true);
+    }).call(this));
   };
   Function.prototype.extend = function(properties) {
     return Object.extend(this, properties);
@@ -1116,9 +1126,11 @@ define(function() {
   Boolean.and = function(a, b) {
     return a && b;
   };
+  Boolean.and.unit = true;
   Boolean.or = function(a, b) {
     return a || b;
   };
+  Boolean.or.unit = false;
   Boolean.xor = function(a, b) {
     return (a && !b) || (b && !a);
   };
