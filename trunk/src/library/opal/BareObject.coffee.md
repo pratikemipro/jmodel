@@ -26,7 +26,7 @@
 				(obj) -> (source) ->
 					( obj[ renaming[key] or key ] = value ) for own key, value of source
 		
-		Object.union = Function.switch [
+		Object.union = Function.overload [
 		
 			Function.From(Array).Returning(-> new Object) \
 				(union) -> (objects) ->
@@ -36,7 +36,7 @@
 			
 		]
 		
-		Object.intersection = Function.switch [
+		Object.intersection = Function.overload [
 		
 			Function.From(Array).Returning(-> new Object) \
 				(intersection) -> ([first,rest...]) ->

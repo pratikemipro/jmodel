@@ -338,7 +338,7 @@ define(['jmodel/opal2'], function() {
       }
     }
 
-    Map.prototype.add = Function["switch"]([
+    Map.prototype.add = Function.overload([
       Function.From(Scalar, Value)(Function.Chaining(function(key, value) {
         return this._[key] = value;
       })), Function.From(Object)(Function.Chaining(function(mappings) {
@@ -621,7 +621,7 @@ define(['jmodel/opal2'], function() {
 
       })(this);
       _fn = function(field, constructor) {
-        return record.prototype[field] = Function["switch"]([
+        return record.prototype[field] = Function.overload([
           Function.From(Not(Function))(Function.Of(constructor).Chaining(function(value) {
             return this._[field] = value;
           })), Function.From(Function)(Function.Chaining(function(fn) {

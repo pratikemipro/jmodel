@@ -72,7 +72,7 @@
 			<span class="property">@_</span> = {}
 			<span class="property">@add</span> mappings <span class="keyword">if</span> mappings <span class="keyword">instanceof</span> Object
 
-		add: Function.<span class="keyword">switch</span> [	
+		add: Function.overload [	
 			Function.From(Scalar,Value) Function.Chaining (key,value) -&gt; <span class="property">@_</span>[key] = value
 			Function.From(Object)       Function.Chaining (mappings) -&gt; <span class="property">@add</span>(key,value) <span class="keyword">for</span> own key, value <span class="keyword">of</span> mappings
 		]

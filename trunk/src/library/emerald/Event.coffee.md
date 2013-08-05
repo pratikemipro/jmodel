@@ -19,7 +19,7 @@
 		
 		# Tests: none
 		# Docs: none
-		Event.key = Function.switch [
+		Event.key = Function.overload [
 		
 			Function.From(Character)     (key) -> ({which}) -> String.fromCharCode(which).toUpperCase() == key
 		

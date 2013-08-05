@@ -8,7 +8,7 @@ Function.constant	full	full
 Function.arguments	none	partial
 Function.argument	full	partial
 Function.map		full	partial
-Function.switch		partial	none
+Function.overload	partial	none
 Window.Type			none	none
 
 Function::then		full	partial

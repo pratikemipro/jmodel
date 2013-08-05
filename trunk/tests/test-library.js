@@ -76,9 +76,9 @@ define(['jmodel/topaz2'], function() {
     equals(counts('quarks'), 6, 'Works for first mapping entry');
     return equals(counts('chargedLeptons'), 3, 'Works for other mapping entries');
   });
-  test('Function.switch', function() {
+  test('Function.overload', function() {
     var getType;
-    getType = Function["switch"]([
+    getType = Function.overload([
       Function.From()(function() {
         return 'nothing';
       }), Function.From(Number)(function(number) {

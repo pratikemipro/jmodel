@@ -166,7 +166,7 @@ define(function() {
       return mapping[key];
     };
   };
-  Function["switch"] = function(variants) {
+  Function.overload = function(variants) {
     var fn;
     if (variants == null) {
       variants = [];
@@ -187,7 +187,7 @@ define(function() {
         if (variants2 == null) {
           variants2 = [];
         }
-        return Function["switch"](variants2.concat(variants));
+        return Function.overload(variants2.concat(variants));
       }
     });
   };
@@ -931,7 +931,7 @@ define(function() {
       };
     });
   });
-  Object.union = Function["switch"]([
+  Object.union = Function.overload([
     Function.From(Array).Returning(function() {
       return new Object;
     })(function(union) {
@@ -959,7 +959,7 @@ define(function() {
       return Object.union(objects);
     })
   ]);
-  Object.intersection = Function["switch"]([
+  Object.intersection = Function.overload([
     Function.From(Array).Returning(function() {
       return new Object;
     })(function(intersection) {
