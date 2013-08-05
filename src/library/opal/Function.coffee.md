@@ -246,9 +246,7 @@
 		Function.gte  = (value) -> Predicate (x) -> x >= value
 		Function::gte = (value) -> @then Function.gte value
 		
-		ordered = (lower,higher) -> lower <= higher
-		
-		Function.between = ( Function.Requiring ordered ) (lower,higher) ->
+		Function.between = ( Function.Requiring (lower,higher) -> lower < higher ) (lower,higher) ->
 			Predicate (x) -> lower <= x <= higher
 		
 		Function::between = (lower,higher) -> @then Function.between lower,higher
