@@ -35,6 +35,8 @@ Function.Of			full	partial
 window.Predicate	none	none
 
 Function.Defaults	full	none
+Function::Defaults	full	none
+Function::defaults	full	none
 
 Function.Returning	full	none
 Function::Returning	full	none

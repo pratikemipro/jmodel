@@ -286,7 +286,15 @@
 
 	Function::<span class="function"><span class="title">Defaults</span></span> = (defaults={}) -&gt; 
 		fn1 = <span class="keyword">this</span>
-		(fn) -&gt; (object) -&gt; fn1.call(<span class="keyword">this</span>,fn).call <span class="keyword">this</span>, Object.union(defaults,object)</pre></div></div>
+		(fn) -&gt; (object) -&gt; fn1.call(<span class="keyword">this</span>,fn).call <span class="keyword">this</span>, Object.union(defaults,object)
+
+	Function::<span class="function"><span class="title">defaults</span></span> = (defaults={}) -&gt;
+		fn = <span class="keyword">this</span>
+		<span class="function"><span class="title">fn2</span></span> = (object) -&gt; 
+			<span class="keyword">if</span> <span class="keyword">this</span>.constructor == fn2
+				<span class="keyword">new</span> fn Object.union(defaults,object)
+			<span class="keyword">else</span>
+				fn.call <span class="keyword">this</span>, Object.union(defaults,object)</pre></div></div>
             
         </li>
         

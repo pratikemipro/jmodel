@@ -379,6 +379,20 @@ define(function() {
       };
     };
   };
+  Function.prototype.defaults = function(defaults) {
+    var fn, fn2;
+    if (defaults == null) {
+      defaults = {};
+    }
+    fn = this;
+    return fn2 = function(object) {
+      if (this.constructor === fn2) {
+        return new fn(Object.union(defaults, object));
+      } else {
+        return fn.call(this, Object.union(defaults, object));
+      }
+    };
+  };
   Function.Returning = function(val) {
     return function(fn) {
       return function() {

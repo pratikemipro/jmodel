@@ -287,7 +287,20 @@
 		
 		equal fred instanceof Person, true, 'Makes object of correct type'
 		equal fred.department, 'Marketing', 'Object has default values for unspecified fields'
-		equal fred.name, 'Fred', 'Other fields behave normally'		
+		equal fred.name, 'Fred', 'Other fields behave normally'
+		
+	test 'Function::defaults', ->
+		
+		Person = ({@name,@department}) ->
+			
+		Marketer = Person.defaults department: 'Marketing'
+		
+		fred = new Marketer name: 'Fred'
+		
+		equal fred instanceof Person, true, 'Makes object of correct type'
+		equal fred.department, 'Marketing', 'Object has default values for unspecified fields'
+		equal fred.name, 'Fred', 'Other fields behave normally'
+		
 
 	module 'Return value manipulation'
 	
