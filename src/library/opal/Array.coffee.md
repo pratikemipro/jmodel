@@ -2,6 +2,10 @@
 
 		
 		Array.concat = (arrays...) -> [].concat arrays...
+		
+		Array.map = (fn) -> (arr) -> arr.map fn
+				
+		Array.reduce = (reduction,initial) -> (arr) -> arr.reduce(reduction,initial or reduction.unit)
 	
 		Array.zip = (arrays...) ->
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
@@ -26,10 +30,6 @@
 						value = array2.shift()
 						return false if not Object.isa(type) value
 				return types2.length == 0 and array2.length == 0
-		
-		Array.map = (fn) -> (arr) -> arr.map fn
-				
-		Array.reduce = (reduction,initial) -> (arr) -> arr.reduce(reduction,initial or reduction.unit)
 				
 		Array::ordered = -> Array.reduce(Boolean.and) ( x < y for [x,y] in Array.zip this, this[1..] )
 				
