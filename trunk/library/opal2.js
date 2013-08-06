@@ -74,46 +74,6 @@ define(function() {
       return array.reduce(reduction, initial || reduction.unit);
     };
   };
-  Array.all = function(predicate) {
-    return function(array) {
-      var x;
-      return Array.reduce(Boolean.and)((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          x = array[_i];
-          _results.push(predicate(x));
-        }
-        return _results;
-      })());
-    };
-  };
-  Array.prototype.all = function(predicate) {
-    return Array.all(predicate)(this);
-  };
-  Array.any = function(predicate) {
-    return function(array) {
-      var x;
-      return Array.reduce(Boolean.or)((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          x = array[_i];
-          _results.push(predicate(x));
-        }
-        return _results;
-      })());
-    };
-  };
-  Array.prototype.any = function(predicate) {
-    return Array.any(predicate)(this);
-  };
-  Array.none = function(predicate) {
-    return Array.any(predicate).not();
-  };
-  Array.prototype.none = function(predicate) {
-    return Array.none(predicate)(this);
-  };
   Array.zip = function() {
     var arr, arrays, i, maxIndex, _i, _results;
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -187,6 +147,46 @@ define(function() {
       }
       return types2.length === 0 && array2.length === 0;
     };
+  };
+  Array.all = function(predicate) {
+    return function(array) {
+      var x;
+      return Array.reduce(Boolean.and)((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          x = array[_i];
+          _results.push(predicate(x));
+        }
+        return _results;
+      })());
+    };
+  };
+  Array.prototype.all = function(predicate) {
+    return Array.all(predicate)(this);
+  };
+  Array.any = function(predicate) {
+    return function(array) {
+      var x;
+      return Array.reduce(Boolean.or)((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = array.length; _i < _len; _i++) {
+          x = array[_i];
+          _results.push(predicate(x));
+        }
+        return _results;
+      })());
+    };
+  };
+  Array.prototype.any = function(predicate) {
+    return Array.any(predicate)(this);
+  };
+  Array.none = function(predicate) {
+    return Array.any(predicate).not();
+  };
+  Array.prototype.none = function(predicate) {
+    return Array.none(predicate)(this);
   };
   Array.prototype.ordered = function() {
     var x, y;
