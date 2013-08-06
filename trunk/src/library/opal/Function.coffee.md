@@ -68,7 +68,7 @@
 			fn = this
 			(args...) ->
 				ret = fn.apply this, args
-				post.apply this, [ret,args...]
+				post.call this, ret, args...
 				ret
 		
 
@@ -269,11 +269,11 @@
 		
 		Function::bind = (context,args1...) ->
 			fn = this
-			(args2...) -> fn.apply context, [args1...,args2...]
+			(args2...) -> fn.call context, args1..., args2...
 		
 		Function::curry = (args1...) ->
 			fn = this
-			(args2...) -> fn.apply this, [args1...,args2...]
+			(args2...) -> fn.call this, args1..., args2...
 		
 		Function::except = (handler) ->
 			fn = this
@@ -289,7 +289,7 @@
 		
 		Function::delay ?= (duration=1,args1...) ->
 			fn = this
-			(args2...) -> setTimeout fn.curry.apply(fn,[args1...,args2...]), duration
+			(args2...) -> setTimeout fn.curry.call(fn,args1...,args2...), duration
 	
 
 ## Mapping methods
