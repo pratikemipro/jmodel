@@ -17,7 +17,7 @@
 			
 			remove: Function.From(Maybe Function) (predicate=Boolean.True) ->
 				partition = @partition predicate
-				Array::splice.apply this, [0,@length].concat ( element for element in partition.get(false) ? [] )
+				Array::splice.apply this, [0,@length,( element for element in partition.get(false) ? [] )...]
 				return partition.get(true) ? new @constructor
 		
 
@@ -40,7 +40,7 @@
 				fn element for element in this
 			
 			reduce: Function.From(Function,Maybe Value) (reduction,initial) ->
-				Array::reduce.apply this, [reduction].concat if initial? then [initial] else []
+				Array::reduce.apply this, [reduction, (if initial? then [initial] else [])...]
 			
 			partition: Function.From(Function).Returning(-> new ( Map.To(Set).Using Set.union ) ) \
 				 (map) -> (key) ->
@@ -53,9 +53,7 @@
 			
 			@subset: Predicate.From(Set,Set) \
 				(first,second) ->
-					[true]
-						.concat( second.member element for element in first )
-						.reduce (a,b) -> a and b
+					Array.reduce(Boolean.and) ( second.member element for element in first )
 			
 			@equal: Predicate.From(Set,Set) \
 				(first,second) ->
@@ -72,7 +70,7 @@
 			@intersection: Function.From([Set]).Returning(-> new this) \
 				(intersection) -> (first=[],rest...) ->
 	 				intersection.add element for element in first when \
-	 					[true].concat( set.member element for set in rest ).reduce (a,b) -> a and b
+						Array.reduce(Boolean.and) ( set.member element for set in rest )
 			
 			@difference: Function.From(Set,Set).Returning(-> new this) \
 				(difference) -> (first,second) ->

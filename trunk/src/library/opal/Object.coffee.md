@@ -11,15 +11,14 @@
 			when constructor in [Number,String,Boolean] then constructor
 		
 			when constructor == Date then (args2...) ->
-				args = Array.concat args1, args2
+				args = [args1...,args2...]
 				switch args.length
 					when 1 then new Date args[0]
 					when 3 then new Date args[0],args[1],args[2]
 					when 7 then new Date args[0],args[1],args[2],args[3],args[4],args[5],args[6]
 				
 			else (args2...) ->
-				args = Array.concat args1, args2
-				new constructor args...
+				new constructor [args1...,args2...]...
 		
 		Object.valid = (constructor) ->
 			switch constructor
@@ -58,15 +57,15 @@
 		Object.method = (method,args1...) ->
 			(obj,args2...) ->
 				throw 'Undefined method' unless obj[method]
-				obj[method] (Array.concat args1, args2)...
+				obj[method] [args1...,args2...]...
 		
 		Object.resolve = (name,args1...) ->
 			(obj,args2...) ->
 				return undefined unless obj[name]
 				if typeof obj[name] == 'function'
-					Object.method(name,(Array.concat args1, args2)...) obj
+					Object.method(name,[args1...,args2...]...) obj
 				else
-					Object.property(name,(Array.concat args1, args2)...) obj
+					Object.property(name,[args1...,args2...]...) obj
 				
 		Object.path = (path=[],separator='.') ->
 			return Object.path path.split(separator) if typeof path == 'string'

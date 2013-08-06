@@ -106,15 +106,14 @@
 		<span class="keyword">when</span> constructor <span class="keyword">in</span> [Number,String,Boolean] <span class="keyword">then</span> constructor
 
 		<span class="keyword">when</span> constructor == Date <span class="keyword">then</span> (args2...) -&gt;
-			args = Array.concat args1, args2
+			args = [args1...,args2...]
 			<span class="keyword">switch</span> args.length
 				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>]
 				<span class="keyword">when</span> <span class="number">3</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>],args[<span class="number">1</span>],args[<span class="number">2</span>]
 				<span class="keyword">when</span> <span class="number">7</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>],args[<span class="number">1</span>],args[<span class="number">2</span>],args[<span class="number">3</span>],args[<span class="number">4</span>],args[<span class="number">5</span>],args[<span class="number">6</span>]
 
 		<span class="keyword">else</span> (args2...) -&gt;
-			args = Array.concat args1, args2
-			<span class="keyword">new</span> constructor args...
+			<span class="keyword">new</span> constructor [args1...,args2...]...
 
 	Object.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt;
 		<span class="keyword">switch</span> constructor
@@ -162,15 +161,15 @@
 	Object.<span class="function"><span class="title">method</span></span> = (method,args1...) -&gt;
 		(obj,args2...) -&gt;
 			<span class="keyword">throw</span> <span class="string">'Undefined method'</span> <span class="keyword">unless</span> obj[method]
-			obj[method] (Array.concat args1, args2)...
+			obj[method] [args1...,args2...]...
 
 	Object.<span class="function"><span class="title">resolve</span></span> = (name,args1...) -&gt;
 		(obj,args2...) -&gt;
 			<span class="keyword">return</span> <span class="literal">undefined</span> <span class="keyword">unless</span> obj[name]
 			<span class="keyword">if</span> <span class="keyword">typeof</span> obj[name] == <span class="string">'function'</span>
-				Object.method(name,(Array.concat args1, args2)...) obj
+				Object.method(name,[args1...,args2...]...) obj
 			<span class="keyword">else</span>
-				Object.property(name,(Array.concat args1, args2)...) obj
+				Object.property(name,[args1...,args2...]...) obj
 
 	Object.<span class="function"><span class="title">path</span></span> = (path=[],separator=<span class="string">'.'</span>) -&gt;
 		<span class="keyword">return</span> Object.path path.split(separator) <span class="keyword">if</span> <span class="keyword">typeof</span> path == <span class="string">'string'</span>

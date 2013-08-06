@@ -250,7 +250,7 @@ define(function() {
         if (variants2 == null) {
           variants2 = [];
         }
-        return Function.overload(variants2.concat(variants));
+        return Function.overload(__slice.call(variants2).concat(__slice.call(variants)));
       }
     });
   };
@@ -306,7 +306,7 @@ define(function() {
       case 0:
         return Function.identity;
       default:
-        return Function.pipe.apply(Function, (Array.concat.apply(Array, arguments)).reverse());
+        return Function.pipe.apply(Function, __slice.call(arguments).reverse());
     }
   };
   Function.prototype.pre = function(pre) {
@@ -325,7 +325,7 @@ define(function() {
       var args, ret;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       ret = fn.apply(this, args);
-      post.apply(this, [ret].concat(args));
+      post.apply(this, [ret].concat(__slice.call(args)));
       return ret;
     };
   };
@@ -658,7 +658,7 @@ define(function() {
     return function() {
       var args2;
       args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn.apply(context, Array.concat(args1, args2));
+      return fn.apply(context, __slice.call(args1).concat(__slice.call(args2)));
     };
   };
   Function.prototype.curry = function() {
@@ -668,7 +668,7 @@ define(function() {
     return function() {
       var args2;
       args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn.apply(this, Array.concat(args1, args2));
+      return fn.apply(this, __slice.call(args1).concat(__slice.call(args2)));
     };
   };
   Function.prototype.except = function(handler) {
@@ -710,7 +710,7 @@ define(function() {
       return function() {
         var args2;
         args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return setTimeout(fn.curry.apply(fn, Array.concat(args1, args2)), duration);
+        return setTimeout(fn.curry.apply(fn, __slice.call(args1).concat(__slice.call(args2))), duration);
       };
     };
   }
@@ -780,7 +780,7 @@ define(function() {
         return function() {
           var args, args2;
           args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          args = Array.concat(args1, args2);
+          args = __slice.call(args1).concat(__slice.call(args2));
           switch (args.length) {
             case 1:
               return new Date(args[0]);
@@ -792,14 +792,13 @@ define(function() {
         };
       default:
         return function() {
-          var args, args2;
+          var args2;
           args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          args = Array.concat(args1, args2);
           return (function(func, args, ctor) {
             ctor.prototype = func.prototype;
             var child = new ctor, result = func.apply(child, args);
             return Object(result) === result ? result : child;
-          })(constructor, args, function(){});
+          })(constructor, __slice.call(args1).concat(__slice.call(args2)), function(){});
         };
     }
   };
@@ -881,7 +880,7 @@ define(function() {
       if (!obj[method]) {
         throw 'Undefined method';
       }
-      return obj[method].apply(obj, Array.concat(args1, args2));
+      return obj[method].apply(obj, __slice.call(args1).concat(__slice.call(args2)));
     };
   };
   Object.resolve = function() {
@@ -894,9 +893,9 @@ define(function() {
         return void 0;
       }
       if (typeof obj[name] === 'function') {
-        return Object.method.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
+        return Object.method.apply(Object, [name].concat(__slice.call(__slice.call(args1).concat(__slice.call(args2)))))(obj);
       } else {
-        return Object.property.apply(Object, [name].concat(__slice.call((Array.concat(args1, args2)))))(obj);
+        return Object.property.apply(Object, [name].concat(__slice.call(__slice.call(args1).concat(__slice.call(args2)))))(obj);
       }
     };
   };
@@ -935,23 +934,23 @@ define(function() {
   });
   Object.equal = Predicate.From(Object, Object)(function(a, b) {
     var prop;
-    return Array.reduce(Boolean.and)(Array.concat((function() {
-      var _results;
-      _results = [];
-      for (prop in a) {
-        if (!__hasProp.call(a, prop)) continue;
-        _results.push(a[prop] === b[prop]);
-      }
-      return _results;
-    })(), (function() {
-      var _results;
-      _results = [];
-      for (prop in b) {
-        if (!__hasProp.call(b, prop)) continue;
-        _results.push(a[prop] === b[prop]);
-      }
-      return _results;
-    })()));
+    return Array.reduce(Boolean.and)(__slice.call((function() {
+        var _results;
+        _results = [];
+        for (prop in a) {
+          if (!__hasProp.call(a, prop)) continue;
+          _results.push(a[prop] === b[prop]);
+        }
+        return _results;
+      })()).concat(__slice.call((function() {
+        var _results;
+        _results = [];
+        for (prop in b) {
+          if (!__hasProp.call(b, prop)) continue;
+          _results.push(a[prop] === b[prop]);
+        }
+        return _results;
+      })())));
   });
   Object.remove = Function.From([Scalar])(function() {
     var fields;

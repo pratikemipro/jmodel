@@ -6,9 +6,10 @@
 		
 		Object.equal = Predicate.From(Object,Object) \
 			(a,b) ->
-				Array.reduce(Boolean.and) Array.concat \
-					( a[prop] == b[prop] for own prop of a ),
-					( a[prop] == b[prop] for own prop of b )
+				Array.reduce(Boolean.and) [
+					( a[prop] == b[prop] for own prop of a )...,
+					( a[prop] == b[prop] for own prop of b )...
+				]
 		
 		Object.remove = Function.From([Scalar]) \
 			(fields...) -> Function.From(Object).Returning(-> new Object) \

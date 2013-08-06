@@ -23,7 +23,7 @@
 					return variant.apply(this,args) if variant.matches args...
 				return undefined
 			fn.extend extend: (variants2=[]) ->
-				Function.overload variants2.concat variants
+				Function.overload [variants2...,variants...]
 		
 
 ## Function composition
@@ -53,7 +53,7 @@
 			switch arguments.length
 				when 1 then fn
 				when 0 then Function.identity
-				else Function.pipe (Array.concat arguments...).reverse()...
+				else Function.pipe [arguments...].reverse()...
 	
 
 ## Aspect-like methods
@@ -68,7 +68,7 @@
 			fn = this
 			(args...) ->
 				ret = fn.apply this, args
-				post.apply this, [ret].concat(args)
+				post.apply this, [ret,args...]
 				ret
 		
 
@@ -269,11 +269,11 @@
 		
 		Function::bind = (context,args1...) ->
 			fn = this
-			(args2...) -> fn.apply context, Array.concat(args1,args2)
+			(args2...) -> fn.apply context, [args1...,args2...]
 		
 		Function::curry = (args1...) ->
 			fn = this
-			(args2...) -> fn.apply this, Array.concat(args1,args2)
+			(args2...) -> fn.apply this, [args1...,args2...]
 		
 		Function::except = (handler) ->
 			fn = this
@@ -289,7 +289,7 @@
 		
 		Function::delay ?= (duration=1,args1...) ->
 			fn = this
-			(args2...) -> setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration
+			(args2...) -> setTimeout fn.curry.apply(fn,[args1...,args2...]), duration
 	
 
 ## Mapping methods
