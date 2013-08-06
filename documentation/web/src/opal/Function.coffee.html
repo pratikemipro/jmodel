@@ -190,7 +190,7 @@
 		fn = <span class="keyword">this</span>
 		(args...) -&gt;
 			ret = fn.apply <span class="keyword">this</span>, args
-			post.apply <span class="keyword">this</span>, [ret,args...]
+			post.call <span class="keyword">this</span>, ret, args...
 			ret</pre></div></div>
             
         </li>
@@ -472,11 +472,11 @@
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">bind</span></span> = (context,args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply context, [args1...,args2...]
+		(args2...) -&gt; fn.call context, args1..., args2...
 
 	Function::<span class="function"><span class="title">curry</span></span> = (args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply <span class="keyword">this</span>, [args1...,args2...]
+		(args2...) -&gt; fn.call <span class="keyword">this</span>, args1..., args2...
 
 	Function::<span class="function"><span class="title">except</span></span> = (handler) -&gt;
 		fn = <span class="keyword">this</span>
@@ -492,7 +492,7 @@
 
 	Function::delay ?= (duration=<span class="number">1</span>,args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; setTimeout fn.curry.apply(fn,[args1...,args2...]), duration</pre></div></div>
+		(args2...) -&gt; setTimeout fn.curry.call(fn,args1...,args2...), duration</pre></div></div>
             
         </li>
         

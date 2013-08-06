@@ -325,7 +325,7 @@ define(function() {
       var args, ret;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       ret = fn.apply(this, args);
-      post.apply(this, [ret].concat(__slice.call(args)));
+      post.call.apply(post, [this, ret].concat(__slice.call(args)));
       return ret;
     };
   };
@@ -658,7 +658,7 @@ define(function() {
     return function() {
       var args2;
       args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn.apply(context, __slice.call(args1).concat(__slice.call(args2)));
+      return fn.call.apply(fn, [context].concat(__slice.call(args1), __slice.call(args2)));
     };
   };
   Function.prototype.curry = function() {
@@ -668,7 +668,7 @@ define(function() {
     return function() {
       var args2;
       args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return fn.apply(this, __slice.call(args1).concat(__slice.call(args2)));
+      return fn.call.apply(fn, [this].concat(__slice.call(args1), __slice.call(args2)));
     };
   };
   Function.prototype.except = function(handler) {
@@ -708,9 +708,9 @@ define(function() {
       }
       fn = this;
       return function() {
-        var args2;
+        var args2, _ref;
         args2 = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return setTimeout(fn.curry.apply(fn, __slice.call(args1).concat(__slice.call(args2))), duration);
+        return setTimeout((_ref = fn.curry).call.apply(_ref, [fn].concat(__slice.call(args1), __slice.call(args2))), duration);
       };
     };
   }
