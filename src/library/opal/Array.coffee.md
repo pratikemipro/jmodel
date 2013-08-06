@@ -6,18 +6,6 @@
 		Array.map = (fn) -> (arr) -> arr.map fn
 				
 		Array.reduce = (reduction,initial) -> (array) -> array.reduce(reduction,initial or reduction.unit)
-		
-		Array.all = (predicate) -> (array) -> Array.reduce(Boolean.and) ( predicate x for x in array )
-		
-		Array::all = (predicate) -> Array.all(predicate) this
-		
-		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) ( predicate x for x in array )
-	
-		Array::any = (predicate) -> Array.any(predicate) this
-		
-		Array.none = (predicate) -> Array.any(predicate).not()
-		
-		Array::none = (predicate) -> Array.none(predicate) this
 	
 		Array.zip = (arrays...) ->
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
@@ -26,6 +14,10 @@
 		
 		Array.flatten = (array=[]) ->
 			Array.concat ( ( if arr instanceof Array then Array.flatten(arr) else arr ) for arr in array )...
+		
+
+## Predicates
+
 		
 		Array.hastypes = (types...) ->
 			(array=[]) ->
@@ -42,6 +34,18 @@
 						value = array2.shift()
 						return false if not Object.isa(type) value
 				return types2.length == 0 and array2.length == 0
-				
+			
+		Array.all = (predicate) -> (array) -> Array.reduce(Boolean.and) ( predicate x for x in array )
+		
+		Array::all = (predicate) -> Array.all(predicate) this
+		
+		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) ( predicate x for x in array )
+		
+		Array::any = (predicate) -> Array.any(predicate) this
+		
+		Array.none = (predicate) -> Array.any(predicate).not()
+		
+		Array::none = (predicate) -> Array.none(predicate) this	
+			
 		Array::ordered = -> Array.reduce(Boolean.and) ( x < y for [x,y] in Array.zip this, this[1..] )
 				
