@@ -91,7 +91,7 @@
 
 		remove: Function.From(Maybe Function) (predicate=Boolean.True) -&gt;
 			partition = <span class="property">@partition</span> predicate
-			Array::splice.apply <span class="keyword">this</span>, [<span class="number">0</span>,<span class="property">@length</span>].concat ( element <span class="keyword">for</span> element <span class="keyword">in</span> partition.get(<span class="literal">false</span>) ? [] )
+			Array::splice.apply <span class="keyword">this</span>, [<span class="number">0</span>,<span class="property">@length</span>,( element <span class="keyword">for</span> element <span class="keyword">in</span> partition.get(<span class="literal">false</span>) ? [] )...]
 			<span class="keyword">return</span> partition.get(<span class="literal">true</span>) ? <span class="keyword">new</span> <span class="property">@constructor</span></pre></div></div>
             
         </li>
@@ -123,7 +123,7 @@
 			fn element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
 
 		reduce: Function.From(Function,Maybe Value) (reduction,initial) -&gt;
-			Array::reduce.apply <span class="keyword">this</span>, [reduction].concat <span class="keyword">if</span> initial? <span class="keyword">then</span> [initial] <span class="keyword">else</span> []
+			Array::reduce.apply <span class="keyword">this</span>, [reduction, (<span class="keyword">if</span> initial? <span class="keyword">then</span> [initial] <span class="keyword">else</span> [])...]
 
 		partition: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> ( Map.To(Set).Using Set.union ) ) \
 			 (map) -&gt; (key) -&gt;
@@ -145,9 +145,7 @@
             
             <div class="content"><div class='highlight'><pre>		<span class="property">@subset</span>: Predicate.From(Set,Set) \
 			(first,second) -&gt;
-				[<span class="literal">true</span>]
-					.concat( second.member element <span class="keyword">for</span> element <span class="keyword">in</span> first )
-					.reduce (a,b) -&gt; a <span class="keyword">and</span> b
+				Array.reduce(Boolean.<span class="keyword">and</span>) ( second.member element <span class="keyword">for</span> element <span class="keyword">in</span> first )
 
 		<span class="property">@equal</span>: Predicate.From(Set,Set) \
 			(first,second) -&gt;
@@ -173,7 +171,7 @@
 		<span class="property">@intersection</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(intersection) -&gt; (first=[],rest...) -&gt;
  				intersection.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> \
- 					[<span class="literal">true</span>].concat( set.member element <span class="keyword">for</span> set <span class="keyword">in</span> rest ).reduce (a,b) -&gt; a <span class="keyword">and</span> b
+					Array.reduce(Boolean.<span class="keyword">and</span>) ( set.member element <span class="keyword">for</span> set <span class="keyword">in</span> rest )
 
 		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(difference) -&gt; (first,second) -&gt;

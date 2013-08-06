@@ -41,16 +41,16 @@ define(['jmodel/opal2'], function() {
         predicate = Boolean.True;
       }
       partition = this.partition(predicate);
-      Array.prototype.splice.apply(this, [0, this.length].concat((function() {
-        var _i, _len, _ref, _ref1, _results;
-        _ref1 = (_ref = partition.get(false)) != null ? _ref : [];
-        _results = [];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          element = _ref1[_i];
-          _results.push(element);
-        }
-        return _results;
-      })()));
+      Array.prototype.splice.apply(this, [0, this.length].concat(__slice.call((function() {
+          var _i, _len, _ref, _ref1, _results;
+          _ref1 = (_ref = partition.get(false)) != null ? _ref : [];
+          _results = [];
+          for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+            element = _ref1[_i];
+            _results.push(element);
+          }
+          return _results;
+        })())));
       return (_ref = partition.get(true)) != null ? _ref : new this.constructor;
     });
 
@@ -96,7 +96,7 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.prototype.reduce = Function.From(Function, Maybe(Value))(function(reduction, initial) {
-      return Array.prototype.reduce.apply(this, [reduction].concat(initial != null ? [initial] : []));
+      return Array.prototype.reduce.apply(this, [reduction].concat(__slice.call((initial != null ? [initial] : []))));
     });
 
     Set.prototype.partition = Function.From(Function).Returning(function() {
@@ -115,7 +115,7 @@ define(['jmodel/opal2'], function() {
 
     Set.subset = Predicate.From(Set, Set)(function(first, second) {
       var element;
-      return [true].concat((function() {
+      return Array.reduce(Boolean.and)((function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = first.length; _i < _len; _i++) {
@@ -123,9 +123,7 @@ define(['jmodel/opal2'], function() {
           _results.push(second.member(element));
         }
         return _results;
-      })()).reduce(function(a, b) {
-        return a && b;
-      });
+      })());
     });
 
     Set.equal = Predicate.From(Set, Set)(function(first, second) {
@@ -167,7 +165,7 @@ define(['jmodel/opal2'], function() {
         _results = [];
         for (_i = 0, _len = first.length; _i < _len; _i++) {
           element = first[_i];
-          if ([true].concat((function() {
+          if (Array.reduce(Boolean.and)((function() {
             var _j, _len1, _results1;
             _results1 = [];
             for (_j = 0, _len1 = rest.length; _j < _len1; _j++) {
@@ -175,9 +173,7 @@ define(['jmodel/opal2'], function() {
               _results1.push(set.member(element));
             }
             return _results1;
-          })()).reduce(function(a, b) {
-            return a && b;
-          })) {
+          })())) {
             _results.push(intersection.add(element));
           }
         }
@@ -557,7 +553,7 @@ define(['jmodel/opal2'], function() {
         return _this.derive(function() {
           var args;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return this.add(acc = reduction.apply(this, [acc].concat(args)));
+          return this.add(acc = reduction.apply(this, [acc].concat(__slice.call(args))));
         });
       })(initial);
     });

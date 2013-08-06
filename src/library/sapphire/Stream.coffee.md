@@ -57,7 +57,7 @@
 			accumulate: Function.From(Function,Maybe Value).To(Stream) \
 				(reduction,initial=reduction.unit) -> do (acc=initial) =>
 					@derive (args...) ->
-						@add acc = reduction.apply this, [acc].concat args
+						@add acc = reduction.apply this, [acc,args...]
 						
 
 ## Stream combinators

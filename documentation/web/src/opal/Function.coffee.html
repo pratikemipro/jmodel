@@ -127,7 +127,7 @@
 				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.matches args...
 			<span class="keyword">return</span> <span class="literal">undefined</span>
 		fn.extend extend: (variants2=[]) -&gt;
-			Function.overload variants2.concat variants</pre></div></div>
+			Function.overload [variants2...,variants...]</pre></div></div>
             
         </li>
         
@@ -166,7 +166,7 @@
 		<span class="keyword">switch</span> arguments.length
 			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
 			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
-			<span class="keyword">else</span> Function.pipe (Array.concat arguments...).reverse()...</pre></div></div>
+			<span class="keyword">else</span> Function.pipe [arguments...].reverse()...</pre></div></div>
             
         </li>
         
@@ -190,7 +190,7 @@
 		fn = <span class="keyword">this</span>
 		(args...) -&gt;
 			ret = fn.apply <span class="keyword">this</span>, args
-			post.apply <span class="keyword">this</span>, [ret].concat(args)
+			post.apply <span class="keyword">this</span>, [ret,args...]
 			ret</pre></div></div>
             
         </li>
@@ -472,11 +472,11 @@
             
             <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">bind</span></span> = (context,args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply context, Array.concat(args1,args2)
+		(args2...) -&gt; fn.apply context, [args1...,args2...]
 
 	Function::<span class="function"><span class="title">curry</span></span> = (args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; fn.apply <span class="keyword">this</span>, Array.concat(args1,args2)
+		(args2...) -&gt; fn.apply <span class="keyword">this</span>, [args1...,args2...]
 
 	Function::<span class="function"><span class="title">except</span></span> = (handler) -&gt;
 		fn = <span class="keyword">this</span>
@@ -492,7 +492,7 @@
 
 	Function::delay ?= (duration=<span class="number">1</span>,args1...) -&gt;
 		fn = <span class="keyword">this</span>
-		(args2...) -&gt; setTimeout fn.curry.apply(fn,Array.concat(args1,args2)), duration</pre></div></div>
+		(args2...) -&gt; setTimeout fn.curry.apply(fn,[args1...,args2...]), duration</pre></div></div>
             
         </li>
         

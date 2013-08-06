@@ -140,7 +140,7 @@
 		accumulate: Function.From(Function,Maybe Value).To(Stream) \
 			(reduction,initial=reduction.unit) -&gt; <span class="keyword">do</span> (acc=initial) =&gt;
 				<span class="property">@derive</span> (args...) -&gt;
-					<span class="property">@add</span> acc = reduction.apply <span class="keyword">this</span>, [acc].concat args</pre></div></div>
+					<span class="property">@add</span> acc = reduction.apply <span class="keyword">this</span>, [acc,args...]</pre></div></div>
             
         </li>
         

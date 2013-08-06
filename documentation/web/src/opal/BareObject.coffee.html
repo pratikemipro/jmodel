@@ -101,9 +101,10 @@
 
 	Object.equal = Predicate.From(Object,Object) \
 		(a,b) -&gt;
-			Array.reduce(Boolean.<span class="keyword">and</span>) Array.concat \
-				( a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> a ),
-				( a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> b )
+			Array.reduce(Boolean.<span class="keyword">and</span>) [
+				( a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> a )...,
+				( a[prop] == b[prop] <span class="keyword">for</span> own prop <span class="keyword">of</span> b )...
+			]
 
 	Object.remove = Function.From([Scalar]) \
 		(fields...) -&gt; Function.From(Object).Returning(-&gt; <span class="keyword">new</span> Object) \
