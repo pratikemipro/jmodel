@@ -9,11 +9,11 @@
 
 var __slice = [].slice,
   __hasProp = {}.hasOwnProperty,
-  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 define(function() {
-  var Promise, _base;
+  var Promise, Type, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -762,6 +762,43 @@ define(function() {
     restricted.valid = Object.isa(restricted.base).and(predicate);
     return restricted;
   };
+  window.Type = Type = function() {};
+  Type.union = Function.From(Object).Returning(function() {
+    return (function() {
+      function _Class() {}
+
+      return _Class;
+
+    })();
+  })(function(type) {
+    return function(subtypes) {
+      var constructor, name, _results;
+      if (subtypes == null) {
+        subtypes = {};
+      }
+      _results = [];
+      for (name in subtypes) {
+        constructor = subtypes[name];
+        _results.push((function(name, constructor) {
+          var _class, _ref;
+          return type[name] = (function(_super) {
+            __extends(_Class, _super);
+
+            function _Class() {
+              _ref = _class.apply(this, arguments);
+              return _ref;
+            }
+
+            _class = constructor;
+
+            return _Class;
+
+          })(type);
+        })(name, constructor));
+      }
+      return _results;
+    };
+  });
   Object.extend = Function.From(Object, Object).To(Object)(function(target, source) {
     var key;
     for (key in source) {

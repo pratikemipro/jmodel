@@ -11,6 +11,7 @@ opal:
 		src/library/opal/header.coffee.md \
 		src/library/opal/Array.coffee.md \
 		src/library/opal/Function.coffee.md \
+		src/library/opal/Type.coffee.md \
 		src/library/opal/Object.coffee.md \
 		src/library/opal/BareObject.coffee.md \
 		src/library/opal/Number.coffee.md \
@@ -52,6 +53,7 @@ library-test:
 		src/library/test.header.coffee \
 		src/library/opal/Array.test.coffee \
 		src/library/opal/Function.test.coffee \
+		src/library/opal/Type.test.coffee \
 		src/library/opal/Object.test.coffee \
 		src/library/opal/BareObject.test.coffee \
 		src/library/opal/Number.test.coffee \
