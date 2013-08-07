@@ -763,7 +763,7 @@ define(function() {
     return restricted;
   };
   window.Type = Type = function() {};
-  Type.union = Function.From(Object).Returning(function() {
+  Type.union = Function.From(Function).Returning(function() {
     return (function() {
       function _Class() {}
 
@@ -771,32 +771,45 @@ define(function() {
 
     })();
   })(function(type) {
-    return function(subtypes) {
-      var constructor, name, _results;
-      if (subtypes == null) {
-        subtypes = {};
+    return function(fn) {
+      var constructor, name, subtype, subtypes, _i, _len, _ref, _results, _results1;
+      subtype = function(constructor) {
+        var _class, _ref;
+        return (function(_super) {
+          __extends(_Class, _super);
+
+          function _Class() {
+            _ref = _class.apply(this, arguments);
+            return _ref;
+          }
+
+          _class = constructor || function() {};
+
+          return _Class;
+
+        })(type);
+      };
+      subtypes = fn.call(type);
+      if (subtypes instanceof Array) {
+        _results = [];
+        for (_i = 0, _len = subtypes.length; _i < _len; _i++) {
+          name = subtypes[_i];
+          _results.push((function(name) {
+            return type[name] = subtype(function() {});
+          })(name));
+        }
+        return _results;
+      } else {
+        _ref = fn.call(type);
+        _results1 = [];
+        for (name in _ref) {
+          constructor = _ref[name];
+          _results1.push((function(name, constructor) {
+            return type[name] = subtype(constructor);
+          })(name, constructor));
+        }
+        return _results1;
       }
-      _results = [];
-      for (name in subtypes) {
-        constructor = subtypes[name];
-        _results.push((function(name, constructor) {
-          var _class, _ref;
-          return type[name] = (function(_super) {
-            __extends(_Class, _super);
-
-            function _Class() {
-              _ref = _class.apply(this, arguments);
-              return _ref;
-            }
-
-            _class = constructor;
-
-            return _Class;
-
-          })(type);
-        })(name, constructor));
-      }
-      return _results;
     };
   });
   Object.extend = Function.From(Object, Object).To(Object)(function(target, source) {
