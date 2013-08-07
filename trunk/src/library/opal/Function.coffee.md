@@ -17,13 +17,18 @@
 		
 		Function.map = (mapping) -> (key) -> mapping[key]
 		
-		Function.overload = Function.match = (variants=[]) ->
+		Function.overload = (variants=[]) ->
 			fn = (args...) ->
 				for variant in variants
 					return variant.apply(this,args) if variant.matches args...
 				return undefined
 			fn.extend extend: (variants2=[]) ->
 				Function.overload [variants2...,variants...]
+				
+		Function.match = (variants=[]) -> (value) ->
+			for variant in variants
+				return variant.apply(value,value) if variant.matches value
+			return undefined
 		
 
 ## Function composition

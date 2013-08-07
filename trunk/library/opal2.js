@@ -229,7 +229,7 @@ define(function() {
       return mapping[key];
     };
   };
-  Function.overload = Function.match = function(variants) {
+  Function.overload = function(variants) {
     var fn;
     if (variants == null) {
       variants = [];
@@ -253,6 +253,21 @@ define(function() {
         return Function.overload(__slice.call(variants2).concat(__slice.call(variants)));
       }
     });
+  };
+  Function.match = function(variants) {
+    if (variants == null) {
+      variants = [];
+    }
+    return function(value) {
+      var variant, _i, _len;
+      for (_i = 0, _len = variants.length; _i < _len; _i++) {
+        variant = variants[_i];
+        if (variant.matches(value)) {
+          return variant.apply(value, value);
+        }
+      }
+      return void 0;
+    };
   };
   Function.prototype.then = function(fn2) {
     var fn1;
