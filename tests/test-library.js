@@ -750,6 +750,15 @@ define(['jmodel/topaz2'], function() {
         }
       };
     });
+    Tree.depth = Function.match([
+      Type(Tree.Empty)(function() {
+        return 0;
+      }), Type(Tree.Leaf)(function() {
+        return 1;
+      }), Type(Tree.Branch)(function() {
+        return 1 + Math.max(Tree.depth(this.left), Tree.depth(this.right));
+      })
+    ]);
     red = new Tree.Leaf('red');
     green = new Tree.Leaf('green');
     tree = new Tree.Branch(red, green);
@@ -759,17 +768,6 @@ define(['jmodel/topaz2'], function() {
     deepEqual([tree.left === red, tree.right === green], [true, true], 'Correct arguments passed to member constructor');
     equals(tree instanceof Tree.Branch, true, 'Member has correct type');
     equals(tree instanceof Tree, true, 'Inheritance set up correctly');
-    Tree.depth = Function.match([
-      Type(Tree.Empty)(function() {
-        return 0;
-      }), Type(Tree.Leaf)(function() {
-        return 1;
-      }), Type(Tree.Branch)(function(_arg) {
-        var left, right;
-        left = _arg.left, right = _arg.right;
-        return 1 + Math.max(Tree.depth(left), Tree.depth(right));
-      })
-    ]);
     equals(Tree.depth(red), 1, 'Works correctly for leaves');
     return equals(Tree.depth(tree), 2, 'Works correctly for branches');
   });
