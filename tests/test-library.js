@@ -735,6 +735,28 @@ define(['jmodel/topaz2'], function() {
     equal(oddEven(6), 'even', 'Works for first mapping entry');
     return equal(oddEven(7), 'odd', 'Works for second mapping entry');
   });
+  module('Type');
+  test('Type.union', function() {
+    var Tree, green, red, tree;
+    Tree = Type.union({
+      Branch: function(left, right) {
+        this.left = left;
+        this.right = right;
+      },
+      Node: function(value) {
+        this.value = value;
+      }
+    });
+    red = new Tree.Node('red');
+    green = new Tree.Node('green');
+    tree = new Tree.Branch(red, green);
+    equals(red.value, 'red', 'Correct arguments passed to member constructor');
+    equals(red instanceof Tree.Node, true, 'Member has correct type');
+    equals(red instanceof Tree, true, 'Inheritance set up correctly');
+    deepEqual([tree.left === red, tree.right === green], [true, true], 'Correct arguments passed to member constructor');
+    equals(tree instanceof Tree.Branch, true, 'Member has correct type');
+    return equals(tree instanceof Tree, true, 'Inheritance set up correctly');
+  });
   module('Object');
   test('Object.extend', function() {
     var source, target;

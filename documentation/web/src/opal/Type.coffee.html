@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Number</title>
+  <title>Type</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -97,46 +97,18 @@
               <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Number</h1>
+              <h1>Type</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <h2>Restrictions</h2>
+            <div class="content"><div class='highlight'><pre>	window.Type = <span class="function"><span class="title">Type</span></span> = -&gt;
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	Number.In = Function.From([Number]).To(Function) (numbers...) -&gt;
-		<span class="property">@Where</span> \
-			(number) -&gt; number <span class="keyword">in</span> numbers,
-			<span class="string">"Invalid Number: \"&lt;value&gt;\" is not in {<span class="subst">#{(number <span class="keyword">for</span> number <span class="keyword">in</span> numbers ).join(',')}</span>}"</span>
-
-	Number.LessThan = Function.From(Number).To(Function) (max) -&gt;
-		<span class="property">@Where</span> Function.lt(max), <span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
-
-	Number.GreaterThan = Function.From(Number).To(Function) (min) -&gt;
-		<span class="property">@Where</span> Function.gt(min), <span class="string">"Invalid Value: &lt;value&gt; is not greater than <span class="subst">#{min}</span>"</span>
-
-	Number.Between = Function.From(Number,Number).To(Function) (min,max) -&gt;
-		<span class="property">@Where</span> Function.between(min,max), <span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
-
-	Number.Integer = Number.Where ( (value) -&gt; value == Math.round value ), <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
-
-	Number.Positive = Number.GreaterThan <span class="number">0</span>
-	Number.Negative = Number.LessThan <span class="number">0</span>
-
-	Number.Odd  = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">1</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
-	Number.Even = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">0</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
+	Type.union = Function.From(Object).Returning(-&gt; class) \
+		(type) -&gt; (subtypes={}) -&gt;
+			<span class="keyword">for</span> name, constructor <span class="keyword">of</span> subtypes
+				<span class="keyword">do</span> (name,constructor) -&gt;
+					type[name] = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">type</span></span>
+						constructor: constructor</pre></div></div>
             
         </li>
         
