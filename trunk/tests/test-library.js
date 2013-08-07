@@ -738,20 +738,23 @@ define(['jmodel/topaz2'], function() {
   module('Type');
   test('Type.union', function() {
     var Tree, green, red, tree;
-    Tree = Type.union({
-      Branch: function(left, right) {
-        this.left = left;
-        this.right = right;
-      },
-      Node: function(value) {
-        this.value = value;
-      }
+    Tree = Type.union(function() {
+      return {
+        Empty: function() {},
+        Branch: Function.From(this, this)(function(left, right) {
+          this.left = left;
+          this.right = right;
+        }),
+        Leaf: function(value) {
+          this.value = value;
+        }
+      };
     });
-    red = new Tree.Node('red');
-    green = new Tree.Node('green');
+    red = new Tree.Leaf('red');
+    green = new Tree.Leaf('green');
     tree = new Tree.Branch(red, green);
     equals(red.value, 'red', 'Correct arguments passed to member constructor');
-    equals(red instanceof Tree.Node, true, 'Member has correct type');
+    equals(red instanceof Tree.Leaf, true, 'Member has correct type');
     equals(red instanceof Tree, true, 'Inheritance set up correctly');
     deepEqual([tree.left === red, tree.right === green], [true, true], 'Correct arguments passed to member constructor');
     equals(tree instanceof Tree.Branch, true, 'Member has correct type');
