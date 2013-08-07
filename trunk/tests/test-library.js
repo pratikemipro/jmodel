@@ -737,7 +737,7 @@ define(['jmodel/topaz2'], function() {
   });
   module('Type');
   test('Type.union', function() {
-    var Tree, green, red, tree;
+    var Tree, depth, green, red, tree;
     Tree = Type.union(function() {
       return {
         Empty: function() {},
@@ -758,7 +758,20 @@ define(['jmodel/topaz2'], function() {
     equals(red instanceof Tree, true, 'Inheritance set up correctly');
     deepEqual([tree.left === red, tree.right === green], [true, true], 'Correct arguments passed to member constructor');
     equals(tree instanceof Tree.Branch, true, 'Member has correct type');
-    return equals(tree instanceof Tree, true, 'Inheritance set up correctly');
+    equals(tree instanceof Tree, true, 'Inheritance set up correctly');
+    depth = Function.match([
+      Type(Tree.Empty)(function() {
+        return 0;
+      }), Type(Tree.Leaf)(function() {
+        return 1;
+      }), Type(Tree.Branch)(function(_arg) {
+        var left, right;
+        left = _arg.left, right = _arg.right;
+        return 1 + Math.max(depth(left), depth(right));
+      })
+    ]);
+    equals(depth(red), 1, 'Works correctly for leaves');
+    return equals(depth(tree), 2, 'Works correctly for branches');
   });
   module('Object');
   test('Object.extend', function() {

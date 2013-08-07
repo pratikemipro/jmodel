@@ -1,7 +1,9 @@
 # Type
 
 		
-		window.Type = Type = ->
+		window.Type = Type = (constructor) ->
+			(fn) -> fn.extend
+				matches: Object.isa constructor
 		
 		Type.union = Function.From(Function).Returning(-> class) \
 			(type) -> (fn) ->

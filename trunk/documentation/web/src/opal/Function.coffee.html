@@ -126,7 +126,7 @@
 
 	Function.<span class="function"><span class="title">map</span></span> = (mapping) -&gt; (key) -&gt; mapping[key]
 
-	Function.<span class="function"><span class="title">overload</span></span> = (variants=[]) -&gt;
+	Function.overload = Function.<span class="function"><span class="title">match</span></span> = (variants=[]) -&gt;
 		<span class="function"><span class="title">fn</span></span> = (args...) -&gt;
 			<span class="keyword">for</span> variant <span class="keyword">in</span> variants
 				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.matches args...
