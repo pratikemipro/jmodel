@@ -101,7 +101,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Type = <span class="function"><span class="title">Type</span></span> = -&gt;
+            <div class="content"><div class='highlight'><pre>	window.Type = <span class="function"><span class="title">Type</span></span> = (constructor) -&gt;
+		(fn) -&gt; fn.extend
+			matches: Object.isa constructor
 
 	Type.union = Function.From(Function).Returning(-&gt; class) \
 		(type) -&gt; (fn) -&gt;

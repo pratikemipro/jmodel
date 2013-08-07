@@ -229,7 +229,7 @@ define(function() {
       return mapping[key];
     };
   };
-  Function.overload = function(variants) {
+  Function.overload = Function.match = function(variants) {
     var fn;
     if (variants == null) {
       variants = [];
@@ -762,7 +762,13 @@ define(function() {
     restricted.valid = Object.isa(restricted.base).and(predicate);
     return restricted;
   };
-  window.Type = Type = function() {};
+  window.Type = Type = function(constructor) {
+    return function(fn) {
+      return fn.extend({
+        matches: Object.isa(constructor)
+      });
+    };
+  };
   Type.union = Function.From(Function).Returning(function() {
     return (function() {
       function _Class() {}

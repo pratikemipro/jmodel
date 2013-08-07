@@ -17,7 +17,7 @@
 		
 		Function.map = (mapping) -> (key) -> mapping[key]
 		
-		Function.overload = (variants=[]) ->
+		Function.overload = Function.match = (variants=[]) ->
 			fn = (args...) ->
 				for variant in variants
 					return variant.apply(this,args) if variant.matches args...
