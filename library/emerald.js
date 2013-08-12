@@ -252,7 +252,7 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				return function () {
 					var last = value;
 					value = fn.apply(null,arguments);
-					return value !== last ? method.apply(this,arguments) : true;
+					return value !== last ? method.call(this,value,last) : true;
 				};
 			});
 		},
