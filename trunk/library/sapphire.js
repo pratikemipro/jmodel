@@ -390,13 +390,11 @@ define(['jmodel/opal'], function (opal) {
 		},
 		
 		// Tests: full
-		map: Array.prototype.map ? function () {
-			return List.fromArray(this.__rep__.map(Function.pipe.apply(null,arguments)));
-		} : function () {
+		map: function () {
 			var mapping = Function.pipe.apply(null,arguments);
 			var list = [];
 			for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
-				list.push(mapping.call(null,rep[i]));
+				list.push(mapping.call(rep[i],rep[i]));
 			}
 			return List.fromArray(list);
 		},
