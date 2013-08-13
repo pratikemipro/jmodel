@@ -18,7 +18,7 @@
 			
 			map: Function.From(Function).Returning(-> new List) \
 				(mapped) -> (fn) ->
-					mapped.add fn element for element in this
+					mapped.add fn.call element, element for element in this
 	
 			@concat: (base,others...) ->
 				new base.constructor Array::concat.apply \
