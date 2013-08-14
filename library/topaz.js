@@ -171,8 +171,11 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 		this.fields			= [];
 
 		this.events = new EventRegistry('change');
+
 		this.events.addArray(this.options.events || []);
 		this.event	= delegateTo(this.events,'get');
+
+		this.event('change').remember(':all')
 
 		for ( var field in fields ) {
 			if ( fields.hasOwnProperty(field) ) {
