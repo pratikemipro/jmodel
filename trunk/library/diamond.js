@@ -114,6 +114,15 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		var entityType = function (data) {
 				
 			ObservableObject.call(this,fields,options);
+			
+			this.events.add('dirty');
+			
+			this.state = new ObservableObject({
+				dirty: Boolean(false)
+			});
+			
+			this.state.event('dirty').republish(this.event('dirty'));
+			this.dirty = delegateTo(this.state,'dirty');
 				
 			if ( data ) {
 				if ( primaryKeyField ) {
@@ -129,17 +138,23 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				
 			if ( primaryKeyField ) {
 				var primaryKeyValue = this[this.primaryKeyField]();
-				this.dirty = primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false;
+				this.state.dirty( primaryKeyValue <= 0 || isNaN(primaryKeyValue) ? true : false );
 			}
 			else {
-				this.dirty = true;
+				this.state.dirty(true);
 			}
-				
+			
+			this.checkpoint();
+			
 			this.event('change')
 				.subscribe({
 					context: this,
 					message: function () {
-						this.dirty = true;
+						var dirty = false;
+						for (i in this.__checkpointed ) {
+							dirty = dirty || this[i]() !== this.__checkpointed[i];
+						}
+						this.state.dirty(dirty);
 					}
 				});
 					
@@ -148,6 +163,21 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		};
 			
 		entityType.prototype = options.proto instanceof Entity ? options.proto : Object.extend(new Entity(), fields.methods);
+		
+		entityType.prototype.checkpoint = function () {
+			this.__checkpointed = {};
+			for (i in this.fields ) {
+				field = this.fields[i];
+				if ( field instanceof ScalarField ) {
+					this.__checkpointed[field.field] = field.get();
+				}
+			}
+			this.state.dirty(false);
+		}
+		
+		entityType.prototype.checkpointed = function(field) {
+			return this.__checkpointed[field];
+		}
 			
 		Object.extend(entityType.prototype,options.instance || {});
 			
