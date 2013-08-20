@@ -32,6 +32,30 @@ define(['jmodel/topaz2'], function() {
     equal(Array.hastypes([Number])([1, 2, 3]), true, 'Works for array type specifiers');
     return equal(Array.hastypes([Number])(), true, 'Array type specifiers include zero length case');
   });
+  test('Array.count', function() {
+    var numbers, odd;
+    odd = function(value) {
+      return value % 2 === 1;
+    };
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    equal(numbers.reduce(Array.count()), 9, 'Counts all elements if called without a predicate');
+    equal(numbers.reduce(Array.count(odd)), 5, 'Counts elements matching predicate');
+    return equal(numbers.reduce(Array.count(function() {
+      return this % 2 === 1;
+    })), 5, 'Can use values via context');
+  });
+  test('Array::count', function() {
+    var numbers, odd;
+    odd = function(value) {
+      return value % 2 === 1;
+    };
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    equal(numbers.count(), 9, 'Counts all elements if called without a predicate');
+    equal(numbers.count(odd), 5, 'Counts elements matching predicate');
+    return equal(numbers.count(function() {
+      return this % 2 === 1;
+    }), 5, 'Can use values via context');
+  });
   module('Property methods');
   test('Function::extend', function() {
     var fn;
