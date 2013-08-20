@@ -178,12 +178,11 @@ define(['jmodel/opal2'], function() {
       return first.count() === second.count() && Set.subset(first, second) && Set.subset(second, first);
     });
 
-    Set.union = Function.From([Set]).Returning(function() {
-      return new this;
-    })(function(union) {
-      return function() {
-        var element, set, sets, _i, _len, _results;
-        sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    Set.union = Function.From([Set])(function() {
+      var element, set, sets;
+      sets = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return new this(Array.concat.apply(Array, (function() {
+        var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = sets.length; _i < _len; _i++) {
           set = sets[_i];
@@ -192,13 +191,13 @@ define(['jmodel/opal2'], function() {
             _results1 = [];
             for (_j = 0, _len1 = set.length; _j < _len1; _j++) {
               element = set[_j];
-              _results1.push(union.add(element));
+              _results1.push(element);
             }
             return _results1;
           })());
         }
         return _results;
-      };
+      })()));
     });
 
     Set.intersection = Function.From([Set]).Returning(function() {

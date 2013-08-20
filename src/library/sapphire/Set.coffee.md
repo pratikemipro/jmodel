@@ -63,9 +63,8 @@
 ## Set algebra
 
 			
-			@union: Function.From([Set]).Returning(-> new this) \
-				(union) -> (sets...) ->
-					union.add element for element in set for set in sets
+			@union: Function.From([Set]) (sets...) ->
+				new this Array.concat ( element for element in set for set in sets )...
 			
 			@intersection: Function.From([Set]).Returning(-> new this) \
 				(intersection) -> (first=[],rest...) ->
