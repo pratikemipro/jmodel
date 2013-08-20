@@ -16,6 +16,17 @@ define(['jmodel/opal2'], function() {
   window.Tuple = Tuple = (function() {
     function Tuple() {}
 
+    Tuple.prototype.constuctor = function() {
+      var arg, args, _i, _len, _results;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      _results = [];
+      for (_i = 0, _len = args.length; _i < _len; _i++) {
+        arg = args[_i];
+        _results.push(Array.prototype.push.call(this, arg));
+      }
+      return _results;
+    };
+
     Tuple.equal = Function.From(Tuple, Tuple)(function(_arg, _arg1) {
       var a, b;
       a = 1 <= _arg.length ? __slice.call(_arg, 0) : [];

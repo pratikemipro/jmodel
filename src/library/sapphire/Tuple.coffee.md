@@ -2,6 +2,8 @@
 
 		
 		window.Tuple = class Tuple
+		
+			constuctor: (args...) -> Array::push.call this, arg for arg in args
 			
 			@equal: Function.From(Tuple,Tuple) ([a...],[b...]) -> Array.equal a, b
 	
