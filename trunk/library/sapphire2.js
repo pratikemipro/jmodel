@@ -326,18 +326,17 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    List.prototype.map = Function.From(Function).Returning(function() {
-      return new List;
-    })(function(mapped) {
-      return function(fn) {
-        var element, _i, _len, _results;
+    List.prototype.map = Function.From(Function)(function(fn) {
+      var element;
+      return new this.constructor((function() {
+        var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           element = this[_i];
-          _results.push(mapped.add(fn.call(element, element)));
+          _results.push(fn.call(element, element));
         }
         return _results;
-      };
+      }).call(this));
     });
 
     List.concat = function() {
