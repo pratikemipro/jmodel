@@ -73,6 +73,8 @@
             
             <div class="content"><div class='highlight'><pre>	window.Tuple = <span class="class"><span class="keyword">class</span> <span class="title">Tuple</span></span>
 
+		constuctor: (args...) -&gt; Array::push.call <span class="keyword">this</span>, arg <span class="keyword">for</span> arg <span class="keyword">in</span> args
+
 		<span class="property">@equal</span>: Function.From(Tuple,Tuple) ([a...],[b...]) -&gt; Array.equal a, b
 
 		<span class="property">@Of</span>: Function.From([Function]) (constructors...) -&gt;
