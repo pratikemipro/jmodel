@@ -83,9 +83,8 @@
 		member: (element) -&gt;
 			-<span class="number">1</span> != Array::indexOf.call <span class="keyword">this</span>, element
 
-		where: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> List ) \
-			(list) -&gt; (predicate) -&gt;
-				list.add element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element
+		where: Function.From(Function) (predicate) -&gt;
+			<span class="keyword">new</span> <span class="property">@constructor</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element )
 
 		map: Function.From(Function) (fn) -&gt;
 			<span class="keyword">new</span> <span class="property">@constructor</span> ( fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
