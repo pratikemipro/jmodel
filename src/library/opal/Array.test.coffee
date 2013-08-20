@@ -50,3 +50,29 @@
 		equal numbers.count(odd), 5, 'Counts elements matching predicate'
 		
 		equal numbers.count(-> this % 2 == 1), 5, 'Can use values via context'
+		
+	test 'Array.contains', ->
+		
+		odd = (value) -> value % 2 == 1
+		numbers = [1,2,3,4,5,6,7,8,9]
+		evens = [2,4,6,8]
+		
+		equal numbers.reduce(Array.contains(),false), true, 'Returns true for non-empty array when called without predicate'
+		
+		equal numbers.reduce(Array.contains(odd),false), true, 'Returns true if array contains element matching predicate'
+		equal evens.reduce(Array.contains(odd),false), false, 'Returns false if array does not contain element matching predicate'
+		
+		equal numbers.reduce(Array.contains -> this % 2 == 1), true, 'Can use values via context'
+	
+	test 'Array::contains', ->
+		
+		odd = (value) -> value % 2 == 1
+		numbers = [1,2,3,4,5,6,7,8,9]
+		evens = [2,4,6,8]
+		
+		equal numbers.contains(), true, 'Returns true for non-empty array when called without predicate'
+		
+		equal numbers.contains(odd), true, 'Returns true if array contains element matching predicate'
+		equal evens.contains(odd), false, 'Returns false if array does not contain element matching predicate'
+		
+		equal numbers.contains(-> this % 2 == 1), true, 'Can use values via context'

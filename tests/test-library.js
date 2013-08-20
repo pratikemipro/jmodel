@@ -56,6 +56,34 @@ define(['jmodel/topaz2'], function() {
       return this % 2 === 1;
     }), 5, 'Can use values via context');
   });
+  test('Array.contains', function() {
+    var evens, numbers, odd;
+    odd = function(value) {
+      return value % 2 === 1;
+    };
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    evens = [2, 4, 6, 8];
+    equal(numbers.reduce(Array.contains(), false), true, 'Returns true for non-empty array when called without predicate');
+    equal(numbers.reduce(Array.contains(odd), false), true, 'Returns true if array contains element matching predicate');
+    equal(evens.reduce(Array.contains(odd), false), false, 'Returns false if array does not contain element matching predicate');
+    return equal(numbers.reduce(Array.contains(function() {
+      return this % 2 === 1;
+    })), true, 'Can use values via context');
+  });
+  test('Array::contains', function() {
+    var evens, numbers, odd;
+    odd = function(value) {
+      return value % 2 === 1;
+    };
+    numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    evens = [2, 4, 6, 8];
+    equal(numbers.contains(), true, 'Returns true for non-empty array when called without predicate');
+    equal(numbers.contains(odd), true, 'Returns true if array contains element matching predicate');
+    equal(evens.contains(odd), false, 'Returns false if array does not contain element matching predicate');
+    return equal(numbers.contains(function() {
+      return this % 2 === 1;
+    }), true, 'Can use values via context');
+  });
   module('Property methods');
   test('Function::extend', function() {
     var fn;
