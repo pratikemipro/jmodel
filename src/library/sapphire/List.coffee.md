@@ -16,9 +16,8 @@
 				(list) -> (predicate) ->
 					List.add element for element in this when predicate element
 			
-			map: Function.From(Function).Returning(-> new List) \
-				(mapped) -> (fn) ->
-					mapped.add fn.call element, element for element in this
+			map: Function.From(Function) (fn) ->
+				new @constructor ( fn.call element, element for element in this )
 	
 			@concat: (base,others...) ->
 				new base.constructor Array::concat.apply \
