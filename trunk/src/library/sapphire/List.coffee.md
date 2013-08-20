@@ -18,10 +18,8 @@
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )
 	
-			@concat: (base,others...) ->
-				new base.constructor Array::concat.apply \
-					Array::slice.call(base),
-					( Array::slice.call(other) for other in others )
+			@concat: (lists...) ->
+				new this Array.concat lists...
 					
 			@Of: Function.From(Function) (constructor) ->
 				class extends this
