@@ -201,6 +201,18 @@ define(function() {
       return _results;
     }).call(this));
   };
+  Array.count = function(predicate) {
+    if (predicate == null) {
+      predicate = Boolean.True;
+    }
+    return function(acc, value) {
+      return acc + (predicate.call(value, value) ? 1 : 0);
+    };
+  };
+  Array.count.unit = 0;
+  Array.prototype.count = function(predicate) {
+    return this.reduce(Array.count(predicate));
+  };
   Function.prototype.extend = function(properties) {
     return Object.extend(this, properties);
   };

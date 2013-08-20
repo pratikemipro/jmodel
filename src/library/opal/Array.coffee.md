@@ -49,3 +49,12 @@
 			
 		Array::ordered = -> Array.reduce(Boolean.and) ( x < y for [x,y] in Array.zip this, this[1..] )
 				
+
+## Reductions
+
+		
+		Array.count = (predicate=Boolean.True) -> (acc,value) -> acc + if predicate.call(value,value) then 1 else 0
+		Array.count.unit = 0
+		
+		Array::count = (predicate) -> @reduce Array.count predicate
+		

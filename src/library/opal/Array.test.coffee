@@ -30,3 +30,23 @@
 		equal Array.hastypes(Number,String,Number)([5,'fred',7]), true, 'Works for longer arrays'
 		equal Array.hastypes([Number])([1,2,3]), true, 'Works for array type specifiers'
 		equal Array.hastypes([Number])(), true, 'Array type specifiers include zero length case'
+		
+	test 'Array.count', ->
+		
+		odd = (value) -> value % 2 == 1
+		numbers = [1,2,3,4,5,6,7,8,9]
+		
+		equal numbers.reduce(Array.count()), 9, 'Counts all elements if called without a predicate'
+		equal numbers.reduce(Array.count odd), 5, 'Counts elements matching predicate'
+		
+		equal numbers.reduce(Array.count -> this % 2 == 1), 5, 'Can use values via context'
+		
+	test 'Array::count', ->
+		
+		odd = (value) -> value % 2 == 1
+		numbers = [1,2,3,4,5,6,7,8,9]
+		
+		equal numbers.count(), 9, 'Counts all elements if called without a predicate'
+		equal numbers.count(odd), 5, 'Counts elements matching predicate'
+		
+		equal numbers.count(-> this % 2 == 1), 5, 'Can use values via context'

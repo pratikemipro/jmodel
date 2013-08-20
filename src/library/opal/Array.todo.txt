@@ -4,14 +4,17 @@ Function			Tests	Docs
 Array.concat		full	none
 Array.map			none	none
 Array.reduce		none	none
+Array.zip			full	none
+Array.flatten		full	none
 
+Array.hastypes		partial	none
 Array.all			none	none
 Array::all			none	none
 Array.any			none	none
 Array::any			none	none
 Array.none			none	none
 Array::none			none	none
+Array::ordered		none	none
 
-Array.zip			full	none
-Array.flatten		full	none
-Array.hastypes		partial	none
+Array.count			none	none
+Array::count		none	none

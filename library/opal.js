@@ -1141,12 +1141,12 @@ define(function (a,b,c,undefined) {
 
 	// Tests: full
 	// Docs: none
-	// Reimplemented: no
+	// Reimplemented: no -> use Math.times
 	var times = function (acc,value) { return acc * value; } .extend({unit:1,label:'product'});
 	
 	// Tests: full
 	// Docs: full
-	// Reimplemented: no
+	// Reimplemented: no -> use Array.count
 	var count = function _count (predicate) {
 		predicate = predicate || Function.constant(true);
 		return function (acc,value) { return acc += (predicate(value) ? 1 : 0); } .extend({unit:0,label:'count'});
