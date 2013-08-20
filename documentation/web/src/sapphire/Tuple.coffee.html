@@ -73,11 +73,13 @@
             
             <div class="content"><div class='highlight'><pre>	window.Tuple = <span class="class"><span class="keyword">class</span> <span class="title">Tuple</span></span>
 
+		<span class="property">@equal</span>: Function.From(Tuple,Tuple) ([a...],[b...]) -&gt; Array.equal a, b
+
 		<span class="property">@Of</span>: Function.From([Function]) (constructors...) -&gt;
 			types = constructors.map (constructor) -&gt; Object.ensure constructor
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
 				constructor: (args...) -&gt;
-					<span class="keyword">this</span>[index] = type(arg) <span class="keyword">for</span> [type,arg], index <span class="keyword">in</span> Array.zip types, args</pre></div></div>
+					Array::push.call <span class="keyword">this</span>, type arg <span class="keyword">for</span> [type,arg] <span class="keyword">in</span> Array.zip types, args</pre></div></div>
             
         </li>
         

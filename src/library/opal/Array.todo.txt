@@ -6,6 +6,7 @@ Array.map			none	none
 Array.reduce		none	none
 Array.zip			full	none
 Array.flatten		full	none
+Array.equal			none	none
 
 Array.hastypes		partial	none
 Array.all			none	none

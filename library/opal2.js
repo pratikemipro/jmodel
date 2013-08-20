@@ -118,6 +118,18 @@ define(function() {
       return _results;
     })());
   };
+  Array.equal = function(a, b) {
+    return a.length === b.length && Array.reduce(Boolean.and)((function() {
+      var _i, _len, _ref, _ref1, _results;
+      _ref = Array.zip(a, b);
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        _ref1 = _ref[_i], a = _ref1[0], b = _ref1[1];
+        _results.push(a === b);
+      }
+      return _results;
+    })());
+  };
   Array.hastypes = function() {
     var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
