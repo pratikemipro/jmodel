@@ -1261,13 +1261,35 @@ define(function() {
     return !a;
   };
   Math.plus = function(a, b) {
+    if (a == null) {
+      a = 0;
+    }
+    if (b == null) {
+      b = 0;
+    }
     return a + b;
   };
   Math.plus.unit = 0;
+  Math.sum = function() {
+    var args;
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return args.reduce(Math.plus, 0);
+  };
   Math.times = function(a, b) {
+    if (a == null) {
+      a = 1;
+    }
+    if (b == null) {
+      b = 1;
+    }
     return a * b;
   };
   Math.times.unit = 1;
+  Math.product = function() {
+    var args;
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    return args.reduce(Math.times, 1);
+  };
   window.Nullable = function(constructor) {
     var construct;
     construct = Object.construct(constructor);
