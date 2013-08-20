@@ -1815,9 +1815,39 @@ define(['jmodel/topaz2'], function() {
     })(), ['Wed Nov 20 1974', 'Sun Jan 14 1979'], 'Passes correct values to constructor');
   });
   module('List');
+  test('List::where', function() {
+    var number, numbers, odd, odds;
+    numbers = new List([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    odd = function(x) {
+      return x % 2 === 1;
+    };
+    odds = numbers.where(odd);
+    deepEqual((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = odds.length; _i < _len; _i++) {
+        number = odds[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 3, 5, 7, 9], 'Filtered list contains correct elements');
+    deepEqual((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8, 9], 'Leaves original set unchanged');
+    equals(odds instanceof List, true, 'Returns a List');
+    return raises((function() {
+      return numbers.map('red');
+    }), 'Raises an exception if argument is not a function');
+  });
   test('List::map', function() {
     var number, numbers, squares;
-    numbers = new List([1, 2, 3, 4, 5, 6, 7, 8]);
+    numbers = new List([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     squares = numbers.map(function(x) {
       return x * x;
     });
@@ -1829,7 +1859,7 @@ define(['jmodel/topaz2'], function() {
         _results.push(number);
       }
       return _results;
-    })(), [1, 4, 9, 16, 25, 36, 49, 64], 'Mapped set contains correct elements');
+    })(), [1, 4, 9, 16, 25, 36, 49, 64, 81], 'Mapped set contains correct elements');
     deepEqual((function() {
       var _i, _len, _results;
       _results = [];
@@ -1838,7 +1868,7 @@ define(['jmodel/topaz2'], function() {
         _results.push(number);
       }
       return _results;
-    })(), [1, 2, 3, 4, 5, 6, 7, 8], 'Leaves original set unchanged');
+    })(), [1, 2, 3, 4, 5, 6, 7, 8, 9], 'Leaves original set unchanged');
     equals(squares instanceof List, true, 'Returns a List');
     return raises((function() {
       return numbers.map('red');

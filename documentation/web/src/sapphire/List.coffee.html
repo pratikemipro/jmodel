@@ -85,7 +85,7 @@
 
 		where: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> List ) \
 			(list) -&gt; (predicate) -&gt;
-				List.add element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element
+				list.add element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element
 
 		map: Function.From(Function) (fn) -&gt;
 			<span class="keyword">new</span> <span class="property">@constructor</span> ( fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
