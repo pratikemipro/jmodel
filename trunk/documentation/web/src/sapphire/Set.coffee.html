@@ -175,9 +175,8 @@
 		<span class="property">@intersection</span>: Function.From([Set]) (first=[],rest...) -&gt;
 			<span class="keyword">new</span> <span class="keyword">this</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> rest.all -&gt; <span class="property">@member</span> element )
 
-		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
-			(difference) -&gt; (first,second) -&gt;
-				difference.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> <span class="keyword">not</span> second.member element
+		<span class="property">@difference</span>: Function.From(Set,Set) (first=[],rest...) -&gt;
+			<span class="keyword">new</span> <span class="keyword">this</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> rest.none -&gt; <span class="property">@member</span> element )
 
 		<span class="property">@product</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
 			(product) -&gt; (sets...) -&gt;</pre></div></div>
