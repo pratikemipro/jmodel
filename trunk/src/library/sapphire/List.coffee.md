@@ -12,10 +12,9 @@
 			member: (element) ->
 				-1 != Array::indexOf.call this, element
 		
-			where: Function.From(Function).Returning(-> new List ) \
-				(list) -> (predicate) ->
-					list.add element for element in this when predicate element
-			
+			where: Function.From(Function) (predicate) ->
+				new @constructor ( element for element in this when predicate element )
+				
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )
 	
