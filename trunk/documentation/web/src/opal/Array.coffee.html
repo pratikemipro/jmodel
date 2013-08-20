@@ -146,11 +146,11 @@
 					<span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="keyword">not</span> Object.isa(type) value
 			<span class="keyword">return</span> types2.length == <span class="number">0</span> <span class="keyword">and</span> array2.length == <span class="number">0</span>
 
-	Array.<span class="function"><span class="title">all</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">and</span>) ( predicate x <span class="keyword">for</span> x <span class="keyword">in</span> array )
+	Array.<span class="function"><span class="title">all</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">and</span>) ( predicate.call x, x <span class="keyword">for</span> x <span class="keyword">in</span> array )
 
 	Array::<span class="function"><span class="title">all</span></span> = (predicate) -&gt; Array.all(predicate) <span class="keyword">this</span>
 
-	Array.<span class="function"><span class="title">any</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">or</span>) ( predicate x <span class="keyword">for</span> x <span class="keyword">in</span> array )
+	Array.<span class="function"><span class="title">any</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">or</span>) ( predicate.call x,x <span class="keyword">for</span> x <span class="keyword">in</span> array )
 
 	Array::<span class="function"><span class="title">any</span></span> = (predicate) -&gt; Array.any(predicate) <span class="keyword">this</span>
 

@@ -168,7 +168,7 @@ define(function() {
         _results = [];
         for (_i = 0, _len = array.length; _i < _len; _i++) {
           x = array[_i];
-          _results.push(predicate(x));
+          _results.push(predicate.call(x, x));
         }
         return _results;
       })());
@@ -185,7 +185,7 @@ define(function() {
         _results = [];
         for (_i = 0, _len = array.length; _i < _len; _i++) {
           x = array[_i];
-          _results.push(predicate(x));
+          _results.push(predicate.call(x, x));
         }
         return _results;
       })());
