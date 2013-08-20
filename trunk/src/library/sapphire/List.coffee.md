@@ -14,7 +14,7 @@
 		
 			where: Function.From(Function).Returning(-> new List ) \
 				(list) -> (predicate) ->
-					List.add element for element in this when predicate element
+					list.add element for element in this when predicate element
 			
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )
