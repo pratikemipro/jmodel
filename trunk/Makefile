@@ -26,6 +26,7 @@ opal:
 sapphire:
 	coffee --compile --bare --map --join library/sapphire2.js \
 		src/library/sapphire/header.coffee.md \
+		src/library/sapphire/Tuple.coffee.md \
 		src/library/sapphire/Set.coffee.md \
 		src/library/sapphire/List.coffee.md \
 		src/library/sapphire/Map.coffee.md \
@@ -62,6 +63,7 @@ library-test:
 		src/library/opal/Nullable.test.coffee \
 		src/library/opal/Maybe.test.coffee \
 		src/library/opal/Promise.test.coffee \
+		src/library/sapphire/Tuple.test.coffee \
 		src/library/sapphire/Set.test.coffee \
 		src/library/sapphire/List.test.coffee \
 		src/library/sapphire/Map.test.coffee \
