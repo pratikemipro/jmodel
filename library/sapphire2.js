@@ -339,17 +339,9 @@ define(['jmodel/opal2'], function() {
     });
 
     List.concat = function() {
-      var base, other, others;
-      base = arguments[0], others = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return new base.constructor(Array.prototype.concat.apply(Array.prototype.slice.call(base), (function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = others.length; _i < _len; _i++) {
-          other = others[_i];
-          _results.push(Array.prototype.slice.call(other));
-        }
-        return _results;
-      })()));
+      var lists;
+      lists = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return new this(Array.concat.apply(Array, lists));
     };
 
     List.Of = Function.From(Function)(function(constructor) {

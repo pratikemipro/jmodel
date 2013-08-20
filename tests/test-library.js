@@ -1874,6 +1874,33 @@ define(['jmodel/topaz2'], function() {
       return numbers.map('red');
     }), 'Raises an exception if argument is not a function');
   });
+  test('List.concat', function() {
+    var first, number, numbers, second, third, x;
+    first = [1, 2, 3];
+    second = [4, 5, 6];
+    third = [7, 8, 9];
+    numbers = List.concat(first, second, third);
+    deepEqual((function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = numbers.length; _i < _len; _i++) {
+        number = numbers[_i];
+        _results.push(number);
+      }
+      return _results;
+    })(), [1, 2, 3, 4, 5, 6, 7, 8, 9], 'Concatenates correctly');
+    equals(numbers instanceof List, true, 'Returns correct type');
+    return deepEqual((function() {
+      var _i, _len, _ref, _results;
+      _ref = List.concat();
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        x = _ref[_i];
+        _results.push(x);
+      }
+      return _results;
+    })(), [], 'Correctly handles zero arguments');
+  });
   module('Map');
   test('Map constructor', function() {
     var empty, falls, key;
