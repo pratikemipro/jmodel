@@ -12,7 +12,37 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/opal2'], function() {
-  var List, Map, Record, Set, Stream;
+  var List, Map, Record, Set, Stream, Tuple;
+  window.Tuple = Tuple = (function() {
+    function Tuple() {}
+
+    Tuple.Of = Function.From([Function])(function() {
+      var constructors, types;
+      constructors = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      types = constructors.map(function(constructor) {
+        return Object.ensure(constructor);
+      });
+      return (function(_super) {
+        __extends(_Class, _super);
+
+        function _Class() {
+          var arg, args, index, type, _i, _len, _ref, _ref1;
+          args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+          _ref = Array.zip(types, args);
+          for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
+            _ref1 = _ref[index], type = _ref1[0], arg = _ref1[1];
+            this[index] = type(arg);
+          }
+        }
+
+        return _Class;
+
+      })(this);
+    });
+
+    return Tuple;
+
+  })();
   window.Set = Set = (function() {
     function Set(elements) {
       var element, _i, _len;

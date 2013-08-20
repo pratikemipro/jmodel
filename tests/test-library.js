@@ -1383,6 +1383,14 @@ define(['jmodel/topaz2'], function() {
       return start();
     });
   });
+  module('Tuple');
+  test('Tuple.Of', function() {
+    var Person, forename, fred, id, surname;
+    Person = Tuple.Of(Number, String, String);
+    fred = new Person(1, 'fred', 'smith');
+    id = fred[0], forename = fred[1], surname = fred[2];
+    return deepEqual([id, forename, surname], [1, 'fred', 'smith'], 'Sets elements correctly');
+  });
   module('Set');
   test('Set constructor', function() {
     var colour, colours, number, numbers;

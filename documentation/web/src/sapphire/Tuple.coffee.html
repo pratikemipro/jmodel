@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>List</title>
+  <title>Tuple</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -67,38 +67,17 @@
               <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>List</h1>
+              <h1>Tuple</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.List = <span class="class"><span class="keyword">class</span> <span class="title">List</span></span>
+            <div class="content"><div class='highlight'><pre>	window.Tuple = <span class="class"><span class="keyword">class</span> <span class="title">Tuple</span></span>
 
-		constructor: ( elements=[] ) -&gt;
-			<span class="keyword">if</span> elements <span class="keyword">not</span> <span class="keyword">instanceof</span> Array <span class="keyword">then</span> elements = [elements]
-			<span class="property">@add</span> element <span class="keyword">for</span> element <span class="keyword">in</span> elements
-
-		add: Function.Chaining (element) -&gt;
-			Array::push.call <span class="keyword">this</span>, element
-
-		member: (element) -&gt;
-			-<span class="number">1</span> != Array::indexOf.call <span class="keyword">this</span>, element
-
-		where: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> List ) \
-			(list) -&gt; (predicate) -&gt;
-				List.add element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element
-
-		map: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> List) \
-			(mapped) -&gt; (fn) -&gt;
-				mapped.add fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
-
-		<span class="property">@concat</span>: (base,others...) -&gt;
-			<span class="keyword">new</span> base.constructor Array::concat.apply \
-				Array::slice.call(base),
-				( Array::slice.call(other) <span class="keyword">for</span> other <span class="keyword">in</span> others )
-
-		<span class="property">@Of</span>: Function.From(Function) (constructor) -&gt;
+		<span class="property">@Of</span>: Function.From([Function]) (constructors...) -&gt;
+			types = constructors.map (constructor) -&gt; Object.ensure constructor
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
+				constructor: (args...) -&gt;
+					<span class="keyword">this</span>[index] = type(arg) <span class="keyword">for</span> [type,arg], index <span class="keyword">in</span> Array.zip types, args</pre></div></div>
             
         </li>
         
