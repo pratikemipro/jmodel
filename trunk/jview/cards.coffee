@@ -20,7 +20,7 @@ define (require) ->
 		
 		constructor: ->
 		
-			@events = new jm.EventRegistry 'ready', 'dispose'
+			@events = new jm.EventRegistry 'ready', 'dispose', 'current'
 			@event('ready').remember 1
 		
 			@li = if @li then $ @li else $ '<li class="card"/>'
@@ -212,6 +212,10 @@ define (require) ->
 			# Changing state scrolls to card
 			@state.event('index').subscribe (index) => @scrollTo index
 			
+			# Inform cards that they are current
+			@state.event('index').subscribe (index) =>
+				@cardListView.cards.get(index).event?('current')?.raise()
+			
 			# Clicking on a card makes it the current card
 			jm.conjoin(
 				@cardListView.element.event('mousedown','li.card'),
@@ -230,7 +234,7 @@ define (require) ->
 			.subscribe ({target}) =>
 				targetIndex = target.closest('li.card').index('li.card')
 				if targetIndex != @state.index()
-					@state.index target.closest('li.card').index('li.card') 
+					@state.index target.closest('li.card').index('li.card')
 
 			# Keyboard control
 			keyEvent = @element.event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0

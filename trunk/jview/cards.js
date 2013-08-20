@@ -24,7 +24,7 @@ define(function(require) {
   Card = (function() {
     function Card() {
       var _this = this;
-      this.events = new jm.EventRegistry('ready', 'dispose');
+      this.events = new jm.EventRegistry('ready', 'dispose', 'current');
       this.event('ready').remember(1);
       this.li = this.li ? $(this.li) : $('<li class="card"/>');
       this.li.addClass(this["class"]);
@@ -313,6 +313,10 @@ define(function(require) {
       });
       this.state.event('index').subscribe(function(index) {
         return _this.scrollTo(index);
+      });
+      this.state.event('index').subscribe(function(index) {
+        var _base, _ref;
+        return typeof (_base = _this.cardListView.cards.get(index)).event === "function" ? (_ref = _base.event('current')) != null ? _ref.raise() : void 0 : void 0;
       });
       jm.conjoin(this.cardListView.element.event('mousedown', 'li.card'), this.cardListView.element.event('mouseup', 'li.card')).map(function(down, up) {
         return {
@@ -707,7 +711,3 @@ define(function(require) {
     Application: Application
   };
 });
-
-/*
-//@ sourceMappingURL=cards.map
-*/
