@@ -206,12 +206,30 @@ define(function() {
       predicate = Boolean.True;
     }
     return function(acc, value) {
+      if (acc == null) {
+        acc = 0;
+      }
       return acc + (predicate.call(value, value) ? 1 : 0);
     };
   };
   Array.count.unit = 0;
   Array.prototype.count = function(predicate) {
-    return this.reduce(Array.count(predicate));
+    return this.reduce(Array.count(predicate), 0);
+  };
+  Array.contains = function(predicate) {
+    if (predicate == null) {
+      predicate = Boolean.True;
+    }
+    return function(acc, value) {
+      if (acc == null) {
+        acc = false;
+      }
+      return acc || predicate.call(value, value);
+    };
+  };
+  Array.contains.unit = false;
+  Array.prototype.contains = function(predicate) {
+    return this.reduce(Array.contains(predicate), false);
   };
   Function.prototype.extend = function(properties) {
     return Object.extend(this, properties);

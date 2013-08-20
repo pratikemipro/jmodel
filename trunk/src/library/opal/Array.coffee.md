@@ -53,8 +53,13 @@
 ## Reductions
 
 		
-		Array.count = (predicate=Boolean.True) -> (acc,value) -> acc + if predicate.call(value,value) then 1 else 0
+		Array.count = (predicate=Boolean.True) -> (acc=0,value) -> acc + if predicate.call(value,value) then 1 else 0
 		Array.count.unit = 0
 		
-		Array::count = (predicate) -> @reduce Array.count predicate
+		Array::count = (predicate) -> @reduce Array.count(predicate), 0
+		
+		Array.contains = (predicate=Boolean.True) -> (acc=false,value) -> acc or predicate.call(value,value)
+		Array.contains.unit = false
+		
+		Array::contains = (predicate) -> @reduce Array.contains(predicate), false
 		

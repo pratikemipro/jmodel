@@ -1204,7 +1204,7 @@ define(function (a,b,c,undefined) {
 	
 	// Tests: none
 	// Docs: none
-	// Reimplemented: no
+	// Reimplemented: no -> Use Array.contains
 	var contains = function (predicate) {
 		return function (acc,value) { return acc || predicate(value); } .extend({unit:false});
 	};

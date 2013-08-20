@@ -16,5 +16,7 @@ Array.none			none	none
 Array::none			none	none
 Array::ordered		none	none
 
-Array.count			none	none
-Array::count		none	none
+Array.count			full	none
+Array::count		full	none
+Array.contains		full	none
+Array::contains		full	none
