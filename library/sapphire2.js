@@ -200,15 +200,14 @@ define(['jmodel/opal2'], function() {
       })()));
     });
 
-    Set.intersection = Function.From([Set]).Returning(function() {
-      return new this;
-    })(function(intersection) {
-      return function() {
-        var element, first, rest, set, _i, _len, _results;
-        first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-        if (first == null) {
-          first = [];
-        }
+    Set.intersection = Function.From([Set])(function() {
+      var element, first, rest, set;
+      first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      if (first == null) {
+        first = [];
+      }
+      return new this((function() {
+        var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = first.length; _i < _len; _i++) {
           element = first[_i];
@@ -221,11 +220,11 @@ define(['jmodel/opal2'], function() {
             }
             return _results1;
           })())) {
-            _results.push(intersection.add(element));
+            _results.push(element);
           }
         }
         return _results;
-      };
+      })());
     });
 
     Set.difference = Function.From(Set, Set).Returning(function() {

@@ -172,12 +172,26 @@
             <div class="content"><div class='highlight'><pre>		<span class="property">@union</span>: Function.From([Set]) (sets...) -&gt;
 			<span class="keyword">new</span> <span class="keyword">this</span> Array.concat ( element <span class="keyword">for</span> element <span class="keyword">in</span> set <span class="keyword">for</span> set <span class="keyword">in</span> sets )...
 
-		<span class="property">@intersection</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
-			(intersection) -&gt; (first=[],rest...) -&gt;
- 				intersection.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> \
-					Array.reduce(Boolean.<span class="keyword">and</span>) ( set.member element <span class="keyword">for</span> set <span class="keyword">in</span> rest )
+		<span class="property">@intersection</span>: Function.From([Set]) (first=[],rest...) -&gt;
+			<span class="keyword">new</span> <span class="keyword">this</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> Array.reduce(Boolean.<span class="keyword">and</span>) ( set.member element <span class="keyword">for</span> set <span class="keyword">in</span> rest ) )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>@intersection: Function.From([Set]).Returning(-&gt; new this) \
+    (intersection) -&gt; (first=[],rest...) -&gt;
+                     intersection.add element for element in first when \
+            Array.reduce(Boolean.and) ( set.member element for set in rest )</p>
 
-		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>		<span class="property">@difference</span>: Function.From(Set,Set).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span>) \
 			(difference) -&gt; (first,second) -&gt;
 				difference.add element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> <span class="keyword">not</span> second.member element
 
@@ -187,11 +201,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <h2>Casting</h2>
 
@@ -203,11 +217,11 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h2>Typed sets</h2>
 
