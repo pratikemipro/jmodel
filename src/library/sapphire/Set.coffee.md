@@ -67,12 +67,7 @@
 				new this Array.concat ( element for element in set for set in sets )...
 				
 			@intersection: Function.From([Set]) (first=[],rest...) ->
-				new this ( element for element in first when Array.reduce(Boolean.and) ( set.member element for set in rest ) )
-			
-			# @intersection: Function.From([Set]).Returning(-> new this) \
-			# 	(intersection) -> (first=[],rest...) ->
-			# 	 				intersection.add element for element in first when \
-			# 			Array.reduce(Boolean.and) ( set.member element for set in rest )
+				new this ( element for element in first when rest.all -> @member element )
 			
 			@difference: Function.From(Set,Set).Returning(-> new this) \
 				(difference) -> (first,second) ->
