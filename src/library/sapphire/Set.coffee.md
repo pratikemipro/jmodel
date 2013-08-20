@@ -69,9 +69,8 @@
 			@intersection: Function.From([Set]) (first=[],rest...) ->
 				new this ( element for element in first when rest.all -> @member element )
 			
-			@difference: Function.From(Set,Set).Returning(-> new this) \
-				(difference) -> (first,second) ->
-					difference.add element for element in first when not second.member element
+			@difference: Function.From(Set,Set) (first=[],rest...) ->
+				new this ( element for element in first when rest.none -> @member element )
 			
 			@product: Function.From([Set]).Returning(-> new this ) \
 				(product) -> (sets...) ->
