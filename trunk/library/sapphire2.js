@@ -16,6 +16,13 @@ define(['jmodel/opal2'], function() {
   window.Tuple = Tuple = (function() {
     function Tuple() {}
 
+    Tuple.equal = Function.From(Tuple, Tuple)(function(_arg, _arg1) {
+      var a, b;
+      a = 1 <= _arg.length ? __slice.call(_arg, 0) : [];
+      b = 1 <= _arg1.length ? __slice.call(_arg1, 0) : [];
+      return Array.equal(a, b);
+    });
+
     Tuple.Of = Function.From([Function])(function() {
       var constructors, types;
       constructors = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -26,12 +33,12 @@ define(['jmodel/opal2'], function() {
         __extends(_Class, _super);
 
         function _Class() {
-          var arg, args, index, type, _i, _len, _ref, _ref1;
+          var arg, args, type, _i, _len, _ref, _ref1;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
           _ref = Array.zip(types, args);
-          for (index = _i = 0, _len = _ref.length; _i < _len; index = ++_i) {
-            _ref1 = _ref[index], type = _ref1[0], arg = _ref1[1];
-            this[index] = type(arg);
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            _ref1 = _ref[_i], type = _ref1[0], arg = _ref1[1];
+            Array.prototype.push.call(this, type(arg));
           }
         }
 

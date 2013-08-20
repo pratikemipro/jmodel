@@ -1385,11 +1385,15 @@ define(['jmodel/topaz2'], function() {
   });
   module('Tuple');
   test('Tuple.Of', function() {
-    var Person, forename, fred, id, surname;
+    var Person, forename, fred, fred2, id, john, surname;
     Person = Tuple.Of(Number, String, String);
     fred = new Person(1, 'fred', 'smith');
     id = fred[0], forename = fred[1], surname = fred[2];
-    return deepEqual([id, forename, surname], [1, 'fred', 'smith'], 'Sets elements correctly');
+    deepEqual([id, forename, surname], [1, 'fred', 'smith'], 'Sets elements correctly');
+    fred2 = new Person(1, 'fred', 'smith');
+    john = new Person(2, 'john', 'smith');
+    equal(Tuple.equal(fred, john), false, 'Tuples with different values are not equal');
+    return equal(Tuple.equal(fred, fred2), true, 'Tuples with same values are equal');
   });
   module('Set');
   test('Set constructor', function() {
