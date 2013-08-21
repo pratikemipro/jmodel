@@ -121,12 +121,12 @@
             
             <div class="content"><div class='highlight'><pre>	String.In = Function.From([String]).To(Function) (strings...) -&gt;
 		<span class="property">@Where</span> \
-			(str) -&gt; str <span class="keyword">in</span> strings,
+			-&gt; <span class="keyword">this</span> <span class="keyword">in</span> strings,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" is not in {<span class="subst">#{( '\"'+string+'\"' <span class="keyword">for</span> string <span class="keyword">in</span> strings ).join(',')}</span>}"</span>
 
 	String.Matching = Function.From(RegExp).To(Function) (regex) -&gt;
 		<span class="property">@Where</span> \
-			(str) -&gt; regex.test str,
+			-&gt; regex.test <span class="keyword">this</span>,
 			<span class="string">"Invalid String: \"&lt;value&gt;\" does not match <span class="subst">#{regex.toString()}</span>"</span></pre></div></div>
             
         </li>
