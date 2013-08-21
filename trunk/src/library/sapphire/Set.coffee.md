@@ -49,13 +49,11 @@
 ## Comparisons
 
 			
-			@subset: Predicate.From(Set,Set) \
-				(first,second) ->
-					Array.reduce(Boolean.and) ( second.member element for element in first )
+			@subset: Predicate.From(Set,Set) (first,second) ->
+				Array.reduce(Boolean.and) ( second.member element for element in first )
 			
-			@equal: Predicate.From(Set,Set) \
-				(first,second) ->
-					first.count() == second.count() and Set.subset(first,second) and Set.subset(second,first)
+			@equal: Predicate.From(Set,Set) (first,second) ->
+				first.count() == second.count() and Set.subset(first,second) and Set.subset(second,first)
 		
 
 ## Set algebra
