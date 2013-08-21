@@ -14,7 +14,7 @@
 			':leftcmd': 	91
 			':rightcmd': 	93
 		
-		Character = String.Where (str) -> str.length == 1
+		Character = String.Where -> @length == 1
 		SpecialKey = String.Matching /:.+/
 		
 		# Tests: none

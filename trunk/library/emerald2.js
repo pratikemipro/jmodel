@@ -29,8 +29,8 @@ define(['jmodel/sapphire2'], function() {
     ':leftcmd': 91,
     ':rightcmd': 93
   };
-  Character = String.Where(function(str) {
-    return str.length === 1;
+  Character = String.Where(function() {
+    return this.length === 1;
   });
   SpecialKey = String.Matching(/:.+/);
   Event.key = Function.overload([

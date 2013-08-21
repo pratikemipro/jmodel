@@ -576,7 +576,7 @@
 		restricted = <span class="property">@post</span> (value) -&gt; <span class="keyword">throw</span> message.replace(<span class="string">'&lt;value&gt;'</span>,value) <span class="keyword">unless</span> predicate.call value, value
 		restricted.base = <span class="property">@base</span> <span class="keyword">or</span> <span class="keyword">this</span>
 		restricted[property] = value <span class="keyword">for</span> property, value <span class="keyword">of</span> restricted.base
-		restricted.valid = Object.isa(restricted.base).<span class="keyword">and</span> predicate
+		restricted.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(restricted.base)(value) <span class="keyword">and</span> predicate.call value, value
 		<span class="keyword">return</span> restricted</pre></div></div>
             
         </li>

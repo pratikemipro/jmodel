@@ -332,6 +332,6 @@
 			restricted = @post (value) -> throw message.replace('<value>',value) unless predicate.call value, value
 			restricted.base = @base or this
 			restricted[property] = value for property, value of restricted.base
-			restricted.valid = Object.isa(restricted.base).and predicate
+			restricted.valid = (value) -> Object.isa(restricted.base)(value) and predicate.call value, value
 			return restricted
 			

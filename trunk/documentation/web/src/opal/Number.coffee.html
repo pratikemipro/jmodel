@@ -101,11 +101,37 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value
+            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2>Predicates</h2>
 
-	Number::equals = Function.From(Number) (x) -&gt; Number(<span class="keyword">this</span>) == Number(x)
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Number::equals = Function.From(Number) (x) -&gt; Number(<span class="keyword">this</span>) == Number(x)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h2">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2>Operators</h2>
 
-	Number::plus= Function.From(Number) (x) -&gt; <span class="keyword">this</span> + x
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>	Number::plus= Function.From(Number) (x) -&gt; <span class="keyword">this</span> + x
 
 	Number::minus = Function.From(Number) (x) -&gt; <span class="keyword">this</span> - x
 
@@ -118,11 +144,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-4">
             <div class="annotation">
               
               <div class="pilwrap for-h2">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
               <h2>Restrictions</h2>
 
@@ -142,13 +168,13 @@
 	Number.Between = Function.From(Number,Number).To(Function) (min,max) -&gt;
 		<span class="property">@Where</span> Function.between(min,max), <span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
 
-	Number.Integer = Number.Where ( (value) -&gt; value == Math.round value ), <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	Number.Integer = Number.Where (-&gt; <span class="property">@equals</span> Math.round <span class="keyword">this</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
 
 	Number.Positive = Number.GreaterThan <span class="number">0</span>
 	Number.Negative = Number.LessThan <span class="number">0</span>
 
-	Number.Odd  = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">1</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
-	Number.Even = Number.Integer.Where ( (number) -&gt; number % <span class="number">2</span> == <span class="number">0</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
+	Number.Odd  = Number.Integer.Where (-&gt; <span class="number">1</span> == <span class="property">@mod</span> <span class="number">2</span>), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
+	Number.Even = Number.Integer.Where (-&gt; <span class="number">0</span> == <span class="property">@mod</span> <span class="number">2</span>), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
             
         </li>
         

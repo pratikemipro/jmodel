@@ -2,8 +2,15 @@
 
 		
 		Number.valid = (value) -> Object.isa(Number)(value) and not isNaN value
+
+## Predicates
+
 		
 		Number::equals = Function.From(Number) (x) -> Number(this) == Number(x)
+		
+
+## Operators
+
 		
 		Number::plus= Function.From(Number) (x) -> this + x
 		
@@ -34,11 +41,11 @@
 		Number.Between = Function.From(Number,Number).To(Function) (min,max) ->
 			@Where Function.between(min,max), "Invalid Value: <value> is not between #{min} and #{max}"
 		
-		Number.Integer = Number.Where ( (value) -> value == Math.round value ), "Invalid Value: <value> is not an integer"
+		Number.Integer = Number.Where (-> @equals Math.round this ), "Invalid Value: <value> is not an integer"
 	
 		Number.Positive = Number.GreaterThan 0
 		Number.Negative = Number.LessThan 0
 		
-		Number.Odd  = Number.Integer.Where ( (number) -> number % 2 == 1 ), "Invalid Value: <value> is not odd"
-		Number.Even = Number.Integer.Where ( (number) -> number % 2 == 0 ), "Invalid Value: <value> is not even"
+		Number.Odd  = Number.Integer.Where (-> 1 == @mod 2), "Invalid Value: <value> is not odd"
+		Number.Even = Number.Integer.Where (-> 0 == @mod 2), "Invalid Value: <value> is not even"
 		

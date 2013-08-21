@@ -816,7 +816,9 @@ define(function() {
       value = _ref[property];
       restricted[property] = value;
     }
-    restricted.valid = Object.isa(restricted.base).and(predicate);
+    restricted.valid = function(value) {
+      return Object.isa(restricted.base)(value) && predicate.call(value, value);
+    };
     return restricted;
   };
   window.Type = Type = function(constructor) {
@@ -1254,16 +1256,16 @@ define(function() {
   Number.Between = Function.From(Number, Number).To(Function)(function(min, max) {
     return this.Where(Function.between(min, max), "Invalid Value: <value> is not between " + min + " and " + max);
   });
-  Number.Integer = Number.Where((function(value) {
-    return value === Math.round(value);
+  Number.Integer = Number.Where((function() {
+    return this.equals(Math.round(this));
   }), "Invalid Value: <value> is not an integer");
   Number.Positive = Number.GreaterThan(0);
   Number.Negative = Number.LessThan(0);
-  Number.Odd = Number.Integer.Where((function(number) {
-    return number % 2 === 1;
+  Number.Odd = Number.Integer.Where((function() {
+    return 1 === this.mod(2);
   }), "Invalid Value: <value> is not odd");
-  Number.Even = Number.Integer.Where((function(number) {
-    return number % 2 === 0;
+  Number.Even = Number.Integer.Where((function() {
+    return 0 === this.mod(2);
   }), "Invalid Value: <value> is not even");
   String.concat = Function.From([String]).To(String)(function() {
     var first, rest;
@@ -1277,8 +1279,8 @@ define(function() {
   String.In = Function.From([String]).To(Function)(function() {
     var string, strings;
     strings = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-    return this.Where(function(str) {
-      return __indexOf.call(strings, str) >= 0;
+    return this.Where(function() {
+      return __indexOf.call(strings, this) >= 0;
     }, "Invalid String: \"<value>\" is not in {" + (((function() {
       var _i, _len, _results;
       _results = [];
@@ -1290,8 +1292,8 @@ define(function() {
     })()).join(',')) + "}");
   });
   String.Matching = Function.From(RegExp).To(Function)(function(regex) {
-    return this.Where(function(str) {
-      return regex.test(str);
+    return this.Where(function() {
+      return regex.test(this);
     }, "Invalid String: \"<value>\" does not match " + (regex.toString()));
   });
   Boolean.True = function() {
