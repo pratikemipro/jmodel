@@ -119,9 +119,8 @@
 			<span class="keyword">return</span> <span class="property">@length</span> <span class="keyword">if</span> predicate == <span class="literal">undefined</span>
 			<span class="property">@reduce</span> Array.count(predicate), <span class="number">0</span>
 
-		where: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> Set ) \
-			(set) -&gt; (predicate) -&gt;
-				set.add element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate element
+		where: Function.From(Function) (predicate) -&gt;
+			<span class="keyword">new</span> <span class="property">@constructor</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate.call element, element )
 
 		each: Function.From(Function) (fn) -&gt;
 			fn element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
