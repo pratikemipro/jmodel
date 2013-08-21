@@ -2105,11 +2105,11 @@ define(['jmodel/topaz2'], function() {
     stream = new Stream();
     output1 = [];
     output2 = [];
-    stream.each(function(obj) {
-      return output1.push(obj);
+    stream.each(function() {
+      return output1.push(this);
     });
-    stream.take(3).each(function(obj) {
-      return output2.push(obj);
+    stream.take(3).each(function() {
+      return output2.push(this);
     });
     stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
@@ -2120,11 +2120,11 @@ define(['jmodel/topaz2'], function() {
     stream = new Stream();
     output1 = [];
     output2 = [];
-    stream.each(function(obj) {
-      return output1.push(obj);
+    stream.each(function() {
+      return output1.push(this);
     });
-    stream.drop(3).each(function(obj) {
-      return output2.push(obj);
+    stream.drop(3).each(function() {
+      return output2.push(this);
     });
     stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
@@ -2134,8 +2134,8 @@ define(['jmodel/topaz2'], function() {
     var output, stream;
     stream = new Stream();
     output = [];
-    stream.transition().each(function(obj) {
-      return output.push(obj);
+    stream.transition().each(function() {
+      return output.push(this);
     });
     stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1);
     deepEqual(output, [3, 2, 5, 1], 'Transition stream only contains distinct values');
@@ -2148,8 +2148,8 @@ define(['jmodel/topaz2'], function() {
     data = new Stream();
     control = new Stream();
     output = [];
-    data.control(control).each(function(item) {
-      return output.push(item);
+    data.control(control).each(function() {
+      return output.push(this);
     });
     data.add('red');
     data.add('green');
@@ -2168,8 +2168,8 @@ define(['jmodel/topaz2'], function() {
     start = new Stream();
     stop = new Stream();
     output = [];
-    data.between(start, stop).each(function(item) {
-      return output.push(item);
+    data.between(start, stop).each(function() {
+      return output.push(this);
     });
     data.add('red');
     data.add('green');
@@ -2187,15 +2187,15 @@ define(['jmodel/topaz2'], function() {
     var numbers, output;
     numbers = new Stream();
     output = [];
-    numbers.accumulate(Math.plus).each(function(item) {
-      return output.push(item);
+    numbers.accumulate(Math.plus).each(function() {
+      return output.push(this);
     });
     numbers.add(1).add(2).add(3).add(4).add(5).add(6);
     deepEqual(output, [1, 3, 6, 10, 15, 21], 'Accumulates correctly');
     numbers = new Stream();
     output = [];
-    numbers.accumulate(Math.plus, 10).each(function(item) {
-      return output.push(item);
+    numbers.accumulate(Math.plus, 10).each(function() {
+      return output.push(this);
     });
     numbers.add(1).add(2).add(3).add(4).add(5).add(6);
     return deepEqual(output, [11, 13, 16, 20, 25, 31], 'Starts with initial value');
@@ -2205,8 +2205,8 @@ define(['jmodel/topaz2'], function() {
     colours1 = new Stream();
     colours2 = new Stream();
     output = [];
-    Stream.disjoin(colours1, colours2).each(function(item) {
-      return output.push(item);
+    Stream.disjoin(colours1, colours2).each(function() {
+      return output.push(this);
     });
     colours1.add('red');
     colours2.add('cyan');
