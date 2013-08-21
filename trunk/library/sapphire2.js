@@ -583,7 +583,7 @@ define(['jmodel/opal2'], function() {
         return _this.derive(function() {
           var args;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return this.add(acc = reduction.apply(this, [acc].concat(__slice.call(args))));
+          return this.add(acc = reduction.call.apply(reduction, [this, acc].concat(__slice.call(args))));
         });
       })(initial);
     });
