@@ -1582,8 +1582,8 @@ define(['jmodel/topaz2'], function() {
     var numbers, output;
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     output = [];
-    numbers.each(function(x) {
-      return output.push(x);
+    numbers.each(function() {
+      return output.push(this);
     });
     return deepEqual(output, [1, 2, 3, 4, 5, 6, 7, 8], 'Function is called for each element of set');
   });
