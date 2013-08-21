@@ -75,7 +75,7 @@
 		numbers = new Set [1,2,3,4,5,6,7,8]
 		output  = []
 		
-		numbers.each (x) -> output.push x
+		numbers.each -> output.push this
 		
 		deepEqual output, [1,2,3,4,5,6,7,8], 'Function is called for each element of set'
 		
