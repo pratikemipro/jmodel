@@ -64,9 +64,9 @@
 		output1 = []
 		output2 = []
 		
-		stream.each (obj) -> output1.push obj
+		stream.each -> output1.push this
 		
-		stream.take(3).each (obj) -> output2.push obj
+		stream.take(3).each -> output2.push this
 		
 		stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow')
 		
@@ -79,9 +79,9 @@
 		output1 = []
 		output2 = []
 	
-		stream.each (obj) -> output1.push obj
+		stream.each -> output1.push this
 	
-		stream.drop(3).each (obj) -> output2.push obj
+		stream.drop(3).each -> output2.push this
 	
 		stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow')
 	
@@ -93,7 +93,7 @@
 		stream = new Stream()
 		output = []
 		
-		stream.transition().each (obj) -> output.push obj
+		stream.transition().each -> output.push this
 		
 		stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1)
 		
@@ -111,7 +111,7 @@
 		control = new Stream()
 
 		output = []
-		data.control(control).each (item) -> output.push item
+		data.control(control).each -> output.push this
 		
 		data.add 'red'
 		data.add 'green'
@@ -132,7 +132,7 @@
 		stop  = new Stream()
 		
 		output = []
-		data.between(start,stop).each (item) -> output.push item
+		data.between(start,stop).each -> output.push this
 		
 		data.add 'red'
 		data.add 'green'
@@ -152,7 +152,7 @@
 		numbers = new Stream()
 		
 		output = []
-		numbers.accumulate(Math.plus).each (item) -> output.push item
+		numbers.accumulate(Math.plus).each -> output.push this
 		
 		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
 		
@@ -161,7 +161,7 @@
 		numbers = new Stream()
 		
 		output = []
-		numbers.accumulate(Math.plus,10).each (item) -> output.push item
+		numbers.accumulate(Math.plus,10).each -> output.push this
 		
 		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
 		
@@ -173,7 +173,7 @@
 		colours2 = new Stream()
 		
 		output = []
-		Stream.disjoin(colours1,colours2).each (item) -> output.push item
+		Stream.disjoin(colours1,colours2).each -> output.push this
 		
 		colours1.add 'red'
 		colours2.add 'cyan'
