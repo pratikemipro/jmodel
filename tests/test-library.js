@@ -1189,6 +1189,55 @@ define(['jmodel/topaz2'], function() {
     return equal(john.department, 'Marketing', 'Defaults can be overriden');
   });
   module('Number');
+  test('Number::equals', function() {
+    var num;
+    num = 3;
+    equals(num.equals(2), false, 'Returns false if argument is not equal to number');
+    equals(num.equals(3), true, 'Returns true if argument is equal to number');
+    return raises((function() {
+      return num.equals('red');
+    }), 'Throws an exception when called with a non-number');
+  });
+  test('Number::plus', function() {
+    var num;
+    num = 3;
+    equals(num.plus(2), 5, 'Returns sum of argument and number');
+    return raises((function() {
+      return num.plus('red');
+    }), 'Throws an exception when called with a non-number');
+  });
+  test('Number::minus', function() {
+    var num;
+    num = 3;
+    equals(num.minus(2), 1, 'Returns difference of argument and number');
+    return raises((function() {
+      return num.minus('red');
+    }), 'Throws an exception when called with a non-number');
+  });
+  test('Number::times', function() {
+    var num;
+    num = 3;
+    equals(num.times(2), 6, 'Returns product of argument and number');
+    return raises((function() {
+      return num.times('red');
+    }), 'Throws an exception when called with a non-number');
+  });
+  test('Number::div', function() {
+    var num;
+    num = 3;
+    equals(num.div(2), 1.5, 'Returns quotient of argument and number');
+    return raises((function() {
+      return num.div('red');
+    }), 'Throws an exception when called with a non-number');
+  });
+  test('Number::mod', function() {
+    var num;
+    num = 3;
+    equals(num.mod(2), 1, 'Returns number modulo argument');
+    return raises((function() {
+      return num.mod('red');
+    }), 'Throws an exception when called with a non-number');
+  });
   test('Integer', function() {
     equals(Number.Integer(5), 5, 'Returns the integer value when called on an integer.');
     return raises((function() {

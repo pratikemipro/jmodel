@@ -101,7 +101,19 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value
+
+	Number::equals = Function.From(Number) (x) -&gt; Number(<span class="keyword">this</span>) == Number(x)
+
+	Number::plus= Function.From(Number) (x) -&gt; <span class="keyword">this</span> + x
+
+	Number::minus = Function.From(Number) (x) -&gt; <span class="keyword">this</span> - x
+
+	Number::times = Function.From(Number) (x) -&gt; <span class="keyword">this</span> * x
+
+	Number::div =  Function.From(Number) (x) -&gt; <span class="keyword">this</span> / x
+
+	Number::mod =  Function.From(Number)  (x) -&gt; <span class="keyword">this</span> % x</pre></div></div>
             
         </li>
         
