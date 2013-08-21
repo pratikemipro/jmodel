@@ -150,7 +150,7 @@ define(['jmodel/opal2'], function() {
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           element = this[_i];
-          _results.push(map.add(key(element), element));
+          _results.push(map.add(key.call(element, element), element));
         }
         return _results;
       };

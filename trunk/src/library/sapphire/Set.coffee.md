@@ -43,7 +43,7 @@
 			partition: Function.From(Function).Returning(-> new ( Map.To(Set).Using Set.union ) ) \
 				 (map) -> (key) ->
 					 for element in this
-						 map.add key(element), element
+						 map.add key.call(element,element), element
 					 
 
 ## Comparisons

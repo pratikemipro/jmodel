@@ -131,7 +131,7 @@
 		partition: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> ( Map.To(Set).Using Set.union ) ) \
 			 (map) -&gt; (key) -&gt;
 				 <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
-					 map.add key(element), element</pre></div></div>
+					 map.add key.call(element,element), element</pre></div></div>
             
         </li>
         
