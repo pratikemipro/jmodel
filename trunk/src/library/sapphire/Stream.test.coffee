@@ -37,9 +37,7 @@
 		stream = new Stream()
 		output = []
 		
-		odd = (x) -> x % 2 == 1
-		
-		stream.map(odd).each (item) -> output.push item
+		stream.map(-> 1 == @mod 2).each (item) -> output.push item
 		
 		stream.add(1).add(2).add(3).add(4).add(5).add(6)
 		

@@ -27,7 +27,7 @@
 
 			
 			map: Function.From(Function).To(Stream) \
-				(fn) -> @derive (args...) -> @add fn args...
+				(fn) -> @derive (first,rest...) -> @add fn.call first, first, rest...
 			
 			where: Function.From(Function).To(Stream) \
 				(predicate) -> @derive (args...) ->

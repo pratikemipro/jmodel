@@ -2072,13 +2072,12 @@ define(['jmodel/topaz2'], function() {
     return equal(john.name, 'john', 'Passes arguments to constructors correctly');
   });
   test('Stream::map', function() {
-    var odd, output, stream;
+    var output, stream;
     stream = new Stream();
     output = [];
-    odd = function(x) {
-      return x % 2 === 1;
-    };
-    stream.map(odd).each(function(item) {
+    stream.map(function() {
+      return 1 === this.mod(2);
+    }).each(function(item) {
       return output.push(item);
     });
     stream.add(1).add(2).add(3).add(4).add(5).add(6);

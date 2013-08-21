@@ -521,9 +521,9 @@ define(['jmodel/opal2'], function() {
 
     Stream.prototype.map = Function.From(Function).To(Stream)(function(fn) {
       return this.derive(function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return this.add(fn.apply(null, args));
+        var first, rest;
+        first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+        return this.add(fn.call.apply(fn, [first, first].concat(__slice.call(rest))));
       });
     });
 
