@@ -146,13 +146,11 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="property">@subset</span>: Predicate.From(Set,Set) \
-			(first,second) -&gt;
-				Array.reduce(Boolean.<span class="keyword">and</span>) ( second.member element <span class="keyword">for</span> element <span class="keyword">in</span> first )
+            <div class="content"><div class='highlight'><pre>		<span class="property">@subset</span>: Predicate.From(Set,Set) (first,second) -&gt;
+			Array.reduce(Boolean.<span class="keyword">and</span>) ( second.member element <span class="keyword">for</span> element <span class="keyword">in</span> first )
 
-		<span class="property">@equal</span>: Predicate.From(Set,Set) \
-			(first,second) -&gt;
-				first.count() == second.count() <span class="keyword">and</span> Set.subset(first,second) <span class="keyword">and</span> Set.subset(second,first)</pre></div></div>
+		<span class="property">@equal</span>: Predicate.From(Set,Set) (first,second) -&gt;
+			first.count() == second.count() <span class="keyword">and</span> Set.subset(first,second) <span class="keyword">and</span> Set.subset(second,first)</pre></div></div>
             
         </li>
         

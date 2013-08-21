@@ -13,7 +13,7 @@
 				-1 != Array::indexOf.call this, element
 		
 			where: Function.From(Function) (predicate) ->
-				new @constructor ( element for element in this when predicate element )
+				new @constructor ( element for element in this when predicate.call element, element )
 				
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )

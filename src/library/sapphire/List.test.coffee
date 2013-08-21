@@ -3,9 +3,7 @@
 	test 'List::where', ->
 		
 		numbers = new List [1,2,3,4,5,6,7,8,9]
-		odd = (x) -> x % 2 == 1
-		
-		odds = numbers.where odd
+		odds = numbers.where -> 1 == @mod 2
 		
 		deepEqual ( number for number in odds ), [1,3,5,7,9], 'Filtered list contains correct elements'
 		deepEqual ( number for number in numbers ), [1,2,3,4,5,6,7,8,9], 'Leaves original set unchanged'
@@ -16,7 +14,7 @@
 	test 'List::map', ->
 		
 		numbers = new List [1,2,3,4,5,6,7,8,9]
-		squares = numbers.map (x) -> x*x
+		squares = numbers.map -> this * this
 		
 		deepEqual ( number for number in squares ), [1,4,9,16,25,36,49,64,81], 'Mapped set contains correct elements'
 		deepEqual ( number for number in numbers ), [1,2,3,4,5,6,7,8,9], 'Leaves original set unchanged'
