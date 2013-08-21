@@ -1552,8 +1552,8 @@ define(['jmodel/topaz2'], function() {
   test('Set::where', function() {
     var evens, number, numbers;
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
-    evens = numbers.where(function(x) {
-      return x % 2 === 0;
+    evens = numbers.where(function() {
+      return 0 === this.mod(2);
     });
     deepEqual((function() {
       var _i, _len, _results;

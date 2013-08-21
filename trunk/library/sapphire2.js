@@ -113,20 +113,19 @@ define(['jmodel/opal2'], function() {
       return this.reduce(Array.count(predicate), 0);
     });
 
-    Set.prototype.where = Function.From(Function).Returning(function() {
-      return new Set;
-    })(function(set) {
-      return function(predicate) {
-        var element, _i, _len, _results;
+    Set.prototype.where = Function.From(Function)(function(predicate) {
+      var element;
+      return new this.constructor((function() {
+        var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           element = this[_i];
-          if (predicate(element)) {
-            _results.push(set.add(element));
+          if (predicate.call(element, element)) {
+            _results.push(element);
           }
         }
         return _results;
-      };
+      }).call(this));
     });
 
     Set.prototype.each = Function.From(Function)(function(fn) {

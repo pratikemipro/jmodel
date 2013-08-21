@@ -31,12 +31,11 @@
 				return @length if predicate == undefined
 				@reduce Array.count(predicate), 0
 			
-			where: Function.From(Function).Returning(-> new Set ) \
-				(set) -> (predicate) ->
-					set.add element for element in this when predicate element
+			where: Function.From(Function) (predicate) ->
+				new @constructor ( element for element in this when predicate.call element, element )
 			
 			each: Function.From(Function) (fn) ->
-				fn element for element in this
+				fn.call element, element for element in this
 			
 			reduce: Function.From(Function,Maybe Value) (reduction,initial) ->
 				Array::reduce.apply this, [reduction, (if initial? then [initial] else [])...]
