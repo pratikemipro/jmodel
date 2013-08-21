@@ -1544,8 +1544,8 @@ define(['jmodel/topaz2'], function() {
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
     empty = new Set([]);
     equals(numbers.count(), 8, 'Returns cardinality of set when called without a predicate');
-    equals(numbers.count(function(x) {
-      return x % 2 === 0;
+    equals(numbers.count(function() {
+      return 0 === this.mod(2);
     }), 4, 'Returns number of elements matching predicate when called with predicate');
     return equals(empty.count(), 0, 'Empty set is empty');
   });

@@ -56,7 +56,7 @@
 		empty   = new Set [] 
 		
 		equals numbers.count(), 8, 'Returns cardinality of set when called without a predicate'
-		equals numbers.count((x) -> x % 2 == 0), 4, 'Returns number of elements matching predicate when called with predicate'
+		equals numbers.count(-> 0 == @mod 2), 4, 'Returns number of elements matching predicate when called with predicate'
 		equals empty.count(), 0, 'Empty set is empty'
 		
 	test 'Set::where', ->

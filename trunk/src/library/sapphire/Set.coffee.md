@@ -29,8 +29,7 @@
 			
 			count: Function.From(Maybe Function).To(Number) (predicate) ->
 				return @length if predicate == undefined
-				reduction = (sum,element) -> sum += if predicate element then 1 else 0 
-				@reduce reduction, 0
+				@reduce Array.count(predicate), 0
 			
 			where: Function.From(Function).Returning(-> new Set ) \
 				(set) -> (predicate) ->

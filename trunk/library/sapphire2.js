@@ -107,14 +107,10 @@ define(['jmodel/opal2'], function() {
     });
 
     Set.prototype.count = Function.From(Maybe(Function)).To(Number)(function(predicate) {
-      var reduction;
       if (predicate === void 0) {
         return this.length;
       }
-      reduction = function(sum, element) {
-        return sum += predicate(element) ? 1 : 0;
-      };
-      return this.reduce(reduction, 0);
+      return this.reduce(Array.count(predicate), 0);
     });
 
     Set.prototype.where = Function.From(Function).Returning(function() {
