@@ -1860,12 +1860,11 @@ define(['jmodel/topaz2'], function() {
   });
   module('List');
   test('List::where', function() {
-    var number, numbers, odd, odds;
+    var number, numbers, odds;
     numbers = new List([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    odd = function(x) {
-      return x % 2 === 1;
-    };
-    odds = numbers.where(odd);
+    odds = numbers.where(function() {
+      return 1 === this.mod(2);
+    });
     deepEqual((function() {
       var _i, _len, _results;
       _results = [];
@@ -1892,8 +1891,8 @@ define(['jmodel/topaz2'], function() {
   test('List::map', function() {
     var number, numbers, squares;
     numbers = new List([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-    squares = numbers.map(function(x) {
-      return x * x;
+    squares = numbers.map(function() {
+      return this * this;
     });
     deepEqual((function() {
       var _i, _len, _results;

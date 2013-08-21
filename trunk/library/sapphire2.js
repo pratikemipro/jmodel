@@ -309,7 +309,7 @@ define(['jmodel/opal2'], function() {
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
           element = this[_i];
-          if (predicate(element)) {
+          if (predicate.call(element, element)) {
             _results.push(element);
           }
         }
