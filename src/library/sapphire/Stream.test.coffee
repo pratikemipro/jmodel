@@ -49,11 +49,9 @@
 		output1 = []
 		output2 = []
 		
-		odd = (x) -> x % 2 == 1
+		stream.each -> output1.push this
 		
-		stream.each (obj) -> output1.push obj
-		
-		stream.where(odd).each (obj) -> output2.push obj
+		stream.where(-> 1 == @mod 2).each -> output2.push this
 		
 		stream.add(1).add(2).add(3).add(4).add(5).add(6)
 		
