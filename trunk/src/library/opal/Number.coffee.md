@@ -2,6 +2,19 @@
 
 		
 		Number.valid = (value) -> Object.isa(Number)(value) and not isNaN value
+		
+		Number::equals = Function.From(Number) (x) -> Number(this) == Number(x)
+		
+		Number::plus= Function.From(Number) (x) -> this + x
+		
+		Number::minus = Function.From(Number) (x) -> this - x
+		
+		Number::times = Function.From(Number) (x) -> this * x
+		
+		Number::div =  Function.From(Number) (x) -> this / x
+		
+		Number::mod =  Function.From(Number)  (x) -> this % x
+		
 	
 
 ## Restrictions

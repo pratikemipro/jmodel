@@ -1212,6 +1212,24 @@ define(function() {
   Number.valid = function(value) {
     return Object.isa(Number)(value) && !isNaN(value);
   };
+  Number.prototype.equals = Function.From(Number)(function(x) {
+    return Number(this) === Number(x);
+  });
+  Number.prototype.plus = Function.From(Number)(function(x) {
+    return this + x;
+  });
+  Number.prototype.minus = Function.From(Number)(function(x) {
+    return this - x;
+  });
+  Number.prototype.times = Function.From(Number)(function(x) {
+    return this * x;
+  });
+  Number.prototype.div = Function.From(Number)(function(x) {
+    return this / x;
+  });
+  Number.prototype.mod = Function.From(Number)(function(x) {
+    return this % x;
+  });
   Number.In = Function.From([Number]).To(Function)(function() {
     var number, numbers;
     numbers = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
