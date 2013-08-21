@@ -1596,19 +1596,14 @@ define(['jmodel/topaz2'], function() {
     return equal(empty.reduce(Math.plus, 0), 0, 'Works with empty set and initial value');
   });
   test('Set::partition', function() {
-    var even, key, number, numbers, partition;
+    var number, numbers, partition;
     numbers = new Set([1, 2, 3, 4, 5, 6, 7, 8]);
-    even = function(x) {
-      return x % 2 === 0;
-    };
-    key = function(x) {
-      if (even(x)) {
-        return 'even';
-      } else {
-        return 'odd';
-      }
-    };
-    partition = numbers.partition(key);
+    partition = numbers.partition((function() {
+      return 0 === this.mod(2);
+    }).map({
+      "true": 'even',
+      "false": 'odd'
+    }));
     deepEqual(((function() {
       var _i, _len, _ref, _results;
       _ref = partition.get('even');

@@ -91,12 +91,8 @@
 	test 'Set::partition', ->
 		
 		numbers = new Set [1,2,3,4,5,6,7,8]
-		
-		even = (x) -> x % 2 == 0
-		
-		key = (x) -> if even x then 'even' else 'odd'
-		
-		partition = numbers.partition key
+
+		partition = numbers.partition (-> 0 == @mod 2).map true: 'even', false: 'odd'
 		
 		deepEqual ( number for number in partition.get 'even' ).sort(), [2,4,6,8], 'Produces correct value for key'
 		
