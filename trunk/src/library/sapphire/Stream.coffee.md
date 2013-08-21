@@ -30,8 +30,8 @@
 				(fn) -> @derive (first,rest...) -> @add fn.call first, first, rest...
 			
 			where: Function.From(Function).To(Stream) \
-				(predicate) -> @derive (args...) ->
-					@add args... if predicate args...
+				(predicate) -> @derive (first,rest...) ->
+					@add first, rest... if predicate.call first, first, rest...
 			
 			take: Function.From(Number).To(Stream) \
 				(number) -> @where -> number-- > 0

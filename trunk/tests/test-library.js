@@ -2084,18 +2084,17 @@ define(['jmodel/topaz2'], function() {
     return deepEqual(output, [true, false, true, false, true, false], 'Correctly applies map');
   });
   test('Stream::where', function() {
-    var odd, output1, output2, stream;
+    var output1, output2, stream;
     stream = new Stream();
     output1 = [];
     output2 = [];
-    odd = function(x) {
-      return x % 2 === 1;
-    };
-    stream.each(function(obj) {
-      return output1.push(obj);
+    stream.each(function() {
+      return output1.push(this);
     });
-    stream.where(odd).each(function(obj) {
-      return output2.push(obj);
+    stream.where(function() {
+      return 1 === this.mod(2);
+    }).each(function() {
+      return output2.push(this);
     });
     stream.add(1).add(2).add(3).add(4).add(5).add(6);
     deepEqual(output1, [1, 2, 3, 4, 5, 6], 'Behaviour of base stream is unaffected');

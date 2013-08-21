@@ -118,8 +118,8 @@
 			(fn) -&gt; <span class="property">@derive</span> (first,rest...) -&gt; <span class="property">@add</span> fn.call first, first, rest...
 
 		where: Function.From(Function).To(Stream) \
-			(predicate) -&gt; <span class="property">@derive</span> (args...) -&gt;
-				<span class="property">@add</span> args... <span class="keyword">if</span> predicate args...
+			(predicate) -&gt; <span class="property">@derive</span> (first,rest...) -&gt;
+				<span class="property">@add</span> first, rest... <span class="keyword">if</span> predicate.call first, first, rest...
 
 		take: Function.From(Number).To(Stream) \
 			(number) -&gt; <span class="property">@where</span> -&gt; number-- &gt; <span class="number">0</span>
