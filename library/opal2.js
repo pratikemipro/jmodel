@@ -806,7 +806,7 @@ define(function() {
       message = 'Invalid value';
     }
     restricted = this.post(function(value) {
-      if (!predicate(value)) {
+      if (!predicate.call(value, value)) {
         throw message.replace('<value>', value);
       }
     });
