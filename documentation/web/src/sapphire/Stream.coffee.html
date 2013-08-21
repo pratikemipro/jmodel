@@ -76,7 +76,7 @@
 		constructor: -&gt;
 			<span class="property">@fns</span> = []
 
-		add: Function.Chaining (args...) -&gt; fn args... <span class="keyword">for</span> fn <span class="keyword">in</span> <span class="property">@fns</span>
+		add: Function.Chaining (first,rest...) -&gt; fn.call first, first, rest... <span class="keyword">for</span> fn <span class="keyword">in</span> <span class="property">@fns</span>
 
 		each: Function.From(Function) \
 			(fn) -&gt; <span class="property">@fns</span>.push fn

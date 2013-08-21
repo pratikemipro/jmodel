@@ -2045,11 +2045,11 @@ define(['jmodel/topaz2'], function() {
     stream = new Stream();
     output1 = [];
     output2 = [];
-    stream.each(function(obj) {
-      return output1.push(obj);
+    stream.each(function() {
+      return output1.push(this);
     });
-    stream.each(function(obj) {
-      return output2.push("<" + obj + ">");
+    stream.each(function() {
+      return output2.push("<" + this + ">");
     });
     stream.add('red').add('green').add('blue');
     deepEqual(output1, ['red', 'green', 'blue'], 'Items added to stream are passed to each');

@@ -479,13 +479,13 @@ define(['jmodel/opal2'], function() {
     }
 
     Stream.prototype.add = Function.Chaining(function() {
-      var args, fn, _i, _len, _ref, _results;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      var first, fn, rest, _i, _len, _ref, _results;
+      first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
       _ref = this.fns;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         fn = _ref[_i];
-        _results.push(fn.apply(null, args));
+        _results.push(fn.call.apply(fn, [first, first].concat(__slice.call(rest))));
       }
       return _results;
     });
