@@ -115,7 +115,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>		map: Function.From(Function).To(Stream) \
-			(fn) -&gt; <span class="property">@derive</span> (args...) -&gt; <span class="property">@add</span> fn args...
+			(fn) -&gt; <span class="property">@derive</span> (first,rest...) -&gt; <span class="property">@add</span> fn.call first, first, rest...
 
 		where: Function.From(Function).To(Stream) \
 			(predicate) -&gt; <span class="property">@derive</span> (args...) -&gt;
