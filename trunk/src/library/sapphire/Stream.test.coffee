@@ -6,9 +6,9 @@
 		output1 = []
 		output2 = []
 		
-		stream.each (obj) -> output1.push obj
+		stream.each -> output1.push this
 		
-		stream.each (obj) -> output2.push "<#{obj}>"
+		stream.each -> output2.push "<#{this}>"
 		
 		stream.add('red').add('green').add('blue')
 		

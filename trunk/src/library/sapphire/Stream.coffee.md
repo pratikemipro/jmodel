@@ -6,7 +6,7 @@
 			constructor: ->
 				@fns = []
 			
-			add: Function.Chaining (args...) -> fn args... for fn in @fns
+			add: Function.Chaining (first,rest...) -> fn.call first, first, rest... for fn in @fns
 			
 			each: Function.From(Function) \
 				(fn) -> @fns.push fn
