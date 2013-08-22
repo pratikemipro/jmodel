@@ -305,7 +305,22 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 	//
 		
 	function Entities (constructor,superType) {
+		
 		ObservableTypedSet.call(this,constructor);
+		
+		this.events.add('dirty');
+		
+		this.event('change')
+			.subscribe({
+				context: this,
+				message: function () {
+					this.event('dirty').raise(0 !== this.count(function (object) {
+						return object.state.dirty();
+					}));
+				}
+			});
+		
+		
 /*			if ( super ) {
 			var constraint = new TypeInclusionConstraint(this,super);
 		} */
