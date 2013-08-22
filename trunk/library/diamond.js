@@ -116,6 +116,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 			ObservableObject.call(this,fields,options);
 			
 			this.events.add('dirty');
+			this.events.add('checkpoint');
 			
 			this.state = new ObservableObject({
 				dirty: Boolean(false)
@@ -173,6 +174,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 				}
 			}
 			this.state.dirty(false);
+			this.event('checkpoint').raise();
 		}
 		
 		entityType.prototype.checkpointed = function(field) {
@@ -309,6 +311,7 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 		ObservableTypedSet.call(this,constructor);
 		
 		this.events.add('dirty');
+		this.events.add('checkpoint');
 		
 		this.event('change')
 			.subscribe({
@@ -319,6 +322,19 @@ define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 					}));
 				}
 			});
+			
+		disjoin(
+			this.event('add'),
+			this.event('replace'),
+			this.event('insert')
+		)			
+		.subscribe({
+			context: this.event('checkpoint'),
+			message: function (object) {
+				object.event('checkpoint')
+			    	.republish(this); 
+			}
+		});
 		
 		
 /*			if ( super ) {
