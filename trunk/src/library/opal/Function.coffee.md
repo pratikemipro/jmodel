@@ -37,7 +37,10 @@
 		Function::then = (fn2) ->
 			throw 'Precondition failure' unless typeof fn2 == 'function'
 			fn1 = this
-			(args...) -> fn2.call this, fn1.apply(this,args)
+			(first,rest...) ->
+				context = if this != window then this ? first else first
+				val1 = fn1.call context, first, rest...
+				fn2.call val1, val1 
 		
 		Function::but = (fn2) ->
 			throw 'Precondition failure' unless typeof fn2 == 'function'

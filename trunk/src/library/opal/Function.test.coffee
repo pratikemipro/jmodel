@@ -94,6 +94,9 @@
 		equals Function.pipe()(7), 7, 'pipe of no functions is identity'
 		
 		raises ( -> Function.pipe times2, 7 ), 'Raises an exception if argument is not a function'
+		
+		pipe = Function.pipe (-> this*2), (-> this+10)
+		equals pipe(7), 24, 'Passes first argument or return value as context'
 
 	test 'Function.compose', ->
 	
