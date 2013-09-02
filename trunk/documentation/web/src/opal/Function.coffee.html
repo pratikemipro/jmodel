@@ -156,7 +156,8 @@
 		<span class="keyword">throw</span> <span class="string">'Precondition failure'</span> <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
 		fn1 = <span class="keyword">this</span>
 		(first,rest...) -&gt;
-			val1 = fn1.call (<span class="keyword">if</span> <span class="keyword">this</span> != window <span class="keyword">then</span> <span class="keyword">this</span> ? first <span class="keyword">else</span> first), first, rest...
+			context = <span class="keyword">if</span> <span class="keyword">this</span> != window <span class="keyword">then</span> <span class="keyword">this</span> ? first <span class="keyword">else</span> first
+			val1 = fn1.call context, first, rest...
 			fn2.call val1, val1 
 
 	Function::<span class="function"><span class="title">but</span></span> = (fn2) -&gt;
