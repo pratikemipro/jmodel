@@ -213,9 +213,9 @@ define(['jmodel/topaz2'], function() {
       return Function.pipe(times2, 7);
     }), 'Raises an exception if argument is not a function');
     pipe = Function.pipe((function() {
-      return this * 2;
+      return this.times(2);
     }), (function() {
-      return this + 10;
+      return this.plus(10);
     }));
     return equals(pipe(7), 24, 'Passes first argument or return value as context');
   });

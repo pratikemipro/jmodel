@@ -95,7 +95,7 @@
 		
 		raises ( -> Function.pipe times2, 7 ), 'Raises an exception if argument is not a function'
 		
-		pipe = Function.pipe (-> this*2), (-> this+10)
+		pipe = Function.pipe (-> @times 2), (-> @plus 10)
 		equals pipe(7), 24, 'Passes first argument or return value as context'
 
 	test 'Function.compose', ->

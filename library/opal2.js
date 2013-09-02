@@ -341,10 +341,11 @@ define(function() {
     }
     fn1 = this;
     return function() {
-      var first, rest, val1;
+      var context, first, rest, val1;
 
       first = arguments[0], rest = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      val1 = fn1.call.apply(fn1, [(this !== window ? typeof this !== "undefined" && this !== null ? this : first : first), first].concat(__slice.call(rest)));
+      context = this !== window ? typeof this !== "undefined" && this !== null ? this : first : first;
+      val1 = fn1.call.apply(fn1, [context, first].concat(__slice.call(rest)));
       return fn2.call(val1, val1);
     };
   };
