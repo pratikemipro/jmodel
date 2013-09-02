@@ -220,7 +220,7 @@ define(['jmodel/topaz2'], function() {
     return equals(pipe(7), 24, 'Passes first argument or return value as context');
   });
   test('Function.compose', function() {
-    var addten, times2;
+    var addten, composition, times2;
 
     times2 = function(x) {
       return 2 * x;
@@ -232,6 +232,12 @@ define(['jmodel/topaz2'], function() {
     equals(Function.compose(addten, times2)(7), 24, 'composition works in opposite direction');
     equals(Function.compose(times2)(7), 14, 'composition of a single function is just that function');
     equals(Function.compose()(7), 7, 'composition of no functions is identity');
+    composition = Function.compose((function() {
+      return this.times(2);
+    }), (function() {
+      return this.plus(10);
+    }));
+    equals(composition(7), 34, 'Passes first argument or return value as context');
     return raises((function() {
       return Function.compose(times2, 7);
     }), 'Raises an exception if argument is not a function');

@@ -108,6 +108,9 @@
 		equals Function.compose(times2)(7), 14, 'composition of a single function is just that function'
 		equals Function.compose()(7), 7, 'composition of no functions is identity'
 		
+		composition = Function.compose (-> @times 2), (-> @plus 10)
+		equals composition(7), 34, 'Passes first argument or return value as context'
+		
 		raises ( -> Function.compose times2, 7 ), 'Raises an exception if argument is not a function'
 	
 	module 'Aspect-like methods'
