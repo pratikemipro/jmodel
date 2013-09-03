@@ -22,7 +22,8 @@
 		
 		Number::mod =  Function.From(Number)  (x) -> this % x
 		
-	
+		Number::map = Function.From(Function) (fn) -> fn.call this, this
+		
 
 ## Restrictions
 

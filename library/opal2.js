@@ -1333,6 +1333,9 @@ define(function() {
   Number.prototype.mod = Function.From(Number)(function(x) {
     return this % x;
   });
+  Number.prototype.map = Function.From(Function)(function(fn) {
+    return fn.call(this, this);
+  });
   Number.In = Function.From([Number]).To(Function)(function() {
     var number, numbers;
 

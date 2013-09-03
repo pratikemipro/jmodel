@@ -139,7 +139,9 @@
 
 	Number::div =  Function.From(Number) (x) -&gt; <span class="keyword">this</span> / x
 
-	Number::mod =  Function.From(Number)  (x) -&gt; <span class="keyword">this</span> % x</pre></div></div>
+	Number::mod =  Function.From(Number)  (x) -&gt; <span class="keyword">this</span> % x
+
+	Number::map = Function.From(Function) (fn) -&gt; fn.call <span class="keyword">this</span>, <span class="keyword">this</span></pre></div></div>
             
         </li>
         
