@@ -90,7 +90,7 @@
 		raises ( -> Object.property('age',17)(fred) ), 'raises exception on attempting to set property that does not exist'
 		equals fred.age, undefined, 'property is not set if it does not exist'
 		
-	test 'Object.method', ->
+	test 'Object.method (string)', ->
 
 		Adder = class
 			unit: -> 0
@@ -102,7 +102,24 @@
 		equals Object.method('add',2,3)(adder), 5, 'Method works with arguments at creation time'
 		equals Object.method('add',2)(adder,3), 5, 'Method works with arguments at invocation time'
 		raises (-> Object.method('test')(adder) ), 'Method raises exception if method does not exist.'
+	
+	test 'Object.method (function)', ->
 		
+		fred =
+			forename: 'fred'
+			surname: 'smith'
+			
+		name = Object.method -> "#{@forename} #{@surname}"
+		
+		equals name(fred), 'fred smith', 'Method called with function sets context correctly'
+		
+		people = [
+			{ forename: 'fred', surname: 'smith' }
+			{ forename: 'john', surname: 'jones' }
+		]
+		
+		deepEqual people.map(name), ['fred smith', 'john jones'], 'Works correctly with Array::map'
+	
 	test 'Object.resolve', ->
     
 		class Person
