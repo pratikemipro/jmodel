@@ -54,7 +54,21 @@
 					obj[property] = value
 					obj
 		
-		Object.method = (method,args1...) ->
+		Object.method = Function.overload [	
+	
+			Function.From(String,[Value]) (method,args1...) ->
+				(obj,args2...) ->
+					throw 'Undefined method' unless obj[method]
+					obj[method] [args1...,args2...]...
+	
+			Function.From(Function,[Value]) (fn,args1...) ->
+				(obj,args2...) ->
+					fn.call obj, args1..., args2...
+	
+		]
+		
+		
+		(method,args1...) ->
 			(obj,args2...) ->
 				throw 'Undefined method' unless obj[method]
 				obj[method] [args1...,args2...]...
