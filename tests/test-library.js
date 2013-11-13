@@ -963,7 +963,11 @@ define(['jmodel/topaz2'], function() {
         surname: 'jones'
       }
     ];
-    return deepEqual(people.map(name), ['fred smith', 'john jones'], 'Works correctly with Array::map');
+    deepEqual(people.map(name), ['fred smith', 'john jones'], 'Works correctly with Array::map');
+    name = Object.method(function(separator) {
+      return "" + this.forename + separator + this.surname;
+    });
+    return equals(name(fred, ' '), 'fred smith', 'Additional parameters can be passed');
   });
   test('Object.resolve', function() {
     var Person, person;
