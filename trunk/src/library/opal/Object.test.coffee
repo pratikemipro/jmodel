@@ -119,6 +119,10 @@
 		]
 		
 		deepEqual people.map(name), ['fred smith', 'john jones'], 'Works correctly with Array::map'
+		
+		name = Object.method (separator) -> "#{@forename}#{separator}#{@surname}"
+	
+		equals name(fred,' '), 'fred smith', 'Additional parameters can be passed'
 	
 	test 'Object.resolve', ->
     
