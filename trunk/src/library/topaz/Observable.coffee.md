@@ -1,13 +1,15 @@
 # Observable
 
 		
-		window.Observable = Observable = (constructor) -> switch
+		window.Observable = Observable = (constructor) -> throw "Cannot make observable from #{constructor}"
 		
 
 ## Observable Set
 
-			
-			when constructor == Set or constructor.inherits Set
+		
+		window.Observable = Observable = do (Observable) -> (constructor) ->
+		
+			if constructor == Set or constructor.inherits Set
 			
 				class extends constructor
 				
@@ -24,12 +26,16 @@
 						
 					remove: this::remove.post (removed) ->
 						@event('remove').raise(item) for item in removed by -1
+						
+			else Observable constructor
 									
 
 ## Observable List
 
-			
-			when constructor == List or constructor.inherits List
+		
+		window.Observable = Observable = do (Observable) -> (constructor) ->
+
+			if constructor == List or constructor.inherits List
 			
 				class extends constructor
 				
@@ -41,11 +47,15 @@
 					add: this::add.post (list,item) ->
 						@event('add').raise(item)
 						
+			else Observable constructor
+						
 
 ## Observable Map
 
-			
-			when constructor == Map or constructor.inherits Map
+		
+		window.Observable = Observable = do (Observable) -> (constructor) ->
+		
+			if constructor == Map or constructor.inherits Map
 			
 				class extends constructor
 				
@@ -65,3 +75,6 @@
 						if @_[key]?
 							delete @_[key]
 							@event('remove').raise(key)
+							
+			else Observable constructor
+			
