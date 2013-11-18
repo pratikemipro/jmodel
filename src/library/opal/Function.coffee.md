@@ -269,7 +269,7 @@
 		
 		Function::hastype = (type) -> @then Object.type.eq type
 		
-		Function::inherits = (constructor) -> this == constructor or @prototype instanceof constructor
+		Function::isa = (constructor) -> this == constructor or @prototype instanceof constructor
 	
 
 ## Application methods
@@ -342,7 +342,7 @@
 			
 		Constructor.Inheriting = (parent) ->
 			fn1 = (constructor) ->
-			fn1.valid = (constructor) -> constructor.inherits parent
+			fn1.valid = (constructor) -> constructor.isa parent
 			return fn1
 			 
 			
