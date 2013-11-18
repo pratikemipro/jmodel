@@ -799,6 +799,29 @@ define(['jmodel/topaz2'], function() {
     equal(oddEven(6), 'even', 'Works for first mapping entry');
     return equal(oddEven(7), 'odd', 'Works for second mapping entry');
   });
+  module('Restricted types');
+  test('Constructor.Inheriting', function() {
+    var Employee, Person, _ref;
+    Person = (function() {
+      function _Class() {}
+
+      return _Class;
+
+    })();
+    Employee = (function(_super) {
+      __extends(_Class, _super);
+
+      function _Class() {
+        _ref = _Class.__super__.constructor.apply(this, arguments);
+        return _ref;
+      }
+
+      return _Class;
+
+    })(Person);
+    equal(Object.isa(Constructor.Inheriting(Person))(Employee), true, 'Returns true when argument is extension');
+    return equal(Object.isa(Constructor.Inheriting(String))(Employee), false, 'Returns false when argument is not extension');
+  });
   module('Type');
   test('Type.union', function() {
     var Tree, green, red, tree;

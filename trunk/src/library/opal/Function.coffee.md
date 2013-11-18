@@ -337,4 +337,13 @@
 			restricted[property] = value for property, value of restricted.base
 			restricted.valid = (value) -> Object.isa(restricted.base)(value) and predicate.call value, value
 			return restricted
+		
+		window.Constructor = Constructor = Function
+			
+		Constructor.Inheriting = (parent) ->
+			fn1 = (constructor) ->
+			fn1.valid = (constructor) -> constructor.inherits parent
+			return fn1
+			 
+			
 			

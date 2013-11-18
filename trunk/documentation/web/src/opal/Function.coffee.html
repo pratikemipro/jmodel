@@ -580,7 +580,14 @@
 		restricted.base = <span class="property">@base</span> <span class="keyword">or</span> <span class="keyword">this</span>
 		restricted[property] = value <span class="keyword">for</span> property, value <span class="keyword">of</span> restricted.base
 		restricted.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(restricted.base)(value) <span class="keyword">and</span> predicate.call value, value
-		<span class="keyword">return</span> restricted</pre></div></div>
+		<span class="keyword">return</span> restricted
+
+	window.Constructor = Constructor = Function
+
+	Constructor.<span class="function"><span class="title">Inheriting</span></span> = (parent) -&gt;
+		<span class="function"><span class="title">fn1</span></span> = (constructor) -&gt;
+		fn1.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt; constructor.inherits parent
+		<span class="keyword">return</span> fn1</pre></div></div>
             
         </li>
         
@@ -588,3 +595,4 @@
   </div>
 </body>
 </html>
+                                             
