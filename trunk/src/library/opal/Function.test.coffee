@@ -544,4 +544,11 @@
 		equal Object.isa(Constructor.Inheriting Person)(Employee), true, 'Returns true when argument is extension'
 		equal Object.isa(Constructor.Inheriting String)(Employee), false, 'Returns false when argument is not extension'
 
+		Chatty = Function.From(Constructor.Inheriting Person) (constructor) ->
+			class extends constructor
+				greeting: -> 'hello'
+		
+		equal ( new (Chatty Employee) ).greeting(), 'hello', 'Inheriting can be used in typed functions'
+		
+		raises ( -> new (Chatty String) ), 'Restricts typed functions correctly'
 	
