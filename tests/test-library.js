@@ -748,7 +748,7 @@ define(['jmodel/topaz2'], function() {
     equal(Person.inherits(Contact), true, 'Classes extend their superclass');
     equal(Employee.inherits(Contact), true, 'Classes extend their supersuperclass');
     equal(Contact.inherits(Person), false, 'Classes do not extend subclasses');
-    return equal(Contact.inherits(Contact), false, 'Classes do not extend themselves');
+    return equal(Contact.inherits(Contact), true, 'Classes inherit themselves');
   });
   module('Application methods');
   test('Function::bind', function() {
@@ -2477,3 +2477,4 @@ define(['jmodel/topaz2'], function() {
 /*
 //@ sourceMappingURL=test-library.map
 */
+       

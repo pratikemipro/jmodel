@@ -490,7 +490,7 @@
 		equal Person.inherits(Contact), true, 'Classes extend their superclass'
 		equal Employee.inherits(Contact), true, 'Classes extend their supersuperclass'
 		equal Contact.inherits(Person), false, 'Classes do not extend subclasses'
-		equal Contact.inherits(Contact), false, 'Classes do not extend themselves'
+		equal Contact.inherits(Contact), true, 'Classes inherit themselves'
 		
 	module 'Application methods'
 	

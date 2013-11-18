@@ -269,7 +269,7 @@
 		
 		Function::hastype = (type) -> @then Object.type.eq type
 		
-		Function::inherits = (constructor) -> @prototype instanceof constructor
+		Function::inherits = (constructor) -> this == constructor or @prototype instanceof constructor
 	
 
 ## Application methods
