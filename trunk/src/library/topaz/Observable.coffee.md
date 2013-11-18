@@ -9,7 +9,7 @@
 		
 		window.Observable = Observable = do (Observable) -> (constructor) ->
 		
-			if constructor == Set or constructor.inherits Set
+			if constructor == Set or constructor.isa Set
 			
 				class extends constructor
 				
@@ -35,7 +35,7 @@
 		
 		window.Observable = Observable = do (Observable) -> (constructor) ->
 
-			if constructor == List or constructor.inherits List
+			if constructor == List or constructor.isa List
 			
 				class extends constructor
 				
@@ -55,7 +55,7 @@
 		
 		window.Observable = Observable = do (Observable) -> (constructor) ->
 		
-			if constructor == Map or constructor.inherits Map
+			if constructor == Map or constructor.isa Map
 			
 				class extends constructor
 				

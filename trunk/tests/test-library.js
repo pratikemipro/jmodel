@@ -715,7 +715,7 @@ define(['jmodel/topaz2'], function() {
     equal(test.hastype('string')(), true, 'returns true when function returns a value of specified type');
     return equal(test.hastype('number')(), false, 'returns false when function returns a value not of specified type');
   });
-  test('Function::inherits', function() {
+  test('Function::isa', function() {
     var Contact, Employee, Person, _ref, _ref1;
     Contact = (function() {
       function _Class() {}
@@ -745,10 +745,10 @@ define(['jmodel/topaz2'], function() {
       return _Class;
 
     })(Person);
-    equal(Person.inherits(Contact), true, 'Classes extend their superclass');
-    equal(Employee.inherits(Contact), true, 'Classes extend their supersuperclass');
-    equal(Contact.inherits(Person), false, 'Classes do not extend subclasses');
-    return equal(Contact.inherits(Contact), true, 'Classes inherit themselves');
+    equal(Person.isa(Contact), true, 'Classes extend their superclass');
+    equal(Employee.isa(Contact), true, 'Classes extend their supersuperclass');
+    equal(Contact.isa(Person), false, 'Classes do not extend subclasses');
+    return equal(Contact.isa(Contact), true, 'Classes inherit themselves');
   });
   module('Application methods');
   test('Function::bind', function() {
@@ -2477,4 +2477,4 @@ define(['jmodel/topaz2'], function() {
 /*
 //@ sourceMappingURL=test-library.map
 */
-       
+                                

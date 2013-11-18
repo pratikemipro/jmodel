@@ -707,7 +707,7 @@ define(function() {
   Function.prototype.hastype = function(type) {
     return this.then(Object.type.eq(type));
   };
-  Function.prototype.inherits = function(constructor) {
+  Function.prototype.isa = function(constructor) {
     return this === constructor || this.prototype instanceof constructor;
   };
   Function.prototype.bind = function() {
@@ -828,7 +828,7 @@ define(function() {
     var fn1;
     fn1 = function(constructor) {};
     fn1.valid = function(constructor) {
-      return constructor.inherits(parent);
+      return constructor.isa(parent);
     };
     return fn1;
   };
