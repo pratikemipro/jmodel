@@ -748,7 +748,7 @@ define(['jmodel/topaz2'], function() {
     equal(Person.isa(Contact), true, 'Classes extend their superclass');
     equal(Employee.isa(Contact), true, 'Classes extend their supersuperclass');
     equal(Contact.isa(Person), false, 'Classes do not extend subclasses');
-    return equal(Contact.isa(Contact), true, 'Classes inherit themselves');
+    return equal(Contact.isa(Contact), true, 'Classes are themselves');
   });
   module('Application methods');
   test('Function::bind', function() {
@@ -801,7 +801,7 @@ define(['jmodel/topaz2'], function() {
   });
   module('Restricted types');
   test('Constructor.Inheriting', function() {
-    var Employee, Person, _ref;
+    var Chatty, Employee, Person, _ref;
     Person = (function() {
       function _Class() {}
 
@@ -820,7 +820,29 @@ define(['jmodel/topaz2'], function() {
 
     })(Person);
     equal(Object.isa(Constructor.Inheriting(Person))(Employee), true, 'Returns true when argument is extension');
-    return equal(Object.isa(Constructor.Inheriting(String))(Employee), false, 'Returns false when argument is not extension');
+    equal(Object.isa(Constructor.Inheriting(String))(Employee), false, 'Returns false when argument is not extension');
+    Chatty = Function.From(Constructor.Inheriting(Person))(function(constructor) {
+      var _ref1;
+      return (function(_super) {
+        __extends(_Class, _super);
+
+        function _Class() {
+          _ref1 = _Class.__super__.constructor.apply(this, arguments);
+          return _ref1;
+        }
+
+        _Class.prototype.greeting = function() {
+          return 'hello';
+        };
+
+        return _Class;
+
+      })(constructor);
+    });
+    equal((new (Chatty(Employee))).greeting(), 'hello', 'Inheriting can be used in typed functions');
+    return raises((function() {
+      return new (Chatty(String));
+    }), 'Restricts typed functions correctly');
   });
   module('Type');
   test('Type.union', function() {
@@ -2477,4 +2499,3 @@ define(['jmodel/topaz2'], function() {
 /*
 //@ sourceMappingURL=test-library.map
 */
-                                
