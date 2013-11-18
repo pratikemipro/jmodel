@@ -13,7 +13,7 @@ var __slice = [].slice,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 define(function() {
-  var Promise, Type, _base;
+  var Constructor, Promise, Type, _base;
   window.Value = function() {};
   window.Value.valid = function(x) {
     return x !== void 0;
@@ -822,6 +822,15 @@ define(function() {
       return Object.isa(restricted.base)(value) && predicate.call(value, value);
     };
     return restricted;
+  };
+  window.Constructor = Constructor = Function;
+  Constructor.Inheriting = function(parent) {
+    var fn1;
+    fn1 = function(constructor) {};
+    fn1.valid = function(constructor) {
+      return constructor.inherits(parent);
+    };
+    return fn1;
   };
   window.Type = Type = function(constructor) {
     return function(fn) {

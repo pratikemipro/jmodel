@@ -532,5 +532,16 @@
 			
 		equal oddEven(6), 'even', 'Works for first mapping entry'
 		equal oddEven(7), 'odd', 'Works for second mapping entry'
+		
+	module 'Restricted types'
+	
+	test 'Constructor.Inheriting', ->
+		
+		Person = class
+			
+		Employee = class extends Person
+			
+		equal Object.isa(Constructor.Inheriting Person)(Employee), true, 'Returns true when argument is extension'
+		equal Object.isa(Constructor.Inheriting String)(Employee), false, 'Returns false when argument is not extension'
 
 	
