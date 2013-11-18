@@ -708,7 +708,7 @@ define(function() {
     return this.then(Object.type.eq(type));
   };
   Function.prototype.inherits = function(constructor) {
-    return this.prototype instanceof constructor;
+    return this === constructor || this.prototype instanceof constructor;
   };
   Function.prototype.bind = function() {
     var args1, context, fn;

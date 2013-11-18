@@ -468,7 +468,7 @@
 
 	Function::<span class="function"><span class="title">hastype</span></span> = (type) -&gt; <span class="property">@then</span> Object.type.eq type
 
-	Function::<span class="function"><span class="title">inherits</span></span> = (constructor) -&gt; <span class="property">@prototype</span> <span class="keyword">instanceof</span> constructor</pre></div></div>
+	Function::<span class="function"><span class="title">inherits</span></span> = (constructor) -&gt; <span class="keyword">this</span> == constructor <span class="keyword">or</span> <span class="property">@prototype</span> <span class="keyword">instanceof</span> constructor</pre></div></div>
             
         </li>
         
@@ -595,4 +595,3 @@
   </div>
 </body>
 </html>
-                                             
