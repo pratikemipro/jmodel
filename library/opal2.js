@@ -896,7 +896,7 @@ define(function() {
     }
     return target;
   });
-  Object.construct = function() {
+  Object.construct = Function.From(Function, [Value])(function() {
     var args1, constructor;
     constructor = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
     switch (false) {
@@ -927,7 +927,7 @@ define(function() {
           })(constructor, __slice.call(args1).concat(__slice.call(args2)), function(){});
         };
     }
-  };
+  });
   Object.valid = function(constructor) {
     switch (constructor) {
       case Number:
@@ -1555,4 +1555,3 @@ define(function() {
 /*
 //@ sourceMappingURL=opal2.map
 */
-              

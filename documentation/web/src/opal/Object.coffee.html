@@ -106,7 +106,7 @@
 			target[key] = source[key] <span class="keyword">for</span> own key <span class="keyword">of</span> source
 			target
 
-	Object.<span class="function"><span class="title">construct</span></span> = (constructor,args1...) -&gt; <span class="keyword">switch</span>
+	Object.construct = Function.From(Function,[Value]) (constructor,args1...) -&gt; <span class="keyword">switch</span>
 
 		<span class="keyword">when</span> constructor <span class="keyword">in</span> [Number,String,Boolean] <span class="keyword">then</span> constructor
 
@@ -218,4 +218,4 @@
   </div>
 </body>
 </html>
-                                     
+                                                              
