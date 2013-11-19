@@ -1060,7 +1060,7 @@ define(function() {
   };
   Object.Of = Function.From(Constructor)(function(constructor) {
     var fn, test;
-    test = Object.isa(Constructor);
+    test = Object.isa(constructor);
     fn = function() {};
     fn.valid = function(obj) {
       var key, value;

@@ -100,9 +100,9 @@
 
 		
 		Object.Of = Function.From(Constructor) (constructor) ->
-			test = Object.isa Constructor
+			test = Object.isa constructor
 			fn = ->
-			fn.valid = (obj) -> Array.reduce(Boolean.and) ( test value for own key, value of obj )
+			fn.valid = (obj) ->	Array.reduce(Boolean.and) ( test value for own key, value of obj )
 			return fn
 			
 			
