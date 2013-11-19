@@ -341,7 +341,7 @@
 		window.Constructor = Constructor = Function
 			
 		Constructor.Inheriting = (parent) ->
-			fn1 = (constructor) ->
+			fn1 = ->
 			fn1.valid = (constructor) -> constructor.isa parent
 			return fn1
 			 
