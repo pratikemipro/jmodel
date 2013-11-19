@@ -14,6 +14,6 @@ Object.has			full	none
 Object.property		full	none
 Object.method		full	none
 Object.resolve		full	none
-Object.path			none	none
+Object.path			full	none
 
 Object.Of			none	none
