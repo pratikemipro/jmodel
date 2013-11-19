@@ -977,11 +977,11 @@ define(function() {
       return _results;
     });
   }
-  Object.has = function(key) {
-    return function(object) {
+  Object.has = Function.From(Scalar)(function(key) {
+    return Function.From(Object).To(Boolean)(function(object) {
       return __indexOf.call(Object.keys(object), key) >= 0;
-    };
-  };
+    });
+  });
   Object.property = Function.overload([
     Function.From(String, Value)(function(property, value) {
       return Function.Requiring(Object.has(property), 'Undefined property')(function(obj) {
@@ -1575,4 +1575,4 @@ define(function() {
 /*
 //@ sourceMappingURL=opal2.map
 */
-                                                                                                                                                                                                                                                                                                                               
+                                                                                                                                                                                                                                                                     

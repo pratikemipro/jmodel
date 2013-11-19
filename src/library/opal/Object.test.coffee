@@ -67,13 +67,23 @@
 		
 	test 'Object.keys', ->
 		
-		a =
+		fred =
 			forename: 'fred'
 			surname: 'smith'
 			age: 20
 			title: 'Mr'
 			
-		deepEqual Object.keys(a), ['forename','surname','age','title'], 'Returns keys'
+		deepEqual Object.keys(fred), ['forename','surname','age','title'], 'Returns keys'
+		
+	test 'Object.has', ->
+		
+		fred =
+			forename: 'fred'
+			surname: 'smith'
+			
+		equal Object.has('forename')(fred), true, 'Returns true when object has property'
+		equal Object.has('age')(fred), false, 'Returns false when object does not have property'
+		
 		
 	test 'Object.property', ->
 		
