@@ -6,7 +6,7 @@
 				target[key] = source[key] for own key of source
 				target
 		
-		Object.construct = (constructor,args1...) -> switch
+		Object.construct = Function.From(Function,[Value]) (constructor,args1...) -> switch
 	
 			when constructor in [Number,String,Boolean] then constructor
 		
