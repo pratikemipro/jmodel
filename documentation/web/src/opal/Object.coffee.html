@@ -155,13 +155,18 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Object.<span class="function"><span class="title">property</span></span> = (property,value) -&gt;
-		<span class="keyword">switch</span> arguments.length
-			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> (obj) -&gt; obj[property]
-			<span class="keyword">when</span> <span class="number">2</span> <span class="keyword">then</span> (obj) -&gt;
-				<span class="keyword">throw</span> <span class="string">'Undefined property'</span> <span class="keyword">unless</span> obj[property]
-				obj[property] = value
-				obj
+            <div class="content"><div class='highlight'><pre>	Object.property = Function.overload [
+
+		Function.From(String,Value) (property,value) -&gt;
+			Function.Requiring( Object.has(property), <span class="string">'Undefined property'</span> ) \
+				(obj) -&gt;
+					obj[property] = value
+					obj
+
+		Function.From(String) (property) -&gt;
+			(obj) -&gt; obj[property]
+
+	]
 
 	Object.method = Function.overload [	
 
@@ -175,12 +180,6 @@
 				fn.call obj, args1..., args2...
 
 	]
-
-
-	(method,args1...) -&gt;
-		(obj,args2...) -&gt;
-			<span class="keyword">throw</span> <span class="string">'Undefined method'</span> <span class="keyword">unless</span> obj[method]
-			obj[method] [args1...,args2...]...
 
 	Object.<span class="function"><span class="title">resolve</span></span> = (name,args1...) -&gt;
 		(obj,args2...) -&gt;
@@ -219,3 +218,4 @@
   </div>
 </body>
 </html>
+                                     

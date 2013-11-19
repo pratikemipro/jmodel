@@ -46,13 +46,18 @@
 ## Accessors
 
 		
-		Object.property = (property,value) ->
-			switch arguments.length
-				when 1 then (obj) -> obj[property]
-				when 2 then (obj) ->
-					throw 'Undefined property' unless obj[property]
-					obj[property] = value
-					obj
+		Object.property = Function.overload [
+		
+			Function.From(String,Value) (property,value) ->
+				Function.Requiring( Object.has(property), 'Undefined property' ) \
+					(obj) ->
+						obj[property] = value
+						obj
+					
+			Function.From(String) (property) ->
+				(obj) -> obj[property]
+		
+		]
 		
 		Object.method = Function.overload [	
 	
@@ -66,12 +71,6 @@
 					fn.call obj, args1..., args2...
 	
 		]
-		
-		
-		(method,args1...) ->
-			(obj,args2...) ->
-				throw 'Undefined method' unless obj[method]
-				obj[method] [args1...,args2...]...
 		
 		Object.resolve = (name,args1...) ->
 			(obj,args2...) ->
