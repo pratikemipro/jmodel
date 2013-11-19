@@ -941,14 +941,23 @@ define(['jmodel/topaz2'], function() {
     return equals(Object.ensure(Person, 'fred')(28).name, 'fred', 'Allows passing at definition time');
   });
   test('Object.keys', function() {
-    var a;
-    a = {
+    var fred;
+    fred = {
       forename: 'fred',
       surname: 'smith',
       age: 20,
       title: 'Mr'
     };
-    return deepEqual(Object.keys(a), ['forename', 'surname', 'age', 'title'], 'Returns keys');
+    return deepEqual(Object.keys(fred), ['forename', 'surname', 'age', 'title'], 'Returns keys');
+  });
+  test('Object.has', function() {
+    var fred;
+    fred = {
+      forename: 'fred',
+      surname: 'smith'
+    };
+    equal(Object.has('forename')(fred), true, 'Returns true when object has property');
+    return equal(Object.has('age')(fred), false, 'Returns false when object does not have property');
   });
   test('Object.property', function() {
     var fred;
@@ -2499,4 +2508,3 @@ define(['jmodel/topaz2'], function() {
 /*
 //@ sourceMappingURL=test-library.map
 */
-                  
