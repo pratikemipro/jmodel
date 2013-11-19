@@ -1,93 +1,94 @@
-Function			Tests	Docs
------------------------------------
+Function				Tests	Docs
+------------------------------------
+                       	
+Function::extend		none	none
+                       	
+Function.identity		full	full
+Function.constant		full	full
+Function.arguments		none	partial
+Function.argument		full	partial
+Function.map			full	partial
+Function.overload		partial	none
+Window.Type				none	none
+                       	
+Function::then			full	partial
+Function::but			full	partial
+Function.pipe			full	partial
+Function.compose		full	partial
+                       	
+Function::pre			full	partial
+Function::post			full	partial
+                       	
+Function::require		full	partial
+Function::ensure		full	partial
+                       	
+Function.hastypes		none	none
+Function::Requiring		none	none
+Function.Requiring		none	none
+Function::Ensuring		none	none
+Function.Ensuring		none	none
+Function::From			partial	none
+Function.From			full	none
+Function::To			partial	none
+Function.To				full	none
+Function.Of				full	partial
+window.Predicate		none	none
+                       	
+Function.Defaults		full	none
+Function::Defaults		full	none
+Function::defaults		full	none
+                       	
+Function.Returning		full	none
+Function::Returning		full	none
+Function.Constant		none	none
+Function.Chaining		full	none
+Function::Chaining		full	none
+                       	
+Function::and			full	partial
+Function::or			full	partial
+Function::not			full	partial
+Function.and			full	partial
+Function.or				full	partial
+Function.not			full	none
+                       	
+Function.delegate		none	none
+Function.delegates		none	none
+                       	
+Function.ordering		none	none
+                       	
+Function.eq				full	none
+Function::eq			none	full
+Function.neq			full	none
+Function::neq			none	none
+Function.lt				full	none
+Function::lt			none	none
+Function.gt				full	none
+Function::gt			none	none
+Function.lte			full	none
+Function::lte			none	none
+Function.gte			full	none
+Function::gte			none	none
+Function.between		full	none
+Function::between		none	none
+Function::is			none	none
+Function::matches		none	none
+Function::isnull		none	none
+Function::isa			none	none
+Function::hastype		none	none
+Function::inherits		none	none
+                       	
+Function::bind			full	none
+Function::curry			full	none
+Function::except		full	full
+Function::memo			full	none
+Function::delay			none	none
+                       	
+Function::map			full	none
 
-Function::extend	none	none
+Function::asc			none	none
+Function::desc			none	none
 
-Function.identity	full	full
-Function.constant	full	full
-Function.arguments	none	partial
-Function.argument	full	partial
-Function.map		full	partial
-Function.overload	partial	none
-Window.Type			none	none
+Function::create		none	full
 
-Function::then		full	partial
-Function::but		full	partial
-Function.pipe		full	partial
-Function.compose	full	partial
-
-Function::pre		full	partial
-Function::post		full	partial
-
-Function::require	full	partial
-Function::ensure	full	partial
-
-Function.hastypes	none	none
-Function::Requiring	none	none
-Function.Requiring	none	none
-Function::Ensuring	none	none
-Function.Ensuring	none	none
-Function::From		partial	none
-Function.From		full	none
-Function::To		partial	none
-Function.To			full	none
-Function.Of			full	partial
-window.Predicate	none	none
-
-Function.Defaults	full	none
-Function::Defaults	full	none
-Function::defaults	full	none
-
-Function.Returning	full	none
-Function::Returning	full	none
-Function.Constant	none	none
-Function.Chaining	full	none
-Function::Chaining	full	none
-
-Function::and		full	partial
-Function::or		full	partial
-Function::not		full	partial
-Function.and		full	partial
-Function.or			full	partial
-Function.not		full	none
-
-Function.delegate	none	none
-Function.delegates	none	none
-
-Function.ordering	none	none
-
-Function.eq			full	none
-Function::eq		none	full
-Function.neq		full	none
-Function::neq		none	none
-Function.lt			full	none
-Function::lt		none	none
-Function.gt			full	none
-Function::gt		none	none
-Function.lte		full	none
-Function::lte		none	none
-Function.gte		full	none
-Function::gte		none	none
-Function.between	full	none
-Function::between	none	none
-Function::is		none	none
-Function::matches	none	none
-Function::isnull	none	none
-Function::isa		none	none
-Function::hastype	none	none
-Function::inherits	none	none
-
-Function::bind		full	none
-Function::curry		full	none
-Function::except	full	full
-Function::memo		full	none
-Function::delay		none	none
-
-Function::map		full	none
-
-Function::asc		none	none
-Function::desc		none	none
-
-Function::create	none	full
-
-Function::Where		none	none
+Function::Where			none	none
+Constructor.Inheriting	none	none
