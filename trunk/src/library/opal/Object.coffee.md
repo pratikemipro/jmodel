@@ -91,13 +91,6 @@
 				else Object.resolve(first).then Object.path rest
 	
 
-## Existential test
-
-		
-		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean)
-		
-		
-
 ## Typed objects
 
 		
