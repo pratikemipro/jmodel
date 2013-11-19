@@ -94,3 +94,15 @@
 		
 		Object.has = (args...) -> Object.resolve.apply(null,args).then(Boolean)
 		
+		
+
+## Typed objects
+
+		
+		Object.Of = Function.From(Constructor) (constructor) ->
+			test = Object.isa Constructor
+			fn = ->
+			fn.valid = (obj) -> Array.reduce(Boolean.and) ( test value for own key, value of obj )
+			return fn
+			
+			

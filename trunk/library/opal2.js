@@ -849,6 +849,7 @@ define(function() {
   })(function(type) {
     return function(fn) {
       var constructor, name, subtype, subtypes, _i, _len, _ref, _results, _results1;
+      fn = Function.To(Object.Of(Function))(fn);
       subtype = function(constructor) {
         var _class, _ref;
         return (function(_super) {
@@ -1057,6 +1058,25 @@ define(function() {
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return Object.resolve.apply(null, args).then(Boolean);
   };
+  Object.Of = Function.From(Constructor)(function(constructor) {
+    var fn, test;
+    test = Object.isa(Constructor);
+    fn = function() {};
+    fn.valid = function(obj) {
+      var key, value;
+      return Array.reduce(Boolean.and)((function() {
+        var _results;
+        _results = [];
+        for (key in obj) {
+          if (!__hasProp.call(obj, key)) continue;
+          value = obj[key];
+          _results.push(test(value));
+        }
+        return _results;
+      })());
+    };
+    return fn;
+  });
   Object.from = Function.From(Scalar, Value).Returning(function() {
     return new Object;
   })(function(obj) {
@@ -1555,3 +1575,4 @@ define(function() {
 /*
 //@ sourceMappingURL=opal2.map
 */
+                                                                                                                                                                                                                                                                                                                    

@@ -8,6 +8,8 @@
 		Type.union = Function.From(Function).Returning(-> class) \
 			(type) -> (fn) ->
 			
+				fn = Function.To(Object.Of Function) fn
+			
 				subtype = (constructor) -> class extends type
 					constructor: ( constructor or -> )
 					
