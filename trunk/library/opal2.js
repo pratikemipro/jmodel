@@ -981,22 +981,18 @@ define(function() {
       return __indexOf.call(Object.keys(object), key) >= 0;
     };
   };
-  Object.property = function(property, value) {
-    switch (arguments.length) {
-      case 1:
-        return function(obj) {
-          return obj[property];
-        };
-      case 2:
-        return function(obj) {
-          if (!obj[property]) {
-            throw 'Undefined property';
-          }
-          obj[property] = value;
-          return obj;
-        };
-    }
-  };
+  Object.property = Function.overload([
+    Function.From(String, Value)(function(property, value) {
+      return Function.Requiring(Object.has(property), 'Undefined property')(function(obj) {
+        obj[property] = value;
+        return obj;
+      });
+    }), Function.From(String)(function(property) {
+      return function(obj) {
+        return obj[property];
+      };
+    })
+  ]);
   Object.method = Function.overload([
     Function.From(String, [Value])(function() {
       var args1, method;
@@ -1019,18 +1015,6 @@ define(function() {
       };
     })
   ]);
-  (function() {
-    var args1, method;
-    method = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-    return function() {
-      var args2, obj;
-      obj = arguments[0], args2 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      if (!obj[method]) {
-        throw 'Undefined method';
-      }
-      return obj[method].apply(obj, __slice.call(args1).concat(__slice.call(args2)));
-    };
-  });
   Object.resolve = function() {
     var args1, name;
     name = arguments[0], args1 = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
@@ -1571,3 +1555,4 @@ define(function() {
 /*
 //@ sourceMappingURL=opal2.map
 */
+              

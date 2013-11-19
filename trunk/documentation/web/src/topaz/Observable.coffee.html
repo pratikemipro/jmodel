@@ -46,7 +46,11 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Observable = <span class="function"><span class="title">Observable</span></span> = (constructor) -&gt; <span class="keyword">throw</span> <span class="string">"Cannot make observable from <span class="subst">#{constructor}</span>"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	window.Observable = Observable = Function.overload [
+
+		Function.From(Value) (constructor) -&gt; <span class="keyword">throw</span> <span class="string">"Cannot make observable from <span class="subst">#{constructor}</span>"</span> 
+
+	]</pre></div></div>
             
         </li>
         
@@ -61,9 +65,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Observable = Observable = <span class="keyword">do</span> (Observable) -&gt; (constructor) -&gt;
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
 
-		<span class="keyword">if</span> constructor == Set <span class="keyword">or</span> constructor.isa Set
+		Function.From(Constructor.Inheriting Set) (constructor) -&gt;
 
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
@@ -81,7 +85,7 @@
 				remove: <span class="keyword">this</span>::remove.post (removed) -&gt;
 					<span class="property">@event</span>(<span class="string">'remove'</span>).raise(item) <span class="keyword">for</span> item <span class="keyword">in</span> removed <span class="keyword">by</span> -<span class="number">1</span>
 
-		<span class="keyword">else</span> Observable constructor</pre></div></div>
+	]</pre></div></div>
             
         </li>
         
@@ -96,9 +100,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Observable = Observable = <span class="keyword">do</span> (Observable) -&gt; (constructor) -&gt;
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
 
-		<span class="keyword">if</span> constructor == List <span class="keyword">or</span> constructor.isa List
+		Function.From(Constructor.Inheriting List) (constructor) -&gt;
 
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
@@ -110,7 +114,7 @@
 				add: <span class="keyword">this</span>::add.post (list,item) -&gt;
 					<span class="property">@event</span>(<span class="string">'add'</span>).raise(item)
 
-		<span class="keyword">else</span> Observable constructor</pre></div></div>
+	]</pre></div></div>
             
         </li>
         
@@ -125,9 +129,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Observable = Observable = <span class="keyword">do</span> (Observable) -&gt; (constructor) -&gt;
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
 
-		<span class="keyword">if</span> constructor == Map <span class="keyword">or</span> constructor.isa Map
+		Function.From(Constructor.Inheriting Map) (constructor) -&gt;
 
 			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
 
@@ -148,7 +152,7 @@
 						<span class="keyword">delete</span> <span class="property">@_</span>[key]
 						<span class="property">@event</span>(<span class="string">'remove'</span>).raise(key)
 
-		<span class="keyword">else</span> Observable constructor</pre></div></div>
+	]</pre></div></div>
             
         </li>
         
