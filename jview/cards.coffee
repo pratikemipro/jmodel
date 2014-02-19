@@ -468,6 +468,10 @@ define (require) ->
 				open href
 				return false
 			else if cardType
+				
+				if a.is '.disabled' then return false
+			
+				a.addClass 'disabled'
 			
 				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
 				# 					@viewPort.scrollTo card.li.index 'li.card'
@@ -487,6 +491,7 @@ define (require) ->
 						@view.event('ready')
 							.where( (inserted) -> inserted == card )
 							.subscribe =>
+								a.removeClass 'disabled'
 								@viewport.state.index card.li.index('li.card')
 					
 			else if href[0] == '#' and protocol not in ['mailto']
