@@ -662,6 +662,10 @@ define(function(require) {
         open(href);
         return false;
       } else if (cardType) {
+        if (a.is('.disabled')) {
+          return false;
+        }
+        a.addClass('disabled');
         require([cardType], (function(_this) {
           return function(cardType) {
             var card;
@@ -680,6 +684,7 @@ define(function(require) {
               return _this.view.event('ready').where(function(inserted) {
                 return inserted === card;
               }).subscribe(function() {
+                a.removeClass('disabled');
                 return _this.viewport.state.index(card.li.index('li.card'));
               });
             }
