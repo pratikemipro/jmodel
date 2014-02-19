@@ -1,1 +1,44 @@
-ul.cards{white-space:nowrap}ul.cards li.extent{display:inline-block;white-space:nowrap}ul.cards li.extent>ul{display:inline-block;white-space:nowrap;list-style-type:none}ul.cards li.card{display:inline-block;position:relative;white-space:normal;vertical-align:top;padding:0!important;-webkit-transition:all .75s ease-in-out;-moz-transition:all .75s ease-in-out}ul.cards li.card>*{-webkit-transition:all .3s ease-in-out;-moz-transition:all .3s ease-in-out}ul.cards li.card.hidden{display:none}ul.cards li.card.adding{width:0;overflow:hidden}ul.cards li.card.adding>*,ul.cards li.card>.adding{visibility:hidden;opacity:0}ul.cards li.card.removing{width:0!important}ul.cards li.card>.removing{opacity:0}
+ul.cards {
+  white-space: nowrap;
+}
+ul.cards li.extent {
+  display: inline-block;
+  white-space: nowrap;
+}
+ul.cards li.extent > ul {
+  display: inline-block;
+  white-space: nowrap;
+  list-style-type: none;
+}
+ul.cards li.card {
+  display: inline-block;
+  position: relative;
+  white-space: normal;
+  vertical-align: top;
+  padding: 0px !important;
+  -webkit-transition: all 0.75s ease-in-out;
+  -moz-transition: all 0.75s ease-in-out;
+}
+ul.cards li.card > * {
+  -webkit-transition: all 0.3s ease-in-out;
+  -moz-transition: all 0.3s ease-in-out;
+}
+ul.cards li.card.hidden {
+  display: none;
+}
+ul.cards li.card.adding {
+  width: 0px;
+  overflow: hidden;
+}
+ul.cards li.card.adding > *,
+ul.cards li.card > .adding {
+  visibility: hidden;
+  opacity: 0;
+}
+ul.cards li.card.removing {
+  width: 0px !important;
+}
+ul.cards li.card > .removing {
+  opacity: 0;
+}
+/*# sourceMappingURL=cards.css.map */
