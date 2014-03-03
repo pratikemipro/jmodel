@@ -3,7 +3,7 @@
 		
 		window.Observable = Observable = Function.overload [
 		
-			Function.From(Value) (constructor) -> throw "Cannot make observable from #{constructor}" 
+			Function.From(Value) (constructor) -> throw new Error "Cannot make observable from #{constructor}" 
 		
 		]
 		
