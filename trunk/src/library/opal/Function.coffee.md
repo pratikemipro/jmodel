@@ -35,7 +35,7 @@
 
 		
 		Function::then = (fn2) ->
-			throw 'Precondition failure' unless typeof fn2 == 'function'
+			throw new PreconditionError unless typeof fn2 == 'function'
 			fn1 = this
 			(first,rest...) ->
 				context = if this != window then this ? first else first
@@ -43,21 +43,21 @@
 				fn2.call val1, val1 
 		
 		Function::but = (fn2) ->
-			throw 'Precondition failure' unless typeof fn2 == 'function'
+			throw new PreconditionError unless typeof fn2 == 'function'
 			fn1 = this
 			(args...) ->
 				fn1.apply this, args
 				fn2.apply this, args
 		
 		Function.pipe = (fn,fns...) ->
-			throw 'Precondition failure' unless typeof fn in ['function','undefined']
+			throw new PreconditionError unless typeof fn in ['function','undefined']
 			switch arguments.length
 				when 1 then fn
 				when 0 then Function.identity
 				else fn.then Function.pipe fns...
 		
 		Function.compose = (fn,fns...) ->
-			throw 'Precondition failure' unless typeof fn in ['function','undefined']
+			throw new PreconditionError unless typeof fn in ['function','undefined']
 			switch arguments.length
 				when 1 then fn
 				when 0 then Function.identity
@@ -68,11 +68,11 @@
 
 		
 		Function::pre = (pre) ->
-			throw 'Precondition failure' unless typeof pre == 'function'
+			throw new PreconditionError unless typeof pre == 'function'
 			pre.but this
 		
 		Function::post = (post) ->
-			throw 'Precondition failure' unless typeof post == 'function'
+			throw new PreconditionError unless typeof post == 'function'
 			fn = this
 			(args...) ->
 				ret = fn.apply this, args
@@ -85,13 +85,13 @@
 		
 		Function::matches = -> true
 		
-		Function::require = (predicate,message='Precondition failure') ->
+		Function::require = (predicate,message='') ->
 			@pre (args...) ->
-				throw message+': '+args.toString() unless predicate.apply this, args
+				throw new PreconditionError(message) unless predicate.apply this, args
 		
-		Function::ensure = (predicate,message='Postcondition failure') ->
+		Function::ensure = (predicate,message='') ->
 			@post (args...) ->
-				throw message+': '+args.toString() unless predicate.apply this, args
+				throw new PostconditionError(message) unless predicate.apply this, args
 		
 
 ## Typed functions
@@ -332,7 +332,7 @@
 		
 		# NOTE: Make this work with objects other than strings and numbers
 		Function::Where = (predicate,message='Invalid value') ->
-			restricted = @post (value) -> throw message.replace('<value>',value) unless predicate.call value, value
+			restricted = @post (value) -> throw new PostconditionError(message.replace('<value>',value)) unless predicate.call value, value
 			restricted.base = @base or this
 			restricted[property] = value for property, value of restricted.base
 			restricted.valid = (value) -> Object.isa(restricted.base)(value) and predicate.call value, value

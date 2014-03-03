@@ -65,7 +65,7 @@
 	
 			Function.From(String,[Value]) (method,args1...) ->
 				(obj,args2...) ->
-					throw 'Undefined method' unless obj[method]
+					throw new Error('Undefined method') unless obj[method]
 					obj[method] [args1...,args2...]...
 	
 			Function.From(Function,[Value]) (fn,args1...) ->
