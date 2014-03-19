@@ -51,29 +51,29 @@ topaz:
 
 library-test:
 	coffee --compile --bare --map --join tests/test-library.js \
-		src/library/test.header.coffee \
-		src/library/opal/Array.test.coffee \
-		src/library/opal/Function.test.coffee \
-		src/library/opal/Type.test.coffee \
-		src/library/opal/Object.test.coffee \
-		src/library/opal/BareObject.test.coffee \
-		src/library/opal/Number.test.coffee \
-		src/library/opal/Boolean.test.coffee \
-		src/library/opal/Math.test.coffee \
-		src/library/opal/Nullable.test.coffee \
-		src/library/opal/Maybe.test.coffee \
-		src/library/opal/Promise.test.coffee \
-		src/library/sapphire/Tuple.test.coffee \
-		src/library/sapphire/Set.test.coffee \
-		src/library/sapphire/List.test.coffee \
-		src/library/sapphire/Map.test.coffee \
-		src/library/sapphire/Stream.test.coffee \
-		src/library/sapphire/Record.test.coffee \
-		src/library/emerald/Event.test.coffee \
-		src/library/emerald/Subscriber.test.coffee \
-		src/library/emerald/EventType.test.coffee \
-		src/library/emerald/EventRegistry.test.coffee \
-		src/library/topaz/Observable.test.coffee
+		src/tests/test.header.coffee \
+		src/tests/opal/Array.test.coffee \
+		src/tests/opal/Function.test.coffee \
+		src/tests/opal/Type.test.coffee \
+		src/tests/opal/Object.test.coffee \
+		src/tests/opal/BareObject.test.coffee \
+		src/tests/opal/Number.test.coffee \
+		src/tests/opal/Boolean.test.coffee \
+		src/tests/opal/Math.test.coffee \
+		src/tests/opal/Nullable.test.coffee \
+		src/tests/opal/Maybe.test.coffee \
+		src/tests/opal/Promise.test.coffee \
+		src/tests/sapphire/Tuple.test.coffee \
+		src/tests/sapphire/Set.test.coffee \
+		src/tests/sapphire/List.test.coffee \
+		src/tests/sapphire/Map.test.coffee \
+		src/tests/sapphire/Stream.test.coffee \
+		src/tests/sapphire/Record.test.coffee \
+		src/tests/emerald/Event.test.coffee \
+		src/tests/emerald/Subscriber.test.coffee \
+		src/tests/emerald/EventType.test.coffee \
+		src/tests/emerald/EventRegistry.test.coffee \
+		src/tests/topaz/Observable.test.coffee
 		
 library-doc:
 	@make opal-doc
