@@ -59,8 +59,26 @@ define(function() {
         };
     }
   };
-  __extends(window.PreconditionError, Error);
-  __extends(window.PostcondtionError, Error);
+  window.PreconditionError = (function(_super) {
+    __extends(_Class, _super);
+
+    function _Class() {
+      return _Class.__super__.constructor.apply(this, arguments);
+    }
+
+    return _Class;
+
+  })(Error);
+  window.PostconditionError = (function(_super) {
+    __extends(_Class, _super);
+
+    function _Class() {
+      return _Class.__super__.constructor.apply(this, arguments);
+    }
+
+    return _Class;
+
+  })(Error);
   Array.concat = function() {
     var arrays, _ref;
     arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];

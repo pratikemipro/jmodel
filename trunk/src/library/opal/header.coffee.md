@@ -50,7 +50,7 @@
 			else
 				(obj) -> obj instanceof constructor
 				
-		window.PreconditionError extends Error
+		window.PreconditionError = class extends Error
 		
-		window.PostcondtionError extends Error
+		window.PostconditionError = class extends Error
 				
