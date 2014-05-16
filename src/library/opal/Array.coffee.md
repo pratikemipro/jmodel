@@ -40,19 +40,21 @@
 						return false if not Object.isa(type) value
 				return types2.length == 0 and array2.length == 0
 			
-		Array.all = (predicate) -> (array) -> Array.reduce(Boolean.and) ( predicate.call x, x for x in array )
+		Array.all = (predicate) -> (array) -> Array.reduce(Boolean.and) array.map (x) -> predicate.call x, x
 		
 		Array::all = (predicate) -> Array.all(predicate) this
 		
-		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) ( predicate.call x,x for x in array )
+		Array.any = (predicate) -> (array) -> Array.reduce(Boolean.or) array.map (x) -> predicate.call x, x
 		
 		Array::any = (predicate) -> Array.any(predicate) this
 		
 		Array.none = (predicate) -> Array.any(predicate).not()
 		
 		Array::none = (predicate) -> Array.none(predicate) this	
+		
+		Array.ordered = (array) -> Array.reduce(Boolean.and) Array.zipWith(Value.lt) array, array[1..]
 			
-		Array::ordered = -> Array.reduce(Boolean.and) Array.zipWith(Value.lt) this, this[1..]
+		Array::ordered = -> Array.ordered this
 				
 
 ## Reductions
