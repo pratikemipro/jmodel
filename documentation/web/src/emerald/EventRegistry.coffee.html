@@ -54,28 +54,29 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>EventRegistry</h1>
+              <h1 id="eventregistry">EventRegistry</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.EventRegistry = <span class="class"><span class="keyword">class</span> <span class="title">EventRegistry</span> <span class="keyword">extends</span> <span class="title">Map</span>.<span class="title">To</span> <span class="title">EventType</span></span>
-
-		constructor: (eventtypes=[]) -&gt;
-			<span class="keyword">super</span> eventtypes
-
-		register: (args...) -&gt; <span class="property">@add</span> args...
-
-		create: Function.Returning(-&gt; <span class="keyword">new</span> EventType) \
-			(eventtype) -&gt; (key) -&gt; <span class="property">@add</span> key, eventtype
-
-		subscribe: Function.From(Object) (subscriptions) -&gt;
-			<span class="property">@get</span>(name).subscribe(subscriber) <span class="keyword">for</span> own name, subscriber <span class="keyword">of</span> subscriptions
-
-		republish: Function.From(Object) (publications) -&gt;
-			<span class="property">@get</span>(name).republished(eventtype) <span class="keyword">for</span> own name, eventtype <span class="keyword">of</span> publications</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	
+	<span class="hljs-built_in">window</span>.EventRegistry = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EventRegistry</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Map</span>.<span class="hljs-title">To</span> <span class="hljs-title">EventType</span></span>
+	
+		<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(eventtypes=[])</span> -&gt;</span>
+			<span class="hljs-keyword">super</span> eventtypes
+			
+		<span class="hljs-attribute">register</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> args...
+		
+		<span class="hljs-attribute">create</span>: Function.Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> EventType) \
+			<span class="hljs-function"><span class="hljs-params">(eventtype)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span> <span class="hljs-property">@add</span> key, eventtype
+		
+		<span class="hljs-attribute">subscribe</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Object)</span> <span class="hljs-params">(subscriptions)</span> -&gt;</span>
+			<span class="hljs-property">@get</span>(name).subscribe(subscriber) <span class="hljs-keyword">for</span> own name, subscriber <span class="hljs-keyword">of</span> subscriptions
+		
+		<span class="hljs-attribute">republish</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Object)</span> <span class="hljs-params">(publications)</span> -&gt;</span>
+			<span class="hljs-property">@get</span>(name).republished(eventtype) <span class="hljs-keyword">for</span> own name, eventtype <span class="hljs-keyword">of</span> publications</pre></div></div>
             
         </li>
         
