@@ -2,6 +2,7 @@
 
 		
 		Number.valid = (value) -> Object.isa(Number)(value) and not isNaN value
+		
 
 ## Predicates
 
@@ -12,7 +13,7 @@
 ## Operators
 
 		
-		Number::plus= Function.From(Number) (x) -> this + x
+		Number::plus = Function.From(Number) (x) -> this + x
 		
 		Number::minus = Function.From(Number) (x) -> this - x
 		
