@@ -188,16 +188,9 @@ define(function() {
   };
   Array.all = function(predicate) {
     return function(array) {
-      var x;
-      return Array.reduce(Boolean.and)((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          x = array[_i];
-          _results.push(predicate.call(x, x));
-        }
-        return _results;
-      })());
+      return Array.reduce(Boolean.and)(array.map(function(x) {
+        return predicate.call(x, x);
+      }));
     };
   };
   Array.prototype.all = function(predicate) {
@@ -205,16 +198,9 @@ define(function() {
   };
   Array.any = function(predicate) {
     return function(array) {
-      var x;
-      return Array.reduce(Boolean.or)((function() {
-        var _i, _len, _results;
-        _results = [];
-        for (_i = 0, _len = array.length; _i < _len; _i++) {
-          x = array[_i];
-          _results.push(predicate.call(x, x));
-        }
-        return _results;
-      })());
+      return Array.reduce(Boolean.or)(array.map(function(x) {
+        return predicate.call(x, x);
+      }));
     };
   };
   Array.prototype.any = function(predicate) {
@@ -226,8 +212,11 @@ define(function() {
   Array.prototype.none = function(predicate) {
     return Array.none(predicate)(this);
   };
+  Array.ordered = function(array) {
+    return Array.reduce(Boolean.and)(Array.zipWith(Value.lt)(array, array.slice(1)));
+  };
   Array.prototype.ordered = function() {
-    return Array.reduce(Boolean.and)(Array.zipWith(Value.lt)(this, this.slice(1)));
+    return Array.ordered(this);
   };
   Array.count = function(predicate) {
     if (predicate == null) {

@@ -98,7 +98,14 @@
 		equal [].none(odd), true, 'Returns true for empty array (for all predicates)'
 		equal [2,4,6,8].none(odd), true, 'Returns true if no elements match predicate'
 		equal [2,4,5,6,8].none(odd), false, 'Returns false if any element matches predicate'
+	
+	test 'Array.ordered', ->
 		
+		equal Array.ordered([1,2,3,4]), true, 'Returns true if array in increasing order'
+		equal Array.ordered([2,3,1,4]), false, 'Returns false if array not in increasing order'
+		equal Array.ordered(['a','b','c']), true, 'Works with ordered strings'
+		equal Array.ordered(['b','a','c']), false, 'Works with unordered strings'
+	
 	test 'Array::ordered', ->
 		
 		equal [1,2,3,4].ordered(), true, 'Returns true if array in increasing order'
