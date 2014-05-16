@@ -51,6 +51,24 @@ define(['jmodel/topaz2'], function() {
     equal(Array.hastypes([Number])([1, 2, 3]), true, 'Works for array type specifiers');
     return equal(Array.hastypes([Number])(), true, 'Array type specifiers include zero length case');
   });
+  test('Array.all', function() {
+    var odd;
+    odd = function(i) {
+      return i % 2 === 1;
+    };
+    equal(Array.all(odd)([]), true, 'Returns true for empty array (for all predicates)');
+    equal(Array.all(odd)([1, 3, 5, 7]), true, 'Returns true if all elements match predicate');
+    return equal(Array.all(odd)([1, 3, 4, 5, 7]), false, 'Returns false if any element does not match predicate');
+  });
+  test('Array::all', function() {
+    var odd;
+    odd = function(i) {
+      return i % 2 === 1;
+    };
+    equal([].all(odd), true, 'Returns true for empty array (for all predicates)');
+    equal([1, 3, 5, 7].all(odd), true, 'Returns true if all elements match predicate');
+    return equal([1, 3, 4, 5, 7].all(odd), false, 'Returns false if any element does not match predicate');
+  });
   test('Array.count', function() {
     var numbers, odd;
     odd = function(value) {
