@@ -105,6 +105,12 @@ define(['jmodel/topaz2'], function() {
     equal([2, 4, 6, 8].none(odd), true, 'Returns true if no elements match predicate');
     return equal([2, 4, 5, 6, 8].none(odd), false, 'Returns false if any element matches predicate');
   });
+  test('Array::ordered', function() {
+    equal([1, 2, 3, 4].ordered(), true, 'Returns true if array in increasing order');
+    equal([2, 3, 1, 4].ordered(), false, 'Returns false if array not in increasing order');
+    equal(['a', 'b', 'c'].ordered(), true, 'Works with ordered strings');
+    return equal(['b', 'a', 'c'].ordered(), false, 'Works with unordered strings');
+  });
   test('Array.count', function() {
     var numbers, odd;
     odd = function(i) {

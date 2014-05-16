@@ -52,7 +52,7 @@
 		
 		Array::none = (predicate) -> Array.none(predicate) this	
 			
-		Array::ordered = -> Array.reduce(Boolean.and) ( x < y for [x,y] in Array.zip this, this[1..] )
+		Array::ordered = -> Array.reduce(Boolean.and) Array.zipWith(Value.lt) this, this[1..]
 				
 
 ## Reductions
