@@ -119,7 +119,10 @@
 	Array.<span class="hljs-function"><span class="hljs-title">flatten</span> = <span class="hljs-params">(array=[])</span> -&gt;</span>
 		Array.concat ( ( <span class="hljs-keyword">if</span> arr <span class="hljs-keyword">instanceof</span> Array <span class="hljs-keyword">then</span> Array.flatten(arr) <span class="hljs-keyword">else</span> arr ) <span class="hljs-keyword">for</span> arr <span class="hljs-keyword">in</span> array )...
 		
-	Array.<span class="hljs-function"><span class="hljs-title">equal</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> a.length == b.length <span class="hljs-keyword">and</span> Array.reduce(Boolean.<span class="hljs-keyword">and</span>) ( a == b <span class="hljs-keyword">for</span> [a,b] <span class="hljs-keyword">in</span> Array.zip a, b )</pre></div></div>
+	Array.<span class="hljs-function"><span class="hljs-title">equal</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> a.length == b.length <span class="hljs-keyword">and</span> Array.reduce<span class="hljs-function"><span class="hljs-params">(Boolean.<span class="hljs-keyword">and</span>)</span> <span class="hljs-title">Array</span>.<span class="hljs-title">zipWith</span><span class="hljs-params">((x,y) -&gt; x==y)</span> <span class="hljs-title">a</span>, <span class="hljs-title">b</span>
+	
+
+</span></pre></div></div>
             
         </li>
         
