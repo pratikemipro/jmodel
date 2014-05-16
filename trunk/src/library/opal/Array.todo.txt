@@ -10,8 +10,8 @@ Array.flatten		full	none
 Array.equal			full	none
 
 Array.hastypes		partial	none
-Array.all			none	none
-Array::all			none	none
+Array.all			full	none
+Array::all			full	none
 Array.any			none	none
 Array::any			none	none
 Array.none			none	none
