@@ -123,6 +123,15 @@ define(function() {
     }
     return _results;
   };
+  Array.zipWith = function(fn) {
+    return function() {
+      var arrays;
+      arrays = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      return Array.zip.apply(Array, arrays).map(function(arr) {
+        return fn.apply(null, arr);
+      });
+    };
+  };
   Array.flatten = function(array) {
     var arr;
     if (array == null) {

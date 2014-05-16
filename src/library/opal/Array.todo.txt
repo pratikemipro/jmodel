@@ -5,6 +5,7 @@ Array.concat		full	none
 Array.map			full	none
 Array.reduce		none	none
 Array.zip			full	none
+Array.zipWith		full	none
 Array.flatten		full	none
 Array.equal			none	none
 
