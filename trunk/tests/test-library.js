@@ -26,6 +26,11 @@ define(['jmodel/topaz2'], function() {
     deepEqual(Array.zip([1, 2, 3], [4, 5, 6], [7, 8, 9]), [[1, 4, 7], [2, 5, 8], [3, 6, 9]], 'Zip works with more than two arguments');
     return deepEqual(Array.zip([1, 2], [3, 4, 5]), [[1, 3], [2, 4]], 'Only zips matching elements of arrays of unequal length');
   });
+  test('Array.zipWith', function() {
+    deepEqual(Array.zipWith(Math.plus)(), [], 'zipWith of zero arrays is empty array');
+    deepEqual(Array.zipWith(Math.plus)([1, 2], [3, 4]), [4, 6], 'zipWith works with equal length arrays');
+    return deepEqual(Array.zipWith(Math.plus)([1, 2], [3, 4, 5]), [4, 6], 'Only zips matching elements of arrays of unequal length');
+  });
   test('Array.flatten', function() {
     deepEqual(Array.flatten(), [], 'Empty argument flattens to empty array');
     deepEqual(Array.flatten([1, 2, 3, 4]), [1, 2, 3, 4], 'Flat array is returned unchanged');

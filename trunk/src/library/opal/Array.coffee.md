@@ -11,6 +11,9 @@
 			maxIndex = Math.min ( arr.length-1 for arr in arrays )...
 			return [] if maxIndex in [-1,Infinity]
 			( arr[i] for arr in arrays for i in [0..maxIndex] )
+			
+		Array.zipWith = (fn) -> (arrays...) ->
+			Array.zip(arrays...).map (arr) -> fn arr...
 		
 		Array.flatten = (array=[]) ->
 			Array.concat ( ( if arr instanceof Array then Array.flatten(arr) else arr ) for arr in array )...
