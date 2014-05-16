@@ -18,6 +18,9 @@ define(function() {
   window.Value.equal = function(x, y) {
     return x === y;
   };
+  window.Value.lt = function(x, y) {
+    return x < y;
+  };
   window.Value.valid = function(x) {
     return x !== void 0;
   };
@@ -224,17 +227,7 @@ define(function() {
     return Array.none(predicate)(this);
   };
   Array.prototype.ordered = function() {
-    var x, y;
-    return Array.reduce(Boolean.and)((function() {
-      var _i, _len, _ref, _ref1, _results;
-      _ref = Array.zip(this, this.slice(1));
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        _ref1 = _ref[_i], x = _ref1[0], y = _ref1[1];
-        _results.push(x < y);
-      }
-      return _results;
-    }).call(this));
+    return Array.reduce(Boolean.and)(Array.zipWith(Value.lt)(this, this.slice(1)));
   };
   Array.count = function(predicate) {
     if (predicate == null) {
