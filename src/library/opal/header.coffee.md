@@ -11,6 +11,7 @@
 		# NOTE: Define assert here
 	
 		window.Value = ->
+		window.Value.equal = (x,y) -> x == y
 		window.Value.valid = (x) -> x != undefined
 		
 		window.Scalar = ->
