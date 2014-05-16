@@ -69,6 +69,24 @@ define(['jmodel/topaz2'], function() {
     equal([1, 3, 5, 7].all(odd), true, 'Returns true if all elements match predicate');
     return equal([1, 3, 4, 5, 7].all(odd), false, 'Returns false if any element does not match predicate');
   });
+  test('Array.any', function() {
+    var odd;
+    odd = function(i) {
+      return i % 2 === 1;
+    };
+    equal(Array.any(odd)([]), false, 'Returns false for empty arrays (for all predicates)');
+    equal(Array.any(odd)([2, 4, 6]), false, 'Returns false if no element matches predicate');
+    return equal(Array.any(odd)([2, 4, 5, 6]), true, 'Returns true if any element matches predicate');
+  });
+  test('Array::any', function() {
+    var odd;
+    odd = function(i) {
+      return i % 2 === 1;
+    };
+    equal([].any(odd), false, 'Returns false for empty arrays (for all predicates)');
+    equal([2, 4, 6].any(odd), false, 'Returns false if no element matches predicate');
+    return equal([2, 4, 5, 6].any(odd), true, 'Returns true if any element matches predicate');
+  });
   test('Array.count', function() {
     var numbers, odd;
     odd = function(value) {
