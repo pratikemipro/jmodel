@@ -29,6 +29,13 @@
 		deepEqual Array.flatten( [[1,2],[3,4],[5,6]] ), [1,2,3,4,5,6], 'Flattens array of arrays'
 		deepEqual Array.flatten( [[1,[2,3]],[[4,5],6]] ), [1,2,3,4,5,6], 'Flatten works with differing depths'
 		
+	test 'Array.equal', ->
+		
+		equal Array.equal([1,2],[1]), false, 'Arrays with unequal lengths are not equal'
+		equal Array.equal([1,2,3],[1,4,3]), false, 'Array with unequal elements are not equal'
+		equal Array.equal([1,2,3],[1,2,3]), true, 'Arrays with equal elements are equal'
+		equal Array.equal([1,2,3],['1','2','3']), false, 'Equality testing is strict'
+		
 	test 'Array.hastypes', ->
 
 		equal Array.hastypes()([]), true, 'Returns true for empty array when type array is empty'
