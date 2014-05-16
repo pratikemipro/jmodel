@@ -7,7 +7,7 @@ Array.reduce		none	none
 Array.zip			full	none
 Array.zipWith		full	none
 Array.flatten		full	none
-Array.equal			none	none
+Array.equal			full	none
 
 Array.hastypes		partial	none
 Array.all			none	none
