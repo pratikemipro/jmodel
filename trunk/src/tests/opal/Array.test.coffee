@@ -83,9 +83,25 @@
 		equal [2,4,6].any(odd), false, 'Returns false if no element matches predicate'
 		equal [2,4,5,6].any(odd), true, 'Returns true if any element matches predicate'
 	
+	test 'Array.none', ->
+		
+		odd = (i) -> i % 2 == 1
+		
+		equal Array.none(odd)([]), true, 'Returns true for empty array (for all predicates)'
+		equal Array.none(odd)([2,4,6,8]), true, 'Returns true if no elements match predicate'
+		equal Array.none(odd)([2,4,5,6,8]), false, 'Returns false if any element matches predicate'
+		
+	test 'Array::none', ->
+		
+		odd = (i) -> i % 2 == 1
+		
+		equal [].none(odd), true, 'Returns true for empty array (for all predicates)'
+		equal [2,4,6,8].none(odd), true, 'Returns true if no elements match predicate'
+		equal [2,4,5,6,8].none(odd), false, 'Returns false if any element matches predicate'
+	
 	test 'Array.count', ->
 		
-		odd = (value) -> value % 2 == 1
+		odd = (i) -> i % 2 == 1
 		numbers = [1,2,3,4,5,6,7,8,9]
 		
 		equal numbers.reduce(Array.count()), 9, 'Counts all elements if called without a predicate'
