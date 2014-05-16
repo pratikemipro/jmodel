@@ -6,6 +6,13 @@
 		deepEqual Array.concat([1,2,3]), [1,2,3], 'Concatenation of one array is array'
 		deepEqual Array.concat([1,2],[3,4],[5,6]), [1,2,3,4,5,6], 'Concatenation works with more than two arguments'
 		deepEqual Array.concat([1,2],3,4,[5,6]), [1,2,3,4,5,6], 'Concatenation treats bare elements as one-element arrays'
+		
+	test 'Array.map', ->
+		
+		double = (x) -> 2*x
+		
+		deepEqual Array.map(double)([]), [], 'Array mapping works with empty arrays'
+		deepEqual Array.map(double)([1,2,3,4,5]), [2,4,6,8,10], 'Array mapping works with non-empty arrays'
 	
 	test 'Array.zip', ->
 		

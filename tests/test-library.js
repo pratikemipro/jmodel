@@ -11,6 +11,14 @@ define(['jmodel/topaz2'], function() {
     deepEqual(Array.concat([1, 2], [3, 4], [5, 6]), [1, 2, 3, 4, 5, 6], 'Concatenation works with more than two arguments');
     return deepEqual(Array.concat([1, 2], 3, 4, [5, 6]), [1, 2, 3, 4, 5, 6], 'Concatenation treats bare elements as one-element arrays');
   });
+  test('Array.map', function() {
+    var double;
+    double = function(x) {
+      return 2 * x;
+    };
+    deepEqual(Array.map(double)([]), [], 'Array mapping works with empty arrays');
+    return deepEqual(Array.map(double)([1, 2, 3, 4, 5]), [2, 4, 6, 8, 10], 'Array mapping works with non-empty arrays');
+  });
   test('Array.zip', function() {
     deepEqual(Array.zip(), [], 'Zip of zero arrays is empty array');
     deepEqual(Array.zip([1, 2]), [[1], [2]], 'Zip works with one argument');

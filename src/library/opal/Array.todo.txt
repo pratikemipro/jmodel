@@ -2,7 +2,7 @@ Function			Tests	Docs
 -----------------------------------
 
 Array.concat		full	none
-Array.map			none	none
+Array.map			full	none
 Array.reduce		none	none
 Array.zip			full	none
 Array.flatten		full	none
