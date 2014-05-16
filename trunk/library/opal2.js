@@ -15,6 +15,9 @@ var __hasProp = {}.hasOwnProperty,
 define(function() {
   var Constructor, Promise, Type, _base;
   window.Value = function() {};
+  window.Value.equal = function(x, y) {
+    return x === y;
+  };
   window.Value.valid = function(x) {
     return x !== void 0;
   };
@@ -148,9 +151,7 @@ define(function() {
     })());
   };
   Array.equal = function(a, b) {
-    return a.length === b.length && Array.reduce(Boolean.and)(Array.zipWith(function(x, y) {
-      return x === y;
-    })(a, b));
+    return a.length === b.length && Array.reduce(Boolean.and)(Array.zipWith(Value.equal)(a, b));
   };
   Array.hastypes = function() {
     var types;

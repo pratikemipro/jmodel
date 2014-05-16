@@ -18,7 +18,7 @@
 		Array.flatten = (array=[]) ->
 			Array.concat ( ( if arr instanceof Array then Array.flatten(arr) else arr ) for arr in array )...
 			
-		Array.equal = (a,b) -> a.length == b.length and Array.reduce(Boolean.and) Array.zipWith((x,y) -> x==y) a, b
+		Array.equal = (a,b) -> a.length == b.length and Array.reduce(Boolean.and) Array.zipWith(Value.equal) a, b
 		
 
 ## Predicates
