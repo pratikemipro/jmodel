@@ -12,8 +12,8 @@ Array.equal			full	none
 Array.hastypes		partial	none
 Array.all			full	none
 Array::all			full	none
-Array.any			none	none
-Array::any			none	none
+Array.any			full	none
+Array::any			full	none
 Array.none			none	none
 Array::none			none	none
 Array::ordered		none	none
