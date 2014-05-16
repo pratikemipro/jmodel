@@ -64,39 +64,40 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Record</h1>
+              <h1 id="record">Record</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Record = <span class="class"><span class="keyword">class</span> <span class="title">Record</span></span>
-
-		<span class="property">@Of</span>: Function.From(Object) (constructors) -&gt; 
-
-			record = <span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-
-				constructor: (data={}) -&gt;
-					<span class="property">@_</span> = {}
-					@[field] data[field] <span class="keyword">for</span> field <span class="keyword">in</span> <span class="property">@fields</span>
-
-				fields: ( field <span class="keyword">for</span> own field <span class="keyword">of</span> constructors )
-
-			<span class="keyword">for</span> own field, constructor <span class="keyword">of</span> constructors
-				<span class="keyword">do</span> (field,constructor) -&gt;
+            <div class="content"><div class='highlight'><pre>	
+	<span class="hljs-built_in">window</span>.Record = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Record</span></span>
+	
+		<span class="hljs-property">@Of</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Object)</span> <span class="hljs-params">(constructors)</span> -&gt;</span> 
+		
+			record = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
+			
+				<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(data={})</span> -&gt;</span>
+					<span class="hljs-property">@_</span> = {}
+					@[field] data[field] <span class="hljs-keyword">for</span> field <span class="hljs-keyword">in</span> <span class="hljs-property">@fields</span>
+					
+				<span class="hljs-attribute">fields</span>: ( field <span class="hljs-keyword">for</span> own field <span class="hljs-keyword">of</span> constructors )
+			
+			<span class="hljs-keyword">for</span> own field, constructor <span class="hljs-keyword">of</span> constructors
+				<span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(field,constructor)</span> -&gt;</span>
 					record.prototype[field] = Function.overload [
 						Function.From(Not Function) \
-							Function.Of(constructor).Chaining (value) -&gt;
-								<span class="property">@_</span>[field] = value
+							Function.Of<span class="hljs-function"><span class="hljs-params">(constructor)</span>.<span class="hljs-title">Chaining</span> <span class="hljs-params">(value)</span> -&gt;</span>
+								<span class="hljs-property">@_</span>[field] = value
 						Function.From(Function) \
-							Function.Chaining (fn) -&gt;
-								@[field] fn.call <span class="keyword">this</span>, <span class="property">@_</span>[field]
-						Function.From() \
-							-&gt; <span class="property">@_</span>[field]
+							Function.Chaining <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span>
+								@[field] fn.call <span class="hljs-keyword">this</span>, <span class="hljs-property">@_</span>[field]
+						Function.From() \<span class="hljs-function">
+							-&gt;</span> <span class="hljs-property">@_</span>[field]
 					]
-
-			<span class="keyword">return</span> record</pre></div></div>
+			
+			<span class="hljs-keyword">return</span> record</pre></div></div>
             
         </li>
         

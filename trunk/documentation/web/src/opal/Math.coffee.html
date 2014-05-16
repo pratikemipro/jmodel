@@ -94,22 +94,23 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Math</h1>
+              <h1 id="math">Math</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Math.<span class="function"><span class="title">plus</span></span> = (a=<span class="number">0</span>,b=<span class="number">0</span>) -&gt; a + b
-	Math.plus.unit = <span class="number">0</span>
+            <div class="content"><div class='highlight'><pre>	
+	Math.<span class="hljs-function"><span class="hljs-title">plus</span> = <span class="hljs-params">(a=<span class="hljs-number">0</span>,b=<span class="hljs-number">0</span>)</span> -&gt;</span> a + b
+	Math.plus.unit = <span class="hljs-number">0</span>
+	
+	Math.<span class="hljs-function"><span class="hljs-title">sum</span> = <span class="hljs-params">(args...)</span> -&gt;</span> args.reduce Math.plus, <span class="hljs-number">0</span>
 
-	Math.<span class="function"><span class="title">sum</span></span> = (args...) -&gt; args.reduce Math.plus, <span class="number">0</span>
-
-	Math.<span class="function"><span class="title">times</span></span> = (a=<span class="number">1</span>,b=<span class="number">1</span>) -&gt; a * b
-	Math.times.unit = <span class="number">1</span>
-
-	Math.<span class="function"><span class="title">product</span></span> = (args...) -&gt; args.reduce Math.times, <span class="number">1</span></pre></div></div>
+	Math.<span class="hljs-function"><span class="hljs-title">times</span> = <span class="hljs-params">(a=<span class="hljs-number">1</span>,b=<span class="hljs-number">1</span>)</span> -&gt;</span> a * b
+	Math.times.unit = <span class="hljs-number">1</span>
+	
+	Math.<span class="hljs-function"><span class="hljs-title">product</span> = <span class="hljs-params">(args...)</span> -&gt;</span> args.reduce Math.times, <span class="hljs-number">1</span></pre></div></div>
             
         </li>
         

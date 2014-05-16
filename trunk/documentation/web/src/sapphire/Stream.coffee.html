@@ -64,25 +64,26 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Stream</h1>
+              <h1 id="stream">Stream</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.Stream = <span class="class"><span class="keyword">class</span> <span class="title">Stream</span></span>
+            <div class="content"><div class='highlight'><pre>	
+	<span class="hljs-built_in">window</span>.Stream = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Stream</span></span>
 
-		constructor: -&gt;
-			<span class="property">@fns</span> = []
-
-		add: Function.Chaining (first,rest...) -&gt; fn.call first, first, rest... <span class="keyword">for</span> fn <span class="keyword">in</span> <span class="property">@fns</span>
-
-		each: Function.From(Function) \
-			(fn) -&gt; <span class="property">@fns</span>.push fn
-
-		derive: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> <span class="property">@constructor</span>() ) \
-			(child) -&gt; (fn) -&gt; <span class="property">@each</span> fn.bind child</pre></div></div>
+		<span class="hljs-attribute">constructor</span>:<span class="hljs-function"> -&gt;</span>
+			<span class="hljs-property">@fns</span> = []
+		
+		<span class="hljs-attribute">add</span>: Function.Chaining <span class="hljs-function"><span class="hljs-params">(first,rest...)</span> -&gt;</span> fn.call first, first, rest... <span class="hljs-keyword">for</span> fn <span class="hljs-keyword">in</span> <span class="hljs-property">@fns</span>
+		
+		<span class="hljs-attribute">each</span>: Function.From(Function) \
+			<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-property">@fns</span>.push fn
+		
+		<span class="hljs-attribute">derive</span>: Function.From(Function).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span>() ) \
+			<span class="hljs-function"><span class="hljs-params">(child)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-property">@each</span> fn.bind child</pre></div></div>
             
         </li>
         
@@ -90,16 +91,17 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h1>Typed streams</h1>
+              <h1 id="typed-streams">Typed streams</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: Function.From(Function) (constructor) -&gt;
-			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		
+		<span class="hljs-property">@Of</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
+			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
+				<span class="hljs-attribute">add</span>: Function.Of(constructor) <span class="hljs-attribute">this</span>::add</pre></div></div>
             
         </li>
         
@@ -107,45 +109,46 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2>Derived streams</h2>
+              <h2 id="derived-streams">Derived streams</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		map: Function.From(Function).To(Stream) \
-			(fn) -&gt; <span class="property">@derive</span> (first,rest...) -&gt; <span class="property">@add</span> fn.call first, first, rest...
-
-		where: Function.From(Function).To(Stream) \
-			(predicate) -&gt; <span class="property">@derive</span> (first,rest...) -&gt;
-				<span class="property">@add</span> first, rest... <span class="keyword">if</span> predicate.call first, first, rest...
-
-		take: Function.From(Number).To(Stream) \
-			(number) -&gt; <span class="property">@where</span> -&gt; number-- &gt; <span class="number">0</span>
-
-		drop: Function.From(Number).To(Stream) \
-			(number) -&gt; <span class="property">@where</span> -&gt; --number &lt; <span class="number">0</span>
-
-		transition: Function.To(Stream) \
-			-&gt; <span class="keyword">do</span> (last=<span class="literal">undefined</span>) =&gt;
-				<span class="property">@where</span> (x) -&gt; last != x <span class="keyword">and</span> ( ( last = x ) <span class="keyword">or</span> <span class="literal">true</span> )
-
-		control: Function.From(Stream).To(Stream) \
-			(control) -&gt; <span class="keyword">do</span> (active=<span class="literal">true</span>) =&gt;
-				control.each Function.Of(Boolean) (state) -&gt; active = state
-				<span class="property">@where</span> -&gt; active
-
-		between: Function.From(Stream,Stream).To(Stream) \
-			(start,stop) -&gt;
-				<span class="property">@control</span> Stream.disjoin \
+            <div class="content"><div class='highlight'><pre>		
+		<span class="hljs-attribute">map</span>: Function.From(Function).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-property">@derive</span> <span class="hljs-function"><span class="hljs-params">(first,rest...)</span> -&gt;</span> <span class="hljs-property">@add</span> fn.call first, first, rest...
+		
+		<span class="hljs-attribute">where</span>: Function.From(Function).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(predicate)</span> -&gt;</span> <span class="hljs-property">@derive</span> <span class="hljs-function"><span class="hljs-params">(first,rest...)</span> -&gt;</span>
+				<span class="hljs-property">@add</span> first, rest... <span class="hljs-keyword">if</span> predicate.call first, first, rest...
+		
+		<span class="hljs-attribute">take</span>: Function.From(Number).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(number)</span> -&gt;</span> <span class="hljs-property">@where</span><span class="hljs-function"> -&gt;</span> number-- &gt; <span class="hljs-number">0</span>
+		
+		<span class="hljs-attribute">drop</span>: Function.From(Number).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(number)</span> -&gt;</span> <span class="hljs-property">@where</span><span class="hljs-function"> -&gt;</span> --number &lt; <span class="hljs-number">0</span>
+		
+		<span class="hljs-attribute">transition</span>: Function.To(Stream) \<span class="hljs-function">
+			-&gt;</span> <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(last=<span class="hljs-literal">undefined</span>)</span> =&gt;</span>
+				<span class="hljs-property">@where</span> <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> last != x <span class="hljs-keyword">and</span> ( ( last = x ) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span> )
+				
+		<span class="hljs-attribute">control</span>: Function.From(Stream).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(control)</span> -&gt;</span> <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(active=<span class="hljs-literal">true</span>)</span> =&gt;</span>
+				control.each Function.Of<span class="hljs-function"><span class="hljs-params">(Boolean)</span> <span class="hljs-params">(state)</span> -&gt;</span> active = state
+				<span class="hljs-property">@where</span><span class="hljs-function"> -&gt;</span> active
+				
+		<span class="hljs-attribute">between</span>: Function.From(Stream,Stream).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(start,stop)</span> -&gt;</span>
+				<span class="hljs-property">@control</span> Stream.disjoin \
 					start.map(Boolean.True),
 					stop.map(Boolean.False)
-
-		accumulate: Function.From(Function,Maybe Value).To(Stream) \
-			(reduction,initial=reduction.unit) -&gt; <span class="keyword">do</span> (acc=initial) =&gt;
-				<span class="property">@derive</span> (args...) -&gt;
-					<span class="property">@add</span> acc = reduction.call <span class="keyword">this</span>, acc, args...</pre></div></div>
+					
+		<span class="hljs-attribute">accumulate</span>: Function.From(Function,Maybe Value).To(Stream) \
+			<span class="hljs-function"><span class="hljs-params">(reduction,initial=reduction.unit)</span> -&gt;</span> <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(acc=initial)</span> =&gt;</span>
+				<span class="hljs-property">@derive</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
+					<span class="hljs-property">@add</span> acc = reduction.call <span class="hljs-keyword">this</span>, acc, args...</pre></div></div>
             
         </li>
         
@@ -153,17 +156,18 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2>Stream combinators</h2>
+              <h2 id="stream-combinators">Stream combinators</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="property">@disjoin</span>: Function.From([Stream]).Returning(-&gt; <span class="keyword">new</span> Stream) \
-			(disjunction) -&gt; (streams...) -&gt;
-				<span class="keyword">for</span> stream <span class="keyword">in</span> streams
-					stream.each (args...) -&gt; disjunction.add args...</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		
+		<span class="hljs-property">@disjoin</span>: Function.From([Stream]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> Stream) \
+			<span class="hljs-function"><span class="hljs-params">(disjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(streams...)</span> -&gt;</span>
+				<span class="hljs-keyword">for</span> stream <span class="hljs-keyword">in</span> streams
+					stream.each <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> disjunction.add args...</pre></div></div>
             
         </li>
         
