@@ -554,20 +554,20 @@ define(function() {
   Function.prototype.and = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
-    return Predicate(function() {
+    return function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return Boolean.and(predicate1.apply(this, args), predicate2.apply(this, args));
-    });
+    };
   });
   Function.prototype.or = Function.From(Function)(function(predicate2) {
     var predicate1;
     predicate1 = this;
-    return Predicate(function() {
+    return function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return Boolean.or(predicate1.apply(this, args), predicate2.apply(this, args));
-    });
+    };
   });
   Function.prototype.not = function() {
     var predicate;
