@@ -259,7 +259,7 @@ define(function() {
       return constant;
     };
   };
-  Function["arguments"] = function() {
+  Function.args = function() {
     var args;
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return args;

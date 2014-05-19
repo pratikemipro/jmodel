@@ -5,7 +5,7 @@ Function::extend		none	none
                        	
 Function.identity		full	full
 Function.constant		full	full
-Function.arguments		none	partial
+Function.args			full	partial
 Function.argument		full	partial
 Function.map			full	partial
 Function.overload		partial	none

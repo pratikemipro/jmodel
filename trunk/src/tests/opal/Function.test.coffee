@@ -23,6 +23,10 @@
 		equals fred(), 'fred', 'Works with no arguments'
 		equals fred(1,2,3), 'fred', 'Works with arguments'
 		
+	test 'Function.args', ->
+		
+		deepEqual Function.args(1,2,3,4), [1,2,3,4], 'Returns arguments correctly'
+		
 	test 'Function.argument', ->
 	
 		equals Function.argument(0).call(this,'red','green','blue'), 'red', 'Function.argument(0) works'
