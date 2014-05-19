@@ -433,43 +433,43 @@
 		
 	module 'Predicate methods'
 		
-	test 'Function::eq', ->
+	test 'Function.eq', ->
 		
 		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
 		
 		
-	test 'Function::neq', ->
+	test 'Function.neq', ->
 		
 		equal Function.neq(5)(3), true, 'returns true when applied to value not equal to argument'
 		equal Function.neq(5)(5), false, 'returns false when applied to value equal to argument'
 
 
-	test 'Function::lt', ->
+	test 'Function.lt', ->
 		
 		equal Function.lt(5)(3), true, 'returns true when applied to value less than argument'
 		equal Function.lt(5)(5), false, 'returns false when applied to value equal to argument'
 		equal Function.lt(5)(7), false, 'returns false when applied to value greater than argument'
 		
-	test 'Function::gt', ->
+	test 'Function.gt', ->
 		
 		equal Function.gt(5)(3), false, 'returns false when applied to value less than argument'
 		equal Function.gt(5)(5), false, 'returns false when applied to value equal to argument'
 		equal Function.gt(5)(7), true, 'returns true when applied to value greater than argument'
 		
-	test 'Function::lte', ->
+	test 'Function.lte', ->
 		
 		equal Function.lte(5)(3), true, 'returns true when applied to value less than argument'
 		equal Function.lte(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.lte(5)(7), false, 'returns false when applied to value greater than argument'
 		
-	test 'Function::gte', ->
+	test 'Function.gte', ->
 		
 		equal Function.gte(5)(3), false, 'returns false when applied to value less than argument'
 		equal Function.gte(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.gte(5)(7), true, 'returns true when applied to value greater than argument'
 		
-	test 'Function::between', ->
+	test 'Function.between', ->
 		
 		equal Function.between(3,5)(2), false, 'returns false when applied to value less than lower bound'
 		equal Function.between(3,5)(3), true, 'returns true when applied to value equal to lower bound'

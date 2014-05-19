@@ -758,35 +758,35 @@ define(['jmodel/topaz2'], function() {
   module('Function: Ordering');
   test('Function.asc', function() {});
   module('Predicate methods');
-  test('Function::eq', function() {
+  test('Function.eq', function() {
     equal(Function.eq(5)(5), true, 'returns true when applied to value equal to argument');
     return equal(Function.eq(5)(3), false, 'returns false when applied to value not equal to argument');
   });
-  test('Function::neq', function() {
+  test('Function.neq', function() {
     equal(Function.neq(5)(3), true, 'returns true when applied to value not equal to argument');
     return equal(Function.neq(5)(5), false, 'returns false when applied to value equal to argument');
   });
-  test('Function::lt', function() {
+  test('Function.lt', function() {
     equal(Function.lt(5)(3), true, 'returns true when applied to value less than argument');
     equal(Function.lt(5)(5), false, 'returns false when applied to value equal to argument');
     return equal(Function.lt(5)(7), false, 'returns false when applied to value greater than argument');
   });
-  test('Function::gt', function() {
+  test('Function.gt', function() {
     equal(Function.gt(5)(3), false, 'returns false when applied to value less than argument');
     equal(Function.gt(5)(5), false, 'returns false when applied to value equal to argument');
     return equal(Function.gt(5)(7), true, 'returns true when applied to value greater than argument');
   });
-  test('Function::lte', function() {
+  test('Function.lte', function() {
     equal(Function.lte(5)(3), true, 'returns true when applied to value less than argument');
     equal(Function.lte(5)(5), true, 'returns true when applied to value equal to argument');
     return equal(Function.lte(5)(7), false, 'returns false when applied to value greater than argument');
   });
-  test('Function::gte', function() {
+  test('Function.gte', function() {
     equal(Function.gte(5)(3), false, 'returns false when applied to value less than argument');
     equal(Function.gte(5)(5), true, 'returns true when applied to value equal to argument');
     return equal(Function.gte(5)(7), true, 'returns true when applied to value greater than argument');
   });
-  test('Function::between', function() {
+  test('Function.between', function() {
     equal(Function.between(3, 5)(2), false, 'returns false when applied to value less than lower bound');
     equal(Function.between(3, 5)(3), true, 'returns true when applied to value equal to lower bound');
     equal(Function.between(3, 5)(4), true, 'returns true when applied to value strictly between bounds');
