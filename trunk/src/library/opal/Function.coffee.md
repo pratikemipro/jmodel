@@ -198,14 +198,14 @@
 			(predicate,predicates...) ->
 				switch arguments.length
 					when 1 then predicate
-					when 0 then -> true
+					when 0 then Boolean.True
 					else predicate.and Function.and predicates...
 		
 		Function.or = Function.From([Function]).To(Function) \
 			(predicate,predicates...) ->
 				switch arguments.length
 					when 1 then predicate
-					when 0 then -> false
+					when 0 then Boolean.False
 					else predicate.or Function.or predicates...
 		
 		Function.not = (predicate) ->

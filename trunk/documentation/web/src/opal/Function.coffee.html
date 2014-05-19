@@ -379,14 +379,14 @@
 		<span class="hljs-function"><span class="hljs-params">(predicate,predicates...)</span> -&gt;</span>
 			<span class="hljs-keyword">switch</span> arguments.length
 				<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> predicate
-				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span><span class="hljs-function"> -&gt;</span> <span class="hljs-literal">true</span>
+				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Boolean.True
 				<span class="hljs-keyword">else</span> predicate.<span class="hljs-keyword">and</span> Function.<span class="hljs-keyword">and</span> predicates...
 	
 	Function.<span class="hljs-keyword">or</span> = Function.From([Function]).To(Function) \
 		<span class="hljs-function"><span class="hljs-params">(predicate,predicates...)</span> -&gt;</span>
 			<span class="hljs-keyword">switch</span> arguments.length
 				<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> predicate
-				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span><span class="hljs-function"> -&gt;</span> <span class="hljs-literal">false</span>
+				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Boolean.False
 				<span class="hljs-keyword">else</span> predicate.<span class="hljs-keyword">or</span> Function.<span class="hljs-keyword">or</span> predicates...
 	
 	Function.<span class="hljs-function"><span class="hljs-title">not</span> = <span class="hljs-params">(predicate)</span> -&gt;</span>
