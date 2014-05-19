@@ -637,13 +637,14 @@ define(function() {
     return _results;
   };
   Function.ordering = Function.or;
+  Function.prototype.is = Function.prototype.then;
   Function.eq = function(value) {
     return Predicate(function(x) {
       return x === value;
     });
   };
   Function.prototype.eq = function(value) {
-    return this.then(Function.eq(value));
+    return this.is(Function.eq(value));
   };
   Function.neq = function(value) {
     return Predicate(function(x) {
@@ -651,7 +652,7 @@ define(function() {
     });
   };
   Function.prototype.neq = function(value) {
-    return this.then(Function.neq(value));
+    return this.is(Function.neq(value));
   };
   Function.lt = function(value) {
     return Predicate(function(x) {
@@ -659,7 +660,7 @@ define(function() {
     });
   };
   Function.prototype.lt = function(value) {
-    return this.then(Function.lt(value));
+    return this.is(Function.lt(value));
   };
   Function.gt = function(value) {
     return Predicate(function(x) {
@@ -667,7 +668,7 @@ define(function() {
     });
   };
   Function.prototype.gt = function(value) {
-    return this.then(Function.gt(value));
+    return this.is(Function.gt(value));
   };
   Function.lte = function(value) {
     return Predicate(function(x) {
@@ -675,7 +676,7 @@ define(function() {
     });
   };
   Function.prototype.lte = function(value) {
-    return this.then(Function.lte(value));
+    return this.is(Function.lte(value));
   };
   Function.gte = function(value) {
     return Predicate(function(x) {
@@ -683,7 +684,7 @@ define(function() {
     });
   };
   Function.prototype.gte = function(value) {
-    return this.then(Function.gte(value));
+    return this.is(Function.gte(value));
   };
   Function.between = (Function.Requiring(function(lower, higher) {
     return lower < higher;
@@ -693,24 +694,18 @@ define(function() {
     });
   });
   Function.prototype.between = function(lower, higher) {
-    return this.then(Function.between(lower, higher));
+    return this.is(Function.between(lower, higher));
   };
-  Function.prototype.is = Function.prototype.then;
   Function.prototype.matches = function(regex) {
-    return this.then(Predicate(function(x) {
+    return this.is(Predicate(function(x) {
       return regex.test(x);
     }));
   };
   Function.prototype.isnull = function() {
-    return this.then(Function.eq(null));
-  };
-  Function.prototype.isa = function(constructor) {
-    return this.then(Predicate(function(x) {
-      return x instanceof constructor;
-    }));
+    return this.is(Function.eq(null));
   };
   Function.prototype.hastype = function(type) {
-    return this.then(Object.type.eq(type));
+    return this.is(Object.type.eq(type));
   };
   Function.prototype.isa = function(constructor) {
     return this === constructor || this.prototype instanceof constructor;

@@ -762,6 +762,12 @@ define(['jmodel/topaz2'], function() {
     equal(Function.eq(5)(5), true, 'returns true when applied to value equal to argument');
     return equal(Function.eq(5)(3), false, 'returns false when applied to value not equal to argument');
   });
+  test('Function.eq', function() {
+    var sumsToFive;
+    sumsToFive = Math.plus.eq(5);
+    equal(sumsToFive(2, 3), true, 'Returns true when return value equals correct value');
+    return equal(sumsToFive(2, 2), false, 'Returns false when return value does not equal correct value');
+  });
   test('Function.neq', function() {
     equal(Function.neq(5)(3), true, 'returns true when applied to value not equal to argument');
     return equal(Function.neq(5)(5), false, 'returns false when applied to value equal to argument');

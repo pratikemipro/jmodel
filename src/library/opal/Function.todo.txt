@@ -55,9 +55,9 @@ Function.delegate		none	none
 Function.delegates		none	none
                        	
 Function.ordering		none	none
-                       	
+                    	
 Function.eq				full	none
-Function::eq			none	full
+Function::eq			full	full
 Function.neq			full	none
 Function::neq			none	none
 Function.lt				full	none

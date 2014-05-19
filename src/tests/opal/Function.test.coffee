@@ -437,7 +437,13 @@
 		
 		equal Function.eq(5)(5), true, 'returns true when applied to value equal to argument'
 		equal Function.eq(5)(3), false, 'returns false when applied to value not equal to argument'
+	
+	test 'Function.eq', ->
 		
+		sumsToFive = Math.plus.eq 5
+		
+		equal sumsToFive(2,3), true, 'Returns true when return value equals correct value'
+		equal sumsToFive(2,2), false, 'Returns false when return value does not equal correct value'	
 		
 	test 'Function.neq', ->
 		

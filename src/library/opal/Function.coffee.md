@@ -236,38 +236,36 @@
 ## Predicates
 
 		
+		Function::is = Function::then
+		
 		Function.eq  = (value) -> Predicate (x) -> x == value
-		Function::eq = (value) -> @then Function.eq value
+		Function::eq = (value) -> @is Function.eq value
 		
 		Function.neq  = (value) -> Predicate (x) -> x != value
-		Function::neq = (value) -> @then Function.neq value
+		Function::neq = (value) -> @is Function.neq value
 		
 		Function.lt  = (value) -> Predicate (x) -> x < value
-		Function::lt = (value) -> @then Function.lt value
+		Function::lt = (value) -> @is Function.lt value
 		
 		Function.gt  = (value) -> Predicate (x) -> x > value
-		Function::gt = (value) -> @then Function.gt value
+		Function::gt = (value) -> @is Function.gt value
 		
 		Function.lte  = (value) -> Predicate (x) -> x <= value
-		Function::lte = (value) -> @then Function.lte value
+		Function::lte = (value) -> @is Function.lte value
 		
 		Function.gte  = (value) -> Predicate (x) -> x >= value
-		Function::gte = (value) -> @then Function.gte value
+		Function::gte = (value) -> @is Function.gte value
 		
 		Function.between = ( Function.Requiring (lower,higher) -> lower < higher ) (lower,higher) ->
 			Predicate (x) -> lower <= x <= higher
 		
-		Function::between = (lower,higher) -> @then Function.between lower,higher
+		Function::between = (lower,higher) -> @is Function.between lower,higher
 		
-		Function::is = Function::then
+		Function::matches = (regex) -> @is Predicate (x) -> regex.test x
 		
-		Function::matches = (regex) -> @then Predicate (x) -> regex.test x
+		Function::isnull = -> @is Function.eq null
 		
-		Function::isnull = -> @then Function.eq null
-		
-		Function::isa = (constructor) -> @then Predicate (x) -> x instanceof constructor
-		
-		Function::hastype = (type) -> @then Object.type.eq type
+		Function::hastype = (type) -> @is Object.type.eq type
 		
 		Function::isa = (constructor) -> this == constructor or @prototype instanceof constructor
 	
