@@ -11,7 +11,7 @@
 		
 		Function.constant = (constant) -> () -> constant
 		
-		Function.arguments = (args...) -> args
+		Function.args = (args...) -> args
 		
 		Function.argument = (n) -> (args...) -> args[n]
 		

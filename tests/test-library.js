@@ -197,6 +197,9 @@ define(['jmodel/topaz2'], function() {
     equals(fred(), 'fred', 'Works with no arguments');
     return equals(fred(1, 2, 3), 'fred', 'Works with arguments');
   });
+  test('Function.args', function() {
+    return deepEqual(Function.args(1, 2, 3, 4), [1, 2, 3, 4], 'Returns arguments correctly');
+  });
   test('Function.argument', function() {
     equals(Function.argument(0).call(this, 'red', 'green', 'blue'), 'red', 'Function.argument(0) works');
     equals(Function.argument(1).call(this, 'red', 'green', 'blue'), 'green', 'Function.argument(1) works');
