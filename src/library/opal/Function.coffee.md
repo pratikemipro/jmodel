@@ -182,13 +182,17 @@
 			(predicate2) ->
 				predicate1 = this
 				Predicate (args...) ->
-					predicate1.apply(this,args) and predicate2.apply(this,args)
+					Boolean.and \
+						predicate1.apply(this,args),
+						predicate2.apply(this,args)
 		
 		Function::or = Function.From(Function) \
 			(predicate2) ->
 				predicate1 = this
 				Predicate (args...) ->
-					predicate1.apply(this,args) or predicate2.apply(this,args)
+					Boolean.or \
+						predicate1.apply(this,args),
+						predicate2.apply(this,args)
 		
 		Function::not = ->
 			predicate = this
