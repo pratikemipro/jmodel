@@ -181,7 +181,7 @@
 		Function::and = Function.From(Function) \
 			(predicate2) ->
 				predicate1 = this
-				Predicate (args...) ->
+				(args...) ->
 					Boolean.and \
 						predicate1.apply(this,args),
 						predicate2.apply(this,args)
@@ -189,7 +189,7 @@
 		Function::or = Function.From(Function) \
 			(predicate2) ->
 				predicate1 = this
-				Predicate (args...) ->
+				(args...) ->
 					Boolean.or \
 						predicate1.apply(this,args),
 						predicate2.apply(this,args)
