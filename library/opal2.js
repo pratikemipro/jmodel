@@ -585,9 +585,7 @@ define(function() {
       case 1:
         return predicate;
       case 0:
-        return function() {
-          return true;
-        };
+        return Boolean.True;
       default:
         return predicate.and(Function.and.apply(Function, predicates));
     }
@@ -599,9 +597,7 @@ define(function() {
       case 1:
         return predicate;
       case 0:
-        return function() {
-          return false;
-        };
+        return Boolean.False;
       default:
         return predicate.or(Function.or.apply(Function, predicates));
     }
