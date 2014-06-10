@@ -661,6 +661,7 @@ define(function(require) {
       _ref1 = this.router.resolve(href), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
       if (path === location.origin + location.pathname) {
         location.hash = '#' + fragment;
+        $(document).scrollTop(0);
         return false;
       } else if (a.hasClass('permalink')) {
         open(href);
