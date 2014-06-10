@@ -467,6 +467,7 @@ define (require) ->
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
+				$(document).scrollTop 0
 				return false
 			else if a.hasClass 'permalink'
 				open href
