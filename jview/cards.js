@@ -646,7 +646,7 @@ define(function(require) {
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, before, cardType, currentIndex, href, keys, li, open, parameters, protocol, target, _ref;
+      var a, before, cardType, currentIndex, fragment, href, keys, li, open, parameters, path, protocol, target, _ref, _ref1;
       target = _arg.target;
       open = function(href) {
         return window.open(href, (Date()).split(' ').join(''));
@@ -654,11 +654,15 @@ define(function(require) {
       a = $(target).closest('a');
       before = a.hasClass('before');
       href = a.attr('href');
+      _ref = href.split('#'), path = _ref[0], fragment = _ref[1];
       protocol = href.split(':')[0];
       li = a.closest('li.card');
       currentIndex = li.length === 0 ? $('li.card').length : li.index('li.card') + 1;
-      _ref = this.router.resolve(href), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
-      if (a.hasClass('permalink')) {
+      _ref1 = this.router.resolve(href), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
+      if (path === location.origin + location.pathname) {
+        location.hash = '#' + fragment;
+        return false;
+      } else if (a.hasClass('permalink')) {
         open(href);
         return false;
       } else if (cardType) {

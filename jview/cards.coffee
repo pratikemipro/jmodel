@@ -454,17 +454,21 @@ define (require) ->
 				
 			open = (href) -> window.open href, (Date()).split(' ').join('')
 			
-			a    	   = $(target).closest 'a'
-			before	   = a.hasClass 'before'
-			href	   = a.attr 'href'
-			[protocol] = href.split(':')
-			li         = a.closest 'li.card'
+			a    	   		= $(target).closest 'a'
+			before	   		= a.hasClass 'before'
+			href	 		= a.attr 'href'
+			[path,fragment]	= href.split '#'
+			[protocol]		= href.split ':'
+			li         		= a.closest 'li.card'
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
 			[cardType,keys,parameters] = @router.resolve href
-			
-			if a.hasClass 'permalink'
+
+			if path == location.origin + location.pathname
+				location.hash = '#'+fragment
+				return false
+			else if a.hasClass 'permalink'
 				open href
 				return false
 			else if cardType
