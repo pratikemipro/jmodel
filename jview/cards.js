@@ -663,6 +663,8 @@ define(function(require) {
         location.hash = '#' + fragment;
         $(document).scrollTop(0);
         return false;
+      } else if (a.attr('download')) {
+        return true;
       } else if (a.hasClass('permalink')) {
         open(href);
         return false;
