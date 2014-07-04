@@ -18,7 +18,7 @@ define [ 'jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald' ], ($,jm) ->
 				new constructor dt, dd, this
 			
 			@dt.event('click')
-				.map( ({target}) => Math.floor $(target).index()/2 )
+				.map( ({target}) => Math.floor $(target).index() / 2 )
 				.subscribe (index) =>
 					@state.current index
 					@state.open (x) -> !x
