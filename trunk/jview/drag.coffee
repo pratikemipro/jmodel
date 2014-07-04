@@ -1,4 +1,10 @@
-define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
+define (require) ->
+
+	$  = require 'jquery'
+	jm = require 'jmodel/emerald'
+	
+	require 'jmodel-plugins/jquery.emerald'
+	
 	
 	##
 	## Source
@@ -34,12 +40,12 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 			
 			# Highlight drag target
 			jm.disjoin(
-				@element.event('dragenter',preventDefault:true).where(@accept).map(-> 1)
-			 	@element.event('dragleave',preventDefault:true).where(@accept).map(-> -1)
-				@element.event('drop',preventDefault:true).map(-> -1)
+				@element.event('dragenter',preventDefault:true).where(@accept).map(-> true)
+			 	@element.event('dragleave',preventDefault:true).where(@accept).map(-> false)
+				@element.event('drop',preventDefault:true).map(-> false)
 			)
-			.accumulate(jm.plus,0)
-			.subscribe (count) => @element.toggleClass 'over', count > 0
+			.subscribe (state) => 
+				@element.toggleClass 'over', state
 			
 			# Update allowed effect
 			@element.event('dragover',preventDefault:true)
@@ -61,7 +67,7 @@ define ['jquery','jmodel/emerald','jmodel-plugins/jquery.emerald'], ($,jm) ->
 		
 		event: (name) -> @events.get name
 		
-		accept: ({originalEvent:{dataTransfer:{types:[type]}}}) => @types.first Object.eq type
+		accept: ({originalEvent:{dataTransfer:{types:[type]}}}) => return true; @types.first Object.eq type
 		
 	
 	##
