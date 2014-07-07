@@ -9,6 +9,7 @@ Set::replace		full	none
 
 Set::member			full	none
 Set::count			full	none
+Set::exsits			none	none
 Set::where			full	none
 Set::each			full	none
 Set::reduce			full	none
