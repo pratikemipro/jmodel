@@ -30,6 +30,9 @@
 			count: Function.From(Maybe Function).To(Number) (predicate) ->
 				return @length if predicate == undefined
 				@reduce Array.count(predicate), 0
+				
+			exists: Function.From(Function).To(Boolean) (predicate) ->
+				0 != @count predicate
 			
 			where: Function.From(Function) (predicate) ->
 				new @constructor ( element for element in this when predicate.call element, element )
