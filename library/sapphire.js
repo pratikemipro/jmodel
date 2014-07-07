@@ -338,6 +338,11 @@ define(['jmodel/opal'], function (opal) {
 		},
 		
 		// Tests: none
+		exists: function (predicate) {
+			return this.count(predicate) != 0
+		},
+		
+		// Tests: none
 		select : function (selector) {
 			return selector ? this.get(selector) : this;
 		},
