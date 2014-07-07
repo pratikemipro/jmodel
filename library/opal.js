@@ -1149,7 +1149,7 @@ define(function (a,b,c,undefined) {
 	// Reimplemented: no -> use Array.count
 	var count = function _count (predicate) {
 		predicate = predicate || Function.constant(true);
-		return function (acc,value) { return acc += (predicate(value) ? 1 : 0); } .extend({unit:0,label:'count'});
+		return function (acc,value) { return acc += (predicate.call(value,value) ? 1 : 0); } .extend({unit:0,label:'count'});
 	};
 	
 	// Tests: full
