@@ -40,12 +40,13 @@ define (require) ->
 			
 			# Highlight drag target
 			jm.disjoin(
-				@element.event('dragenter',preventDefault:true).where( ({originalEvent:{dataTransfer}}) => @accept dataTransfer ).map(-> true)
-			 	@element.event('dragleave',preventDefault:true).where( ({originalEvent:{dataTransfer}}) => @accept dataTransfer ).map(-> false)
-				@element.event('drop',preventDefault:true).map(-> false)
+				@element.event('dragenter',preventDefault:true).where( ({originalEvent:{dataTransfer}}) => @accept dataTransfer ).map(-> 1)
+			 	@element.event('dragleave',preventDefault:true).where( ({originalEvent:{dataTransfer}}) => @accept dataTransfer ).map(-> -1)
+				@element.event('drop',preventDefault:true).map(-> 1)
 			)
-			.subscribe (state) => 
-				@element.toggleClass 'over', state
+			.accumulate(jm.plus,0)
+			.subscribe (count) => 
+				@element.toggleClass 'over', count > 0
 			
 			# Update allowed effect
 			@element.event('dragover',preventDefault:true)
