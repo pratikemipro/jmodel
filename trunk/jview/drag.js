@@ -43,7 +43,7 @@ define(function(require) {
           return _this.accept(dataTransfer);
         };
       })(this)).map(function() {
-        return true;
+        return 1;
       }), this.element.event('dragleave', {
         preventDefault: true
       }).where((function(_this) {
@@ -53,14 +53,14 @@ define(function(require) {
           return _this.accept(dataTransfer);
         };
       })(this)).map(function() {
-        return false;
+        return -1;
       }), this.element.event('drop', {
         preventDefault: true
       }).map(function() {
-        return false;
-      })).subscribe((function(_this) {
-        return function(state) {
-          return _this.element.toggleClass('over', state);
+        return 1;
+      })).accumulate(jm.plus, 0).subscribe((function(_this) {
+        return function(count) {
+          return _this.element.toggleClass('over', count > 0);
         };
       })(this));
       this.element.event('dragover', {
