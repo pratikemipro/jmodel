@@ -17,6 +17,9 @@ define (require) ->
 			@element    = $ element
 			@extractors = new jm.List.fromArray extractors
 			
+			@element.find '*'
+				.attr 'draggable', false
+			
 			@element
 				.attr('draggable',true)
 				.event('dragstart').subscribe ({originalEvent:{dataTransfer},target}) =>

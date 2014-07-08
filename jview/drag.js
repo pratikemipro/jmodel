@@ -10,6 +10,7 @@ define(function(require) {
     function Source(element, extractors) {
       this.element = $(element);
       this.extractors = new jm.List.fromArray(extractors);
+      this.element.find('*').attr('draggable', false);
       this.element.attr('draggable', true).event('dragstart').subscribe((function(_this) {
         return function(_arg) {
           var dataTransfer, target, _ref;
