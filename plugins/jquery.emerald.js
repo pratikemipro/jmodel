@@ -10,6 +10,14 @@
 define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
 
 	var disjoin = emerald.disjoin, Set = emerald.Set, event = emerald.event;
+	
+	jQuery.union = function () {
+		elements = [].concat.apply([],Array.prototype.slice.call(arguments).map(function (x) {
+			return x.get();
+		}));
+		$_ = $();
+		return $_.add.apply($_,elements);
+	}
 
 	jQuery.fn.event = function () {
 		
