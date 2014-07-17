@@ -150,11 +150,11 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 		},
 		
 		where: function () {
-		    var context		= arguments[0].context   || this,
+		    var context		= arguments[0].context,
 		        predicate	= arguments[0].predicate || ( arguments.length > 1 ? and.apply(this,arguments) : arguments[0] );
 			return this.derive(function (method) {
 				return function () {
-					return predicate.apply(context,arguments) ? method.apply(this,arguments) : true;
+					return predicate.apply((context || arguments[0]),arguments) ? method.apply(this,arguments) : true;
 				};
 			});
 		},
