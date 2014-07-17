@@ -355,7 +355,7 @@ define (require) ->
 			
 			after(1) =>
 				@scrollLeft = @element.scrollLeft()
-				scale = @element.outerWidth()/@width
+				scale = @element.outerWidth() / @width
 				@cardListView.element.css 
 					'position': 'relative'
 					'-webkit-transform': 'scale('+scale+')'
