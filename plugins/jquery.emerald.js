@@ -15,8 +15,7 @@ define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
 		elements = [].concat.apply([],Array.prototype.slice.call(arguments).map(function (x) {
 			return x.get();
 		}));
-		$_ = $();
-		return $_.add.apply($_,elements);
+		return $(elements);
 	}
 
 	jQuery.fn.event = function () {
