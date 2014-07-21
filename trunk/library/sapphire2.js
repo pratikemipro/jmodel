@@ -132,7 +132,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.prototype.each = Function.From(Function)(function(fn) {
+    Set.prototype.each = Function.Chaining.From(Function)(function(fn) {
       var element, _i, _len, _results;
       _results = [];
       for (_i = 0, _len = this.length; _i < _len; _i++) {
@@ -343,6 +343,16 @@ define(['jmodel/opal2'], function() {
         }
         return _results;
       }).call(this));
+    });
+
+    List.prototype.each = Function.Chaining.From(Function)(function(fn) {
+      var element, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = this.length; _i < _len; _i++) {
+        element = this[_i];
+        _results.push(fn.call(element, element));
+      }
+      return _results;
     });
 
     List.prototype.map = Function.From(Function)(function(fn) {

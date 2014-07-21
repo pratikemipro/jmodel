@@ -14,6 +14,9 @@
 		
 			where: Function.From(Function) (predicate) ->
 				new @constructor ( element for element in this when predicate.call element, element )
+			
+			each: Function.Chaining.From(Function) (fn) ->
+				fn.call element, element for element in this
 				
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )
