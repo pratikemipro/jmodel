@@ -5,7 +5,7 @@ default:
 	@make topaz
 	@make library-test
 	@make jview
-	@make plugins
+	@make jmodel-plugins
 
 opal:
 	coffee --compile --bare --map --join library/opal2.js \
@@ -113,5 +113,5 @@ topaz-doc:
 jview:
 	coffee --compile --bare --map view/cards.coffee
 	
-plugins:
+jmodel-plugins:
 	coffee --compile --bare --map --output plugins/ src/plugins/
