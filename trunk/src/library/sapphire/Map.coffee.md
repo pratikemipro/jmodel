@@ -26,7 +26,7 @@
 ## Typed maps
 
 			
-			@To: (constructor) ->
+			@To: Function.Cache.From(Function) (constructor) ->
 				class extends this
 				
 					add: this::add.extend [			

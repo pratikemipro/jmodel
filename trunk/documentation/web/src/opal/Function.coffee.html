@@ -515,7 +515,7 @@
 				
 	Function.<span class="hljs-function"><span class="hljs-title">Cache</span> = <span class="hljs-params">(fn)</span> -&gt;</span> fn.cache()
 	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">cache</span> = -&gt;</span>
+	<span class="hljs-attribute">Function</span>::cache = <span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Cache</span> = -&gt;</span>
 		cache = []
 		<span class="hljs-function"><span class="hljs-title">lookup</span> = <span class="hljs-params">(args)</span> -&gt;</span> cache.find<span class="hljs-function"> -&gt;</span> Array.equal <span class="hljs-property">@args</span>, args
 		fn = <span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(ret,args...)</span> -&gt;</span> cache.push <span class="hljs-attribute">args</span>: args, <span class="hljs-attribute">ret</span>: ret

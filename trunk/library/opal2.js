@@ -752,7 +752,7 @@ define(function() {
   Function.Cache = function(fn) {
     return fn.cache();
   };
-  Function.prototype.cache = function() {
+  Function.prototype.cache = Function.prototype.Cache = function() {
     var cache, fn, lookup;
     cache = [];
     lookup = function(args) {

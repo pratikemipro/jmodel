@@ -116,7 +116,7 @@ define(['jmodel/sapphire2'], function() {
       })));
     };
 
-    EventType.Of = function(constructor) {
+    EventType.Of = Function.Cache.From(Function)(function(constructor) {
       var type;
       type = Promise.Of(constructor);
       return (function(_super1) {
@@ -143,7 +143,7 @@ define(['jmodel/sapphire2'], function() {
         return _Class;
 
       })(this);
-    };
+    });
 
     return EventType;
 
