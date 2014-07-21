@@ -1,6 +1,12 @@
 define (require) ->
 
 	require 'jmodel/sapphire2'
+
+	query = (selector) -> switch
+		when selector.charAt(0) == '>'
+			( child for child in @children when child.matches selector[2..] )
+		else
+			@querySelectorAll selector
 	
 	##
 	## Find elements within documents or elements
@@ -9,7 +15,7 @@ define (require) ->
 	Document::find =
 	Element::find =
 		Function.From(String) (selector) ->
-			new ( Set.Of Element ) @querySelectorAll selector
+			new ( Set.Of Element ) query.call this, selector
 			
 	##
 	## Find elements from selector without context
@@ -27,5 +33,5 @@ define (require) ->
 	Set.Of(Element)::find =
 	List.Of(Element)::find =
 		Function.From(String) (selector) ->
-			new @constructor @mapAll -> @querySelectorAll selector
+			new @constructor @mapAll -> query.call this, selector
 	
