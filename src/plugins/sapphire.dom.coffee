@@ -8,7 +8,7 @@ define (require) ->
 	
 	Document::find =
 	Element::find =
-		(selector) ->
+		Function.From(String) (selector) ->
 			new ( Set.Of Element ) @querySelectorAll selector
 			
 	##
@@ -17,7 +17,8 @@ define (require) ->
 	
 	Set.Of(Element).fromSelector =
 	List.Of(Element).fromSelector =
-		(selector) -> document.find selector
+		Function.From(String) (selector) ->
+			document.find selector
 			
 	##
 	## Find elements within elements in collection
@@ -25,6 +26,6 @@ define (require) ->
 					
 	Set.Of(Element)::find =
 	List.Of(Element)::find =
-		(selector) ->
+		Function.From(String) (selector) ->
 			new @constructor @mapAll -> @querySelectorAll selector
 	
