@@ -524,9 +524,16 @@
 			
 		equal handled(), 'Error: bang!', 'except works correctly in simplest case'
 		
+	test 'Function.Cache', ->
+		
+		add = Function.Cache (a,b) -> a + b
+		
+		equals add(2,3), 5, 'memoized function works normally on first call'
+		equals add(2,3), 5, 'memoized function works normally on subsequent calls'
+		
 	test 'Function::cache', ->
 	
-		add = ( (a,b) -> a+b ).cache();
+		add = ( (a,b) -> a + b ).cache();
 		
 		equals add(2,3), 5, 'memoized function works normally on first call'
 		equals add(2,3), 5, 'memoized function works normally on subsequent calls'

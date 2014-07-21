@@ -512,6 +512,8 @@
 			<span class="hljs-keyword">try</span> fn.apply <span class="hljs-keyword">this</span>, args
 			<span class="hljs-keyword">catch</span> error
 				handler.call <span class="hljs-keyword">this</span>, error
+				
+	Function.<span class="hljs-function"><span class="hljs-title">Cache</span> = <span class="hljs-params">(fn)</span> -&gt;</span> fn.cache()
 	
 	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">cache</span> = -&gt;</span>
 		cache = []

@@ -291,6 +291,8 @@
 				try fn.apply this, args
 				catch error
 					handler.call this, error
+					
+		Function.Cache = (fn) -> fn.cache()
 		
 		Function::cache = ->
 			cache = []
