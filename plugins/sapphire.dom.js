@@ -55,7 +55,8 @@ define(function(require) {
     });
   };
   Set.Of(Element).prototype.style = List.Of(Element).prototype.style = context('style');
-  return Set.Of(Element).prototype.dataset = List.Of(Element).prototype.dataset = context('dataset');
+  Set.Of(Element).prototype.dataset = List.Of(Element).prototype.dataset = context('dataset');
+  return Set.Of(Element).prototype.classes = List.Of(Element).prototype.classes = context('classList');
 });
 
 //# sourceMappingURL=sapphire.dom.map
