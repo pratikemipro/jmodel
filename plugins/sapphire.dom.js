@@ -42,10 +42,20 @@ define(function(require) {
   Set.Of(Element).fromSelector = List.Of(Element).fromSelector = Function.From(String)(function(selector) {
     return document.find(selector);
   });
-  return Set.Of(Element).prototype.find = List.Of(Element).prototype.find = Function.From(String)(function(selector) {
+  Set.Of(Element).prototype.find = List.Of(Element).prototype.find = Function.From(String)(function(selector) {
     return new this.constructor(this.mapAll(function() {
       return query.call(this, selector);
     }));
+  });
+  Set.Of(Element).prototype.style = List.Of(Element).prototype.style = Function.From(Function)(function(fn) {
+    return this.each(function() {
+      return fn.call(this.style);
+    });
+  });
+  return Set.Of(Element).prototype.data = List.Of(Element).prototype.data = Function.From(Function)(function(fn) {
+    return this.each(function() {
+      return fn.call(this.dataset);
+    });
   });
 });
 
