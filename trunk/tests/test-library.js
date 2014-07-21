@@ -2025,7 +2025,7 @@ define(['jmodel/topaz2'], function() {
     }), 'Raises an exception if not called with a function');
   });
   test('Set.Of', function() {
-    var date, dates;
+    var DateSet1, DateSet2, date, dates;
     dates = new (Set.Of(Date));
     dates.add('1974-11-20').add('1979-1-14');
     deepEqual((function() {
@@ -2037,7 +2037,7 @@ define(['jmodel/topaz2'], function() {
       }
       return _results;
     })(), [true, true], 'Implicitly applies constructor');
-    return deepEqual((function() {
+    deepEqual((function() {
       var _i, _len, _results;
       _results = [];
       for (_i = 0, _len = dates.length; _i < _len; _i++) {
@@ -2046,6 +2046,9 @@ define(['jmodel/topaz2'], function() {
       }
       return _results;
     })(), ['Wed Nov 20 1974', 'Sun Jan 14 1979'], 'Passes correct values to constructor');
+    DateSet1 = Set.Of(Date);
+    DateSet2 = Set.Of(Date);
+    return equals(DateSet1, DateSet2, 'Typed Set constructor cached correctly');
   });
   module('List');
   test('List::where', function() {
@@ -2192,13 +2195,16 @@ define(['jmodel/topaz2'], function() {
     })()).sort(), ['constantinople', 'rome'], 'Returns correct keys');
   });
   test('Map.To', function() {
-    var falls;
+    var DateMap1, DateMap2, falls;
     falls = new (Map.To(Date))({
       rome: '476-9-4',
       constantinople: '1453-5-29'
     });
     equals(falls.get('rome') instanceof Date, true, 'Converts values to correct type');
-    return equals(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
+    equals(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
+    DateMap1 = Map.To(Date);
+    DateMap2 = Map.To(Date);
+    return equals(DateMap1, DateMap2, 'Typed Map constructor cached correctly');
   });
   test('Map.Using', function() {
     var departments, person, scores;
@@ -2245,7 +2251,7 @@ define(['jmodel/topaz2'], function() {
     return deepEqual(output2, ['<red>', '<green>', '<blue>'], 'Allows multiple each callbacks');
   });
   test('Stream.Of', function() {
-    var Person, fred, john, output, stream;
+    var Person, PersonStream1, PersonStream2, fred, john, output, stream;
     Person = function(name) {
       this.name = name;
     };
@@ -2258,7 +2264,10 @@ define(['jmodel/topaz2'], function() {
     fred = output[0], john = output[1];
     equal(stream instanceof Stream, true, 'Typed Streams are Streams');
     equal(fred instanceof Person && john instanceof Person, true, 'Objects in stream are of correct type');
-    return equal(john.name, 'john', 'Passes arguments to constructors correctly');
+    equal(john.name, 'john', 'Passes arguments to constructors correctly');
+    PersonStream1 = Stream.Of(Person);
+    PersonStream2 = Stream.Of(Person);
+    return equal(PersonStream1, PersonStream2, 'Typed Stream constructor cached correctly');
   });
   test('Stream::map', function() {
     var output, stream;

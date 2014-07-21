@@ -45,6 +45,11 @@
 		equals falls.get('rome') instanceof Date, true, 'Converts values to correct type'
 		equals falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct'
 		
+		DateMap1 = Map.To Date
+		DateMap2 = Map.To Date
+		
+		equals DateMap1, DateMap2, 'Typed Map constructor cached correctly'
+		
 	test 'Map.Using', ->
 		
 		scores = new (Map.Using Math.plus)
