@@ -5,6 +5,10 @@ define (require) ->
 	query = (selector) -> switch
 		when selector.charAt(0) == '>'
 			( child for child in @children when child.matches selector[2..] )
+		when selector.charAt(0) == '<'
+			ancestors = do (parent = this) -> while parent.parentNode?
+				parent = parent.parentNode
+			( ancestor for ancestor in ancestors when ancestor.matches? selector[2..] )
 		else
 			@querySelectorAll selector
 	
