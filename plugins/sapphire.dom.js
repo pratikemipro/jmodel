@@ -10,7 +10,7 @@ define(function(require) {
   Set.Of(Element).fromSelector = collectionFromSelector(Set.Of(Element));
   List.Of(Element).fromSelector = collectionFromSelector(List.Of(Element));
   return Document.prototype.find = Element.prototype.find = function(selector) {
-    return new Set.Of(Element)(this.querySelectorAll(selector));
+    return new (Set.Of(Element))(this.querySelectorAll(selector));
   };
 });
 
