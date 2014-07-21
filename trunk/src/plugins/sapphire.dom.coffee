@@ -47,13 +47,14 @@ define (require) ->
 	## Shorthands
 	##
 	
+	context = (property) ->
+		Function.From(Function) (fn) ->
+			@each -> fn.call this[property]
+	
 	Set.Of(Element)::style =
 	List.Of(Element)::style =
-		Function.From(Function) (fn) ->
-			@each -> fn.call @style
+		context 'style'
 	
 	Set.Of(Element)::dataset =
 	List.Of(Element)::dataset =
-		Function.From(Function) (fn) ->
-			@each -> fn.call @dataset
-	
+		context 'dataset'
