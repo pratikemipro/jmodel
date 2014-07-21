@@ -43,3 +43,17 @@ define (require) ->
 		Function.From(String) (selector) ->
 			new @constructor @mapAll -> query.call this, selector
 	
+	##
+	## Shorthands
+	##
+	
+	Set.Of(Element)::style =
+	List.Of(Element)::style =
+		Function.From(Function) (fn) ->
+			@each -> fn.call @style
+	
+	Set.Of(Element)::data =
+	List.Of(Element)::data =
+		Function.From(Function) (fn) ->
+			@each -> fn.call @dataset
+	
