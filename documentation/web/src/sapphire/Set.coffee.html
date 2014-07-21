@@ -75,7 +75,7 @@
 	<span class="hljs-built_in">window</span>.Set = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Set</span></span>
 		
 		<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">( elements=[] )</span> -&gt;</span>
-			<span class="hljs-keyword">if</span> elements <span class="hljs-keyword">not</span> <span class="hljs-keyword">instanceof</span> Array <span class="hljs-keyword">or</span> arguments.length &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> elements = <span class="hljs-attribute">Array</span>::slice.call arguments
+			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> elements == <span class="hljs-string">'string'</span> <span class="hljs-keyword">or</span> arguments.length &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> elements.length? <span class="hljs-keyword">then</span> elements = <span class="hljs-attribute">Array</span>::slice.call arguments
 			<span class="hljs-property">@length</span> = <span class="hljs-number">0</span>
 			<span class="hljs-property">@add</span> element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> elements</pre></div></div>
             
