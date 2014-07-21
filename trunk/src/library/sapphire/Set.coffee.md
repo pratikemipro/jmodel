@@ -4,7 +4,7 @@
 		window.Set = class Set
 			
 			constructor: ( elements=[] ) ->
-				if elements not instanceof Array or arguments.length > 1 then elements = Array::slice.call arguments
+				if typeof elements == 'string' or arguments.length > 1 or not elements.length? then elements = Array::slice.call arguments
 				@length = 0
 				@add element for element in elements
 		

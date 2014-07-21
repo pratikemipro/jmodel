@@ -3,7 +3,7 @@
 		window.List = class List
 	
 			constructor: ( elements=[] ) ->
-				if elements not instanceof Array then elements = [elements]
+				if typeof elements == 'string' or arguments.length > 1 or not elements.length? then elements = Array::slice.call arguments
 				@add element for element in elements
 	
 			add: Function.Chaining (element) ->
