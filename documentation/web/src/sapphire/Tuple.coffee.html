@@ -64,25 +64,24 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="tuple">Tuple</h1>
+              <h1>Tuple</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Tuple = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Tuple</span></span>
-	
-		<span class="hljs-attribute">constuctor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-attribute">Array</span>::push.call <span class="hljs-keyword">this</span>, arg <span class="hljs-keyword">for</span> arg <span class="hljs-keyword">in</span> args
-		
-		<span class="hljs-property">@equal</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Tuple,Tuple)</span> <span class="hljs-params">([a...],[b...])</span> -&gt;</span> Array.equal a, b
+            <div class="content"><div class='highlight'><pre>	window.Tuple = <span class="class"><span class="keyword">class</span> <span class="title">Tuple</span></span>
 
-		<span class="hljs-property">@Of</span>: Function.Cache.From<span class="hljs-function"><span class="hljs-params">([Function])</span> <span class="hljs-params">(constructors...)</span> -&gt;</span>
-			types = constructors.map <span class="hljs-function"><span class="hljs-params">(constructor)</span> -&gt;</span> Object.ensure constructor
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
-				<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-					<span class="hljs-attribute">Array</span>::push.call <span class="hljs-keyword">this</span>, type arg <span class="hljs-keyword">for</span> [type,arg] <span class="hljs-keyword">in</span> Array.zip types, args</pre></div></div>
+		constuctor: (args...) -&gt; Array::push.call <span class="keyword">this</span>, arg <span class="keyword">for</span> arg <span class="keyword">in</span> args
+
+		<span class="property">@equal</span>: Function.From(Tuple,Tuple) ([a...],[b...]) -&gt; Array.equal a, b
+
+		<span class="property">@Of</span>: Function.Cache.From([Function]) (constructors...) -&gt;
+			types = constructors.map (constructor) -&gt; Object.ensure constructor
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				constructor: (args...) -&gt;
+					Array::push.call <span class="keyword">this</span>, type arg <span class="keyword">for</span> [type,arg] <span class="keyword">in</span> Array.zip types, args</pre></div></div>
             
         </li>
         

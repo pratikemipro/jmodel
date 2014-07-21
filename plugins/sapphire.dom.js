@@ -48,15 +48,41 @@ define(function(require) {
     }));
   });
   context = function(property) {
-    return Function.From(Function)(function(fn) {
-      return this.each(function() {
-        return fn.call(this[property]);
-      });
-    });
+    return Function.overload([
+      Function.From()(function() {
+        return this.to(List).map(function() {
+          return this[property];
+        });
+      }), Function.From(String)(function(name) {
+        return this.to(List).map(function() {
+          return this[property][name];
+        });
+      }), Function.From(Function)(function(fn) {
+        return this.each(function() {
+          return fn.call(this[property]);
+        });
+      })
+    ]);
   };
-  Set.Of(Element).prototype.style = List.Of(Element).prototype.style = context('style');
+  Set.Of(Element).prototype.style = List.Of(Element).prototype.style = context('style').extend([
+    Function.From()(function() {
+      return this.to(List).map(function() {
+        return window.getComputedStyle(this);
+      });
+    }), Function.From(String)(function(name) {
+      return this.style().map(function() {
+        return this[name];
+      });
+    })
+  ]);
   Set.Of(Element).prototype.dataset = List.Of(Element).prototype.dataset = context('dataset');
-  return Set.Of(Element).prototype.classes = List.Of(Element).prototype.classes = context('classList');
+  return Set.Of(Element).prototype.classes = List.Of(Element).prototype.classes = context('classList').extend([
+    Function.From(String)(function(name) {
+      return this.classes().map(function() {
+        return this.contains(name);
+      });
+    })
+  ]);
 });
 
 //# sourceMappingURL=sapphire.dom.map

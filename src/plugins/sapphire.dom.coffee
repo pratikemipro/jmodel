@@ -47,13 +47,30 @@ define (require) ->
 	## Shorthands
 	##
 	
-	context = (property) ->
+	context = (property) -> Function.overload [
+		
+		Function.From() ->
+			@to(List).map -> this[property]
+		
+		Function.From(String) (name) ->
+			@to(List).map -> this[property][name]
+	
 		Function.From(Function) (fn) ->
 			@each -> fn.call this[property]
 	
+	]
+	
 	Set.Of(Element)::style =
 	List.Of(Element)::style =
-		context 'style'
+		context('style').extend [
+			
+			Function.From() ->
+				@to(List).map -> window.getComputedStyle this
+			
+			Function.From(String) (name) ->
+				@style().map -> this[name]
+				
+		]
 	
 	Set.Of(Element)::dataset =
 	List.Of(Element)::dataset =
@@ -61,4 +78,9 @@ define (require) ->
 		
 	Set.Of(Element)::classes =
 	List.Of(Element)::classes =
-		context 'classList'
+		context('classList').extend [
+		
+			Function.From(String) (name) ->
+				@classes().map -> @contains name
+		
+		]

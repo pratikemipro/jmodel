@@ -94,56 +94,55 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="promise">Promise</h1>
+              <h1>Promise</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Promise = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Promise</span></span>
-	
-		[PENDING,FULFILLED,REJECTED] = [<span class="hljs-number">1.</span><span class="hljs-number">.3</span>]
-	
-		<span class="hljs-function"><span class="hljs-title">delay</span> = <span class="hljs-params">(fn)</span> -&gt;</span> setTimeout fn, <span class="hljs-number">0</span>
-	
-		<span class="hljs-function"><span class="hljs-title">chain</span> = <span class="hljs-params">(promise,fn,value)</span> -&gt;</span> delay<span class="hljs-function"> -&gt;</span>
-			<span class="hljs-keyword">try</span>
+            <div class="content"><div class='highlight'><pre>	window.Promise = <span class="class"><span class="keyword">class</span> <span class="title">Promise</span></span>
+
+		[PENDING,FULFILLED,REJECTED] = [<span class="number">1.</span><span class="number">.3</span>]
+
+		<span class="function"><span class="title">delay</span></span> = (fn) -&gt; setTimeout fn, <span class="number">0</span>
+
+		<span class="function"><span class="title">chain</span></span> = (promise,fn,value) -&gt; delay -&gt;
+			<span class="keyword">try</span>
 				ret = fn value...
 				promise.fulfil ret
-			<span class="hljs-keyword">catch</span> reason
+			<span class="keyword">catch</span> reason
 				promise.reject reason
-		
-		<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-		
-			<span class="hljs-property">@status</span> = PENDING
-			<span class="hljs-property">@value</span>  = <span class="hljs-literal">undefined</span>
-			<span class="hljs-property">@reason</span> = <span class="hljs-literal">undefined</span>
-	
-			<span class="hljs-property">@waiting</span> = []
-		
-			<span class="hljs-property">@fulfil</span> args... <span class="hljs-keyword">if</span> args.length &gt; <span class="hljs-number">0</span>
-	
-		<span class="hljs-attribute">then</span>: <span class="hljs-function"><span class="hljs-params">(fulfilled,rejected)</span> -&gt;</span>
-		
-			promise = <span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span>()
-		
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> fulfilled != <span class="hljs-string">'function'</span> <span class="hljs-keyword">then</span> fulfilled = Function.arguments
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> rejected != <span class="hljs-string">'function'</span> <span class="hljs-keyword">then</span> rejected = Function.identity
-			
-			<span class="hljs-keyword">switch</span> <span class="hljs-property">@status</span>
-				<span class="hljs-keyword">when</span> PENDING
-					<span class="hljs-property">@waiting</span>.push
-						<span class="hljs-attribute">promise</span>: promise
-						<span class="hljs-attribute">fulfilled</span>: fulfilled
-						<span class="hljs-attribute">rejected</span>: rejected
-				<span class="hljs-keyword">when</span> FULFILLED
-					chain promise, fulfilled, <span class="hljs-property">@value</span>
-				<span class="hljs-keyword">when</span> REJECTED
-					chain promise, rejected, [<span class="hljs-property">@reason</span>]
-				
-			<span class="hljs-keyword">return</span> promise</pre></div></div>
+
+		constructor: (args...) -&gt;
+
+			<span class="property">@status</span> = PENDING
+			<span class="property">@value</span>  = <span class="literal">undefined</span>
+			<span class="property">@reason</span> = <span class="literal">undefined</span>
+
+			<span class="property">@waiting</span> = []
+
+			<span class="property">@fulfil</span> args... <span class="keyword">if</span> args.length &gt; <span class="number">0</span>
+
+		<span class="keyword">then</span>: (fulfilled,rejected) -&gt;
+
+			promise = <span class="keyword">new</span> <span class="property">@constructor</span>()
+
+			<span class="keyword">if</span> <span class="keyword">typeof</span> fulfilled != <span class="string">'function'</span> <span class="keyword">then</span> fulfilled = Function.arguments
+			<span class="keyword">if</span> <span class="keyword">typeof</span> rejected != <span class="string">'function'</span> <span class="keyword">then</span> rejected = Function.identity
+
+			<span class="keyword">switch</span> <span class="property">@status</span>
+				<span class="keyword">when</span> PENDING
+					<span class="property">@waiting</span>.push
+						promise: promise
+						fulfilled: fulfilled
+						rejected: rejected
+				<span class="keyword">when</span> FULFILLED
+					chain promise, fulfilled, <span class="property">@value</span>
+				<span class="keyword">when</span> REJECTED
+					chain promise, rejected, [<span class="property">@reason</span>]
+
+			<span class="keyword">return</span> promise</pre></div></div>
             
         </li>
         
@@ -158,11 +157,11 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">fulfil</span>: Function.Requiring(<span class="hljs-function">-&gt;</span> <span class="hljs-property">@status</span> == PENDING) \
-			<span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@value</span>...)</span> -&gt;</span>
-				<span class="hljs-property">@status</span> = FULFILLED
-				<span class="hljs-keyword">for</span> {promise,fulfilled} <span class="hljs-keyword">in</span> <span class="hljs-property">@waiting</span>
-					chain promise, fulfilled, <span class="hljs-property">@value</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>		fulfil: Function.Requiring(-&gt; <span class="property">@status</span> == PENDING) \
+			(<span class="property">@value</span>...) -&gt;
+				<span class="property">@status</span> = FULFILLED
+				<span class="keyword">for</span> {promise,fulfilled} <span class="keyword">in</span> <span class="property">@waiting</span>
+					chain promise, fulfilled, <span class="property">@value</span></pre></div></div>
             
         </li>
         
@@ -177,11 +176,11 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">reject</span>: Function.Requiring(<span class="hljs-function">-&gt;</span> <span class="hljs-property">@status</span> == PENDING) \
-			<span class="hljs-function"><span class="hljs-params">(<span class="hljs-property">@reason</span>)</span> -&gt;</span>
-				<span class="hljs-property">@status</span> = REJECTED
-				<span class="hljs-keyword">for</span> {promise,rejected} <span class="hljs-keyword">in</span> <span class="hljs-property">@waiting</span>
-					chain promise, rejected, [<span class="hljs-property">@reason</span>]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		reject: Function.Requiring(-&gt; <span class="property">@status</span> == PENDING) \
+			(<span class="property">@reason</span>) -&gt;
+				<span class="property">@status</span> = REJECTED
+				<span class="keyword">for</span> {promise,rejected} <span class="keyword">in</span> <span class="property">@waiting</span>
+					chain promise, rejected, [<span class="property">@reason</span>]</pre></div></div>
             
         </li>
         
@@ -189,19 +188,18 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h1 id="pre-resolved-promises">Pre-resolved Promises</h1>
+              <h1>Pre-resolved Promises</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-property">@Fulfilled</span>: Function.Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
-			<span class="hljs-function"><span class="hljs-params">(promise)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> promise.fulfil args...
-			
-		<span class="hljs-property">@Rejected</span>: Function.Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
-			<span class="hljs-function"><span class="hljs-params">(promise)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> promise.reject args...</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Fulfilled</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+			(promise) -&gt; (args...) -&gt; promise.fulfil args...
+
+		<span class="property">@Rejected</span>: Function.Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+			(promise) -&gt; (args...) -&gt; promise.reject args...</pre></div></div>
             
         </li>
         
@@ -209,17 +207,16 @@
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h1 id="typed-promises">Typed Promises</h1>
+              <h1>Typed Promises</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			
-		<span class="hljs-property">@Of</span>: <span class="hljs-function"><span class="hljs-params">(constructor)</span> -&gt;</span>
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
-				<span class="hljs-attribute">fulfil</span>: Function.Of(constructor) <span class="hljs-attribute">this</span>::fulfil</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: (constructor) -&gt;
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				fulfil: Function.Of(constructor) <span class="keyword">this</span>::fulfil</pre></div></div>
             
         </li>
         
@@ -227,20 +224,19 @@
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h1 id="promise-combinators">Promise combinators</h1>
+              <h1>Promise combinators</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>			
-		<span class="hljs-property">@conjoin</span>:<span class="hljs-function"> -&gt;</span>
-		
-		<span class="hljs-property">@disjoin</span>: Function.From([Promise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
-			<span class="hljs-function"><span class="hljs-params">(disjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(promises...)</span> -&gt;</span>
-				[fulfil,reject] = Function.delegates<span class="hljs-function"> -&gt;</span> [ disjunction, disjunction.fulfil, disjunction.reject ]
-				promise.<span class="hljs-keyword">then</span> fulfil, reject <span class="hljs-keyword">for</span> promise <span class="hljs-keyword">in</span> promises</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@conjoin</span>: -&gt;
+
+		<span class="property">@disjoin</span>: Function.From([Promise]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+			(disjunction) -&gt; (promises...) -&gt;
+				[fulfil,reject] = Function.delegates -&gt; [ disjunction, disjunction.fulfil, disjunction.reject ]
+				promise.<span class="keyword">then</span> fulfil, reject <span class="keyword">for</span> promise <span class="keyword">in</span> promises</pre></div></div>
             
         </li>
         

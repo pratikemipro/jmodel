@@ -66,17 +66,17 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.EventType = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EventType</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Stream</span>.<span class="hljs-title">Of</span> <span class="hljs-title">Promise</span></span>
-	
-		<span class="hljs-attribute">constructor</span>:<span class="hljs-function"> -&gt;</span>
-		
-			<span class="hljs-keyword">super</span>()
-		
-			<span class="hljs-property">@subscribers</span> = <span class="hljs-keyword">new</span> (Set.Of Subscriber)
-		
-			<span class="hljs-property">@each</span> <span class="hljs-function"><span class="hljs-params">(promise)</span> =&gt;</span>
-				<span class="hljs-property">@subscribers</span>.each <span class="hljs-function"><span class="hljs-params">({notify,fail})</span> -&gt;</span>
-					promise.<span class="hljs-keyword">then</span> notify, fail</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	window.EventType = <span class="class"><span class="keyword">class</span> <span class="title">EventType</span> <span class="keyword">extends</span> <span class="title">Stream</span>.<span class="title">Of</span> <span class="title">Promise</span></span>
+
+		constructor: -&gt;
+
+			<span class="keyword">super</span>()
+
+			<span class="property">@subscribers</span> = <span class="keyword">new</span> (Set.Of Subscriber)
+
+			<span class="property">@each</span> (promise) =&gt;
+				<span class="property">@subscribers</span>.each ({notify,fail}) -&gt;
+					promise.<span class="keyword">then</span> notify, fail</pre></div></div>
             
         </li>
         
@@ -91,7 +91,7 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">subscribe</span>: Function.delegate<span class="hljs-function"> -&gt;</span> [ <span class="hljs-property">@subscribers</span>, <span class="hljs-property">@subscribers</span>.add ]</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		subscribe: Function.delegate -&gt; [ <span class="property">@subscribers</span>, <span class="property">@subscribers</span>.add ]</pre></div></div>
             
         </li>
         
@@ -106,21 +106,21 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">raise</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> Promise.Fulfilled args...
-		
-		<span class="hljs-attribute">fail</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> Promise.Rejected args...
-		
-		<span class="hljs-attribute">republish</span>: <span class="hljs-function"><span class="hljs-params">(eventtype)</span> -&gt;</span>
-			<span class="hljs-property">@subscribe</span> \
-				Function.delegate<span class="hljs-function"> -&gt;</span> [eventtype,eventtype.raise],
-				Function.delegate<span class="hljs-function"> -&gt;</span> [eventtype,eventtype.fail]
-				
-		<span class="hljs-property">@Of</span>: Function.Cache.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>		raise: (args...) -&gt; <span class="property">@add</span> Promise.Fulfilled args...
+
+		fail: (args...) -&gt; <span class="property">@add</span> Promise.Rejected args...
+
+		republish: (eventtype) -&gt;
+			<span class="property">@subscribe</span> \
+				Function.delegate -&gt; [eventtype,eventtype.raise],
+				Function.delegate -&gt; [eventtype,eventtype.fail]
+
+		<span class="property">@Of</span>: Function.Cache.From(Function) (constructor) -&gt;
 			type = Promise.Of constructor
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
-				<span class="hljs-attribute">add</span>: Function.Of(type) <span class="hljs-attribute">this</span>::add
-				<span class="hljs-attribute">raise</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> type.Fulfilled args...
-				<span class="hljs-attribute">fail</span>:  <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> type.Rejected args...</pre></div></div>
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				add: Function.Of(type) <span class="keyword">this</span>::add
+				raise: (args...) -&gt; <span class="property">@add</span> type.Fulfilled args...
+				fail:  (args...) -&gt; <span class="property">@add</span> type.Rejected args...</pre></div></div>
             
         </li>
         

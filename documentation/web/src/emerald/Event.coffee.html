@@ -67,23 +67,23 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>	codes =
-		<span class="hljs-string">':backspace'</span>: 	<span class="hljs-number">8</span>
-		<span class="hljs-string">':tab'</span>: 		<span class="hljs-number">9</span>
-		<span class="hljs-string">':return'</span>: 		<span class="hljs-number">13</span>
-		<span class="hljs-string">':shift'</span>: 		<span class="hljs-number">16</span>
-		<span class="hljs-string">':ctrl'</span>: 		<span class="hljs-number">17</span>
-		<span class="hljs-string">':alt'</span>: 		<span class="hljs-number">18</span>
-		<span class="hljs-string">':escape'</span>: 		<span class="hljs-number">27</span>
-		<span class="hljs-string">':left'</span>: 		<span class="hljs-number">37</span>
-		<span class="hljs-string">':up'</span>: 			<span class="hljs-number">38</span>
-		<span class="hljs-string">':right'</span>: 		<span class="hljs-number">39</span>
-		<span class="hljs-string">':down'</span>: 		<span class="hljs-number">40</span>
-		<span class="hljs-string">':delete'</span>: 		<span class="hljs-number">46</span>
-		<span class="hljs-string">':leftcmd'</span>: 	<span class="hljs-number">91</span>
-		<span class="hljs-string">':rightcmd'</span>: 	<span class="hljs-number">93</span>
-	
-	Character = String.Where<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@length</span> == <span class="hljs-number">1</span>
-	SpecialKey = String.Matching <span class="hljs-regexp">/:.+/</span></pre></div></div>
+		<span class="string">':backspace'</span>: 	<span class="number">8</span>
+		<span class="string">':tab'</span>: 		<span class="number">9</span>
+		<span class="string">':return'</span>: 		<span class="number">13</span>
+		<span class="string">':shift'</span>: 		<span class="number">16</span>
+		<span class="string">':ctrl'</span>: 		<span class="number">17</span>
+		<span class="string">':alt'</span>: 		<span class="number">18</span>
+		<span class="string">':escape'</span>: 		<span class="number">27</span>
+		<span class="string">':left'</span>: 		<span class="number">37</span>
+		<span class="string">':up'</span>: 			<span class="number">38</span>
+		<span class="string">':right'</span>: 		<span class="number">39</span>
+		<span class="string">':down'</span>: 		<span class="number">40</span>
+		<span class="string">':delete'</span>: 		<span class="number">46</span>
+		<span class="string">':leftcmd'</span>: 	<span class="number">91</span>
+		<span class="string">':rightcmd'</span>: 	<span class="number">93</span>
+
+	Character = String.Where -&gt; <span class="property">@length</span> == <span class="number">1</span>
+	SpecialKey = String.Matching <span class="regexp">/:.+/</span></pre></div></div>
             
         </li>
         
@@ -100,17 +100,17 @@ Docs: none</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>	Event.key = Function.overload [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Character)</span>     <span class="hljs-params">(key)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">({which})</span> -&gt;</span> String.fromCharCode(which).toUpperCase() == key
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(RegExp)</span>        <span class="hljs-params">(regex)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">({which})</span> -&gt;</span> String.fromCharCode(which).toUpperCase().match(regex) <span class="hljs-keyword">or</span> <span class="hljs-literal">false</span>
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span>        <span class="hljs-params">(number)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">({which})</span> -&gt;</span> which == number
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(SpecialKey)</span>    <span class="hljs-params">(identifier)</span> -&gt;</span> Event.key codes[identifier]
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Value,[Value])</span> <span class="hljs-params">(identifer,identifiers...)</span> -&gt;</span> Event.key(identifier).<span class="hljs-keyword">or</span> Event.key identifiers...
-	
+
+		Function.From(Character)     (key) -&gt; ({which}) -&gt; String.fromCharCode(which).toUpperCase() == key
+
+		Function.From(RegExp)        (regex) -&gt; ({which}) -&gt; String.fromCharCode(which).toUpperCase().match(regex) <span class="keyword">or</span> <span class="literal">false</span>
+
+		Function.From(Number)        (number) -&gt; ({which}) -&gt; which == number
+
+		Function.From(SpecialKey)    (identifier) -&gt; Event.key codes[identifier]
+
+		Function.From(Value,[Value]) (identifer,identifiers...) -&gt; Event.key(identifier).<span class="keyword">or</span> Event.key identifiers...
+
 	]</pre></div></div>
             
         </li>
