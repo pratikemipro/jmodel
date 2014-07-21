@@ -2,13 +2,29 @@ define (require) ->
 
 	require 'jmodel/sapphire2'
 	
-	collectionFromSelector =
-		(constructor) ->
-			(selector) ->
-				new constructor document.querySelectorAll selector
+	##
+	## Find elements within documents or elements
+	##
 	
-	Set.Of(Element).fromSelector  = collectionFromSelector Set.Of Element
-	List.Of(Element).fromSelector = collectionFromSelector List.Of Element
+	Document::find =
+	Element::find =
+		(selector) ->
+			new ( Set.Of Element ) @querySelectorAll selector
+			
+	##
+	## Find elements from selector without context
+	##
 	
-	Document::find = Element::find = (selector) ->
-		new ( Set.Of(Element) ) @querySelectorAll selector
+	Set.Of(Element).fromSelector =
+	List.Of(Element).fromSelector =
+		(selector) -> document.find selector
+			
+	##
+	## Find elements within elements in collection
+	##		
+					
+	Set.Of(Element)::find =
+	List.Of(Element)::find =
+		(selector) ->
+			new @constructor @mapAll -> @querySelectorAll selector
+	
