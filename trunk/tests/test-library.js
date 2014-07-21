@@ -871,11 +871,11 @@ define(['jmodel/topaz2'], function() {
     });
     return equal(handled(), 'Error: bang!', 'except works correctly in simplest case');
   });
-  test('Function::memo', function() {
+  test('Function::cache', function() {
     var add;
     add = (function(a, b) {
       return a + b;
-    }).memo();
+    }).cache();
     equals(add(2, 3), 5, 'memoized function works normally on first call');
     return equals(add(2, 3), 5, 'memoized function works normally on subsequent calls');
   });

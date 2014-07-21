@@ -113,6 +113,10 @@ define(['jmodel/opal2'], function() {
       return this.reduce(Array.count(predicate), 0);
     });
 
+    Set.prototype.exists = Function.From(Function).To(Boolean)(function(predicate) {
+      return 0 !== this.count(predicate);
+    });
+
     Set.prototype.where = Function.From(Function)(function(predicate) {
       var element;
       return new this.constructor((function() {
