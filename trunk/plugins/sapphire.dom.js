@@ -3,7 +3,7 @@ define(function(require) {
   var query;
   require('jmodel/sapphire2');
   query = function(selector) {
-    var child, _i, _len, _ref, _results;
+    var ancestor, ancestors, child, _i, _j, _len, _len1, _ref, _results, _results1;
     switch (false) {
       case selector.charAt(0) !== '>':
         _ref = this.children;
@@ -15,6 +15,23 @@ define(function(require) {
           }
         }
         return _results;
+      case selector.charAt(0) !== '<':
+        ancestors = (function(parent) {
+          var _results1;
+          _results1 = [];
+          while (parent.parentNode != null) {
+            _results1.push(parent = parent.parentNode);
+          }
+          return _results1;
+        })(this);
+        _results1 = [];
+        for (_j = 0, _len1 = ancestors.length; _j < _len1; _j++) {
+          ancestor = ancestors[_j];
+          if (typeof ancestor.matches === "function" ? ancestor.matches(selector.slice(2)) : void 0) {
+            _results1.push(ancestor);
+          }
+        }
+        return _results1;
       default:
         return this.querySelectorAll(selector);
     }
