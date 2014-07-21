@@ -142,6 +142,32 @@ define(['jmodel/opal2'], function() {
       return _results;
     });
 
+    Set.prototype.map = Function.From(Function)(function(fn) {
+      var element;
+      return new this.constructor((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(fn.call(element, element));
+        }
+        return _results;
+      }).call(this));
+    });
+
+    Set.prototype.mapAll = Function.From(Function)(function(fn) {
+      var element;
+      return new this.constructor(Array.flatten((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(Array.prototype.slice.call(fn.call(element, element)));
+        }
+        return _results;
+      }).call(this)));
+    });
+
     Set.prototype.reduce = Function.From(Function, Maybe(Value))(function(reduction, initial) {
       return Array.prototype.reduce.apply(this, [reduction].concat(__slice.call((initial != null ? [initial] : []))));
     });
@@ -330,6 +356,19 @@ define(['jmodel/opal2'], function() {
         }
         return _results;
       }).call(this));
+    });
+
+    List.prototype.mapAll = Function.From(Function)(function(fn) {
+      var element;
+      return new this.constructor(Array.flatten((function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = this.length; _i < _len; _i++) {
+          element = this[_i];
+          _results.push(Array.prototype.slice.call(fn.call(element, element)));
+        }
+        return _results;
+      }).call(this)));
     });
 
     List.concat = function() {
