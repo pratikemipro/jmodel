@@ -39,6 +39,12 @@
 			
 			each: Function.From(Function) (fn) ->
 				fn.call element, element for element in this
+				
+			map: Function.From(Function) (fn) ->
+				new @constructor ( fn.call element, element for element in this )
+				
+			mapAll: Function.From(Function) (fn) ->
+				new @constructor Array.flatten ( Array::slice.call(fn.call element, element) for element in this )
 			
 			reduce: Function.From(Function,Maybe Value) (reduction,initial) ->
 				Array::reduce.apply this, [reduction, (if initial? then [initial] else [])...]

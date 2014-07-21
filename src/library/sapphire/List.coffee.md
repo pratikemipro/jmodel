@@ -18,6 +18,9 @@
 			map: Function.From(Function) (fn) ->
 				new @constructor ( fn.call element, element for element in this )
 	
+			mapAll: Function.From(Function) (fn) ->
+				new @constructor Array.flatten ( Array::slice.call(fn.call element, element) for element in this )
+	
 			@concat: (lists...) ->
 				new this Array.concat lists...
 					
