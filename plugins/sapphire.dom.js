@@ -52,7 +52,7 @@ define(function(require) {
       return fn.call(this.style);
     });
   });
-  return Set.Of(Element).prototype.data = List.Of(Element).prototype.data = Function.From(Function)(function(fn) {
+  return Set.Of(Element).prototype.dataset = List.Of(Element).prototype.dataset = Function.From(Function)(function(fn) {
     return this.each(function() {
       return fn.call(this.dataset);
     });

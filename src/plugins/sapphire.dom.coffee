@@ -52,8 +52,8 @@ define (require) ->
 		Function.From(Function) (fn) ->
 			@each -> fn.call @style
 	
-	Set.Of(Element)::data =
-	List.Of(Element)::data =
+	Set.Of(Element)::dataset =
+	List.Of(Element)::dataset =
 		Function.From(Function) (fn) ->
 			@each -> fn.call @dataset
 	
