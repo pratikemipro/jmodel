@@ -749,6 +749,9 @@ define(function() {
       }
     };
   };
+  Function.Cache = function(fn) {
+    return fn.cache();
+  };
   Function.prototype.cache = function() {
     var cache, fn, lookup;
     cache = [];
