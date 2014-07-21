@@ -294,7 +294,7 @@
 					
 		Function.Cache = (fn) -> fn.cache()
 		
-		Function::cache = ->
+		Function::cache = Function::Cache = ->
 			cache = []
 			lookup = (args) -> cache.find -> Array.equal @args, args
 			fn = @post (ret,args...) -> cache.push args: args, ret: ret

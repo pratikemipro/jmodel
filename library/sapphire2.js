@@ -34,7 +34,7 @@ define(['jmodel/opal2'], function() {
       return Array.equal(a, b);
     });
 
-    Tuple.Of = Function.From([Function])(function() {
+    Tuple.Of = Function.Cache.From([Function])(function() {
       var constructors, types;
       constructors = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       types = constructors.map(function(constructor) {
@@ -263,7 +263,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.Of = Function.From(Function)(function(constructor) {
+    Set.Of = Function.Cache.From(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -338,7 +338,7 @@ define(['jmodel/opal2'], function() {
       return new this(Array.concat.apply(Array, lists));
     };
 
-    List.Of = Function.From(Function)(function(constructor) {
+    List.Of = Function.Cache.From(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -415,7 +415,7 @@ define(['jmodel/opal2'], function() {
 
     Map.prototype.ensure = Function.identity;
 
-    Map.To = function(constructor) {
+    Map.To = Function.Cache.From(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -444,7 +444,7 @@ define(['jmodel/opal2'], function() {
         return _Class;
 
       })(this);
-    };
+    });
 
     Map.Using = function(combine) {
       combine = combine.bind(this.value_constructor);
@@ -498,7 +498,7 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Stream.Of = Function.From(Function)(function(constructor) {
+    Stream.Of = Function.Cache.From(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -610,7 +610,7 @@ define(['jmodel/opal2'], function() {
   return window.Record = Record = (function() {
     function Record() {}
 
-    Record.Of = Function.From(Object)(function(constructors) {
+    Record.Of = Function.Cache.From(Object)(function(constructors) {
       var constructor, field, record, _fn;
       record = (function(_super) {
         var field;

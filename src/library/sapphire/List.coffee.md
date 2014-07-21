@@ -21,7 +21,7 @@
 			@concat: (lists...) ->
 				new this Array.concat lists...
 					
-			@Of: Function.From(Function) (constructor) ->
+			@Of: Function.Cache.From(Function) (constructor) ->
 				class extends this
 					add: Function.Of(constructor) this::add
 					

@@ -23,7 +23,7 @@
 					Function.delegate -> [eventtype,eventtype.raise],
 					Function.delegate -> [eventtype,eventtype.fail]
 					
-			@Of: (constructor) ->
+			@Of: Function.Cache.From(Function) (constructor) ->
 				type = Promise.Of constructor
 				class extends this
 					add: Function.Of(type) this::add
