@@ -39,18 +39,17 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="observable">Observable</h1>
+              <h1>Observable</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Observable = Observable = Function.overload [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Value)</span> <span class="hljs-params">(constructor)</span> -&gt;</span> <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error <span class="hljs-string">"Cannot make observable from <span class="hljs-subst">#{constructor}</span>"</span> 
-	
+            <div class="content"><div class='highlight'><pre>	window.Observable = Observable = Function.overload [
+
+		Function.From(Value) (constructor) -&gt; <span class="keyword">throw</span> <span class="keyword">new</span> Error <span class="string">"Cannot make observable from <span class="subst">#{constructor}</span>"</span> 
+
 	]</pre></div></div>
             
         </li>
@@ -59,34 +58,33 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="observable-set">Observable Set</h2>
+              <h2>Observable Set</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Observable = <span class="hljs-built_in">window</span>.Observable.extend [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Constructor.Inheriting Set)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-		
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">constructor</span></span>
-		
-				<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-					<span class="hljs-property">@events</span> = <span class="hljs-keyword">new</span> EventRegistry [<span class="hljs-string">'add'</span>,<span class="hljs-string">'remove'</span>,<span class="hljs-string">'change'</span>]
-					<span class="hljs-property">@event</span> = Function.delegate<span class="hljs-function"> -&gt;</span> [<span class="hljs-property">@events</span>,<span class="hljs-property">@events</span>.get]
-					<span class="hljs-keyword">super</span>
-				
-				<span class="hljs-attribute">add</span>:<span class="hljs-function"> -&gt;</span>
-					length = <span class="hljs-property">@length</span>
-					<span class="hljs-keyword">super</span>
-					<span class="hljs-property">@event</span>(<span class="hljs-string">'add'</span>).raise @[length] <span class="hljs-keyword">if</span> length != <span class="hljs-property">@length</span>
-					<span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>
-				
-				<span class="hljs-attribute">remove</span>: <span class="hljs-attribute">this</span>::remove.post <span class="hljs-function"><span class="hljs-params">(removed)</span> -&gt;</span>
-					<span class="hljs-property">@event</span>(<span class="hljs-string">'remove'</span>).raise(item) <span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> removed <span class="hljs-keyword">by</span> -<span class="hljs-number">1</span>
-	
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
+
+		Function.From(Constructor.Inheriting Set) (constructor) -&gt;
+
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
+
+				constructor: (args...) -&gt;
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
+					<span class="keyword">super</span>
+
+				add: -&gt;
+					length = <span class="property">@length</span>
+					<span class="keyword">super</span>
+					<span class="property">@event</span>(<span class="string">'add'</span>).raise @[length] <span class="keyword">if</span> length != <span class="property">@length</span>
+					<span class="keyword">return</span> <span class="keyword">this</span>
+
+				remove: <span class="keyword">this</span>::remove.post (removed) -&gt;
+					<span class="property">@event</span>(<span class="string">'remove'</span>).raise(item) <span class="keyword">for</span> item <span class="keyword">in</span> removed <span class="keyword">by</span> -<span class="number">1</span>
+
 	]</pre></div></div>
             
         </li>
@@ -95,28 +93,27 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="observable-list">Observable List</h2>
+              <h2>Observable List</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Observable = <span class="hljs-built_in">window</span>.Observable.extend [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Constructor.Inheriting List)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-		
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">constructor</span></span>
-		
-				<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-					<span class="hljs-property">@events</span> = <span class="hljs-keyword">new</span> EventRegistry [<span class="hljs-string">'add'</span>,<span class="hljs-string">'change'</span>]
-					<span class="hljs-property">@event</span> = Function.delegate<span class="hljs-function"> -&gt;</span> [<span class="hljs-property">@events</span>,<span class="hljs-property">@events</span>.get]
-					<span class="hljs-keyword">super</span>
-				
-				<span class="hljs-attribute">add</span>: <span class="hljs-attribute">this</span>::add.post <span class="hljs-function"><span class="hljs-params">(list,item)</span> -&gt;</span>
-					<span class="hljs-property">@event</span>(<span class="hljs-string">'add'</span>).raise(item)
-	
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
+
+		Function.From(Constructor.Inheriting List) (constructor) -&gt;
+
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
+
+				constructor: (args...) -&gt;
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
+					<span class="keyword">super</span>
+
+				add: <span class="keyword">this</span>::add.post (list,item) -&gt;
+					<span class="property">@event</span>(<span class="string">'add'</span>).raise(item)
+
 	]</pre></div></div>
             
         </li>
@@ -125,37 +122,36 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="observable-map">Observable Map</h2>
+              <h2>Observable Map</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Observable = <span class="hljs-built_in">window</span>.Observable.extend [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(Constructor.Inheriting Map)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-		
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">constructor</span></span>
-		
-				<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-					<span class="hljs-property">@events</span> = <span class="hljs-keyword">new</span> EventRegistry [<span class="hljs-string">'add'</span>,<span class="hljs-string">'remove'</span>,<span class="hljs-string">'change'</span>]
-					<span class="hljs-property">@event</span> = Function.delegate<span class="hljs-function"> -&gt;</span> [<span class="hljs-property">@events</span>,<span class="hljs-property">@events</span>.get]
-					<span class="hljs-keyword">super</span>
-				
-				<span class="hljs-attribute">add</span>: <span class="hljs-attribute">this</span>::add.extend [			
-					Function.From<span class="hljs-function"><span class="hljs-params">(Scalar,Value)</span> <span class="hljs-title">Function</span>.<span class="hljs-title">Chaining</span> <span class="hljs-params">(key,value)</span> -&gt;</span>
-						value = <span class="hljs-property">@ensure</span> value
-						<span class="hljs-property">@_</span>[key] = value
-						<span class="hljs-property">@event</span>(<span class="hljs-string">'add'</span>).raise(key,value)
+            <div class="content"><div class='highlight'><pre>	window.Observable = window.Observable.extend [
+
+		Function.From(Constructor.Inheriting Map) (constructor) -&gt;
+
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">constructor</span></span>
+
+				constructor: (args...) -&gt;
+					<span class="property">@events</span> = <span class="keyword">new</span> EventRegistry [<span class="string">'add'</span>,<span class="string">'remove'</span>,<span class="string">'change'</span>]
+					<span class="property">@event</span> = Function.delegate -&gt; [<span class="property">@events</span>,<span class="property">@events</span>.get]
+					<span class="keyword">super</span>
+
+				add: <span class="keyword">this</span>::add.extend [			
+					Function.From(Scalar,Value) Function.Chaining (key,value) -&gt;
+						value = <span class="property">@ensure</span> value
+						<span class="property">@_</span>[key] = value
+						<span class="property">@event</span>(<span class="string">'add'</span>).raise(key,value)
 				]
-			
-				<span class="hljs-attribute">remove</span>: Function.Chaining <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span>
-					<span class="hljs-keyword">if</span> <span class="hljs-property">@_</span>[key]?
-						<span class="hljs-keyword">delete</span> <span class="hljs-property">@_</span>[key]
-						<span class="hljs-property">@event</span>(<span class="hljs-string">'remove'</span>).raise(key)
-	
+
+				remove: Function.Chaining (key) -&gt;
+					<span class="keyword">if</span> <span class="property">@_</span>[key]?
+						<span class="keyword">delete</span> <span class="property">@_</span>[key]
+						<span class="property">@event</span>(<span class="string">'remove'</span>).raise(key)
+
 	]</pre></div></div>
             
         </li>

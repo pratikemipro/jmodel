@@ -94,29 +94,28 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="boolean">Boolean</h1>
+              <h1>Boolean</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Boolean.<span class="hljs-function"><span class="hljs-title">True</span> = -&gt;</span> <span class="hljs-literal">true</span>
-	Boolean.True.valid = Object.isa<span class="hljs-function"><span class="hljs-params">(Boolean)</span>.<span class="hljs-title">and</span> <span class="hljs-params">(value)</span> -&gt;</span> value
-	
-	Boolean.<span class="hljs-function"><span class="hljs-title">False</span> = -&gt;</span> <span class="hljs-literal">false</span>
-	Boolean.False.valid = Object.isa<span class="hljs-function"><span class="hljs-params">(Boolean)</span>.<span class="hljs-title">and</span> <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-keyword">not</span> value
-	
-	Boolean.<span class="hljs-function"><span class="hljs-title">and</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> a <span class="hljs-keyword">and</span> b
-	Boolean.<span class="hljs-keyword">and</span>.unit = <span class="hljs-literal">true</span>
-	
-	Boolean.<span class="hljs-function"><span class="hljs-title">or</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> a <span class="hljs-keyword">or</span> b
-	Boolean.<span class="hljs-keyword">or</span>.unit = <span class="hljs-literal">false</span>
-	
-	Boolean.<span class="hljs-function"><span class="hljs-title">xor</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> (a <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> b) <span class="hljs-keyword">or</span> (b <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> a)
-	
-	Boolean.<span class="hljs-function"><span class="hljs-title">not</span> = <span class="hljs-params">(a)</span> -&gt;</span> <span class="hljs-keyword">not</span> a</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Boolean.<span class="function"><span class="title">True</span></span> = -&gt; <span class="literal">true</span>
+	Boolean.True.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; value
+
+	Boolean.<span class="function"><span class="title">False</span></span> = -&gt; <span class="literal">false</span>
+	Boolean.False.valid = Object.isa(Boolean).<span class="keyword">and</span> (value) -&gt; <span class="keyword">not</span> value
+
+	Boolean.<span class="function"><span class="title">and</span></span> = (a,b) -&gt; a <span class="keyword">and</span> b
+	Boolean.<span class="keyword">and</span>.unit = <span class="literal">true</span>
+
+	Boolean.<span class="function"><span class="title">or</span></span> = (a,b) -&gt; a <span class="keyword">or</span> b
+	Boolean.<span class="keyword">or</span>.unit = <span class="literal">false</span>
+
+	Boolean.<span class="function"><span class="title">xor</span></span> = (a,b) -&gt; (a <span class="keyword">and</span> <span class="keyword">not</span> b) <span class="keyword">or</span> (b <span class="keyword">and</span> <span class="keyword">not</span> a)
+
+	Boolean.<span class="function"><span class="title">not</span></span> = (a) -&gt; <span class="keyword">not</span> a</pre></div></div>
             
         </li>
         

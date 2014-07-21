@@ -144,7 +144,7 @@ define(['jmodel/opal2'], function() {
 
     Set.prototype.map = Function.From(Function)(function(fn) {
       var element;
-      return new this.constructor((function() {
+      return new Set((function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {
@@ -357,7 +357,7 @@ define(['jmodel/opal2'], function() {
 
     List.prototype.map = Function.From(Function)(function(fn) {
       var element;
-      return new this.constructor((function() {
+      return new List((function() {
         var _i, _len, _results;
         _results = [];
         for (_i = 0, _len = this.length; _i < _len; _i++) {

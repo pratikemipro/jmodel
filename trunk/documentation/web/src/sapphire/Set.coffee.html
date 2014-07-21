@@ -64,20 +64,19 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="set">Set</h1>
+              <h1>Set</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Set = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Set</span></span>
-		
-		<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">( elements=[] )</span> -&gt;</span>
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> elements == <span class="hljs-string">'string'</span> <span class="hljs-keyword">or</span> arguments.length &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> elements.length? <span class="hljs-keyword">then</span> elements = <span class="hljs-attribute">Array</span>::slice.call arguments
-			<span class="hljs-property">@length</span> = <span class="hljs-number">0</span>
-			<span class="hljs-property">@add</span> element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> elements</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	window.Set = <span class="class"><span class="keyword">class</span> <span class="title">Set</span></span>
+
+		constructor: ( elements=[] ) -&gt;
+			<span class="keyword">if</span> <span class="keyword">typeof</span> elements == <span class="string">'string'</span> <span class="keyword">or</span> arguments.length &gt; <span class="number">1</span> <span class="keyword">or</span> <span class="keyword">not</span> elements.length? <span class="keyword">then</span> elements = Array::slice.call arguments
+			<span class="property">@length</span> = <span class="number">0</span>
+			<span class="property">@add</span> element <span class="keyword">for</span> element <span class="keyword">in</span> elements</pre></div></div>
             
         </li>
         
@@ -85,21 +84,20 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="mutators">Mutators</h2>
+              <h2>Mutators</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-attribute">add</span>: Function.Chaining <span class="hljs-function"><span class="hljs-params">(element)</span> -&gt;</span>
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@member</span> element <span class="hljs-keyword">then</span> <span class="hljs-attribute">Array</span>::push.call <span class="hljs-keyword">this</span>, element
-		
-		<span class="hljs-attribute">remove</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Maybe Function)</span> <span class="hljs-params">(predicate=Boolean.True)</span> -&gt;</span>
-			partition = <span class="hljs-property">@partition</span> predicate
-			<span class="hljs-attribute">Array</span>::splice.apply <span class="hljs-keyword">this</span>, [<span class="hljs-number">0</span>,<span class="hljs-property">@length</span>,( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> partition.get(<span class="hljs-literal">false</span>) ? [] )...]
-			<span class="hljs-keyword">return</span> partition.get(<span class="hljs-literal">true</span>) ? <span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>		add: Function.Chaining (element) -&gt;
+			<span class="keyword">if</span> <span class="keyword">not</span> <span class="property">@member</span> element <span class="keyword">then</span> Array::push.call <span class="keyword">this</span>, element
+
+		remove: Function.From(Maybe Function) (predicate=Boolean.True) -&gt;
+			partition = <span class="property">@partition</span> predicate
+			Array::splice.apply <span class="keyword">this</span>, [<span class="number">0</span>,<span class="property">@length</span>,( element <span class="keyword">for</span> element <span class="keyword">in</span> partition.get(<span class="literal">false</span>) ? [] )...]
+			<span class="keyword">return</span> partition.get(<span class="literal">true</span>) ? <span class="keyword">new</span> <span class="property">@constructor</span></pre></div></div>
             
         </li>
         
@@ -107,42 +105,41 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="pure-methods">Pure methods</h2>
+              <h2>Pure methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-attribute">member</span>: Predicate.From<span class="hljs-function"><span class="hljs-params">(Maybe Value)</span> <span class="hljs-params">(element)</span> -&gt;</span>
-			-<span class="hljs-number">1</span> != <span class="hljs-attribute">Array</span>::indexOf.call <span class="hljs-keyword">this</span>, element
-		
-		<span class="hljs-attribute">count</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Maybe Function)</span>.<span class="hljs-title">To</span><span class="hljs-params">(Number)</span> <span class="hljs-params">(predicate)</span> -&gt;</span>
-			<span class="hljs-keyword">return</span> <span class="hljs-property">@length</span> <span class="hljs-keyword">if</span> predicate == <span class="hljs-literal">undefined</span>
-			<span class="hljs-property">@reduce</span> Array.count(predicate), <span class="hljs-number">0</span>
-			
-		<span class="hljs-attribute">exists</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span>.<span class="hljs-title">To</span><span class="hljs-params">(Boolean)</span> <span class="hljs-params">(predicate)</span> -&gt;</span>
-			<span class="hljs-number">0</span> != <span class="hljs-property">@count</span> predicate
-		
-		<span class="hljs-attribute">where</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(predicate)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span> ( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> <span class="hljs-keyword">when</span> predicate.call element, element )
-		
-		<span class="hljs-attribute">each</span>: Function.Chaining.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
-			fn.call element, element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>
-			
-		<span class="hljs-attribute">map</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span> ( fn.call element, element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> )
-			
-		<span class="hljs-attribute">mapAll</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span> Array.flatten ( <span class="hljs-attribute">Array</span>::slice.call(fn.call element, element) <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> )
-		
-		<span class="hljs-attribute">reduce</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function,Maybe Value)</span> <span class="hljs-params">(reduction,initial)</span> -&gt;</span>
-			<span class="hljs-attribute">Array</span>::reduce.apply <span class="hljs-keyword">this</span>, [reduction, (<span class="hljs-keyword">if</span> initial? <span class="hljs-keyword">then</span> [initial] <span class="hljs-keyword">else</span> [])...]
-		
-		<span class="hljs-attribute">partition</span>: Function.From(Function).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> ( Map.To(Set).Using Set.union ) ) \
-			 <span class="hljs-function"><span class="hljs-params">(map)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span>
-				 <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>
+            <div class="content"><div class='highlight'><pre>		member: Predicate.From(Maybe Value) (element) -&gt;
+			-<span class="number">1</span> != Array::indexOf.call <span class="keyword">this</span>, element
+
+		count: Function.From(Maybe Function).To(Number) (predicate) -&gt;
+			<span class="keyword">return</span> <span class="property">@length</span> <span class="keyword">if</span> predicate == <span class="literal">undefined</span>
+			<span class="property">@reduce</span> Array.count(predicate), <span class="number">0</span>
+
+		exists: Function.From(Function).To(Boolean) (predicate) -&gt;
+			<span class="number">0</span> != <span class="property">@count</span> predicate
+
+		where: Function.From(Function) (predicate) -&gt;
+			<span class="keyword">new</span> <span class="property">@constructor</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate.call element, element )
+
+		each: Function.Chaining.From(Function) (fn) -&gt;
+			fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
+
+		map: Function.From(Function) (fn) -&gt;
+			<span class="keyword">new</span> Set ( fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
+
+		mapAll: Function.From(Function) (fn) -&gt;
+			<span class="keyword">new</span> <span class="property">@constructor</span> Array.flatten ( Array::slice.call(fn.call element, element) <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
+
+		reduce: Function.From(Function,Maybe Value) (reduction,initial) -&gt;
+			Array::reduce.apply <span class="keyword">this</span>, [reduction, (<span class="keyword">if</span> initial? <span class="keyword">then</span> [initial] <span class="keyword">else</span> [])...]
+
+		partition: Function.From(Function).Returning(-&gt; <span class="keyword">new</span> ( Map.To(Set).Using Set.union ) ) \
+			 (map) -&gt; (key) -&gt;
+				 <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
 					 map.add key.call(element,element), element</pre></div></div>
             
         </li>
@@ -151,19 +148,18 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="comparisons">Comparisons</h2>
+              <h2>Comparisons</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-property">@subset</span>: Predicate.From<span class="hljs-function"><span class="hljs-params">(Set,Set)</span> <span class="hljs-params">(first,second)</span> -&gt;</span>
-			Array.reduce(Boolean.<span class="hljs-keyword">and</span>) ( second.member element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> first )
-		
-		<span class="hljs-property">@equal</span>: Predicate.From<span class="hljs-function"><span class="hljs-params">(Set,Set)</span> <span class="hljs-params">(first,second)</span> -&gt;</span>
-			first.count() == second.count() <span class="hljs-keyword">and</span> Set.subset(first,second) <span class="hljs-keyword">and</span> Set.subset(second,first)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@subset</span>: Predicate.From(Set,Set) (first,second) -&gt;
+			Array.reduce(Boolean.<span class="keyword">and</span>) ( second.member element <span class="keyword">for</span> element <span class="keyword">in</span> first )
+
+		<span class="property">@equal</span>: Predicate.From(Set,Set) (first,second) -&gt;
+			first.count() == second.count() <span class="keyword">and</span> Set.subset(first,second) <span class="keyword">and</span> Set.subset(second,first)</pre></div></div>
             
         </li>
         
@@ -171,25 +167,24 @@
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h2 id="set-algebra">Set algebra</h2>
+              <h2>Set algebra</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-property">@union</span>: Function.From<span class="hljs-function"><span class="hljs-params">([Set])</span> <span class="hljs-params">(sets...)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> Array.concat ( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> set <span class="hljs-keyword">for</span> set <span class="hljs-keyword">in</span> sets )...
-			
-		<span class="hljs-property">@intersection</span>: Function.From<span class="hljs-function"><span class="hljs-params">([Set])</span> <span class="hljs-params">(first=[],rest...)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> first <span class="hljs-keyword">when</span> rest.all<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@member</span> element )
-		
-		<span class="hljs-property">@difference</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Set,Set)</span> <span class="hljs-params">(first=[],rest...)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> first <span class="hljs-keyword">when</span> rest.none<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@member</span> element )
-		
-		<span class="hljs-property">@product</span>: Function.From([Set]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
-			<span class="hljs-function"><span class="hljs-params">(product)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(sets...)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@union</span>: Function.From([Set]) (sets...) -&gt;
+			<span class="keyword">new</span> <span class="keyword">this</span> Array.concat ( element <span class="keyword">for</span> element <span class="keyword">in</span> set <span class="keyword">for</span> set <span class="keyword">in</span> sets )...
+
+		<span class="property">@intersection</span>: Function.From([Set]) (first=[],rest...) -&gt;
+			<span class="keyword">new</span> <span class="keyword">this</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> rest.all -&gt; <span class="property">@member</span> element )
+
+		<span class="property">@difference</span>: Function.From(Set,Set) (first=[],rest...) -&gt;
+			<span class="keyword">new</span> <span class="keyword">this</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> first <span class="keyword">when</span> rest.none -&gt; <span class="property">@member</span> element )
+
+		<span class="property">@product</span>: Function.From([Set]).Returning(-&gt; <span class="keyword">new</span> <span class="keyword">this</span> ) \
+			(product) -&gt; (sets...) -&gt;</pre></div></div>
             
         </li>
         
@@ -197,16 +192,15 @@
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2 id="casting">Casting</h2>
+              <h2>Casting</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-attribute">to</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> constructor (element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		to: Function.From(Function) (constructor) -&gt;
+			<span class="keyword">new</span> constructor (element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>)</pre></div></div>
             
         </li>
         
@@ -214,17 +208,16 @@
         <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h2 id="typed-sets">Typed sets</h2>
+              <h2>Typed sets</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-		<span class="hljs-property">@Of</span>: Function.Cache.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
-				<span class="hljs-attribute">add</span>: Function.Of(constructor) <span class="hljs-attribute">this</span>::add</pre></div></div>
+            <div class="content"><div class='highlight'><pre>		<span class="property">@Of</span>: Function.Cache.From(Function) (constructor) -&gt;
+			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
+				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
             
         </li>
         

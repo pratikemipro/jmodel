@@ -94,15 +94,14 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="number">Number</h1>
+              <h1>Number</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Number.<span class="hljs-function"><span class="hljs-title">valid</span> = <span class="hljs-params">(value)</span> -&gt;</span> Object.isa(Number)(value) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> isNaN value</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(Number)(value) <span class="keyword">and</span> <span class="keyword">not</span> isNaN value</pre></div></div>
             
         </li>
         
@@ -110,15 +109,14 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="predicates">Predicates</h2>
+              <h2>Predicates</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Number</span>::equals = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span> <span class="hljs-params">(x)</span> -&gt;</span> Number(<span class="hljs-keyword">this</span>) == Number(x)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number::equals = Function.From(Number) (x) -&gt; Number(<span class="keyword">this</span>) == Number(x)</pre></div></div>
             
         </li>
         
@@ -126,25 +124,24 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="operators">Operators</h2>
+              <h2>Operators</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Number</span>::plus = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span> <span class="hljs-params">(x)</span> -&gt;</span> <span class="hljs-keyword">this</span> + x
-	
-	<span class="hljs-attribute">Number</span>::minus = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span> <span class="hljs-params">(x)</span> -&gt;</span> <span class="hljs-keyword">this</span> - x
-	
-	<span class="hljs-attribute">Number</span>::times = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span> <span class="hljs-params">(x)</span> -&gt;</span> <span class="hljs-keyword">this</span> * x
-	
-	<span class="hljs-attribute">Number</span>::div =  Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span> <span class="hljs-params">(x)</span> -&gt;</span> <span class="hljs-keyword">this</span> / x
-	
-	<span class="hljs-attribute">Number</span>::mod =  Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span>  <span class="hljs-params">(x)</span> -&gt;</span> <span class="hljs-keyword">this</span> % x
-	
-	<span class="hljs-attribute">Number</span>::map = Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span> fn.call <span class="hljs-keyword">this</span>, <span class="hljs-keyword">this</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Number::plus = Function.From(Number) (x) -&gt; <span class="keyword">this</span> + x
+
+	Number::minus = Function.From(Number) (x) -&gt; <span class="keyword">this</span> - x
+
+	Number::times = Function.From(Number) (x) -&gt; <span class="keyword">this</span> * x
+
+	Number::div =  Function.From(Number) (x) -&gt; <span class="keyword">this</span> / x
+
+	Number::mod =  Function.From(Number)  (x) -&gt; <span class="keyword">this</span> % x
+
+	Number::map = Function.From(Function) (fn) -&gt; fn.call <span class="keyword">this</span>, <span class="keyword">this</span></pre></div></div>
             
         </li>
         
@@ -152,35 +149,34 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="restrictions">Restrictions</h2>
+              <h2>Restrictions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Number.In = Function.From<span class="hljs-function"><span class="hljs-params">([Number])</span>.<span class="hljs-title">To</span><span class="hljs-params">(Function)</span> <span class="hljs-params">(numbers...)</span> -&gt;</span>
-		<span class="hljs-property">@Where</span> \
-			<span class="hljs-function"><span class="hljs-params">(number)</span> -&gt;</span> number <span class="hljs-keyword">in</span> numbers,
-			<span class="hljs-string">"Invalid Number: \"&lt;value&gt;\" is not in {<span class="hljs-subst">#{(number <span class="hljs-keyword">for</span> number <span class="hljs-keyword">in</span> numbers ).join(<span class="hljs-string">','</span>)}</span>}"</span>
-	
-	Number.LessThan = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span>.<span class="hljs-title">To</span><span class="hljs-params">(Function)</span> <span class="hljs-params">(max)</span> -&gt;</span>
-		<span class="hljs-property">@Where</span> Function.lt(max), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not less than <span class="hljs-subst">#{max}</span>"</span>
-		
-	Number.GreaterThan = Function.From<span class="hljs-function"><span class="hljs-params">(Number)</span>.<span class="hljs-title">To</span><span class="hljs-params">(Function)</span> <span class="hljs-params">(min)</span> -&gt;</span>
-		<span class="hljs-property">@Where</span> Function.gt(min), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not greater than <span class="hljs-subst">#{min}</span>"</span>
+            <div class="content"><div class='highlight'><pre>	Number.In = Function.From([Number]).To(Function) (numbers...) -&gt;
+		<span class="property">@Where</span> \
+			(number) -&gt; number <span class="keyword">in</span> numbers,
+			<span class="string">"Invalid Number: \"&lt;value&gt;\" is not in {<span class="subst">#{(number <span class="keyword">for</span> number <span class="keyword">in</span> numbers ).join(',')}</span>}"</span>
 
-	Number.Between = Function.From<span class="hljs-function"><span class="hljs-params">(Number,Number)</span>.<span class="hljs-title">To</span><span class="hljs-params">(Function)</span> <span class="hljs-params">(min,max)</span> -&gt;</span>
-		<span class="hljs-property">@Where</span> Function.between(min,max), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not between <span class="hljs-subst">#{min}</span> and <span class="hljs-subst">#{max}</span>"</span>
-	
-	Number.Integer = Number.Where (<span class="hljs-function">-&gt;</span> <span class="hljs-property">@equals</span> Math.round <span class="hljs-keyword">this</span> ), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+	Number.LessThan = Function.From(Number).To(Function) (max) -&gt;
+		<span class="property">@Where</span> Function.lt(max), <span class="string">"Invalid Value: &lt;value&gt; is not less than <span class="subst">#{max}</span>"</span>
 
-	Number.Positive = Number.GreaterThan <span class="hljs-number">0</span>
-	Number.Negative = Number.LessThan <span class="hljs-number">0</span>
-	
-	Number.Odd  = Number.Integer.Where (<span class="hljs-function">-&gt;</span> <span class="hljs-number">1</span> == <span class="hljs-property">@mod</span> <span class="hljs-number">2</span>), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not odd"</span>
-	Number.Even = Number.Integer.Where (<span class="hljs-function">-&gt;</span> <span class="hljs-number">0</span> == <span class="hljs-property">@mod</span> <span class="hljs-number">2</span>), <span class="hljs-string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
+	Number.GreaterThan = Function.From(Number).To(Function) (min) -&gt;
+		<span class="property">@Where</span> Function.gt(min), <span class="string">"Invalid Value: &lt;value&gt; is not greater than <span class="subst">#{min}</span>"</span>
+
+	Number.Between = Function.From(Number,Number).To(Function) (min,max) -&gt;
+		<span class="property">@Where</span> Function.between(min,max), <span class="string">"Invalid Value: &lt;value&gt; is not between <span class="subst">#{min}</span> and <span class="subst">#{max}</span>"</span>
+
+	Number.Integer = Number.Where (-&gt; <span class="property">@equals</span> Math.round <span class="keyword">this</span> ), <span class="string">"Invalid Value: &lt;value&gt; is not an integer"</span>
+
+	Number.Positive = Number.GreaterThan <span class="number">0</span>
+	Number.Negative = Number.LessThan <span class="number">0</span>
+
+	Number.Odd  = Number.Integer.Where (-&gt; <span class="number">1</span> == <span class="property">@mod</span> <span class="number">2</span>), <span class="string">"Invalid Value: &lt;value&gt; is not odd"</span>
+	Number.Even = Number.Integer.Where (-&gt; <span class="number">0</span> == <span class="property">@mod</span> <span class="number">2</span>), <span class="string">"Invalid Value: &lt;value&gt; is not even"</span></pre></div></div>
             
         </li>
         

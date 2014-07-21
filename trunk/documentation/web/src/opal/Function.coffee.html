@@ -94,15 +94,14 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="function">Function</h1>
+              <h1>Function</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">extend</span> = <span class="hljs-params">(properties)</span> -&gt;</span> Object.extend <span class="hljs-keyword">this</span>, properties</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">extend</span></span> = (properties) -&gt; Object.extend <span class="keyword">this</span>, properties</pre></div></div>
             
         </li>
         
@@ -110,36 +109,35 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="basic-functions">Basic functions</h2>
+              <h2>Basic functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.<span class="hljs-function"><span class="hljs-title">identity</span> = <span class="hljs-params">(x)</span> -&gt;</span> x
-	
-	Function.<span class="hljs-function"><span class="hljs-title">constant</span> = <span class="hljs-params">(constant)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">()</span> -&gt;</span> constant
-	
-	Function.<span class="hljs-function"><span class="hljs-title">args</span> = <span class="hljs-params">(args...)</span> -&gt;</span> args
-	
-	Function.<span class="hljs-function"><span class="hljs-title">argument</span> = <span class="hljs-params">(n)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> args[n]
-	
-	Function.<span class="hljs-function"><span class="hljs-title">map</span> = <span class="hljs-params">(mapping)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(key)</span> -&gt;</span> mapping[key]
-	
-	Function.<span class="hljs-function"><span class="hljs-title">overload</span> = <span class="hljs-params">(variants=[])</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-title">fn</span> = <span class="hljs-params">(args...)</span> -&gt;</span>
-			<span class="hljs-keyword">for</span> variant <span class="hljs-keyword">in</span> variants
-				<span class="hljs-keyword">return</span> variant.apply(<span class="hljs-keyword">this</span>,args) <span class="hljs-keyword">if</span> variant.matches args...
-			<span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span>
-		fn.extend <span class="hljs-attribute">extend</span>: <span class="hljs-function"><span class="hljs-params">(variants2=[])</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">identity</span></span> = (x) -&gt; x
+
+	Function.<span class="function"><span class="title">constant</span></span> = (constant) -&gt; () -&gt; constant
+
+	Function.<span class="function"><span class="title">args</span></span> = (args...) -&gt; args
+
+	Function.<span class="function"><span class="title">argument</span></span> = (n) -&gt; (args...) -&gt; args[n]
+
+	Function.<span class="function"><span class="title">map</span></span> = (mapping) -&gt; (key) -&gt; mapping[key]
+
+	Function.<span class="function"><span class="title">overload</span></span> = (variants=[]) -&gt;
+		<span class="function"><span class="title">fn</span></span> = (args...) -&gt;
+			<span class="keyword">for</span> variant <span class="keyword">in</span> variants
+				<span class="keyword">return</span> variant.apply(<span class="keyword">this</span>,args) <span class="keyword">if</span> variant.matches args...
+			<span class="keyword">return</span> <span class="literal">undefined</span>
+		fn.extend extend: (variants2=[]) -&gt;
 			Function.overload [variants2...,variants...]
-			
-	Function.<span class="hljs-function"><span class="hljs-title">match</span> = <span class="hljs-params">(variants=[])</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(value)</span> -&gt;</span>
-		<span class="hljs-keyword">for</span> variant <span class="hljs-keyword">in</span> variants
-			<span class="hljs-keyword">return</span> variant.apply(value,value) <span class="hljs-keyword">if</span> variant.matches value
-		<span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span></pre></div></div>
+
+	Function.<span class="function"><span class="title">match</span></span> = (variants=[]) -&gt; (value) -&gt;
+		<span class="keyword">for</span> variant <span class="keyword">in</span> variants
+			<span class="keyword">return</span> variant.apply(value,value) <span class="keyword">if</span> variant.matches value
+		<span class="keyword">return</span> <span class="literal">undefined</span></pre></div></div>
             
         </li>
         
@@ -147,42 +145,41 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="function-composition">Function composition</h2>
+              <h2>Function composition</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">then</span> = <span class="hljs-params">(fn2)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> fn2 == <span class="hljs-string">'function'</span>
-		fn1 = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(first,rest...)</span> -&gt;</span>
-			context = <span class="hljs-keyword">if</span> <span class="hljs-keyword">this</span> != <span class="hljs-built_in">window</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">this</span> ? first <span class="hljs-keyword">else</span> first
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">then</span></span> = (fn2) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
+		fn1 = <span class="keyword">this</span>
+		(first,rest...) -&gt;
+			context = <span class="keyword">if</span> <span class="keyword">this</span> != window <span class="keyword">then</span> <span class="keyword">this</span> ? first <span class="keyword">else</span> first
 			val1 = fn1.call context, first, rest...
 			fn2.call val1, val1 
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">but</span> = <span class="hljs-params">(fn2)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> fn2 == <span class="hljs-string">'function'</span>
-		fn1 = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			fn1.apply <span class="hljs-keyword">this</span>, args
-			fn2.apply <span class="hljs-keyword">this</span>, args
-	
-	Function.<span class="hljs-function"><span class="hljs-title">pipe</span> = <span class="hljs-params">(fn,fns...)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> fn <span class="hljs-keyword">in</span> [<span class="hljs-string">'function'</span>,<span class="hljs-string">'undefined'</span>]
-		<span class="hljs-keyword">switch</span> arguments.length
-			<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> fn
-			<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Function.identity
-			<span class="hljs-keyword">else</span> fn.<span class="hljs-keyword">then</span> Function.pipe fns...
-	
-	Function.<span class="hljs-function"><span class="hljs-title">compose</span> = <span class="hljs-params">(fn,fns...)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> fn <span class="hljs-keyword">in</span> [<span class="hljs-string">'function'</span>,<span class="hljs-string">'undefined'</span>]
-		<span class="hljs-keyword">switch</span> arguments.length
-			<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> fn
-			<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Function.identity
-			<span class="hljs-keyword">else</span> Function.pipe [arguments...].reverse()...</pre></div></div>
+
+	Function::<span class="function"><span class="title">but</span></span> = (fn2) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> fn2 == <span class="string">'function'</span>
+		fn1 = <span class="keyword">this</span>
+		(args...) -&gt;
+			fn1.apply <span class="keyword">this</span>, args
+			fn2.apply <span class="keyword">this</span>, args
+
+	Function.<span class="function"><span class="title">pipe</span></span> = (fn,fns...) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
+		<span class="keyword">switch</span> arguments.length
+			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
+			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
+			<span class="keyword">else</span> fn.<span class="keyword">then</span> Function.pipe fns...
+
+	Function.<span class="function"><span class="title">compose</span></span> = (fn,fns...) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> fn <span class="keyword">in</span> [<span class="string">'function'</span>,<span class="string">'undefined'</span>]
+		<span class="keyword">switch</span> arguments.length
+			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> fn
+			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.identity
+			<span class="keyword">else</span> Function.pipe [arguments...].reverse()...</pre></div></div>
             
         </li>
         
@@ -190,24 +187,23 @@
         <li id="section-4">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="aspect-like-methods">Aspect-like methods</h2>
+              <h2>Aspect-like methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">pre</span> = <span class="hljs-params">(pre)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> pre == <span class="hljs-string">'function'</span>
-		pre.but <span class="hljs-keyword">this</span>
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">post</span> = <span class="hljs-params">(post)</span> -&gt;</span>
-		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError <span class="hljs-keyword">unless</span> <span class="hljs-keyword">typeof</span> post == <span class="hljs-string">'function'</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			ret = fn.apply <span class="hljs-keyword">this</span>, args
-			post.call <span class="hljs-keyword">this</span>, ret, args...
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">pre</span></span> = (pre) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> pre == <span class="string">'function'</span>
+		pre.but <span class="keyword">this</span>
+
+	Function::<span class="function"><span class="title">post</span></span> = (post) -&gt;
+		<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError <span class="keyword">unless</span> <span class="keyword">typeof</span> post == <span class="string">'function'</span>
+		fn = <span class="keyword">this</span>
+		(args...) -&gt;
+			ret = fn.apply <span class="keyword">this</span>, args
+			post.call <span class="keyword">this</span>, ret, args...
 			ret</pre></div></div>
             
         </li>
@@ -216,23 +212,22 @@
         <li id="section-5">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h2 id="preconditions-and-postconditions">Preconditions and postconditions</h2>
+              <h2>Preconditions and postconditions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">matches</span> = -&gt;</span> <span class="hljs-literal">true</span>
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">require</span> = <span class="hljs-params">(predicate,message=<span class="hljs-string">''</span>)</span> -&gt;</span>
-		<span class="hljs-property">@pre</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PreconditionError(message) <span class="hljs-keyword">unless</span> predicate.apply <span class="hljs-keyword">this</span>, args
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">ensure</span> = <span class="hljs-params">(predicate,message=<span class="hljs-string">''</span>)</span> -&gt;</span>
-		<span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PostconditionError(message) <span class="hljs-keyword">unless</span> predicate.apply <span class="hljs-keyword">this</span>, args</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">matches</span></span> = -&gt; <span class="literal">true</span>
+
+	Function::<span class="function"><span class="title">require</span></span> = (predicate,message=<span class="string">''</span>) -&gt;
+		<span class="property">@pre</span> (args...) -&gt;
+			<span class="keyword">throw</span> <span class="keyword">new</span> PreconditionError(message) <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args
+
+	Function::<span class="function"><span class="title">ensure</span></span> = (predicate,message=<span class="string">''</span>) -&gt;
+		<span class="property">@post</span> (args...) -&gt;
+			<span class="keyword">throw</span> <span class="keyword">new</span> PostconditionError(message) <span class="keyword">unless</span> predicate.apply <span class="keyword">this</span>, args</pre></div></div>
             
         </li>
         
@@ -240,53 +235,52 @@
         <li id="section-6">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2 id="typed-functions">Typed functions</h2>
+              <h2>Typed functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.<span class="hljs-function"><span class="hljs-title">hastypes</span> = <span class="hljs-params">(types...)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">hastypes</span></span> = (types...) -&gt;
 		predicate = Array.hastypes types...
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> predicate args
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Requiring</span> = <span class="hljs-params">(predicate,message)</span> -&gt;</span>
-		<span class="hljs-property">@then</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span>
-			fn2 = fn.<span class="hljs-built_in">require</span> predicate, message
+		(args...) -&gt; predicate args
+
+	Function::<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
+		<span class="property">@then</span> (fn) -&gt;
+			fn2 = fn.require predicate, message
 			fn2.matches = predicate
-			<span class="hljs-keyword">return</span> fn2
-	
-	Function.<span class="hljs-function"><span class="hljs-title">Requiring</span> = <span class="hljs-params">(predicate,message)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span>
-			fn2 = fn.<span class="hljs-built_in">require</span> predicate, message
+			<span class="keyword">return</span> fn2
+
+	Function.<span class="function"><span class="title">Requiring</span></span> = (predicate,message) -&gt;
+		(fn) -&gt;
+			fn2 = fn.require predicate, message
 			fn2.matches = predicate
-			<span class="hljs-keyword">return</span> fn2
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Ensuring</span> = <span class="hljs-params">(predicate,message)</span> -&gt;</span>
-		<span class="hljs-property">@then</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> fn.ensure predicate, message
-	
-	Function.<span class="hljs-function"><span class="hljs-title">Ensuring</span> = <span class="hljs-params">(predicate,message)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> fn.ensure predicate, message
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">From</span> = <span class="hljs-params">(types...)</span> -&gt;</span>
-		<span class="hljs-property">@Requiring</span> Function.hastypes(types...), <span class="hljs-string">'Incorrect source type. Arguments are'</span>
-	
-	Function.<span class="hljs-function"><span class="hljs-title">From</span> = <span class="hljs-params">(types...)</span> -&gt;</span>
-		Function.Requiring Function.hastypes(types...), <span class="hljs-string">'Incorrect source type. Arguments are'</span>
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">To</span> = <span class="hljs-params">(type)</span> -&gt;</span>
-		<span class="hljs-property">@Ensuring</span> Object.isa(type), <span class="hljs-string">'Incorrect target type. Returned value is'</span>
-	
-	Function.<span class="hljs-function"><span class="hljs-title">To</span> = <span class="hljs-params">(type)</span> -&gt;</span>
-		Function.Ensuring Object.isa(type), <span class="hljs-string">'Incorrect target type. Returned value is'</span>
-	
-	Function.<span class="hljs-function"><span class="hljs-title">Of</span> = <span class="hljs-params">(constructor)</span> -&gt;</span>
+			<span class="keyword">return</span> fn2
+
+	Function::<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
+		<span class="property">@then</span> (fn) -&gt; fn.ensure predicate, message
+
+	Function.<span class="function"><span class="title">Ensuring</span></span> = (predicate,message) -&gt;
+		(fn) -&gt; fn.ensure predicate, message
+
+	Function::<span class="function"><span class="title">From</span></span> = (types...) -&gt;
+		<span class="property">@Requiring</span> Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
+
+	Function.<span class="function"><span class="title">From</span></span> = (types...) -&gt;
+		Function.Requiring Function.hastypes(types...), <span class="string">'Incorrect source type. Arguments are'</span>
+
+	Function::<span class="function"><span class="title">To</span></span> = (type) -&gt;
+		<span class="property">@Ensuring</span> Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>
+
+	Function.<span class="function"><span class="title">To</span></span> = (type) -&gt;
+		Function.Ensuring Object.isa(type), <span class="string">'Incorrect target type. Returned value is'</span>
+
+	Function.<span class="function"><span class="title">Of</span></span> = (constructor) -&gt;
 		ensure = Object.ensure constructor
-		<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> fn.call <span class="hljs-keyword">this</span>, ensure args...
-	
-	<span class="hljs-built_in">window</span>.Predicate = Function.To Boolean</pre></div></div>
+		(fn) -&gt; (args...) -&gt; fn.call <span class="keyword">this</span>, ensure args...
+
+	window.Predicate = Function.To Boolean</pre></div></div>
             
         </li>
         
@@ -294,27 +288,26 @@
         <li id="section-7">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <h2 id="argument-manipulation">Argument manipulation</h2>
+              <h2>Argument manipulation</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.<span class="hljs-function"><span class="hljs-title">Defaults</span> = <span class="hljs-params">(defaults={})</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(object)</span> -&gt;</span> fn.call <span class="hljs-keyword">this</span>, Object.union(defaults,object)
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Defaults</span> = <span class="hljs-params">(defaults={})</span> -&gt;</span> 
-		fn1 = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(object)</span> -&gt;</span> fn1.call(<span class="hljs-keyword">this</span>,fn).call <span class="hljs-keyword">this</span>, Object.union(defaults,object)
-		
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">defaults</span> = <span class="hljs-params">(defaults={})</span> -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-title">fn2</span> = <span class="hljs-params">(object)</span> -&gt;</span> 
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">this</span>.constructor == fn2
-				<span class="hljs-keyword">new</span> fn Object.union(defaults,object)
-			<span class="hljs-keyword">else</span>
-				fn.call <span class="hljs-keyword">this</span>, Object.union(defaults,object)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Defaults</span></span> = (defaults={}) -&gt; (fn) -&gt; (object) -&gt; fn.call <span class="keyword">this</span>, Object.union(defaults,object)
+
+	Function::<span class="function"><span class="title">Defaults</span></span> = (defaults={}) -&gt; 
+		fn1 = <span class="keyword">this</span>
+		(fn) -&gt; (object) -&gt; fn1.call(<span class="keyword">this</span>,fn).call <span class="keyword">this</span>, Object.union(defaults,object)
+
+	Function::<span class="function"><span class="title">defaults</span></span> = (defaults={}) -&gt;
+		fn = <span class="keyword">this</span>
+		<span class="function"><span class="title">fn2</span></span> = (object) -&gt; 
+			<span class="keyword">if</span> <span class="keyword">this</span>.constructor == fn2
+				<span class="keyword">new</span> fn Object.union(defaults,object)
+			<span class="keyword">else</span>
+				fn.call <span class="keyword">this</span>, Object.union(defaults,object)</pre></div></div>
             
         </li>
         
@@ -322,28 +315,27 @@
         <li id="section-8">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <h2 id="return-value-manipulation">Return value manipulation</h2>
+              <h2>Return value manipulation</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.<span class="hljs-function"><span class="hljs-title">Returning</span> = <span class="hljs-params">(val)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			ret = val.call(<span class="hljs-keyword">this</span>)
-			fn.call(<span class="hljs-keyword">this</span>,ret).apply(<span class="hljs-keyword">this</span>,args)
-			<span class="hljs-keyword">return</span> ret
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Returning</span> = <span class="hljs-params">(val)</span> -&gt;</span>
-		Function.Returning(val).<span class="hljs-keyword">then</span>(<span class="hljs-keyword">this</span>)
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		(fn) -&gt; (args...) -&gt;
+			ret = val.call(<span class="keyword">this</span>)
+			fn.call(<span class="keyword">this</span>,ret).apply(<span class="keyword">this</span>,args)
+			<span class="keyword">return</span> ret
 
-	Function.<span class="hljs-function"><span class="hljs-title">Constant</span> = <span class="hljs-params">(constant)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> fn.but<span class="hljs-function"> -&gt;</span> constant
-	
-	Function.Chaining = Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span> fn.but<span class="hljs-function"> -&gt;</span> <span class="hljs-keyword">this</span>
-	
-	<span class="hljs-attribute">Function</span>::Chaining = Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span> @(fn).but<span class="hljs-function"> -&gt;</span> <span class="hljs-keyword">this</span></pre></div></div>
+	Function::<span class="function"><span class="title">Returning</span></span> = (val) -&gt;
+		Function.Returning(val).<span class="keyword">then</span>(<span class="keyword">this</span>)
+
+	Function.<span class="function"><span class="title">Constant</span></span> = (constant) -&gt; (fn) -&gt; fn.but -&gt; constant
+
+	Function.Chaining = Function.From(Function) (fn) -&gt; fn.but -&gt; <span class="keyword">this</span>
+
+	Function::Chaining = Function.From(Function) (fn) -&gt; @(fn).but -&gt; <span class="keyword">this</span></pre></div></div>
             
         </li>
         
@@ -351,50 +343,49 @@
         <li id="section-9">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <h2 id="logical-functions">Logical functions</h2>
+              <h2>Logical functions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-keyword">and</span> = Function.From(Function) \
-		<span class="hljs-function"><span class="hljs-params">(predicate2)</span> -&gt;</span>
-			predicate1 = <span class="hljs-keyword">this</span>
-			<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-				Boolean.<span class="hljs-keyword">and</span> \
-					predicate1.apply(<span class="hljs-keyword">this</span>,args),
-					predicate2.apply(<span class="hljs-keyword">this</span>,args)
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-keyword">or</span> = Function.From(Function) \
-		<span class="hljs-function"><span class="hljs-params">(predicate2)</span> -&gt;</span>
-			predicate1 = <span class="hljs-keyword">this</span>
-			<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-				Boolean.<span class="hljs-keyword">or</span> \
-					predicate1.apply(<span class="hljs-keyword">this</span>,args),
-					predicate2.apply(<span class="hljs-keyword">this</span>,args)
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">not</span> = -&gt;</span>
-		predicate = <span class="hljs-keyword">this</span>
-		Predicate <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-keyword">not</span> predicate.apply <span class="hljs-keyword">this</span>, args
-	
-	Function.<span class="hljs-keyword">and</span> = Function.From([Function]).To(Function) \
-		<span class="hljs-function"><span class="hljs-params">(predicate,predicates...)</span> -&gt;</span>
-			<span class="hljs-keyword">switch</span> arguments.length
-				<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> predicate
-				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Boolean.True
-				<span class="hljs-keyword">else</span> predicate.<span class="hljs-keyword">and</span> Function.<span class="hljs-keyword">and</span> predicates...
-	
-	Function.<span class="hljs-keyword">or</span> = Function.From([Function]).To(Function) \
-		<span class="hljs-function"><span class="hljs-params">(predicate,predicates...)</span> -&gt;</span>
-			<span class="hljs-keyword">switch</span> arguments.length
-				<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> predicate
-				<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Boolean.False
-				<span class="hljs-keyword">else</span> predicate.<span class="hljs-keyword">or</span> Function.<span class="hljs-keyword">or</span> predicates...
-	
-	Function.<span class="hljs-function"><span class="hljs-title">not</span> = <span class="hljs-params">(predicate)</span> -&gt;</span>
-		<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> predicate == <span class="hljs-string">'function'</span> <span class="hljs-keyword">then</span> predicate.<span class="hljs-keyword">not</span>() <span class="hljs-keyword">else</span> <span class="hljs-keyword">not</span> predicate</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="keyword">and</span> = Function.From(Function) \
+		(predicate2) -&gt;
+			predicate1 = <span class="keyword">this</span>
+			(args...) -&gt;
+				Boolean.<span class="keyword">and</span> \
+					predicate1.apply(<span class="keyword">this</span>,args),
+					predicate2.apply(<span class="keyword">this</span>,args)
+
+	Function::<span class="keyword">or</span> = Function.From(Function) \
+		(predicate2) -&gt;
+			predicate1 = <span class="keyword">this</span>
+			(args...) -&gt;
+				Boolean.<span class="keyword">or</span> \
+					predicate1.apply(<span class="keyword">this</span>,args),
+					predicate2.apply(<span class="keyword">this</span>,args)
+
+	Function::<span class="function"><span class="title">not</span></span> = -&gt;
+		predicate = <span class="keyword">this</span>
+		Predicate (args...) -&gt; <span class="keyword">not</span> predicate.apply <span class="keyword">this</span>, args
+
+	Function.<span class="keyword">and</span> = Function.From([Function]).To(Function) \
+		(predicate,predicates...) -&gt;
+			<span class="keyword">switch</span> arguments.length
+				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> predicate
+				<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Boolean.True
+				<span class="keyword">else</span> predicate.<span class="keyword">and</span> Function.<span class="keyword">and</span> predicates...
+
+	Function.<span class="keyword">or</span> = Function.From([Function]).To(Function) \
+		(predicate,predicates...) -&gt;
+			<span class="keyword">switch</span> arguments.length
+				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> predicate
+				<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Boolean.False
+				<span class="keyword">else</span> predicate.<span class="keyword">or</span> Function.<span class="keyword">or</span> predicates...
+
+	Function.<span class="function"><span class="title">not</span></span> = (predicate) -&gt;
+		<span class="keyword">if</span> <span class="keyword">typeof</span> predicate == <span class="string">'function'</span> <span class="keyword">then</span> predicate.<span class="keyword">not</span>() <span class="keyword">else</span> <span class="keyword">not</span> predicate</pre></div></div>
             
         </li>
         
@@ -402,23 +393,22 @@
         <li id="section-10">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2 id="delegation">Delegation</h2>
+              <h2>Delegation</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.<span class="hljs-function"><span class="hljs-title">delegate</span> = <span class="hljs-params">(fn)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> 
-			[context,method] = fn.call(<span class="hljs-keyword">this</span>)
+            <div class="content"><div class='highlight'><pre>	Function.<span class="function"><span class="title">delegate</span></span> = (fn) -&gt;
+		(args...) -&gt; 
+			[context,method] = fn.call(<span class="keyword">this</span>)
 			method.apply context, args
-			
-	Function.<span class="hljs-function"><span class="hljs-title">delegates</span> = <span class="hljs-params">(fn)</span> -&gt;</span>
-		<span class="hljs-keyword">for</span> index <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span><span class="hljs-number">.9</span>]
-			<span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(index)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-				[context,fns...] = fn.call(<span class="hljs-keyword">this</span>)
+
+	Function.<span class="function"><span class="title">delegates</span></span> = (fn) -&gt;
+		<span class="keyword">for</span> index <span class="keyword">in</span> [<span class="number">0.</span><span class="number">.9</span>]
+			<span class="keyword">do</span> (index) -&gt; (args...) -&gt;
+				[context,fns...] = fn.call(<span class="keyword">this</span>)
 				fns[index].apply context, args</pre></div></div>
             
         </li>
@@ -427,15 +417,14 @@
         <li id="section-11">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <h2 id="composite-ordering">Composite ordering</h2>
+              <h2>Composite ordering</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Function.ordering = Function.<span class="hljs-keyword">or</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function.ordering = Function.<span class="keyword">or</span></pre></div></div>
             
         </li>
         
@@ -443,46 +432,45 @@
         <li id="section-12">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <h2 id="predicates">Predicates</h2>
+              <h2>Predicates</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-keyword">is</span> = <span class="hljs-attribute">Function</span>::<span class="hljs-keyword">then</span>
-	
-	Function.<span class="hljs-function"><span class="hljs-title">eq</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x == value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">eq</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.eq value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">neq</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x != value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">neq</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.neq value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">lt</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x &lt; value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">lt</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.lt value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">gt</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x &gt; value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">gt</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.gt value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">lte</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x &lt;= value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">lte</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.lte value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">gte</span>  = <span class="hljs-params">(value)</span> -&gt;</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> x &gt;= value
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">gte</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.gte value
-	
-	Function.<span class="hljs-function"><span class="hljs-title">between</span> = <span class="hljs-params">( Function.Requiring (lower,higher) -&gt; lower &lt; higher )</span> <span class="hljs-params">(lower,higher)</span> -&gt;</span>
-		Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> lower &lt;= x &lt;= higher
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">between</span> = <span class="hljs-params">(lower,higher)</span> -&gt;</span> <span class="hljs-property">@is</span> Function.between lower,higher
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">matches</span> = <span class="hljs-params">(regex)</span> -&gt;</span> <span class="hljs-property">@is</span> Predicate <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> regex.test x
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">isnull</span> = -&gt;</span> <span class="hljs-property">@is</span> Function.eq <span class="hljs-literal">null</span>
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">hastype</span> = <span class="hljs-params">(type)</span> -&gt;</span> <span class="hljs-property">@is</span> Object.type.eq type
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">isa</span> = <span class="hljs-params">(constructor)</span> -&gt;</span> <span class="hljs-keyword">this</span> == constructor <span class="hljs-keyword">or</span> <span class="hljs-property">@prototype</span> <span class="hljs-keyword">instanceof</span> constructor</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="keyword">is</span> = Function::<span class="keyword">then</span>
+
+	Function.<span class="function"><span class="title">eq</span></span>  = (value) -&gt; Predicate (x) -&gt; x == value
+	Function::<span class="function"><span class="title">eq</span></span> = (value) -&gt; <span class="property">@is</span> Function.eq value
+
+	Function.<span class="function"><span class="title">neq</span></span>  = (value) -&gt; Predicate (x) -&gt; x != value
+	Function::<span class="function"><span class="title">neq</span></span> = (value) -&gt; <span class="property">@is</span> Function.neq value
+
+	Function.<span class="function"><span class="title">lt</span></span>  = (value) -&gt; Predicate (x) -&gt; x &lt; value
+	Function::<span class="function"><span class="title">lt</span></span> = (value) -&gt; <span class="property">@is</span> Function.lt value
+
+	Function.<span class="function"><span class="title">gt</span></span>  = (value) -&gt; Predicate (x) -&gt; x &gt; value
+	Function::<span class="function"><span class="title">gt</span></span> = (value) -&gt; <span class="property">@is</span> Function.gt value
+
+	Function.<span class="function"><span class="title">lte</span></span>  = (value) -&gt; Predicate (x) -&gt; x &lt;= value
+	Function::<span class="function"><span class="title">lte</span></span> = (value) -&gt; <span class="property">@is</span> Function.lte value
+
+	Function.<span class="function"><span class="title">gte</span></span>  = (value) -&gt; Predicate (x) -&gt; x &gt;= value
+	Function::<span class="function"><span class="title">gte</span></span> = (value) -&gt; <span class="property">@is</span> Function.gte value
+
+	Function.<span class="function"><span class="title">between</span></span> = ( Function.Requiring (lower,higher) -&gt; lower &lt; higher ) (lower,higher) -&gt;
+		Predicate (x) -&gt; lower &lt;= x &lt;= higher
+
+	Function::<span class="function"><span class="title">between</span></span> = (lower,higher) -&gt; <span class="property">@is</span> Function.between lower,higher
+
+	Function::<span class="function"><span class="title">matches</span></span> = (regex) -&gt; <span class="property">@is</span> Predicate (x) -&gt; regex.test x
+
+	Function::<span class="function"><span class="title">isnull</span></span> = -&gt; <span class="property">@is</span> Function.eq <span class="literal">null</span>
+
+	Function::<span class="function"><span class="title">hastype</span></span> = (type) -&gt; <span class="property">@is</span> Object.type.eq type
+
+	Function::<span class="function"><span class="title">isa</span></span> = (constructor) -&gt; <span class="keyword">this</span> == constructor <span class="keyword">or</span> <span class="property">@prototype</span> <span class="keyword">instanceof</span> constructor</pre></div></div>
             
         </li>
         
@@ -490,40 +478,39 @@
         <li id="section-13">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <h2 id="application-methods">Application methods</h2>
+              <h2>Application methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">bind</span> = <span class="hljs-params">(context,args1...)</span> -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args2...)</span> -&gt;</span> fn.call context, args1..., args2...
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">curry</span> = <span class="hljs-params">(args1...)</span> -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args2...)</span> -&gt;</span> fn.call <span class="hljs-keyword">this</span>, args1..., args2...
-	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">except</span> = <span class="hljs-params">(handler)</span> -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span>
-			<span class="hljs-keyword">try</span> fn.apply <span class="hljs-keyword">this</span>, args
-			<span class="hljs-keyword">catch</span> error
-				handler.call <span class="hljs-keyword">this</span>, error
-				
-	Function.<span class="hljs-function"><span class="hljs-title">Cache</span> = <span class="hljs-params">(fn)</span> -&gt;</span> fn.cache()
-	
-	<span class="hljs-attribute">Function</span>::cache = <span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Cache</span> = -&gt;</span>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">bind</span></span> = (context,args1...) -&gt;
+		fn = <span class="keyword">this</span>
+		(args2...) -&gt; fn.call context, args1..., args2...
+
+	Function::<span class="function"><span class="title">curry</span></span> = (args1...) -&gt;
+		fn = <span class="keyword">this</span>
+		(args2...) -&gt; fn.call <span class="keyword">this</span>, args1..., args2...
+
+	Function::<span class="function"><span class="title">except</span></span> = (handler) -&gt;
+		fn = <span class="keyword">this</span>
+		(args...) -&gt;
+			<span class="keyword">try</span> fn.apply <span class="keyword">this</span>, args
+			<span class="keyword">catch</span> error
+				handler.call <span class="keyword">this</span>, error
+
+	Function.<span class="function"><span class="title">Cache</span></span> = (fn) -&gt; fn.cache()
+
+	Function::cache = Function::<span class="function"><span class="title">Cache</span></span> = -&gt;
 		cache = []
-		<span class="hljs-function"><span class="hljs-title">lookup</span> = <span class="hljs-params">(args)</span> -&gt;</span> cache.find<span class="hljs-function"> -&gt;</span> Array.equal <span class="hljs-property">@args</span>, args
-		fn = <span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(ret,args...)</span> -&gt;</span> cache.push <span class="hljs-attribute">args</span>: args, <span class="hljs-attribute">ret</span>: ret
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> lookup(args)?.ret ? fn.apply <span class="hljs-keyword">this</span>, arguments
-	
-	<span class="hljs-attribute">Function</span>::delay ?= <span class="hljs-function"><span class="hljs-params">(duration=<span class="hljs-number">1</span>,args1...)</span> -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(args2...)</span> -&gt;</span> setTimeout fn.curry.call(fn,args1...,args2...), duration</pre></div></div>
+		<span class="function"><span class="title">lookup</span></span> = (args) -&gt; cache.find -&gt; Array.equal <span class="property">@args</span>, args
+		fn = <span class="property">@post</span> (ret,args...) -&gt; cache.push args: args, ret: ret
+		(args...) -&gt; lookup(args)?.ret ? fn.apply <span class="keyword">this</span>, arguments
+
+	Function::delay ?= (duration=<span class="number">1</span>,args1...) -&gt;
+		fn = <span class="keyword">this</span>
+		(args2...) -&gt; setTimeout fn.curry.call(fn,args1...,args2...), duration</pre></div></div>
             
         </li>
         
@@ -531,15 +518,14 @@
         <li id="section-14">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <h2 id="mapping-methods">Mapping methods</h2>
+              <h2>Mapping methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">map</span> = <span class="hljs-params">(mapping)</span> -&gt;</span> <span class="hljs-property">@then</span> Function.map mapping</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">map</span></span> = (mapping) -&gt; <span class="property">@then</span> Function.map mapping</pre></div></div>
             
         </li>
         
@@ -547,24 +533,23 @@
         <li id="section-15">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <h2 id="ordering-methods">Ordering methods</h2>
+              <h2>Ordering methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">asc</span> = -&gt;</span>
-		fn = <span class="hljs-keyword">this</span>
-		<span class="hljs-function"><span class="hljs-params">(a,b)</span> -&gt;</span>
-			fna = fn.call <span class="hljs-keyword">this</span>, a
-			fnb = fn.call <span class="hljs-keyword">this</span>, b
-			<span class="hljs-keyword">return</span> -<span class="hljs-number">1</span> <span class="hljs-keyword">if</span> fna &lt; fnb
-			<span class="hljs-keyword">return</span>  <span class="hljs-number">1</span> <span class="hljs-keyword">if</span> fna &gt; fnb
-			<span class="hljs-keyword">return</span>  <span class="hljs-number">0</span>
-			
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">desc</span> = -&gt;</span> <span class="hljs-property">@asc</span><span class="hljs-function"><span class="hljs-params">()</span>.<span class="hljs-title">then</span> <span class="hljs-params">(x)</span> -&gt;</span> -x</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">asc</span></span> = -&gt;
+		fn = <span class="keyword">this</span>
+		(a,b) -&gt;
+			fna = fn.call <span class="keyword">this</span>, a
+			fnb = fn.call <span class="keyword">this</span>, b
+			<span class="keyword">return</span> -<span class="number">1</span> <span class="keyword">if</span> fna &lt; fnb
+			<span class="keyword">return</span>  <span class="number">1</span> <span class="keyword">if</span> fna &gt; fnb
+			<span class="keyword">return</span>  <span class="number">0</span>
+
+	Function::<span class="function"><span class="title">desc</span></span> = -&gt; <span class="property">@asc</span>().<span class="keyword">then</span> (x) -&gt; -x</pre></div></div>
             
         </li>
         
@@ -572,15 +557,14 @@
         <li id="section-16">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <h2 id="constructor-methods">Constructor methods</h2>
+              <h2>Constructor methods</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">create</span> = <span class="hljs-params">(args...)</span> -&gt;</span> Object.construct(<span class="hljs-keyword">this</span>)(args...)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">create</span></span> = (args...) -&gt; Object.construct(<span class="keyword">this</span>)(args...)</pre></div></div>
             
         </li>
         
@@ -588,39 +572,27 @@
         <li id="section-17">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <h2 id="restricted-types">Restricted types</h2>
+              <h2>Restricted types</h2>
+<p>NOTE: Make this work with objects other than strings and numbers</p>
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-18">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p>NOTE: Make this work with objects other than strings and numbers</p>
+            <div class="content"><div class='highlight'><pre>	Function::<span class="function"><span class="title">Where</span></span> = (predicate,message=<span class="string">'Invalid value'</span>) -&gt;
+		restricted = <span class="property">@post</span> (value) -&gt; <span class="keyword">throw</span> <span class="keyword">new</span> PostconditionError(message.replace(<span class="string">'&lt;value&gt;'</span>,value)) <span class="keyword">unless</span> predicate.call value, value
+		restricted.base = <span class="property">@base</span> <span class="keyword">or</span> <span class="keyword">this</span>
+		restricted[property] = value <span class="keyword">for</span> property, value <span class="keyword">of</span> restricted.base
+		restricted.<span class="function"><span class="title">valid</span></span> = (value) -&gt; Object.isa(restricted.base)(value) <span class="keyword">and</span> predicate.call value, value
+		<span class="keyword">return</span> restricted
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">Where</span> = <span class="hljs-params">(predicate,message=<span class="hljs-string">'Invalid value'</span>)</span> -&gt;</span>
-		restricted = <span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> PostconditionError(message.replace(<span class="hljs-string">'&lt;value&gt;'</span>,value)) <span class="hljs-keyword">unless</span> predicate.call value, value
-		restricted.base = <span class="hljs-property">@base</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">this</span>
-		restricted[property] = value <span class="hljs-keyword">for</span> property, value <span class="hljs-keyword">of</span> restricted.base
-		restricted.<span class="hljs-function"><span class="hljs-title">valid</span> = <span class="hljs-params">(value)</span> -&gt;</span> Object.isa(restricted.base)(value) <span class="hljs-keyword">and</span> predicate.call value, value
-		<span class="hljs-keyword">return</span> restricted
-	
-	<span class="hljs-built_in">window</span>.Constructor = Constructor = Function
-		
-	Constructor.<span class="hljs-function"><span class="hljs-title">Inheriting</span> = <span class="hljs-params">(parent)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-title">fn1</span> = -&gt;</span>
-		fn1.<span class="hljs-function"><span class="hljs-title">valid</span> = <span class="hljs-params">(constructor)</span> -&gt;</span> constructor.isa parent
-		<span class="hljs-keyword">return</span> fn1</pre></div></div>
+	window.Constructor = Constructor = Function
+
+	Constructor.<span class="function"><span class="title">Inheriting</span></span> = (parent) -&gt;
+		<span class="function"><span class="title">fn1</span></span> = -&gt;
+		fn1.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt; constructor.isa parent
+		<span class="keyword">return</span> fn1</pre></div></div>
             
         </li>
         

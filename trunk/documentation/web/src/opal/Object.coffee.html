@@ -94,56 +94,55 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h1">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="object">Object</h1>
+              <h1>Object</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Object.extend = Function.From(Object,Object).To(Object) \
-		<span class="hljs-function"><span class="hljs-params">(target,source)</span> -&gt;</span>
-			target[key] = source[key] <span class="hljs-keyword">for</span> own key <span class="hljs-keyword">of</span> source
+            <div class="content"><div class='highlight'><pre>	Object.extend = Function.From(Object,Object).To(Object) \
+		(target,source) -&gt;
+			target[key] = source[key] <span class="keyword">for</span> own key <span class="keyword">of</span> source
 			target
-	
-	Object.construct = Function.From<span class="hljs-function"><span class="hljs-params">(Function,[Value])</span> <span class="hljs-params">(constructor,args1...)</span> -&gt;</span> <span class="hljs-keyword">switch</span>
 
-		<span class="hljs-keyword">when</span> constructor <span class="hljs-keyword">in</span> [Number,String,Boolean] <span class="hljs-keyword">then</span> constructor
-	
-		<span class="hljs-keyword">when</span> constructor == Date <span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(args2...)</span> -&gt;</span>
+	Object.construct = Function.From(Function,[Value]) (constructor,args1...) -&gt; <span class="keyword">switch</span>
+
+		<span class="keyword">when</span> constructor <span class="keyword">in</span> [Number,String,Boolean] <span class="keyword">then</span> constructor
+
+		<span class="keyword">when</span> constructor == Date <span class="keyword">then</span> (args2...) -&gt;
 			args = [args1...,args2...]
-			<span class="hljs-keyword">switch</span> args.length
-				<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">new</span> Date args[<span class="hljs-number">0</span>]
-				<span class="hljs-keyword">when</span> <span class="hljs-number">3</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">new</span> Date args[<span class="hljs-number">0</span>],args[<span class="hljs-number">1</span>],args[<span class="hljs-number">2</span>]
-				<span class="hljs-keyword">when</span> <span class="hljs-number">7</span> <span class="hljs-keyword">then</span> <span class="hljs-keyword">new</span> Date args[<span class="hljs-number">0</span>],args[<span class="hljs-number">1</span>],args[<span class="hljs-number">2</span>],args[<span class="hljs-number">3</span>],args[<span class="hljs-number">4</span>],args[<span class="hljs-number">5</span>],args[<span class="hljs-number">6</span>]
-			
-		<span class="hljs-keyword">else</span> <span class="hljs-function"><span class="hljs-params">(args2...)</span> -&gt;</span>
-			<span class="hljs-keyword">new</span> constructor [args1...,args2...]...
-	
-	Object.<span class="hljs-function"><span class="hljs-title">valid</span> = <span class="hljs-params">(constructor)</span> -&gt;</span>
-		<span class="hljs-keyword">switch</span> constructor
-			<span class="hljs-keyword">when</span> Number <span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(number)</span> -&gt;</span> Object.isa(Number)(number) <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> isNan number
-			<span class="hljs-keyword">when</span> Date <span class="hljs-keyword">then</span> <span class="hljs-function"><span class="hljs-params">(date)</span> -&gt;</span> Object.isa(Date)(date) <span class="hljs-keyword">and</span> date.toString() != <span class="hljs-string">'Invalid Date'</span>
-			<span class="hljs-keyword">else</span> Object.isa(constructor)
-	
-	Object.<span class="hljs-function"><span class="hljs-title">ensure</span> = <span class="hljs-params">(constructor)</span> -&gt;</span>
+			<span class="keyword">switch</span> args.length
+				<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>]
+				<span class="keyword">when</span> <span class="number">3</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>],args[<span class="number">1</span>],args[<span class="number">2</span>]
+				<span class="keyword">when</span> <span class="number">7</span> <span class="keyword">then</span> <span class="keyword">new</span> Date args[<span class="number">0</span>],args[<span class="number">1</span>],args[<span class="number">2</span>],args[<span class="number">3</span>],args[<span class="number">4</span>],args[<span class="number">5</span>],args[<span class="number">6</span>]
+
+		<span class="keyword">else</span> (args2...) -&gt;
+			<span class="keyword">new</span> constructor [args1...,args2...]...
+
+	Object.<span class="function"><span class="title">valid</span></span> = (constructor) -&gt;
+		<span class="keyword">switch</span> constructor
+			<span class="keyword">when</span> Number <span class="keyword">then</span> (number) -&gt; Object.isa(Number)(number) <span class="keyword">and</span> <span class="keyword">not</span> isNan number
+			<span class="keyword">when</span> Date <span class="keyword">then</span> (date) -&gt; Object.isa(Date)(date) <span class="keyword">and</span> date.toString() != <span class="string">'Invalid Date'</span>
+			<span class="keyword">else</span> Object.isa(constructor)
+
+	Object.<span class="function"><span class="title">ensure</span></span> = (constructor) -&gt;
 		isa = Object.isa constructor
 		construct = Object.construct arguments...
-		<span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span> <span class="hljs-keyword">if</span> isa obj <span class="hljs-keyword">then</span> obj <span class="hljs-keyword">else</span> construct arguments...
-	
-	Object.<span class="hljs-function"><span class="hljs-title">copy</span> = <span class="hljs-params">(obj)</span> -&gt;</span> Object.extend {}, obj
-	
-	Object.<span class="hljs-function"><span class="hljs-title">type</span> = <span class="hljs-params">(obj)</span> -&gt;</span> <span class="hljs-keyword">typeof</span> obj
-	
-	Object.<span class="hljs-function"><span class="hljs-title">eq</span> = <span class="hljs-params">(value)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(object)</span> -&gt;</span> object == value
-	
+		(obj) -&gt; <span class="keyword">if</span> isa obj <span class="keyword">then</span> obj <span class="keyword">else</span> construct arguments...
+
+	Object.<span class="function"><span class="title">copy</span></span> = (obj) -&gt; Object.extend {}, obj
+
+	Object.<span class="function"><span class="title">type</span></span> = (obj) -&gt; <span class="keyword">typeof</span> obj
+
+	Object.<span class="function"><span class="title">eq</span></span> = (value) -&gt; (object) -&gt; object == value
+
 	Object.keys ?= Function.From(Object).To(Array) \
-		<span class="hljs-function"><span class="hljs-params">(object)</span> -&gt;</span> key <span class="hljs-keyword">for</span> own key <span class="hljs-keyword">of</span> object
-	
-	Object.has = Function.From<span class="hljs-function"><span class="hljs-params">(Scalar)</span> <span class="hljs-params">(key)</span> -&gt;</span>
+		(object) -&gt; key <span class="keyword">for</span> own key <span class="keyword">of</span> object
+
+	Object.has = Function.From(Scalar) (key) -&gt;
 		Function.From(Object).To(Boolean) \
-			<span class="hljs-function"><span class="hljs-params">(object)</span> -&gt;</span> key <span class="hljs-keyword">in</span> Object.keys(object)</pre></div></div>
+			(object) -&gt; key <span class="keyword">in</span> Object.keys(object)</pre></div></div>
             
         </li>
         
@@ -151,55 +150,54 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2 id="accessors">Accessors</h2>
+              <h2>Accessors</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Object.property = Function.overload [
-	
-		Function.From<span class="hljs-function"><span class="hljs-params">(String,Value)</span> <span class="hljs-params">(property,value)</span> -&gt;</span>
-			Function.Requiring( Object.has(property), <span class="hljs-string">'Undefined property'</span> ) \
-				<span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>	Object.property = Function.overload [
+
+		Function.From(String,Value) (property,value) -&gt;
+			Function.Requiring( Object.has(property), <span class="string">'Undefined property'</span> ) \
+				(obj) -&gt;
 					obj[property] = value
 					obj
-				
-		Function.From<span class="hljs-function"><span class="hljs-params">(String)</span> <span class="hljs-params">(property)</span> -&gt;</span>
-			<span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span> obj[property]
-	
+
+		Function.From(String) (property) -&gt;
+			(obj) -&gt; obj[property]
+
 	]
-	
+
 	Object.method = Function.overload [	
 
-		Function.From<span class="hljs-function"><span class="hljs-params">(String,[Value])</span> <span class="hljs-params">(method,args1...)</span> -&gt;</span>
-			<span class="hljs-function"><span class="hljs-params">(obj,args2...)</span> -&gt;</span>
-				<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> Error(<span class="hljs-string">'Undefined method'</span>) <span class="hljs-keyword">unless</span> obj[method]
+		Function.From(String,[Value]) (method,args1...) -&gt;
+			(obj,args2...) -&gt;
+				<span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Undefined method'</span>) <span class="keyword">unless</span> obj[method]
 				obj[method] [args1...,args2...]...
 
-		Function.From<span class="hljs-function"><span class="hljs-params">(Function,[Value])</span> <span class="hljs-params">(fn,args1...)</span> -&gt;</span>
-			<span class="hljs-function"><span class="hljs-params">(obj,args2...)</span> -&gt;</span>
+		Function.From(Function,[Value]) (fn,args1...) -&gt;
+			(obj,args2...) -&gt;
 				fn.call obj, args1..., args2...
 
 	]
-	
-	Object.<span class="hljs-function"><span class="hljs-title">resolve</span> = <span class="hljs-params">(name,args1...)</span> -&gt;</span>
-		<span class="hljs-function"><span class="hljs-params">(obj,args2...)</span> -&gt;</span>
-			<span class="hljs-keyword">return</span> <span class="hljs-literal">undefined</span> <span class="hljs-keyword">unless</span> obj[name]
-			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> obj[name] == <span class="hljs-string">'function'</span>
+
+	Object.<span class="function"><span class="title">resolve</span></span> = (name,args1...) -&gt;
+		(obj,args2...) -&gt;
+			<span class="keyword">return</span> <span class="literal">undefined</span> <span class="keyword">unless</span> obj[name]
+			<span class="keyword">if</span> <span class="keyword">typeof</span> obj[name] == <span class="string">'function'</span>
 				Object.method(name,[args1...,args2...]...) obj
-			<span class="hljs-keyword">else</span>
+			<span class="keyword">else</span>
 				Object.property(name,[args1...,args2...]...) obj
-			
-	Object.<span class="hljs-function"><span class="hljs-title">path</span> = <span class="hljs-params">(path=[],separator=<span class="hljs-string">'.'</span>)</span> -&gt;</span>
-		<span class="hljs-keyword">return</span> Object.path path.split(separator) <span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> path == <span class="hljs-string">'string'</span>
+
+	Object.<span class="function"><span class="title">path</span></span> = (path=[],separator=<span class="string">'.'</span>) -&gt;
+		<span class="keyword">return</span> Object.path path.split(separator) <span class="keyword">if</span> <span class="keyword">typeof</span> path == <span class="string">'string'</span>
 		[first,rest...] = path
-		<span class="hljs-keyword">switch</span> path.length
-			<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Function.constant <span class="hljs-literal">undefined</span>
-			<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> Object.resolve first
-			<span class="hljs-keyword">else</span> Object.resolve(first).<span class="hljs-keyword">then</span> Object.path rest</pre></div></div>
+		<span class="keyword">switch</span> path.length
+			<span class="keyword">when</span> <span class="number">0</span> <span class="keyword">then</span> Function.constant <span class="literal">undefined</span>
+			<span class="keyword">when</span> <span class="number">1</span> <span class="keyword">then</span> Object.resolve first
+			<span class="keyword">else</span> Object.resolve(first).<span class="keyword">then</span> Object.path rest</pre></div></div>
             
         </li>
         
@@ -207,19 +205,18 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap ">
+              <div class="pilwrap for-h2">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="typed-objects">Typed objects</h2>
+              <h2>Typed objects</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	
-	Object.Of = Function.From<span class="hljs-function"><span class="hljs-params">(Constructor)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>	Object.Of = Function.From(Constructor) (constructor) -&gt;
 		test = Object.isa constructor
-		<span class="hljs-function"><span class="hljs-title">fn</span> = -&gt;</span>
-		fn.<span class="hljs-function"><span class="hljs-title">valid</span> = <span class="hljs-params">(obj)</span> -&gt;</span>	Array.reduce(Boolean.<span class="hljs-keyword">and</span>) ( test value <span class="hljs-keyword">for</span> own key, value <span class="hljs-keyword">of</span> obj )
-		<span class="hljs-keyword">return</span> fn</pre></div></div>
+		<span class="function"><span class="title">fn</span></span> = -&gt;
+		fn.<span class="function"><span class="title">valid</span></span> = (obj) -&gt;	Array.reduce(Boolean.<span class="keyword">and</span>) ( test value <span class="keyword">for</span> own key, value <span class="keyword">of</span> obj )
+		<span class="keyword">return</span> fn</pre></div></div>
             
         </li>
         
