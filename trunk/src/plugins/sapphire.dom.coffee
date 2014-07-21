@@ -58,3 +58,7 @@ define (require) ->
 	Set.Of(Element)::dataset =
 	List.Of(Element)::dataset =
 		context 'dataset'
+		
+	Set.Of(Element)::classes =
+	List.Of(Element)::classes =
+		context 'classList'

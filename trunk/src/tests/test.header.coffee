@@ -1,1 +1,1 @@
-define ['jmodel/topaz2'], ->
+define ['jmodel/topaz2','plugins/sapphire.dom'], ->
