@@ -513,10 +513,11 @@
 			<span class="hljs-keyword">catch</span> error
 				handler.call <span class="hljs-keyword">this</span>, error
 	
-	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">memo</span> = -&gt;</span>
-		cache = {}
-		fn = <span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(ret,args...)</span> -&gt;</span> cache[args] = ret
-		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> cache[args] ? fn.apply <span class="hljs-keyword">this</span>, arguments
+	<span class="hljs-attribute">Function</span>::<span class="hljs-function"><span class="hljs-title">cache</span> = -&gt;</span>
+		cache = []
+		<span class="hljs-function"><span class="hljs-title">lookup</span> = <span class="hljs-params">(args)</span> -&gt;</span> cache.find<span class="hljs-function"> -&gt;</span> Array.equal <span class="hljs-property">@args</span>, args
+		fn = <span class="hljs-property">@post</span> <span class="hljs-function"><span class="hljs-params">(ret,args...)</span> -&gt;</span> cache.push <span class="hljs-attribute">args</span>: args, <span class="hljs-attribute">ret</span>: ret
+		<span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> lookup(args)?.ret ? fn.apply <span class="hljs-keyword">this</span>, arguments
 	
 	<span class="hljs-attribute">Function</span>::delay ?= <span class="hljs-function"><span class="hljs-params">(duration=<span class="hljs-number">1</span>,args1...)</span> -&gt;</span>
 		fn = <span class="hljs-keyword">this</span>

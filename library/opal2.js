@@ -156,6 +156,15 @@ define(function() {
   Array.equal = function(a, b) {
     return a.length === b.length && Array.reduce(Boolean.and)(Array.zipWith(Value.equal)(a, b));
   };
+  Array.prototype.find = function(predicate) {
+    var item, _i, _len;
+    for (_i = 0, _len = this.length; _i < _len; _i++) {
+      item = this[_i];
+      if (predicate.call(item, item)) {
+        return item;
+      }
+    }
+  };
   Array.hastypes = function() {
     var types;
     types = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
@@ -740,18 +749,26 @@ define(function() {
       }
     };
   };
-  Function.prototype.memo = function() {
-    var cache, fn;
-    cache = {};
+  Function.prototype.cache = function() {
+    var cache, fn, lookup;
+    cache = [];
+    lookup = function(args) {
+      return cache.find(function() {
+        return Array.equal(this.args, args);
+      });
+    };
     fn = this.post(function() {
       var args, ret;
       ret = arguments[0], args = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      return cache[args] = ret;
+      return cache.push({
+        args: args,
+        ret: ret
+      });
     });
     return function() {
-      var args, _ref;
+      var args, _ref, _ref1;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return (_ref = cache[args]) != null ? _ref : fn.apply(this, arguments);
+      return (_ref = (_ref1 = lookup(args)) != null ? _ref1.ret : void 0) != null ? _ref : fn.apply(this, arguments);
     };
   };
   if ((_base = Function.prototype).delay == null) {

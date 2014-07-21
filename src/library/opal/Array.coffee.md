@@ -20,6 +20,10 @@
 			
 		Array.equal = (a,b) -> a.length == b.length and Array.reduce(Boolean.and) Array.zipWith(Value.equal) a, b
 		
+		Array::find = (predicate) ->
+			for item in this
+				return item if predicate.call item, item
+		
 
 ## Predicates
 

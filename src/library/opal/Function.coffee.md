@@ -292,10 +292,11 @@
 				catch error
 					handler.call this, error
 		
-		Function::memo = ->
-			cache = {}
-			fn = @post (ret,args...) -> cache[args] = ret
-			(args...) -> cache[args] ? fn.apply this, arguments
+		Function::cache = ->
+			cache = []
+			lookup = (args) -> cache.find -> Array.equal @args, args
+			fn = @post (ret,args...) -> cache.push args: args, ret: ret
+			(args...) -> lookup(args)?.ret ? fn.apply this, arguments
 		
 		Function::delay ?= (duration=1,args1...) ->
 			fn = this

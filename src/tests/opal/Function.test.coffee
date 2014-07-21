@@ -524,9 +524,9 @@
 			
 		equal handled(), 'Error: bang!', 'except works correctly in simplest case'
 		
-	test 'Function::memo', ->
+	test 'Function::cache', ->
 	
-		add = ( (a,b) -> a+b ).memo();
+		add = ( (a,b) -> a+b ).cache();
 		
 		equals add(2,3), 5, 'memoized function works normally on first call'
 		equals add(2,3), 5, 'memoized function works normally on subsequent calls'
