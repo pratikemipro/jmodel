@@ -2,6 +2,10 @@ define (require) ->
 
 	require 'jmodel/sapphire2'
 
+	##
+	## General querying within object
+	##
+
 	query = (selector) -> switch
 		when selector.charAt(0) == '>'
 			( child for child in @children when child.matches selector[2..] )
