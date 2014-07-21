@@ -31,6 +31,11 @@
 		equal stream instanceof Stream, true, 'Typed Streams are Streams'
 		equal fred instanceof Person and john instanceof Person, true, 'Objects in stream are of correct type'
 		equal john.name, 'john', 'Passes arguments to constructors correctly'
+		
+		PersonStream1 = Stream.Of Person
+		PersonStream2 = Stream.Of Person
+		
+		equal PersonStream1, PersonStream2, 'Typed Stream constructor cached correctly'
 	
 	test 'Stream::map', ->
 		

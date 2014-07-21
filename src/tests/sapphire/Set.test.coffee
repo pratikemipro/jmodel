@@ -203,3 +203,8 @@
 		deepEqual ( date instanceof Date for date in dates ), [true,true], 'Implicitly applies constructor'
 		
 		deepEqual ( date.toDateString() for date in dates ), ['Wed Nov 20 1974','Sun Jan 14 1979'], 'Passes correct values to constructor'
+		
+		DateSet1 = Set.Of Date
+		DateSet2 = Set.Of Date
+		
+		equals DateSet1, DateSet2, 'Typed Set constructor cached correctly'
