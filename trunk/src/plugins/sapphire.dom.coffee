@@ -84,3 +84,24 @@ define (require) ->
 				@classes().map -> @contains name
 		
 		]
+		
+	getAttributes =
+		Function.Returning(-> {}) (attributes) -> ->
+			attributes[attr.name] = attr.value for attr in @attributes
+	
+	Set.Of(Element)::attributes =
+	List.Of(Element)::attributes =
+		Function.overload [
+		
+			Function.From() ->
+				@to(List).map getAttributes
+				
+			Function.From(String) (name) ->
+				@attributes().map -> this[name]
+				
+			Function.From(Function) (fn) ->
+				@each ->
+					for own name, value of (Function.Chaining fn).call getAttributes.call this
+						if value? and value then @setAttribute name, value else @removeAttribute name
+		
+		]

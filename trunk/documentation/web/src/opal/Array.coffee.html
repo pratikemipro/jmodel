@@ -94,35 +94,36 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>Array</h1>
+              <h1 id="array">Array</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Array.<span class="function"><span class="title">concat</span></span> = (arrays...) -&gt; [].concat arrays...
+            <div class="content"><div class='highlight'><pre>	
+	Array.<span class="hljs-function"><span class="hljs-title">concat</span> = <span class="hljs-params">(arrays...)</span> -&gt;</span> [].concat arrays...
+	
+	Array.<span class="hljs-function"><span class="hljs-title">map</span> = <span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(arr)</span> -&gt;</span> arr.map fn
+			
+	Array.<span class="hljs-function"><span class="hljs-title">reduce</span> = <span class="hljs-params">(reduction,initial)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(array)</span> -&gt;</span> array.reduce(reduction,initial <span class="hljs-keyword">or</span> reduction.unit)
 
-	Array.<span class="function"><span class="title">map</span></span> = (fn) -&gt; (arr) -&gt; arr.map fn
-
-	Array.<span class="function"><span class="title">reduce</span></span> = (reduction,initial) -&gt; (array) -&gt; array.reduce(reduction,initial <span class="keyword">or</span> reduction.unit)
-
-	Array.<span class="function"><span class="title">zip</span></span> = (arrays...) -&gt;
-		maxIndex = Math.min ( arr.length-<span class="number">1</span> <span class="keyword">for</span> arr <span class="keyword">in</span> arrays )...
-		<span class="keyword">return</span> [] <span class="keyword">if</span> maxIndex <span class="keyword">in</span> [-<span class="number">1</span>,Infinity]
-		( arr[i] <span class="keyword">for</span> arr <span class="keyword">in</span> arrays <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">0.</span>.maxIndex] )
-
-	Array.<span class="function"><span class="title">zipWith</span></span> = (fn) -&gt; (arrays...) -&gt;
-		Array.zip(arrays...).map (arr) -&gt; fn arr...
-
-	Array.<span class="function"><span class="title">flatten</span></span> = (array=[]) -&gt;
-		Array.concat ( ( <span class="keyword">if</span> arr <span class="keyword">instanceof</span> Array <span class="keyword">then</span> Array.flatten(arr) <span class="keyword">else</span> arr ) <span class="keyword">for</span> arr <span class="keyword">in</span> array )...
-
-	Array.<span class="function"><span class="title">equal</span></span> = (a,b) -&gt; a.length == b.length <span class="keyword">and</span> Array.reduce(Boolean.<span class="keyword">and</span>) Array.zipWith(Value.equal) a, b
-
-	Array::<span class="function"><span class="title">find</span></span> = (predicate) -&gt;
-		<span class="keyword">for</span> item <span class="keyword">in</span> <span class="keyword">this</span>
-			<span class="keyword">return</span> item <span class="keyword">if</span> predicate.call item, item</pre></div></div>
+	Array.<span class="hljs-function"><span class="hljs-title">zip</span> = <span class="hljs-params">(arrays...)</span> -&gt;</span>
+		maxIndex = Math.min ( arr.length-<span class="hljs-number">1</span> <span class="hljs-keyword">for</span> arr <span class="hljs-keyword">in</span> arrays )...
+		<span class="hljs-keyword">return</span> [] <span class="hljs-keyword">if</span> maxIndex <span class="hljs-keyword">in</span> [-<span class="hljs-number">1</span>,Infinity]
+		( arr[i] <span class="hljs-keyword">for</span> arr <span class="hljs-keyword">in</span> arrays <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [<span class="hljs-number">0.</span>.maxIndex] )
+		
+	Array.<span class="hljs-function"><span class="hljs-title">zipWith</span> = <span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(arrays...)</span> -&gt;</span>
+		Array.zip<span class="hljs-function"><span class="hljs-params">(arrays...)</span>.<span class="hljs-title">map</span> <span class="hljs-params">(arr)</span> -&gt;</span> fn arr...
+	
+	Array.<span class="hljs-function"><span class="hljs-title">flatten</span> = <span class="hljs-params">(array=[])</span> -&gt;</span>
+		Array.concat ( ( <span class="hljs-keyword">if</span> arr <span class="hljs-keyword">instanceof</span> Array <span class="hljs-keyword">then</span> Array.flatten(arr) <span class="hljs-keyword">else</span> arr ) <span class="hljs-keyword">for</span> arr <span class="hljs-keyword">in</span> array )...
+		
+	Array.<span class="hljs-function"><span class="hljs-title">equal</span> = <span class="hljs-params">(a,b)</span> -&gt;</span> a.length == b.length <span class="hljs-keyword">and</span> Array.reduce(Boolean.<span class="hljs-keyword">and</span>) Array.zipWith(Value.equal) a, b
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">find</span> = <span class="hljs-params">(predicate)</span> -&gt;</span>
+		<span class="hljs-keyword">for</span> item <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>
+			<span class="hljs-keyword">return</span> item <span class="hljs-keyword">if</span> predicate.call item, item</pre></div></div>
             
         </li>
         
@@ -130,44 +131,45 @@
         <li id="section-2">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <h2>Predicates</h2>
+              <h2 id="predicates">Predicates</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Array.<span class="function"><span class="title">hastypes</span></span> = (types...) -&gt;
-		(array=[]) -&gt;
-			<span class="keyword">return</span> <span class="literal">true</span> <span class="keyword">if</span> types.length == <span class="number">0</span> <span class="keyword">and</span> array.length == <span class="number">0</span>
-			types2 = types.slice <span class="number">0</span>
-			array2 = array.slice <span class="number">0</span>
-			value  = <span class="literal">undefined</span>
-			<span class="keyword">while</span> type = types2.shift()
-				<span class="keyword">if</span> type <span class="keyword">instanceof</span> Array
+            <div class="content"><div class='highlight'><pre>	
+	Array.<span class="hljs-function"><span class="hljs-title">hastypes</span> = <span class="hljs-params">(types...)</span> -&gt;</span>
+		<span class="hljs-function"><span class="hljs-params">(array=[])</span> -&gt;</span>
+			<span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> types.length == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> array.length == <span class="hljs-number">0</span>
+			types2 = types.slice <span class="hljs-number">0</span>
+			array2 = array.slice <span class="hljs-number">0</span>
+			value  = <span class="hljs-literal">undefined</span>
+			<span class="hljs-keyword">while</span> type = types2.shift()
+				<span class="hljs-keyword">if</span> type <span class="hljs-keyword">instanceof</span> Array
 					[type] = type
-					<span class="keyword">while</span> array2.length &gt; <span class="number">0</span> <span class="keyword">and</span> Object.isa(type) array2[<span class="number">0</span>]
+					<span class="hljs-keyword">while</span> array2.length &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> Object.isa(type) array2[<span class="hljs-number">0</span>]
 						array2.shift()
-				<span class="keyword">else</span>
+				<span class="hljs-keyword">else</span>
 					value = array2.shift()
-					<span class="keyword">return</span> <span class="literal">false</span> <span class="keyword">if</span> <span class="keyword">not</span> Object.isa(type) value
-			<span class="keyword">return</span> types2.length == <span class="number">0</span> <span class="keyword">and</span> array2.length == <span class="number">0</span>
-
-	Array.<span class="function"><span class="title">all</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">and</span>) array.map (x) -&gt; predicate.call x, x
-
-	Array::<span class="function"><span class="title">all</span></span> = (predicate) -&gt; Array.all(predicate) <span class="keyword">this</span>
-
-	Array.<span class="function"><span class="title">any</span></span> = (predicate) -&gt; (array) -&gt; Array.reduce(Boolean.<span class="keyword">or</span>) array.map (x) -&gt; predicate.call x, x
-
-	Array::<span class="function"><span class="title">any</span></span> = (predicate) -&gt; Array.any(predicate) <span class="keyword">this</span>
-
-	Array.<span class="function"><span class="title">none</span></span> = (predicate) -&gt; Array.any(predicate).<span class="keyword">not</span>()
-
-	Array::<span class="function"><span class="title">none</span></span> = (predicate) -&gt; Array.none(predicate) <span class="keyword">this</span>	
-
-	Array.<span class="function"><span class="title">ordered</span></span> = (array) -&gt; Array.reduce(Boolean.<span class="keyword">and</span>) Array.zipWith(Value.lt) array, array[<span class="number">1.</span>.]
-
-	Array::<span class="function"><span class="title">ordered</span></span> = -&gt; Array.ordered <span class="keyword">this</span></pre></div></div>
+					<span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> Object.isa(type) value
+			<span class="hljs-keyword">return</span> types2.length == <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> array2.length == <span class="hljs-number">0</span>
+		
+	Array.<span class="hljs-function"><span class="hljs-title">all</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(array)</span> -&gt;</span> Array.reduce<span class="hljs-function"><span class="hljs-params">(Boolean.<span class="hljs-keyword">and</span>)</span> <span class="hljs-title">array</span>.<span class="hljs-title">map</span> <span class="hljs-params">(x)</span> -&gt;</span> predicate.call x, x
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">all</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> Array.all(predicate) <span class="hljs-keyword">this</span>
+	
+	Array.<span class="hljs-function"><span class="hljs-title">any</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(array)</span> -&gt;</span> Array.reduce<span class="hljs-function"><span class="hljs-params">(Boolean.<span class="hljs-keyword">or</span>)</span> <span class="hljs-title">array</span>.<span class="hljs-title">map</span> <span class="hljs-params">(x)</span> -&gt;</span> predicate.call x, x
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">any</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> Array.any(predicate) <span class="hljs-keyword">this</span>
+	
+	Array.<span class="hljs-function"><span class="hljs-title">none</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> Array.any(predicate).<span class="hljs-keyword">not</span>()
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">none</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> Array.none(predicate) <span class="hljs-keyword">this</span>	
+	
+	Array.<span class="hljs-function"><span class="hljs-title">ordered</span> = <span class="hljs-params">(array)</span> -&gt;</span> Array.reduce(Boolean.<span class="hljs-keyword">and</span>) Array.zipWith(Value.lt) array, array[<span class="hljs-number">1.</span>.]
+		
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">ordered</span> = -&gt;</span> Array.ordered <span class="hljs-keyword">this</span></pre></div></div>
             
         </li>
         
@@ -175,22 +177,23 @@
         <li id="section-3">
             <div class="annotation">
               
-              <div class="pilwrap for-h2">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2>Reductions</h2>
+              <h2 id="reductions">Reductions</h2>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	Array.<span class="function"><span class="title">count</span></span> = (predicate=Boolean.True) -&gt; (acc=<span class="number">0</span>,value) -&gt; acc + <span class="keyword">if</span> predicate.call(value,value) <span class="keyword">then</span> <span class="number">1</span> <span class="keyword">else</span> <span class="number">0</span>
-	Array.count.unit = <span class="number">0</span>
-
-	Array::<span class="function"><span class="title">count</span></span> = (predicate) -&gt; <span class="property">@reduce</span> Array.count(predicate), <span class="number">0</span>
-
-	Array.<span class="function"><span class="title">contains</span></span> = (predicate=Boolean.True) -&gt; (acc=<span class="literal">false</span>,value) -&gt; acc <span class="keyword">or</span> predicate.call(value,value)
-	Array.contains.unit = <span class="literal">false</span>
-
-	Array::<span class="function"><span class="title">contains</span></span> = (predicate) -&gt; <span class="property">@reduce</span> Array.contains(predicate), <span class="literal">false</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>	
+	Array.<span class="hljs-function"><span class="hljs-title">count</span> = <span class="hljs-params">(predicate=Boolean.True)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(acc=<span class="hljs-number">0</span>,value)</span> -&gt;</span> acc + <span class="hljs-keyword">if</span> predicate.call(value,value) <span class="hljs-keyword">then</span> <span class="hljs-number">1</span> <span class="hljs-keyword">else</span> <span class="hljs-number">0</span>
+	Array.count.unit = <span class="hljs-number">0</span>
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">count</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> <span class="hljs-property">@reduce</span> Array.count(predicate), <span class="hljs-number">0</span>
+	
+	Array.<span class="hljs-function"><span class="hljs-title">contains</span> = <span class="hljs-params">(predicate=Boolean.True)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(acc=<span class="hljs-literal">false</span>,value)</span> -&gt;</span> acc <span class="hljs-keyword">or</span> predicate.call(value,value)
+	Array.contains.unit = <span class="hljs-literal">false</span>
+	
+	<span class="hljs-attribute">Array</span>::<span class="hljs-function"><span class="hljs-title">contains</span> = <span class="hljs-params">(predicate)</span> -&gt;</span> <span class="hljs-property">@reduce</span> Array.contains(predicate), <span class="hljs-literal">false</span></pre></div></div>
             
         </li>
         
