@@ -64,43 +64,43 @@
         <li id="section-1">
             <div class="annotation">
               
-              <div class="pilwrap for-h1">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1>List</h1>
+              <h1 id="list">List</h1>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>	window.List = <span class="class"><span class="keyword">class</span> <span class="title">List</span></span>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.List = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">List</span></span>
 
-		constructor: ( elements=[] ) -&gt;
-			<span class="keyword">if</span> <span class="keyword">typeof</span> elements == <span class="string">'string'</span> <span class="keyword">or</span> arguments.length &gt; <span class="number">1</span> <span class="keyword">or</span> <span class="keyword">not</span> elements.length? <span class="keyword">then</span> elements = Array::slice.call arguments
-			<span class="property">@add</span> element <span class="keyword">for</span> element <span class="keyword">in</span> elements
+		<span class="hljs-attribute">constructor</span>: <span class="hljs-function"><span class="hljs-params">( elements=[] )</span> -&gt;</span>
+			<span class="hljs-keyword">if</span> <span class="hljs-keyword">typeof</span> elements == <span class="hljs-string">'string'</span> <span class="hljs-keyword">or</span> arguments.length &gt; <span class="hljs-number">1</span> <span class="hljs-keyword">or</span> <span class="hljs-keyword">not</span> elements.length? <span class="hljs-keyword">then</span> elements = <span class="hljs-attribute">Array</span>::slice.call arguments
+			<span class="hljs-property">@add</span> element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> elements
 
-		add: Function.Chaining (element) -&gt;
-			Array::push.call <span class="keyword">this</span>, element
+		<span class="hljs-attribute">add</span>: Function.Chaining <span class="hljs-function"><span class="hljs-params">(element)</span> -&gt;</span>
+			<span class="hljs-attribute">Array</span>::push.call <span class="hljs-keyword">this</span>, element
 
-		member: (element) -&gt;
-			-<span class="number">1</span> != Array::indexOf.call <span class="keyword">this</span>, element
+		<span class="hljs-attribute">member</span>: <span class="hljs-function"><span class="hljs-params">(element)</span> -&gt;</span>
+			-<span class="hljs-number">1</span> != <span class="hljs-attribute">Array</span>::indexOf.call <span class="hljs-keyword">this</span>, element
+	
+		<span class="hljs-attribute">where</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(predicate)</span> -&gt;</span>
+			<span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span> ( element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> <span class="hljs-keyword">when</span> predicate.call element, element )
+		
+		<span class="hljs-attribute">each</span>: Function.Chaining.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
+			fn.call element, element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>
+			
+		<span class="hljs-attribute">map</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
+			<span class="hljs-keyword">new</span> List ( fn.call element, element <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> )
 
-		where: Function.From(Function) (predicate) -&gt;
-			<span class="keyword">new</span> <span class="property">@constructor</span> ( element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> <span class="keyword">when</span> predicate.call element, element )
+		<span class="hljs-attribute">mapAll</span>: Function.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(fn)</span> -&gt;</span>
+			<span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span> Array.flatten ( <span class="hljs-attribute">Array</span>::slice.call(fn.call element, element) <span class="hljs-keyword">for</span> element <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span> )
 
-		each: Function.Chaining.From(Function) (fn) -&gt;
-			fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span>
-
-		map: Function.From(Function) (fn) -&gt;
-			<span class="keyword">new</span> List ( fn.call element, element <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
-
-		mapAll: Function.From(Function) (fn) -&gt;
-			<span class="keyword">new</span> <span class="property">@constructor</span> Array.flatten ( Array::slice.call(fn.call element, element) <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">this</span> )
-
-		<span class="property">@concat</span>: (lists...) -&gt;
-			<span class="keyword">new</span> <span class="keyword">this</span> Array.concat lists...
-
-		<span class="property">@Of</span>: Function.Cache.From(Function) (constructor) -&gt;
-			<span class="class"><span class="keyword">class</span> <span class="keyword">extends</span> <span class="title">this</span></span>
-				add: Function.Of(constructor) <span class="keyword">this</span>::add</pre></div></div>
+		<span class="hljs-property">@concat</span>: <span class="hljs-function"><span class="hljs-params">(lists...)</span> -&gt;</span>
+			<span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> Array.concat lists...
+				
+		<span class="hljs-property">@Of</span>: Function.Cache.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
+			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
+				<span class="hljs-attribute">add</span>: Function.Of(constructor) <span class="hljs-attribute">this</span>::add</pre></div></div>
             
         </li>
         
