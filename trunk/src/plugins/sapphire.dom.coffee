@@ -7,9 +7,8 @@ define (require) ->
 	##
 	
 	makeElement = Function.From(String) (str) ->
-		div = document.createElement 'div'
-		div.innerHTML = str
-		return div.childNodes[0];
+		{childNodes:[element]} = Object.execute(-> @innerHTML = str) document.createElement 'div'
+		return element
 	
 	Set.Of(Element)::add =
 		(str) -> Set::add.call this, if str instanceof Element then str else makeElement str
@@ -72,7 +71,7 @@ define (require) ->
 			@to(List).map -> this[property][name]
 	
 		Function.From(Function) (fn) ->
-			@each -> fn.call this[property]
+			@each -> Object.execute(fn) this[property]
 	
 	]
 	
@@ -117,7 +116,7 @@ define (require) ->
 				
 			Function.From(Function) (fn) ->
 				@each ->
-					for own name, value of (Function.Chaining fn).call getAttributes.call this
+					for own name, value of Object.execute(fn) getAttributes.call this
 						if value? and value then @setAttribute name, value else @removeAttribute name
 		
 		]

@@ -89,6 +89,10 @@
 				when 0 then Function.constant undefined
 				when 1 then Object.resolve first
 				else Object.resolve(first).then Object.path rest
+				
+		Object.execute = (fn) -> (obj) ->
+			fn.call obj
+			return obj
 	
 
 ## Typed objects

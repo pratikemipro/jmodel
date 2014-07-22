@@ -5,10 +5,11 @@ define(function(require) {
   var context, getAttributes, makeElement, query;
   require('jmodel/sapphire2');
   makeElement = Function.From(String)(function(str) {
-    var div;
-    div = document.createElement('div');
-    div.innerHTML = str;
-    return div.childNodes[0];
+    var element;
+    element = Object.execute(function() {
+      return this.innerHTML = str;
+    })(document.createElement('div')).childNodes[0];
+    return element;
   });
   Set.Of(Element).prototype.add = function(str) {
     return Set.prototype.add.call(this, str instanceof Element ? str : makeElement(str));
@@ -73,7 +74,7 @@ define(function(require) {
         });
       }), Function.From(Function)(function(fn) {
         return this.each(function() {
-          return fn.call(this[property]);
+          return Object.execute(fn)(this[property]);
         });
       })
     ]);
@@ -121,7 +122,7 @@ define(function(require) {
     }), Function.From(Function)(function(fn) {
       return this.each(function() {
         var name, value, _ref, _results;
-        _ref = (Function.Chaining(fn)).call(getAttributes.call(this));
+        _ref = Object.execute(fn)(getAttributes.call(this));
         _results = [];
         for (name in _ref) {
           if (!__hasProp.call(_ref, name)) continue;
