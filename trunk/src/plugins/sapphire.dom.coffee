@@ -27,13 +27,15 @@ define (require) ->
 	##
 
 	query = (selector) -> switch
-		when selector.charAt(0) == '>'
+		when selector.charAt(0) == '>' ## Immediate child selector
 			( child for child in @children when child.matches selector[2..] )
-		when selector.charAt(0) == '<'
+		when selector.substring(0,2) == '<<' # Ancestor selector
 			ancestors = do (parent = this) -> while parent.parentNode?
 				parent = parent.parentNode
-			( ancestor for ancestor in ancestors when ancestor.matches? selector[2..] )
-		else
+			( ancestor for ancestor in ancestors when ancestor.matches? selector[3..] )
+		when selector.charAt(0) == '<' # Parent selector
+			( parent for parent in [@parentNode] when parent.matches selector[2..])
+		else # Descendant selector
 			@querySelectorAll selector
 	
 	##
