@@ -6,16 +6,16 @@ define (require) ->
 	## Implicit construction of elements
 	##
 	
-	makeElement = (str) ->
+	makeElement = Function.From(String) (str) ->
 		div = document.createElement 'div'
 		div.innerHTML = str
 		return div.childNodes[0];
 	
 	Set.Of(Element)::add =
-		(str) -> Set::add.call this, makeElement str
+		(str) -> Set::add.call this, if str instanceof Element then str else makeElement str
 	
 	List.Of(Element)::add =
-		(str) -> List::add.call this, makeElement str
+		(str) -> List::add.call this, if str instanceof Element then str else makeElement str
 	
 
 	##
