@@ -6,8 +6,8 @@ define (require) ->
 	## Implicit construction of elements
 	##
 	
-	makeElement = Function.From(String) (str) ->
-		{childNodes:[element]} = Object.execute(-> @innerHTML = str) document.createElement 'div'
+	makeElement = Function.From(String) (html) ->
+		{childNodes:[element]} = Object.execute(-> @innerHTML = html) document.createElement 'div'
 		return element
 	
 	Set.Of(Element)::add =

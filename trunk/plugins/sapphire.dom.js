@@ -4,10 +4,10 @@ var __hasProp = {}.hasOwnProperty;
 define(function(require) {
   var context, getAttributes, makeElement, query;
   require('jmodel/sapphire2');
-  makeElement = Function.From(String)(function(str) {
+  makeElement = Function.From(String)(function(html) {
     var element;
     element = Object.execute(function() {
-      return this.innerHTML = str;
+      return this.innerHTML = html;
     })(document.createElement('div')).childNodes[0];
     return element;
   });
