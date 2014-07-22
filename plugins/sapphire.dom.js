@@ -25,7 +25,7 @@ define(function(require) {
     return List.prototype.add.call(this, ensureElement(element));
   };
   query = function(selector) {
-    var ancestor, ancestors, child, _i, _j, _len, _len1, _ref, _results, _results1;
+    var ancestor, ancestors, child, parent, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _results, _results1, _results2;
     switch (false) {
       case selector.charAt(0) !== '>':
         _ref = this.children;
@@ -37,7 +37,7 @@ define(function(require) {
           }
         }
         return _results;
-      case selector.charAt(0) !== '<':
+      case selector.substring(0, 2) !== '<<':
         ancestors = (function(parent) {
           var _results1;
           _results1 = [];
@@ -49,11 +49,21 @@ define(function(require) {
         _results1 = [];
         for (_j = 0, _len1 = ancestors.length; _j < _len1; _j++) {
           ancestor = ancestors[_j];
-          if (typeof ancestor.matches === "function" ? ancestor.matches(selector.slice(2)) : void 0) {
+          if (typeof ancestor.matches === "function" ? ancestor.matches(selector.slice(3)) : void 0) {
             _results1.push(ancestor);
           }
         }
         return _results1;
+      case selector.charAt(0) !== '<':
+        _ref1 = [this.parentNode];
+        _results2 = [];
+        for (_k = 0, _len2 = _ref1.length; _k < _len2; _k++) {
+          parent = _ref1[_k];
+          if (parent.matches(selector.slice(2))) {
+            _results2.push(parent);
+          }
+        }
+        return _results2;
       default:
         return this.querySelectorAll(selector);
     }
