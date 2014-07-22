@@ -1,6 +1,22 @@
 define (require) ->
 
 	require 'jmodel/sapphire2'
+	
+	##
+	## Implicit construction of elements
+	##
+	
+	makeElement = (str) ->
+		div = document.createElement 'div'
+		div.innerHTML = str
+		return div.childNodes[0];
+	
+	Set.Of(Element)::add =
+		(str) -> Set::add.call this, makeElement str
+	
+	List.Of(Element)::add =
+		(str) -> List::add.call this, makeElement str
+	
 
 	##
 	## General querying within object

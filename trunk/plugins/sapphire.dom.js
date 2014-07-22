@@ -2,8 +2,20 @@
 var __hasProp = {}.hasOwnProperty;
 
 define(function(require) {
-  var context, getAttributes, query;
+  var context, getAttributes, makeElement, query;
   require('jmodel/sapphire2');
+  makeElement = function(str) {
+    var div;
+    div = document.createElement('div');
+    div.innerHTML = str;
+    return div.childNodes[0];
+  };
+  Set.Of(Element).prototype.add = function(str) {
+    return Set.prototype.add.call(this, makeElement(str));
+  };
+  List.Of(Element).prototype.add = function(str) {
+    return List.prototype.add.call(this, makeElement(str));
+  };
   query = function(selector) {
     var ancestor, ancestors, child, _i, _j, _len, _len1, _ref, _results, _results1;
     switch (false) {
