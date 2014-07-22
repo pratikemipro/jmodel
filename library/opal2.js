@@ -1069,6 +1069,12 @@ define(function() {
         return Object.resolve(first).then(Object.path(rest));
     }
   };
+  Object.execute = function(fn) {
+    return function(obj) {
+      fn.call(obj);
+      return obj;
+    };
+  };
   Object.Of = Function.From(Constructor)(function(constructor) {
     var fn, test;
     test = Object.isa(constructor);

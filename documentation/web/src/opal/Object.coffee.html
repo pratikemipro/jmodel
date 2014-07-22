@@ -199,7 +199,11 @@
 		<span class="hljs-keyword">switch</span> path.length
 			<span class="hljs-keyword">when</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> Function.constant <span class="hljs-literal">undefined</span>
 			<span class="hljs-keyword">when</span> <span class="hljs-number">1</span> <span class="hljs-keyword">then</span> Object.resolve first
-			<span class="hljs-keyword">else</span> Object.resolve(first).<span class="hljs-keyword">then</span> Object.path rest</pre></div></div>
+			<span class="hljs-keyword">else</span> Object.resolve(first).<span class="hljs-keyword">then</span> Object.path rest
+			
+	Object.<span class="hljs-function"><span class="hljs-title">execute</span> = <span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+		fn.call obj
+		<span class="hljs-keyword">return</span> obj</pre></div></div>
             
         </li>
         
