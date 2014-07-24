@@ -2,9 +2,9 @@
 var __hasProp = {}.hasOwnProperty;
 
 define(function(require) {
-  var context, createElement, ensureElement, getAttributes, query;
+  var context, ensureElement, getAttributes, query;
   require('jmodel/sapphire2');
-  createElement = Function.From(String)(function(html) {
+  Element.create = Function.From(String)(function(html) {
     var element;
     element = Object.execute(function() {
       return this.innerHTML = html;
@@ -15,7 +15,7 @@ define(function(require) {
     if (element instanceof Element) {
       return element;
     } else {
-      return createElement(element);
+      return Element.create(element);
     }
   };
   Set.Of(Element).prototype.add = function(element) {

@@ -3,17 +3,21 @@ define (require) ->
 	require 'jmodel/sapphire2'
 	
 	##
-	## Implicit construction of elements
+	## Element
 	##
 	
-	createElement = Function.From(String) (html) ->
+	Element.create = Function.From(String) (html) ->
 		{childNodes:[element]} =
 			Object.execute(-> @innerHTML = html) \
 				document.createElement 'div'
 		return element
+	
+	##
+	## Implicit construction of elements
+	##
 		
 	ensureElement = (element) ->
-		if element instanceof Element then element else createElement element
+		if element instanceof Element then element else Element.create element
 		
 	Set.Of(Element)::add =
 		(element) -> Set::add.call this, ensureElement element
