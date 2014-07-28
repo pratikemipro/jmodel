@@ -463,7 +463,7 @@ define (require) ->
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
-			[cardType,keys,parameters] = @router.resolve href
+			[cardType,keys,parameters] = @router.resolve (href.split('#'))[0]
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
