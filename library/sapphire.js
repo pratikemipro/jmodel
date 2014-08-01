@@ -359,13 +359,10 @@ define(['jmodel/opal'], function (opal) {
 		// NOTE: Test setting of this
 		// NOTE: Test passing of index
 		// NOTE: Test explicit definition
-		each: Array.prototype.forEach ? function () {
-			this.__rep__.forEach(Function.pipe.apply(null,arguments),this);
-			return this;
-		} : function () {
+		each: function () {
 			var callback = Function.pipe.apply(null,arguments);
 			for ( var i=0, rep=this.__rep__; i<rep.length; i++) {
-				callback.call(this,rep[i],i);
+				callback.call(rep[i],rep[i],i);
 			}
 			return this;
 		},
