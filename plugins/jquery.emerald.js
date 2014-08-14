@@ -17,6 +17,14 @@ define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
 		}));
 		return $(elements);
 	}
+	
+	jQuery.element = function (fn) {
+		return fn.call($(this));
+	}
+	
+	jQuery.fn.exists = function (selector) {
+		return 0 !== this.filter(selector).length
+	}
 
 	jQuery.fn.event = function () {
 		
