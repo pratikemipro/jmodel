@@ -72,7 +72,7 @@
 # Typed Promises
 
 				
-			@Of: (constructor) ->
+			@Of: Function.Cache.From(Function).To(Function) (constructor) ->
 				class extends this
 					fulfil: Function.Of(constructor) this::fulfil
 			

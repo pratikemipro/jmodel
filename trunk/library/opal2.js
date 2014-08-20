@@ -1551,7 +1551,7 @@ define(function() {
       };
     });
 
-    Promise.Of = function(constructor) {
+    Promise.Of = Function.Cache.From(Function).To(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -1564,7 +1564,7 @@ define(function() {
         return _Class;
 
       })(this);
-    };
+    });
 
     Promise.conjoin = function() {};
 
