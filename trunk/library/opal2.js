@@ -1424,7 +1424,7 @@ define(function() {
       }
     };
   };
-  window.Maybe = function(base) {
+  window.Maybe = Function.Cache(function(base) {
     var construct, derived, valid;
     construct = Object.construct(base);
     valid = Object.isa(base);
@@ -1439,7 +1439,7 @@ define(function() {
       return (x == null) || valid(x);
     };
     return derived;
-  };
+  });
   return window.Promise = Promise = (function() {
     var FULFILLED, PENDING, REJECTED, chain, delay, _ref;
 

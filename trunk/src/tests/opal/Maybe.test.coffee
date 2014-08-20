@@ -11,3 +11,7 @@
 		equals type.valid(undefined), true, 'Undefined is a valid value'
 		equals type.valid(5), true, 'Values from base type are valid'
 		equals type.valid('red'), false, 'Values not from base type are not valid'
+		
+		type2 = Maybe Number
+		
+		equals type, type2, 'Maybe cached correctly'

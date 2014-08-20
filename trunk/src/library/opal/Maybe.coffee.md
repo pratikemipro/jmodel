@@ -1,6 +1,6 @@
 # Maybe
 		
-		window.Maybe = (base) ->
+		window.Maybe = Function.Cache (base) ->
 		
 			construct = Object.construct base
 			valid     = Object.isa base
