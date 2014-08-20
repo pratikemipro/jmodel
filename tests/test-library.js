@@ -1464,14 +1464,16 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   module('Maybe');
   test('Maybe Number', function() {
-    var type;
+    var type, type2;
     type = Maybe(Number);
     equals(type(), void 0, 'Returns undefined when called with no arguments.');
     equals(type(void 0), void 0, 'Returns undefined when called with undefined');
     equals(type(5), 5, 'Returns value when called with value of correct type');
     equals(type.valid(void 0), true, 'Undefined is a valid value');
     equals(type.valid(5), true, 'Values from base type are valid');
-    return equals(type.valid('red'), false, 'Values not from base type are not valid');
+    equals(type.valid('red'), false, 'Values not from base type are not valid');
+    type2 = Maybe(Number);
+    return equals(type, type2, 'Maybe cached correctly');
   });
   module('Promise');
   test('Promise.then', function() {
