@@ -7,7 +7,7 @@
 			
 			@equal: Function.From(Tuple,Tuple) ([a...],[b...]) -> Array.equal a, b
 	
-			@Of: Function.Cache.From([Function]) (constructors...) ->
+			@Of: Function.Cache.From([Function]).To(Function) (constructors...) ->
 				types = constructors.map (constructor) -> Object.ensure constructor
 				class extends this
 					constructor: (args...) ->
