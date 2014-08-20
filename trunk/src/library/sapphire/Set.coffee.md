@@ -91,7 +91,7 @@
 ## Typed sets
 
 			
-			@Of: Function.Cache.From(Function) (constructor) ->
+			@Of: Function.Cache.From(Function).To(Function) (constructor) ->
 				class extends this
 					add: Function.Of(constructor) this::add
 					

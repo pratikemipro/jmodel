@@ -34,7 +34,7 @@ define(['jmodel/opal2'], function() {
       return Array.equal(a, b);
     });
 
-    Tuple.Of = Function.Cache.From([Function])(function() {
+    Tuple.Of = Function.Cache.From([Function]).To(Function)(function() {
       var constructors, types;
       constructors = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       types = constructors.map(function(constructor) {
@@ -289,7 +289,7 @@ define(['jmodel/opal2'], function() {
       }).call(this));
     });
 
-    Set.Of = Function.Cache.From(Function)(function(constructor) {
+    Set.Of = Function.Cache.From(Function).To(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -387,7 +387,7 @@ define(['jmodel/opal2'], function() {
       return new this(Array.concat.apply(Array, lists));
     };
 
-    List.Of = Function.Cache.From(Function)(function(constructor) {
+    List.Of = Function.Cache.From(Function).To(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -547,7 +547,7 @@ define(['jmodel/opal2'], function() {
       };
     });
 
-    Stream.Of = Function.Cache.From(Function)(function(constructor) {
+    Stream.Of = Function.Cache.From(Function).To(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
