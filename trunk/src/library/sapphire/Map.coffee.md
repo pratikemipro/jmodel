@@ -26,7 +26,7 @@
 ## Typed maps
 
 			
-			@To: Function.Cache.From(Function) (constructor) ->
+			@To: Function.Cache.From(Function).To(Function) (constructor) ->
 				class extends this
 				
 					add: this::add.extend [			
@@ -38,7 +38,7 @@
 					
 					@value_constructor: constructor
 			
-			@Using: (combine) ->
+			@Using: Function.Cache.From(Function).To(Function) (combine) ->
 				combine = combine.bind @value_constructor
 				class extends this
 					add: this::add.extend [

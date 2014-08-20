@@ -2204,7 +2204,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     equals(falls.get('rome').toDateString(), 'Fri Sep 04 476', 'Mapped values are correct');
     DateMap1 = Map.To(Date);
     DateMap2 = Map.To(Date);
-    return equals(DateMap1, DateMap2, 'Typed Map constructor cached correctly');
+    equals(DateMap1, DateMap2, 'Typed Map constructor cached correctly');
+    return equals(Map.To(Date), Map.To(Date), 'Map.To cached correctly');
   });
   test('Map.Using', function() {
     var departments, person, scores;
@@ -2223,7 +2224,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     departments.add('IT', 'Jonathan');
     departments.add('Finance', 'Rachel');
     equals(departments.get('IT') instanceof Set, true, 'Converts values to correct type');
-    return deepEqual(((function() {
+    deepEqual(((function() {
       var _i, _len, _ref, _results;
       _ref = departments.get('IT');
       _results = [];
@@ -2233,6 +2234,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
       }
       return _results;
     })()).sort(), ['Jonathan', 'Richard'], 'Combines values correctly');
+    return equals(Map.To(Set).Using(Set.union), Map.To(Set).Using(Set.union), 'Map.Using cached correctly');
   });
   module('Stream');
   test('Stream::add', function() {

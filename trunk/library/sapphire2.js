@@ -464,7 +464,7 @@ define(['jmodel/opal2'], function() {
 
     Map.prototype.ensure = Function.identity;
 
-    Map.To = Function.Cache.From(Function)(function(constructor) {
+    Map.To = Function.Cache.From(Function).To(Function)(function(constructor) {
       return (function(_super) {
         __extends(_Class, _super);
 
@@ -495,7 +495,7 @@ define(['jmodel/opal2'], function() {
       })(this);
     });
 
-    Map.Using = function(combine) {
+    Map.Using = Function.Cache.From(Function).To(Function)(function(combine) {
       combine = combine.bind(this.value_constructor);
       return (function(_super) {
         __extends(_Class, _super);
@@ -513,7 +513,7 @@ define(['jmodel/opal2'], function() {
         return _Class;
 
       })(this);
-    };
+    });
 
     return Map;
 
