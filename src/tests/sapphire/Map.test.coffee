@@ -50,6 +50,8 @@
 		
 		equals DateMap1, DateMap2, 'Typed Map constructor cached correctly'
 		
+		equals (Map.To Date), (Map.To Date), 'Map.To cached correctly'
+		
 	test 'Map.Using', ->
 		
 		scores = new (Map.Using Math.plus)
@@ -72,3 +74,5 @@
 		
 		equals departments.get('IT') instanceof Set, true, 'Converts values to correct type'
 		deepEqual (person for person in departments.get('IT')).sort(), ['Jonathan','Richard'], 'Combines values correctly'
+		
+		equals (Map.To(Set).Using Set.union), (Map.To(Set).Using Set.union), 'Map.Using cached correctly'
