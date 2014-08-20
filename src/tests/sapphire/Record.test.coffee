@@ -5,7 +5,7 @@
 		Person = Record.Of
 			name: String
 			dob: Date
-			affiliations: Set.Of(String)
+			affiliations: Set.Of String
 			
 		einstein = new Person
 			name: 'Albert Einstein'
@@ -28,3 +28,10 @@
 		einstein.name (name) -> "#{name} rules!"
 		
 		equals einstein.name(), 'Al Einstein rules!', true, 'String fields allow functional updates'
+		
+		Person2 = Record.Of
+			name: String
+			dob: Date
+			affiliations: Set.Of String
+			
+		equals Person, Person2, 'Record.Of caches correctly'

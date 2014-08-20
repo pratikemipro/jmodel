@@ -3,7 +3,7 @@
 		
 		window.Record = class Record
 		
-			@Of: Function.Cache.From(Object) (constructors) -> 
+			@Of: Function.Cache.From(Object).To(Function) (constructors) -> 
 			
 				record = class extends this
 				
