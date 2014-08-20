@@ -1623,7 +1623,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   module('Tuple');
   test('Tuple.Of', function() {
-    var Person, forename, fred, fred2, id, john, surname;
+    var Person, Person2, forename, fred, fred2, id, john, surname;
     Person = Tuple.Of(Number, String, String);
     fred = new Person(1, 'fred', 'smith');
     id = fred[0], forename = fred[1], surname = fred[2];
@@ -1631,7 +1631,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     fred2 = new Person(1, 'fred', 'smith');
     john = new Person(2, 'john', 'smith');
     equal(Tuple.equal(fred, john), false, 'Tuples with different values are not equal');
-    return equal(Tuple.equal(fred, fred2), true, 'Tuples with same values are equal');
+    equal(Tuple.equal(fred, fred2), true, 'Tuples with same values are equal');
+    Person2 = Tuple.Of(Number, String, String);
+    return equal(Person, Person2, 'Tuple.Of cached correctly');
   });
   module('Set');
   test('Set constructor', function() {
