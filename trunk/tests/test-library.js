@@ -2418,7 +2418,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   module('Record');
   test('Constructor', function() {
-    var Person, einstein, org;
+    var Person, Person2, einstein, org;
     Person = Record.Of({
       name: String,
       dob: Date,
@@ -2449,7 +2449,13 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     einstein.name(function(name) {
       return "" + name + " rules!";
     });
-    return equals(einstein.name(), 'Al Einstein rules!', true, 'String fields allow functional updates');
+    equals(einstein.name(), 'Al Einstein rules!', true, 'String fields allow functional updates');
+    Person2 = Record.Of({
+      name: String,
+      dob: Date,
+      affiliations: Set.Of(String)
+    });
+    return equals(Person, Person2, 'Record.Of caches correctly');
   });
   module('Event');
   module('Subscriber');

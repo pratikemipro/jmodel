@@ -16,7 +16,11 @@ define(function() {
   var Constructor, Promise, Type, _base;
   window.Value = function() {};
   window.Value.equal = function(x, y) {
-    return x === y;
+    if (x.constructor === Object) {
+      return Object.equal(x, y);
+    } else {
+      return x === y;
+    }
   };
   window.Value.lt = function(x, y) {
     return x < y;

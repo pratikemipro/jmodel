@@ -11,7 +11,7 @@
 		# NOTE: Define assert here
 	
 		window.Value = ->
-		window.Value.equal = (x,y) -> x == y
+		window.Value.equal = (x,y) -> if x.constructor == Object then Object.equal(x,y) else x == y
 		window.Value.lt = (x,y) -> x < y
 		window.Value.valid = (x) -> x != undefined
 		

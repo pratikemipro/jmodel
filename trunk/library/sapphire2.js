@@ -659,7 +659,7 @@ define(['jmodel/opal2'], function() {
   return window.Record = Record = (function() {
     function Record() {}
 
-    Record.Of = Function.Cache.From(Object)(function(constructors) {
+    Record.Of = Function.Cache.From(Object).To(Function)(function(constructors) {
       var constructor, field, record, _fn;
       record = (function(_super) {
         var field;
