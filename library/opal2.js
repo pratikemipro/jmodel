@@ -1413,7 +1413,7 @@ define(function() {
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     return args.reduce(Math.times, 1);
   };
-  window.Nullable = function(constructor) {
+  window.Nullable = Function.Cache.From(Function)(function(constructor) {
     var construct;
     construct = Object.construct(constructor);
     return function(x) {
@@ -1423,7 +1423,7 @@ define(function() {
         return construct.apply(null, arguments);
       }
     };
-  };
+  });
   window.Maybe = Function.Cache(function(base) {
     var construct, derived, valid;
     construct = Object.construct(base);
