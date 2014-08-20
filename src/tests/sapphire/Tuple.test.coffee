@@ -15,3 +15,7 @@
 		
 		equal Tuple.equal(fred,john), false, 'Tuples with different values are not equal'
 		equal Tuple.equal(fred,fred2), true, 'Tuples with same values are equal'
+		
+		Person2 = Tuple.Of Number, String, String
+		
+		equal Person, Person2, 'Tuple.Of cached correctly'
