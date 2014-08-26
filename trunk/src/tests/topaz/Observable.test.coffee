@@ -8,7 +8,7 @@
 		
 		items = []
 		
-		set.event('add').subscribe (item) -> items.push item
+		set.event('add').subscribe -> items.push this
 		
 		set.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6)
 		
@@ -24,7 +24,7 @@
 		
 		items = []
 		
-		set.event('remove').subscribe (item) -> items.push item
+		set.event('remove').subscribe -> items.push this
 		
 		set.remove(Number.Odd.valid)
 		
@@ -40,7 +40,7 @@
 		
 		items = []
 		
-		list.event('add').subscribe (item) -> items.push item
+		list.event('add').subscribe -> items.push this
 		
 		list.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6)
 		
@@ -76,7 +76,7 @@
 		
 		removed = []
 		
-		map.event('remove').subscribe (key) -> removed.push key
+		map.event('remove').subscribe -> removed.push this
 		
 		map.add
 			up: 'quark'

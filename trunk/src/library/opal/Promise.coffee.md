@@ -9,7 +9,7 @@
 		
 			chain = (promise,fn,value) -> delay ->
 				try
-					ret = fn value...
+					ret = fn.call value[0], value...
 					promise.fulfil ret
 				catch reason
 					promise.reject reason

@@ -1453,7 +1453,7 @@ define(function() {
       return delay(function() {
         var reason, ret;
         try {
-          ret = fn.apply(null, value);
+          ret = fn.call.apply(fn, [value[0]].concat(__slice.call(value)));
           return promise.fulfil(ret);
         } catch (_error) {
           reason = _error;

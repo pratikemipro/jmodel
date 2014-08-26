@@ -2481,8 +2481,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     output = [];
     promise1 = new Promise();
     promise2 = new Promise();
-    et.subscribe(function(x) {
-      return output.push(x);
+    et.subscribe(function() {
+      return output.push(this);
     });
     et.add(promise1);
     et.add(promise2);
@@ -2498,11 +2498,11 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     et = new EventType();
     output1 = [];
     output2 = [];
-    et.subscribe(function(x) {
-      return output1.push(x);
+    et.subscribe(function() {
+      return output1.push(this);
     });
-    et.subscribe(function(x) {
-      return output2.push(x);
+    et.subscribe(function() {
+      return output2.push(this);
     });
     et.raise('red');
     et.raise('green');
@@ -2518,8 +2518,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     output = [];
     numbers.where(function() {
       return this % 2 === 0;
-    }).subscribe(function(x) {
-      return output.push(x);
+    }).subscribe(function() {
+      return output.push(this);
     });
     numbers.raise(1);
     numbers.raise(2);
@@ -2537,9 +2537,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
       this.old = old;
     };
     et = new (EventType.Of(ValueChangeEvent));
-    et.subscribe(function(event) {
-      equal(event instanceof ValueChangeEvent, true, 'Generates events of right type');
-      deepEqual([event.value, event.old], ['red', 'green'], 'Passes correct values to constructor');
+    et.subscribe(function() {
+      equal(this instanceof ValueChangeEvent, true, 'Generates events of right type');
+      deepEqual([this.value, this.old], ['red', 'green'], 'Passes correct values to constructor');
       return start();
     });
     return et.raise('red', 'green');
@@ -2553,8 +2553,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     };
     set = new (Observable(Set));
     items = [];
-    set.event('add').subscribe(function(item) {
-      return items.push(item);
+    set.event('add').subscribe(function() {
+      return items.push(this);
     });
     set.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6);
     return delay(function() {
@@ -2569,8 +2569,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     };
     set = new (Observable(Set))([1, 2, 3, 4, 5, 6]);
     items = [];
-    set.event('remove').subscribe(function(item) {
-      return items.push(item);
+    set.event('remove').subscribe(function() {
+      return items.push(this);
     });
     set.remove(Number.Odd.valid);
     return delay(function() {
@@ -2585,8 +2585,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     };
     list = new (Observable(List));
     items = [];
-    list.event('add').subscribe(function(item) {
-      return items.push(item);
+    list.event('add').subscribe(function() {
+      return items.push(this);
     });
     list.add(1).add(1).add(2).add(3).add(2).add(4).add(1).add(5).add(6);
     return delay(function() {
@@ -2622,8 +2622,8 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     };
     map = new (Observable(Map));
     removed = [];
-    map.event('remove').subscribe(function(key) {
-      return removed.push(key);
+    map.event('remove').subscribe(function() {
+      return removed.push(this);
     });
     map.add({
       up: 'quark',
