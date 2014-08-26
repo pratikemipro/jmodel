@@ -132,7 +132,7 @@
 		
 		<span class="hljs-attribute">transition</span>: Function.To(Stream) \<span class="hljs-function">
 			-&gt;</span> <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(last=<span class="hljs-literal">undefined</span>)</span> =&gt;</span>
-				<span class="hljs-property">@where</span> <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> last != x <span class="hljs-keyword">and</span> ( ( last = x ) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span> )
+				<span class="hljs-property">@where</span> <span class="hljs-function"><span class="hljs-params">(x)</span> -&gt;</span> Boolean (<span class="hljs-keyword">not</span> Value.equal(x,last) ) <span class="hljs-keyword">and</span> ( ( last = x ) <span class="hljs-keyword">or</span> <span class="hljs-literal">true</span> )
 				
 		<span class="hljs-attribute">control</span>: Function.From(Stream).To(Stream) \
 			<span class="hljs-function"><span class="hljs-params">(control)</span> -&gt;</span> <span class="hljs-keyword">do</span> <span class="hljs-function"><span class="hljs-params">(active=<span class="hljs-literal">true</span>)</span> =&gt;</span>

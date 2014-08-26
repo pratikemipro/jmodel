@@ -60,8 +60,8 @@
 		numbers
 			.map -> this*this
 			.subscribe -> output.push this
-			
-		numbers.raise(1).raise(2).raise(3).raise(4)
+		
+		[1,2,3,4].each -> numbers.raise +this
 		
 		delay ->	
 			deepEqual output, [1,4,9,16], 'Mapped events notify correctly'
@@ -76,7 +76,7 @@
 			.where -> this % 2 == 0
 			.subscribe -> output.push this
 		
-		numbers.raise(1).raise(2).raise(3).raise(4)
+		[1,2,3,4].each -> numbers.raise +this
 		
 		delay ->	
 			deepEqual output, [2,4], 'Filtered events notify correctly'
@@ -91,7 +91,7 @@
 			.take 2
 			.subscribe -> output.push this
 		
-		numbers.raise(1).raise(2).raise(3).raise(4)
+		[1,2,3,4].each -> numbers.raise +this
 		
 		delay ->	
 			deepEqual output, [1,2], 'Taken events notify correctly'
@@ -106,7 +106,7 @@
 			.drop 2
 			.subscribe -> output.push this
 		
-		numbers.raise(1).raise(2).raise(3).raise(4)
+		[1,2,3,4].each -> numbers.raise +this
 		
 		delay ->	
 			deepEqual output, [3,4], 'Dropped events notify correctly'
@@ -119,9 +119,10 @@
 		
 		numbers
 			.transition()
-			.subscribe -> output.push this
+			.subscribe ->
+				output.push this
 		
-		numbers.raise(1).raise(2).raise(2).raise(2).raise(3).raise(3).raise(4)
+		[1,2,2,2,3,3,4].each -> numbers.raise this
 		
 		delay ->	
 			deepEqual output, [1,2,3,4], 'Transition events notify correctly'
@@ -139,4 +140,3 @@
 			start()
 			
 		et.raise 'red', 'green'
-			

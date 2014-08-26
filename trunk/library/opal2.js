@@ -16,10 +16,15 @@ define(function() {
   var Constructor, Promise, Type, _base;
   window.Value = function() {};
   window.Value.equal = function(x, y) {
-    if (x.constructor === Object) {
-      return Object.equal(x, y);
-    } else {
-      return x === y;
+    switch (false) {
+      case !(x instanceof Boolean && y instanceof Boolean):
+        return x === y;
+      case !(x instanceof Number && y instanceof Number):
+        return +x === +y;
+      case x.constructor !== Object:
+        return Object.equal(x, y);
+      default:
+        return x === y;
     }
   };
   window.Value.lt = function(x, y) {
@@ -168,6 +173,15 @@ define(function() {
         return item;
       }
     }
+  };
+  Array.prototype.each = function(fn) {
+    var item, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = this.length; _i < _len; _i++) {
+      item = this[_i];
+      _results.push(fn.call(item, item));
+    }
+    return _results;
   };
   Array.hastypes = function() {
     var types;
