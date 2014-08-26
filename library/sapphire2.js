@@ -596,7 +596,7 @@ define(['jmodel/opal2'], function() {
       return (function(_this) {
         return function(last) {
           return _this.where(function(x) {
-            return last !== x && ((last = x) || true);
+            return Boolean((!Value.equal(x, last)) && ((last = x) || true));
           });
         };
       })(this)(void 0);

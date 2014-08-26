@@ -2244,7 +2244,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   module('Stream');
   test('Stream::add', function() {
     var output1, output2, stream;
-    stream = new Stream();
+    stream = new Stream;
     output1 = [];
     output2 = [];
     stream.each(function() {
@@ -2278,19 +2278,21 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   test('Stream::map', function() {
     var output, stream;
-    stream = new Stream();
+    stream = new Stream;
     output = [];
     stream.map(function() {
       return 1 === this.mod(2);
     }).each(function(item) {
       return output.push(item);
     });
-    stream.add(1).add(2).add(3).add(4).add(5).add(6);
+    [1, 2, 3, 4, 5, 6].each(function() {
+      return stream.add(this);
+    });
     return deepEqual(output, [true, false, true, false, true, false], 'Correctly applies map');
   });
   test('Stream::where', function() {
     var output1, output2, stream;
-    stream = new Stream();
+    stream = new Stream;
     output1 = [];
     output2 = [];
     stream.each(function() {
@@ -2301,13 +2303,15 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     }).each(function() {
       return output2.push(this);
     });
-    stream.add(1).add(2).add(3).add(4).add(5).add(6);
+    [1, 2, 3, 4, 5, 6].each(function() {
+      return stream.add(this);
+    });
     deepEqual(output1, [1, 2, 3, 4, 5, 6], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, [1, 3, 5], 'Derived stream only includes first n items');
   });
   test('Stream::take', function() {
     var output1, output2, stream;
-    stream = new Stream();
+    stream = new Stream;
     output1 = [];
     output2 = [];
     stream.each(function() {
@@ -2316,13 +2320,15 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     stream.take(3).each(function() {
       return output2.push(this);
     });
-    stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
+    ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'].each(function() {
+      return stream.add(this);
+    });
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, ['red', 'green', 'blue'], 'Derived stream only includes first n items');
   });
   test('Stream::drop', function() {
     var output1, output2, stream;
-    stream = new Stream();
+    stream = new Stream;
     output1 = [];
     output2 = [];
     stream.each(function() {
@@ -2331,27 +2337,37 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     stream.drop(3).each(function() {
       return output2.push(this);
     });
-    stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow');
+    ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'].each(function() {
+      return stream.add(this);
+    });
     deepEqual(output1, ['red', 'green', 'blue', 'cyan', 'magenta', 'yellow'], 'Behaviour of base stream is unaffected');
     return deepEqual(output2, ['cyan', 'magenta', 'yellow'], 'Derived stream does not include first n items');
   });
   test('Stream::transition', function() {
-    var output, stream;
-    stream = new Stream();
+    var booleans, numbers, output;
+    numbers = new Stream;
     output = [];
-    stream.transition().each(function() {
-      return output.push(this);
+    numbers.transition().each(function() {
+      return output.push(+this);
     });
-    stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1);
+    [3, 3, 3, 2, 5, 5, 1].each(function() {
+      return numbers.add(+this);
+    });
     deepEqual(output, [3, 2, 5, 1], 'Transition stream only contains distinct values');
+    booleans = new Stream;
     output = [];
-    stream.add(false).add(false).add(false).add(true).add(false).add(true).add(true);
+    booleans.transition().each(function(x) {
+      return output.push(x);
+    });
+    [false, false, false, true, false, true, true].each(function(x) {
+      return booleans.add(x);
+    });
     return deepEqual(output, [false, true, false, true], 'Transition works for Boolean values');
   });
   test('Stream::control', function() {
     var control, data, output;
-    data = new Stream();
-    control = new Stream();
+    data = new Stream;
+    control = new Stream;
     output = [];
     data.control(control).each(function() {
       return output.push(this);
@@ -2369,9 +2385,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   test('Stream::between', function() {
     var data, output, start, stop;
-    data = new Stream();
-    start = new Stream();
-    stop = new Stream();
+    data = new Stream;
+    start = new Stream;
+    stop = new Stream;
     output = [];
     data.between(start, stop).each(function() {
       return output.push(this);
@@ -2395,14 +2411,18 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.accumulate(Math.plus).each(function() {
       return output.push(this);
     });
-    numbers.add(1).add(2).add(3).add(4).add(5).add(6);
+    [1, 2, 3, 4, 5, 6].each(function() {
+      return numbers.add(this);
+    });
     deepEqual(output, [1, 3, 6, 10, 15, 21], 'Accumulates correctly');
     numbers = new Stream();
     output = [];
     numbers.accumulate(Math.plus, 10).each(function() {
       return output.push(this);
     });
-    numbers.add(1).add(2).add(3).add(4).add(5).add(6);
+    [1, 2, 3, 4, 5, 6].each(function() {
+      return numbers.add(this);
+    });
     return deepEqual(output, [11, 13, 16, 20, 25, 31], 'Starts with initial value');
   });
   test('Stream.disjoin', function() {
@@ -2521,7 +2541,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     }).subscribe(function() {
       return output.push(this);
     });
-    numbers.raise(1).raise(2).raise(3).raise(4);
+    [1, 2, 3, 4].each(function() {
+      return numbers.raise(+this);
+    });
     return delay(function() {
       deepEqual(output, [1, 4, 9, 16], 'Mapped events notify correctly');
       return start();
@@ -2536,7 +2558,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     }).subscribe(function() {
       return output.push(this);
     });
-    numbers.raise(1).raise(2).raise(3).raise(4);
+    [1, 2, 3, 4].each(function() {
+      return numbers.raise(+this);
+    });
     return delay(function() {
       deepEqual(output, [2, 4], 'Filtered events notify correctly');
       return start();
@@ -2549,7 +2573,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.take(2).subscribe(function() {
       return output.push(this);
     });
-    numbers.raise(1).raise(2).raise(3).raise(4);
+    [1, 2, 3, 4].each(function() {
+      return numbers.raise(+this);
+    });
     return delay(function() {
       deepEqual(output, [1, 2], 'Taken events notify correctly');
       return start();
@@ -2562,7 +2588,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.drop(2).subscribe(function() {
       return output.push(this);
     });
-    numbers.raise(1).raise(2).raise(3).raise(4);
+    [1, 2, 3, 4].each(function() {
+      return numbers.raise(+this);
+    });
     return delay(function() {
       deepEqual(output, [3, 4], 'Dropped events notify correctly');
       return start();
@@ -2575,7 +2603,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.transition().subscribe(function() {
       return output.push(this);
     });
-    numbers.raise(1).raise(2).raise(2).raise(2).raise(3).raise(3).raise(4);
+    [1, 2, 2, 2, 3, 3, 4].each(function() {
+      return numbers.raise(this);
+    });
     return delay(function() {
       deepEqual(output, [1, 2, 3, 4], 'Transition events notify correctly');
       return start();

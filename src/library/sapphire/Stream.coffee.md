@@ -41,7 +41,7 @@
 			
 			transition: Function.To(Stream) \
 				-> do (last=undefined) =>
-					@where (x) -> last != x and ( ( last = x ) or true )
+					@where (x) -> Boolean (not Value.equal(x,last) ) and ( ( last = x ) or true )
 					
 			control: Function.From(Stream).To(Stream) \
 				(control) -> do (active=true) =>

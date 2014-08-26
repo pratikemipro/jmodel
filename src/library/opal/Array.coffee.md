@@ -23,6 +23,10 @@
 		Array::find = (predicate) ->
 			for item in this
 				return item if predicate.call item, item
+				
+		Array::each = (fn) ->
+			for item in this
+				fn.call item, item
 		
 
 ## Predicates

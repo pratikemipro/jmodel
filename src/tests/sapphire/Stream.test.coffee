@@ -2,7 +2,7 @@
 	
 	test 'Stream::add', ->
 		
-		stream = new Stream()
+		stream = new Stream
 		output1 = []
 		output2 = []
 		
@@ -39,18 +39,18 @@
 	
 	test 'Stream::map', ->
 		
-		stream = new Stream()
+		stream = new Stream
 		output = []
 		
 		stream.map(-> 1 == @mod 2).each (item) -> output.push item
 		
-		stream.add(1).add(2).add(3).add(4).add(5).add(6)
+		[1,2,3,4,5,6].each -> stream.add this
 		
 		deepEqual output, [true,false,true,false,true,false], 'Correctly applies map'
 	
 	test 'Stream::where', ->
 		
-		stream = new Stream()
+		stream = new Stream
 		output1 = []
 		output2 = []
 		
@@ -58,14 +58,14 @@
 		
 		stream.where(-> 1 == @mod 2).each -> output2.push this
 		
-		stream.add(1).add(2).add(3).add(4).add(5).add(6)
+		[1,2,3,4,5,6].each -> stream.add this
 		
 		deepEqual output1, [1,2,3,4,5,6], 'Behaviour of base stream is unaffected'
 		deepEqual output2, [1,3,5], 'Derived stream only includes first n items'
 		
 	test 'Stream::take', ->
 		
-		stream = new Stream()
+		stream = new Stream
 		output1 = []
 		output2 = []
 		
@@ -73,14 +73,14 @@
 		
 		stream.take(3).each -> output2.push this
 		
-		stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow')
+		['red','green','blue','cyan','magenta','yellow'].each -> stream.add this
 		
 		deepEqual output1, ['red','green','blue','cyan','magenta','yellow'], 'Behaviour of base stream is unaffected'
 		deepEqual output2, ['red','green','blue'], 'Derived stream only includes first n items'
 		
 	test 'Stream::drop', ->
 	
-		stream = new Stream()
+		stream = new Stream
 		output1 = []
 		output2 = []
 	
@@ -88,32 +88,35 @@
 	
 		stream.drop(3).each -> output2.push this
 	
-		stream.add('red').add('green').add('blue').add('cyan').add('magenta').add('yellow')
+		['red','green','blue','cyan','magenta','yellow'].each -> stream.add this
 	
 		deepEqual output1, ['red','green','blue','cyan','magenta','yellow'], 'Behaviour of base stream is unaffected'
 		deepEqual output2, ['cyan','magenta','yellow'], 'Derived stream does not include first n items'
 	
 	test 'Stream::transition', ->
 		
-		stream = new Stream()
+		numbers = new Stream
 		output = []
 		
-		stream.transition().each -> output.push this
+		numbers.transition().each -> output.push +this
 		
-		stream.add(3).add(3).add(3).add(2).add(5).add(5).add(1)
+		[3,3,3,2,5,5,1].each -> numbers.add +this
 		
 		deepEqual output, [3,2,5,1], 'Transition stream only contains distinct values'
-		
+
+		booleans = new Stream
 		output = []
 		
-		stream.add(false).add(false).add(false).add(true).add(false).add(true).add(true)
+		booleans.transition().each (x) -> output.push x
+		
+		[false,false,false,true,false,true,true].each (x) -> booleans.add x
 		
 		deepEqual output, [false,true,false,true], 'Transition works for Boolean values'
 		
 	test 'Stream::control', ->
 		
-		data    = new Stream()
-		control = new Stream()
+		data    = new Stream
+		control = new Stream
 
 		output = []
 		data.control(control).each -> output.push this
@@ -132,9 +135,9 @@
 		
 	test 'Stream::between', ->
 		
-		data  = new Stream()
-		start = new Stream()
-		stop  = new Stream()
+		data  = new Stream
+		start = new Stream
+		stop  = new Stream
 		
 		output = []
 		data.between(start,stop).each -> output.push this
@@ -159,7 +162,7 @@
 		output = []
 		numbers.accumulate(Math.plus).each -> output.push this
 		
-		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
+		[1,2,3,4,5,6].each -> numbers.add this
 		
 		deepEqual output, [1,3,6,10,15,21], 'Accumulates correctly'
 		
@@ -168,7 +171,7 @@
 		output = []
 		numbers.accumulate(Math.plus,10).each -> output.push this
 		
-		numbers.add(1).add(2).add(3).add(4).add(5).add(6)
+		[1,2,3,4,5,6].each -> numbers.add this
 		
 		deepEqual output, [11,13,16,20,25,31], 'Starts with initial value'
 		
