@@ -92,6 +92,16 @@ define(['jmodel/sapphire2'], function() {
       })(this));
     }
 
+    EventType.prototype.derive = Function.From(Function).Returning(function() {
+      return new this.constructor();
+    })(function(child) {
+      return function(fn) {
+        return this.each(function(promise) {
+          return promise.then(fn.bind(child));
+        });
+      };
+    });
+
     EventType.prototype.subscribe = Function.delegate(function() {
       return [this.subscribers, this.subscribers.add];
     });

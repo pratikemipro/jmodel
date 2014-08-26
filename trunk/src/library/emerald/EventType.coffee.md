@@ -9,6 +9,9 @@
 				@each (promise) =>
 					@subscribers.each ({notify,fail}) ->
 						promise.then notify, fail
+						
+			derive: Function.From(Function).Returning(-> new @constructor() ) \
+				(child) -> (fn) -> @each (promise) -> promise.then fn.bind child
 		
 			# Tests: full
 			subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]

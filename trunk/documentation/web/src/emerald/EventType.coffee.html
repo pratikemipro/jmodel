@@ -76,7 +76,10 @@
 		
 			<span class="hljs-property">@each</span> <span class="hljs-function"><span class="hljs-params">(promise)</span> =&gt;</span>
 				<span class="hljs-property">@subscribers</span>.each <span class="hljs-function"><span class="hljs-params">({notify,fail})</span> -&gt;</span>
-					promise.<span class="hljs-keyword">then</span> notify, fail</pre></div></div>
+					promise.<span class="hljs-keyword">then</span> notify, fail
+					
+		<span class="hljs-attribute">derive</span>: Function.From(Function).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-property">@constructor</span>() ) \
+			<span class="hljs-function"><span class="hljs-params">(child)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(fn)</span> -&gt;</span> <span class="hljs-property">@each</span> <span class="hljs-function"><span class="hljs-params">(promise)</span> -&gt;</span> promise.<span class="hljs-keyword">then</span> fn.bind child</pre></div></div>
             
         </li>
         

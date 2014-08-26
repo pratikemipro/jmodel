@@ -1,5 +1,7 @@
 	module 'EventType'
 	
+	delay = (fn) -> setTimeout fn, 50
+	
 	test 'EventType::subscribe', ->
 		
 		et = new EventType()
@@ -11,8 +13,6 @@
 		equal et.subscribers[0], subscriber, 'Subscribers are added to subscriber set'
 	
 	asyncTest 'EventType::add', 1, ->
-		
-		delay = (fn) -> setTimeout fn, 1
 		
 		et = new EventType()
 		
@@ -34,8 +34,6 @@
 		
 	asyncTest 'EventType::raise', 2, ->
 		
-		delay = (fn) -> setTimeout fn, 1
-		
 		et = new EventType()
 		
 		output1 = []
@@ -52,6 +50,25 @@
 			deepEqual output1, ['red','green'], 'Raising notifies first subscriber'
 			deepEqual output2, ['red','green'], 'Raising notifies other subscribers'
 		
+			start()
+			
+	asyncTest 'EventType::where', 1, ->
+		
+		numbers = new EventType()
+		output = []
+		
+		numbers
+			.where -> this % 2 == 0
+			.subscribe (x) -> output.push x
+		
+		numbers.raise 1
+		numbers.raise 2
+		numbers.raise 3
+		numbers.raise 4
+		
+		delay ->
+			console.log output[0]		
+			deepEqual output, [2,4], 'Derived events notify correctly'
 			start()
 			
 	asyncTest 'EventType.Of', 0, ->

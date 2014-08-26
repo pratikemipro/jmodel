@@ -4,6 +4,7 @@ var __slice = [].slice,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
+  var delay;
   module('Array');
   test('Array.concat', function() {
     deepEqual(Array.concat(), [], 'Concatenation of zero arrays is empty array');
@@ -2464,6 +2465,9 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   module('Event');
   module('Subscriber');
   module('EventType');
+  delay = function(fn) {
+    return setTimeout(fn, 50);
+  };
   test('EventType::subscribe', function() {
     var et, subscriber;
     et = new EventType();
@@ -2472,10 +2476,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
   });
   asyncTest('EventType::add', 1, function() {
-    var delay, et, output, promise1, promise2;
-    delay = function(fn) {
-      return setTimeout(fn, 1);
-    };
+    var et, output, promise1, promise2;
     et = new EventType();
     output = [];
     promise1 = new Promise();
@@ -2493,10 +2494,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     });
   });
   asyncTest('EventType::raise', 2, function() {
-    var delay, et, output1, output2;
-    delay = function(fn) {
-      return setTimeout(fn, 1);
-    };
+    var et, output1, output2;
     et = new EventType();
     output1 = [];
     output2 = [];
@@ -2511,6 +2509,25 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     return delay(function() {
       deepEqual(output1, ['red', 'green'], 'Raising notifies first subscriber');
       deepEqual(output2, ['red', 'green'], 'Raising notifies other subscribers');
+      return start();
+    });
+  });
+  asyncTest('EventType::where', 1, function() {
+    var numbers, output;
+    numbers = new EventType();
+    output = [];
+    numbers.where(function() {
+      return this % 2 === 0;
+    }).subscribe(function(x) {
+      return output.push(x);
+    });
+    numbers.raise(1);
+    numbers.raise(2);
+    numbers.raise(3);
+    numbers.raise(4);
+    return delay(function() {
+      console.log(output[0]);
+      deepEqual(output, [2, 4], 'Derived events notify correctly');
       return start();
     });
   });
@@ -2531,7 +2548,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   module('EventRegistry');
   module('Observable');
   asyncTest('(Observable Set)::add', 1, function() {
-    var delay, items, set;
+    var items, set;
     delay = function(fn) {
       return setTimeout(fn, 1);
     };
@@ -2547,7 +2564,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     });
   });
   asyncTest('(Observable Set)::remove', 1, function() {
-    var delay, items, set;
+    var items, set;
     delay = function(fn) {
       return setTimeout(fn, 1);
     };
@@ -2563,7 +2580,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     });
   });
   asyncTest('(Observable List)::add', 1, function() {
-    var delay, items, list;
+    var items, list;
     delay = function(fn) {
       return setTimeout(fn, 1);
     };
@@ -2579,7 +2596,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     });
   });
   asyncTest('(Observable Map)::add', 1, function() {
-    var delay, map, mappings;
+    var map, mappings;
     delay = function(fn) {
       return setTimeout(fn, 1);
     };
@@ -2600,7 +2617,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     });
   });
   return asyncTest('(Observable Map)::remove', 1, function() {
-    var delay, map, removed;
+    var map, removed;
     delay = function(fn) {
       return setTimeout(fn, 1);
     };
