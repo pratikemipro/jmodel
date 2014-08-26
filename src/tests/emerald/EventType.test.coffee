@@ -103,7 +103,25 @@
 		numbers.raise 4
 		
 		delay ->	
-			deepEqual output, [1,2], 'Filtered events notify correctly'
+			deepEqual output, [1,2], 'Taken events notify correctly'
+			start()
+			
+	asyncTest 'EventType::drop', 1, ->
+		
+		numbers = new EventType
+		output = []
+		
+		numbers
+			.drop 2
+			.subscribe -> output.push this
+		
+		numbers.raise 1
+		numbers.raise 2
+		numbers.raise 3
+		numbers.raise 4
+		
+		delay ->	
+			deepEqual output, [3,4], 'Dropped events notify correctly'
 			start()
 			
 	asyncTest 'EventType.Of', 0, ->
