@@ -2560,7 +2560,23 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.raise(3);
     numbers.raise(4);
     return delay(function() {
-      deepEqual(output, [1, 2], 'Filtered events notify correctly');
+      deepEqual(output, [1, 2], 'Taken events notify correctly');
+      return start();
+    });
+  });
+  asyncTest('EventType::drop', 1, function() {
+    var numbers, output;
+    numbers = new EventType;
+    output = [];
+    numbers.drop(2).subscribe(function() {
+      return output.push(this);
+    });
+    numbers.raise(1);
+    numbers.raise(2);
+    numbers.raise(3);
+    numbers.raise(4);
+    return delay(function() {
+      deepEqual(output, [3, 4], 'Dropped events notify correctly');
       return start();
     });
   });
