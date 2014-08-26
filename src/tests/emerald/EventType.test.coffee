@@ -124,6 +124,27 @@
 			deepEqual output, [3,4], 'Dropped events notify correctly'
 			start()
 			
+	asyncTest 'EventType::transition', 1, ->
+		
+		numbers = new EventType
+		output = []
+		
+		numbers
+			.transition()
+			.subscribe -> output.push this
+		
+		numbers.raise 1
+		numbers.raise 2
+		numbers.raise 2
+		numbers.raise 2
+		numbers.raise 3
+		numbers.raise 3
+		numbers.raise 4
+		
+		delay ->	
+			deepEqual output, [1,2,3,4], 'Transition events notify correctly'
+			start()
+			
 	asyncTest 'EventType.Of', 0, ->
 		
 		ValueChangeEvent = (@value,@old) ->
