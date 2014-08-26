@@ -2470,17 +2470,17 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   };
   test('EventType::subscribe', function() {
     var et, subscriber;
-    et = new EventType();
+    et = new EventType;
     subscriber = new Subscriber();
     et.subscribe(subscriber);
     return equal(et.subscribers[0], subscriber, 'Subscribers are added to subscriber set');
   });
   asyncTest('EventType::add', 1, function() {
     var et, output, promise1, promise2;
-    et = new EventType();
+    et = new EventType;
     output = [];
-    promise1 = new Promise();
-    promise2 = new Promise();
+    promise1 = new Promise;
+    promise2 = new Promise;
     et.subscribe(function() {
       return output.push(this);
     });
@@ -2495,7 +2495,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
   });
   asyncTest('EventType::raise', 2, function() {
     var et, output1, output2;
-    et = new EventType();
+    et = new EventType;
     output1 = [];
     output2 = [];
     et.subscribe(function() {
@@ -2512,9 +2512,27 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
       return start();
     });
   });
+  asyncTest('EventType::map', 1, function() {
+    var numbers, output;
+    numbers = new EventType;
+    output = [];
+    numbers.map(function() {
+      return this * this;
+    }).subscribe(function() {
+      return output.push(this);
+    });
+    numbers.raise(1);
+    numbers.raise(2);
+    numbers.raise(3);
+    numbers.raise(4);
+    return delay(function() {
+      deepEqual(output, [1, 4, 9, 16], 'Mapped events notify correctly');
+      return start();
+    });
+  });
   asyncTest('EventType::where', 1, function() {
     var numbers, output;
-    numbers = new EventType();
+    numbers = new EventType;
     output = [];
     numbers.where(function() {
       return this % 2 === 0;
@@ -2526,7 +2544,7 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.raise(3);
     numbers.raise(4);
     return delay(function() {
-      deepEqual(output, [2, 4], 'Derived events notify correctly');
+      deepEqual(output, [2, 4], 'Filtered events notify correctly');
       return start();
     });
   });
