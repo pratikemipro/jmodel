@@ -110,7 +110,7 @@
 	
 		<span class="hljs-function"><span class="hljs-title">chain</span> = <span class="hljs-params">(promise,fn,value)</span> -&gt;</span> delay<span class="hljs-function"> -&gt;</span>
 			<span class="hljs-keyword">try</span>
-				ret = fn value...
+				ret = fn.call value[<span class="hljs-number">0</span>], value...
 				promise.fulfil ret
 			<span class="hljs-keyword">catch</span> reason
 				promise.reject reason

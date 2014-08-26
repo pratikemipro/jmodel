@@ -20,7 +20,7 @@
 		promise1 = new Promise()
 		promise2 = new Promise()
 		
-		et.subscribe (x) -> output.push x
+		et.subscribe -> output.push this
 		
 		et.add promise1
 		et.add promise2
@@ -39,8 +39,8 @@
 		output1 = []
 		output2 = []
 		
-		et.subscribe (x) -> output1.push x
-		et.subscribe (x) -> output2.push x
+		et.subscribe -> output1.push this
+		et.subscribe -> output2.push this
 		
 		et.raise 'red'
 		et.raise 'green'
@@ -59,7 +59,7 @@
 		
 		numbers
 			.where -> this % 2 == 0
-			.subscribe (x) -> output.push x
+			.subscribe -> output.push this
 		
 		numbers.raise 1
 		numbers.raise 2
@@ -76,9 +76,9 @@
 		
 		et = new (EventType.Of ValueChangeEvent)
 		
-		et.subscribe (event) ->
-			equal event instanceof ValueChangeEvent, true, 'Generates events of right type'
-			deepEqual [event.value,event.old], ['red','green'], 'Passes correct values to constructor'
+		et.subscribe ->
+			equal this instanceof ValueChangeEvent, true, 'Generates events of right type'
+			deepEqual [@value,@old], ['red','green'], 'Passes correct values to constructor'
 			start()
 			
 		et.raise 'red', 'green'
