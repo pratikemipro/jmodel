@@ -4,7 +4,7 @@
 	
 	test 'EventType::subscribe', ->
 		
-		et = new EventType()
+		et = new EventType
 		
 		subscriber = new Subscriber()
 
@@ -14,11 +14,11 @@
 	
 	asyncTest 'EventType::add', 1, ->
 		
-		et = new EventType()
+		et = new EventType
 		
 		output = []
-		promise1 = new Promise()
-		promise2 = new Promise()
+		promise1 = new Promise
+		promise2 = new Promise
 		
 		et.subscribe -> output.push this
 		
@@ -34,7 +34,7 @@
 		
 	asyncTest 'EventType::raise', 2, ->
 		
-		et = new EventType()
+		et = new EventType
 		
 		output1 = []
 		output2 = []
@@ -52,9 +52,27 @@
 		
 			start()
 			
+	asyncTest 'EventType::map', 1, ->
+		
+		numbers = new EventType
+		output = []
+		
+		numbers
+			.map -> this*this
+			.subscribe -> output.push this
+			
+		numbers.raise 1
+		numbers.raise 2
+		numbers.raise 3
+		numbers.raise 4
+		
+		delay ->	
+			deepEqual output, [1,4,9,16], 'Mapped events notify correctly'
+			start()
+			
 	asyncTest 'EventType::where', 1, ->
 		
-		numbers = new EventType()
+		numbers = new EventType
 		output = []
 		
 		numbers
@@ -67,7 +85,7 @@
 		numbers.raise 4
 		
 		delay ->	
-			deepEqual output, [2,4], 'Derived events notify correctly'
+			deepEqual output, [2,4], 'Filtered events notify correctly'
 			start()
 			
 	asyncTest 'EventType.Of', 0, ->
