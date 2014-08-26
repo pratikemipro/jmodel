@@ -66,8 +66,7 @@
 		numbers.raise 3
 		numbers.raise 4
 		
-		delay ->
-			console.log output[0]		
+		delay ->	
 			deepEqual output, [2,4], 'Derived events notify correctly'
 			start()
 			

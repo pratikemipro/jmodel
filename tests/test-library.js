@@ -2526,7 +2526,6 @@ define(['jmodel/topaz2', 'plugins/sapphire.dom'], function() {
     numbers.raise(3);
     numbers.raise(4);
     return delay(function() {
-      console.log(output[0]);
       deepEqual(output, [2, 4], 'Derived events notify correctly');
       return start();
     });
