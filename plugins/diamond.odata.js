@@ -103,7 +103,7 @@ define([
 			var id = this.primaryKeyField ? this[this.primaryKeyField]() : undefined;
 
 			var data = this.toBareObject().removeProperties(this.primaryKeyField),
-				type =   id > 0 && !this._deleted ? 'MERGE'
+				type =   id > 0 && !this._deleted ? 'PATCH'
 					   : id > 0 && this._deleted ? 'DELETE'
 					   : 'POST';
 					   
