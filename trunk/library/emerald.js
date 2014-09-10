@@ -623,10 +623,10 @@ define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
 				if ( jQuery.ajaxSettings.beforeSend ) {
 					jQuery.ajaxSettings.beforeSend(xhr,settings);
 				}
-				if ( settings.type != 'GET' && settings.type != 'POST' ) {
+/*				if ( settings.type != 'GET' && settings.type != 'POST' ) {
 					xhr.setRequestHeader('X-HTTP-Method',settings.type);
 					settings.type = 'POST';
-				}
+				} */
 			}
 		});
 			
