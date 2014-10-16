@@ -94,6 +94,30 @@
 		promise.then (->), (value) ->
 			equals value, 'error', 'Passes argument correctly'
 			start()
+			
+	asyncTest 'Promise.conjoin', 2, ->
+		
+		delay = (fn) -> setTimeout fn, 100
+		
+		promise1 = new Promise
+		promise2 = new Promise
+		promise3 = new Promise
+		
+		promise = Promise.conjoin promise1, promise2, promise3
+		
+		equals promise instanceof Promise, true, 'A conjunction of promises is a promise'
+		
+		output = []
+		
+		promise.then (values...) -> output = values
+		
+		promise1.fulfil 'red'
+		promise2.fulfil 'green'
+		promise3.fulfil 'blue'
+		
+		delay ->
+			deepEqual output, ['red','green','blue'], 'Conjunction fulfilled with all fulfilled values'
+			start()
 		
 	asyncTest 'Promise.disjoin', 2, ->
 		

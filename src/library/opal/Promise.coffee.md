@@ -80,10 +80,19 @@
 # Promise combinators
 
 				
-			@conjoin: ->
+			@conjoin: Function.From([Promise]).Returning(-> new this) \
+				(conjunction) -> (promises...) ->
+					
+					completed = ->
+						if promises.none( -> @status == PENDING )
+							conjunction.fulfil promises.map( ({value:[ret]}) -> ret)...
+					
+					promises.each (promise) -> @then completed, completed
+						
+					
 			
 			@disjoin: Function.From([Promise]).Returning(-> new this ) \
 				(disjunction) -> (promises...) ->
 					[fulfil,reject] = Function.delegates -> [ disjunction, disjunction.fulfil, disjunction.reject ]
-					promise.then fulfil, reject for promise in promises
+					promises.each -> @then fulfil, reject
 							
