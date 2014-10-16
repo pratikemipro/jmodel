@@ -235,12 +235,21 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>			
-		<span class="hljs-property">@conjoin</span>:<span class="hljs-function"> -&gt;</span>
+		<span class="hljs-property">@conjoin</span>: Function.From([Promise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span>) \
+			<span class="hljs-function"><span class="hljs-params">(conjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(promises...)</span> -&gt;</span>
+				
+				<span class="hljs-function"><span class="hljs-title">completed</span> = -&gt;</span>
+					<span class="hljs-keyword">if</span> promises.none(<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@status</span> == PENDING )
+						conjunction.fulfil promises.map<span class="hljs-function"><span class="hljs-params">( ({value:[ret]}) -&gt; ret)</span>...
+				
+				<span class="hljs-title">promises</span>.<span class="hljs-title">each</span> <span class="hljs-params">(promise)</span> -&gt;</span> <span class="hljs-property">@then</span> completed, completed
+					
+				
 		
 		<span class="hljs-property">@disjoin</span>: Function.From([Promise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
 			<span class="hljs-function"><span class="hljs-params">(disjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(promises...)</span> -&gt;</span>
 				[fulfil,reject] = Function.delegates<span class="hljs-function"> -&gt;</span> [ disjunction, disjunction.fulfil, disjunction.reject ]
-				promise.<span class="hljs-keyword">then</span> fulfil, reject <span class="hljs-keyword">for</span> promise <span class="hljs-keyword">in</span> promises</pre></div></div>
+				promises.each<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@then</span> fulfil, reject</pre></div></div>
             
         </li>
         
