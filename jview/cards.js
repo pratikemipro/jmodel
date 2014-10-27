@@ -710,7 +710,7 @@ define(function(require) {
   })();
   Application = (function() {
     function Application(element, menuElement, external, constructors) {
-      var card, cardType, keys, parameters, rootCardElement, route, _ref;
+      var card, cardType, keys, parameters, rootCardElement, route, url, _ref;
       this.external = external;
       this.constructors = constructors;
       this.element = $(element);
@@ -735,7 +735,8 @@ define(function(require) {
         return _results;
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
-      _ref = this.router.resolve((rootCardElement != null ? rootCardElement.data('url') : void 0) || window.location.pathname.substring(1)), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
+      url = rootCardElement ? $(rootCardElement).data('url') : window.location.pathname.substring(1);
+      _ref = this.router.resolve(url), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (cardType == null) {
         cardType = require(this.constructors[0].card);
       }
