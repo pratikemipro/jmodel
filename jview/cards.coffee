@@ -529,7 +529,7 @@ define (require) ->
 			@router = new Router ( new Route(route,card) for route, card of @constructors )
 			
 			[rootCardElement] = @element.find 'ul.cards li.card'
-			[cardType,keys,parameters] = @router.resolve rootCardElement.data('url') or window.location.pathname.substring(1)
+			[cardType,keys,parameters] = @router.resolve rootCardElement?.data('url') or window.location.pathname.substring(1)
 			
 			cardType ?= require @constructors[0].card
 			

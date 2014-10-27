@@ -735,7 +735,7 @@ define(function(require) {
         return _results;
       }).call(this));
       rootCardElement = this.element.find('ul.cards li.card')[0];
-      _ref = this.router.resolve(rootCardElement.data('url') || window.location.pathname.substring(1)), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
+      _ref = this.router.resolve((rootCardElement != null ? rootCardElement.data('url') : void 0) || window.location.pathname.substring(1)), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (cardType == null) {
         cardType = require(this.constructors[0].card);
       }
