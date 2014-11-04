@@ -129,7 +129,7 @@ define([
 			.subscribe({
 				context: this,
 				message: function (json) {
-					this.dirty = false;
+					this.dirty(false);
 					if ( json ) {
 						var object = Object.fromOData(json);
 						if ( this.primaryKeyField ) {
