@@ -211,6 +211,7 @@ define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 					}
 					else { // Field
 						if ( !this[property] ) {
+							console.trace();
 							console.log(arguments);
 							console.log(this);
 							console.log(property);
