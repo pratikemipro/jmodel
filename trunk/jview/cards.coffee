@@ -458,12 +458,12 @@ define (require) ->
 			before	   		= a.hasClass 'before'
 			href	 		= a.attr 'href'
 			[path,fragment]	= href.match( /(.*)#(.*)/ ) or []
-			[protocol]		= href.match( /(.*):.*/ ) or []
+			[protocol]		= href.match( /(.*):.*/ ) or ['https']
 			li         		= a.closest 'li.card'
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
-			[cardType,keys,parameters] = ( @router.resolve (href.split('#'))[0] ) if protocol == undefined or protocol in ['http','https']
+			[cardType,keys,parameters] = ( @router.resolve (href.split('#'))[0] ) if protocol in ['http','https']
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment

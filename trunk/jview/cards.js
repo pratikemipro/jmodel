@@ -655,10 +655,10 @@ define(function(require) {
       before = a.hasClass('before');
       href = a.attr('href');
       _ref = href.match(/(.*)#(.*)/) || [], path = _ref[0], fragment = _ref[1];
-      protocol = (href.match(/(.*):.*/) || [])[0];
+      protocol = (href.match(/(.*):.*/) || ['https'])[0];
       li = a.closest('li.card');
       currentIndex = li.length === 0 ? $('li.card').length : li.index('li.card') + 1;
-      if (protocol === void 0 || (protocol === 'http' || protocol === 'https')) {
+      if (protocol === 'http' || protocol === 'https') {
         _ref1 = this.router.resolve((href.split('#'))[0]), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
       }
       if (path === location.origin + location.pathname) {
