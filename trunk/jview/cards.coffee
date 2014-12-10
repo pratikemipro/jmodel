@@ -457,13 +457,13 @@ define (require) ->
 			a    	   		= $(target).closest 'a'
 			before	   		= a.hasClass 'before'
 			href	 		= a.attr 'href'
-			[path,fragment]	= href.split '#'
-			[protocol]		= href.split ':'
+			[path,fragment]	= href.match( /(.*)#(.*)/ ) or []
+			[protocol]		= href.match( /(.*):.*/ ) or []
 			li         		= a.closest 'li.card'
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
-			[cardType,keys,parameters] = @router.resolve (href.split('#'))[0] if protocol in ['http','https']
+			[cardType,keys,parameters] = ( @router.resolve (href.split('#'))[0] ) if protocol == undefined or protocol in ['http','https']
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
