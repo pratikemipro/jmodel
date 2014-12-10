@@ -237,7 +237,7 @@ define (require) ->
 					@state.index target.closest('li.card').index('li.card')
 
 			# Keyboard control
-			keyEvent = @element.event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0
+			keyEvent = $(document).event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0
 			
 			jm.disjoin(
 				keyEvent.where(jm.key(':left')).map(->-1)
@@ -528,7 +528,7 @@ define (require) ->
 			@cards  = new List @external, this
 			@router = new Router ( new Route(route,card) for route, card of @constructors )
 			
-			[rootCardElement] = @element.find 'ul.cards li.card'
+			[rootCardElement] = @element.children 'li.card'
 			url = if rootCardElement then $(rootCardElement).data('url') else window.location.pathname.substring(1)
 			[cardType,keys,parameters] = @router.resolve url
 			
@@ -539,16 +539,17 @@ define (require) ->
 			if cardType then require [cardType], (cardType) =>
 			
 				rootCard = new cardType @cards, keys, $(rootCardElement), parameters
+				
 				rootCard.event('ready').republish @event 'ready'
 			
 				if rootCardElement then @cards.add rootCard
-			
-				@view       = new ListView @cards, @element.find('ul.cards')
+
+				@view       = new ListView @cards, @element
 				@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
 				@controller = new Controller @cards, @view, @viewport, @element, @router
-			
+
 				if !rootCardElement then @cards.add rootCard
-				
+
 				@event('initialised').raise()
 			
 		event: (name) -> @events.get name
