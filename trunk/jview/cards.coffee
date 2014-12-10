@@ -463,7 +463,7 @@ define (require) ->
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
-			[cardType,keys,parameters] = @router.resolve (href.split('#'))[0]
+			[cardType,keys,parameters] = @router.resolve (href.split('#'))[0] if protocol in ['http','https']
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
@@ -474,7 +474,7 @@ define (require) ->
 			else if a.hasClass 'permalink'
 				open href
 				return false
-			else if cardType
+			else if cardType?
 				
 				if a.is '.disabled' then return false
 			

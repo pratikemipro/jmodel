@@ -363,7 +363,7 @@ define(function(require) {
           }
         };
       })(this));
-      keyEvent = this.element.event('keydown').where(function(_arg) {
+      keyEvent = $(document).event('keydown').where(function(_arg) {
         var target;
         target = _arg.target;
         return $(target).closest('input,select,textarea,[contentEditable=true]').length === 0;
@@ -658,7 +658,9 @@ define(function(require) {
       protocol = href.split(':')[0];
       li = a.closest('li.card');
       currentIndex = li.length === 0 ? $('li.card').length : li.index('li.card') + 1;
-      _ref1 = this.router.resolve((href.split('#'))[0]), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
+      if (protocol === 'http' || protocol === 'https') {
+        _ref1 = this.router.resolve((href.split('#'))[0]), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
+      }
       if (path === location.origin + location.pathname) {
         location.hash = '#' + fragment;
         $(document).scrollTop(0);
@@ -668,7 +670,7 @@ define(function(require) {
       } else if (a.hasClass('permalink')) {
         open(href);
         return false;
-      } else if (cardType) {
+      } else if (cardType != null) {
         if (a.is('.disabled')) {
           return false;
         }
