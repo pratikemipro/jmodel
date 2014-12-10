@@ -734,7 +734,7 @@ define(function(require) {
         }
         return _results;
       }).call(this));
-      rootCardElement = this.element.find('ul.cards li.card')[0];
+      rootCardElement = this.element.children('li.card')[0];
       url = rootCardElement ? $(rootCardElement).data('url') : window.location.pathname.substring(1);
       _ref = this.router.resolve(url), cardType = _ref[0], keys = _ref[1], parameters = _ref[2];
       if (cardType == null) {
@@ -750,7 +750,7 @@ define(function(require) {
             if (rootCardElement) {
               _this.cards.add(rootCard);
             }
-            _this.view = new ListView(_this.cards, _this.element.find('ul.cards'));
+            _this.view = new ListView(_this.cards, _this.element);
             _this.viewport = new ViewPort(_this.view, _this.element, _this.menuElement, _this.external.offset != null);
             _this.controller = new Controller(_this.cards, _this.view, _this.viewport, _this.element, _this.router);
             if (!rootCardElement) {
