@@ -124,7 +124,7 @@ define (require) ->
 			@element.find('li.card').each (index,li) ->
 				$(li).css
 					'-webkit-transform': 'rotate('+(4*(index % 2) - 2)+'deg)'
-					'left': (-1*$(li).offset().left+100*index)+'px'
+					'left': (-1*$(li).position().left+100*index)+'px'
 		
 		## Adding a card creates a new extent
 		add: (card) ->
@@ -328,7 +328,8 @@ define (require) ->
 			li = @cardListView.element.find('li.card').eq(index)
 			if li.length > 0
 				@element.stop().animate
-					scrollLeft: Math.min(li.offset().left - @offset ,li.offset().left+li.width()-@element.width() - @offset)+1+'px'
+#					scrollLeft: Math.min(li.position().left - @offset ,li.position().left+li.width()-@element.width() - @offset)+'px'
+					scrollLeft: @element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'),10)+'px'
 					scrollTop: '0px',
 					duration
 					
@@ -350,7 +351,7 @@ define (require) ->
 			@width   = 0
 			
 			@cardListView.element.children('li').each (index,item) =>
-				@offsets.push $(item).offset().left
+				@offsets.push $(item).position().left
 				@width += $(item).outerWidth true
 			
 			after(1) =>

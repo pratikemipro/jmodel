@@ -201,7 +201,7 @@ define(function(require) {
       return this.element.find('li.card').each(function(index, li) {
         return $(li).css({
           '-webkit-transform': 'rotate(' + (4 * (index % 2) - 2) + 'deg)',
-          'left': (-1 * $(li).offset().left + 100 * index) + 'px'
+          'left': (-1 * $(li).position().left + 100 * index) + 'px'
         });
       });
     };
@@ -469,7 +469,7 @@ define(function(require) {
       li = this.cardListView.element.find('li.card').eq(index);
       if (li.length > 0) {
         return this.element.stop().animate({
-          scrollLeft: Math.min(li.offset().left - this.offset, li.offset().left + li.width() - this.element.width() - this.offset) + 1 + 'px',
+          scrollLeft: this.element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'), 10) + 'px',
           scrollTop: '0px'
         }, duration);
       }
@@ -497,7 +497,7 @@ define(function(require) {
       this.width = 0;
       this.cardListView.element.children('li').each((function(_this) {
         return function(index, item) {
-          _this.offsets.push($(item).offset().left);
+          _this.offsets.push($(item).position().left);
           return _this.width += $(item).outerWidth(true);
         };
       })(this));
