@@ -436,14 +436,14 @@ define (require) ->
 		
 		constructor: (@cardList,@view,@viewport,@element,@router) ->
 			
-			@element.event('click','a[href]')
+			$(document).event('click','a[href]')
 				.notBetween(
 					$(document).event('keydown').where(jm.key(':leftcmd',':ctrl')),
 					$(document).event('keyup').where(jm.key(':leftcmd',':ctrl'))
 				)
 				.subscribe (event) => @handle event, true
 				
-			@element.event('click','a[href]')
+			$(document).event('click','a[href]')
 				.between(
 					$(document).event('keydown').where(jm.key(':leftcmd',':ctrl')),
 					$(document).event('keyup').where(jm.key(':leftcmd',':ctrl'))

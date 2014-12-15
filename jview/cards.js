@@ -633,12 +633,12 @@ define(function(require) {
       this.viewport = viewport;
       this.element = element;
       this.router = router;
-      this.element.event('click', 'a[href]').notBetween($(document).event('keydown').where(jm.key(':leftcmd', ':ctrl')), $(document).event('keyup').where(jm.key(':leftcmd', ':ctrl'))).subscribe((function(_this) {
+      $(document).event('click', 'a[href]').notBetween($(document).event('keydown').where(jm.key(':leftcmd', ':ctrl')), $(document).event('keyup').where(jm.key(':leftcmd', ':ctrl'))).subscribe((function(_this) {
         return function(event) {
           return _this.handle(event, true);
         };
       })(this));
-      this.element.event('click', 'a[href]').between($(document).event('keydown').where(jm.key(':leftcmd', ':ctrl')), $(document).event('keyup').where(jm.key(':leftcmd', ':ctrl'))).subscribe((function(_this) {
+      $(document).event('click', 'a[href]').between($(document).event('keydown').where(jm.key(':leftcmd', ':ctrl')), $(document).event('keyup').where(jm.key(':leftcmd', ':ctrl'))).subscribe((function(_this) {
         return function(event) {
           return _this.handle(event, false);
         };
