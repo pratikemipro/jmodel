@@ -324,13 +324,12 @@ define (require) ->
 			# 	.subscribe (currentScreenX,[startScreenX,startScroll]) =>
 			# 		$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
 				
-		scrollTo: (index,duration=1000) ->
+		scrollTo: (index,duration=300) ->
 			li = @cardListView.element.find('li.card').eq(index)
 			if li.length > 0
 				@element.stop().animate
 #					scrollLeft: Math.min(li.position().left - @offset ,li.position().left+li.width()-@element.width() - @offset)+'px'
 					scrollLeft: @element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'),10)+'px'
-					scrollTop: '0px',
 					duration
 					
 		nudge: ->

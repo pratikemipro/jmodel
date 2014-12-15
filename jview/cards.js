@@ -464,13 +464,12 @@ define(function(require) {
     ViewPort.prototype.scrollTo = function(index, duration) {
       var li;
       if (duration == null) {
-        duration = 1000;
+        duration = 500;
       }
       li = this.cardListView.element.find('li.card').eq(index);
       if (li.length > 0) {
         return this.element.stop().animate({
-          scrollLeft: this.element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'), 10) + 'px',
-          scrollTop: '0px'
+          scrollLeft: this.element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'), 10) + 'px'
         }, duration);
       }
     };
