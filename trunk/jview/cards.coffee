@@ -454,16 +454,23 @@ define (require) ->
 				
 			open = (href) -> window.open href, (Date()).split(' ').join('')
 			
-			a    	   		= $(target).closest 'a'
-			before	   		= a.hasClass 'before'
-			href	 		= a.attr 'href'
-			[path,fragment]	= href.match( /(.*)#(.*)/ ) or []
-			[protocol]		= href.match( /(.*):.*/ ) or ['https']
-			li         		= a.closest 'li.card'
+			a = $(target).closest 'a'
+			before = a.hasClass 'before'
+			href = a.attr 'href'
+			[_,path,fragment,query] = href.match( /([^#\?]*)((?:#)[^\?]*)?(\?.*)?/ ) or []
+			[protocol] = href.match( /^([^:\?]*):.*/ ) or ['https']
+			li = a.closest 'li.card'
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
-			[cardType,keys,parameters] = ( @router.resolve (href.split('#'))[0] ) if protocol in ['http','https']
+			[cardType,keys,parameters] = ( @router.resolve path ) if protocol in ['http','https']
+
+			parameters = parameters or {}
+			parameters.location =
+				protocol: protocol
+				path: path
+				fragment: fragment
+				query: query
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment

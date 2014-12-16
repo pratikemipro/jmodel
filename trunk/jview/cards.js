@@ -464,7 +464,7 @@ define(function(require) {
     ViewPort.prototype.scrollTo = function(index, duration) {
       var li;
       if (duration == null) {
-        duration = 500;
+        duration = 300;
       }
       li = this.cardListView.element.find('li.card').eq(index);
       if (li.length > 0) {
@@ -645,7 +645,7 @@ define(function(require) {
     }
 
     Controller.prototype.handle = function(_arg, animate) {
-      var a, before, cardType, currentIndex, fragment, href, keys, li, open, parameters, path, protocol, target, _ref, _ref1;
+      var a, before, cardType, currentIndex, fragment, href, keys, li, open, parameters, path, protocol, query, target, _, _ref, _ref1;
       target = _arg.target;
       open = function(href) {
         return window.open(href, (Date()).split(' ').join(''));
@@ -653,13 +653,20 @@ define(function(require) {
       a = $(target).closest('a');
       before = a.hasClass('before');
       href = a.attr('href');
-      _ref = href.match(/(.*)#(.*)/) || [], path = _ref[0], fragment = _ref[1];
-      protocol = (href.match(/(.*):.*/) || ['https'])[0];
+      _ref = href.match(/([^#\?]*)((?:#)[^\?]*)?(\?.*)?/) || [], _ = _ref[0], path = _ref[1], fragment = _ref[2], query = _ref[3];
+      protocol = (href.match(/^([^:\?]*):.*/) || ['https'])[0];
       li = a.closest('li.card');
       currentIndex = li.length === 0 ? $('li.card').length : li.index('li.card') + 1;
       if (protocol === 'http' || protocol === 'https') {
-        _ref1 = this.router.resolve((href.split('#'))[0]), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
+        _ref1 = this.router.resolve(path), cardType = _ref1[0], keys = _ref1[1], parameters = _ref1[2];
       }
+      parameters = parameters || {};
+      parameters.location = {
+        protocol: protocol,
+        path: path,
+        fragment: fragment,
+        query: query
+      };
       if (path === location.origin + location.pathname) {
         location.hash = '#' + fragment;
         $(document).scrollTop(0);
