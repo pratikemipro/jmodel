@@ -11,7 +11,7 @@
 //									 Object Predicate and Action Library (OPAL)
 // ============================================================================
 
-define(function (a,b,c,undefined) {
+define('jmodel/opal',function (a,b,c,undefined) {
 
 	var opal   = { opal_version: '0.22.0' },
 		_slice = Array.prototype.slice,

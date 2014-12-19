@@ -9,7 +9,7 @@
  *
  */
 
-define(['jmodel/topaz'],function (topaz,a,b,c,undefined) {
+define('jmodel/diamond',['jmodel/topaz'],function (topaz,a,b,c,undefined) {
 
 	//
 	// Import Topaz

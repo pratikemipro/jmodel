@@ -14,7 +14,7 @@
 //													Topaz Observables Framework
 // ============================================================================
  
-define(['jmodel/emerald'],function (emerald,a,b,c,undefined) {
+define('jmodel/topaz',['jmodel/emerald'],function (emerald,a,b,c,undefined) {
 
 	//
 	// Import Emerald
