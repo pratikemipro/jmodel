@@ -7,7 +7,10 @@
  *
  */
 
-define(['jquery','jmodel/emerald'], function (jQuery,emerald) {
+define(function (require) {
+	
+	var $ = require('jquery');
+	var emerald = require('jmodel/emerald');
 
 	var disjoin = emerald.disjoin, Set = emerald.Set, event = emerald.event;
 	

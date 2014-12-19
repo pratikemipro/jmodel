@@ -7,7 +7,9 @@
  *
  */
 
-define(['jmodel/diamond'], function (diamond) {
+define(function (require) {
+	
+	var diamond = require('jmodel/diamond');
 	
 	Object.extend(diamond.Context.prototype,{
 		

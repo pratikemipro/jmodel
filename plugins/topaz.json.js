@@ -7,7 +7,9 @@
  *
  */
 
-define(['jmodel/topaz'], function (topaz) {
+define(function (require) {
+
+	topaz = require('jmodel/topaz');
 
 	Object.extend(topaz.ObservableObject.prototype, {
 		

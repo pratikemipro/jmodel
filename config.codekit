@@ -534,17 +534,17 @@
 		"outputPathIsSetByUser": 0
 		},
 	"\/jview\/cards.coffee": {
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/jview\/cards.coffee",
 		"minifyOutput": 1,
 		"outputAbbreviatedPath": "\/jview\/cards.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
 		},
 	"\/jview\/cards.js": {
 		"fileType": 64,
@@ -558,17 +558,17 @@
 		"syntaxCheckerStyle": 1
 		},
 	"\/jview\/drag.coffee": {
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/jview\/drag.coffee",
 		"minifyOutput": 1,
 		"outputAbbreviatedPath": "\/jview\/drag.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
 		},
 	"\/jview\/drag.js": {
 		"fileType": 64,
@@ -582,17 +582,17 @@
 		"syntaxCheckerStyle": 1
 		},
 	"\/jview\/hierarchy.coffee": {
-		"createSourceMap": 0,
+		"createSourceMap": 1,
 		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/jview\/hierarchy.coffee",
 		"minifyOutput": 1,
 		"outputAbbreviatedPath": "\/jview\/hierarchy.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
 		},
 	"\/jview\/hierarchy.js": {
 		"fileType": 64,
@@ -605,18 +605,66 @@
 		"outputStyle": 1,
 		"syntaxCheckerStyle": 1
 		},
-	"\/jview\/palettes.coffee": {
+	"\/jview\/jview-ck-source-map-reference.coffee": {
 		"createSourceMap": 0,
 		"fileType": 32,
 		"ignore": 0,
 		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.coffee",
+		"minifyOutput": 1,
+		"outputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 0,
+		"syntaxCheckerStyle": 1
+		},
+	"\/jview\/jview-ck-source-map-reference.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.js",
+		"outputAbbreviatedPath": "\/jview\/min\/jview-ck-source-map-reference-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/jview\/jview.coffee": {
+		"createSourceMap": 1,
+		"fileType": 32,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/jview\/jview.coffee",
+		"minifyOutput": 0,
+		"outputAbbreviatedPath": "\/jview\/jview.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
+		},
+	"\/jview\/jview.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/jview\/jview.js",
+		"outputAbbreviatedPath": "\/jview\/min\/jview-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/jview\/palettes.coffee": {
+		"createSourceMap": 1,
+		"fileType": 32,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/jview\/palettes.coffee",
 		"minifyOutput": 1,
 		"outputAbbreviatedPath": "\/jview\/palettes.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 0
 		},
 	"\/jview\/palettes.js": {
 		"fileType": 64,
@@ -686,6 +734,17 @@
 		"ignoreWasSetByUser": 0,
 		"inputAbbreviatedPath": "\/library\/emerald2.js",
 		"outputAbbreviatedPath": "\/library\/min\/emerald2-min.js",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"outputStyle": 1,
+		"syntaxCheckerStyle": 1
+		},
+	"\/library\/jmodel-min.js": {
+		"fileType": 64,
+		"ignore": 1,
+		"ignoreWasSetByUser": 0,
+		"inputAbbreviatedPath": "\/library\/jmodel-min.js",
+		"outputAbbreviatedPath": "\/library\/min\/jmodel-min-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
@@ -792,212 +851,212 @@
 		},
 	"\/plugins\/diamond.debug.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/diamond.debug.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/diamond.debug-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/diamond.odata.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/diamond.odata.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/diamond.odata-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/emerald.jquery.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/emerald.jquery.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/emerald.jquery-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/emerald.keys.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/emerald.keys.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/emerald.keys-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jmodel.base.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jmodel.base.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.base-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jmodel.debug.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jmodel.debug.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.debug-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jmodel.json.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jmodel.json.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.json-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jmodel.odata.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jmodel.odata.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.odata-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jmodel.schema.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jmodel.schema.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.schema-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jquery.domain.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jquery.domain.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jquery.domain-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jquery.emerald.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jquery.emerald.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jquery.emerald-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jquery.permute.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jquery.permute.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jquery.permute-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jquery.sapphire.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jquery.sapphire.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jquery.sapphire-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/jquery.topaz.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/jquery.topaz.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/jquery.topaz-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/opal.async.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/opal.async.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/opal.async-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/sapphire.dom.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/sapphire.dom.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.dom-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/sapphire.formatting.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/sapphire.formatting.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.formatting-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/sapphire.relations.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/sapphire.relations.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.relations-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/plugins\/topaz.json.js": {
 		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
+		"ignore": 1,
+		"ignoreWasSetByUser": 1,
 		"inputAbbreviatedPath": "\/plugins\/topaz.json.js",
 		"outputAbbreviatedPath": "\/plugins\/min\/topaz.json-min.js",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
+		"syntaxCheckerStyle": 0
 		},
 	"\/requirements\/require.js": {
 		"fileType": 64,

@@ -7,7 +7,12 @@
  *
  */
 
-define(['jquery','jmodel/topaz','jmodel-plugins/jquery.emerald'], function (jQuery,topaz) {
+define(function (require) {
+	
+	var jQuery = require('jquery');
+	var topaz = require('jmodel/topaz');
+	
+	require('jmodel-plugins/jquery.emerald');
 	
 	jQuery.fn.bindTo = function (object,binding,formatter) {
 		

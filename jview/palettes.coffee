@@ -1,4 +1,9 @@
-define [ 'jquery', 'jmodel/topaz', 'jmodel-plugins/jquery.emerald' ], ($,jm) ->
+define 'jview/palettes', (require) ->
+	
+	$	= require 'jquery'
+	jm	= require 'jmodel/topaz'
+	
+	require 'jmodel-plugins/jquery.emerald'
 	
 	class Palettes
 	
