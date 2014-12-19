@@ -1,4 +1,7 @@
-define ['jquery','jmodel/topaz'], ($,jm) ->
+define 'jview/hierarchy', (require) ->
+
+	$	= require 'jquery'
+	jm	= require 'jmodel/topaz'
 
 	##
 	## Node

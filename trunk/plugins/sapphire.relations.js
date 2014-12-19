@@ -7,7 +7,9 @@
  *
  */
 
-define(['jmodel/sapphire'], function (sapphire) {
+define(function (require) {
+	
+	var sapphire = require('jmodel/sapphire');
 	
 	//
 	// Import Sapphire

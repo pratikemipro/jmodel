@@ -7,13 +7,12 @@
  *
  */
 
-define([
-
-	'jmodel/diamond',
-	'jquery',
-	'jmodel-plugins/topaz.json'
-
-], function (diamond,$) {
+define(function (require) {
+	
+	var diamond = require('jmodel/diamond');
+	var $ = require('jquery');
+	
+	require('jmodel-plugins/topaz.json');
 	
 	Array.fromOData = function (odata,expand) {
 		expand = typeof expand !== 'undefined' ? expand : false;

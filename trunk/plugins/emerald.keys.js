@@ -7,7 +7,9 @@
  *
  */
 
-define(['jmodel/emerald'], function (emerald) {
+define(function (require) {
+	
+	var emerald = require('jmodel/emerald');
 	
 	var _slice = Array.prototype.slice,
 		codes = {

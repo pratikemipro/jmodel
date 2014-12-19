@@ -1,4 +1,4 @@
-define (require) ->
+define 'jview/drag', (require) ->
 
 	$  = require 'jquery'
 	jm = require 'jmodel/emerald'
