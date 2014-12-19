@@ -14,7 +14,7 @@
 //														Emerald Event Framework
 // ============================================================================
  
-define(['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
+define('jmodel/emerald',['jmodel/sapphire'],function (sapphire,a,b,c,undefined) {
  
 	//
 	// Import Sapphire

@@ -106,17 +106,17 @@ define(['jmodel/sapphire2'], function() {
       return [this.subscribers, this.subscribers.add];
     });
 
-    EventType.prototype.raise = function() {
+    EventType.prototype.raise = Function.Chaining(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return this.add(Promise.Fulfilled.apply(Promise, args));
-    };
+      return this.add(Promise.resolve.apply(Promise, args));
+    });
 
-    EventType.prototype.fail = function() {
+    EventType.prototype.fail = Function.Chaining(function() {
       var args;
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      return this.add(Promise.Rejected.apply(Promise, args));
-    };
+      return this.add(Promise.reject.apply(Promise, args));
+    });
 
     EventType.prototype.republish = function(eventtype) {
       return this.subscribe(Function.delegate(function() {
@@ -138,16 +138,20 @@ define(['jmodel/sapphire2'], function() {
 
         _Class.prototype.add = Function.Of(type)(_Class.prototype.add);
 
-        _Class.prototype.raise = function() {
-          var args;
+        _Class.prototype.raise = Function.Chaining(function() {
+          var args, promise;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return this.add(type.Fulfilled.apply(type, args));
-        };
+          promise = new type;
+          this.add(promise);
+          return promise.fulfil.apply(promise, args);
+        });
 
         _Class.prototype.fail = function() {
-          var args;
+          var args, promise;
           args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-          return this.add(type.Rejected.apply(type, args));
+          promise = new type;
+          this.add(promise);
+          return promise.reject.apply(promise, args);
         };
 
         return _Class;

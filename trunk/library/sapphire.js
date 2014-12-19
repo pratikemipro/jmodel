@@ -9,7 +9,7 @@
  *
  */
 
-define(['jmodel/opal'], function (opal) {
+define('jmodel/sapphire',['jmodel/opal'], function (opal) {
 
 	//
 	// Import OPAL

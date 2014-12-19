@@ -13,7 +13,7 @@ var __hasProp = {}.hasOwnProperty,
   __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 define(function() {
-  var Constructor, Promise, Type, _base;
+  var Constructor, Type, _base;
   window.Value = function() {};
   window.Value.equal = function(x, y) {
     switch (false) {
@@ -1438,7 +1438,7 @@ define(function() {
       }
     };
   });
-  window.Maybe = Function.Cache(function(base) {
+  return window.Maybe = Function.Cache(function(base) {
     var construct, derived, valid;
     construct = Object.construct(base);
     valid = Object.isa(base);
@@ -1454,173 +1454,6 @@ define(function() {
     };
     return derived;
   });
-  return window.Promise = Promise = (function() {
-    var FULFILLED, PENDING, REJECTED, chain, delay, _ref;
-
-    _ref = [1, 2, 3], PENDING = _ref[0], FULFILLED = _ref[1], REJECTED = _ref[2];
-
-    delay = function(fn) {
-      return setTimeout(fn, 0);
-    };
-
-    chain = function(promise, fn, value) {
-      return delay(function() {
-        var reason, ret;
-        try {
-          ret = fn.call.apply(fn, [value[0]].concat(__slice.call(value)));
-          return promise.fulfil(ret);
-        } catch (_error) {
-          reason = _error;
-          return promise.reject(reason);
-        }
-      });
-    };
-
-    function Promise() {
-      var args;
-      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      this.status = PENDING;
-      this.value = void 0;
-      this.reason = void 0;
-      this.waiting = [];
-      if (args.length > 0) {
-        this.fulfil.apply(this, args);
-      }
-    }
-
-    Promise.prototype.then = function(fulfilled, rejected) {
-      var promise;
-      promise = new this.constructor();
-      if (typeof fulfilled !== 'function') {
-        fulfilled = Function["arguments"];
-      }
-      if (typeof rejected !== 'function') {
-        rejected = Function.identity;
-      }
-      switch (this.status) {
-        case PENDING:
-          this.waiting.push({
-            promise: promise,
-            fulfilled: fulfilled,
-            rejected: rejected
-          });
-          break;
-        case FULFILLED:
-          chain(promise, fulfilled, this.value);
-          break;
-        case REJECTED:
-          chain(promise, rejected, [this.reason]);
-      }
-      return promise;
-    };
-
-    Promise.prototype.fulfil = Function.Requiring(function() {
-      return this.status === PENDING;
-    })(function() {
-      var fulfilled, promise, value, _i, _len, _ref1, _ref2, _results;
-      value = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-      this.value = value;
-      this.status = FULFILLED;
-      _ref1 = this.waiting;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        _ref2 = _ref1[_i], promise = _ref2.promise, fulfilled = _ref2.fulfilled;
-        _results.push(chain(promise, fulfilled, this.value));
-      }
-      return _results;
-    });
-
-    Promise.prototype.reject = Function.Requiring(function() {
-      return this.status === PENDING;
-    })(function(reason) {
-      var promise, rejected, _i, _len, _ref1, _ref2, _results;
-      this.reason = reason;
-      this.status = REJECTED;
-      _ref1 = this.waiting;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        _ref2 = _ref1[_i], promise = _ref2.promise, rejected = _ref2.rejected;
-        _results.push(chain(promise, rejected, [this.reason]));
-      }
-      return _results;
-    });
-
-    Promise.Fulfilled = Function.Returning(function() {
-      return new this;
-    })(function(promise) {
-      return function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return promise.fulfil.apply(promise, args);
-      };
-    });
-
-    Promise.Rejected = Function.Returning(function() {
-      return new this;
-    })(function(promise) {
-      return function() {
-        var args;
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        return promise.reject.apply(promise, args);
-      };
-    });
-
-    Promise.Of = Function.Cache.From(Function).To(Function)(function(constructor) {
-      return (function(_super) {
-        __extends(_Class, _super);
-
-        function _Class() {
-          return _Class.__super__.constructor.apply(this, arguments);
-        }
-
-        _Class.prototype.fulfil = Function.Of(constructor)(_Class.prototype.fulfil);
-
-        return _Class;
-
-      })(this);
-    });
-
-    Promise.conjoin = Function.From([Promise]).Returning(function() {
-      return new this;
-    })(function(conjunction) {
-      return function() {
-        var completed, promises;
-        promises = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        completed = function() {
-          if (promises.none(function() {
-            return this.status === PENDING;
-          })) {
-            return conjunction.fulfil.apply(conjunction, promises.map(function(_arg) {
-              var ret;
-              ret = _arg.value[0];
-              return ret;
-            }));
-          }
-        };
-        return promises.each(function(promise) {
-          return this.then(completed, completed);
-        });
-      };
-    });
-
-    Promise.disjoin = Function.From([Promise]).Returning(function() {
-      return new this;
-    })(function(disjunction) {
-      return function() {
-        var fulfil, promises, reject, _ref1;
-        promises = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        _ref1 = Function.delegates(function() {
-          return [disjunction, disjunction.fulfil, disjunction.reject];
-        }), fulfil = _ref1[0], reject = _ref1[1];
-        return promises.each(function() {
-          return this.then(fulfil, reject);
-        });
-      };
-    });
-
-    return Promise;
-
-  })();
 });
 
 //# sourceMappingURL=opal2.js.map
