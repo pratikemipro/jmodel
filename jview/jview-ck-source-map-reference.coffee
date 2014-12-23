@@ -132,7 +132,7 @@ define 'jview/cards', (require) ->
 			@element.append '<li class="extent"><ul><li class="label hidden"></li></ul></li>'
 			card.event('ready').take(1).subscribe =>
 				card.li.children().addClass 'adding'
-				after(350) =>
+				after(1) =>
 					@element.children('li.extent:last').children('ul').append card.li
 					after(1) =>
 						card.li.children().removeClass 'adding'
@@ -151,10 +151,10 @@ define 'jview/cards', (require) ->
 			else
 				@element.find('li.card').eq(index-1).after li
 			card.event('ready').take(1).subscribe =>
-				after(350) =>
+				after(1) =>
 					width = Math.min window.innerWidth, li.children('article').outerWidth(true)
 					li.css 'width', width
-					after(@duration) =>
+					after(1) =>
 						li.removeClass 'adding'
 						@event('ready').raise card
 			
@@ -175,7 +175,7 @@ define 'jview/cards', (require) ->
 			li.children().addClass 'removing'
 			after(@duration) =>
 				li.addClass 'removing'
-				after(@duration) =>
+				after(1) =>
 					extent = li.closest 'li.extent'
 					li.remove().removeClass 'removing'
 					li.children().removeClass 'removing'
@@ -183,7 +183,7 @@ define 'jview/cards', (require) ->
 					if extent.find('li.card').length == 0
 						extent.remove()
 					if @cards.count() == 1
-						after(350) =>
+						after(1) =>
 							@element.find('li.card').addClass 'zoomed'
 							@element.find('li.extent > ul > li.label').addClass 'hidden'
 	

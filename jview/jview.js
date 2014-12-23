@@ -213,7 +213,7 @@ define('jview/cards', function(require) {
       return card.event('ready').take(1).subscribe((function(_this) {
         return function() {
           card.li.children().addClass('adding');
-          return after(350)(function() {
+          return after(1)(function() {
             _this.element.children('li.extent:last').children('ul').append(card.li);
             return after(1)(function() {
               card.li.children().removeClass('adding');
@@ -241,11 +241,11 @@ define('jview/cards', function(require) {
       }
       return card.event('ready').take(1).subscribe((function(_this) {
         return function() {
-          return after(350)(function() {
+          return after(1)(function() {
             var width;
             width = Math.min(window.innerWidth, li.children('article').outerWidth(true));
             li.css('width', width);
-            return after(_this.duration)(function() {
+            return after(1)(function() {
               li.removeClass('adding');
               return _this.event('ready').raise(card);
             });
@@ -281,7 +281,7 @@ define('jview/cards', function(require) {
       return after(this.duration)((function(_this) {
         return function() {
           li.addClass('removing');
-          return after(_this.duration)(function() {
+          return after(1)(function() {
             var extent;
             extent = li.closest('li.extent');
             li.remove().removeClass('removing');
@@ -291,7 +291,7 @@ define('jview/cards', function(require) {
               extent.remove();
             }
             if (_this.cards.count() === 1) {
-              return after(350)(function() {
+              return after(1)(function() {
                 _this.element.find('li.card').addClass('zoomed');
                 return _this.element.find('li.extent > ul > li.label').addClass('hidden');
               });
