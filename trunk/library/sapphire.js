@@ -316,7 +316,7 @@ define('jmodel/sapphire',['jmodel/opal'], function (opal) {
 		first: function (predicate) {
 			return    this.length === 0 ? undefined
 					: typeof predicate !== 'undefined' ? (
-						this.predicate(predicate)(this.head()) ? this.head() : this.tail().first(predicate) 
+						this.predicate(predicate).call(this.head(),this.head()) ? this.head() : this.tail().first(predicate) 
 					)
 					: this.head();
 		},
