@@ -7,7 +7,7 @@
  *
  */
 
-define(function (require) {
+define('jmodel-plugins/diamond.debug',function (require) {
 	
 	var diamond = require('jmodel/diamond');
 	
