@@ -7,7 +7,7 @@
  *
  */
 
-define(function (require) {
+define('jmodel-plugins/jquery.emerald',function (require) {
 	
 	var $ = require('jquery');
 	var emerald = require('jmodel/emerald');
