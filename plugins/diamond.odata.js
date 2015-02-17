@@ -7,7 +7,7 @@
  *
  */
 
-define(function (require) {
+define('jmodel-plugins/diamond.odata',function (require) {
 	
 	var diamond = require('jmodel/diamond');
 	var $ = require('jquery');
