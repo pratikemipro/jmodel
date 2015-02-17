@@ -7,7 +7,7 @@
  *
  */
 
-define(function (require) {
+define('jmodel-plugins/topaz.json',function (require) {
 
 	topaz = require('jmodel/topaz');
 
