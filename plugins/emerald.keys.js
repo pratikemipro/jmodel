@@ -7,7 +7,7 @@
  *
  */
 
-define(function (require) {
+define('jmodel-plugins/emerald.keys',function (require) {
 	
 	var emerald = require('jmodel/emerald');
 	
