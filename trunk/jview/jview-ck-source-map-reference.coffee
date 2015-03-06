@@ -126,24 +126,21 @@ define 'jview/cards', (require) ->
 					'-webkit-transform': 'rotate('+(4*(index % 2) - 2)+'deg)'
 					'left': (-1*$(li).position().left+100*index)+'px'
 		
-		## Adding a card creates a new extent
+		## Adding a card to end of list
 		add: (card) ->
-			@element.find('li.card').removeClass 'zoomed'
-			@element.append '<li class="extent"><ul><li class="label hidden"></li></ul></li>'
-			card.event('ready').take(1).subscribe =>
-				card.li.children().addClass 'adding'
-				after(1) =>
-					@element.children('li.extent:last').children('ul').append card.li
+			if card.li.closest('ul.cards').length == 0
+				card.event('ready').take(1).subscribe =>
+					card.li.children().addClass 'adding'
 					after(1) =>
-						card.li.children().removeClass 'adding'
-						@event('ready').raise card
-						after(350) => @element.find('li.extent > ul > li.label').removeClass 'hidden'
+						@element.append card.li
+						after(1) =>
+							card.li.children().removeClass 'adding'
+							@event('ready').raise card
+			else
+				@event('ready').raise card
 					
-		## Inserting a card uses an existing extent
+		## Inserting a card at specfic index
 		insert: (card,index) ->
-			cards = @element.find 'li.card'
-			cards.removeClass 'zoomed'
-			@element.find('li.extent > ul > li.label').removeClass 'hidden'
 			li = card.li
 			li.addClass 'adding'
 			if index == 0
@@ -176,16 +173,9 @@ define 'jview/cards', (require) ->
 			after(@duration) =>
 				li.addClass 'removing'
 				after(1) =>
-					extent = li.closest 'li.extent'
 					li.remove().removeClass 'removing'
 					li.children().removeClass 'removing'
 					@event('removed').raise card
-					if extent.find('li.card').length == 0
-						extent.remove()
-					if @cards.count() == 1
-						after(1) =>
-							@element.find('li.card').addClass 'zoomed'
-							@element.find('li.extent > ul > li.label').addClass 'hidden'
 	
 
 	##
@@ -214,7 +204,7 @@ define 'jview/cards', (require) ->
 			
 			# Inform cards that they are current
 			@state.event('index').subscribe (index) =>
-				@cardListView.cards.get(index).event?('current')?.raise()
+				@cardListView.cards.get(index)?.event?('current')?.raise()
 			
 			# Clicking on a card makes it the current card
 			jm.conjoin(
@@ -535,29 +525,27 @@ define 'jview/cards', (require) ->
 			@cards  = new List @external, this
 			@router = new Router ( new Route(route,card) for route, card of @constructors )
 			
-			[rootCardElement] = @element.children 'li.card'
-			url = if rootCardElement then $(rootCardElement).data('url') else window.location.pathname.substring(1)
-			[cardType,keys,parameters] = @router.resolve url
+			@view       = new ListView @cards, @element
+			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
+			@controller = new Controller @cards, @view, @viewport, @element, @router
 			
-			cardType ?= require @constructors[0].card
 			
-			parameters.zoomed = !rootCardElement?
-			
-			if cardType then require [cardType], (cardType) =>
-			
-				rootCard = new cardType @cards, keys, $(rootCardElement), parameters
-				
-				rootCard.event('ready').republish @event 'ready'
-			
-				if rootCardElement then @cards.add rootCard
-
-				@view       = new ListView @cards, @element
-				@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
-				@controller = new Controller @cards, @view, @viewport, @element, @router
-
-				if !rootCardElement then @cards.add rootCard
-
-				@event('initialised').raise()
+			@element.children 'li.card'
+				.each (index,li) =>
+					
+					url = $(li).data 'url'
+					[cardType,keys,parameters] = @router.resolve url
+					
+					require [cardType], (cardType) =>
+						card = new cardType @cards, keys, $(li), parameters
+						@cards.add card
+						@viewport.state.index @cards.count()
+						if @cards.cards.count() == @element.children('li.card').length
+							@cards.each (card) =>
+								card.event 'ready'
+									.republish @event 'ready'
+							@event 'initialised'
+								.raise()
 			
 		event: (name) -> @events.get name
 			
