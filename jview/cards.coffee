@@ -401,7 +401,12 @@ define 'jview/cards', (require) ->
 			
 		resolve: (url) ->
 			
+			[url,fragment] = url.split '#'
 			[_,path,query] = url.match /([^\?]*)\??(.*)/
+			
+			console.log path
+			console.log query
+			console.log fragment
 			
 			# Find first matching route
 			[route] = ( route for route in @routes when route.test path )
@@ -412,7 +417,7 @@ define 'jview/cards', (require) ->
 				keys = route.match path
 				
 				# Convert URL parameters to object
-				parameters = {}
+				parameters = fragment: fragment
 				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
 						
 			return [ route?.cardType , keys || {}, parameters || {} ]
