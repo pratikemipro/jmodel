@@ -404,10 +404,6 @@ define 'jview/cards', (require) ->
 			[url,fragment] = url.split '#'
 			[_,path,query] = url.match /([^\?]*)\??(.*)/
 			
-			console.log path
-			console.log query
-			console.log fragment
-			
 			# Find first matching route
 			[route] = ( route for route in @routes when route.test path )
 			
