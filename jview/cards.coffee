@@ -99,6 +99,7 @@ define 'jview/cards', (require) ->
 		count:	 (args...) -> @cards.count args...
 		first:	 (args...) -> @cards.first args...
 		each:    (args...) -> @cards.each args...
+		map:	 (args...) -> @cards.map args...
 		
 			
 	##
@@ -451,6 +452,16 @@ define 'jview/cards', (require) ->
 			[_,path,fragment,query] = href.match( /([^#\?]*)((?:#)[^\?]*)?(\?.*)?/ ) or []
 			[protocol] = href.match( /^([^:\?]*):.*/ ) or ['https']
 			li = a.closest 'li.card'
+			
+			indexes = new jm.List
+			url = "https://#{location.host}/#{path}"
+			@cardList.each (card,index)->
+				[current] = @url.split '#'
+				indexes.add [index,current==url]
+			matched = indexes.first ([_,match]) -> match 
+			if matched?
+				@viewport.state.index matched[0]
+				return false
 
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
 			
