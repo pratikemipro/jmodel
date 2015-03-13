@@ -1,4 +1,4 @@
-		window.EventType = class EventType extends Stream.Of Promise
+		window.EventType = class EventType extends Stream.Of JMPromise
 		
 			constructor: ->
 			
@@ -17,9 +17,9 @@
 			subscribe: Function.delegate -> [ @subscribers, @subscribers.add ]
 			
 			# Tests: partial
-			raise: (args...) -> @add Promise.Fulfilled args...
+			raise: (args...) -> @add JMPromise.Fulfilled args...
 			
-			fail: (args...) -> @add Promise.Rejected args...
+			fail: (args...) -> @add JMPromise.Rejected args...
 			
 			republish: (eventtype) ->
 				@subscribe \
@@ -27,7 +27,7 @@
 					Function.delegate -> [eventtype,eventtype.fail]
 					
 			@Of: Function.Cache.From(Function) (constructor) ->
-				type = Promise.Of constructor
+				type = JMPromise.Of constructor
 				class extends this
 					add: Function.Of(type) this::add
 					raise: (args...) -> @add type.Fulfilled args...
