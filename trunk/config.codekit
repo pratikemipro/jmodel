@@ -2,1829 +2,6 @@
 "CodeKitInfo": "This is a CodeKit 2.x project configuration file. It is designed to sync project settings across multiple machines. MODIFYING THE CONTENTS OF THIS FILE IS A POOR LIFE DECISION. If you do so, you will likely cause CodeKit to crash. This file is not useful unless accompanied by the project that created it in CodeKit 2. This file is not backwards-compatible with CodeKit 1.x. For more information, see: http:\/\/incident57.com\/codekit",
 "creatorBuild": "18493",
 "files": {
-	"\/documentation\/opal.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/opal.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/sapphire.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/sapphire.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/emerald\/Event.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/emerald\/Event.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/emerald\/EventType.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/emerald\/EventType.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/emerald\/Subscriber.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/emerald\/Subscriber.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Array.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Array.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/BareObject.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/BareObject.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Boolean.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Boolean.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Function.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Function.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Math.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Math.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Maybe.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Maybe.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Nullable.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Nullable.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Number.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Number.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Object.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Object.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/Promise.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/Promise.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/opal\/String.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/opal\/String.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/sapphire\/List.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/sapphire\/List.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/sapphire\/Map.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/sapphire\/Map.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/sapphire\/Set.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/sapphire\/Set.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/api\/sapphire\/Stream.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/api\/sapphire\/Stream.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/index.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/index.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/docco.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/docco.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/Event.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/Event.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/EventRegistry.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/EventRegistry.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/EventType.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/EventType.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/header.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/header.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/public\/stylesheets\/normalize.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/public\/stylesheets\/normalize.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/emerald\/Subscriber.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/emerald\/Subscriber.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Array.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Array.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/BareObject.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/BareObject.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Boolean.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Boolean.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/docco.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/docco.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Function.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Function.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/header.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/header.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Math.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Math.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Maybe.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Maybe.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Nullable.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Nullable.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Number.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Number.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Object.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Object.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Promise.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Promise.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/public\/stylesheets\/normalize.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/public\/stylesheets\/normalize.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/String.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/String.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/opal\/Type.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/opal\/Type.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/docco.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/docco.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/header.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/header.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/List.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/List.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/Map.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/Map.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/public\/stylesheets\/normalize.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/public\/stylesheets\/normalize.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/Record.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/Record.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/Set.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/Set.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/Stream.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/Stream.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/sapphire\/Tuple.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/sapphire\/Tuple.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/topaz\/docco.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/topaz\/docco.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/topaz\/header.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/topaz\/header.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/topaz\/Observable.coffee.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/topaz\/Observable.coffee.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/src\/topaz\/public\/stylesheets\/normalize.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/src\/topaz\/public\/stylesheets\/normalize.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/stylesheets\/jmodel.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/stylesheets\/jmodel.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/stylesheets\/main.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/stylesheets\/main.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/documentation\/web\/stylesheets\/reset.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/documentation\/web\/stylesheets\/reset.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/jview\/cards.coffee": {
-		"createSourceMap": 1,
-		"fileType": 32,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/jview\/cards.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/cards.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/jview\/drag.coffee": {
-		"createSourceMap": 1,
-		"fileType": 32,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/jview\/drag.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/drag.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/jview\/hierarchy.coffee": {
-		"createSourceMap": 1,
-		"fileType": 32,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/jview\/hierarchy.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/hierarchy.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/jview\/jview-ck-source-map-reference.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/jview\/jview-ck-source-map-reference.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/jview-ck-source-map-reference.js",
-		"outputAbbreviatedPath": "\/jview\/min\/jview-ck-source-map-reference-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/jview\/jview.coffee": {
-		"createSourceMap": 1,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/jview.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/jview.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/jview\/jview.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/jview.js",
-		"outputAbbreviatedPath": "\/jview\/min\/jview-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/jview\/palettes.coffee": {
-		"createSourceMap": 1,
-		"fileType": 32,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/jview\/palettes.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/jview\/palettes.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/jview\/stylesheets\/cards.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/stylesheets\/cards.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/jview\/stylesheets\/cards.less": {
-		"allowInsecureImports": 0,
-		"createSourceMap": 0,
-		"disableJavascript": 0,
-		"fileType": 1,
-		"ieCompatibility": 1,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/jview\/stylesheets\/cards.less",
-		"outputAbbreviatedPath": "\/jview\/css\/cards.css",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"relativeURLS": 0,
-		"shouldRunAutoprefixer": 0,
-		"shouldRunBless": 0,
-		"strictImports": 0,
-		"strictMath": 0,
-		"strictUnits": 0
-		},
-	"\/library\/diamond.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/diamond.js",
-		"outputAbbreviatedPath": "\/library\/min\/diamond-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/emerald.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/emerald.js",
-		"outputAbbreviatedPath": "\/library\/min\/emerald-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/emerald2.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/emerald2.js",
-		"outputAbbreviatedPath": "\/library\/min\/emerald2-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/jmodel-min.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/jmodel-min.js",
-		"outputAbbreviatedPath": "\/library\/min\/jmodel-min-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/jmodel-obsolete.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/jmodel-obsolete.js",
-		"outputAbbreviatedPath": "\/library\/min\/jmodel-obsolete-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/jmodel.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/jmodel.js",
-		"outputAbbreviatedPath": "\/library\/jmodel-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 1,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/library\/jmodel2-obsolete.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/jmodel2-obsolete.js",
-		"outputAbbreviatedPath": "\/library\/min\/jmodel2-obsolete-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/opal.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/opal.js",
-		"outputAbbreviatedPath": "\/library\/min\/opal-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/opal2.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/opal2.js",
-		"outputAbbreviatedPath": "\/library\/min\/opal2-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/sapphire.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/sapphire.js",
-		"outputAbbreviatedPath": "\/library\/min\/sapphire-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/sapphire2.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/sapphire2.js",
-		"outputAbbreviatedPath": "\/library\/min\/sapphire2-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/topaz.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/topaz.js",
-		"outputAbbreviatedPath": "\/library\/min\/topaz-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/library\/topaz2.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/library\/topaz2.js",
-		"outputAbbreviatedPath": "\/library\/min\/topaz2-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/plugins\/diamond.debug.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/diamond.debug.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/diamond.debug-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/diamond.odata.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/diamond.odata.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/diamond.odata-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/emerald.jquery.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/emerald.jquery.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/emerald.jquery-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/emerald.keys.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/emerald.keys.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/emerald.keys-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jmodel.base.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jmodel.base.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.base-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jmodel.debug.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jmodel.debug.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.debug-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jmodel.json.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jmodel.json.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.json-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jmodel.odata.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jmodel.odata.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.odata-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jmodel.schema.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jmodel.schema.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jmodel.schema-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jquery.domain.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jquery.domain.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jquery.domain-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jquery.emerald.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jquery.emerald.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jquery.emerald-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jquery.permute.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jquery.permute.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jquery.permute-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jquery.sapphire.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jquery.sapphire.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jquery.sapphire-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/jquery.topaz.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/jquery.topaz.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/jquery.topaz-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/opal.async.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/opal.async.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/opal.async-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/sapphire.dom.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/sapphire.dom.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.dom-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/sapphire.formatting.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/sapphire.formatting.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.formatting-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/sapphire.relations.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/sapphire.relations.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/sapphire.relations-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/plugins\/topaz.json.js": {
-		"fileType": 64,
-		"ignore": 1,
-		"ignoreWasSetByUser": 1,
-		"inputAbbreviatedPath": "\/plugins\/topaz.json.js",
-		"outputAbbreviatedPath": "\/plugins\/min\/topaz.json-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 0
-		},
-	"\/requirements\/require.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/requirements\/require.js",
-		"outputAbbreviatedPath": "\/requirements\/min\/require-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/library\/emerald\/Event.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/emerald\/Event.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/emerald\/Event.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/emerald\/EventRegistry.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/emerald\/EventRegistry.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/emerald\/EventRegistry.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/emerald\/EventType.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/emerald\/EventType.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/emerald\/EventType.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/emerald\/header.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/emerald\/header.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/emerald\/header.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/emerald\/Subscriber.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/emerald\/Subscriber.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/emerald\/Subscriber.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Array.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Array.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Array.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/BareObject.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/BareObject.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/BareObject.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Boolean.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Boolean.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Boolean.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Function.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Function.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Function.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/header.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/header.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/header.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Math.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Math.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Math.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Maybe.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Maybe.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Maybe.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Nullable.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Nullable.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Nullable.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Number.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Number.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Number.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Object.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Object.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Object.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Promise.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Promise.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Promise.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/String.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/String.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/String.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/opal\/Type.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/opal\/Type.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/opal\/Type.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/header.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/header.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/header.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/List.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/List.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/List.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/Map.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/Map.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/Map.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/Record.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/Record.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/Record.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/Set.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/Set.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/Set.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/Stream.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/Stream.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/Stream.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/sapphire\/Tuple.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/sapphire\/Tuple.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/sapphire\/Tuple.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/topaz\/header.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/topaz\/header.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/topaz\/header.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/library\/topaz\/Observable.coffee.md": {
-		"enableFootnoteSupport": 0,
-		"enableSmartyPants": 1,
-		"expandTabs": 1,
-		"fileType": 4096,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/library\/topaz\/Observable.coffee.md",
-		"outputAbbreviatedPath": "\/src\/library\/topaz\/Observable.coffee.html",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/src\/plugins\/emerald.jquery.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/plugins\/emerald.jquery.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/plugins\/emerald.jquery.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/plugins\/sapphire.dom.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/plugins\/sapphire.dom.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/plugins\/sapphire.dom.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/emerald\/Event.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/emerald\/Event.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/emerald\/Event.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/emerald\/EventRegistry.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/emerald\/EventRegistry.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/emerald\/EventRegistry.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/emerald\/EventType.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/emerald\/EventType.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/emerald\/EventType.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/emerald\/Subscriber.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/emerald\/Subscriber.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/emerald\/Subscriber.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Array.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Array.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Array.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/BareObject.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/BareObject.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/BareObject.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Boolean.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Boolean.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Boolean.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Function.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Function.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Function.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Math.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Math.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Math.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Maybe.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Maybe.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Maybe.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Nullable.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Nullable.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Nullable.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Number.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Number.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Number.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Object.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Object.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Object.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Promise.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Promise.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Promise.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/opal\/Type.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/opal\/Type.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/opal\/Type.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/List.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/List.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/List.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/Map.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/Map.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/Map.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/Record.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/Record.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/Record.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/Set.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/Set.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/Set.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/Stream.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/Stream.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/Stream.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/sapphire\/Tuple.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/sapphire\/Tuple.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/sapphire\/Tuple.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/test.header.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/test.header.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/test.header.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/src\/tests\/topaz\/Observable.test.coffee": {
-		"createSourceMap": 0,
-		"fileType": 32,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/src\/tests\/topaz\/Observable.test.coffee",
-		"minifyOutput": 1,
-		"outputAbbreviatedPath": "\/src\/tests\/topaz\/Observable.test.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 0,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/diamond.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/diamond.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/index.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/index.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/opal.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/opal.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/qunit.css": {
-		"fileType": 16,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/qunit.css",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/qunit.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/qunit.js",
-		"outputAbbreviatedPath": "\/tests\/min\/qunit-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/require.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/require.js",
-		"outputAbbreviatedPath": "\/tests\/min\/require-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/sapphire.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/sapphire.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/test-diamond.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-diamond.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-diamond-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/test-library.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-library.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		},
-	"\/tests\/test-library.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-library.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-library-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/test-opal-coffee.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-opal-coffee.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-opal-coffee-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/test-opal.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-opal.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-opal-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/test-sapphire.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-sapphire.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-sapphire-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/test-topaz.js": {
-		"fileType": 64,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/test-topaz.js",
-		"outputAbbreviatedPath": "\/tests\/min\/test-topaz-min.js",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0,
-		"outputStyle": 1,
-		"syntaxCheckerStyle": 1
-		},
-	"\/tests\/topaz.html": {
-		"fileType": 8192,
-		"ignore": 0,
-		"ignoreWasSetByUser": 0,
-		"inputAbbreviatedPath": "\/tests\/topaz.html",
-		"outputAbbreviatedPath": "No Output Path",
-		"outputPathIsOutsideProject": 0,
-		"outputPathIsSetByUser": 0
-		}
 	},
 "hooks": [
 	],
@@ -1834,816 +11,816 @@
 "projectAttributes": {
 	"bowerAbbreviatedPath": "",
 	"displayValue": "jmodel",
-	"displayValueWasSetByUser": 0,
+	"displayValueWasSetByUser": 1,
 	"iconImageName": "brackets_gray"
 	},
 "projectSettings": {
-	"alwaysUseExternalServer": 0,
-	"animateCSSInjections": 1,
+	"alwaysUseExternalServer": false,
+	"animateCSSInjections": true,
 	"autoApplyPSLanguageSettingsStyle": 0,
 	"autoprefixerBrowserString": "> 1%, last 2 versions, Firefox ESR, Opera 12.1",
-	"autoSyncProjectSettingsFile": 1,
+	"autoSyncProjectSettingsFile": true,
 	"browserRefreshDelay": 0,
-	"coffeeAutoOutputPathEnabled": 1,
+	"coffeeAutoOutputPathEnabled": true,
 	"coffeeAutoOutputPathFilenamePattern": "*.js",
 	"coffeeAutoOutputPathRelativePath": "",
 	"coffeeAutoOutputPathReplace1": "",
 	"coffeeAutoOutputPathReplace2": "",
 	"coffeeAutoOutputPathStyle": 0,
-	"coffeeCreateSourceMap": 0,
+	"coffeeCreateSourceMap": false,
 	"coffeeLintFlags2": {
 		"arrow_spacing": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"camel_case_classes": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"colon_assignment_spacing": {
-			"active": 0,
+			"active": false,
 			"flagValue": 1
 			},
 		"cyclomatic_complexity": {
-			"active": 0,
+			"active": false,
 			"flagValue": 10
 			},
 		"duplicate_key": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"empty_constructor_needs_parens": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"ensure_comprehensions": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"indentation": {
-			"active": 1,
+			"active": true,
 			"flagValue": 2
 			},
 		"line_endings": {
-			"active": 0,
+			"active": false,
 			"flagValue": 0
 			},
 		"max_line_length": {
-			"active": 0,
+			"active": false,
 			"flagValue": 150
 			},
 		"missing_fat_arrows": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"newlines_after_classes": {
-			"active": 0,
+			"active": false,
 			"flagValue": 3
 			},
 		"no_backticks": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_debugger": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_empty_functions": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_empty_param_list": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_implicit_braces": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_implicit_parens": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_interpolation_in_single_quotes": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_plusplus": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_stand_alone_at": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_tabs": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_throwing_strings": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_trailing_semicolons": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_trailing_whitespace": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"no_unnecessary_double_quotes": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"no_unnecessary_fat_arrows": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"non_empty_constructor_needs_parens": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"prefer_english_operator": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"space_operators": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"spacing_after_comma": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			}
 		},
-	"coffeeMinifyOutput": 1,
+	"coffeeMinifyOutput": true,
 	"coffeeOutputStyle": 0,
 	"coffeeSyntaxCheckerStyle": 1,
 	"externalServerAddress": "http:\/\/localhost:8888",
 	"externalServerPreviewPathAddition": "",
 	"genericWebpageFileExtensionsString": "html, htm, shtml, shtm, xhtml, php, jsp, asp, aspx, erb, ctp",
-	"hamlAutoOutputPathEnabled": 1,
+	"hamlAutoOutputPathEnabled": true,
 	"hamlAutoOutputPathFilenamePattern": "*.html",
 	"hamlAutoOutputPathRelativePath": "",
 	"hamlAutoOutputPathReplace1": "",
 	"hamlAutoOutputPathReplace2": "",
 	"hamlAutoOutputPathStyle": 0,
-	"hamlEscapeHTMLCharacters": 0,
-	"hamlNoEscapeInAttributes": 0,
+	"hamlEscapeHTMLCharacters": false,
+	"hamlNoEscapeInAttributes": false,
 	"hamlOutputFormat": 2,
 	"hamlOutputStyle": 0,
-	"hamlUseCDATA": 0,
-	"hamlUseDoubleQuotes": 0,
-	"hamlUseUnixNewlines": 0,
-	"jadeAutoOutputPathEnabled": 1,
+	"hamlUseCDATA": false,
+	"hamlUseDoubleQuotes": false,
+	"hamlUseUnixNewlines": false,
+	"jadeAutoOutputPathEnabled": true,
 	"jadeAutoOutputPathFilenamePattern": "*.html",
 	"jadeAutoOutputPathRelativePath": "",
 	"jadeAutoOutputPathReplace1": "",
 	"jadeAutoOutputPathReplace2": "",
 	"jadeAutoOutputPathStyle": 0,
-	"jadeCompileDebug": 1,
+	"jadeCompileDebug": true,
 	"jadeOutputStyle": 0,
-	"javascriptAutoOutputPathEnabled": 1,
+	"javascriptAutoOutputPathEnabled": true,
 	"javascriptAutoOutputPathFilenamePattern": "*-min.js",
 	"javascriptAutoOutputPathRelativePath": "\/min",
 	"javascriptAutoOutputPathReplace1": "",
 	"javascriptAutoOutputPathReplace2": "",
 	"javascriptAutoOutputPathStyle": 2,
-	"javascriptCreateSourceMap": 1,
+	"javascriptCreateSourceMap": true,
 	"javascriptOutputStyle": 1,
 	"javascriptSyntaxCheckerStyle": 1,
 	"jsCheckerReservedNamesString": "",
 	"jsHintFlags2": {
 		"asi": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"bitwise": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"boss": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"browser": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"browserify": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"camelcase": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"couch": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"curly": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"debug": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"devel": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"dojo": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"elision": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"eqeqeq": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"eqnull": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"es3": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"esnext": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"evil": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"expr": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"forin": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"freeze": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"funcscope": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"globalstrict": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"immed": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"indent": {
-			"active": 0,
+			"active": false,
 			"flagValue": 4
 			},
 		"iterator": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"jasmine": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"jquery": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"lastsemic": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"latedef": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"laxbreak": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"laxcomma": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"loopfunc": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"maxcomplexity": {
-			"active": 0,
+			"active": false,
 			"flagValue": 10
 			},
 		"maxdepth": {
-			"active": 0,
+			"active": false,
 			"flagValue": 3
 			},
 		"maxlen": {
-			"active": 0,
+			"active": false,
 			"flagValue": 150
 			},
 		"maxparams": {
-			"active": 0,
+			"active": false,
 			"flagValue": 3
 			},
 		"maxstatements": {
-			"active": 0,
+			"active": false,
 			"flagValue": 4
 			},
 		"mocha": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"mootools": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"moz": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"multistr": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"newcap": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"noarg": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"node": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"noempty": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"nonbsp": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"nonew": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"nonstandard": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"notypeof": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"noyield": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"onecase": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"phantom": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"plusplus": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"proto": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"prototypejs": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"qunit": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"regexp": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"rhino": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"scripturl": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"shadow": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"shelljs": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"singleGroups": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"strict": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"sub": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"supernew": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"typed": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"undef": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"unused": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"withstmt": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"worker": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"wsh": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"yui": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			}
 		},
 	"jsLintFlags2": {
 		"ass": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"bitwise": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"browser": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"closure": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"continue": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"debug": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"devel": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"eqeq": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"evil": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"forin": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"indent": {
-			"active": 0,
+			"active": false,
 			"flagValue": 4
 			},
 		"maxlen": {
-			"active": 0,
+			"active": false,
 			"flagValue": 150
 			},
 		"newcap": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"node": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"nomen": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"plusplus": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"properties": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"regexp": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"rhino": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"sloppy": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"stupid": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"sub": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"todo": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"unparam": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"vars": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"white": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			}
 		},
-	"kitAutoOutputPathEnabled": 1,
+	"kitAutoOutputPathEnabled": true,
 	"kitAutoOutputPathFilenamePattern": "*.html",
 	"kitAutoOutputPathRelativePath": "",
 	"kitAutoOutputPathReplace1": "",
 	"kitAutoOutputPathReplace2": "",
 	"kitAutoOutputPathStyle": 0,
-	"lessAllowInsecureImports": 0,
-	"lessAutoOutputPathEnabled": 1,
+	"lessAllowInsecureImports": false,
+	"lessAutoOutputPathEnabled": true,
 	"lessAutoOutputPathFilenamePattern": "*.css",
 	"lessAutoOutputPathRelativePath": "..\/css",
 	"lessAutoOutputPathReplace1": "less",
 	"lessAutoOutputPathReplace2": "css",
 	"lessAutoOutputPathStyle": 2,
-	"lessCreateSourceMap": 0,
-	"lessDisableJavascript": 0,
-	"lessIeCompatibility": 1,
+	"lessCreateSourceMap": false,
+	"lessDisableJavascript": false,
+	"lessIeCompatibility": true,
 	"lessOutputStyle": 0,
-	"lessRelativeURLS": 0,
-	"lessStrictImports": 0,
-	"lessStrictMath": 0,
-	"lessStrictUnits": 0,
-	"markdownAutoOutputPathEnabled": 1,
+	"lessRelativeURLS": false,
+	"lessStrictImports": false,
+	"lessStrictMath": false,
+	"lessStrictUnits": false,
+	"markdownAutoOutputPathEnabled": true,
 	"markdownAutoOutputPathFilenamePattern": "*.html",
 	"markdownAutoOutputPathRelativePath": "",
 	"markdownAutoOutputPathReplace1": "",
 	"markdownAutoOutputPathReplace2": "",
 	"markdownAutoOutputPathStyle": 0,
-	"markdownEnableFootnotes": 0,
-	"markdownEnableSmartyPants": 1,
-	"markdownExpandTabs": 1,
-	"reloadFileURLs": 0,
-	"sassAutoOutputPathEnabled": 1,
+	"markdownEnableFootnotes": false,
+	"markdownEnableSmartyPants": true,
+	"markdownExpandTabs": true,
+	"reloadFileURLs": false,
+	"sassAutoOutputPathEnabled": true,
 	"sassAutoOutputPathFilenamePattern": "*.css",
 	"sassAutoOutputPathRelativePath": "..\/css",
 	"sassAutoOutputPathReplace1": "sass",
 	"sassAutoOutputPathReplace2": "css",
 	"sassAutoOutputPathStyle": 2,
-	"sassCreateSourceMap": 0,
+	"sassCreateSourceMap": false,
 	"sassDebugStyle": 0,
 	"sassDecimalPrecision": 10,
 	"sassOutputStyle": 0,
-	"sassUseLibsass": 0,
-	"shouldRunAutoprefixer": 0,
-	"shouldRunBless": 0,
+	"sassUseLibsass": false,
+	"shouldRunAutoprefixer": false,
+	"shouldRunBless": false,
 	"skippedItemsString": ".svn, .git, .hg, log, _logs, _cache, cache, logs, node_modules",
-	"slimAutoOutputPathEnabled": 1,
+	"slimAutoOutputPathEnabled": true,
 	"slimAutoOutputPathFilenamePattern": "*.html",
 	"slimAutoOutputPathRelativePath": "",
 	"slimAutoOutputPathReplace1": "",
 	"slimAutoOutputPathReplace2": "",
 	"slimAutoOutputPathStyle": 0,
-	"slimCompileOnly": 0,
-	"slimLogicless": 0,
+	"slimCompileOnly": false,
+	"slimLogicless": false,
 	"slimOutputFormat": 0,
 	"slimOutputStyle": 1,
-	"slimRailsCompatible": 0,
-	"stylusAutoOutputPathEnabled": 1,
+	"slimRailsCompatible": false,
+	"stylusAutoOutputPathEnabled": true,
 	"stylusAutoOutputPathFilenamePattern": "*.css",
 	"stylusAutoOutputPathRelativePath": "..\/css",
 	"stylusAutoOutputPathReplace1": "stylus",
 	"stylusAutoOutputPathReplace2": "css",
 	"stylusAutoOutputPathStyle": 2,
-	"stylusCreateSourceMap": 0,
+	"stylusCreateSourceMap": false,
 	"stylusDebugStyle": 0,
-	"stylusImportCSS": 0,
+	"stylusImportCSS": false,
 	"stylusOutputStyle": 0,
-	"stylusResolveRelativeURLS": 0,
-	"typescriptAutoOutputPathEnabled": 1,
+	"stylusResolveRelativeURLS": false,
+	"typescriptAutoOutputPathEnabled": true,
 	"typescriptAutoOutputPathFilenamePattern": "*.js",
 	"typescriptAutoOutputPathRelativePath": "\/js",
 	"typescriptAutoOutputPathReplace1": "",
 	"typescriptAutoOutputPathReplace2": "",
 	"typescriptAutoOutputPathStyle": 2,
-	"typescriptCreateDeclarationFile": 0,
-	"typescriptCreateSourceMap": 0,
-	"typescriptMinifyOutput": 0,
+	"typescriptCreateDeclarationFile": false,
+	"typescriptCreateSourceMap": false,
+	"typescriptMinifyOutput": false,
 	"typescriptModuleType": 0,
-	"typescriptNoImplicitAny": 0,
-	"typescriptPreserveConstEnums": 0,
-	"typescriptRemoveComments": 0,
-	"typescriptSuppressImplicitAnyIndexErrors": 0,
+	"typescriptNoImplicitAny": false,
+	"typescriptPreserveConstEnums": false,
+	"typescriptRemoveComments": false,
+	"typescriptSuppressImplicitAnyIndexErrors": false,
 	"typescriptTargetECMAVersion": 0,
 	"uglifyDefinesString": "",
 	"uglifyFlags2": {
 		"ascii-only": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"booleans": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"bracketize": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"cascade": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"comments": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"comparisons": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"compress": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"conditionals": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"dead_code": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"drop_console": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"drop_debugger": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"eval": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"evaluate": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"hoist_funs": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"hoist_vars": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"if_return": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"indent-level": {
-			"active": 0,
+			"active": false,
 			"flagValue": 4
 			},
 		"indent-start": {
-			"active": 0,
+			"active": false,
 			"flagValue": 0
 			},
 		"inline-script": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"join_vars": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"keep_fargs": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"loops": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"mangle": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"max-line-len": {
-			"active": 1,
+			"active": true,
 			"flagValue": 32000
 			},
 		"negate_iife": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"properties": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"pure_getters": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"quote-keys": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"screw-ie8": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"semicolons": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"sequences": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"sort": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"space-colon": {
-			"active": 1,
+			"active": true,
 			"flagValue": -1
 			},
 		"toplevel": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"unsafe": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"unused": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"warnings": {
-			"active": 0,
+			"active": false,
 			"flagValue": -1
 			},
 		"width": {
-			"active": 1,
+			"active": true,
 			"flagValue": 80
 			}
 		},

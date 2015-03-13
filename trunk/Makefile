@@ -4,7 +4,7 @@ default:
 	@make emerald
 	@make topaz
 	@make library-test
-	@make jview
+	@make jview2
 	@make jmodel-plugins
 
 opal:
@@ -110,8 +110,9 @@ emerald-doc:
 topaz-doc:
 	saxon -strip:all -xsl:documentation/documentation.xsl -s:src/library/topaz/Observable.doc.xml -o:documentation/web/api/topaz/Observable.html
 		
-jview:
-	coffee --compile --bare --map view/cards.coffee
+jview2:
+	coffee --compile --bare --map --join jview/jview2.js \
+		src/jview/Tiles.coffee.md
 	
 jmodel-plugins:
 	coffee --compile --bare --map --output plugins/ src/plugins/

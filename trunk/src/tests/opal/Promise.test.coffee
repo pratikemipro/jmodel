@@ -1,14 +1,14 @@
-	module 'Promise'
+	module 'JMPromise'
 	
-	test 'Promise.then', ->
+	test 'JMPromise.then', ->
 	
-		promise = new Promise()
+		promise = new JMPromise()
 		
-		equals promise.then(->) instanceof Promise, true, 'Returns a Promise'
+		equals promise.then(->) instanceof JMPromise, true, 'Returns a JMPromise'
 		
 	asyncTest 'onFulfilled', 2, ->
 		
-		promise = new Promise()
+		promise = new JMPromise()
 		
 		promise.then (x,y) ->
 			equals x, 'fred', 'onFulfilled called with fulfilment value'
@@ -19,7 +19,7 @@
 		
 	asyncTest 'onRejected', 1, ->
 		
-		promise = new Promise()
+		promise = new JMPromise()
 		
 		promise.then undefined, (x) ->
 			equals x, 'fred', 'onRejected called with rejection reason'
@@ -27,9 +27,9 @@
 			
 		promise.reject 'fred'
 	
-	test 'Promise.fulfil', ->
+	test 'JMPromise.fulfil', ->
 		
-		promise = new Promise()
+		promise = new JMPromise()
 		promise.fulfil 'fred'
 		
 		raises ( -> promise.fulfil() ), 'Throws exception if fulfiled more than once'
@@ -38,9 +38,9 @@
 		equals promise.value, 'fred', 'After fulfilment, promise value is fulfilment value'
 		equals promise.reason, undefined, 'After fulfulment, promise reason is undefined'
 	
-	test 'Promise.reject', ->
+	test 'JMPromise.reject', ->
 		
-		promise = new Promise()
+		promise = new JMPromise()
 		promise.reject 'fred'
 		
 		raises ( -> promise.reject() ), 'Throws exception if rejected more than once'
@@ -49,27 +49,27 @@
 		equals promise.value, undefined, 'After rejection, promise value is undefined'
 		equals promise.reason, 'fred', 'After rejection, promise reason is rejection reason'
 		
-	asyncTest 'Promise.Fulfilled', 2, ->
+	asyncTest 'JMPromise.Fulfilled', 2, ->
 		
-		promise = Promise.Fulfilled 'red'
+		promise = JMPromise.Fulfilled 'red'
 		
 		promise.then (value) ->
-			equals promise instanceof Promise, true, 'Already fulfilled promises are promises'
-			equals value, 'red', 'Promise fulfilled with correct value'
+			equals promise instanceof JMPromise, true, 'Already fulfilled promises are promises'
+			equals value, 'red', 'JMPromise fulfilled with correct value'
 			start()
 			
-	asyncTest 'Promise.Rejected', 2, ->
+	asyncTest 'JMPromise.Rejected', 2, ->
 		
-		promise = Promise.Rejected 'red'
+		promise = JMPromise.Rejected 'red'
 		
 		promise.then (->), (value) ->
-			equals promise instanceof Promise, true, 'Already rejected promises are promises'
-			equals value, 'red', 'Promise rejected with correct value'
+			equals promise instanceof JMPromise, true, 'Already rejected promises are promises'
+			equals value, 'red', 'JMPromise rejected with correct value'
 			start()
 		
-	asyncTest 'Promise.Of', 2, ->
+	asyncTest 'JMPromise.Of', 2, ->
 		
-		promise = new (Promise.Of Date)
+		promise = new (JMPromise.Of Date)
 
 		promise.then (value) ->
 			equals value instanceof Date, true, 'Creates object of correct type'
@@ -78,34 +78,34 @@
 		
 		promise.fulfil '1974-11-20'
 		
-	asyncTest 'Promise.Of.Fulfilled', 2, ->
+	asyncTest 'JMPromise.Of.Fulfilled', 2, ->
 		
-		promise = Promise.Of(Date).Fulfilled '1974-11-20'
+		promise = JMPromise.Of(Date).Fulfilled '1974-11-20'
 		
 		promise.then (value) ->
 			equals value instanceof Date, true, 'Creates object of correct type'
 			equals value.toDateString(), 'Wed Nov 20 1974', 'Passes arguments correctly'
 			start()
 			
-	asyncTest 'Promise.Of.Rejected', 1, ->
+	asyncTest 'JMPromise.Of.Rejected', 1, ->
 		
-		promise = Promise.Of(Date).Rejected 'error'
+		promise = JMPromise.Of(Date).Rejected 'error'
 		
 		promise.then (->), (value) ->
 			equals value, 'error', 'Passes argument correctly'
 			start()
 			
-	asyncTest 'Promise.conjoin', 2, ->
+	asyncTest 'JMPromise.conjoin', 2, ->
 		
 		delay = (fn) -> setTimeout fn, 100
 		
-		promise1 = new Promise
-		promise2 = new Promise
-		promise3 = new Promise
+		promise1 = new JMPromise
+		promise2 = new JMPromise
+		promise3 = new JMPromise
 		
-		promise = Promise.conjoin promise1, promise2, promise3
+		promise = JMPromise.conjoin promise1, promise2, promise3
 		
-		equals promise instanceof Promise, true, 'A conjunction of promises is a promise'
+		equals promise instanceof JMPromise, true, 'A conjunction of promises is a promise'
 		
 		output = []
 		
@@ -119,17 +119,17 @@
 			deepEqual output, ['red','green','blue'], 'Conjunction fulfilled with all fulfilled values'
 			start()
 		
-	asyncTest 'Promise.disjoin', 2, ->
+	asyncTest 'JMPromise.disjoin', 2, ->
 		
 		delay = (fn) -> setTimeout fn, 100
 		
-		promise1 = new Promise
-		promise2 = new Promise
-		promise3 = new Promise
+		promise1 = new JMPromise
+		promise2 = new JMPromise
+		promise3 = new JMPromise
 		
-		promise = Promise.disjoin promise1, promise2, promise3
+		promise = JMPromise.disjoin promise1, promise2, promise3
 		
-		equals promise instanceof Promise, true, 'A disjunction of promises is a promise'
+		equals promise instanceof JMPromise, true, 'A disjunction of promises is a promise'
 		
 		output = []
 		
@@ -142,17 +142,17 @@
 			deepEqual output, ['green'], 'Disjunction fulfilled with first fulfilled value only'
 			start()
 			
-	asyncTest 'Promise.Of.disjoin', 3, ->
+	asyncTest 'JMPromise.Of.disjoin', 3, ->
 		
 		delay = (fn) -> setTimeout fn, 100
 		
-		promise1 = new Promise
-		promise2 = new Promise
-		promise3 = new Promise
+		promise1 = new JMPromise
+		promise2 = new JMPromise
+		promise3 = new JMPromise
 		
-		promise = Promise.Of(Date).disjoin promise1, promise2, promise3
+		promise = JMPromise.Of(Date).disjoin promise1, promise2, promise3
 		
-		equals promise instanceof Promise, true, 'A typed disjunction of promises is a promise'
+		equals promise instanceof JMPromise, true, 'A typed disjunction of promises is a promise'
 		
 		output = []
 		

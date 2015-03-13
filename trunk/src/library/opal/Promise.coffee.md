@@ -1,7 +1,7 @@
-# Promise
+# JMPromise
 
 		
-		window.Promise = class Promise
+		window.JMPromise = class JMPromise
 		
 			[PENDING,FULFILLED,REJECTED] = [1..3]
 		
@@ -59,7 +59,7 @@
 						chain promise, rejected, [@reason]
 			
 
-# Pre-resolved Promises
+# Pre-resolved JMPromises
 
 			
 			@Fulfilled: Function.Returning(-> new this ) \
@@ -69,7 +69,7 @@
 				(promise) -> (args...) -> promise.reject args...
 			
 
-# Typed Promises
+# Typed JMPromises
 
 				
 			@Of: Function.Cache.From(Function).To(Function) (constructor) ->
@@ -77,10 +77,10 @@
 					fulfil: Function.Of(constructor) this::fulfil
 			
 
-# Promise combinators
+# JMPromise combinators
 
 				
-			@conjoin: Function.From([Promise]).Returning(-> new this) \
+			@conjoin: Function.From([JMPromise]).Returning(-> new this) \
 				(conjunction) -> (promises...) ->
 					
 					completed = ->
@@ -91,7 +91,7 @@
 						
 					
 			
-			@disjoin: Function.From([Promise]).Returning(-> new this ) \
+			@disjoin: Function.From([JMPromise]).Returning(-> new this ) \
 				(disjunction) -> (promises...) ->
 					[fulfil,reject] = Function.delegates -> [ disjunction, disjunction.fulfil, disjunction.reject ]
 					promises.each -> @then fulfil, reject

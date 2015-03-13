@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Promise</title>
+  <title>JMPromise</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -97,12 +97,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="promise">Promise</h1>
+              <h1 id="jmpromise">JMPromise</h1>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>	
-	<span class="hljs-built_in">window</span>.Promise = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Promise</span></span>
+	<span class="hljs-built_in">window</span>.JMPromise = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">JMPromise</span></span>
 	
 		[PENDING,FULFILLED,REJECTED] = [<span class="hljs-number">1.</span><span class="hljs-number">.3</span>]
 	
@@ -192,7 +192,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h1 id="pre-resolved-promises">Pre-resolved Promises</h1>
+              <h1 id="pre-resolved-jmpromises">Pre-resolved JMPromises</h1>
 
             </div>
             
@@ -212,7 +212,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <h1 id="typed-promises">Typed Promises</h1>
+              <h1 id="typed-jmpromises">Typed JMPromises</h1>
 
             </div>
             
@@ -230,12 +230,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h1 id="promise-combinators">Promise combinators</h1>
+              <h1 id="jmpromise-combinators">JMPromise combinators</h1>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>			
-		<span class="hljs-property">@conjoin</span>: Function.From([Promise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span>) \
+		<span class="hljs-property">@conjoin</span>: Function.From([JMPromise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span>) \
 			<span class="hljs-function"><span class="hljs-params">(conjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(promises...)</span> -&gt;</span>
 				
 				<span class="hljs-function"><span class="hljs-title">completed</span> = -&gt;</span>
@@ -246,7 +246,7 @@
 					
 				
 		
-		<span class="hljs-property">@disjoin</span>: Function.From([Promise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
+		<span class="hljs-property">@disjoin</span>: Function.From([JMPromise]).Returning(<span class="hljs-function">-&gt;</span> <span class="hljs-keyword">new</span> <span class="hljs-keyword">this</span> ) \
 			<span class="hljs-function"><span class="hljs-params">(disjunction)</span> -&gt;</span> <span class="hljs-function"><span class="hljs-params">(promises...)</span> -&gt;</span>
 				[fulfil,reject] = Function.delegates<span class="hljs-function"> -&gt;</span> [ disjunction, disjunction.fulfil, disjunction.reject ]
 				promises.each<span class="hljs-function"> -&gt;</span> <span class="hljs-property">@then</span> fulfil, reject</pre></div></div>

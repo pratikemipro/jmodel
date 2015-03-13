@@ -66,7 +66,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.EventType = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EventType</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Stream</span>.<span class="hljs-title">Of</span> <span class="hljs-title">Promise</span></span>
+            <div class="content"><div class='highlight'><pre>	<span class="hljs-built_in">window</span>.EventType = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EventType</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Stream</span>.<span class="hljs-title">Of</span> <span class="hljs-title">JMPromise</span></span>
 	
 		<span class="hljs-attribute">constructor</span>:<span class="hljs-function"> -&gt;</span>
 		
@@ -109,9 +109,9 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">raise</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> Promise.Fulfilled args...
+            <div class="content"><div class='highlight'><pre>		<span class="hljs-attribute">raise</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> JMPromise.Fulfilled args...
 		
-		<span class="hljs-attribute">fail</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> Promise.Rejected args...
+		<span class="hljs-attribute">fail</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> JMPromise.Rejected args...
 		
 		<span class="hljs-attribute">republish</span>: <span class="hljs-function"><span class="hljs-params">(eventtype)</span> -&gt;</span>
 			<span class="hljs-property">@subscribe</span> \
@@ -119,7 +119,7 @@
 				Function.delegate<span class="hljs-function"> -&gt;</span> [eventtype,eventtype.fail]
 				
 		<span class="hljs-property">@Of</span>: Function.Cache.From<span class="hljs-function"><span class="hljs-params">(Function)</span> <span class="hljs-params">(constructor)</span> -&gt;</span>
-			type = Promise.Of constructor
+			type = JMPromise.Of constructor
 			<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">this</span></span>
 				<span class="hljs-attribute">add</span>: Function.Of(type) <span class="hljs-attribute">this</span>::add
 				<span class="hljs-attribute">raise</span>: <span class="hljs-function"><span class="hljs-params">(args...)</span> -&gt;</span> <span class="hljs-property">@add</span> type.Fulfilled args...

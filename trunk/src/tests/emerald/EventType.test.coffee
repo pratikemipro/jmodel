@@ -17,8 +17,8 @@
 		et = new EventType
 		
 		output = []
-		promise1 = new Promise
-		promise2 = new Promise
+		promise1 = new JMPromise
+		promise2 = new JMPromise
 		
 		et.subscribe -> output.push this
 		
