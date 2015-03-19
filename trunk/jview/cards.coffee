@@ -144,8 +144,10 @@ define 'jview/cards', (require) ->
 		insert: (card,index) ->
 			li = card.li
 			li.addClass 'adding'
-			if index == 0
+			if index == 0 and @element.find('li.card').length > 0
 				@element.find('li.card').eq(0).before li
+			else if index == 0
+				@element.append card.li
 			else
 				@element.find('li.card').eq(index-1).after li
 			card.event('ready').take(1).subscribe =>
@@ -501,7 +503,7 @@ define 'jview/cards', (require) ->
 					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
 						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
 					else
-						@cardList.insert currentIndex + ( if before then -1 else 0 ), card
+						@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
 						
 					if animate
 						@view.event('ready')
