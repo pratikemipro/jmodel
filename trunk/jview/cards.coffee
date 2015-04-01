@@ -31,6 +31,11 @@ define 'jview/cards', (require) ->
 				false
 				
 		event: (name) -> @events.get name
+		
+		handle: (url) ->
+			matched = url == @url?.split('#')[0]
+			if matched then @event('current').raise this
+			return matched
 	
 	
 	##
@@ -66,11 +71,13 @@ define 'jview/cards', (require) ->
 
 	class CardList
 	
-		constructor: ({@types,@external,@application}) ->
+		constructor: ({types,@external,@application}) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
-			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready'
+			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready', 'current'
 			@event('ready').remember 1
+			
+			@router = new Router ( new Route(card.match,card) for card in types )
 			
 			@cards.events.republish
 				add:     @event 'add'
@@ -84,10 +91,19 @@ define 'jview/cards', (require) ->
 				@cards.event('replace').map( (_,card) -> card )
 			)
 			.subscribe (card) =>
+				card.event('current').republish @event 'current'
 				card.event('ready').subscribe   (card) => @event('ready').raise card
 				card.event('dispose').subscribe (card) => @cards.remove card
 		
 		event: (name) -> @events.get name
+		
+		handle: (url,index) ->
+			
+			handled = @cards
+				.map -> @handle url
+				.first()
+
+			return handled
 		
 		# Delegation
 		add:     (args...) -> @cards.add args...
@@ -205,8 +221,13 @@ define 'jview/cards', (require) ->
 			@state.event('index').subscribe (index) => @scrollTo index
 			
 			# Inform cards that they are current
-			@state.event('index').subscribe (index) =>
-				@cardListView.cards.get(index)?.event?('current')?.raise()
+			# @state.event('index').subscribe (index) =>
+# 				@cardListView.cards.get(index)?.event?('current')?.raise()
+
+			# Scroll to current card
+			@cardListView.cards.event 'current'
+				.subscribe (card) =>
+					@state.index card.li.index 'li.card'
 			
 			# Clicking on a card makes it the current card
 			jm.conjoin(
@@ -418,7 +439,9 @@ define 'jview/cards', (require) ->
 				parameters = fragment: fragment
 				parameters[name] = value for [name,value] in ( param.split('=') for param in query.split('&') )
 						
-			return [ route?.cardType , keys || {}, parameters || {} ]
+				return [ route.cardType , keys || {}, parameters || {} ]
+				
+			return false
 	
 			
 	##
@@ -454,17 +477,11 @@ define 'jview/cards', (require) ->
 			[protocol] = href.match( /^([^:\?]*):.*/ ) or ['https']
 			li = a.closest 'li.card'
 			
-			indexes = new jm.List
-			url = "https://#{location.host}/#{path}"
-			@cardList.each (card,index)->
-				[current] = @url.split '#'
-				indexes.add [index,current==url]
-			matched = indexes.first ([_,match]) -> match 
-			if matched?
-				@viewport.state.index matched[0]
-				return false
-
 			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
+			url = "https://#{location.host}/#{path}"
+			
+			if @cardList.handle url, currentIndex
+				return false
 			
 			[cardType,keys,parameters] = ( @router.resolve path ) if protocol in ['http','https']
 
@@ -547,6 +564,9 @@ define 'jview/cards', (require) ->
 					
 					url = $(li).data 'url'
 					$(li).remove()
+					
+					@cards.handle url, index
+					
 					[cardType,keys,parameters] = @router.resolve url
 					card = new cardType @cards, keys, parameters
 					@cards.add card
