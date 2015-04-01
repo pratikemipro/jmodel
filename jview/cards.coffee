@@ -67,7 +67,7 @@ define 'jview/cards', (require) ->
 
 	class CardList
 	
-		constructor: (@external,@application) ->
+		constructor: ({@types,@external,@application}) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
 			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready'
@@ -532,7 +532,10 @@ define 'jview/cards', (require) ->
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
-			@cards  = new CardList @external, this
+			@cards = new CardList
+				types: constructors
+				external: @external
+				application: this
 			@router = new Router ( new Route(card.match,card) for card in @constructors )
 			
 			@view       = new ListView @cards, @element
