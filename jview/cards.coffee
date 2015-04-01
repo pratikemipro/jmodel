@@ -19,13 +19,12 @@ define 'jview/cards', (require) ->
 	class Card
 		
 		constructor: ->
+			
+			@li = $ '<li class="card"/>'
+			@li.addClass @class
 		
 			@events = new jm.EventRegistry 'ready', 'dispose', 'current'
 			@event('ready').remember 1
-		
-			@li = if @li then $ @li else $ '<li class="card"/>'
-		
-			@li.addClass @class
 			
 			@li.event('click','.close').subscribe =>
 				@event('dispose').raise this
@@ -383,7 +382,7 @@ define 'jview/cards', (require) ->
 	class Route
 		
 		constructor: (pattern,@cardType) ->
-			@keys       = ( key.replace('{','').replace('}','').replace('?','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
+			@keys    = ( key.replace('{','').replace('}','').replace('?','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
 			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\/?\{[^\}]+\?\}/g,'(?:/?([^\/]+))?').replace(/\/?\{[^\}]+\}/g,'(?:/?([^\/]+))')+'/?$'
 			
 		test: (path) -> @pattern.test path
@@ -542,15 +541,17 @@ define 'jview/cards', (require) ->
 			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
 			@controller = new Controller @cards, @view, @viewport, @element, @router
 			
+			numberCards = @element.children('li.card').length
 			@element.children 'li.card'
 				.each (index,li) =>
 					
 					url = $(li).data 'url'
+					$(li).remove()
 					[cardType,keys,parameters] = @router.resolve url
-					card = new cardType @cards, keys, $(li), parameters
+					card = new cardType @cards, keys, undefined, parameters
 					@cards.add card
 					@viewport.state.index @cards.count()
-					if @cards.cards.count() == @element.children('li.card').length
+					if @cards.cards.count() == numberCards
 						@cards.each (card) =>
 							card.event 'ready'
 								.republish @event 'ready'
