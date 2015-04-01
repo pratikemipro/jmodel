@@ -490,7 +490,7 @@ define 'jview/cards', (require) ->
 			
 				a.addClass 'disabled'
 
-				card = new cardType @cardList, keys, undefined, parameters
+				card = new cardType @cardList, keys, parameters
 				
 				card.url = href
 				
@@ -548,7 +548,7 @@ define 'jview/cards', (require) ->
 					url = $(li).data 'url'
 					$(li).remove()
 					[cardType,keys,parameters] = @router.resolve url
-					card = new cardType @cards, keys, undefined, parameters
+					card = new cardType @cards, keys, parameters
 					@cards.add card
 					@viewport.state.index @cards.count()
 					if @cards.cards.count() == numberCards
