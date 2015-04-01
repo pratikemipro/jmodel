@@ -65,7 +65,7 @@ define 'jview/cards', (require) ->
 	## List
 	##
 
-	class List
+	class CardList
 	
 		constructor: (@external,@application) ->
 			
@@ -532,7 +532,7 @@ define 'jview/cards', (require) ->
 			@event('ready').remember 1			
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
-			@cards  = new List @external, this
+			@cards  = new CardList @external, this
 			@router = new Router ( new Route(card.match,card) for card in @constructors )
 			
 			@view       = new ListView @cards, @element
@@ -565,7 +565,7 @@ define 'jview/cards', (require) ->
 	return {
 		Card: Card
 		AjaxCard: AjaxCard
-		List: List
+		CardList: CardList
 		ListView: ListView
 		ViewPort: ViewPort
 		Route: Route
