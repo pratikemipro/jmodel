@@ -99,11 +99,20 @@ define 'jview/cards', (require) ->
 		
 		handle: (url,index) ->
 			
+			## Let existing cards try to handle URL
 			handled = @cards
 				.map -> @handle url
 				.first()
-
-			return handled
+				
+			## Let router try to handle URL
+			[_,path,fragment,query] = url.replace(location.protocol+'//'+location.host+'/','').match( /([^#\?]*)((?:#)[^\?]*)?(\?.*)?/ ) or []
+			[protocol] = url.match( /^([^:\?]*):.*/ ) or ['https']
+			[cardType,keys,parameters] = @router.resolve path
+			
+			if cardType
+				@insert index, new cardType this, keys, parameters
+			
+			return handled or cardType?
 		
 		# Delegation
 		add:     (args...) -> @cards.add args...
@@ -225,9 +234,12 @@ define 'jview/cards', (require) ->
 # 				@cardListView.cards.get(index)?.event?('current')?.raise()
 
 			# Scroll to current card
-			@cardListView.cards.event 'current'
-				.subscribe (card) =>
-					@state.index card.li.index 'li.card'
+			jm.disjoin(
+				@cardListView.cards.event 'current'
+				@cardListView.cards.event 'ready'
+			)
+			.subscribe (card) =>
+				@state.index card.li.index 'li.card'
 			
 			# Clicking on a card makes it the current card
 			jm.conjoin(
@@ -450,7 +462,7 @@ define 'jview/cards', (require) ->
 	
 	class Controller
 		
-		constructor: (@cardList,@view,@viewport,@element,@router) ->
+		constructor: (@cardList,@view,@viewport,@element) ->
 			
 			$(document).event('click','a[href]')
 				.notBetween(
@@ -482,15 +494,8 @@ define 'jview/cards', (require) ->
 			
 			if @cardList.handle url, currentIndex
 				return false
-			
-			[cardType,keys,parameters] = ( @router.resolve path ) if protocol in ['http','https']
 
-			parameters = parameters or {}
-			parameters.location =
-				protocol: protocol
-				path: path
-				fragment: fragment
-				query: query
+			console.log 'Not handled by card list'
 
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
@@ -507,11 +512,7 @@ define 'jview/cards', (require) ->
 			
 				a.addClass 'disabled'
 
-				card = new cardType @cardList, keys, parameters
-				
 				card.url = href
-				
-				@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
 					
 				if animate
 					@view.event('ready')
@@ -549,11 +550,10 @@ define 'jview/cards', (require) ->
 				types: constructors
 				external: @external
 				application: this
-			@router = new Router ( new Route(card.match,card) for card in @constructors )
 			
 			@view       = new ListView @cards, @element
 			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
-			@controller = new Controller @cards, @view, @viewport, @element, @router
+			@controller = new Controller @cards, @view, @viewport, @element
 			
 			numberCards = @element.children('li.card').length
 			@element.children 'li.card'
@@ -563,15 +563,9 @@ define 'jview/cards', (require) ->
 					$(li).remove()
 					
 					@cards.handle url, index
-					
-					[cardType,keys,parameters] = @router.resolve url
-					card = new cardType @cards, keys, parameters
-					@cards.add card
+
 					@viewport.state.index @cards.count()
 					if @cards.cards.count() == numberCards
-						@cards.each (card) =>
-							card.event 'ready'
-								.republish @event 'ready'
 						@event 'initialised'
 							.raise()
 			
