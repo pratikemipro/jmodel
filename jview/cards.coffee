@@ -490,27 +490,22 @@ define 'jview/cards', (require) ->
 				if a.is '.disabled' then return false
 			
 				a.addClass 'disabled'
-			
-				# if a.hasClass('singleton') and card = @cardList.first( (card) -> card instanceof cardType and card.id = id )
-				# 					@viewPort.scrollTo card.li.index 'li.card'
-				# 				else
-				require [cardType], (cardType) =>
+
+				card = new cardType @cardList, keys, undefined, parameters
+				
+				card.url = href
+				
+				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
+					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
+				else
+					@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
 					
-					card = new cardType @cardList, keys, undefined, parameters
-					
-					card.url = href
-					
-					if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-						@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
-					else
-						@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
-						
-					if animate
-						@view.event('ready')
-							.where( (inserted) -> inserted == card )
-							.subscribe =>
-								a.removeClass 'disabled'
-								@viewport.state.index card.li.index('li.card')
+				if animate
+					@view.event('ready')
+						.where( (inserted) -> inserted == card )
+						.subscribe =>
+							a.removeClass 'disabled'
+							@viewport.state.index card.li.index('li.card')
 					
 			else if href[0] == '#' and protocol not in ['mailto']
 				history.pushState null, null, window.location.pathname + href
@@ -526,10 +521,11 @@ define 'jview/cards', (require) ->
 	
 	class Application
 		
-		constructor: (element,menuElement,@external,@constructors) ->
+		constructor: (element,menuElement,@external,constructors) ->
 			
-			@element     = $ element
-			@menuElement = $ menuElement
+			@constructors = constructors
+			@element      = $ element
+			@menuElement  = $ menuElement
 			
 			@events = new jm.EventRegistry 'initialised','ready'
 			@event('initialised').remember 1
@@ -537,29 +533,26 @@ define 'jview/cards', (require) ->
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
 			@cards  = new List @external, this
-			@router = new Router ( new Route(route,card) for route, card of @constructors )
+			@router = new Router ( new Route(card.match,card) for card in @constructors )
 			
 			@view       = new ListView @cards, @element
 			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
 			@controller = new Controller @cards, @view, @viewport, @element, @router
-			
 			
 			@element.children 'li.card'
 				.each (index,li) =>
 					
 					url = $(li).data 'url'
 					[cardType,keys,parameters] = @router.resolve url
-					
-					require [cardType], (cardType) =>
-						card = new cardType @cards, keys, $(li), parameters
-						@cards.add card
-						@viewport.state.index @cards.count()
-						if @cards.cards.count() == @element.children('li.card').length
-							@cards.each (card) =>
-								card.event 'ready'
-									.republish @event 'ready'
-							@event 'initialised'
-								.raise()
+					card = new cardType @cards, keys, $(li), parameters
+					@cards.add card
+					@viewport.state.index @cards.count()
+					if @cards.cards.count() == @element.children('li.card').length
+						@cards.each (card) =>
+							card.event 'ready'
+								.republish @event 'ready'
+						@event 'initialised'
+							.raise()
 			
 		event: (name) -> @events.get name
 			
