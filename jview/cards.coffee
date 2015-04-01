@@ -495,31 +495,29 @@ define 'jview/cards', (require) ->
 			if @cardList.handle url, currentIndex
 				return false
 
-			console.log 'Not handled by card list'
-
 			if path == location.origin + location.pathname
 				location.hash = '#'+fragment
 				$(document).scrollTop 0
 				return false
-			else if a.attr('download')
+			else if a.attr 'download'
 				return true
 			else if a.hasClass 'permalink'
 				open href
 				return false
-			else if cardType?
-				
-				if a.is '.disabled' then return false
-			
-				a.addClass 'disabled'
-
-				card.url = href
-					
-				if animate
-					@view.event('ready')
-						.where( (inserted) -> inserted == card )
-						.subscribe =>
-							a.removeClass 'disabled'
-							@viewport.state.index card.li.index('li.card')
+			# else if cardType?
+			#
+			# 	if a.is '.disabled' then return false
+			#
+			# 	a.addClass 'disabled'
+			#
+			# 	card.url = href
+			#
+			# 	if animate
+			# 		@view.event('ready')
+			# 			.where( (inserted) -> inserted == card )
+			# 			.subscribe =>
+			# 				a.removeClass 'disabled'
+			# 				@viewport.state.index card.li.index('li.card')
 					
 			else if href[0] == '#' and protocol not in ['mailto']
 				history.pushState null, null, window.location.pathname + href
