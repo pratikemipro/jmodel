@@ -511,10 +511,7 @@ define 'jview/cards', (require) ->
 				
 				card.url = href
 				
-				if card.li.hasClass('singleton') and li.hasClass('singleton') and @cardList.count() == 1
-					@element.animate { scrollLeft: 0 }, 500, => @cardList.replace @cardList.get(0), card
-				else
-					@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
+				@cardList.insert (currentIndex or 0) + ( if before then -1 else 0 ), card
 					
 				if animate
 					@view.event('ready')
