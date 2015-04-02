@@ -168,12 +168,13 @@ define 'jview/cards', (require) ->
 		insert: (card,index) ->
 			li = card.li
 			li.addClass 'adding'
-			if index == 0 and @element.find('li.card').length > 0
-				@element.find('li.card').eq(0).before li
-			else if index == 0
+			if @element.children('li.card').length == 0
 				@element.append card.li
+			else if index == 0
+				@element.children('li.card').eq(0).before li
 			else
-				@element.find('li.card').eq(index-1).after li
+				@element.children('li.card').eq(index-1).after li
+				
 			card.event('ready').take(1).subscribe =>
 				after(1) =>
 					width = Math.min window.innerWidth, li.children('article').outerWidth(true)
@@ -239,7 +240,7 @@ define 'jview/cards', (require) ->
 				@cardListView.cards.event 'ready'
 			)
 			.subscribe (card) =>
-				@state.index card.li.index 'li.card'
+				@state.index card.li.index()
 			
 			# Clicking on a card makes it the current card
 			jm.conjoin(
@@ -257,9 +258,9 @@ define 'jview/cards', (require) ->
 				({deltaY}) -> -3 < deltaY < 3
 			)
 			.subscribe ({target}) =>
-				targetIndex = target.closest('li.card').index('li.card')
+				targetIndex = target.closest('li.card').index()
 				if targetIndex != @state.index()
-					@state.index target.closest('li.card').index('li.card')
+					@state.index target.closest('li.card').index()
 
 			# Keyboard control
 			keyEvent = $(document).event('keydown').where ({target}) -> $(target).closest('input,select,textarea,[contentEditable=true]').length == 0
@@ -291,7 +292,7 @@ define 'jview/cards', (require) ->
 			
 			# Clear
 			@controls.find('button.close').event('click').subscribe => 
-				@cardListView.cards.remove (card) -> card.li.index('li.card') > 0
+				@cardListView.cards.remove (card) -> card.li.index() > 0
 			
 			# Count
 			jm.disjoin(
@@ -348,9 +349,12 @@ define 'jview/cards', (require) ->
 			# 	)
 			# 	.subscribe (currentScreenX,[startScreenX,startScroll]) =>
 			# 		$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
+		
+		handle: (url) ->
+			@cardListView.cards.handle url, @state.index()+1
 				
 		scrollTo: (index,duration=300) ->
-			li = @cardListView.element.find('li.card').eq(index)
+			li = @cardListView.element.children('li.card').eq(index)
 			if li.length > 0
 				@element.stop().animate
 #					scrollLeft: Math.min(li.position().left - @offset ,li.position().left+li.width()-@element.width() - @offset)+'px'
@@ -489,10 +493,12 @@ define 'jview/cards', (require) ->
 			[protocol] = href.match( /^([^:\?]*):.*/ ) or ['https']
 			li = a.closest 'li.card'
 			
-			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
+			## NOTE: FIX THIS
+##			currentIndex = if li.length == 0 then $('li.card').length else li.index('li.card') + 1
+			currentIndex = 0
 			url = "https://#{location.host}/#{path}"
 			
-			if @cardList.handle url, currentIndex
+			if @viewport.handle url
 				return false
 
 			if path == location.origin + location.pathname
