@@ -378,15 +378,12 @@ define('jmodel/sapphire',['jmodel/opal'], function (opal) {
 		},
 		
 		// Tests: none
-		filter: Array.prototype.filter ? function (predicate) {
-			return    typeof predicate === 'undefined' ? this
-					: this.__constructor.fromArray(this.__rep__.filter(this.predicate(predicate)));
-		} : function (predicate) {
+		filter: function (predicate) {
 			if ( typeof predicate === 'undefined' ) { return this; }
 			var set = [];
 			for ( var i=0, rep=this.__rep__; i<rep.length; i++ ) {
 				var item = rep[i];
-				if ( predicate(item) ) { set.push(item); }
+				if ( predicate.call(item,item) ) { set.push(item); }
 			}
 			return this.__constructor.fromArray(set);
 		},
