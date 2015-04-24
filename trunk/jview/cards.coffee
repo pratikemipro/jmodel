@@ -259,6 +259,13 @@ define 'jview/cards', (require) ->
 			# Changing state scrolls to card
 			@state.event 'index'
 				.subscribe (index) => @scrollTo index
+				
+			# Resizing window scrolls to card
+			$ window
+				.event 'resize'
+				.subscribe =>
+					console.log 'here'
+					@scrollTo @state.index()
 			
 			# Inform cards that they are current
 			@state.event 'index'
