@@ -18,10 +18,12 @@ define 'jview/cards', (require) ->
 	
 	class Card
 		
-		constructor: ->
-			
-			@li = $ '<li class="card"/>'
+		constructor: ({@li}={}) ->
+
+			@li = @li or $ '<li class="card"/>'
 			@li.addClass @class
+				
+			@url = @li.find('[data-url]:eq(0)').data 'url'
 		
 			@events = new jm.EventRegistry 'ready', 'dispose', 'current'
 			@event('ready').remember 1
@@ -33,9 +35,15 @@ define 'jview/cards', (require) ->
 		event: (name) -> @events.get name
 		
 		handle: (url) ->
-			matched = url == @url?.split('#')[0]
-			if matched then @event('current').raise this
+			matched = url == @url
+			if matched
+				@current()
+				# history.pushState null, null, @url
 			return matched
+			
+		current: ->
+			@event 'current'
+			 	.raise this
 	
 	
 	##
@@ -49,7 +57,7 @@ define 'jview/cards', (require) ->
 	
 		constructor: ->
 			
-			super()
+			super
 			
 			@events.add 'load', jm.event.fromAjax @load
 			
@@ -61,7 +69,7 @@ define 'jview/cards', (require) ->
 		init: (html) ->
 			@li.html html
 			@li.toggleClass 'error', $(html).hasClass('error')
-			@url = @li.children('article').data 'url'
+			@url = @li.find('[data-url]:eq(0)').data 'url'
 			@event('ready').raise this
 	
 
@@ -71,13 +79,17 @@ define 'jview/cards', (require) ->
 
 	class CardList
 	
-		constructor: ({types,@external,@application}) ->
+		constructor: ({types,@external,@application,@base}) ->
 			
 			@cards  = new jm.ObservableTypedList(Card)
 			@events = new jm.EventRegistry 'add', 'insert', 'replace', 'remove', 'count', 'ready', 'current'
 			@event('ready').remember 1
 			
-			@router = new Router ( new Route(card.match,card) for card in types )
+			@router =
+				if types instanceof Array
+					new Router ( new Route(card.match,card) for card in types)
+				else if types instanceof Object
+					new Router ( new Route(@base+pattern,card) for pattern, card of types )
 			
 			@cards.events.republish
 				add:     @event 'add'
@@ -97,22 +109,36 @@ define 'jview/cards', (require) ->
 		
 		event: (name) -> @events.get name
 		
-		handle: (url,index) ->
+		handle: (url,index,li) ->
 			
 			## Let existing cards try to handle URL
 			handled = @cards
 				.map -> @handle url
-				.first()
-				
+				.first (state) -> state
+			
+			handled = handled or false
+			
+			if handled then return true
+			
 			## Let router try to handle URL
-			[_,path,fragment,query] = url.replace(location.protocol+'//'+location.host+'/','').match( /([^#\?]*)((?:#)[^\?]*)?(\?.*)?/ ) or []
-			[protocol] = url.match( /^([^:\?]*):.*/ ) or ['https']
-			[cardType,keys,parameters] = @router.resolve path
+			if @router
+				[_,path,fragment,query] = url.replace(location.protocol+'//'+location.host+'/','').match( /([^#\?]*)((?:#)[^\?]*)?(\?.*)?/ ) or []
+				[protocol] = url.match( /^([^:\?]*):.*/ ) or ['https']
+				[cardType,keys,parameters] = @router.resolve path
 			
 			if cardType
-				@insert index, new cardType this, keys, parameters
+				card = new cardType
+					li: li
+					list: this
+					keys: keys
+					parameters: parameters
+					external: @external
+				@insert index, card
+				card.event 'ready'
+					.subscribe ->
+						card.handle url
 			
-			return handled or cardType?
+			return cardType?
 		
 		# Delegation
 		add:     (args...) -> @cards.add args...
@@ -123,6 +149,8 @@ define 'jview/cards', (require) ->
 		count:	 (args...) -> @cards.count args...
 		first:	 (args...) -> @cards.first args...
 		each:    (args...) -> @cards.each args...
+		where:   (args...) -> @cards.filter args...
+		filter:  (args...) -> @cards.filter args...
 		map:	 (args...) -> @cards.map args...
 		
 			
@@ -153,6 +181,7 @@ define 'jview/cards', (require) ->
 		
 		## Adding a card to end of list
 		add: (card) ->
+			console.log 'ADDING'
 			if card.li.closest('ul.cards').length == 0
 				card.event('ready').take(1).subscribe =>
 					card.li.children().addClass 'adding'
@@ -165,23 +194,23 @@ define 'jview/cards', (require) ->
 				@event('ready').raise card
 					
 		## Inserting a card at specfic index
-		insert: (card,index) ->
+		insert: (card,index=0) ->
+			console.log "INSERTING at #{index}"
 			li = card.li
-			li.addClass 'adding'
-			if @element.children('li.card').length == 0
-				@element.append card.li
-			else if index == 0
-				@element.children('li.card').eq(0).before li
-			else
-				@element.children('li.card').eq(index-1).after li
+			if card.li.closest('ul.cards').length == 0
+				li.addClass 'adding'
+				if @element.children('li.card').length == 0
+					@element.append card.li
+				else if index == 0
+					@element.children('li.card').eq(0).before li
+				else
+					@element.children('li.card').eq(index-1).after li
 				
-			card.event('ready').take(1).subscribe =>
-				after(1) =>
-					width = Math.min window.innerWidth, li.children('article').outerWidth(true)
-					li.css 'width', width
+				card.event('ready').take(1).subscribe =>
 					after(1) =>
-						li.removeClass 'adding'
-						@event('ready').raise card
+						after(1) =>
+							li.removeClass 'adding'
+							@event('ready').raise card
 			
 		replace: (before,card) ->
 			card.event('ready').take(1).subscribe =>
@@ -225,14 +254,16 @@ define 'jview/cards', (require) ->
 					type: Number
 					defaultValue: 0
 					remember: 1
-					repeat: true
+					repeat: false
 			
 			# Changing state scrolls to card
-			@state.event('index').subscribe (index) => @scrollTo index
+			@state.event 'index'
+				.subscribe (index) => @scrollTo index
 			
 			# Inform cards that they are current
-			# @state.event('index').subscribe (index) =>
-# 				@cardListView.cards.get(index)?.event?('current')?.raise()
+			@state.event 'index'
+				.subscribe (index) =>
+ 					@cardListView.cards.get(index)?.current?()
 
 			# Scroll to current card
 			jm.disjoin(
@@ -247,6 +278,7 @@ define 'jview/cards', (require) ->
 				@cardListView.element.event('mousedown','li.card'),
 				@cardListView.element.event('mouseup','li.card')
 			)
+			.where ({target}) => $(target).closest('ul.cards') == @element
 			.map( (down,up) ->
 				target: $(down.target)
 				deltaX: up.screenX - down.screenX
@@ -350,15 +382,15 @@ define 'jview/cards', (require) ->
 			# 	.subscribe (currentScreenX,[startScreenX,startScroll]) =>
 			# 		$(window).scrollLeft( startScroll + startScreenX - currentScreenX )
 		
-		handle: (url) ->
-			@cardListView.cards.handle url, @state.index()+1
+		handle: (url,li,increment=1) ->
+			@cardListView.cards.handle url, @state.index()+increment, li
 				
 		scrollTo: (index,duration=300) ->
 			li = @cardListView.element.children('li.card').eq(index)
 			if li.length > 0
 				@element.stop().animate
-#					scrollLeft: Math.min(li.position().left - @offset ,li.position().left+li.width()-@element.width() - @offset)+'px'
-					scrollLeft: @element.scrollLeft() + li.position().left + parseInt(li.css('margin-left'),10)+'px'
+					scrollLeft: @element.scrollLeft() + li.position().left
+					scrollTop: @element.scrollTop() + li.position().top
 					duration
 					
 		nudge: ->
@@ -420,7 +452,7 @@ define 'jview/cards', (require) ->
 		
 		constructor: (pattern,@cardType) ->
 			@keys    = ( key.replace('{','').replace('}','').replace('?','') for key in ( pattern.match(/\{[^\}]+\}/g) || ['id'] ) )
-			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\/?\{[^\}]+\?\}/g,'(?:/?([^\/]+))?').replace(/\/?\{[^\}]+\}/g,'(?:/?([^\/]+))')+'/?$'
+			@pattern = new RegExp '^'+String(pattern).replace('/','\/').replace(/\/?\{[^\}]+\?\}/g,'(?:/?([^\/]+))?').replace(/\/?\{[^\}]+\}/g,'(?:/?([^\/]+))')+'/?.*$'
 			
 		test: (path) -> @pattern.test path
 		
@@ -498,7 +530,8 @@ define 'jview/cards', (require) ->
 			currentIndex = 0
 			url = "https://#{location.host}/#{path}"
 			
-			if @viewport.handle url
+			if @viewport.handle url, undefined, ( if before then -1 else 1 )
+				history.pushState null, null, url
 				return false
 
 			if path == location.origin + location.pathname
@@ -539,11 +572,7 @@ define 'jview/cards', (require) ->
 	
 	class Application
 		
-		constructor: (element,menuElement,@external,constructors) ->
-			
-			@constructors = constructors
-			@element      = $ element
-			@menuElement  = $ menuElement
+		constructor: ({@base,@element,@menu,@external,constructors}) ->
 			
 			@events = new jm.EventRegistry 'initialised','ready'
 			@event('initialised').remember 1
@@ -551,22 +580,24 @@ define 'jview/cards', (require) ->
 			@event('ready').subscribe => @element.removeClass 'loading'
 			
 			@cards = new CardList
+				base: @base or ''
 				types: constructors
 				external: @external
 				application: this
 			
 			@view       = new ListView @cards, @element
-			@viewport   = new ViewPort @view, @element, @menuElement, @external.offset?
-			@controller = new Controller @cards, @view, @viewport, @element
+			@viewport   = new ViewPort @view, @element, @menu, @external?.offset?
+			if @element.parent().closest('ul.cards').length == 0
+				@controller = new Controller @cards, @view, @viewport, @element
 			
 			numberCards = @element.children('li.card').length
 			@element.children 'li.card'
 				.each (index,li) =>
 					
-					url = $(li).data 'url'
-					$(li).remove()
+					url = $(li).data('url') or $(li).children('article').data('url')
+					if $(li).children().length == 0 then $(li).remove()
 					
-					@cards.handle url, index
+					@cards.handle url, index, $ li
 
 					@viewport.state.index @cards.count()
 					if @cards.cards.count() == numberCards
