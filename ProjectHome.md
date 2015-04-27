@@ -1,0 +1,1 @@
+jModel is a lightweight Javascript domain model framework designed for use with jQuery.
